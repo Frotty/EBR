@@ -12,7 +12,7 @@ package SetupObject
     
     trigger orderTrigger
     
-    public class SetupObject extends DynamicEntity
+    public class DynamicSetupObject extends DynamicEntity
         player owner
         
         unit actor        
@@ -57,14 +57,14 @@ package SetupObject
             
             
         static function onOrderEvent()
-        	var u = GetTriggerUnit()
+        	var obj = GetTriggerUnit().getUserData() castTo Entity
         	var order = GetIssuedOrderId()
         	var x = GetOrderPointX()
         	var y = GetOrderPointY()
+        	var u = GetOrderTargetUnit()
         	
-        	var obj = u.getUserData() castTo Entity
-        	if obj.oType == TYPE_SETUPOBJECT
-                obj = (obj castTo int) castTo SetupObject
+        	if obj instanceof DynamicSetupObject
+                obj = obj castTo DynamicSetupObject
                 if x == 0.
                     skip //IssueImmediateOrderById(obj., order)
                 else
@@ -73,6 +73,6 @@ package SetupObject
 	
 	init
 		orderTrigger = CreateTrigger()
-		orderTrigger.addAction(function SetupObject.onOrderEvent )
+		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
 
 endpackage

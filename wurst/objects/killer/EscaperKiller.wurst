@@ -1,15 +1,9 @@
 package EscaperKiller
     import Entity
     import Terrain
+    import SetupObject
     
-	constant int 	TELEPORTER_ID   = 'n00C'
-	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
-	
-	constant real 	EVENT_RADIUS	= 32.
-
-    
-    class EscaperKiller extends DynamicEntity
-        boolean teleportEscaper = true
+    class EscaperKiller extends DynamicSetupObject
         
 
         
