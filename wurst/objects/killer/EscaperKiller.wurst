@@ -2,29 +2,22 @@ package EscaperKiller
     import Entity
     import Terrain
     import SetupObject
+    import Escaper
     
-    class EscaperKiller extends DynamicSetupObject
+    public class EscaperKiller extends DynamicSetupObject
         
 
+        static function onInRangeEvent()
+            var ent = GetTriggerUnit().getUserData() castTo Entity
+            
+            if ent instanceof Escaper
+            	var es = ent castTo Escaper
+            	es.kill() 
         
-        static function register()
-            unit u = GetConstructedStructure()
-            u.setUserData( new Teleporter( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
+        construct( real x, real y, unit u, unit setup, real radius )
+        	super( x, y, getTerrainZ(x,y), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
         
-        construct( real x, real y, unit u, real radius )
-        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Teleporter.teleport ) 
-
-        
-        static function filter() returns boolean
-            return GetUnitTypeId( GetFilterUnit() ) == TELEPORTER_ID
-
-        
-    
-    
-    public function init_Teleporter( trigger t )
-        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
-        t.addAction( function Teleporter.register )
 
 
 endpackage
