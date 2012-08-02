@@ -66,9 +66,9 @@ package SetupObject
         	if obj.oType == TYPE_SETUPOBJECT
                 obj = (obj castTo int) castTo SetupObject
                 if x == 0.
-                    IssueImmediateOrderById(obj., order)
+                    skip //IssueImmediateOrderById(obj., order)
                 else
-                    IssuePointOrderById(obj.actor, order, x, y)
+                    skip //IssuePointOrderById(obj.actor, order, x, y)
 
 	
 	init

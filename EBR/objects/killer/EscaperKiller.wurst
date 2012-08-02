@@ -11,22 +11,6 @@ package EscaperKiller
     class EscaperKiller extends DynamicEntity
         boolean teleportEscaper = true
         
-        static function teleport()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            var rx = obj.getRallyX()
-            var ry = obj.getRallyY()
-            if obj.teleportEscaper and e.oType == TYPE_ESCAPER
-                SetUnitPosition( u, rx, ry )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-                PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-            else if not obj.teleportEscaper and e.oType == TYPE_KILLER
-                SetUnitPosition( u, rx, ry )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
 
         
         static function register()
