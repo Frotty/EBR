@@ -1,52 +1,23 @@
 package EscaperKiller
     import Entity
     import Terrain
+    import SetupObject
+    import Escaper
     
-	constant int 	TELEPORTER_ID   = 'n00C'
-	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
-	
-	constant real 	EVENT_RADIUS	= 32.
-
-    
-    class EscaperKiller extends DynamicEntity
-        boolean teleportEscaper = true
+    public class EscaperKiller extends DynamicSetupObject
         
-        static function teleport()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            var rx = obj.getRallyX()
-            var ry = obj.getRallyY()
-            if obj.teleportEscaper and e.oType == TYPE_ESCAPER
-                SetUnitPosition( u, rx, ry )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-                PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-            else if not obj.teleportEscaper and e.oType == TYPE_KILLER
-                SetUnitPosition( u, rx, ry )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+
+        static function onInRangeEvent()
+            var ent = GetTriggerUnit().getUserData() castTo Entity
+            
+            if ent instanceof Escaper
+            	var es = ent castTo Escaper
+            	es.kill() 
+        
+        construct( real x, real y, unit u, unit setup, real radius )
+        	super( x, y, getTerrainZ(x,y), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
         
-        static function register()
-            unit u = GetConstructedStructure()
-            u.setUserData( new Teleporter( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
-
-        
-        construct( real x, real y, unit u, real radius )
-        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Teleporter.teleport ) 
-
-        
-        static function filter() returns boolean
-            return GetUnitTypeId( GetFilterUnit() ) == TELEPORTER_ID
-
-        
-    
-    
-    public function init_Teleporter( trigger t )
-        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
-        t.addAction( function Teleporter.register )
 
 
 endpackage

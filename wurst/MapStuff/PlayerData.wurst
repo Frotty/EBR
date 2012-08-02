@@ -72,7 +72,7 @@ package PlayerData
                 i++
             name = Colorcode[ id ] + nameRaw 
             */
-	public function isPlayerEscaper(player p) returns boolean
+	public function isPlayerEscaper(player p) returns boolean //not sure if its proper
 		if GetPlayerId(p) < 7
 			return true
 		return false

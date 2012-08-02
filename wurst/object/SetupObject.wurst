@@ -12,7 +12,7 @@ package SetupObject
     
     trigger orderTrigger
     
-    public class SetupObject extends DynamicEntity
+    public class DynamicSetupObject extends DynamicEntity
         player owner
         
         unit actor        
@@ -22,9 +22,6 @@ package SetupObject
         trigger inRangeTrig // Trigger for inRange detection
         
                         
-        function onInRangeEvent()
-            skip
-        
         construct( real x, real y, real z, unit u, unit setup, real radius, code c )
         	super( x, y, z )
             actor = u
@@ -57,22 +54,26 @@ package SetupObject
             
             
         static function onOrderEvent()
-        	var u = GetTriggerUnit()
+        	var entity = GetTriggerUnit().getUserData() castTo Entity
         	var order = GetIssuedOrderId()
         	var x = GetOrderPointX()
         	var y = GetOrderPointY()
+        	var u = GetOrderTargetUnit()
         	
-        	var obj = u.getUserData() castTo Entity
-        	if obj.oType == TYPE_SETUPOBJECT
-                obj = (obj castTo int) castTo SetupObject
-                if x == 0.
-                    IssueImmediateOrderById(obj., order)
-                else
+        	if entity instanceof DynamicSetupObject
+                var obj = entity castTo DynamicSetupObject
+                if u != null
+                    IssueTargetOrderById(obj.actor, order, u)
+                else if x != 0.    
                     IssuePointOrderById(obj.actor, order, x, y)
+                else
+                    IssueImmediateOrderById(obj.actor, order)
+
+                    
 
 	
 	init
 		orderTrigger = CreateTrigger()
-		orderTrigger.addAction(function SetupObject.onOrderEvent )
+		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
 
 endpackage

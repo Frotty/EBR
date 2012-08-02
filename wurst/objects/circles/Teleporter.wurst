@@ -1,13 +1,15 @@
 package Teleporter
     import BaseObject
     import Terrain
+    import Escaper
+    import EscaperKiller
     
 	constant int 	TELEPORTER_ID   = 'n00C'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 	
 	constant real 	EVENT_RADIUS	= 32.
 
-    
+
     class Teleporter extends StaticBaseObject
         boolean teleportEscaper = true
         
@@ -18,12 +20,12 @@ package Teleporter
             thistype obj = source.getUserData() castTo thistype
             var rx = obj.getRallyX()
             var ry = obj.getRallyY()
-            if obj.teleportEscaper and e.oType == TYPE_ESCAPER
+            if obj.teleportEscaper and e instanceof Escaper
                 SetUnitPosition( u, rx, ry )
                 DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
                 DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
                 PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-            else if not obj.teleportEscaper and e.oType == TYPE_KILLER
+            else if not obj.teleportEscaper and e instanceof EscaperKiller
                 SetUnitPosition( u, rx, ry )
                 DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
                 DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )

@@ -2,13 +2,10 @@ package Entity
 	import Vectors
 	import LinkedListModule
 	import Debug
-	import public Types
 	
 	
 	public class Entity
 		use LinkedListModule
-		
-		int oType
 		
 		vec3 position
 		
