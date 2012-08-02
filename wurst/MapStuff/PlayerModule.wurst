@@ -1,0 +1,35 @@
+package PlayerModule
+    import PlayerData
+    import MultiboardClass
+    import Multiboard
+    
+    PlayerVariables array pData
+    public Board playerboard
+    int playercount
+    
+    function initMB()
+        playerboard = new Board(playercount+1,3)
+        playerboard.board.setTitle("EBR0.64 : "+("|cff66aa2200:01"))
+        for int i = 0 to playercount
+            playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
+            playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
+            playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
+            pData[i].setMBRow(i+1)
+        playerboard.board.getItem(0,0).setStyle(true,false)
+        playerboard.updateItem(0,0,"Player",null)
+        playerboard.board.getItem(0,1).setStyle(false,true)
+        playerboard.updateItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
+        playerboard.updateItem(0,2,"Rank",null)
+        playerboard.board.display(true)
+                
+        
+    init    
+        int r = 0
+        for int i = 0 to 11
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
+                pData[i] = new PlayerVariables(Player(i),r+1)
+                r++
+        playercount = r
+        TimerStart(CreateTimer(), 1., false,function initMB)
+                
+endpackage
