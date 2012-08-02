@@ -1,0 +1,61 @@
+package Entity
+	import Vectors
+	import LinkedListModule
+	import Debug
+	import public Types
+	
+	
+	public class Entity
+		use LinkedListModule
+		
+		int oType
+		
+		vec3 position
+		
+		real collisionRadius
+		
+		construct( real x, real y, real z )
+			position = vec3(x,y,z)
+			entityCount++
+			currentEntityCount++
+		
+		function update()
+			skip
+			
+		ondestroy
+			currentEntityCount--
+	
+		
+	public class DynamicEntity extends Entity
+		vec3 velocity
+		
+		construct( real x, real y, real z )
+			super(x,y,z)
+			velocity = vec3(0.,0.,0.)
+			dynamicEntityCount++
+			
+		function addForce(real x, real y, real z)
+			velocity += vec3(x,y,z)
+		
+		function setForce(real x, real y, real z)
+			velocity = vec3(x,y,z)
+			
+		override function update()
+			skip
+		
+	public class UnitEntity extends DynamicEntity
+		unit actor
+		player owner
+		
+		construct( real x, real y, real z, unit u )
+			super(x,y,z)
+			actor = u
+			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			owner = GetOwningPlayer(u)
+			unitEntityCount++
+			
+			
+		override function update()
+			skip
+			
+endpackage
