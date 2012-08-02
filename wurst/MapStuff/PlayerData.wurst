@@ -34,7 +34,7 @@ package PlayerData
             playerboard.updateItem(r,0,mbname,icon)
             playerboard.updateValue(r,1,deaths.toString())
             playerboard.updateValue(r,2,rank)    
-                
+            
                 
     public class PlayerData //just the player's (constant) stuff
         int gameID
@@ -72,6 +72,9 @@ package PlayerData
                 i++
             name = Colorcode[ id ] + nameRaw 
             */
-            
+	public function isPlayerEscaper(player p) returns boolean
+		if GetPlayerId(p) < 7
+			return true
+		return false
         
 endpackage 
