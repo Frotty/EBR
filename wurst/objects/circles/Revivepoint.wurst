@@ -1,0 +1,43 @@
+package RevivePoint
+    import BaseObject
+    import Terrain
+    import PlayerData
+
+    constant real EVENT_RADIUS = 80.
+    constant int REVIVEPOINT_ID = 'n000'
+    
+    public Revivepoint currentRevivepoint
+
+    public class Revivepoint extends StaticBaseObject
+        boolean reached = false
+        
+        static function reach()
+	        unit source = GetTriggeringTrigger().getSource()
+	        unit u = GetTriggerUnit()
+	        Entity e = u.getUserData() castTo Entity
+	        thistype obj = source.getUserData() castTo thistype
+            if not obj.reached and e.oType == TYPE_ESCAPER and isPlayerEscaper(GetOwningPlayer(u))
+                //StartSound(gg_snd_Rescue)
+                SetUnitColor( obj.???, PLAYER_COLOR_RED )
+                obj.reached = true
+                currentRevivepoint = obj
+
+		static function register()
+            unit u = GetConstructedStructure()
+            u.setUserData( new Revivepoint( u.getX(), u.getY() , u, 50 ) castTo int )
+	
+
+        construct( real x, real y, unit u, real radius )
+        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Revivepoint.reach ) 
+
+        
+		static function filter() returns boolean
+			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
+    
+    
+    
+    public function init_Revivepoint( trigger t )
+        //t.registerAnyUnitEvent( Condition( function Revivepoint.filter  ) )
+        t.addAction( function Revivepoint.register )
+
+endpackage 
