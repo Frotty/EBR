@@ -32,7 +32,17 @@ package UnitProducer
 			
 			
 	function init_UnitProducer()
-		skip
+		unitTable.saveInt('A05F','u00G') //Big Killer
+		unitTable.saveInt('A05G','u008')
+		unitTable.saveInt('A05H','u00F')
+		unitTable.saveInt('A05I','u00Q')
+		unitTable.saveInt('A05J','u006')
+		unitTable.saveInt('A05K','u00E') //Small Killer
+		unitTable.saveInt('A05L','u00K')
+		unitTable.saveInt('A05M','u001')
+		unitTable.saveInt('A05N','u00B')
+		unitTable.saveInt('A05O','u00Y')
+		unitTable.saveInt('A05P','u004')
 		//Table presets
 		
 	init
