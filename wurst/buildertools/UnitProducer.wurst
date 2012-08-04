@@ -29,7 +29,8 @@ package UnitProducer
 			if typeTable.loadInt(id) == SETUP_TYPE
 				new DynamicSetupObject( rX, rY, 0., u, setup, 0., null )
 				
-			
+		construct(code c)
+			skip
 			
 	function init_UnitProducer()
 		unitTable.saveInt('A05F','u00G') //Big Killer
@@ -44,6 +45,7 @@ package UnitProducer
 		unitTable.saveInt('A05O','u00Y')
 		unitTable.saveInt('A05P','u004')
 		//Table presets
+		new UnitProducer(null)
 		
 	init
 		orderTrigger = CreateTrigger()
