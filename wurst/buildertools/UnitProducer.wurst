@@ -29,11 +29,13 @@ package UnitProducer
 			if typeTable.loadInt(id) == SETUP_TYPE
 				new DynamicSetupObject( rX, rY, 0., u, setup, 0., null )
 				
-			
+		construct(code c)
+			skip
 			
 	function init_UnitProducer()
 		skip
 		//Table presets
+		new UnitProducer(null)
 		
 	init
 		orderTrigger = CreateTrigger()
