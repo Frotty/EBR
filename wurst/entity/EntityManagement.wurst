@@ -3,14 +3,18 @@ package EntityManagement
 
 	
 	function updateEntities()
+		print("yes2")
 		Entity e = Entity.first
+		print("yes3")
 		while e != null
 			e.update()
+			print("updated")
 			e = e.next
 			
 		
 	public function init_EntityManagement()
 		TimerStart(CreateTimer(), 0.031250000, true, function updateEntities)
+		print("yes1")
 		
 		
 endpackage

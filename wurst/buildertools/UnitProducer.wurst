@@ -1,0 +1,43 @@
+package UnitProducer
+	import BaseObject
+	import SetupObject
+	
+	constant int ID
+	
+	trigger orderTrigger
+	
+	Table unitTable = new Table()
+	Table typeTable = new Table()
+	
+	constant int SETUP_TYPE = 0
+	
+	class UnitProducer extends StaticBaseObject
+
+		construct( real x, real y, player owner )
+			super(x, y, 0., CreateUnit( owner, ID, x, y, 0.  ) , 0., function spawnUnit)
+
+			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_SPELL_CAST)
+
+		static function spawnUnit()
+			var id = GetSpellAbilityId()
+			var obj = GetSpellAbilityUnit().getUserData() castTo UnitProducer
+			
+			var rX = obj.getRallyX()
+			var rY = obj.getRallyY() 
+			
+			var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
+			if typeTable.loadInt(id) == SETUP_TYPE
+				new DynamicSetupObject( rX, rY, 0., u, setup, 0., null )
+				
+			
+			
+	function init_UnitProducer()
+		skip
+		//Table presets
+		
+	init
+		orderTrigger = CreateTrigger()
+		orderTrigger.addAction(function UnitProducer.spawnUnit)
+	
+	
+endpackage 

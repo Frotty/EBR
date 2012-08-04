@@ -17,6 +17,7 @@ package Entity
 			currentEntityCount++
 		
 		function update()
+			print("no")
 			skip
 			
 		ondestroy

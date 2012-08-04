@@ -29,6 +29,9 @@ package SetupObject
             actor.addAbility('Aloc')
             
             this.setup = setup
+            TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
+            TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
+            TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
             
             position = vec3 (x, y, getTerrainZ(x,y) )
             
@@ -37,7 +40,11 @@ package SetupObject
                 inRangeTrig = CreateTrigger()
                 inRangeTrig.registerUnitInRangeSource( actor, radius )
                 inRangeTrig.addAction( c )
-
+		
+		override function update()
+			print("yes")
+			setup.setX( actor.getX() )
+			setup.setY( actor.getY() )
         
         function setX( real x )
             SetUnitX( actor, x )
