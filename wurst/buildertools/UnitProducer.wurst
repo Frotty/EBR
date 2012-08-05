@@ -27,15 +27,15 @@ package UnitProducer
 			
 			var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
 			if typeTable.loadInt(id) == SETUP_TYPE
-				new DynamicSetupObject( rX, rY, 0., u, setup, 0., null )
+				new DynamicSetupObject( rX, rY, 0., u, u, 0., null )
 				
-		construct(code c)
+		override function update()
 			skip
 			
 	function init_UnitProducer()
 		skip
 		//Table presets
-		new UnitProducer(null)
+
 		
 	init
 		orderTrigger = CreateTrigger()

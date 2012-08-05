@@ -3,6 +3,7 @@ package SetupObject
     import Vectors
     import Terrain
     import Trigger
+    import EscaperKiller
    
     /**
     	Objects which are unclickable for escapers,
@@ -17,7 +18,7 @@ package SetupObject
         
         unit actor        
         
-        private unit setup
+        unit setup
         
         trigger inRangeTrig // Trigger for inRange detection
         
@@ -32,19 +33,21 @@ package SetupObject
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
-            
-            position = vec3 (x, y, getTerrainZ(x,y) )
-            
+           
+            setup.setX( actor.getX() )
+			setup.setY( actor.getY() )
             
             if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
                 inRangeTrig = CreateTrigger()
                 inRangeTrig.registerUnitInRangeSource( actor, radius )
                 inRangeTrig.addAction( c )
+                
+            setup.setUserData( this castTo int )
 		
 		override function update()
 			print("yes")
-			setup.setX( actor.getX() )
-			setup.setY( actor.getY() )
+			//setup.setX( actor.getX() )
+			//setup.setY( actor.getY() )
         
         function setX( real x )
             SetUnitX( actor, x )
@@ -66,9 +69,12 @@ package SetupObject
         	var x = GetOrderPointX()
         	var y = GetOrderPointY()
         	var u = GetOrderTargetUnit()
+        	print("order")
         	
         	if entity instanceof DynamicSetupObject
+                print("order2")
                 var obj = entity castTo DynamicSetupObject
+                print("order3")
                 if u != null
                     IssueTargetOrderById(obj.actor, order, u)
                 else if x != 0.    

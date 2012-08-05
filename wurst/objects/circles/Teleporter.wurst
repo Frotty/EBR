@@ -29,7 +29,9 @@ package Teleporter
                 SetUnitPosition( u, rx, ry )
                 DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
                 DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-
+	
+		override function update()
+			skip
         
         static function register()
             unit u = GetConstructedStructure()

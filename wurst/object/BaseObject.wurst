@@ -40,7 +40,12 @@ package BaseObject
                 inRangeTrig.addAction( c )
             
             TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER ) 
-            TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER ) 
+            TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+            
+            actor.setUserData(this castTo int)
+            
+        override function update()
+        	skip 
         
         static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
             unit u        = GetOrderedUnit()
