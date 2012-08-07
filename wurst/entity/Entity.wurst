@@ -50,6 +50,8 @@ package Entity
 			actor = u
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			owner = GetOwningPlayer(u)
+			
+			
 			unitEntityCount++
 			
 			
