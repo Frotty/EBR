@@ -18,7 +18,7 @@ package Waypoint
             thistype obj = source.getUserData() castTo thistype
             var rx = obj.getRallyX()
             var ry = obj.getRallyY()
-            if  and e instanceof EscaperKiller
+            if e instanceof EscaperKiller
                 IssuePointOrder(u, "move", rx, ry )
 
         

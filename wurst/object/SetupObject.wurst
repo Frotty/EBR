@@ -82,7 +82,75 @@ package SetupObject
                 else
                     IssueImmediateOrderById(obj.actor, order)
 
+
+
+          
                     
+    public class StaticSetupObject extends Entity
+        player owner
+        
+        unit actor        
+        
+        unit setup
+        
+        trigger inRangeTrig // Trigger for inRange detection
+        
+                        
+        construct( real x, real y, real z, unit u, unit setup, real radius, code c )
+        	super( x, y, z )
+            actor = u
+            actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+            actor.addAbility('Aloc')
+            
+            this.setup = setup
+            setup.setX( actor.getX() )
+			setup.setY( actor.getY() )
+            
+            if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+                inRangeTrig = CreateTrigger()
+                inRangeTrig.registerUnitInRangeSource( actor, radius )
+                inRangeTrig.addAction( c )
+                
+            setup.setUserData( this castTo int )
+		
+		override function update()
+			print("yes")
+        
+        function setX( real x )
+            SetUnitX( actor, x )
+
+        function setY( real y )
+            SetUnitY( actor, y )
+            
+        function setZ( real z )
+            SetUnitFlyHeight( actor, z, 0. )
+                          
+        
+        ondestroy
+            actor.clearRegister()
+            
+            
+        static function onOrderEvent()
+        	var entity = GetTriggerUnit().getUserData() castTo Entity
+        	var order = GetIssuedOrderId()
+        	var x = GetOrderPointX()
+        	var y = GetOrderPointY()
+        	var u = GetOrderTargetUnit()
+        	print("order")
+        	
+        	if entity instanceof DynamicSetupObject
+                print("order2")
+                var obj = entity castTo DynamicSetupObject
+                print("order3")
+                if u != null
+                    IssueTargetOrderById(obj.actor, order, u)
+                else if x != 0.    
+                    IssuePointOrderById(obj.actor, order, x, y)
+                else
+                    IssueImmediateOrderById(obj.actor, order)
+
+
+
 
 	
 	init
