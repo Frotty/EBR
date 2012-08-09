@@ -2,6 +2,7 @@ package RevivePoint
     import BaseObject
     import Terrain
     import PlayerData
+    import Escaper
 
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'
@@ -14,11 +15,13 @@ package RevivePoint
         static function reach()
 	        unit source = GetTriggeringTrigger().getSource()
 	        unit u = GetTriggerUnit()
+	        
 	        Entity e = u.getUserData() castTo Entity
 	        thistype obj = source.getUserData() castTo thistype
-            if not obj.reached and e.oType == TYPE_ESCAPER and isPlayerEscaper(GetOwningPlayer(u))
+	        
+            if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
                 //StartSound(gg_snd_Rescue)
-                SetUnitColor( obj.???, PLAYER_COLOR_RED )
+                SetUnitColor( source, PLAYER_COLOR_RED )
                 obj.reached = true
                 currentRevivepoint = obj
 

@@ -32,6 +32,7 @@ package UnitProducer
 		override function update()
 			skip
 			
+			
 	function init_UnitProducer()
 		unitTable.saveInt('A05F','u00G') //Big Killer
 		unitTable.saveInt('A05G','u008')

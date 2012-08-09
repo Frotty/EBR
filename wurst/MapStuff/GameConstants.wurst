@@ -6,6 +6,7 @@ package GameConstants
 	public string array colorcode
 	public integer array expBounds
 	public string array ranks
+	public constant int cplayerCount = 13
 
 	init
 		mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"

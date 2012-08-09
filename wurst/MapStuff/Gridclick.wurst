@@ -9,8 +9,7 @@ package Gridclick
     int PATROL_ID = 851990
     int MOVE_ID = 851971
     int GROUND_ATTACK_ID = 851984
-    int GRID = 64
-    
+    int GRID = 64    
     
     function checkRightOrder()
         var i = GetIssuedOrderId()

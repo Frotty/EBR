@@ -2,20 +2,45 @@ package PlayerData
     import MultiboardClass
     import PlayerModule
     import GameConstants
-    int playercount
+    import LinkedListModule
     
-    public class PlayerVariables extends PlayerData
-        //EB related Stuff
-        unit escaper
-        int deaths
-        int XP
+    
+    public int playercount = 0
+
+
+    public class PlayerData //just the player's (constant) stuff
+    	use LinkedListModule
+    	
+    	int id
+        int gameId
+        player p
+        string name
+        string mbname //Basically the output name
+        string rank = "Newbie"
+        string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+        boolean left = false
         
-        construct(player p, int i)
-            super(p, i)
-            deaths = 0
-            XP = 40
+        unit escaper
+        int deaths = 0
+        int XP = 40
     
-        function updateRank ()
+        construct (player p)
+            this.p = p
+            id = GetPlayerId(p)
+            gameId = PlayerData.size - 1
+            name = GetPlayerName(p)
+            mbname = name
+            if mbname == "Frotty" or mbname == "FrottyZ"
+                rank = "|cffADD642Creator"
+
+            for int i = 0 to cplayerCount
+                if mbname == names[i]
+                    mbname = tags[i] + "|r" + colorcode[ id ] + mbname
+
+            mbname = colorcode[ id ] + mbname
+            
+            
+		function updateRank ()
             int i = 0
             while XP >= expBounds[i]
                 i++
@@ -27,51 +52,12 @@ package PlayerData
             else if XP > 99
                 AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper, "chest" )
                 DisplayTextToForce( bj_FORCE_ALL_PLAYERS, name + " has loaded his Player Rank" )
-        
-        
-        function setMBRow(int r)
-            mbID = r
+                
+		function setMBRow(int r)
             playerboard.updateItem(r,0,mbname,icon)
             playerboard.updateValue(r,1,deaths.toString())
-            playerboard.updateValue(r,2,rank)    
-            
-                
-    public class PlayerData //just the player's (constant) stuff
-        int gameID
-        player p //constant
-        string name //constant
-        int mbID //Maultiboard position
-        string mbname //Basically the output name
-        string rank = "Newbie"
-        string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
-        boolean left = false
-    
-        construct (player pP, int gameP)
-            p = pP
-            int id = GetPlayerId( pP )
-            gameID = gameP
-            mbID = gameP+1
-            name = GetPlayerName(pP)
-            mbname = name
-            if mbname == "Frotty" or mbname == "FrottyZ"
-                rank = "|cffADD642Creator"
-            int i = 0
-            while names[i] != null
-                if mbname == names[i]
-                    mbname = tags[i] + "|r" + colorcode[ id ] + mbname
-                i++
-            mbname = colorcode[ id ] + mbname
-            /*
-            nameRaw = name
-            if nameRaw == "Frotty" or nameRaw == "FrottyZ"
-                rank = "|cffADD642Creator"
-            int i = 0
-            while names[i] != null
-                if nameRaw == names[i]
-                    name = tags[i] + "|r" + Colorcode[ id ] + nameRaw
-                i++
-            name = Colorcode[ id ] + nameRaw 
-            */
+            playerboard.updateValue(r,2,rank)  
+
 	public function isPlayerEscaper(player p) returns boolean //not sure if its proper
 		if GetPlayerId(p) < 7
 			return true

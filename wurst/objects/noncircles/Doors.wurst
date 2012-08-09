@@ -2,6 +2,7 @@ package Door
     import BaseObject
     import Terrain
     import Escaper
+    
 	//NOTE: Some parts of this are from the old ebr  O.o   >:0
     int array keycolor
     int array colorRGBv
@@ -85,7 +86,7 @@ package Door
                     pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 0 )
 
     
-    function onSpellCast()
+	function onSpellCast()
         unit u = GetTriggerUnit()
         Doors door = u.getData() castTo Doors
         int id = GetSpellAbilityId()
@@ -98,7 +99,7 @@ package Door
             door.colorize()
         else if id == DOORPLACEKEY_ABILITY_ID
             door.placekey(GetSpellTargetX(),GetSpellTargetY())
-
+            
         static function register()
             unit u = GetConstructedStructure()
             u.setUserData( new Door( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )

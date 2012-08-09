@@ -5,7 +5,7 @@ package Escaper
 	import Terrain
 	import TimerUtils
 	
-	public Table herotable = new Table()
+	public Table escaperTable = new Table()
 	
 	
 
@@ -21,7 +21,7 @@ package Escaper
 		
 		construct( real x, real y, real z, player owner )
 			super(x,y,z,CreateUnit(owner, 'h000', x, y, 0.) )
-			herotable.saveInt(GetHandleId(actor), this castTo int)
+			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 
 		
 		override function update()
