@@ -1,0 +1,57 @@
+package Obstacle
+    import SetupObject
+    import Terrain
+    import Escaper
+    import Regions
+    
+	constant int 	BIGOBSTACLE_ID  	= 'n00C'
+	constant int 	SMALLOBSTACLE_ID	= 'n00C'
+		
+	constant real 	EVENT_RADIUS_SMALL	= 32.
+	constant real 	EVENT_RADIUS_BIG	= 64.
+
+    class Obstacle extends StaticSetupObject
+        
+        static function kill()
+            unit source = GetTriggeringTrigger().getSource()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            thistype obj = source.getUserData() castTo thistype
+            if e instanceof Escaper
+                u.kill() //or whatever
+
+		static function dummy()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            thistype obj = source.getUserData() castTo thistype
+			//Get region type here
+            if GetUnitTypeId(u) == SMALLOBSTACLE_ID
+                dummy = CreateUnit( owner, R.SOBST, obj.position.x, obj.position.y, GetRandomReal(0,360) )
+            else
+                dummy = CreateUnit( owner, R.BOBST, obj.position.x, obj.position.y, GetRandomReal(0,360) )
+            SetUnitScale( setup, .1, .1, .1 )
+        
+        static function register()
+            unit u = GetConstructedStructure()
+            u.setUserData( new Obstacle( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
+
+        
+        construct( real x, real y, unit u, real radius )
+            if GetUnitTypeId(u) == SMALLOBSTACLE_ID
+        		super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS_SMALL, function Obstacle.kill ) 
+            else
+        		super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS_BIG, function Obstacle.kill ) 
+
+
+        
+        static function filter() returns boolean
+            return GetUnitTypeId( GetFilterUnit() ) == SMALLOBSTACLE_ID or GetUnitTypeId( GetFilterUnit() ) == BIGOBSTACLE_ID
+
+        
+    
+    public function init_Obstacle( trigger t )
+        //t.registerAnyUnitEvent( Condition( function Obstacle.filter  ) )
+        t.addAction( function Obstacle.register )
+
+
+endpackage
