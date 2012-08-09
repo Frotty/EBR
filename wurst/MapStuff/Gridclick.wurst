@@ -1,9 +1,9 @@
 //kari0003 presents:
-package Gridclick
 //This system is allowing builders to synchronize Killers easily.
 //It must be able to turn in/out
 //It modifies every move&patrol order to the ordered point be a point of the grid.
 // 64 points for GRID is the ideal imo, i dont think builders need an option to set their grid's standard.
+package Gridclick
     import PlayerModule
 
     int PATROL_ID = 851990
@@ -14,7 +14,7 @@ package Gridclick
     function checkRightOrder()
         var i = GetIssuedOrderId()
         print(i.toString())
-        if pData[GetOwningPlayer(GetOrderedUnit())].wantGridclick == true // is this proper??
+        if pData[GetPlayerId(GetOwningPlayer(GetOrderedUnit()))].gridClickActivated == true // is this proper??
             if (i == PATROL_ID or i == MOVE_ID or i == GROUND_ATTACK_ID)
                 var gridx = (round(GetOrderPointX()/ GRID) * GRID).toReal() //similar as placement of the terrainblocker circle??
                 var gridy = (round(GetOrderPointY()/ GRID) * GRID).toReal()
