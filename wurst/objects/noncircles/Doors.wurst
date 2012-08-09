@@ -19,7 +19,7 @@ package Door
     constant integer array DOOR_COLOR_RGB_ID //restructure to 3 table???
     
     
-    public class Door extends StaticBaseObject
+    public class Door extends StaticSetupObject
         unit dummy
         unit pathing
         int color = 0
@@ -36,7 +36,7 @@ package Door
             		RemoveItem( GetItemOfTypeFromUnitBJ( u, keycolor[color] ) ) //WARNING BJ function//
             		toggleopen()
                     
-        static function colorize()
+        function colorize()
             color +=1
             if color >=8
                 color = 0
