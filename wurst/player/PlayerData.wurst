@@ -23,6 +23,8 @@ package PlayerData
         unit escaper
         int deaths = 0
         int XP = 40
+        
+        boolean gridClickActivated = false
     
         construct (player p)
             this.p = p

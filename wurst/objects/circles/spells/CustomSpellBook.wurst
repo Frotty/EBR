@@ -1,0 +1,48 @@
+package CustomSpellBook
+	import Entity
+	
+	SpellBookDummy array dummies
+	group array groups
+	
+	constant int DUMMY_ID
+	
+	trigger trig
+	
+	public class SpellBookDummy extends Entity
+		unit actor
+		
+		construct( player p, int id )
+			super( 0.,0.,0. )
+			GroupEnumUnitsSelected(groups[GetPlayerId(p)], p, null)
+			
+			var invalid = 0
+			for unit u in groups[GetPlayerId(p)]
+				if GetUnitTypeId(u) != id
+					invalid++
+					
+			if invalid < 1
+				actor = CreateUnit(p, DUMMY_ID, 0, 0, 0)
+				
+				TriggerRegisterUnitEvent(trig, actor, EVENT_UNIT_SPELL_CAST)
+				
+				actor.setUserData(this castTo int)
+			else
+				print("Your selected units aren't all of the same type.\nMulti-Config only works with a selection of units on the same type.")
+		
+		function addSpell(int id)
+			if actor != null
+				actor.addAbility(id)
+
+		
+		
+		static function onCast() 
+			SpellBookDummy dum = GetSpellAbilityUnit().getUserData() castTo SpellBookDummy
+			
+			
+	init
+		trig = CreateTrigger()
+		trig.addAction(function SpellBookDummy.onCast)
+		for int i = 8 to 10
+			groups[i] = CreateGroup()
+
+endpackage
