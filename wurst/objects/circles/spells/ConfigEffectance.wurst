@@ -1,0 +1,45 @@
+package ConfigEffectance
+	
+	Table killer_effectamce_ability_id()
+	int object_count = 13
+	
+	
+	public module ConfigEffectance
+		Table effectance
+	//Easier Handling with tables.
+	/*	0 escaper
+		
+		1 bigkiller
+		2 smallkiller
+		3 tank
+		4 galive
+		5 bigrandkiller
+		6 smallrandkiller
+		
+		7 spinner
+		8 powernode
+		9 bomber
+		10 teleportertarget
+		11 bombertarget
+		12 arrow
+		13 terrainchanger */
+					
+		construct()
+			for int i = 0 to object_count
+				effectance.saveBool(i,false)
+		
+		function enableOther(boolean value)
+			for int i = 1 to object_count
+				effectance.saveBool(i,value)
+		
+		function toggleEffectance(int id)
+			effectance.saveBool(id,not effectance.loadBool(id))
+		
+		function isEscaperEffected() returns boolean
+			return effectance.LoadBool(0)
+			
+	init
+		effect_on_ability_id.saveInt( 0, 'Abil')
+		effect_off_ability_id.saveInt( 0, 'Abil')
+		
+endpackage

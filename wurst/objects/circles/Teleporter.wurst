@@ -3,6 +3,7 @@ package Teleporter
     import Terrain
     import Escaper
     import EscaperKiller
+    import CustomSpellBook
     
 	constant int 	TELEPORTER_ID   = 'n00C'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -32,6 +33,17 @@ package Teleporter
 	
 		override function update()
 			skip
+			
+		static function onUpdateAbility(int ability_id)
+			for int id = 0 to object_count
+				if effectance_on_ability_id.loadInt(id) == ability_id
+					toggleEffectance(id)
+					RemoveAbility(obj ,ability_id)
+					AddAbility(obj ,effectance_off_ability_id.loadInt(id))
+				else if effectance_off_ability_id.loadInt(id) == ability_id
+					toggleEffectance(id)
+					RemoveAbility(obj ,ability_id)
+					AddAbility(obj ,effectance_on_ability_id.loadInt(id))
         
         static function register()
             unit u = GetConstructedStructure()
