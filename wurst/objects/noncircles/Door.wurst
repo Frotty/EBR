@@ -2,6 +2,7 @@ package Door
     import BaseObject
     import Terrain
     import Escaper
+    import SetupObject
     
 	//NOTE: Some parts of this are from the old ebr  O.o   >:0
     int array keycolor
@@ -15,9 +16,11 @@ package Door
     constant integer DOORCOLOR_ABILITY_ID = 'Ague'
     constant integer DOORPLACEKEY_ABILITY_ID = 'Av42'
     //Item type ids
-    constant integer array KEY_COLOR_ID
+    // doesn't work yet
+    integer array KEY_COLOR_ID
     //0-255 color of each gradient
-    constant integer array DOOR_COLOR_RGB_ID //restructure to 3 table???
+    integer array DOOR_COLOR_RGB_ID //restructure to 3 table???
+    
     
     
     public class Door extends StaticSetupObject
@@ -86,37 +89,37 @@ package Door
                     pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 0 )
 
     
-	function onSpellCast()
-        unit u = GetTriggerUnit()
-        Doors door = u.getData() castTo Doors
-        int id = GetSpellAbilityId()
-        
-        if id == DOOROPEN_ABILITY_ID
-            door.toggleopen()
-        else if id == DOORTURN_ABILITY_ID
-            door.turn()
-        else if id == DOORCOLOR_ABILITY_ID
-            door.colorize()
-        else if id == DOORPLACEKEY_ABILITY_ID
-            door.placekey(GetSpellTargetX(),GetSpellTargetY())
-            
-        static function register()
-            unit u = GetConstructedStructure()
-            u.setUserData( new Door( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
-
-        
-        construct( real x, real y, unit u, real radius )
-        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Door.keyopen ) 
-
-        
-        static function filter() returns boolean
-            return GetUnitTypeId( GetFilterUnit() ) == DOORDUMMY_ID
+		function onSpellCast()
+	        unit u = GetTriggerUnit()
+	        Doors door = u.getData() castTo Doors
+	        int id = GetSpellAbilityId()
+	        
+	        if id == DOOROPEN_ABILITY_ID
+	            door.toggleopen()
+	        else if id == DOORTURN_ABILITY_ID
+	            door.turn()
+	        else if id == DOORCOLOR_ABILITY_ID
+	            door.colorize()
+	        else if id == DOORPLACEKEY_ABILITY_ID
+	            door.placekey(GetSpellTargetX(),GetSpellTargetY())
+	            
+	    static function register()
+	        unit u = GetConstructedStructure()
+	        u.setUserData( new Door( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
+	
+	    
+	    construct( real x, real y, unit u, real radius )
+	    	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Door.keyopen ) 
+	
+	    
+	    static function filter() returns boolean
+	        return GetUnitTypeId( GetFilterUnit() ) == DOORDUMMY_ID
     
     public function init_Door( trigger t )
         //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
         t.addAction( function Door.register )
         //color id        unit id
-        KEY_COLOR_ID[0] = 'I0000' //white
+        KEY_COLOR_ID[0] = 'I000' //white
         KEY_COLOR_ID[1] = 'I005' //red
         KEY_COLOR_ID[2] = 'I006' //green
         KEY_COLOR_ID[3] = 'I007' //blue

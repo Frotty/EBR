@@ -4,7 +4,7 @@
 //It modifies every move&patrol order to the ordered point be a point of the grid.
 // 64 points for GRID is the ideal imo, i dont think builders need an option to set their grid's standard.
 package Gridclick
-    import PlayerModule
+    import PlayerData
 
     int PATROL_ID = 851990
     int MOVE_ID = 851971

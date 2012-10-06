@@ -1,13 +1,13 @@
 package ConfigEffectance
-	
-	Table killer_effectamce_ability_id()
+	/*
+	Table killer_effectamce_ability_id
 	int object_count = 13
 	
 	
 	public module ConfigEffectance
 		Table effectance
-	//Easier Handling with tables.
-	/*	0 escaper
+	Easier Handling with tables.
+		0 escaper
 		
 		1 bigkiller
 		2 smallkiller
@@ -22,7 +22,7 @@ package ConfigEffectance
 		10 teleportertarget
 		11 bombertarget
 		12 arrow
-		13 terrainchanger */
+		13 terrainchanger
 					
 		construct()
 			for int i = 0 to object_count
@@ -41,5 +41,5 @@ package ConfigEffectance
 	init
 		effect_on_ability_id.saveInt( 0, 'Abil')
 		effect_off_ability_id.saveInt( 0, 'Abil')
-		
-endpackage
+
+*/

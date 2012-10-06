@@ -15,7 +15,6 @@ package BaseObject
     
     
     public class StaticBaseObject extends Entity
-        player owner
         
         unit actor        
         
@@ -25,12 +24,11 @@ package BaseObject
         
         trigger inRangeTrig // Trigger for inRange detection
         
-        construct( real x, real y, real z, unit u, real radius, code c )
-        	super( x, y, z )
+        construct( vec3 pos, unit u, real radius, code c )
+        	super( pos, radius, u.getOwner() )
+        	active = false
             actor = u
             actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            
-            position = vec3 (x, y, getTerrainZ(x,y) )
             
             rallyPoint = position
             
@@ -45,7 +43,8 @@ package BaseObject
             actor.setUserData(this castTo int)
             
         override function update()
-        	skip 
+        override function onGround()
+        override function inAir()
         
         static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
             unit u        = GetOrderedUnit()
@@ -61,7 +60,7 @@ package BaseObject
                 if u2 == null
                     obj.rallyUnit = null
                     obj.rallyPoint = vec3( x, y, getTerrainZ( x, y ) )
-                    obj.rallyAngle = angleBetweenCoords( obj.position.x, obj.position.y, x, y )
+                    obj.rallyAngle = angleBetweenCoordsD( obj.position.x, obj.position.y, x, y )
                 else
                     obj.rallyUnit = u2
                     
@@ -108,8 +107,6 @@ package BaseObject
         ondestroy
             actor.clearRegister()
 
-    
-    /* End of Struct */
     
 
     init

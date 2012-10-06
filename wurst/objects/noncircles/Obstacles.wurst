@@ -2,7 +2,7 @@ package Obstacle
     import SetupObject
     import Terrain
     import Escaper
-    import Regions
+    //import Regions
     
 	constant int 	BIGOBSTACLE_ID  	= 'n00C'
 	constant int 	SMALLOBSTACLE_ID	= 'n00C'
@@ -37,10 +37,13 @@ package Obstacle
 
         
         construct( real x, real y, unit u, real radius )
-            if GetUnitTypeId(u) == SMALLOBSTACLE_ID
-        		super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS_SMALL, function Obstacle.kill ) 
-            else
-        		super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS_BIG, function Obstacle.kill ) 
+			super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS_SMALL, function Obstacle.kill ) 
+        	
+            //if GetUnitTypeId(u) == SMALLOBSTACLE_ID
+                // not valid
+                // super has to be first statement
+            //else
+        		//super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS_BIG, function Obstacle.kill ) 
 
 
         
