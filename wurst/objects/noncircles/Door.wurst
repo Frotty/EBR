@@ -1,0 +1,156 @@
+package Door
+    import BaseObject
+    import Terrain
+    import Escaper
+    import SetupObject
+    
+	//NOTE: Some parts of this are from the old ebr  O.o   >:0
+    int array keycolor
+    int array colorRGBv
+    constant integer DOORDUMMY_ID = 'h002'
+    constant integer DOORORDER_ID = 'h00C'
+    constant integer DOORPATH = 'h006'
+    constant integer DOORPATH_O = 'h00F'
+    constant integer DOOROPEN_ABILITY_ID = 'A00J'
+    constant integer DOORTURN_ABILITY_ID = 'A01W'
+    constant integer DOORCOLOR_ABILITY_ID = 'Ague'
+    constant integer DOORPLACEKEY_ABILITY_ID = 'Av42'
+    //Item type ids
+    // doesn't work yet
+    integer array KEY_COLOR_ID
+    //0-255 color of each gradient
+    integer array DOOR_COLOR_RGB_ID //restructure to 3 table???
+    
+    
+    
+    public class Door extends StaticSetupObject
+        unit dummy
+        unit pathing
+        int color = 0
+        boolean vertical = false
+        boolean opened = true
+        
+        static function keyopen() //open with item and color conditions
+        	unit source = GetTriggeringTrigger().getSource()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            thistype obj = source.getUserData() castTo thistype
+            if e instanceof Escaper
+          		if UnitHasItemOfTypeBJ( u, keycolor[color] ) and opened == false //WARNING BJ function//
+            		RemoveItem( GetItemOfTypeFromUnitBJ( u, keycolor[color] ) ) //WARNING BJ function//
+            		toggleopen()
+                    
+        function colorize()
+            color +=1
+            if color >=8
+                color = 0
+            SetUnitVertexColor(mydoor,DOOR_COLOR_RGB_ID[color] ,DOOR_COLOR_RGB_ID[color+8],DOOR_COLOR_RGB_ID[color+16],0)
+        
+        static function toggleopen()
+            if opened
+                SetUnitAnimation( dummy, "stand" )
+                RemoveUnit( pathing )
+                opened = false
+                if vertical
+                    pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 0 )
+                else
+                    pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 270 )
+            else
+                SetUnitAnimation( dummy, "Death Alternate" )
+                RemoveUnit( pathing )
+                opened = false
+                if vertical
+                    pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 0 )
+                else
+                    pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 270 )
+            
+        static function turn()
+            if vertical
+                RemoveUnit( pathing )
+                RemoveUnit( dummy )
+                vertical = false
+                if opened
+                    dummy = CreateUnit( owner, DOORDUMMY_ID , obj.position.x, obj.position.y, 270 )
+                    SetUnitAnimation( dummy, "Death Alternate" )
+                    pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 270 )
+                else
+                    dummy = CreateUnit( owner, DOORDUMMY_ID , obj.position.x, obj.position.y, 270 )
+                    pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 270 )
+            else
+                RemoveUnit( pathing )
+                RemoveUnit( dummy )
+                vertical = true
+                if this.opened 
+                    dummy = CreateUnit(owner, DOORDUMMY_ID , obj.position.x, obj.position.y, 0 )
+                    SetUnitAnimation( dummy, "Death Alternate" )
+                    pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 0 )
+                else
+                    dummy = CreateUnit( owner, DOORDUMMY_ID , obj.position.x, obj.position.y, 0 )
+                    pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 0 )
+
+    
+		function onSpellCast()
+	        unit u = GetTriggerUnit()
+	        Doors door = u.getData() castTo Doors
+	        int id = GetSpellAbilityId()
+	        
+	        if id == DOOROPEN_ABILITY_ID
+	            door.toggleopen()
+	        else if id == DOORTURN_ABILITY_ID
+	            door.turn()
+	        else if id == DOORCOLOR_ABILITY_ID
+	            door.colorize()
+	        else if id == DOORPLACEKEY_ABILITY_ID
+	            door.placekey(GetSpellTargetX(),GetSpellTargetY())
+	            
+	    static function register()
+	        unit u = GetConstructedStructure()
+	        u.setUserData( new Door( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
+	
+	    
+	    construct( real x, real y, unit u, real radius )
+	    	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Door.keyopen ) 
+	
+	    
+	    static function filter() returns boolean
+	        return GetUnitTypeId( GetFilterUnit() ) == DOORDUMMY_ID
+    
+    public function init_Door( trigger t )
+        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
+        t.addAction( function Door.register )
+        //color id        unit id
+        KEY_COLOR_ID[0] = 'I000' //white
+        KEY_COLOR_ID[1] = 'I005' //red
+        KEY_COLOR_ID[2] = 'I006' //green
+        KEY_COLOR_ID[3] = 'I007' //blue
+        KEY_COLOR_ID[4] = 'I008' //yellow
+        KEY_COLOR_ID[5] = 'I009' //pink
+        KEY_COLOR_ID[6] = 'I00A' //cyan
+        KEY_COLOR_ID[7] = 'I00J' //gray
+        //gatecoloring ^^
+        DOOR_COLOR_RGB_ID[0] = 255 //red
+        DOOR_COLOR_RGB_ID[1] = 255
+        DOOR_COLOR_RGB_ID[2] = 100
+        DOOR_COLOR_RGB_ID[3] = 100
+        DOOR_COLOR_RGB_ID[4] = 220
+        DOOR_COLOR_RGB_ID[5] = 220
+        DOOR_COLOR_RGB_ID[6] = 50
+        DOOR_COLOR_RGB_ID[7] = 100 
+        DOOR_COLOR_RGB_ID[8] = 255 //green
+        DOOR_COLOR_RGB_ID[9] = 100
+        DOOR_COLOR_RGB_ID[10] = 255
+        DOOR_COLOR_RGB_ID[11] = 100
+        DOOR_COLOR_RGB_ID[12] = 50
+        DOOR_COLOR_RGB_ID[13] = 220
+        DOOR_COLOR_RGB_ID[14] = 220
+        DOOR_COLOR_RGB_ID[15] = 100
+        DOOR_COLOR_RGB_ID[16] = 255 //blue
+        DOOR_COLOR_RGB_ID[17] = 100
+        DOOR_COLOR_RGB_ID[18] = 100
+        DOOR_COLOR_RGB_ID[19] = 255
+        DOOR_COLOR_RGB_ID[20] = 50
+        DOOR_COLOR_RGB_ID[21] = 220
+        DOOR_COLOR_RGB_ID[22] = 220
+        DOOR_COLOR_RGB_ID[23] = 100
+
+endpackage
