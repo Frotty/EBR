@@ -31,7 +31,7 @@ package RevivePoint
 	
 
         construct( real x, real y, unit u, real radius )
-        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Revivepoint.reach ) 
+        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Revivepoint.reach ) 
 
         
 		static function filter() returns boolean

@@ -1,35 +1,63 @@
 package Entity
-	import Vectors
+	import public Vectors
+	import public EntityManagement
 	import LinkedListModule
 	import Debug
+	import Terrain
+	
+	// bound factor for unit-unit collision
+	public constant BOUNCE_FACTOR = 0.6
 	
 	
-	public class Entity
+	public abstract class Entity
 		use LinkedListModule
 		
 		vec3 position
 		
-		real collisionRadius
+		real radius
+		real mass = .1
+		player owner
+		real terrainZ
 		
-		construct( real x, real y, real z )
-			position = vec3(x,y,z)
+		boolean isStatic = false
+		boolean active = true
+		boolean done = false
+		
+		construct( vec3 pos, real radius, player p )
+			position = pos
+			owner = p
+			this.radius = radius
 			entityCount++
 			currentEntityCount++
+			print("current Entities: " + currentEntityCount.toString() )
+			
+
+			
+		abstract function onGround()
+		abstract function inAir()
+
 		
-		function update()
-			print("no")
-			skip
+		function update()			
+			terrainZ = getTerrainZ( position.x, position.y )
+			
+			if position.z <= terrainZ + 1.
+				onGround()
+			else
+				inAir()
 			
 		ondestroy
+			print("yes")
 			currentEntityCount--
 	
 		
-	public class DynamicEntity extends Entity
+	public abstract class DynamicEntity extends Entity
 		vec3 velocity
 		
-		construct( real x, real y, real z )
-			super(x,y,z)
-			velocity = vec3(0.,0.,0.)
+		real factor = 1.
+
+		construct( vec3 pos, real radius, player p )
+			super(pos, radius, p)
+			velocity = vec3(0,0,0)
 			dynamicEntityCount++
 			
 		function addForce(real x, real y, real z)
@@ -39,23 +67,45 @@ package Entity
 			velocity = vec3(x,y,z)
 			
 		override function update()
-			skip
+			super.update()
+			position += velocity
 		
+		
+			
 	public class UnitEntity extends DynamicEntity
 		unit actor
-		player owner
 		
-		construct( real x, real y, real z, unit u )
-			super(x,y,z)
+		construct( vec3 pos, real radius, unit u )
+			super(pos,radius, u.getOwner())
+			print(position.toString())
 			actor = u
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			owner = GetOwningPlayer(u)
-			
+			actor.setUserData(this castTo int)
 			
 			unitEntityCount++
 			
+		function setNewPos(vec3 pos)
+			position = pos
+			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
+			
+		override function onGround()
+			super.onGround()
+			position = vec3( actor.getX(), actor.getY(), terrainZ )
+			
+		override function inAir()
+			super.inAir()
+			position = vec3( actor.getX(), actor.getY(), position.z )
+		
 			
 		override function update()
-			skip
+			super.update()
+			SetUnitX( actor, position.x )
+            SetUnitY( actor, position.y )
+            SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
+				
+			
+		ondestroy
+			actor.remove()
 			
 endpackage

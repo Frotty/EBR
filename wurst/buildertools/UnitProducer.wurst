@@ -2,9 +2,9 @@ package UnitProducer
 	import BaseObject
 	import SetupObject
 	
-	constant int ID
+	constant int ID = 'H00A'
 	
-	trigger orderTrigger
+	trigger castTrigger
 	
 	Table unitTable = new Table()
 	Table typeTable = new Table()
@@ -13,10 +13,10 @@ package UnitProducer
 	
 	class UnitProducer extends StaticBaseObject
 
-		construct( real x, real y, player owner )
-			super(x, y, 0., CreateUnit( owner, ID, x, y, 0.  ) , 0., function spawnUnit)
+		construct( vec3 pos, player owner )
+			super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., function spawnUnit)
 
-			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_SPELL_CAST)
+			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_SPELL_CAST)
 
 		static function spawnUnit()
 			var id = GetSpellAbilityId()
@@ -24,16 +24,13 @@ package UnitProducer
 			
 			var rX = obj.getRallyX()
 			var rY = obj.getRallyY() 
-			
+			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
 			var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
-			if typeTable.loadInt(id) == SETUP_TYPE
-				new DynamicSetupObject( rX, rY, 0., u, u, 0., null )
+			
 				
-		override function update()
-			skip
 			
 			
-	function init_UnitProducer()
+	public function init_UnitProducer()
 		unitTable.saveInt('A05F','u00G') //Big Killer
 		unitTable.saveInt('A05G','u008')
 		unitTable.saveInt('A05H','u00F')
@@ -46,11 +43,11 @@ package UnitProducer
 		unitTable.saveInt('A05O','u00Y')
 		unitTable.saveInt('A05P','u004')
 		//Table presets
-
+		new UnitProducer(vec3(0,0,0),Player(8))
 		
 	init
-		orderTrigger = CreateTrigger()
-		orderTrigger.addAction(function UnitProducer.spawnUnit)
-	
+		castTrigger = CreateTrigger()
+		castTrigger.addAction(function UnitProducer.spawnUnit)
+		
 	
 endpackage 

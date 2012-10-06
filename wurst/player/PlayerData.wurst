@@ -1,6 +1,5 @@
 package PlayerData
     import MultiboardClass
-    import PlayerModule
     import GameConstants
     import LinkedListModule
     
@@ -27,18 +26,24 @@ package PlayerData
         boolean gridClickActivated = false
     
         construct (player p)
+        	print("0")
             this.p = p
+            print("1")
             id = GetPlayerId(p)
+            print("2")
             gameId = PlayerData.size - 1
             name = GetPlayerName(p)
             mbname = name
+            print("3")
             if mbname == "Frotty" or mbname == "FrottyZ"
                 rank = "|cffADD642Creator"
-
+			print("4")
             for int i = 0 to cplayerCount
+                print(i.toString())
                 if mbname == names[i]
                     mbname = tags[i] + "|r" + colorcode[ id ] + mbname
-
+                    break
+			print("5")
             mbname = colorcode[ id ] + mbname
             
             
@@ -64,5 +69,45 @@ package PlayerData
 		if GetPlayerId(p) < 7
 			return true
 		return false
+		
+	public Board playerboard
+    public PlayerData array pData
+    
+    function initMB()
+        playerboard = new Board(playercount+1,3)
+        playerboard.board.setTitle("EBR0.64 : "+("|cff66aa2200:01"))
+        
+		PlayerData pd = PlayerData.first
+		int i = 0
+		while pd != null
+            playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
+            playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
+            playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
+            pd.setMBRow(i+1)
+            i++
+            pd = pd.next
+            
+        playerboard.board.getItem(0,0).setStyle(true,false)
+        playerboard.updateItem(0,0,"Player",null)
+        playerboard.board.getItem(0,1).setStyle(false,true)
+        playerboard.updateItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
+        playerboard.updateItem(0,2,"Rank",null)
+        playerboard.board.display(true)
+                
+        
+    init
+    	print("init p")
+        int r = 0
+        for i = 0 to 11
+            print(i.toString())
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
+                print(i.toString() + ".1")
+                pData[i] = new PlayerData(Player(i))
+                print(i.toString() + ".2")
+                r++
+                print(i.toString() + ".3")
+        playercount = r
+        print("yes")
+        TimerStart(CreateTimer(), 1., false,function initMB)
         
 endpackage 

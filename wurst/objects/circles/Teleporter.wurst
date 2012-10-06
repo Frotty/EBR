@@ -35,15 +35,7 @@ package Teleporter
 			skip
 			
 		static function onUpdateAbility(int ability_id)
-			for int id = 0 to object_count
-				if effectance_on_ability_id.loadInt(id) == ability_id
-					toggleEffectance(id)
-					RemoveAbility(obj ,ability_id)
-					AddAbility(obj ,effectance_off_ability_id.loadInt(id))
-				else if effectance_off_ability_id.loadInt(id) == ability_id
-					toggleEffectance(id)
-					RemoveAbility(obj ,ability_id)
-					AddAbility(obj ,effectance_on_ability_id.loadInt(id))
+			
         
         static function register()
             unit u = GetConstructedStructure()
@@ -51,7 +43,7 @@ package Teleporter
 
         
         construct( real x, real y, unit u, real radius )
-        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Teleporter.teleport ) 
+        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Teleporter.teleport ) 
 
         
         static function filter() returns boolean

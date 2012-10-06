@@ -1,4 +1,5 @@
 package CustomSpellBook
+/*
 	import Entity
 	
 	SpellBookDummy array dummies
@@ -46,3 +47,4 @@ package CustomSpellBook
 			groups[i] = CreateGroup()
 
 endpackage
+*/

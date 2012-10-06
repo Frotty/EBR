@@ -1,0 +1,22 @@
+package GameInit
+    import PlayerData
+    import Entity
+    import UnitProducer
+        	
+    function initGame()
+
+        print("Starting Init")
+        init_UnitProducer()
+        
+        if init_EntityManagement()
+            print("Finished Init - Game started")
+        else
+            printError("gamestart malfunction")
+
+    init
+    	print("ja")
+        trigger t = CreateTrigger()
+        TriggerRegisterTimerEvent( t, .2, false )
+        TriggerAddAction( t, function initGame )
+
+endpackage 

@@ -28,7 +28,7 @@ package Waypoint
 
         
         construct( real x, real y, unit u, real radius )
-        	super( x, y, getTerrainZ(x,y), u, EVENT_RADIUS, function Waypoint.orderMove ) 
+        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Waypoint.orderMove ) 
 
         
         static function filter() returns boolean

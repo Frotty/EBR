@@ -7,7 +7,10 @@ package BomberTarget
     public class BomberTarget extends DynamicSetupObject 
         
         construct( real x, real y, unit u, unit setup, real radius )
-        	super( x, y, getTerrainZ(x,y), u, setup, 0, function BomberTarget.onInRangeEvent ) 
+        	super( vec3(x, y, getTerrainZ(x,y)), u, setup, 0., function BomberTarget.onInRangeEvent ) 
+        	
+        static function onInRangeEvent()
+            print("wut")
 
         override function update()
         	print("yes")

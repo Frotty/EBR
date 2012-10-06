@@ -7,7 +7,7 @@ package Escaper
 	
 	public Table escaperTable = new Table()
 	
-	
+	constant real COLL_RADIUS = 32.
 
 	
 	public class Escaper extends UnitEntity
@@ -19,8 +19,8 @@ package Escaper
 			skip
 		
 		
-		construct( real x, real y, real z, player owner )
-			super(x,y,z,CreateUnit(owner, 'h000', x, y, 0.) )
+		construct( vec3 pos, player owner )
+			super(pos, COLL_RADIUS, CreateUnit(owner, 'h000', pos.x, pos.y, 0.) )
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 
 		
