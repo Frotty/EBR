@@ -47,23 +47,29 @@ package Door
             SetUnitVertexColor(mydoor,DOOR_COLOR_RGB_ID[color] ,DOOR_COLOR_RGB_ID[color+8],DOOR_COLOR_RGB_ID[color+16],0)
         
         static function toggleopen()
-            if opened
-                SetUnitAnimation( dummy, "stand" )
-                RemoveUnit( pathing )
-                opened = false
-                if vertical
-                    pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 0 )
-                else
-                    pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 270 )
+        	if opened
+                closeDoor()
             else
-                SetUnitAnimation( dummy, "Death Alternate" )
-                RemoveUnit( pathing )
-                opened = false
-                if vertical
-                    pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 0 )
-                else
-                    pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 270 )
-            
+                openDoor()
+        
+        function closeDoor()
+            SetUnitAnimation( dummy, "stand" )
+            RemoveUnit( pathing )
+            opened = false
+            if vertical
+                pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 0 )
+            else
+                pathing  = CreateUnit( owner, DOORPATH, obj.position.x, obj.position.y, 270 )
+    
+        function openDoor()
+            SetUnitAnimation( dummy, "Death Alternate" )
+            RemoveUnit( pathing )
+            opened = false
+            if vertical
+                pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 0 )
+            else
+                pathing  = CreateUnit( owner, DOORPATH_O, obj.position.x, obj.position.y, 270 )
+        
         static function turn()
             if vertical
                 RemoveUnit( pathing )

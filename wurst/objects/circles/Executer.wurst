@@ -1,0 +1,111 @@
+package Teleporter
+    import BaseObject
+    import Terrain
+    import Escaper
+    import EscaperKiller
+    import CustomSpellBook
+    
+	constant int 	EXECUTER_ID   = 'n00C'
+	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+	
+	constant real 	EVENT_RADIUS	= 32.
+
+	enum Emode
+		REPEATING
+		ONESHOT
+		LEVER
+		PRESSUREPLATE
+	
+	enum Amode
+		OPENDOOR
+		CLOSEDOOR
+		CREATEUNIT
+		MOVEUNIT
+		CHANGETERRAIN
+
+	enum ActionTile //for change terrain action
+		WALKABLE
+		UNWALKABLE
+		ICE
+		UNICE
+		
+
+    class Executer extends StaticBaseObject
+        boolean canKillerTrigger = false
+        Emode eventMode
+        Amode actionMode
+        boolean ON // only for lever and pressureplate
+        ActionTile actionTile
+        int verticalTileSize
+        int horizontalTileSize
+        unit unitToMove // for unitMover
+        ActionUnit creatingUnit // only for UnitCreator Executer 
+        
+        static function onEvent()
+            unit source = GetTriggeringTrigger().getSource()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            thistype obj = source.getUserData() castTo thistype
+            
+            if (not obj.canKillerTrigger and e instanceof Escaper) or (obj.canKillerTrigger and e instanceof Killer)
+	        	switch eventMode
+	        		case REPEATING
+	        			obj.findAction()
+	        		case ONESHOT
+	        			obj.findAction()
+	        			destroy obj
+	        		case LEVER
+	        			if ON
+	                        obj.negativeAction()
+	                    else
+	                        obj.findAction()
+	        		case PRESSUREPLATE
+	        			if not ON
+	                        obj.findAction()
+        		
+        function findAction()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            
+            var rx = getRallyX()
+            var ry = getRallyY()
+            
+            switch actionMode
+            	case CLOSEGATE
+            		door.close
+            	case OPENGATE
+            		door.open
+            	case CHANGETERRAIN
+            		complicated
+            	case MOVEUNIT
+            		complicated
+            	case CREATEUNIT
+            		complicated
+	            		
+		function negativeAction()
+		override function update()
+			skip
+			
+		static function onUpdateAbility(int ability_id)
+			
+        
+        static function register()
+            unit u = GetConstructedStructure()
+            u.setUserData( new Executer( u.getX(), u.getY(), u) castTo int )
+
+        
+        construct( real x, real y, unit u)
+        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Executer.onEvent ) 
+
+        
+        static function filter() returns boolean
+            return GetUnitTypeId( GetFilterUnit() ) == EXECUTER_ID
+        
+    
+    
+    public function init_Executer( trigger t )
+        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
+        t.addAction( function Executer.register )
+
+
+endpackage
