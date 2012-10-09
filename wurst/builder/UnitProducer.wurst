@@ -1,0 +1,53 @@
+package UnitProducer
+	import BaseObject
+	import SetupObject
+	
+	constant int ID = 'H00A'
+	
+	trigger castTrigger
+	
+	Table unitTable = new Table()
+	Table typeTable = new Table()
+	
+	constant int SETUP_TYPE = 0
+	
+	class UnitProducer extends StaticBaseObject
+
+		construct( vec3 pos, player owner )
+			super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., function spawnUnit)
+
+			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_SPELL_CAST)
+
+		static function spawnUnit()
+			var id = GetSpellAbilityId()
+			var obj = GetSpellAbilityUnit().getUserData() castTo UnitProducer
+			
+			var rX = obj.getRallyX()
+			var rY = obj.getRallyY() 
+			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
+			var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
+			
+				
+			
+			
+	public function init_UnitProducer()
+		unitTable.saveInt('A05F','u00G') //Big Killer
+		unitTable.saveInt('A05G','u008')
+		unitTable.saveInt('A05H','u00F')
+		unitTable.saveInt('A05I','u00Q')
+		unitTable.saveInt('A05J','u006')
+		unitTable.saveInt('A05K','u00E') //Small Killer
+		unitTable.saveInt('A05L','u00K')
+		unitTable.saveInt('A05M','u001')
+		unitTable.saveInt('A05N','u00B')
+		unitTable.saveInt('A05O','u00Y')
+		unitTable.saveInt('A05P','u004')
+		//Table presets
+		//new UnitProducer(vec3(0,0,0),Player(8))
+		
+	init
+		castTrigger = CreateTrigger()
+		castTrigger.addAction(function UnitProducer.spawnUnit)
+		
+	
+endpackage 

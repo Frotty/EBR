@@ -1,4 +1,0 @@
-package BuilderConstants
-
-public constant real hiddenX = -5448
-public constant real hiddenY = 6469

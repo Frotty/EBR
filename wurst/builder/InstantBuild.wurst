@@ -1,0 +1,106 @@
+package InstantBuild
+import Builder
+import Entity
+
+constant int dummy = 'h00G'
+        
+real x
+real y
+real ox
+real oy
+unit u
+unit d
+timer t = CreateTimer()
+int o
+int array buildorders
+
+    
+function condition() returns boolean
+    return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
+  
+
+function isOrderBuildOrder( int o ) returns boolean
+    int i = 0
+    
+    while buildorders[i] != 0
+        if buildorders[i] == o
+            return true 
+        i++
+    return false
+
+
+function callback()
+    d = CreateUnit(Player(GetPlayerId(GetOwningPlayer(u))),dummy,x,y,bj_UNIT_FACING)
+    UnitApplyTimedLife(d,'BTLF',1)
+    IssuePointOrderById(d,o,x,y)
+    SetUnitPosition(u,x,y)
+    SetUnitX(u,ox)
+    SetUnitY(u,oy)
+    d = null
+
+
+function conac() 
+    
+    widget w = GetOrderTarget()
+    int ord = GetIssuedOrderId()
+    u = GetTriggerUnit()
+    o = GetUnitCurrentOrder(u)
+    
+    if isOrderBuildOrder(ord)
+        x = GetLocationX(GetOrderPointLoc())
+        y = GetLocationY(GetOrderPointLoc())
+        ox = GetUnitX(u)
+        oy = GetUnitY(u)
+        TimerStart(t,0.00,false, function callback)
+    else
+        if w == null
+            SetUnitX(u,GetOrderPointX())
+            SetUnitY(u,GetOrderPointY())
+            DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", GetUnitX(u), GetUnitY(u) ) )
+            SetUnitFacing(u, angleBetweenCoordsD(GetUnitX(u), GetUnitY(u), GetOrderPointX(), GetOrderPointY()) )
+        else
+            SetUnitFacing( u, angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetWidgetX(w), GetWidgetY(w) ) )
+            SetUnitX(u,GetWidgetX(w))
+            SetUnitY(u,GetWidgetY(w))
+            DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", GetUnitX(u), GetUnitY(u) ) )
+
+    w = null
+
+
+
+
+
+init
+    trigger trig = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
+    TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
+    TriggerAddCondition( trig, Condition( function condition ) )
+    TriggerAddAction( trig,  function conac  )
+    
+    buildorders[0] = 'n00G'
+    buildorders[1] = 'n00B'
+    buildorders[2] = 'n000'
+    buildorders[3] = 'n01B'
+    buildorders[4] = 'n001'
+    buildorders[5] = 'h019'
+    buildorders[6] = 'n012'
+    buildorders[7] = 'h009'
+    buildorders[8] = 'n01D'
+    buildorders[9] = 'n01E'
+    buildorders[10] = 'n00F'
+    buildorders[11] = 'n00J'
+    buildorders[12] = 'n003'
+    buildorders[13] = 'n004'
+    buildorders[14] = 'n00C'
+    buildorders[15] = 'h002'
+    buildorders[16] = 'obSD'
+    buildorders[17] = 'obBD'
+    buildorders[18] = 'n010'
+    buildorders[19] = 'n013'
+    buildorders[20] = 'n006'
+    buildorders[21] = 'h01M'
+    buildorders[22] = 'n00P'
+    buildorders[23] = 'n01C'
+    buildorders[24] = 'h00H'
+    buildorders[25] = 'h0nn'
+

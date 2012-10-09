@@ -1,5 +1,5 @@
 package Door
-    import BaseObject
+/*    import BaseObject
     import Terrain
     import Escaper
     import SetupObject
@@ -152,5 +152,5 @@ package Door
         DOOR_COLOR_RGB_ID[21] = 220
         DOOR_COLOR_RGB_ID[22] = 220
         DOOR_COLOR_RGB_ID[23] = 100
-
+*/
 endpackage
