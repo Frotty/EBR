@@ -1,6 +1,7 @@
 package UnitProducer
 	import BaseObject
 	import SetupObject
+	import RegionData
 	
 	constant int ID = 'H00A'
 	
@@ -24,8 +25,19 @@ package UnitProducer
 			
 			var rX = obj.getRallyX()
 			var rY = obj.getRallyY() 
+			var i = getRegionNumber(rX, rY)
+			
 			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
-			var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
+			if regions[i].isOwner(obj.owner)
+				if id == 'A05F'
+					var u = CreateUnit(obj.owner, regions[i].bigKillerId, rX, rY, 0. )
+				else if id == 'A05K'
+					var u = CreateUnit(obj.owner, regions[i].smallKillerId, rX, rY, 0. )
+				else
+					var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
+			else
+				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019This Region doesn't belong to you!createU")
+				
 			
 				
 			
@@ -48,6 +60,5 @@ package UnitProducer
 	init
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function UnitProducer.spawnUnit)
-		
-	
-endpackage 
+
+endpackage

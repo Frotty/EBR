@@ -1,0 +1,132 @@
+package TerrainModder
+	//The Terrainers appear as heroes, and which with the builders change tiles.
+	
+	import BaseObject
+	import SetupObject
+	import RegionData
+	
+	constant int ICECONTROL = 'H007'
+    constant int ICEUNCONTROL = 'H008'
+    constant int UNWALKABLE = 'H005'
+    constant int WALKABLE = 'H004'
+    
+    constant int ICE_ABILITY = 'AICE'
+    constant int REVICE_ABILITY = 'AREV'
+	int array UNWALKABLE_MOD_ABILITY_ID
+	
+	trigger castTrigger
+	
+	
+	constant int SETUP_TYPE = 0
+	
+	class TerrainModder extends StaticBaseObject
+		boolean smallbrush 
+		int modification // 0 = basic terrain, 1 = lava/revice 2 = poison
+
+		construct( vec3 pos, player owner ,unit u)
+			super(pos, u , 0., function changeTerrain)
+
+			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
+
+		static function changeTerrain()
+			var id = GetTriggerUnit()
+			var obj = GetTriggerUnit().getUserData() castTo TerrainModder
+			
+			var rX = GetOrderPointX()
+			var rY = GetOrderPointY()
+			 
+			var i = getRegionNumber(rX, rY)
+			
+			if regions[i].isOwner(obj.owner)
+            	if GetUnitTypeId(id) == ICECONTROL
+                    if obj.modification == 1
+                        if obj.smallbrush
+                            SetTerrainType( rX, rY, REVICE, -1, 1, 1 )
+                        else
+                            SetTerrainType( rX, rY, REVICE, -1, 2, 1 )
+                    else
+                        if obj.smallbrush
+                            SetTerrainType( rX, rY, ICE, -1, 1, 1 )
+                        else
+                            SetTerrainType( rX, rY, ICE, -1, 2, 1 )
+                            
+                else if GetUnitTypeId(id) == ICEUNCONTROL
+                    if obj.smallbrush
+                        SetTerrainType( rX, rY, UCICE, -1, 1, 1 )
+                    else
+                        SetTerrainType( rX, rY, UCICE, -1, 2, 1 )
+                else if GetUnitTypeId(id) == WALKABLE
+                    if obj.smallbrush
+                        SetTerrainType( rX, rY, regions[i].walkableTile, -1, 1, 1 )
+                    else
+                        SetTerrainType( rX, rY, regions[i].walkableTile, -1, 2, 1 )
+                else if GetUnitTypeId(id) == UNWALKABLE
+                    if obj.modification == 0
+                        if obj.smallbrush
+                        	SetTerrainType( rX, rY, regions[i].unwalkableTile, -1, 1, 1 )
+                    	else
+                        	SetTerrainType( rX, rY, regions[i].unwalkableTile, -1, 2, 1 )
+                    else if obj.modification == 1
+                        if obj.smallbrush
+                        	SetTerrainType( rX, rY, LAVA, -1, 1, 1 )
+                    	else
+                        	SetTerrainType( rX, rY, LAVA, -1, 2, 1 )
+                    else if obj.modification == 2
+                        if obj.smallbrush
+                        	SetTerrainType( rX, rY, POISON, -1, 1, 1 )
+                    	else
+                        	SetTerrainType( rX, rY, POISON, -1, 2, 1 )
+        	else
+        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019This Region doesn't belong to you!changeT")
+
+		function switchMode()
+			if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[1]
+	            if not modification == 1
+					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[1], false)
+					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+	                modification = 1
+	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
+	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[2]
+	            if not modification == 2
+					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[2], false)
+					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+	                modification = 2
+	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
+	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[0]
+				if not modification == 0
+					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[0], false)
+					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+		            modification = 0
+		            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+			else if GetSpellAbilityId() == ICE_ABILITY
+	            if not modification == 0
+					SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, false)
+					SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, true)
+	                modification = 0
+	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+	        else if GetSpellAbilityId() == REVICE_ABILITY
+	            if not modification == 1
+					SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, false)
+					SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, true)
+	                modification = 1
+	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
+	
+	function oncast()
+		var id = GetSpellAbilityId()
+		var obj = GetSpellAbilityUnit().getUserData() castTo TerrainModder
+		obj.switchMode()
+		
+			
+	
+	init
+		castTrigger = CreateTrigger()
+		castTrigger.addAction(function TerrainModder.changeTerrain)
+		trigger t = CreateTrigger()
+		RegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_CAST)
+		TriggerAddAction(t, function oncast)
+		
+		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'
+		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04X'
+		UNWALKABLE_MOD_ABILITY_ID[2] = 'A04Z'
+
+endpackage
