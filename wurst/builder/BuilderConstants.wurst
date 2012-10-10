@@ -6,6 +6,9 @@ public constant real hiddenY = 6469
 public constant int CONTROLLABLEICE = 'Nice'
 public constant int UNCONTROLLABLEICE = 'Idki'
 public constant int REVICE = 'Glav'
+public constant int LAVA = 'Glvc'
+public constant int POISON = 'Cpos'
+
 
 public constant int BUILDER_1 = 'u001'
 

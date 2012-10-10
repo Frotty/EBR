@@ -24,6 +24,11 @@ public class RegionData
 	
 	boolean visible = false
 	trigger visTrig
+	
+	boolean isGreyOwner
+    boolean isLBOwner
+    boolean isDGOwner
+            
 	construct( rect r )
 		theRect = r
 		visTrig = CreateTrigger()
@@ -46,7 +51,18 @@ public class RegionData
 				treeId = trees[i]
 				print("RegionData set " + i.toString())
 				break
-				
+	
+	function isOwner(int playerid) returns boolean
+		switch playerid
+			case 9
+				return isGreyOwner
+			case 10
+				return isLBOwner
+			case 11 
+				return isDGOwner
+			default
+				return false
+								
 	static function enterRect()
 		print("YESSSSSSSSSSSS entered")
 		var u = GetTriggerUnit()
@@ -58,6 +74,15 @@ public class RegionData
 				CreateFogModifierRectBJ( true, u.getOwner(), FOG_OF_WAR_VISIBLE, rdata.theRect )
 				rdata.visible = true
 				
+
+
+public function getRegionData(real x, real y) returns RegionData
+	for i = 0 to 21
+		if RectContainsCoords(regions[i].theRect, x, y)
+			return regions[i]
+			
+	return null
+
 
 Table regionTable = new Table()
 public RegionData array regions
@@ -113,53 +138,55 @@ public function init_Regions()
     
    
 function initTerrainTypes()
-	 //CITADEL
-    ritem[0] = 'I00H'
-    rectw[0] = 'Idtr'
-    rectuw[0] = 'Ibkb'
-    rectsk[0] = 'n00E'
-    rectbk[0] = 'h01I'
-    trees[0] = 'KTtw'
-    sobst[0] = 'n018'
-    bobst[0] = 'n019'
-    
-    //SAND
-    ritem[1] = 'I00G'
-    rectw[1] = 'Bdsd'
-    rectuw[1] = GetTerrainType(2670,-7090)
-    rectsk[1] = 'n00D'
-    rectbk[1] = 'h01H'
-    trees[1] = 'BTtw'
-    sobst[1] = 'n01F'
-    bobst[1] = 'n01G'
-                
-    
-    //CITY
-    ritem[2] = 'I00E'
-    rectw[2] = 'Ywmb'
-    rectuw[2] = 'Ygsb'
-    rectsk[2] = 'n009'
-    rectbk[2] = 'h018'
-    trees[2] = 'LTlt'
-    sobst[2] = 'n01I'
-    bobst[2] = 'n01H'
-                
-    //ICE
-    ritem[3] = 'I00D'
-    rectw[3] = 'Itbk'
-    rectuw[3] = 'Isnw'
-    rectsk[3] = 'n007'
-    rectbk[3] = 'h015'
-    trees[3] = 'WTst'
-    sobst[3] = 'n00R'
-    bobst[3] = 'n00S'
-    
-    //SUNKEN
-    ritem[4] = 'I00N'
-    rectw[4] = 'Zbks'
-    rectuw[4] = 'Zdrg'
-    rectsk[4] = 'u002'
-    rectbk[4] = 'u009'
-    trees[4] = 'ZTtw'
-    sobst[4] = 'n055'
-    bobst[4] = 'n005'
+	//CITADEL
+	ritem[0] = 'I00H'
+	rectw[0] = 'Idtr'
+	rectuw[0] = 'Ibkb'
+	rectsk[0] = 'n00E'
+	rectbk[0] = 'h01I'
+	trees[0] = 'KTtw'
+	sobst[0] = 'n018'
+	bobst[0] = 'n019'
+	
+	//SAND
+	ritem[1] = 'I00G'
+	rectw[1] = 'Bdsd'
+	rectuw[1] = GetTerrainType(2670,-7090)
+	rectsk[1] = 'n00D'
+	rectbk[1] = 'h01H'
+	trees[1] = 'BTtw'
+	sobst[1] = 'n01F'
+	bobst[1] = 'n01G'
+	            
+	
+	//CITY
+	ritem[2] = 'I00E'
+	rectw[2] = 'Ywmb'
+	rectuw[2] = 'Ygsb'
+	rectsk[2] = 'n009'
+	rectbk[2] = 'h018'
+	trees[2] = 'LTlt'
+	sobst[2] = 'n01I'
+	bobst[2] = 'n01H'
+	            
+	//ICE
+	ritem[3] = 'I00D'
+	rectw[3] = 'Itbk'
+	rectuw[3] = 'Isnw'
+	rectsk[3] = 'n007'
+	rectbk[3] = 'h015'
+	trees[3] = 'WTst'
+	sobst[3] = 'n00R'
+	bobst[3] = 'n00S'
+	
+	//SUNKEN
+	ritem[4] = 'I00N'
+	rectw[4] = 'Zbks'
+	rectuw[4] = 'Zdrg'
+	rectsk[4] = 'u002'
+	rectbk[4] = 'u009'
+	trees[4] = 'ZTtw'
+	sobst[4] = 'n055'
+	bobst[4] = 'n005'
+	
+

@@ -105,6 +105,11 @@ package Escaper
 					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x2,y2))
                 else
 					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x3,y3))
+			else if ttype == REVICE
+                if w == null
+					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x2,y2)-180)
+                else
+					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x3,y3)-180)
 
 			
 	trigger slideAssist

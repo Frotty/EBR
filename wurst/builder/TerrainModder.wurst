@@ -1,6 +1,6 @@
 package TerrainModder
 	//The Terrainers appear as heroes, and which with the builders change tiles.
-	
+	import BuilderConstants
 	import BaseObject
 	import SetupObject
 	import RegionData
@@ -35,9 +35,9 @@ package TerrainModder
 			var rX = GetOrderPointX()
 			var rY = GetOrderPointY()
 			 
-			var i = getRegionNumber(rX, rY)
+			var rdata = getRegionData(rX, rY)
 			
-			if regions[i].isOwner(obj.owner)
+			if rdata.isOwner(obj.owner.getId()) 
             	if GetUnitTypeId(id) == ICECONTROL
                     if obj.modification == 1
                         if obj.smallbrush
@@ -46,26 +46,26 @@ package TerrainModder
                             SetTerrainType( rX, rY, REVICE, -1, 2, 1 )
                     else
                         if obj.smallbrush
-                            SetTerrainType( rX, rY, ICE, -1, 1, 1 )
+                            SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 1, 1 )
                         else
-                            SetTerrainType( rX, rY, ICE, -1, 2, 1 )
+                            SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 2, 1 )
                             
                 else if GetUnitTypeId(id) == ICEUNCONTROL
                     if obj.smallbrush
-                        SetTerrainType( rX, rY, UCICE, -1, 1, 1 )
+                        SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 1, 1 )
                     else
-                        SetTerrainType( rX, rY, UCICE, -1, 2, 1 )
+                        SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 2, 1 )
                 else if GetUnitTypeId(id) == WALKABLE
                     if obj.smallbrush
-                        SetTerrainType( rX, rY, regions[i].walkableTile, -1, 1, 1 )
+                        SetTerrainType( rX, rY, rdata.walkableTile, -1, 1, 1 )
                     else
-                        SetTerrainType( rX, rY, regions[i].walkableTile, -1, 2, 1 )
+                        SetTerrainType( rX, rY, rdata.walkableTile, -1, 2, 1 )
                 else if GetUnitTypeId(id) == UNWALKABLE
                     if obj.modification == 0
                         if obj.smallbrush
-                        	SetTerrainType( rX, rY, regions[i].unwalkableTile, -1, 1, 1 )
+                        	SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 1, 1 )
                     	else
-                        	SetTerrainType( rX, rY, regions[i].unwalkableTile, -1, 2, 1 )
+                        	SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 2, 1 )
                     else if obj.modification == 1
                         if obj.smallbrush
                         	SetTerrainType( rX, rY, LAVA, -1, 1, 1 )
@@ -122,7 +122,7 @@ package TerrainModder
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function TerrainModder.changeTerrain)
 		trigger t = CreateTrigger()
-		RegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_CAST)
+		TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_CAST)
 		TriggerAddAction(t, function oncast)
 		
 		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'

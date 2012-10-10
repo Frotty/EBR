@@ -172,7 +172,7 @@ public function init_Choose()
 		
 	x2 = PX + 150 * Cos(360 * bj_DEGTORAD)
     y2 = PY + 150 * Sin(360 * bj_DEGTORAD)
-    herott[i + 1] = CreateTextTag()
+    herott[herocount] = CreateTextTag()
     SetTextTagText(herott[i+1],"Press the |cff2194EFLeft|r/|cff08B552Right|r |cffB5B5B5Arrowkey|r to switch the escaper.\nChoose by Pressing the |cff2194EFDown|r |cffB5B5B5Arrowkey|r. ",10* 0.023 / 10)
     SetTextTagPermanent(herott[i+1],true)
     SetTextTagVisibility(herott[i+1],true)
