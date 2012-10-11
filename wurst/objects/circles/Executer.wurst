@@ -4,6 +4,7 @@ package Teleporter
     import Escaper
     import EscaperKiller
     import CustomSpellBook
+    import RegionData
     
 	constant int 	EXECUTER_ID   = 'n00C'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -29,6 +30,12 @@ package Teleporter
 		ICE
 		UNICE
 		
+	enum ActionUnit
+		SMALLKILLER
+		BIGKILLER
+		POINTER
+		TANK
+		GLAIVE
 
     class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
@@ -39,7 +46,7 @@ package Teleporter
         int verticalTileSize
         int horizontalTileSize
         unit unitToMove // for unitMover
-        ActionUnit creatingUnit // only for UnitCreator Executer 
+        ActionUnit actionUnit // only for UnitCreator Executer 
         
         static function onEvent()
             unit source = GetTriggeringTrigger().getSource()
@@ -47,21 +54,23 @@ package Teleporter
             Entity e = u.getUserData() castTo Entity
             thistype obj = source.getUserData() castTo thistype
             
-            if (not obj.canKillerTrigger and e instanceof Escaper) or (obj.canKillerTrigger and e instanceof Killer)
-	        	switch eventMode
-	        		case REPEATING
+            if (not obj.canKillerTrigger and e instanceof Escaper) or (obj.canKillerTrigger and e instanceof EscaperKiller)
+	        	switch obj.eventMode
+	        		case Emode.REPEATING
 	        			obj.findAction()
-	        		case ONESHOT
+	        		case Emode.ONESHOT
 	        			obj.findAction()
 	        			destroy obj
-	        		case LEVER
-	        			if ON
+	        		case Emode.LEVER
+	        			if obj.ON
 	                        obj.negativeAction()
 	                    else
 	                        obj.findAction()
-	        		case PRESSUREPLATE
-	        			if not ON
+	        		case Emode.PRESSUREPLATE
+	        			if not obj.ON
 	                        obj.findAction()
+	                default
+	                	print("Bug- ExecuterEvent")
         		
         function findAction()
             unit u = GetTriggerUnit()
@@ -71,20 +80,55 @@ package Teleporter
             var ry = getRallyY()
             
             switch actionMode
-            	case CLOSEGATE
+            	case Amode.CLOSEDOOR
             		door.close
-            	case OPENGATE
+            	case Amode.OPENDOOR
             		door.open
-            	case CHANGETERRAIN
-            		complicated
-            	case MOVEUNIT
-            		complicated
-            	case CREATEUNIT
-            		complicated
+            	case Amode.CHANGETERRAIN
+            		changeTerrain()
+            	case Amode.MOVEUNIT
+            		moveUnit()
+            	case Amode.CREATEUNIT
+            		createUnit()
+            	default
+            		print("Bug - ExecuterAction")
 	            		
 		function negativeAction()
-		override function update()
 			skip
+		
+		function moveUnit()
+			skip
+			
+		function createUnit()
+			unit u
+			
+			var rX = getRallyX()
+            var rY = getRallyY()
+            var i = getRegionNumber(rX, rY)
+            
+			if regions[i].isOwner(GetPlayerId(owner))
+				switch actionUnit
+					case ActionUnit.SMALLKILLER
+						u = CreateUnit(owner, regions[i].smallKillerId,rX, rY, 0.)
+					case ActionUnit.BIGKILLER
+						u = CreateUnit(owner, regions[i].bigKillerId,rX, rY, 0.)
+					case ActionUnit.TANK
+						u = CreateUnit(owner, TANKID,rX, rY, 0.)
+					case ActionUnit.GLAIVE
+						u = CreateUnit(owner, GLAIVEID,rX, rY, 0.)
+					case ActionUnit.POINTER
+						u = CreateUnit(owner, PONTERID,rX, rY, 0.)
+					default
+						print("Bug- ExecuterCreateUnit")
+			
+		function changeTerrain()
+			unit u
+			
+			var rX = getRallyX()
+            var rY = getRallyY()
+            var i = getRegionNumber(rX, rY)
+            
+            if 
 			
 		static function onUpdateAbility(int ability_id)
 			

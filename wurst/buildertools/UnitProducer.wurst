@@ -27,14 +27,15 @@ package UnitProducer
 			var rY = obj.getRallyY() 
 			var i = getRegionNumber(rX, rY)
 			
+			unit u
 			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
-			if regions[i].isOwner(obj.owner)
+			if regions[i].isOwner(GetPlayerId(obj.owner))
 				if id == 'A05F'
-					var u = CreateUnit(obj.owner, regions[i].bigKillerId, rX, rY, 0. )
+					u = CreateUnit(obj.owner, regions[i].bigKillerId, rX, rY, 0. )
 				else if id == 'A05K'
-					var u = CreateUnit(obj.owner, regions[i].smallKillerId, rX, rY, 0. )
+					u = CreateUnit(obj.owner, regions[i].smallKillerId, rX, rY, 0. )
 				else
-					var u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
+					u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
 			else
 				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019This Region doesn't belong to you!createU")
 				
