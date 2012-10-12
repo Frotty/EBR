@@ -23,15 +23,7 @@ package Executer
 		CREATEUNIT
 		MOVEUNIT
 		CHANGETERRAIN
-<<<<<<< HEAD
 
-	enum ActionTile //for change terrain action
-		WALKABLE
-		UNWALKABLE
-		ICE
-		UNICE
-	/*	
-=======
 		
 	enum ActionUnit
 		SMALLKILLER
@@ -39,7 +31,6 @@ package Executer
 		POINTER
 		TANK
 		GLAIVE
->>>>>>> 7fe3f1be84608a20de79f09be4acfecf79af13c2
 
     class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
@@ -221,10 +212,5 @@ package Executer
         executerUnitLeave = CreateTrigger()
         executerUnitLeave.addAction(function onEvent)
 
-<<<<<<< HEAD
-	*/
 endpackage
-=======
 
-endpackage
->>>>>>> 7fe3f1be84608a20de79f09be4acfecf79af13c2
