@@ -89,6 +89,10 @@ package Entity
 			position = pos
 			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
 			
+		function setNewActor(unit u)
+			actor = u
+			actor.setUserData(this castTo int)
+			
 		override function onGround()
 			position = vec3( actor.getX(), actor.getY(), terrainZ )
 			

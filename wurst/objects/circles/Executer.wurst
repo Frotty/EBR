@@ -28,7 +28,7 @@ package Executer
 		UNWALKABLE
 		ICE
 		UNICE
-		
+	/*	
 
     class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
@@ -107,5 +107,5 @@ package Executer
         //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
         t.addAction( function Executer.register )
 
-
+	*/
 endpackage

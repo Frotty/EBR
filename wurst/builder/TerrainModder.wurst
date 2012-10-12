@@ -82,32 +82,32 @@ package TerrainModder
 		function switchMode()
 			if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[1]
 	            if not modification == 1
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[1], false)
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+					//SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[1], false)
+					//SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
 	                modification = 1
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
 	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[2]
 	            if not modification == 2
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[2], false)
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+					//SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[2], false)
+					//SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
 	                modification = 2
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
 	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[0]
 				if not modification == 0
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[0], false)
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+					//SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[0], false)
+					//SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
 		            modification = 0
 		            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 			else if GetSpellAbilityId() == ICE_ABILITY
 	            if not modification == 0
-					SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, false)
-					SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, true)
+					//SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, false)
+					//SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, true)
 	                modification = 0
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 	        else if GetSpellAbilityId() == REVICE_ABILITY
 	            if not modification == 1
-					SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, false)
-					SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, true)
+					//SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, false)
+					//SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, true)
 	                modification = 1
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
 	
@@ -122,7 +122,7 @@ package TerrainModder
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function TerrainModder.changeTerrain)
 		trigger t = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_CAST)
+		//TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_CAST)
 		TriggerAddAction(t, function oncast)
 		
 		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'

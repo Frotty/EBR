@@ -36,7 +36,7 @@ public class RegionData
 		visTrig.addAction(function RegionData.enterRect)
 		regionTable.saveInt(GetHandleId(r), this castTo int)
 		
-	function setType( int itemId )
+	function setType( int itemId, boolean changeTerrain )
 		print("wtf")
 		for i = 0 to 4
 			print("RegionData check " + itemId.toString() + " == " + ritem[i].toString() )
@@ -50,15 +50,36 @@ public class RegionData
 				bigObstacleId = bobst[i]
 				treeId = trees[i]
 				print("RegionData set " + i.toString())
+				if changeTerrain
+					theRect.changeTerrain(unwalkableTile)
 				break
+				
+				
+	function allow(int playerid)
+		switch playerid
+			case 8
+				isGreyOwner = true
+			case 9
+				isLBOwner = true
+			case 10 
+				isDGOwner = true
+
+	function disallow(int playerid)
+		switch playerid
+			case 8
+				isGreyOwner = false
+			case 9
+				isLBOwner = false
+			case 10 
+				isDGOwner = false
 	
 	function isOwner(int playerid) returns boolean
 		switch playerid
-			case 9
+			case 8
 				return isGreyOwner
-			case 10
+			case 9
 				return isLBOwner
-			case 11 
+			case 10
 				return isDGOwner
 			default
 				return false
@@ -74,7 +95,22 @@ public class RegionData
 				CreateFogModifierRectBJ( true, u.getOwner(), FOG_OF_WAR_VISIBLE, rdata.theRect )
 				rdata.visible = true
 				
+function rect.changeTerrain( integer ttype )
+    real xmax = GetRectMaxX(this)-32
+    real xmin = GetRectMinX(this)+32
+    real ymax = GetRectMaxY(this)-32
+    real ymin = GetRectMinY(this)+32
+    real x = xmin
+    real y = ymin
+    while y <= ymax
+        while x <= xmax
+            SetTerrainType( x, y, ttype, -1, 1, 1 )
+            x = x + 64
 
+        x = xmin
+        y = y + 64
+
+        
 
 public function getRegionData(real x, real y) returns RegionData
 	for i = 0 to 21
@@ -109,14 +145,14 @@ public function init_Regions()
 	
 	print("RegionData init")
 	regions[0] = new RegionData( gg_rct_Region_024 )
-	regions[0].setType('I00D')
+	regions[0].setType('I00D', false)
 	print("RegionData set")
     regions[1] = new RegionData( gg_rct_Region_018 )
-    regions[1].setType('I00G')
+    regions[1].setType('I00G', false)
     regions[2] = new RegionData( gg_rct_Region_000 )
-    regions[2].setType('I00E')
+    regions[2].setType('I00E', false)
     regions[3] = new RegionData( gg_rct_Region_003 )
-    regions[3].setType('I00H')
+    regions[3].setType('I00H', false)
     regions[4] = new RegionData( gg_rct_Region_004 )
     regions[5] = new RegionData( gg_rct_Region_005 )
     regions[6] = new RegionData( gg_rct_Region_006 )

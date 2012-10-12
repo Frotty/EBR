@@ -2,8 +2,11 @@ package UnitProducer
 	import BaseObject
 	import SetupObject
 	import RegionData
+	import EscaperKiller
 	
 	constant int ID = 'H00A'
+	
+
 	
 	trigger castTrigger
 	
@@ -12,7 +15,7 @@ package UnitProducer
 	
 	constant int SETUP_TYPE = 0
 	
-	class UnitProducer extends StaticBaseObject
+	public class UnitProducer extends StaticBaseObject
 
 		construct( vec3 pos, player owner )
 			super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., function spawnUnit)
@@ -32,9 +35,9 @@ package UnitProducer
 			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
 			if data.isOwner(GetPlayerId(obj.owner))
 				if id == 'A05F'
-					u = CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. )
+					new EscaperKiller(vec3(rX, rY, 0), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), COLL_SIZE_BK)
 				else if id == 'A05K'
-					u = CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. )
+					new EscaperKiller(vec3(rX, rY, 0),CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
 				else
 					u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
 			else
@@ -45,12 +48,10 @@ package UnitProducer
 			
 			
 	public function init_UnitProducer()
-		unitTable.saveInt('A05F','u00G') //Big Killer
 		unitTable.saveInt('A05G','u008')
 		unitTable.saveInt('A05H','u00F')
 		unitTable.saveInt('A05I','u00Q')
 		unitTable.saveInt('A05J','u006')
-		unitTable.saveInt('A05K','u00E') //Small Killer
 		unitTable.saveInt('A05L','u00K')
 		unitTable.saveInt('A05M','u001')
 		unitTable.saveInt('A05N','u00B')

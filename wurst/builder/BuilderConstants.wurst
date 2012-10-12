@@ -11,5 +11,15 @@ public constant int POISON = 'Cpos'
 
 
 public constant int BUILDER_1 = 'u001'
+public constant int BUILDER_2 = 'u005'
+public constant int BUILDER_3 = 'u007'
+public constant int BUILDER_4 = 'u00C'
 
+        
+public constant int MENU_1 = 'A000'
+public constant int MENU_2 = 'A00O'
+public constant int MENU_3 = 'A05B'
+public constant int MENU_4 = 'A05C'
+public constant int MENU_5 = 'A05D'
+public constant int MENU_6 = 'A05E'
 
