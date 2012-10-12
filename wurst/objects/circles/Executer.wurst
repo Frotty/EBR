@@ -33,7 +33,7 @@ package Executer
 
     class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
-        rect eventRect
+        region eventRegion
         Emode eventMode
         Amode actionMode
         boolean ON // only for lever and pressureplate
@@ -68,7 +68,12 @@ package Executer
 	                        obj.findAction()
 	                default
 	                	print("Bug- ExecuterEvent")
-        		
+        
+        static function onLeaveEvent()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            //thistype obj = GetTriggerRegion() castTo thistype
+        
         function findAction()
             unit u = GetTriggerUnit()
             Entity e = u.getUserData() castTo Entity
@@ -177,9 +182,12 @@ package Executer
         
         function registerRect(real centerX, real centerY, real offset)
             //note: with movable circles, itll be necessary to move the rect too.
-        	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
-        	TriggerRegisterLeaveRegion(executerUnitLeave, RegionAddRect(CreateRegion(), eventRect), null)
-        	executerUnitLeave.addAction(function onEvent)
+        	eventRegion = CreateRegion()
+        	RegionAddRect(eventRegion,Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset))
+        	TriggerRegisterLeaveRegion(executerUnitLeave, eventRegion, null)
+        	int i = this castTo int
+        	eventRegion.setRegionData(i)
+        	executerUnitLeave.addAction(function onLeaveEvent)
         	
         
         static function register()
@@ -193,7 +201,8 @@ package Executer
         
         static function filter() returns boolean
             return GetUnitTypeId( GetFilterUnit() ) == EXECUTER_ID
-
+	
+	
     int TANKID
 	int GLAIVEID
 	int POINTERID
@@ -209,7 +218,6 @@ package Executer
         //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
         t.addAction( function Executer.register )
         executerUnitLeave = CreateTrigger()
-        executerUnitLeave.addAction(function onEvent)
 
 
 endpackage
