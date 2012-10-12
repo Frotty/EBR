@@ -19,10 +19,6 @@ package EscaperKiller
         construct( vec3 pos, unit u, unit setup, real radius )
         	super( pos, u, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
-        override function update()
-        	print("yes")
-			setup.setX( actor.getX() )
-			setup.setY( actor.getY() )
 
 
 endpackage

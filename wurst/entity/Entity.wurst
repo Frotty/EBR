@@ -46,7 +46,7 @@ package Entity
 				inAir()
 			
 		ondestroy
-			print("yes")
+			print("destroyed")
 			currentEntityCount--
 	
 		

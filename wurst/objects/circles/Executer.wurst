@@ -179,7 +179,7 @@ package Executer
         function registerRect(real centerX, real centerY, real offset)
             //note: with movable circles, itll be necessary to move the rect too.
         	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
-        	TriggerRegisterLeaveRegion(executerUnitLeave, RegionAddRect(CreateRegion(), eventRect), null)
+        	//TriggerRegisterLeaveRegion(executerUnitLeave, RegionAddRect(CreateRegion(), eventRect), null)
         	executerUnitLeave.addAction(function onEvent)
         	
         
@@ -210,7 +210,7 @@ package Executer
         //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
         t.addAction( function Executer.register )
         executerUnitLeave = CreateTrigger()
-        executerUnitLeave.addAction(function onEvent)
+        //executerUnitLeave.addAction(function onEvent)
 
 endpackage
 

@@ -26,7 +26,8 @@ package SetupObject
         	super( pos, radius, u.getOwner() )
             actor = u
             actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            actor.addAbility('Aloc')
+            actor.addAbility('Aloc').removeAbility('Aloc')
+            SetUnitPathing(actor, true)
             
             this.setup = setup
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
@@ -35,6 +36,7 @@ package SetupObject
            
             setup.setX( actor.getX() )
 			setup.setY( actor.getY() )
+			setup.addAbility('Agho')
             
             if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
                 inRangeTrig = CreateTrigger()
