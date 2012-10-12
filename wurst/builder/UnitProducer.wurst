@@ -29,9 +29,8 @@ package UnitProducer
 			var rX = obj.getRallyX()
 			var rY = obj.getRallyY() 
 			var data = getRegionData(rX, rY)
-						
-			unit u
 			
+			unit u
 			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
 			if data.isOwner(GetPlayerId(obj.owner))
 				if id == 'A05F'
