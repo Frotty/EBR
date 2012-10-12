@@ -1,4 +1,4 @@
-package Teleporter
+package Executer
     import BaseObject
     import Terrain
     import Escaper
@@ -23,12 +23,6 @@ package Teleporter
 		CREATEUNIT
 		MOVEUNIT
 		CHANGETERRAIN
-
-	enum ActionTile //for change terrain action
-		WALKABLE
-		UNWALKABLE
-		ICE
-		UNICE
 		
 	enum ActionUnit
 		SMALLKILLER
@@ -39,14 +33,17 @@ package Teleporter
 
     class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
+        rect eventRect
         Emode eventMode
         Amode actionMode
         boolean ON // only for lever and pressureplate
-        ActionTile actionTile
+        int tiletype
+        int nottiletype
         int verticalTileSize
         int horizontalTileSize
         unit unitToMove // for unitMover
         ActionUnit actionUnit // only for UnitCreator Executer 
+        string moveOrderString // only for unitMover
         
         static function onEvent()
             unit source = GetTriggeringTrigger().getSource()
@@ -81,11 +78,11 @@ package Teleporter
             
             switch actionMode
             	case Amode.CLOSEDOOR
-            		door.close
+            		skip
             	case Amode.OPENDOOR
-            		door.open
+            		skip
             	case Amode.CHANGETERRAIN
-            		changeTerrain()
+            		changeTerrain(true)
             	case Amode.MOVEUNIT
             		moveUnit()
             	case Amode.CREATEUNIT
@@ -94,44 +91,96 @@ package Teleporter
             		print("Bug - ExecuterAction")
 	            		
 		function negativeAction()
-			skip
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            
+            var rx = getRallyX()
+            var ry = getRallyY()
+            
+            switch actionMode
+            	case Amode.CLOSEDOOR
+            		skip //Open
+            	case Amode.OPENDOOR
+            		skip //Close
+            	case Amode.CHANGETERRAIN
+            		changeTerrain(false)
+            	default
+            		print("Bug - ExecuterNotAction")
 		
 		function moveUnit()
-			skip
 			
+			var rX = getRallyX()
+            var rY = getRallyY()
+            if moveOrderString == "stop"
+                IssueImmediateOrder(unitToMove, moveOrderString)
+            else
+            	IssuePointOrder(unitToMove, moveOrderString, rX, rY)
+		
+
+				
 		function createUnit()
 			unit u
 			
 			var rX = getRallyX()
             var rY = getRallyY()
-            var i = getRegionNumber(rX, rY)
+            var data = getRegionData(rX, rY)
             
-			if regions[i].isOwner(GetPlayerId(owner))
+			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
-						u = CreateUnit(owner, regions[i].smallKillerId,rX, rY, 0.)
+						u = CreateUnit(owner, data.smallKillerId,rX, rY, 0.)
 					case ActionUnit.BIGKILLER
-						u = CreateUnit(owner, regions[i].bigKillerId,rX, rY, 0.)
+						u = CreateUnit(owner, data.bigKillerId,rX, rY, 0.)
 					case ActionUnit.TANK
 						u = CreateUnit(owner, TANKID,rX, rY, 0.)
 					case ActionUnit.GLAIVE
 						u = CreateUnit(owner, GLAIVEID,rX, rY, 0.)
 					case ActionUnit.POINTER
-						u = CreateUnit(owner, PONTERID,rX, rY, 0.)
+						u = CreateUnit(owner, POINTERID,rX, rY, 0.)
 					default
 						print("Bug- ExecuterCreateUnit")
 			
-		function changeTerrain()
-			unit u
-			
+		function changeTerrain(boolean isAction)
+		
 			var rX = getRallyX()
             var rY = getRallyY()
-            var i = getRegionNumber(rX, rY)
+            var data = getRegionData(rX, rY)
+            int tileID
             
-            if 
-			
+            if isAction
+                tileID = tiletype
+            else
+                tileID = nottiletype
+            
+            for int i = 0 to (verticalTileSize*2)
+                for int j = 0 to (horizontalTileSize*2)
+            		if data.isOwner(GetPlayerId(owner))
+                    	SetTerrainType( rX+ (128*(i-verticalTileSize)), rY+ (128*(i-horizontalTileSize)), tiletype, -1, 1, 1 )
+		
+		
 		static function onUpdateAbility(int ability_id)
-			
+			unit source = GetSpellAbilityUnit()
+            thistype obj = source.getUserData() castTo thistype
+            
+            int i = GetSpellAbilityId()
+            switch i
+            	case ONESHOT_ABIL_ID
+            		obj.eventMode = Emode.ONESHOT
+            	case REPEATING_ABIL_ID
+            		obj.eventMode = Emode.REPEATING
+            	case LEVER_ABIL_ID
+            		obj.eventMode = Emode.LEVER
+            		//CREATERECT
+            	case PRESSURE_ABIL_ID
+            		obj.eventMode = Emode.PRESSUREPLATE
+            		obj.registerRect(obj.actor.getX(), obj.actor.getY(), 50)
+        
+        function registerRect(real centerX, real centerY, real offset)
+            //note: with movable circles, itll be necessary to move the rect too.
+        	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
+        	TriggerRegisterLeaveRegion(executerUnitLeave, RegionAddRect(CreateRegion(), eventRect), null)
+        	executerUnitLeave.addAction(function onEvent)
+        	
         
         static function register()
             unit u = GetConstructedStructure()
@@ -144,12 +193,23 @@ package Teleporter
         
         static function filter() returns boolean
             return GetUnitTypeId( GetFilterUnit() ) == EXECUTER_ID
-        
-    
+
+    int TANKID
+	int GLAIVEID
+	int POINTERID
+	
+	int ONESHOT_ABIL_ID
+	int REPEATING_ABIL_ID
+	int LEVER_ABIL_ID
+	int PRESSURE_ABIL_ID
+	
+	trigger executerUnitLeave
     
     public function init_Executer( trigger t )
         //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
         t.addAction( function Executer.register )
+        executerUnitLeave = CreateTrigger()
+        executerUnitLeave.addAction(function onEvent)
 
 
 endpackage

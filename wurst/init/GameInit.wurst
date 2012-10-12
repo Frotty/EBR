@@ -2,12 +2,20 @@ package GameInit
     import PlayerData
     import Entity
     import UnitProducer
-        	
+    import Escaper
+    import RegionData
+    import PickSystem
+    import Builder
+    
     function initGame()
 
         print("Starting Init")
-        init_UnitProducer()
         
+        init_UnitProducer()
+        init_Regions()
+        init_Choose()
+        init_Builder()
+        startChoose()
         if init_EntityManagement()
             print("Finished Init - Game started")
         else

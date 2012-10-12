@@ -13,7 +13,7 @@ package Gridclick
     
     function checkRightOrder()
         var i = GetIssuedOrderId()
-        print(i.toString())
+        //print(i.toString())
         if pData[GetPlayerId(GetOwningPlayer(GetOrderedUnit()))].gridClickActivated == true // is this proper??
             if (i == PATROL_ID or i == MOVE_ID or i == GROUND_ATTACK_ID)
                 var gridx = (round(GetOrderPointX()/ GRID) * GRID).toReal() //similar as placement of the terrainblocker circle??

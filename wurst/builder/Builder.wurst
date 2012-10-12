@@ -1,0 +1,17 @@
+package Builder
+import Entity
+import PlayerData
+import BuilderConstants
+
+public class Builder extends UnitEntity
+
+	construct( player p )
+		super( vec3(0,0,0), 0., CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
+	
+	
+public function init_Builder()
+	PlayerData pd = PlayerData.first
+	while pd != null
+		if pd.id > 7
+			pd.builder = new Builder( pd.p )
+		pd = pd.next

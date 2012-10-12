@@ -1,6 +1,6 @@
 package TerrainModder
 	//The Terrainers appear as heroes, and which with the builders change tiles.
-	
+	import BuilderConstants
 	import BaseObject
 	import SetupObject
 	import RegionData
@@ -25,8 +25,8 @@ package TerrainModder
 
 		construct( vec3 pos, player owner ,unit u)
 			super(pos, u , 0., function changeTerrain)
-
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
+			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_CAST )
 
 		static function changeTerrain()
 			var id = GetTriggerUnit()
@@ -35,9 +35,9 @@ package TerrainModder
 			var rX = GetOrderPointX()
 			var rY = GetOrderPointY()
 			 
-			var i = getRegionNumber(rX, rY)
+			var rdata = getRegionData(rX, rY)
 			
-			if regions[i].isOwner(obj.owner)
+			if rdata.isOwner(GetPlayerId(obj.owner)) 
             	if GetUnitTypeId(id) == ICECONTROL
                     if obj.modification == 1
                         if obj.smallbrush
@@ -46,26 +46,26 @@ package TerrainModder
                             SetTerrainType( rX, rY, REVICE, -1, 2, 1 )
                     else
                         if obj.smallbrush
-                            SetTerrainType( rX, rY, ICE, -1, 1, 1 )
+                            SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 1, 1 )
                         else
-                            SetTerrainType( rX, rY, ICE, -1, 2, 1 )
+                            SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 2, 1 )
                             
                 else if GetUnitTypeId(id) == ICEUNCONTROL
                     if obj.smallbrush
-                        SetTerrainType( rX, rY, UCICE, -1, 1, 1 )
+                        SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 1, 1 )
                     else
-                        SetTerrainType( rX, rY, UCICE, -1, 2, 1 )
+                        SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 2, 1 )
                 else if GetUnitTypeId(id) == WALKABLE
                     if obj.smallbrush
-                        SetTerrainType( rX, rY, regions[i].walkableTile, -1, 1, 1 )
+                        SetTerrainType( rX, rY, rdata.walkableTile, -1, 1, 1 )
                     else
-                        SetTerrainType( rX, rY, regions[i].walkableTile, -1, 2, 1 )
+                        SetTerrainType( rX, rY, rdata.walkableTile, -1, 2, 1 )
                 else if GetUnitTypeId(id) == UNWALKABLE
                     if obj.modification == 0
                         if obj.smallbrush
-                        	SetTerrainType( rX, rY, regions[i].unwalkableTile, -1, 1, 1 )
+                        	SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 1, 1 )
                     	else
-                        	SetTerrainType( rX, rY, regions[i].unwalkableTile, -1, 2, 1 )
+                        	SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 2, 1 )
                     else if obj.modification == 1
                         if obj.smallbrush
                         	SetTerrainType( rX, rY, LAVA, -1, 1, 1 )
@@ -82,32 +82,32 @@ package TerrainModder
 		function switchMode()
 			if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[1]
 	            if not modification == 1
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[1], false)
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
+					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 	                modification = 1
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
 	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[2]
 	            if not modification == 2
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[2], false)
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
+					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 	                modification = 2
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
 	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[0]
 				if not modification == 0
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[0], false)
-					SetAbilityAvailable(GetOwningPlayer(actor),UNWALKABLE_MOD_ABILITY_ID[modification], true)
+					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
+					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 		            modification = 0
 		            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 			else if GetSpellAbilityId() == ICE_ABILITY
 	            if not modification == 0
-					SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, false)
-					SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, true)
+					UnitRemoveAbility(actor,ICE_ABILITY)
+					UnitAddAbility(actor,REVICE_ABILITY)
 	                modification = 0
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 	        else if GetSpellAbilityId() == REVICE_ABILITY
 	            if not modification == 1
-					SetAbilityAvailable(GetOwningPlayer(actor),REVICE_ABILITY, false)
-					SetAbilityAvailable(GetOwningPlayer(actor),ICE_ABILITY, true)
+					UnitRemoveAbility(actor,REVICE_ABILITY)
+					UnitAddAbility(actor,ICE_ABILITY)
 	                modification = 1
 	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
 	
@@ -116,14 +116,14 @@ package TerrainModder
 		var obj = GetSpellAbilityUnit().getUserData() castTo TerrainModder
 		obj.switchMode()
 		
-			
+	trigger onTerrainModCast	
 	
 	init
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function TerrainModder.changeTerrain)
-		trigger t = CreateTrigger()
-		RegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_CAST)
-		TriggerAddAction(t, function oncast)
+		onTerrainModCast = CreateTrigger()
+		unit u = GetTriggerUnit()
+		TriggerAddAction(onTerrainModCast, function oncast)
 		
 		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'
 		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04X'

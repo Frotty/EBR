@@ -1,5 +1,5 @@
 package Obstacle
-    import SetupObject
+/*    import SetupObject
     import Terrain
     import Escaper
     //import Regions
@@ -56,5 +56,5 @@ package Obstacle
         //t.registerAnyUnitEvent( Condition( function Obstacle.filter  ) )
         t.addAction( function Obstacle.register )
 
-
+*/
 endpackage

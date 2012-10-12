@@ -2,7 +2,8 @@ package PlayerData
     import MultiboardClass
     import GameConstants
     import LinkedListModule
-    
+    import Escaper
+    import Builder
     
     public int playercount = 0
 
@@ -19,11 +20,13 @@ package PlayerData
         string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
         boolean left = false
         
-        unit escaper
         int deaths = 0
+        Escaper escaper
+        Builder builder
         int XP = 40
         
         boolean gridClickActivated = false
+        boolean picked = false
     
         construct (player p)
         	print("0")
@@ -53,18 +56,21 @@ package PlayerData
                 i++
             rank = ranks[i-1]
             if XP > 500
-                AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper, "chest" )
+                AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper.actor, "chest" )
             else if XP > 300
-                AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper, "chest" )
+                AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
             else if XP > 99
-                AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper, "chest" )
+                AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
                 DisplayTextToForce( bj_FORCE_ALL_PLAYERS, name + " has loaded his Player Rank" )
                 
 		function setMBRow(int r)
             playerboard.updateItem(r,0,mbname,icon)
             playerboard.updateValue(r,1,deaths.toString())
             playerboard.updateValue(r,2,rank)  
-
+        
+        function setMbIcon(int typ)
+			playerboard.updateIcon(gameId+1, 0, mbPic[typ])
+			
 	public function isPlayerEscaper(player p) returns boolean //not sure if its proper
 		if GetPlayerId(p) < 7
 			return true
@@ -75,39 +81,65 @@ package PlayerData
     
     function initMB()
         playerboard = new Board(playercount+1,3)
-        playerboard.board.setTitle("EBR0.64 : "+("|cff66aa2200:01"))
         
 		PlayerData pd = PlayerData.first
-		int i = 0
+		
+        int i = 1
 		while pd != null
             playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
             playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
             playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
-            pd.setMBRow(i+1)
+            pd.setMBRow(i)
             i++
             pd = pd.next
             
-        playerboard.board.getItem(0,0).setStyle(true,false)
+        playerboard.board.getItem(0,0).setStyle(true,false).setWidth(0.1)
+        playerboard.board.getItem(0,2).setWidth(0.05)
         playerboard.updateItem(0,0,"Player",null)
-        playerboard.board.getItem(0,1).setStyle(false,true)
+        playerboard.board.getItem(0,1).setStyle(false,true).setWidth(0.015)
         playerboard.updateItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
         playerboard.updateItem(0,2,"Rank",null)
         playerboard.board.display(true)
                 
         
     init
-    	print("init p")
         int r = 0
         for i = 0 to 11
             print(i.toString())
-            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
-                print(i.toString() + ".1")
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
                 pData[i] = new PlayerData(Player(i))
-                print(i.toString() + ".2")
                 r++
-                print(i.toString() + ".3")
         playercount = r
-        print("yes")
         TimerStart(CreateTimer(), 1., false,function initMB)
-        
+        TimerStart(CreateTimer(), 1., true, function setTime)
+       
+	int minutes = 0
+	int seconds = 0
+	
+	function setTime()
+		seconds++
+		string secs = "|cffffffff"
+		string mins = "|cffffffff"
+		if seconds < 10
+			secs += "0" + seconds.toString()
+		else
+			secs += seconds.toString()
+			
+		if minutes < 10
+			mins += "0" + minutes.toString()
+		else
+			mins += minutes.toString()
+			
+		secs += "|r"
+		mins += "|r"
+		
+		playerboard.board.setTitle( MAP_VER + " [ " + mins + " : " + secs +" ]")
+		
+		
+		
+		if seconds >= 60
+			seconds = 0
+			minutes++
+		
+		
 endpackage 

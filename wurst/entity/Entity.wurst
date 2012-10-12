@@ -90,11 +90,9 @@ package Entity
 			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
 			
 		override function onGround()
-			super.onGround()
 			position = vec3( actor.getX(), actor.getY(), terrainZ )
 			
 		override function inAir()
-			super.inAir()
 			position = vec3( actor.getX(), actor.getY(), position.z )
 		
 			

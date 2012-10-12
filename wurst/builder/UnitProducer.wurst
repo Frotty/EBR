@@ -25,19 +25,19 @@ package UnitProducer
 			
 			var rX = obj.getRallyX()
 			var rY = obj.getRallyY() 
-			var i = getRegionNumber(rX, rY)
+			var data = getRegionData(rX, rY)
 			
 			unit u
 			print(rX.toString() + "  " + rY.toString() + "   " + id.toString() + "   " + unitTable.loadInt(id).toString())
-			if regions[i].isOwner(GetPlayerId(obj.owner))
+			if data.isOwner(GetPlayerId(obj.owner))
 				if id == 'A05F'
-					u = CreateUnit(obj.owner, regions[i].bigKillerId, rX, rY, 0. )
+					u = CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. )
 				else if id == 'A05K'
-					u = CreateUnit(obj.owner, regions[i].smallKillerId, rX, rY, 0. )
+					u = CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. )
 				else
 					u = CreateUnit(obj.owner, unitTable.loadInt(id), rX, rY, 0. )
 			else
-				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019This Region doesn't belong to you!createU")
+				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 				
 			
 				
@@ -56,7 +56,7 @@ package UnitProducer
 		unitTable.saveInt('A05O','u00Y')
 		unitTable.saveInt('A05P','u004')
 		//Table presets
-		new UnitProducer(vec3(0,0,0),Player(8))
+		//new UnitProducer(vec3(0,0,0),Player(8))
 		
 	init
 		castTrigger = CreateTrigger()
