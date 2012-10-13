@@ -28,7 +28,12 @@ public function startChoose()
 	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
 	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
 	    pd = pd.next
-
+	EnablePreSelect( true, false )
+	getTimer().start(.60, function allow )
+	
+function allow()
+	EnableUserControl(true)
+    EnableOcclusion(true)
 
 function keyleft()
     print("yes")

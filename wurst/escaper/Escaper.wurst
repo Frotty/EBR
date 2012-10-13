@@ -10,7 +10,7 @@ package Escaper
 	public Table escaperTable = new Table()
 	
 	constant real COLL_RADIUS = 32.
-	constant real SLIDE_ADD = 1.65
+	constant real SLIDE_ADD = 1.8
 	
 	public class Escaper extends UnitEntity
 		int deaths 		= 0
@@ -29,6 +29,11 @@ package Escaper
 		
 		construct( vec3 pos, player owner, int typ )
 			super(pos, COLL_RADIUS, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
+			actor.addAbility('Aloc')
+			.hide()
+    		.removeAbility('Aloc')
+    		.show()
+    		
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
             TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
@@ -63,7 +68,7 @@ package Escaper
 				
 			// ebr (un)walkable
 			// print("tile " + currentRegion.unwalkableTile.toString())
-			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb'
+			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
 				kill()
 							
 		

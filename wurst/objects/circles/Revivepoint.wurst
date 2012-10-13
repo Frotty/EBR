@@ -7,9 +7,9 @@ package RevivePoint
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'
     
-    public Revivepoint currentRevivepoint
+    public RevivePoint currentRevivepoint
 
-    public class Revivepoint extends StaticBaseObject
+    public class RevivePoint extends StaticBaseObject
         boolean reached = false
         
         static function reach()
@@ -20,27 +20,20 @@ package RevivePoint
 	        thistype obj = source.getUserData() castTo thistype
 	        
             if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
-                //StartSound(gg_snd_Rescue)
+                PlaySoundBJ(gg_snd_Rescue)
                 SetUnitColor( source, PLAYER_COLOR_RED )
                 obj.reached = true
                 currentRevivepoint = obj
 
-		static function register()
-            unit u = GetConstructedStructure()
-            u.setUserData( new Revivepoint( u.getX(), u.getY() , u, 50 ) castTo int )
-	
 
-        construct( real x, real y, unit u, real radius )
-        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Revivepoint.reach ) 
+        construct( vec2 pos, player owner)
+        	super( pos.toVec3(), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
 
         
 		static function filter() returns boolean
 			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
     
     
-    
-    public function init_Revivepoint( trigger t )
-        //t.registerAnyUnitEvent( Condition( function Revivepoint.filter  ) )
-        t.addAction( function Revivepoint.register )
+
 
 endpackage 

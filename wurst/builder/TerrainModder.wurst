@@ -4,6 +4,7 @@ package TerrainModder
 	import BaseObject
 	import SetupObject
 	import RegionData
+	import PlayerData
 	
 	constant int ICECONTROL = 'H007'
     constant int ICEUNCONTROL = 'H008'
@@ -26,8 +27,8 @@ package TerrainModder
 		boolean smallbrush 
 		int modification // 0 = basic terrain, 1 = lava/revice 2 = poison
 
-		construct( vec3 pos, player owner ,unit u)
-			super(pos, u , 0., function changeTerrain)
+		construct( vec2 pos, player owner, unit u)
+			super(pos.toVec3(), u , 0., function changeTerrain)
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_CAST )
 
@@ -126,7 +127,7 @@ package TerrainModder
 		
 	trigger onTerrainModCast	
 	
-	init
+	public function init_TerrainModder()
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function TerrainModder.changeTerrain)
 		onTerrainModCast = CreateTrigger()
@@ -137,5 +138,15 @@ package TerrainModder
 		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'
 		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04X'
 		UNWALKABLE_MOD_ABILITY_ID[2] = 'A04Z'
+		
+		PlayerData pd = PlayerData.first
+		while pd != null
+			if pd.id > 7
+				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+
+			pd = pd.next
 
 endpackage

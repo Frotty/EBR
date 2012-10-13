@@ -3,6 +3,8 @@ package UnitProducer
 	import SetupObject
 	import RegionData
 	import EscaperKiller
+	import PlayerData
+	import BuilderConstants
 	
 	constant int ID = 'H00A'
 	
@@ -17,8 +19,8 @@ package UnitProducer
 	
 	public class UnitProducer extends StaticBaseObject
 
-		construct( vec3 pos, player owner )
-			super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., function spawnUnit)
+		construct( vec2 pos, player owner )
+			super(pos.toVec3(), CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., function spawnUnit)
 
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_SPELL_CAST)
 
@@ -56,11 +58,14 @@ package UnitProducer
 		unitTable.saveInt('A05N','u00B')
 		unitTable.saveInt('A05O','u00Y')
 		unitTable.saveInt('A05P','u004')
-		//Table presets
-		//new UnitProducer(vec3(0,0,0),Player(8))
-		
-	init
+
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function UnitProducer.spawnUnit)
+		
+		PlayerData pd = PlayerData.first
+		while pd != null
+			if pd.id > 7
+				new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
+			pd = pd.next
 
 endpackage

@@ -3,6 +3,7 @@ import Builder
 import Entity
 import Door
 import RegionData
+import RevivePoint
 
 constant int dummy = 'h00G'
         
@@ -38,8 +39,12 @@ function callback()
     var owner = u.getOwner()
     var rdata = getRegionData(x, y)
     if rdata.isOwner(owner.getId())
-	    if ord == buildorders[15]
-	        new Door(vec2(x,y), u.getOwner())	
+		switch ord
+	    
+	    	case buildorders[2]
+	    		new RevivePoint(vec2(x,y), u.getOwner())
+	    	case buildorders[15]
+	        	new Door(vec2(x,y), u.getOwner())	
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
     d = null
@@ -85,7 +90,7 @@ init
     
     buildorders[0] = 'n00G'
     buildorders[1] = 'n00B'
-    buildorders[2] = 'n000'
+    buildorders[2] = 'n000' // Revivepoint
     buildorders[3] = 'n01B'
     buildorders[4] = 'n001'
     buildorders[5] = 'h019'

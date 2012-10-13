@@ -91,9 +91,12 @@ public class RegionData
 		var rdata = regionTable.loadInt(GetHandleId(GetTriggeringTrigger().getSourceRect())) castTo RegionData
 		
 		if data instanceof Escaper
+			var edata = data castTo Escaper
 			if not rdata.visible and data.owner.getId() <= 7
 				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
 				rdata.visible = true
+				edata.currentRegion = rdata
+				
 				
 function rect.changeTerrain( integer ttype )
     real xmax = GetRectMaxX(this)-32
