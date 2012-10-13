@@ -8,6 +8,7 @@ public constant int UNCONTROLLABLEICE = 'Idki'
 public constant int REVICE = 'Glav'
 public constant int LAVA = 'Glvc'
 public constant int POISON = 'Cpos'
+public constant int RUNES = 'Irbk'
 
 
 public constant int BUILDER_1 = 'u001'

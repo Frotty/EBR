@@ -25,6 +25,8 @@ public class Builder extends UnitEntity
 		if id != 'I000' and id != 'I001' and id != 'I002' and id != 'I003'
 			rdata.setType(id, true)
 			rdata.allow(builder.owner.getId())
+			RemoveItem( GetManipulatedItem())
+			
 			GroupEnumUnitsInRange(ENUM_GROUP,builder.position.x, builder.position.y, 512., Filter( function filter))
 			for shop in ENUM_GROUP
 				shop.remove()
