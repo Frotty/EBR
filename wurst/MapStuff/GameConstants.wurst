@@ -1,5 +1,6 @@
 package GameConstants
-
+	import RGBA
+	
 	public string array mbPic
 	public string array names
 	public string array tags
@@ -9,8 +10,42 @@ package GameConstants
 	public constant int cplayerCount = 13
 	
 	public constant string MAP_VER = "EBR 0.70"
+	
+	
+	public enum COLOR
+		WHITE
+		RED
+		BLUE
+		TEAL	
+		PURPLE
+		YELLOW
+		ORANGE
+		GREEN		
+		PINK
+		GREY
+		LIGHTBLUE
+		DARKGREEN
+		BROWN
+
+	public color array colors
 
 	init
+		colors[0] = color(255,255,255)
+		colors[1] = color(255,2,2)
+		colors[2] = color(0,65,255)
+		colors[3] = color(27,230,184)
+		colors[4] = color(31,191,0)
+		colors[5] = color(83,0,128)
+		colors[6] = color(254,137,13)
+		colors[7] = color(31,191,0)
+		colors[8] = color(299,90,175)
+		colors[9] = color(148,149,150)
+		colors[10] = color(125,190,241)
+		colors[11] = color(15,97,69)
+		colors[12] = color(77,41,3)
+		
+	
+	
 		mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"
 		mbPic[ 1 ] = "ReplaceableTextures\\CommandButtons\\BTNFootman.blp"
 		mbPic[ 2 ] = "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp"

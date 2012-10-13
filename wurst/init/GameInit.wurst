@@ -6,6 +6,7 @@ package GameInit
     import RegionData
     import PickSystem
     import Builder
+    import Door
     
     function initGame()
 
@@ -16,6 +17,8 @@ package GameInit
         init_Choose()
         init_Builder()
         startChoose()
+        init_Door()
+        new UnitProducer(vec3(0,0,0), Player(8))
         if init_EntityManagement()
             print("Finished Init - Game started")
         else

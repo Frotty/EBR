@@ -1,6 +1,8 @@
 package InstantBuild
 import Builder
 import Entity
+import Door
+import RegionData
 
 constant int dummy = 'h00G'
         
@@ -11,7 +13,7 @@ real oy
 unit u
 unit d
 timer t = CreateTimer()
-int o
+int ord
 int array buildorders
 
     
@@ -30,39 +32,43 @@ function isOrderBuildOrder( int o ) returns boolean
 
 
 function callback()
-    d = CreateUnit(Player(GetPlayerId(GetOwningPlayer(u))),dummy,x,y,bj_UNIT_FACING)
-    UnitApplyTimedLife(d,'BTLF',1)
-    IssuePointOrderById(d,o,x,y)
     SetUnitPosition(u,x,y)
     SetUnitX(u,ox)
     SetUnitY(u,oy)
+    var owner = u.getOwner()
+    var rdata = getRegionData(x, y)
+    if rdata.isOwner(owner.getId())
+	    if ord == buildorders[15]
+	        new Door(vec2(x,y), u.getOwner())	
+	else
+		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
     d = null
 
 
 function conac() 
     
     widget w = GetOrderTarget()
-    int ord = GetIssuedOrderId()
+    ord = GetIssuedOrderId()
     u = GetTriggerUnit()
-    o = GetUnitCurrentOrder(u)
-    
+    var owner = u.getOwner()
     if isOrderBuildOrder(ord)
         x = GetLocationX(GetOrderPointLoc())
         y = GetLocationY(GetOrderPointLoc())
         ox = GetUnitX(u)
         oy = GetUnitY(u)
         TimerStart(t,0.00,false, function callback)
+		
+
     else
         if w == null
             SetUnitX(u,GetOrderPointX())
             SetUnitY(u,GetOrderPointY())
-            DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", GetUnitX(u), GetUnitY(u) ) )
             SetUnitFacing(u, angleBetweenCoordsD(GetUnitX(u), GetUnitY(u), GetOrderPointX(), GetOrderPointY()) )
         else
             SetUnitFacing( u, angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetWidgetX(w), GetWidgetY(w) ) )
             SetUnitX(u,GetWidgetX(w))
             SetUnitY(u,GetWidgetY(w))
-            DestroyEffect( AddSpecialEffect( "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl", GetUnitX(u), GetUnitY(u) ) )
+
 
     w = null
 
@@ -92,7 +98,7 @@ init
     buildorders[12] = 'n003'
     buildorders[13] = 'n004'
     buildorders[14] = 'n00C'
-    buildorders[15] = 'h002'
+    buildorders[15] = 'h002' // Door
     buildorders[16] = 'obSD'
     buildorders[17] = 'obBD'
     buildorders[18] = 'n010'

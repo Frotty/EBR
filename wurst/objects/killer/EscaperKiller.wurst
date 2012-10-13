@@ -4,7 +4,9 @@ package EscaperKiller
     import SetupObject
     import Escaper
    
-    
+    public constant real COLL_SIZE_SK = 72
+	public constant real COLL_SIZE_BK = 96
+	
     public class EscaperKiller extends DynamicSetupObject
         
         static function onInRangeEvent()
@@ -14,13 +16,9 @@ package EscaperKiller
             	var es = ent castTo Escaper
             	es.kill() 
         
-        construct( real x, real y, unit u, unit setup, real radius )
-        	super( vec3(x, y, getTerrainZ(x,y)), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
+        construct( vec3 pos, unit u, unit setup, real radius )
+        	super( pos, u, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
-        override function update()
-        	print("yes")
-			setup.setX( actor.getX() )
-			setup.setY( actor.getY() )
 
 
 endpackage

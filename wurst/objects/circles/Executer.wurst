@@ -23,6 +23,7 @@ package Executer
 		CREATEUNIT
 		MOVEUNIT
 		CHANGETERRAIN
+
 		
 	enum ActionUnit
 		SMALLKILLER
@@ -182,11 +183,12 @@ package Executer
         
         function registerRect(real centerX, real centerY, real offset)
             //note: with movable circles, itll be necessary to move the rect too.
-        	eventRegion = CreateRegion()
-        	RegionAddRect(eventRegion,Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset))
-        	TriggerRegisterLeaveRegion(executerUnitLeave, eventRegion, null)
+        	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset) 
+        	region r = CreateRegion()
+        	RegionAddRect(r,eventRect)
+        	TriggerRegisterLeaveRegion(executerUnitLeave, r, null)
         	int i = this castTo int
-        	eventRegion.setRegionData(i)
+        	eventRect.setRectData(i)
         	executerUnitLeave.addAction(function onLeaveEvent)
         	
         
@@ -219,5 +221,5 @@ package Executer
         t.addAction( function Executer.register )
         executerUnitLeave = CreateTrigger()
 
-
 endpackage
+

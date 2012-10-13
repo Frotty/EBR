@@ -2,16 +2,104 @@ package Builder
 import Entity
 import PlayerData
 import BuilderConstants
+import RegionData
+import GroupUtils
+
+trigger swapTrigger
+trigger itemTrigger
 
 public class Builder extends UnitEntity
-
+	
+	
 	construct( player p )
 		super( vec3(0,0,0), 0., CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
+		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )
+		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_PICKUP_ITEM )
 	
 	
-public function init_Builder()
+	static function claimRegion()
+		var u = GetTriggerUnit()
+		var id = GetItemTypeId(GetManipulatedItem())
+		var builder = u.getUserData() castTo Builder
+		var rdata = getRegionData(builder.position.x, builder.position.y)
+		if id != 'I000' and id != 'I001' and id != 'I002' and id != 'I003'
+			rdata.setType(id, true)
+			rdata.allow(builder.owner.getId())
+			GroupEnumUnitsInRange(ENUM_GROUP,builder.position.x, builder.position.y, 512., Filter( function filter))
+			for shop in ENUM_GROUP
+				shop.remove()
+			GroupClear(ENUM_GROUP)
+	
+	static function swapPages()
+		var data = GetTriggerUnit().getUserData() castTo Entity
+		
+		if data instanceof Builder
+			var builder = data castTo Builder
+			var id = GetSpellAbilityId()
+			switch id
+				case MENU_1
+					builder.actor.remove()
+		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
+		            UnitAddItemById(builder.actor,'I000')
+		            UnitAddItemById(builder.actor,'I001')
+		            UnitAddItemById(builder.actor,'I002')
+		            UnitAddItemById(builder.actor,'I003')		            
+		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		        case MENU_2
+		            builder.actor.remove()
+		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit())))
+		            UnitAddItemById(builder.actor,'I000')
+		            UnitAddItemById(builder.actor,'I001')
+		            UnitAddItemById(builder.actor,'I002')
+		            UnitAddItemById(builder.actor,'I003')		            
+		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		        case MENU_3
+		            builder.actor.remove()
+		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit()) ) )
+		            UnitAddItemById(builder.actor,'I000')
+		            UnitAddItemById(builder.actor,'I001')
+		            UnitAddItemById(builder.actor,'I002')
+		            UnitAddItemById(builder.actor,'I003')		            
+		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		        case MENU_4
+		            builder.actor.remove()
+		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit()) ) )
+		            UnitAddItemById(builder.actor,'I000')
+		            UnitAddItemById(builder.actor,'I001')
+		            UnitAddItemById(builder.actor,'I002')
+		            UnitAddItemById(builder.actor,'I003')		            
+		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		        case MENU_5
+		            builder.actor.remove()
+		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
+		            UnitAddItemById(builder.actor,'I000')
+		            UnitAddItemById(builder.actor,'I001')
+		            UnitAddItemById(builder.actor,'I002')
+		            UnitAddItemById(builder.actor,'I003')		            
+		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		        case MENU_6
+		            builder.actor.remove()
+		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
+		            UnitAddItemById(builder.actor,'I000')
+		            UnitAddItemById(builder.actor,'I001')
+		            UnitAddItemById(builder.actor,'I002')
+		            UnitAddItemById(builder.actor,'I003')		            
+		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+
+
+function filter() returns boolean
+	return GetUnitTypeId(GetFilterUnit()) == 'n008'
+		
+public function init_Builder()	
+	swapTrigger = CreateTrigger()
+	swapTrigger.addAction(function Builder.swapPages)
+	itemTrigger = CreateTrigger()
+	itemTrigger.addAction(function Builder.claimRegion)
+	
 	PlayerData pd = PlayerData.first
 	while pd != null
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
 		pd = pd.next
+	
+	

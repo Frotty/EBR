@@ -124,6 +124,7 @@ package TerrainModder
 		onTerrainModCast = CreateTrigger()
 		unit u = GetTriggerUnit()
 		TriggerAddAction(onTerrainModCast, function oncast)
+
 		
 		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'
 		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04X'

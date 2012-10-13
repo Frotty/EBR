@@ -26,7 +26,8 @@ package SetupObject
         	super( pos, radius, u.getOwner() )
             actor = u
             actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            actor.addAbility('Aloc')
+            actor.addAbility('Aloc').removeAbility('Aloc')
+            SetUnitPathing(actor, true)
             
             this.setup = setup
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
@@ -35,6 +36,7 @@ package SetupObject
            
             setup.setX( actor.getX() )
 			setup.setY( actor.getY() )
+			setup.addAbility('Agho')
             
             if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
                 inRangeTrig = CreateTrigger()
@@ -85,8 +87,6 @@ package SetupObject
           
                     
     public class StaticSetupObject extends Entity
-        player owner
-        
         unit actor        
         
         unit setup
@@ -95,20 +95,19 @@ package SetupObject
         
                         
         construct( vec3 pos, unit u, unit setup, real radius, code c )
-        	super( pos, radius, u.getOwner() )
+        	super( pos, radius, setup.getOwner() )
+        	print("nou1")
             actor = u
             actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
             actor.addAbility('Aloc')
-            
+            print("nou1")
             this.setup = setup
-            setup.setX( actor.getX() )
-			setup.setY( actor.getY() )
-            
+            print("nou1")
             if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
                 inRangeTrig = CreateTrigger()
-                inRangeTrig.registerUnitInRangeSource( actor, radius )
+                inRangeTrig.registerUnitInRangeSource( setup, radius )
                 inRangeTrig.addAction( c )
-                
+            print("nou1")    
             setup.setUserData( this castTo int )
 		
 		override function update()
@@ -123,6 +122,7 @@ package SetupObject
             
         function setZ( real z )
             SetUnitFlyHeight( actor, z, 0. )
+            
                           
         
         ondestroy
