@@ -71,7 +71,9 @@ package BaseObject
                 real y = GetUnitY( rallyUnit )
                 return vec3( x, y, getTerrainZ( x, y ) )
                         
-
+		function getRallyUnit() returns unit
+			return rallyUnit
+			
         function setX( real x )
             SetUnitX( actor, x )
 

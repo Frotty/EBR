@@ -14,6 +14,9 @@ package TerrainModder
     constant int REVICE_ABILITY = 'AREV'
 	int array UNWALKABLE_MOD_ABILITY_ID
 	
+    constant int SMALL_BRUSH_ABILITY = 'BLAD'
+    constant int BIG_BRUSH_ABILITY = 'AFER'
+    
 	trigger castTrigger
 	
 	
@@ -81,35 +84,40 @@ package TerrainModder
 
 		function switchMode()
 			if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[1]
-	            if not modification == 1
-					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
-					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
-	                modification = 1
-	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
+				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
+				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
+	            modification = 1
+	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
 	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[2]
-	            if not modification == 2
-					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
-					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
-	                modification = 2
-	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
+				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
+				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
+	            modification = 2
+	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
 	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[0]
-				if not modification == 0
-					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
-					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
-		            modification = 0
-		            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
+				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
+		        modification = 0
+		        DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+		        
 			else if GetSpellAbilityId() == ICE_ABILITY
-	            if not modification == 0
-					UnitRemoveAbility(actor,ICE_ABILITY)
-					UnitAddAbility(actor,REVICE_ABILITY)
-	                modification = 0
-	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+				UnitRemoveAbility(actor,ICE_ABILITY)
+				UnitAddAbility(actor,REVICE_ABILITY)
+	            modification = 0
+	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 	        else if GetSpellAbilityId() == REVICE_ABILITY
-	            if not modification == 1
-					UnitRemoveAbility(actor,REVICE_ABILITY)
-					UnitAddAbility(actor,ICE_ABILITY)
-	                modification = 1
-	                DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
+				UnitRemoveAbility(actor,REVICE_ABILITY)
+				UnitAddAbility(actor,ICE_ABILITY)
+	            modification = 1
+	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
+	            
+	        else if GetSpellAbilityId() == SMALL_BRUSH_ABILITY
+				UnitRemoveAbility(actor,SMALL_BRUSH_ABILITY)
+				UnitAddAbility(actor,BIG_BRUSH_ABILITY)
+	            smallbrush = true
+	        else if GetSpellAbilityId() == BIG_BRUSH_ABILITY
+				UnitRemoveAbility(actor,BIG_BRUSH_ABILITY)
+				UnitAddAbility(actor,SMALL_BRUSH_ABILITY)
+	            smallbrush = false
 	
 	function oncast()
 		var id = GetSpellAbilityId()
