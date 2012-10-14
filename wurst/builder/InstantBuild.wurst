@@ -3,7 +3,7 @@ import Builder
 import Entity
 import Door
 import RegionData
-import RevivePoint
+import Revivepoint
 import Executer
 
 constant int dummy = 'h00G'

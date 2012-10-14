@@ -1,0 +1,37 @@
+package Unitcreator
+    import BaseObject
+    import Terrain
+    import EscaperKiller
+    import CustomSpellBook
+    import TimerUtils
+    
+	constant int 	UNITCREATOR_ID   = 'n00C'
+
+
+    class Unitcreator extends StaticBaseObject
+        real interval = 5.
+        int spawnUnitType
+        timer spawn
+        
+        construct( vec2 pos, player owner)
+        	super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., function Unitcreator.create )
+        	spawn = getTimer()
+        	spawn.startPeriodic(interval, function create)
+        	
+        static function create()
+            thistype obj = GetExpiredTimer().getData() castTo thistype
+            var rx = obj.getRallyX()
+            var ry = obj.getRallyY()
+            
+
+        static function filter() returns boolean
+            return GetUnitTypeId( GetFilterUnit() ) == UNITCREATOR_ID
+
+        
+    
+    
+    public function init_Unitcreator()
+    	skip
+
+
+endpackage

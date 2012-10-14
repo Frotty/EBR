@@ -11,12 +11,12 @@ package TerrainModder
     constant int UNWALKABLE = 'H005'
     constant int WALKABLE = 'H004'
     
-    constant int ICE_ABILITY = 'A05V'
+    constant int ICE_ABILITY = 'A063'
     constant int REVICE_ABILITY = 'A00C'
 	int array UNWALKABLE_MOD_ABILITY_ID
 	
-    constant int SMALL_BRUSH_ABILITY = 'A05T'
-    constant int BIG_BRUSH_ABILITY = 'A05U'
+    constant int SMALL_BRUSH_ABILITY = 'A061'
+    constant int BIG_BRUSH_ABILITY = 'A062'
     
 	trigger castTrigger
 	

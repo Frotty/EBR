@@ -1,4 +1,4 @@
-package RevivePoint
+package Revivepoint
     import BaseObject
     import Terrain
     import PlayerData
@@ -11,6 +11,9 @@ package RevivePoint
 
     public class RevivePoint extends StaticBaseObject
         boolean reached = false
+        
+        construct( vec2 pos, player owner)
+        	super( pos.toVec3(), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
         
         static function reach()
 	        unit source = GetTriggeringTrigger().getSource()
@@ -26,10 +29,6 @@ package RevivePoint
                 currentRevivepoint = obj
 
 
-        construct( vec2 pos, player owner)
-        	super( pos.toVec3(), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
-
-        
 		static function filter() returns boolean
 			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
     
