@@ -1,12 +1,16 @@
 package Executer
     import BaseObject
     import Terrain
+    import Rect
+    import GroupUtils
     import Escaper
     import EscaperKiller
     import CustomSpellBook
     import RegionData
+    import Door
+    import BuilderConstants
     
-	constant int 	EXECUTER_ID   = 'n00C'
+	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 	
 	constant real 	EVENT_RADIUS	= 32.
@@ -32,21 +36,27 @@ package Executer
 		TANK
 		GLAIVE
 
-    class Executer extends StaticBaseObject
+    public class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
-        rect eventRect
+        rect eventRect // only for pressureplate
         Emode eventMode
         Amode actionMode
         boolean ON // only for lever and pressureplate
         int tiletype
         int nottiletype
-        int verticalTileSize
-        int horizontalTileSize
+        int verticalTileSize = 0
+        int horizontalTileSize = 0
         unit unitToMove // for unitMover
         ActionUnit actionUnit // only for UnitCreator Executer 
         string moveOrderString // only for unitMover
         
+        construct( vec2 pos, player owner)
+        	super( pos.toVec3(), CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent ) 
+			TriggerRegisterUnitEvent( onExecuterCast, actor, EVENT_UNIT_SPELL_ENDCAST )
+			print("PEWPEWPEWPEW")
+			
         static function onEvent()
+        	print("executer on Event")
             unit source = GetTriggeringTrigger().getSource()
             unit u = GetTriggerUnit()
             Entity e = u.getUserData() castTo Entity
@@ -62,15 +72,36 @@ package Executer
 	        		case Emode.LEVER
 	        			if obj.ON
 	                        obj.negativeAction()
+	                        obj.ON = false
 	                    else
 	                        obj.findAction()
+	                        obj.ON = true
 	        		case Emode.PRESSUREPLATE
 	        			if not obj.ON
 	                        obj.findAction()
+	                        obj.ON = true
 	                default
 	                	print("Bug- ExecuterEvent")
-        		
+        
+        static function onLeaveEvent()
+            unit u = GetTriggerUnit()
+            region r = GetTriggeringRegion()
+            Entity e = u.getUserData() castTo Entity
+            thistype obj = r.loadRegionData() castTo thistype
+    		GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
+    		int c = 0
+    		for unit eu from ENUM_GROUP
+	            Entity ee = eu.getUserData() castTo Entity
+	            if (obj.canKillerTrigger and e instanceof EscaperKiller) or (not obj.canKillerTrigger and e instanceof Escaper)
+	                c++
+            ENUM_GROUP.clear()
+    		if c == 0
+                obj.negativeAction()
+                obj.ON = false
+    		
+
         function findAction()
+            print("executer on action")
             unit u = GetTriggerUnit()
             Entity e = u.getUserData() castTo Entity
             
@@ -79,9 +110,11 @@ package Executer
             
             switch actionMode
             	case Amode.CLOSEDOOR
-            		skip
+            		Door closingdoor = getRallyUnit().getUserData() castTo Door
+            		closingdoor.closeDoor()
             	case Amode.OPENDOOR
-            		skip
+            		Door openingdoor = getRallyUnit().getUserData() castTo Door
+            		openingdoor.openDoor()
             	case Amode.CHANGETERRAIN
             		changeTerrain(true)
             	case Amode.MOVEUNIT
@@ -100,9 +133,11 @@ package Executer
             
             switch actionMode
             	case Amode.CLOSEDOOR
-            		skip //Open
+            		Door closingdoor = getRallyUnit().getUserData() castTo Door
+            		closingdoor.openDoor()
             	case Amode.OPENDOOR
-            		skip //Close
+            		Door openingdoor = getRallyUnit().getUserData() castTo Door
+            		openingdoor.closeDoor()
             	case Amode.CHANGETERRAIN
             		changeTerrain(false)
             	default
@@ -145,7 +180,7 @@ package Executer
 		
 			var rX = getRallyX()
             var rY = getRallyY()
-            var data = getRegionData(rX, rY)
+            RegionData data
             int tileID
             
             if isAction
@@ -155,62 +190,191 @@ package Executer
             
             for int i = 0 to (verticalTileSize*2)
                 for int j = 0 to (horizontalTileSize*2)
+                    var y = rY+ (128*(i-verticalTileSize))
+                    var x = rX+ (128*(j-horizontalTileSize))
+                    data = getRegionData(x,y)
             		if data.isOwner(GetPlayerId(owner))
-                    	SetTerrainType( rX+ (128*(i-verticalTileSize)), rY+ (128*(i-horizontalTileSize)), tiletype, -1, 1, 1 )
+                        if tileID == '0000'
+                            tileID = data.walkableTile
+                    	else if tileID== '0001'
+                            tileID = data.unwalkableTile
+                    	SetTerrainType(x, x, tiletype, -1, 1, 1 )
 		
+		function addActionAbilsNormal()
+			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
+			UnitAddAbility(actor,DOOR_OPEN_ABIL)
+			UnitAddAbility(actor,TERRAIN_WALKABLE_ABIL)
+			UnitAddAbility(actor,TERRAIN_ICE_ABIL)
+			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
+			UnitAddAbility(actor,TERRAIN_UNICE_ABIL)
+			UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
+				
+			
+		function addActionAbilsReversable()
+			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
+			UnitAddAbility(actor,DOOR_OPEN_ABIL)
+			UnitAddAbility(actor,TERRAIN_WALKABLE_ABIL)
+			UnitAddAbility(actor,TERRAIN_ICE_ABIL)
+			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
+			UnitAddAbility(actor,TERRAIN_UNICE_ABIL)
 		
-		static function onUpdateAbility(int ability_id)
-			unit source = GetSpellAbilityUnit()
-            thistype obj = source.getUserData() castTo thistype
-            
-            int i = GetSpellAbilityId()
-            switch i
-            	case ONESHOT_ABIL_ID
-            		obj.eventMode = Emode.ONESHOT
-            	case REPEATING_ABIL_ID
-            		obj.eventMode = Emode.REPEATING
-            	case LEVER_ABIL_ID
-            		obj.eventMode = Emode.LEVER
-            		//CREATERECT
-            	case PRESSURE_ABIL_ID
-            		obj.eventMode = Emode.PRESSUREPLATE
-            		obj.registerRect(obj.actor.getX(), obj.actor.getY(), 50)
+		function removeModeAbils()
+			UnitRemoveAbility(actor, ONESHOT_ABIL)
+			UnitRemoveAbility(actor, REPEATING_ABIL)
+			UnitRemoveAbility(actor, LEVER_ABIL)
+			UnitRemoveAbility(actor, PRESSURE_ABIL)
+			
+		function removeActionAbils()
+			UnitRemoveAbility(actor,DOOR_CLOSE_ABIL)
+			UnitRemoveAbility(actor,DOOR_OPEN_ABIL)
+			UnitRemoveAbility(actor,TERRAIN_WALKABLE_ABIL)
+			UnitRemoveAbility(actor,TERRAIN_ICE_ABIL)
+			UnitRemoveAbility(actor,TERRAIN_UNWALKABLE_ABIL)
+			UnitRemoveAbility(actor,TERRAIN_UNICE_ABIL)
+			UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
+			
+		function addTerrainAdjuster()
+			UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
+			UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)
+			UnitAddAbility(actor, TERRAIN_DECREASE_V_ABIL)
+			UnitAddAbility(actor, TERRAIN_DECREASE_H_ABIL)
+			
+		function addMoveUnitAdjuster()
+			UnitAddAbility(actor, MOVE_UNIT_STOP_ABIL)
+			UnitAddAbility(actor, MOVE_UNIT_DIRECT_ABIL)
+			UnitAddAbility(actor, MOVE_UNIT_PATROL_ABIL)
+			UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
+
+            		
         
         function registerRect(real centerX, real centerY, real offset)
             //note: with movable circles, itll be necessary to move the rect too.
+        	region eventRegion = CreateRegion()
         	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
-        	//TriggerRegisterLeaveRegion(executerUnitLeave, RegionAddRect(CreateRegion(), eventRect), null)
-        	executerUnitLeave.addAction(function onEvent)
+        	RegionAddRect(eventRegion,eventRect)
+        	TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
+        	eventRegion.setRegionData(this castTo int)
+        	executerUnitLeave.addAction(function onLeaveEvent)
         	
-        
+        /*
         static function register()
             unit u = GetConstructedStructure()
-            u.setUserData( new Executer( u.getX(), u.getY(), u) castTo int )
+            u.setUserData( new Executer( vec2(u.getX(), u.getY()), ) castTo int )*/
 
         
-        construct( real x, real y, unit u)
-        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Executer.onEvent ) 
 
         
-        static function filter() returns boolean
-            return GetUnitTypeId( GetFilterUnit() ) == EXECUTER_ID
 
+	function onUpdateAbility()
+        print("Executer casts")
+		unit source = GetSpellAbilityUnit()
+        Executer obj = source.getUserData() castTo Executer
+        
+        int i = GetSpellAbilityId()
+        switch i
+        	case ONESHOT_ABIL
+        		obj.eventMode = Emode.ONESHOT
+        		obj.addActionAbilsNormal()
+        		obj.removeModeAbils()
+        	case REPEATING_ABIL
+        		obj.eventMode = Emode.REPEATING
+        		obj.addActionAbilsNormal()
+        		obj.removeModeAbils()
+        	case LEVER_ABIL
+        		obj.eventMode = Emode.LEVER
+        		obj.addActionAbilsReversable()
+        		obj.removeModeAbils()
+        	case PRESSURE_ABIL
+        		obj.eventMode = Emode.PRESSUREPLATE
+        		obj.addActionAbilsReversable()
+        		obj.removeModeAbils()
+        		obj.registerRect(obj.actor.getX(), obj.actor.getY(), 50)
+        		
+        	case DOOR_OPEN_ABIL
+        		obj.actionMode = Amode.OPENDOOR
+        		obj.removeActionAbils()
+			case DOOR_CLOSE_ABIL
+        		obj.actionMode = Amode.CLOSEDOOR
+        		obj.removeActionAbils()
+        		
+        	case TERRAIN_WALKABLE_ABIL
+        		obj.actionMode = Amode.CHANGETERRAIN
+        		obj.removeActionAbils()
+        		obj.addTerrainAdjuster()
+        		obj.tiletype = '0000'
+        	case TERRAIN_UNWALKABLE_ABIL
+        		obj.actionMode = Amode.CHANGETERRAIN
+        		obj.removeActionAbils()
+        		obj.addTerrainAdjuster()
+        		obj.tiletype = '0001'
+        	case TERRAIN_ICE_ABIL
+        		obj.actionMode = Amode.CHANGETERRAIN
+        		obj.removeActionAbils()
+        		obj.addTerrainAdjuster()
+        		obj.tiletype = CONTROLLABLEICE
+        	case TERRAIN_UNICE_ABIL
+        		obj.actionMode = Amode.CHANGETERRAIN
+        		obj.removeActionAbils()
+        		obj.addTerrainAdjuster()
+        		obj.tiletype = UNCONTROLLABLEICE
+        	
+        	case MOVE_UNIT_DIRECT_ABIL
+        		obj.moveOrderString = "move"
+        		if obj.actionMode == null
+        			obj.actionMode = Amode.MOVEUNIT
+        			obj.removeActionAbils()
+        			obj.addMoveUnitAdjuster()
+        	case MOVE_UNIT_PATROL_ABIL
+        		obj.moveOrderString = "patrol"
+        	case MOVE_UNIT_STOP_ABIL
+        		obj.moveOrderString = "stop"
+        	case MOVE_UNIT_SELECT_ABIL
+        		obj.unitToMove = GetSpellTargetUnit()
+        	
+        	case TERRAIN_INCREASE_H_ABIL
+        		obj.horizontalTileSize ++
+			case TERRAIN_INCREASE_V_ABIL
+        		obj.verticalTileSize ++
+			case TERRAIN_DECREASE_H_ABIL
+        		obj.horizontalTileSize --
+			case TERRAIN_DECREASE_V_ABIL
+        		obj.verticalTileSize --
+        	default
+        		print("Bug - ExecuterAbility")
+	
     int TANKID
 	int GLAIVEID
 	int POINTERID
 	
-	int ONESHOT_ABIL_ID
-	int REPEATING_ABIL_ID
-	int LEVER_ABIL_ID
-	int PRESSURE_ABIL_ID
+	//ABILITY ID-s
+	int ONESHOT_ABIL = 'A068'
+	int REPEATING_ABIL = 'A069'
+	int LEVER_ABIL = 'A067'
+	int PRESSURE_ABIL = 'A066'
 	
-	trigger executerUnitLeave
+	int TERRAIN_WALKABLE_ABIL = 'A015'
+	int TERRAIN_UNWALKABLE_ABIL = 'A016'
+	int TERRAIN_ICE_ABIL = 'A019'
+	int TERRAIN_UNICE_ABIL = 'A01A'
+	int TERRAIN_INCREASE_H_ABIL
+	int TERRAIN_INCREASE_V_ABIL
+	int TERRAIN_DECREASE_H_ABIL
+	int TERRAIN_DECREASE_V_ABIL
+	
+	int DOOR_OPEN_ABIL = 'A018'
+	int DOOR_CLOSE_ABIL = 'A01N'
+	
+	int MOVE_UNIT_DIRECT_ABIL = 'A04R'
+	int MOVE_UNIT_PATROL_ABIL = 'A064'
+	int MOVE_UNIT_STOP_ABIL = 'A065'
+	int MOVE_UNIT_SELECT_ABIL
+	
+	trigger executerUnitLeave = CreateTrigger()
+	trigger onExecuterCast
     
-    public function init_Executer( trigger t )
-        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) )
-        t.addAction( function Executer.register )
-        executerUnitLeave = CreateTrigger()
-        //executerUnitLeave.addAction(function onEvent)
+    public function init_Executer()
+        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) 
+        onExecuterCast = CreateTrigger()
+        onExecuterCast.addAction( function onUpdateAbility )
 
 endpackage
-

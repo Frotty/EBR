@@ -78,18 +78,20 @@ package GameConstants
 		tags    [12] = "|cff9C94E6[Tester]"
 		names   [13] = "kleinerhauck"
 		tags    [13] = "|cff9C94E6[Tester]"
+		names	[14] = "kari0003"
+		tags	[14] = "|cffFFE87C[Lightbringer]"
 
-		colorcode[ 0 ] = "|cffFF0202" // rot
-		colorcode[ 1 ] = "|cff0041FF" // blau
+		colorcode[ 0 ] = "|cffFF0202" // red
+		colorcode[ 1 ] = "|cff0041FF" // blue
 		colorcode[ 2 ] = "|cff1BE6B8" // teal
 		colorcode[ 3 ] = "|cff530080" // lila
-		colorcode[ 4 ] = "|cffFFFC00" // gelb
+		colorcode[ 4 ] = "|cffFFFC00" // yellow
 		colorcode[ 5 ] = "|cffFE890D" // orange
-		colorcode[ 6 ] = "|cff1FBF00" // gruen
+		colorcode[ 6 ] = "|cff1FBF00" // green
 		colorcode[ 7 ] = "|cffE55AAF" // pink
-		colorcode[ 8 ] = "|cff949596" // grau
-		colorcode[ 9 ] = "|cff7DBEF1" // hellblau
-		colorcode[ 10 ] = "|cff0F6145" 
+		colorcode[ 8 ] = "|cff949596" // gray
+		colorcode[ 9 ] = "|cff7DBEF1" // lightblue
+		colorcode[ 10 ] = "|cff0F6145" // darkgreen
 
 		expBounds[0] = 10
 		expBounds[1] = 30
