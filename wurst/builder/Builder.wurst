@@ -4,6 +4,7 @@ import PlayerData
 import BuilderConstants
 import RegionData
 import GroupUtils
+import Key
 
 trigger swapTrigger
 trigger itemTrigger
@@ -38,55 +39,46 @@ public class Builder extends UnitEntity
 		if data instanceof Builder
 			var builder = data castTo Builder
 			var id = GetSpellAbilityId()
+			var ox = GetSpellTargetX()
+			var oy = GetSpellTargetY()
+			boolean wasMenu = false
 			switch id
 				case MENU_1
 					builder.actor.remove()
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
-		            UnitAddItemById(builder.actor,'I000')
-		            UnitAddItemById(builder.actor,'I001')
-		            UnitAddItemById(builder.actor,'I002')
-		            UnitAddItemById(builder.actor,'I003')		            
-		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		            wasMenu = true
 		        case MENU_2
 		            builder.actor.remove()
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit())))
-		            UnitAddItemById(builder.actor,'I000')
-		            UnitAddItemById(builder.actor,'I001')
-		            UnitAddItemById(builder.actor,'I002')
-		            UnitAddItemById(builder.actor,'I003')		            
-		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		            wasMenu = true
 		        case MENU_3
 		            builder.actor.remove()
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit()) ) )
-		            UnitAddItemById(builder.actor,'I000')
-		            UnitAddItemById(builder.actor,'I001')
-		            UnitAddItemById(builder.actor,'I002')
-		            UnitAddItemById(builder.actor,'I003')		            
-		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		            wasMenu = true
 		        case MENU_4
 		            builder.actor.remove()
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit()) ) )
-		            UnitAddItemById(builder.actor,'I000')
-		            UnitAddItemById(builder.actor,'I001')
-		            UnitAddItemById(builder.actor,'I002')
-		            UnitAddItemById(builder.actor,'I003')		            
-		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		            wasMenu = true
 		        case MENU_5
 		            builder.actor.remove()
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
-		            UnitAddItemById(builder.actor,'I000')
-		            UnitAddItemById(builder.actor,'I001')
-		            UnitAddItemById(builder.actor,'I002')
-		            UnitAddItemById(builder.actor,'I003')		            
-		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		            wasMenu = true
 		        case MENU_6
 		            builder.actor.remove()
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
-		            UnitAddItemById(builder.actor,'I000')
-		            UnitAddItemById(builder.actor,'I001')
-		            UnitAddItemById(builder.actor,'I002')
-		            UnitAddItemById(builder.actor,'I003')		            
-		            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		            wasMenu = true
+				case KEY_SPELL_ID
+					new Key(vec2(ox,oy), builder.owner)
+					
+					
+			if wasMenu
+				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
+				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
+	            UnitAddItemById(builder.actor,'I000')
+	            UnitAddItemById(builder.actor,'I001')
+	            UnitAddItemById(builder.actor,'I002')
+	            UnitAddItemById(builder.actor,'I003')		            
+	            SelectUnitForPlayerSingle( builder.actor, builder.owner )
 
 
 function filter() returns boolean
@@ -102,6 +94,10 @@ public function init_Builder()
 	while pd != null
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
+			UnitAddItemById(pd.builder.actor,'I000')
+            UnitAddItemById(pd.builder.actor,'I001')
+			UnitAddItemById(pd.builder.actor,'I002')
+            UnitAddItemById(pd.builder.actor,'I003')	
 		pd = pd.next
 	
 	

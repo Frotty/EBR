@@ -1,0 +1,21 @@
+package ItemObject
+import Entity
+
+public class ItemObject extends Entity
+	unit setup
+	item actorItem
+
+
+	construct( vec2 pos, item i, unit setup )
+		super( pos.toVec3(), 0., DUMMY_PLAYER )
+		this.setup = setup
+		actorItem = i
+		SetItemUserData(actorItem, this castTo int)
+		setup.setUserData(this castTo int)
+		
+		
+		
+	override function onGround()
+	override function inAir()
+
+

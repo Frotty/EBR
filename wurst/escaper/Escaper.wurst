@@ -6,6 +6,8 @@ package Escaper
 	import TimerUtils
 	import RegionData
 	import BuilderConstants
+	import ItemObject
+	import Key
 	
 	public Table escaperTable = new Table()
 	
@@ -16,6 +18,7 @@ package Escaper
 		int deaths 		= 0
 		boolean flying = false
 		boolean sliding = false
+		boolean onUnwalkable = false
 		
 		vec3 slideVelocity = vec3(0,0,0)
 		vec3 trackVelocity = vec3(0,0,0)
@@ -36,6 +39,8 @@ package Escaper
     		
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
             TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+            TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
+            TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 			currentRegion = regions[0]
 
@@ -69,7 +74,10 @@ package Escaper
 			// ebr (un)walkable
 			// print("tile " + currentRegion.unwalkableTile.toString())
 			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
+				onUnwalkable = true
 				kill()
+			else
+				onUnwalkable = false
 							
 		
 		override function update()
@@ -115,13 +123,39 @@ package Escaper
 					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x2,y2)-180)
                 else
 					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x3,y3)-180)
+					
+		static function pickupItem()
+			var pickedItem = GetManipulatedItem()
+			var escaper = GetTriggerUnit().getUserData() castTo Escaper
+			var idata = pickedItem.getUserData() castTo ItemObject
+			
+			if idata instanceof Key
+				var kdata = idata castTo Key
+				kdata.pickedUp(escaper)
+				
+		static function dropItem()
+			var pickedItem = GetManipulatedItem()
+			var escaper = GetTriggerUnit().getUserData() castTo Escaper
+			var idata = pickedItem.getUserData() castTo ItemObject
+			
+			if idata instanceof Key
+				var kdata = idata castTo Key
+				dropTrig.disable()
+				RemoveItem(kdata.actorItem)
+				kdata.dropped()
+				dropTrig.enable()
 
 			
 	trigger slideAssist
+	trigger pickupTrig
+	public trigger dropTrig
 			
 	init
 		slideAssist = CreateTrigger()
 		slideAssist.addAction(function Escaper.changeAngle)
-		
+		pickupTrig = CreateTrigger()
+		pickupTrig.addAction( function Escaper.pickupItem )
+		dropTrig = CreateTrigger()
+		dropTrig.addAction( function Escaper.dropItem )
 		
 endpackage 

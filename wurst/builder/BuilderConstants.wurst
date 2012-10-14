@@ -24,3 +24,19 @@ public constant int MENU_4 = 'A05C'
 public constant int MENU_5 = 'A05D'
 public constant int MENU_6 = 'A05E'
 
+public constant int KEY_SPELL_ID = 'A03Z'
+public constant int TOME_SPELL_ID = 'A040'
+public constant int BOOTS_SPELL_ID = 'A03Y'
+
+public int array colorSpells
+
+init
+	colorSpells[0] = 'A05T'
+	colorSpells[1] = 'A05U'
+	colorSpells[2] = 'A05V'
+	colorSpells[3] = 'A05W'
+	colorSpells[4] = 'A05S'
+	colorSpells[5] = 'A05X'
+	colorSpells[6] = 'A05Y'
+	colorSpells[7] = 'A05Z'
+	colorSpells[8] = 'A060'

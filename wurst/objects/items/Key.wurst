@@ -1,0 +1,94 @@
+package Key
+import ItemObject
+import GameConstants
+import Escaper
+import BuilderConstants
+
+int array keyIds
+
+trigger castTrig
+
+public class Key extends ItemObject
+	COLOR col = COLOR.WHITE
+	boolean picked = false
+	boolean followWalkable = true
+	Escaper holder
+	
+	construct(vec2 pos, player owner)
+		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
+		TriggerRegisterUnitEvent(castTrig, setup, EVENT_UNIT_SPELL_CAST)
+		
+	function recolor()
+		RemoveItem(actorItem)
+		actorItem = CreateItem( keyIds[col castTo int], position.x, position.y )
+		actorItem.setUserData(this castTo int)
+		
+	function pickedUp(Escaper holder)
+		picked = true
+		this.holder = holder
+		setup.hide()
+		
+	function dropped()
+		picked = false
+		holder = null
+		setup.setXYVec(position.toVec2())
+		setup.show()
+		actorItem = CreateItem( keyIds[col castTo int], position.x, position.y )
+		actorItem.setUserData(this castTo int)
+		
+		
+	override function update()
+		if picked and followWalkable
+			if not holder.flying and not holder.sliding and not holder.onUnwalkable
+				position = holder.position
+				
+			
+		
+	static function onCast()
+		var id = GetSpellAbilityId()
+		var data = GetTriggerUnit().getUserData() castTo Key
+		switch id
+			case colorSpells[0]
+				data.col = COLOR.WHITE
+			case colorSpells[1]
+				data.col = COLOR.RED
+			case colorSpells[2]
+				data.col = COLOR.BLUE
+			case colorSpells[3]
+				data.col = COLOR.TEAL
+			case colorSpells[4]
+				data.col = COLOR.PURPLE
+			case colorSpells[5]
+				data.col = COLOR.YELLOW
+			case colorSpells[6]
+				data.col = COLOR.ORANGE
+			case colorSpells[7]
+				data.col = COLOR.GREEN
+			case colorSpells[8]
+				data.col = COLOR.PINK
+		data.recolor()
+		
+	ondestroy
+		dropTrig.disable()
+		actorItem.remove()
+		dropTrig.enable()
+		holder = null
+		setup.remove()
+		
+		
+init
+	castTrig = CreateTrigger()
+	castTrig.addAction(function Key.onCast)
+	
+	keyIds[0] = 'I009'
+	keyIds[1] = 'I00C'
+	keyIds[2] = 'I004'
+	keyIds[3] = 'I008'
+	keyIds[4] = 'I00J'
+	keyIds[5] = 'I005'
+	keyIds[6] = 'I00O'
+	keyIds[7] = 'I00B'
+	keyIds[8] = 'I006'
+	
+	
+	
