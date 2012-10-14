@@ -24,13 +24,13 @@ package TerrainModder
 	constant int SETUP_TYPE = 0
 	
 	class TerrainModder extends StaticBaseObject
-		boolean smallbrush 
-		int modification // 0 = basic terrain, 1 = lava/revice 2 = poison
+		boolean smallbrush = true
+		int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 		construct( vec2 pos, player owner, unit u)
 			super(pos.toVec3(), u , 0., function changeTerrain)
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_CAST )
+			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_ENDCAST )
 
 		static function changeTerrain()
 			var id = GetTriggerUnit()
@@ -81,63 +81,64 @@ package TerrainModder
                     	else
                         	SetTerrainType( rX, rY, POISON, -1, 2, 1 )
         	else
-        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019This Region doesn't belong to you!changeT")
+        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
-		function switchMode()
-			if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[1]
+		function switchMode(int spell_id)
+			if spell_id == UNWALKABLE_MOD_ABILITY_ID[1]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 	            modification = 1
 	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
-	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[2]
+	        else if spell_id == UNWALKABLE_MOD_ABILITY_ID[2]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 	            modification = 2
 	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
-	        else if GetSpellAbilityId() == UNWALKABLE_MOD_ABILITY_ID[0]
+	        else if spell_id == UNWALKABLE_MOD_ABILITY_ID[0]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 		        modification = 0
 		        DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 		        
-			else if GetSpellAbilityId() == ICE_ABILITY
+			else if spell_id == ICE_ABILITY
 				UnitRemoveAbility(actor,ICE_ABILITY)
 				UnitAddAbility(actor,REVICE_ABILITY)
 	            modification = 0
 	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
-	        else if GetSpellAbilityId() == REVICE_ABILITY
+	        else if spell_id == REVICE_ABILITY
 				UnitRemoveAbility(actor,REVICE_ABILITY)
 				UnitAddAbility(actor,ICE_ABILITY)
 	            modification = 1
 	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
 	            
-	        else if GetSpellAbilityId() == SMALL_BRUSH_ABILITY
+	        else if spell_id == SMALL_BRUSH_ABILITY
 				UnitRemoveAbility(actor,SMALL_BRUSH_ABILITY)
 				UnitAddAbility(actor,BIG_BRUSH_ABILITY)
 	            smallbrush = true
-	        else if GetSpellAbilityId() == BIG_BRUSH_ABILITY
+	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "SmallBrush")
+	        else if spell_id == BIG_BRUSH_ABILITY
 				UnitRemoveAbility(actor,BIG_BRUSH_ABILITY)
 				UnitAddAbility(actor,SMALL_BRUSH_ABILITY)
 	            smallbrush = false
+	            DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "BigBrush")
+	        else
+				print("Bug - Terrainmodder Ability")
 	
 	function oncast()
-		var id = GetSpellAbilityId()
 		var obj = GetSpellAbilityUnit().getUserData() castTo TerrainModder
-		obj.switchMode()
+		obj.switchMode(GetSpellAbilityId())
 		
-	trigger onTerrainModCast	
+	trigger onTerrainModCast = CreateTrigger()
 	
 	public function init_TerrainModder()
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function TerrainModder.changeTerrain)
-		onTerrainModCast = CreateTrigger()
-		unit u = GetTriggerUnit()
 		TriggerAddAction(onTerrainModCast, function oncast)
 
 		
-		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Y'
-		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04X'
-		UNWALKABLE_MOD_ABILITY_ID[2] = 'A04Z'
+		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
+		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
+		UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'
 		
 		PlayerData pd = PlayerData.first
 		while pd != null

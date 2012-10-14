@@ -4,6 +4,7 @@ import Entity
 import Door
 import RegionData
 import RevivePoint
+import Executer
 
 constant int dummy = 'h00G'
         
@@ -45,6 +46,8 @@ function callback()
 	    		new RevivePoint(vec2(x,y), u.getOwner())
 	    	case buildorders[15]
 	        	new Door(vec2(x,y), u.getOwner())	
+	        case buildorders[8]
+	        	new Executer(vec2(x,y), u.getOwner())
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
     d = null
@@ -96,7 +99,7 @@ init
     buildorders[5] = 'h019'
     buildorders[6] = 'n012'
     buildorders[7] = 'h009'
-    buildorders[8] = 'n01D'
+    buildorders[8] = 'n01D'  // Executer
     buildorders[9] = 'n01E'
     buildorders[10] = 'n00F'
     buildorders[11] = 'n00J'
