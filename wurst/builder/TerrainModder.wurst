@@ -30,7 +30,7 @@ package TerrainModder
 		construct( vec2 pos, player owner, unit u)
 			super(pos.toVec3(), u , 0., function changeTerrain)
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_ENDCAST )
+			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_EFFECT )
 
 		static function changeTerrain()
 			var id = GetTriggerUnit()
