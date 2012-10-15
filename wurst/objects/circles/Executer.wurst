@@ -41,9 +41,9 @@ package Executer
         rect eventRect // only for pressureplate
         Emode eventMode
         Amode actionMode
-        boolean ON // only for lever and pressureplate
+        boolean ON = false// only for lever and pressureplate
         int tiletype
-        int nottiletype
+        int nottiletype = '0001'
         int verticalTileSize = 0
         int horizontalTileSize = 0
         unit unitToMove // for unitMover
@@ -52,8 +52,7 @@ package Executer
         
         construct( vec2 pos, player owner)
         	super( pos.toVec3(), CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent ) 
-			TriggerRegisterUnitEvent( onExecuterCast, actor, EVENT_UNIT_SPELL_ENDCAST )
-			print("PEWPEWPEWPEW")
+			TriggerRegisterUnitEvent( onExecuterCast, actor, EVENT_UNIT_SPELL_EFFECT )
 			
         static function onEvent()
         	print("executer on Event")
@@ -62,7 +61,7 @@ package Executer
             Entity e = u.getUserData() castTo Entity
             thistype obj = source.getUserData() castTo thistype
             
-            if (not obj.canKillerTrigger and e instanceof Escaper) or (obj.canKillerTrigger and e instanceof EscaperKiller)
+            if obj.canTrigger(e)
 	        	switch obj.eventMode
 	        		case Emode.REPEATING
 	        			obj.findAction()
@@ -111,10 +110,16 @@ package Executer
             switch actionMode
             	case Amode.CLOSEDOOR
             		Door closingdoor = getRallyUnit().getUserData() castTo Door
-            		closingdoor.closeDoor()
+            		if closingdoor == null
+                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+                    else
+            			closingdoor.closeDoor()
             	case Amode.OPENDOOR
             		Door openingdoor = getRallyUnit().getUserData() castTo Door
-            		openingdoor.openDoor()
+            		if openingdoor == null
+                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+            		else
+            			openingdoor.openDoor()
             	case Amode.CHANGETERRAIN
             		changeTerrain(true)
             	case Amode.MOVEUNIT
@@ -134,17 +139,22 @@ package Executer
             switch actionMode
             	case Amode.CLOSEDOOR
             		Door closingdoor = getRallyUnit().getUserData() castTo Door
-            		closingdoor.openDoor()
+            		if closingdoor == null
+                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+            		else
+            			closingdoor.openDoor()
             	case Amode.OPENDOOR
             		Door openingdoor = getRallyUnit().getUserData() castTo Door
-            		openingdoor.closeDoor()
+            		if openingdoor == null
+                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+            		else
+            			openingdoor.closeDoor()
             	case Amode.CHANGETERRAIN
             		changeTerrain(false)
             	default
             		print("Bug - ExecuterNotAction")
 		
 		function moveUnit()
-			
 			var rX = getRallyX()
             var rY = getRallyY()
             if moveOrderString == "stop"
@@ -182,7 +192,7 @@ package Executer
             var rY = getRallyY()
             RegionData data
             int tileID
-            
+            print("Tiletype: " + tiletype.toString())
             if isAction
                 tileID = tiletype
             else
@@ -198,7 +208,8 @@ package Executer
                             tileID = data.walkableTile
                     	else if tileID== '0001'
                             tileID = data.unwalkableTile
-                    	SetTerrainType(x, x, tiletype, -1, 1, 1 )
+                        print("changingTerrain " + tileID.toString() + " " + x.toString() + "," + y.toString())
+                    	SetTerrainType(x, y, tileID, -1, 1, 1 )
 		
 		function addActionAbilsNormal()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -238,12 +249,15 @@ package Executer
 			UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)
 			UnitAddAbility(actor, TERRAIN_DECREASE_V_ABIL)
 			UnitAddAbility(actor, TERRAIN_DECREASE_H_ABIL)
+			if eventMode == Emode.LEVER or eventMode == Emode.PRESSUREPLATE
+				UnitAddAbility(actor, TERRAIN_BOOK_ABIL)
 			
 		function addMoveUnitAdjuster()
 			UnitAddAbility(actor, MOVE_UNIT_STOP_ABIL)
 			UnitAddAbility(actor, MOVE_UNIT_DIRECT_ABIL)
 			UnitAddAbility(actor, MOVE_UNIT_PATROL_ABIL)
 			UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
+				
 
             		
         
@@ -255,11 +269,18 @@ package Executer
         	TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
         	eventRegion.setRegionData(this castTo int)
         	executerUnitLeave.addAction(function onLeaveEvent)
-        	
-        /*
-        static function register()
-            unit u = GetConstructedStructure()
-            u.setUserData( new Executer( vec2(u.getX(), u.getY()), ) castTo int )*/
+        
+        ondestroy
+        	actor.remove()
+        	RemoveRect(eventRect)
+        
+		function canTrigger(Entity e) returns boolean
+			if (not canKillerTrigger and e instanceof Escaper)
+				return true
+			else if (canKillerTrigger and e instanceof EscaperKiller)
+	    		return true
+	    	return false
+			
 
         
 
@@ -298,29 +319,42 @@ package Executer
         		obj.removeActionAbils()
         		
         	case TERRAIN_WALKABLE_ABIL
-        		obj.actionMode = Amode.CHANGETERRAIN
-        		obj.removeActionAbils()
-        		obj.addTerrainAdjuster()
-        		obj.tiletype = '0000'
+        		if obj.actionMode == null
+        			obj.actionMode = Amode.CHANGETERRAIN
+        			obj.removeActionAbils()
+        			obj.addTerrainAdjuster()
+        			obj.tiletype = '0000'
+        		else
+                    obj.nottiletype = '0000'
         	case TERRAIN_UNWALKABLE_ABIL
-        		obj.actionMode = Amode.CHANGETERRAIN
-        		obj.removeActionAbils()
-        		obj.addTerrainAdjuster()
-        		obj.tiletype = '0001'
+        		if obj.actionMode == null
+        			obj.actionMode = Amode.CHANGETERRAIN
+        			obj.removeActionAbils()
+        			obj.addTerrainAdjuster()
+        			obj.tiletype = '0001'
+        		else
+        			obj.nottiletype = '0001'
         	case TERRAIN_ICE_ABIL
-        		obj.actionMode = Amode.CHANGETERRAIN
-        		obj.removeActionAbils()
-        		obj.addTerrainAdjuster()
-        		obj.tiletype = CONTROLLABLEICE
+        		if obj.actionMode == null
+        			obj.actionMode = Amode.CHANGETERRAIN
+        			obj.removeActionAbils()
+        			obj.addTerrainAdjuster()
+        			obj.tiletype = CONTROLLABLEICE
+        		else
+        			obj.nottiletype = CONTROLLABLEICE
         	case TERRAIN_UNICE_ABIL
-        		obj.actionMode = Amode.CHANGETERRAIN
-        		obj.removeActionAbils()
-        		obj.addTerrainAdjuster()
-        		obj.tiletype = UNCONTROLLABLEICE
+        		if obj.actionMode == null
+        			obj.actionMode = Amode.CHANGETERRAIN
+        			obj.removeActionAbils()
+        			obj.addTerrainAdjuster()
+        			obj.tiletype = UNCONTROLLABLEICE
+        		else
+        			obj.nottiletype = UNCONTROLLABLEICE
         	
         	case MOVE_UNIT_DIRECT_ABIL
         		obj.moveOrderString = "move"
         		if obj.actionMode == null
+                    print("BANG")
         			obj.actionMode = Amode.MOVEUNIT
         			obj.removeActionAbils()
         			obj.addMoveUnitAdjuster()
@@ -329,14 +363,17 @@ package Executer
         	case MOVE_UNIT_STOP_ABIL
         		obj.moveOrderString = "stop"
         	case MOVE_UNIT_SELECT_ABIL
+        		print(GetUnitTypeId(GetSpellTargetUnit()).toString())
         		obj.unitToMove = GetSpellTargetUnit()
         	
         	case TERRAIN_INCREASE_H_ABIL
         		obj.horizontalTileSize ++
+        		print(obj.horizontalTileSize.toString())
 			case TERRAIN_INCREASE_V_ABIL
         		obj.verticalTileSize ++
 			case TERRAIN_DECREASE_H_ABIL
         		obj.horizontalTileSize --
+        		print(obj.horizontalTileSize.toString())
 			case TERRAIN_DECREASE_V_ABIL
         		obj.verticalTileSize --
         	default
@@ -356,10 +393,11 @@ package Executer
 	int TERRAIN_UNWALKABLE_ABIL = 'A016'
 	int TERRAIN_ICE_ABIL = 'A019'
 	int TERRAIN_UNICE_ABIL = 'A01A'
-	int TERRAIN_INCREASE_H_ABIL
-	int TERRAIN_INCREASE_V_ABIL
-	int TERRAIN_DECREASE_H_ABIL
-	int TERRAIN_DECREASE_V_ABIL
+	int TERRAIN_INCREASE_H_ABIL = 'A01K'
+	int TERRAIN_INCREASE_V_ABIL = 'A01M'
+	int TERRAIN_DECREASE_H_ABIL = 'A01U'
+	int TERRAIN_DECREASE_V_ABIL = 'A01T'
+	int TERRAIN_BOOK_ABIL = 'A06B'
 	
 	int DOOR_OPEN_ABIL = 'A018'
 	int DOOR_CLOSE_ABIL = 'A01N'
@@ -367,7 +405,7 @@ package Executer
 	int MOVE_UNIT_DIRECT_ABIL = 'A04R'
 	int MOVE_UNIT_PATROL_ABIL = 'A064'
 	int MOVE_UNIT_STOP_ABIL = 'A065'
-	int MOVE_UNIT_SELECT_ABIL
+	int MOVE_UNIT_SELECT_ABIL = 'A06A'
 	
 	trigger executerUnitLeave = CreateTrigger()
 	trigger onExecuterCast
