@@ -1,0 +1,78 @@
+package Powernode
+import Lists
+import Entity
+import Escaper
+
+trigger castTrig
+
+constant int LINK_ID = 'A051'
+constant string EFFECT_STRING = "DRAM"
+constant string KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
+constant int NODE_ID = 'h0nn'
+constant real ACTIVATION_DIST = 25.
+
+class Link
+	Powernode linkedNode
+	lightning sfx
+	
+	construct( Powernode node, lightning sfx )
+		linkedNode = node
+		this.sfx = sfx
+		
+	ondestroy
+		DestroyLightning(sfx)
+
+public class Powernode extends Entity
+	LinkedList<Link> links = new LinkedList<Link>()
+	
+	unit actor
+	
+	construct( vec2 pos, player owner )
+		super( pos.toVec3(), 0., owner )
+		actor = CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 )
+		TriggerRegisterUnitEvent(castTrig, actor, EVENT_UNIT_SPELL_EFFECT)
+		actor.setUserData(this castTo int)
+		
+	function unlink( Link l )
+		links.remove(l)
+		destroy l
+		
+	function link( Powernode p )
+		links.add(new Link(p, AddLightning(EFFECT_STRING, false, position.x, position.y, p.position.x, p.position.y)))
+		
+	override function update()
+		position.x = actor.getX()
+		position.y = actor.getY()
+		if links.size > 0
+			print(links.size.toString())
+			for Link l in links
+				MoveLightning(l.sfx, false, position.x, position.y, l.linkedNode.position.x, l.linkedNode.position.y)
+				for Escaper e in escapers
+					if e.position.toVec2().distToSegmentSquared(position.toVec2(), l.linkedNode.position.toVec2() ) < ACTIVATION_DIST
+						e.kill()
+						AddSpecialEffect( KILL_EFFECT , e.position.x, e.position.y ) 
+				
+				
+	override function onGround()
+	override function inAir()
+	
+	static function onCast()
+		var id = GetSpellAbilityId()
+		var target = GetSpellTargetUnit()
+		var node = GetTriggerUnit().getUserData() castTo Powernode
+		print("node cast")
+		switch id
+			case LINK_ID
+				print("node cast link")
+				var data = target.getUserData() castTo Entity
+				if data instanceof Powernode
+					print("node cast link is node")
+					for Link l in node.links
+						if l.linkedNode.actor == target
+							node.unlink(l)
+					node.link(data castTo Powernode)
+					
+init
+	castTrig = CreateTrigger()
+	castTrig.addAction(function Powernode.onCast)
+	

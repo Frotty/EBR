@@ -8,11 +8,15 @@ package Escaper
 	import BuilderConstants
 	import ItemObject
 	import Key
+	import Revivepoint
+	import Lists
 	
 	public Table escaperTable = new Table()
 	
 	constant real COLL_RADIUS = 32.
 	constant real SLIDE_ADD = 1.8
+	
+	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	
 	public class Escaper extends UnitEntity
 		int deaths 		= 0
@@ -25,10 +29,7 @@ package Escaper
 		vec3 vortexVelocity = vec3(0,0,0)
 		
 		RegionData currentRegion
-		
-		function kill()
-			actor.kill()
-		
+
 		
 		construct( vec3 pos, player owner, int typ )
 			super(pos, COLL_RADIUS, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
@@ -43,6 +44,7 @@ package Escaper
             TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 			currentRegion = regions[0]
+			escapers.add(this)
 
 		override function inAir()
 			velocity += gravity
@@ -78,7 +80,13 @@ package Escaper
 				kill()
 			else
 				onUnwalkable = false
-							
+				
+		function kill()
+			if owner.getId() < 8
+				getTimer().start(.1, function Escaper.revive).setData(this castTo int)
+			else
+				getTimer().start(3., function Escaper.revive).setData(this castTo int)
+			actor.kill()
 		
 		override function update()
 			terrainZ = getTerrainZ( position.x, position.y )
@@ -101,6 +109,19 @@ package Escaper
 			else
 				actor.setXY(position.x, position.y)
             SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
+            
+		static function revive()
+			var t = GetExpiredTimer()
+			Escaper e = t.getData() castTo Escaper
+			ReviveHero(e.actor, currentRevivepoint.position.x, currentRevivepoint.position.y, false)
+			if e.owner.getId() < 8
+				if (GetLocalPlayer() == e.owner)
+                    PanCameraToTimed(currentRevivepoint.position.x, currentRevivepoint.position.y, 0)
+                    ClearSelection()
+                    SelectUnit(e.actor, true)
+				
+			
+			t.release()
             
 		static function changeAngle()
 			var u = GetTriggerUnit()

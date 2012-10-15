@@ -3,9 +3,11 @@ package Revivepoint
     import Terrain
     import PlayerData
     import Escaper
+    import GameConstants
 
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'
+    boolean isFirst = true
     
     public RevivePoint currentRevivepoint
 
@@ -23,8 +25,12 @@ package Revivepoint
 	        thistype obj = source.getUserData() castTo thistype
 	        
             if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
-                PlaySoundBJ(gg_snd_Rescue)
-                SetUnitColor( source, PLAYER_COLOR_RED )
+                if not isFirst
+                	PlaySoundBJ(gg_snd_Rescue)
+                	DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
+                else
+                    isFirst = false
+                SetUnitColor( source, PLAYER_COLOR_BLUE )
                 obj.reached = true
                 currentRevivepoint = obj
 

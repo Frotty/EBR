@@ -5,6 +5,7 @@ import Door
 import RegionData
 import Revivepoint
 import Executer
+import Powernode
 
 constant int dummy = 'h00G'
         
@@ -44,10 +45,13 @@ function callback()
 	    
 	    	case buildorders[2]
 	    		new RevivePoint(vec2(x,y), u.getOwner())
+	    	case buildorders[8]
+	        	new Executer(vec2(x,y), u.getOwner())
 	    	case buildorders[15]
 	        	new Door(vec2(x,y), u.getOwner())	
-	        case buildorders[8]
-	        	new Executer(vec2(x,y), u.getOwner())
+	        case buildorders[25]
+	        	new Powernode(vec2(x,y), u.getOwner())		
+	        
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
     d = null
@@ -116,5 +120,5 @@ init
     buildorders[22] = 'n00P'
     buildorders[23] = 'n01C'
     buildorders[24] = 'h00H'
-    buildorders[25] = 'h0nn'
+    buildorders[25] = 'h0nn' // Powernode
 
