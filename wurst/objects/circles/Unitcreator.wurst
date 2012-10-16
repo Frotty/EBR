@@ -4,34 +4,74 @@ package Unitcreator
     import EscaperKiller
     import CustomSpellBook
     import TimerUtils
+    import RegionData
     
 	constant int 	UNITCREATOR_ID   = 'n00C'
 
 
     class Unitcreator extends StaticBaseObject
         real interval = 5.
+        boolean ON = false
         int spawnUnitType
         timer spawn
         
         construct( vec2 pos, player owner)
         	super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., function Unitcreator.create )
         	spawn = getTimer()
-        	spawn.startPeriodic(interval, function create)
         	
         static function create()
             thistype obj = GetExpiredTimer().getData() castTo thistype
-            var rx = obj.getRallyX()
-            var ry = obj.getRallyY()
+            var rX = obj.getRallyX()
+            var rY = obj.getRallyY()
+            var data = getRegionData(rX,rY)
+            if obj.spawnUnitType == 'BIGK'
+				new EscaperKiller(vec3(rX, rY, 0), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), COLL_SIZE_BK)
+			else if obj.spawnUnitType == 'SMAL'
+				new EscaperKiller(vec3(rX, rY, 0), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
+			else
+				var u = CreateUnit(obj.owner, SPAWN_TYPE_ABIL.loadInt(obj.spawnUnitType), rX, rY, 0. )
+        	obj.spawn.start(obj.interval, function create)
             
+        function onCast()
+            int id = 0
+            
+            if id == INCREASE_INTERVAL_ABIL
+                if interval >= 10
+            		DisplayTextToPlayer( owner, 0, 0, "|cffC51019Maximum intervall reached!")
+				else
+					interval += 0.25
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
+			else if id == DECREASE_INTERVAL_ABIL
+                if interval < 0.75
+            		DisplayTextToPlayer( owner, 0, 0, "|cffC51019Minimum intervall reached!")
+				else
+					interval += 0.25
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
+			else if SPAWN_TYPE_ABIL.hasInt(id)
+				spawnUnitType = SPAWN_TYPE_ABIL.loadInt(id)
+			else if id == START_ABIL
+				spawn.startPeriodic(interval, function create)
+			else if id == PAUSE_ABIL
+				spawn.release()
 
         static function filter() returns boolean
             return GetUnitTypeId( GetFilterUnit() ) == UNITCREATOR_ID
 
         
-    
+    int INCREASE_INTERVAL_ABIL
+    int DECREASE_INTERVAL_ABIL
+    int START_ABIL
+    int PAUSE_ABIL
+    Table SPAWN_TYPE_ABIL
     
     public function init_Unitcreator()
-    	skip
+		SPAWN_TYPE_ABIL.saveInt('A05F','BIGK') // Big Killer
+		SPAWN_TYPE_ABIL.saveInt('A05K','SMAL') // Small Killer
+		SPAWN_TYPE_ABIL.saveInt('A05G','u008') // Big Random Killer
+		SPAWN_TYPE_ABIL.saveInt('A05H','u00F') // Glaive
+		SPAWN_TYPE_ABIL.saveInt('A05I','h00Q') // Pointer
+		SPAWN_TYPE_ABIL.saveInt('A05J','u006') // Small Random Killer
+		SPAWN_TYPE_ABIL.saveInt('A05M','h001') // tank
 
 
 endpackage

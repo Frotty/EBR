@@ -1,0 +1,70 @@
+package Trap
+import BaseObject
+import Escaper
+
+constant int TRAP_ID = 'h999'
+string array SFX_STRINGS
+string array ABILITY_STRINGS
+
+public class Trap extends StaticBaseObject
+	int sfxid
+	int abilityid
+	int interval
+	boolean onstep
+	timer traptimer
+	
+	construct( vec2 pos, player owner )
+			super(pos.toVec3(), CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , 50., function onStep)
+			traptimer = getTimer()
+			
+	static function onStep()
+		unit source = GetTriggeringTrigger().getSource()
+        unit u = GetTriggerUnit()
+        Entity e = u.getUserData() castTo Entity
+        thistype obj = source.getUserData() castTo thistype
+		
+		if obj.onstep and e instanceof Escaper
+			obj.doEffect()
+	
+	function doEffect()
+		DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
+		IssueImmediateOrder(actor, ABILITY_STRINGS[abilityid])
+		
+	function onCast()
+		unit source = GetSpellAbilityUnit()
+        thistype obj = source.getUserData() castTo thistype
+		int spell_id = 2
+		
+		if spell_id == NEXT_SFX_ABIL
+			if obj.sfxid == 7
+				obj.sfxid = 0
+			else
+				obj.sfxid ++
+		
+		else if spell_id == PREV_SFX_ABIL
+			if obj.sfxid == 0
+				obj.sfxid = 7
+			else
+				obj.sfxid --
+		  
+
+int NEXT_SFX_ABIL
+int PREV_SFX_ABIL
+int NEXT_ABILITY_ABIL
+int PREV_ABILITY_ABIL
+int INCREASE_INTERVAL_ABIL
+int DECREASE_INTERVAL_ABIL
+int START_ABIL
+int STOP_ABIL
+
+public function init_Trap()
+	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
+	SFX_STRINGS[1] = "Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl"
+	SFX_STRINGS[2] = "Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl"
+	SFX_STRINGS[3] = "Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl"
+	SFX_STRINGS[4] = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
+	SFX_STRINGS[5] = "Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl"
+	SFX_STRINGS[6] = "Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl"
+	SFX_STRINGS[7] = "Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl"
+
+

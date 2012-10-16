@@ -11,7 +11,7 @@ package Executer
     import BuilderConstants
     
 	constant int 	EXECUTER_ID   = 'n01D'
-	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
 	
 	constant real 	EVENT_RADIUS	= 32.
 
@@ -42,6 +42,7 @@ package Executer
         Emode eventMode
         Amode actionMode
         boolean ON = false// only for lever and pressureplate
+        effect oneffect
         int tiletype
         int nottiletype = '0001'
         int verticalTileSize = 0
@@ -72,13 +73,16 @@ package Executer
 	        			if obj.ON
 	                        obj.negativeAction()
 	                        obj.ON = false
+	                        DestroyEffect(obj.oneffect)
 	                    else
 	                        obj.findAction()
 	                        obj.ON = true
+							obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
 	        		case Emode.PRESSUREPLATE
 	        			if not obj.ON
 	                        obj.findAction()
 	                        obj.ON = true
+							obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
 	                default
 	                	print("Bug- ExecuterEvent")
         
@@ -97,6 +101,7 @@ package Executer
     		if c == 0
                 obj.negativeAction()
                 obj.ON = false
+	            DestroyEffect(obj.oneffect)
     		
 
         function findAction()
