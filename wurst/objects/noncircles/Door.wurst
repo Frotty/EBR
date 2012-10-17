@@ -28,7 +28,6 @@ package Door
     
     public class Door extends StaticSetupObject
         unit pathing
-        
         COLOR col = COLOR.WHITE
         
         boolean vertical = false
@@ -37,25 +36,17 @@ package Door
         construct( vec2 pos, player owner )
 	    	super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
 	    						CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
-	    	print("construct1")
 			pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
-			print("construct2")
 			TriggerRegisterUnitEvent( castTrig, setup, EVENT_UNIT_SPELL_CAST )
-			print("construct3")
+
         
         static function keyopen() //open with item and color conditions
-        	print("unit near")
         	unit source = GetTriggeringTrigger().getSource()
             unit u = GetTriggerUnit()
-            print("unit near1")
             Entity e = u.getUserData() castTo Entity
             Door door = source.getUserData() castTo Door
-            print("unit near2")
             if e instanceof Escaper
-				print("unit near3")
 				item i = UnitItemInSlot(u, 0)
-				print("in inventory " + GetItemTypeId(i).toString())
-				print("gate color array " + (door.col castTo int).toString() + " " + KEY_COLOR_ID[door.col castTo int].toString())
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) and door.opened == false //WARNING BJ function//
             		var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
             		destroy kdata
@@ -144,6 +135,7 @@ package Door
                     actor = CreateUnit( owner, DOORDUMMY_ID , position.x, position.y, 0 )
                     pathing  = CreateUnit( owner, DOORPATH, position.x, position.y, 0 )
 					print("yäs2")
+			colorize()
     
 		static function onSpellCast()
 			print("casted")

@@ -2,8 +2,7 @@ package Powernode
 import Lists
 import Entity
 import Escaper
-
-trigger castTrig
+import EventHandling
 
 constant int LINK_ID = 'A051'
 constant string EFFECT_STRING = "DRAM"
@@ -30,7 +29,7 @@ public class Powernode extends Entity
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), 0., owner )
 		actor = CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 )
-		TriggerRegisterUnitEvent(castTrig, actor, EVENT_UNIT_SPELL_EFFECT)
+		actor.registerCastEvent(Condition(function onCast))
 		actor.setUserData(this castTo int)
 		
 	function unlink( Link l )
@@ -56,7 +55,7 @@ public class Powernode extends Entity
 	override function onGround()
 	override function inAir()
 	
-	static function onCast()
+	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
@@ -71,8 +70,8 @@ public class Powernode extends Entity
 						if l.linkedNode.actor == target
 							node.unlink(l)
 					node.link(data castTo Powernode)
+		return false
 					
-init
-	castTrig = CreateTrigger()
-	castTrig.addAction(function Powernode.onCast)
+	ondestroy
+		actor.unregisterCastEvent()
 	

@@ -13,7 +13,6 @@ package BaseObject
         the code c: name of the static method that is being called upon inRangeEvent
     */
     
-    
     public class StaticBaseObject extends Entity
         
         unit actor        
@@ -82,8 +81,7 @@ package BaseObject
             
         function setZ( real z )
             SetUnitFlyHeight( actor, z, 0. )
-        
-        //Copying with getting the live Rallypoint, but still using the structmeber to save some native calls
+
         function getRallyX() returns real
             if rallyUnit == null
                 return rallyPoint.x
@@ -103,6 +101,9 @@ package BaseObject
                 else
                     rallyUnit = null
                     return rallyPoint.y
+                    
+        function getRallyAngle() returns real
+            return angleBetweenCoordsR(position.x, position.y, getRallyX(), getRallyY())
         
         
         ondestroy
@@ -113,6 +114,6 @@ package BaseObject
     init
         rallyTrigger = CreateTrigger()
         rallyTrigger.addAction( function StaticBaseObject.adjustRallypoint )
-        //setting arrays in a scopeinit is always a good idea.
+
 
 endpackage

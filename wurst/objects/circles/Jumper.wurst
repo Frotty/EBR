@@ -1,0 +1,21 @@
+package Jumper
+import Entity
+import Escaper
+import EventHandling
+import BaseObject
+
+constant int JUMPER_ID = 'n00B'
+
+public class Jumper extends StaticBaseObject
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 32., function Jumper.inRange)
+		
+		
+	static function inRange()
+		var data = GetTriggerUnit().getUserData() castTo Entity
+		var jdata = GetTriggeringTrigger().getSource().getUserData() castTo Jumper
+		if data instanceof Escaper
+			var edata = data castTo Escaper
+			edata.setTarget(jdata.getRallyX(), jdata.getRallyY(), 15., jdata.getRallyAngle())
+			AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", jdata.getRallyX(), jdata.getRallyY())

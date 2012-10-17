@@ -4,6 +4,7 @@ package Entity
 	import LinkedListModule
 	import Debug
 	import Terrain
+	import Physics
 	
 	// bound factor for unit-unit collision
 	public constant BOUNCE_FACTOR = 0.6
@@ -65,6 +66,19 @@ package Entity
 		
 		function setForce(real x, real y, real z)
 			velocity = vec3(x,y,z)
+			
+		function setTarget( real x, real y, real speed, real angle )
+			var t = distanceBetweenCoords(position.x, position.y, x, y)/speed
+			let e = getTerrainZ(x,y)
+			
+			if t < 300./speed
+				t = 300./speed
+			
+			let startZVelocity = ((-gravity.z * t) / 2 - position.z/t + e/t)
+			if startZVelocity > .5
+				this.position.z = 1.1
+			this.setForce( Cos(angle) * speed, Sin(angle) * speed, startZVelocity )
+			update()
 			
 		override function update()
 			super.update()

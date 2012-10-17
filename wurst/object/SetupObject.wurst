@@ -33,6 +33,7 @@ package SetupObject
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
             TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
+
            
             setup.setX( actor.getX() )
 			setup.setY( actor.getY() )
@@ -75,12 +76,17 @@ package SetupObject
                 print("order2")
                 var obj = entity castTo DynamicSetupObject
                 print("order3")
-                if u != null
-                    IssueTargetOrderById(obj.actor, order, u)
-                else if x != 0.    
-                    IssuePointOrderById(obj.actor, order, x, y)
+                if OrderId2String(order) == "smart" and u == null
+                    AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
+                    IssuePointOrder(obj.setup, "move", x+GetRandomReal(-1,1), y)
+
                 else
-                    IssueImmediateOrderById(obj.actor, order)
+	                if u != null
+	                    IssueTargetOrderById(obj.actor, order, u)
+	                else if x != 0.    
+	                    IssuePointOrderById(obj.actor, order, x, y)
+	                else
+	                    IssueImmediateOrderById(obj.actor, order)
 
 
 
@@ -128,25 +134,6 @@ package SetupObject
         ondestroy
             actor.clearRegister()
             
-            
-        static function onOrderEvent()
-        	var entity = GetTriggerUnit().getUserData() castTo Entity
-        	var order = GetIssuedOrderId()
-        	var x = GetOrderPointX()
-        	var y = GetOrderPointY()
-        	var u = GetOrderTargetUnit()
-        	print("order")
-        	
-        	if entity instanceof DynamicSetupObject
-                print("order2")
-                var obj = entity castTo DynamicSetupObject
-                print("order3")
-                if u != null
-                    IssueTargetOrderById(obj.actor, order, u)
-                else if x != 0.    
-                    IssuePointOrderById(obj.actor, order, x, y)
-                else
-                    IssueImmediateOrderById(obj.actor, order)
 
 
 

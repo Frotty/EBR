@@ -5,9 +5,11 @@ import BuilderConstants
 import RegionData
 import GroupUtils
 import Key
+import SetupBox
 
 trigger swapTrigger
 trigger itemTrigger
+
 
 public class Builder extends UnitEntity
 	
@@ -23,15 +25,21 @@ public class Builder extends UnitEntity
 		var id = GetItemTypeId(GetManipulatedItem())
 		var builder = u.getUserData() castTo Builder
 		var rdata = getRegionData(builder.position.x, builder.position.y)
-		if id != 'I000' and id != 'I001' and id != 'I002' and id != 'I003'
+		if rdata.isTerrainItem(id)
 			rdata.setType(id, true)
 			rdata.allow(builder.owner.getId())
 			RemoveItem( GetManipulatedItem())
 			
 			GroupEnumUnitsInRange(ENUM_GROUP,builder.position.x, builder.position.y, 512., Filter( function filter))
 			for shop in ENUM_GROUP
-				shop.remove()
+				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
+				shop.remove()				
 			GroupClear(ENUM_GROUP)
+			
+			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
+            new SetupBox( vec2( rdata.theRect.getMinX() + 128., rdata.theRect.getMaxY() - 128. ), builder.owner, rdata )
+			
+			
 	
 	static function swapPages()
 		var data = GetTriggerUnit().getUserData() castTo Entity

@@ -1,0 +1,81 @@
+package SetupBox
+import Entity
+import RegionData
+
+constant int SETUP_BOX = 'n00A'
+constant int ICEI_ID = 'A057'
+constant int ICED_ID = 'A006'
+constant int PI_ID = 'A011'
+constant int PD_ID = 'A059'
+constant int LI_ID = 'A058'
+constant int LD_ID = 'A05A'
+
+constant real MAX_SLIDESPEED = 15.
+constant real MAX_DOT_DMG = 10.
+
+trigger castTrig
+
+public class SetupBox extends Entity
+	unit actor
+	RegionData rdata
+	
+	construct( vec2 pos, player owner, RegionData data )
+		super( pos.toVec3(), 0., owner)
+		actor = CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 )
+		castTrig.registerUnitEvent( actor, EVENT_UNIT_SPELL_EFFECT )
+		actor.setUserData(this castTo int)
+		rdata = data
+		
+		
+	static function onCast()
+		print("cast")
+		var id = GetSpellAbilityId()
+		var box = GetSpellAbilityUnit().getUserData() castTo SetupBox
+		switch id
+			case ICEI_ID
+				if box.rdata.slidespeed >= MAX_SLIDESPEED
+					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed is on Maximum" )
+				else
+					box.rdata.slidespeed += .1
+					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed: " + box.rdata.slidespeed.toString() )
+			case ICED_ID
+				if box.rdata.slidespeed <= -MAX_SLIDESPEED
+					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed is on Minimum" )
+				else
+					box.rdata.slidespeed -= .1
+					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed: " + box.rdata.slidespeed.toString() )
+			case PI_ID
+				if box.rdata.poisonDmg >= MAX_DOT_DMG
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Maximum" )
+				else
+					box.rdata.poisonDmg += .1
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
+			case PD_ID
+				if box.rdata.poisonDmg <= MAX_DOT_DMG
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Minimum" )
+				else
+					box.rdata.poisonDmg -= .1
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
+			case LI_ID
+				if box.rdata.lavaDmg >= MAX_DOT_DMG
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Maximum" )
+				else
+					box.rdata.lavaDmg += .1
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
+			case LD_ID
+				if box.rdata.lavaDmg <= MAX_DOT_DMG
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Minimum" )
+				else
+					box.rdata.lavaDmg -= .1
+					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
+					
+		
+	override function onGround()
+	override function inAir()
+	
+	
+init
+	castTrig = CreateTrigger()
+	castTrig.addAction(function SetupBox.onCast)
+	
+	

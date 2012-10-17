@@ -5,7 +5,11 @@ import Door
 import RegionData
 import Revivepoint
 import Executer
+import Vortex
 import Powernode
+import Tracks
+import Jumper
+
 
 constant int dummy = 'h00G'
         
@@ -42,13 +46,18 @@ function callback()
     var rdata = getRegionData(x, y)
     if rdata.isOwner(owner.getId())
 		switch ord
-	    
+	    	case buildorders[1]
+	    		new Jumper(vec2(x,y), u.getOwner())
 	    	case buildorders[2]
 	    		new RevivePoint(vec2(x,y), u.getOwner())
+	    	case buildorders[6]
+	    		new Vortex(vec2(x,y), u.getOwner())
 	    	case buildorders[8]
 	        	new Executer(vec2(x,y), u.getOwner())
 	    	case buildorders[15]
-	        	new Door(vec2(x,y), u.getOwner())	
+	        	new Door(vec2(x,y), u.getOwner())
+	        case buildorders[23]
+	        	new Tracks(vec2(x,y), u.getOwner())	
 	        case buildorders[25]
 	        	new Powernode(vec2(x,y), u.getOwner())		
 	        
@@ -96,12 +105,12 @@ init
     TriggerAddAction( trig,  function conac  )
     
     buildorders[0] = 'n00G'
-    buildorders[1] = 'n00B'
+    buildorders[1] = 'n00B' // Jumper
     buildorders[2] = 'n000' // Revivepoint
     buildorders[3] = 'n01B'
     buildorders[4] = 'n001'
     buildorders[5] = 'h019'
-    buildorders[6] = 'n012'
+    buildorders[6] = 'n012' // Vortex
     buildorders[7] = 'h009'
     buildorders[8] = 'n01D'  // Executer
     buildorders[9] = 'n01E'
@@ -118,7 +127,7 @@ init
     buildorders[20] = 'n006'
     buildorders[21] = 'h01M'
     buildorders[22] = 'n00P'
-    buildorders[23] = 'n01C'
+    buildorders[23] = 'n01C' // Tracks
     buildorders[24] = 'h00H'
     buildorders[25] = 'h0nn' // Powernode
 

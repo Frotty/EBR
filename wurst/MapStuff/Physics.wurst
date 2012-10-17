@@ -3,6 +3,4 @@ package Physics
 	
 	public vec3 gravity = vec3(0,0,-0.8)
 	
-	public real terrainHeight = 256.
-		
 endpackage

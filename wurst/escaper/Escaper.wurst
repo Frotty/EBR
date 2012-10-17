@@ -16,6 +16,8 @@ package Escaper
 	constant real COLL_RADIUS = 32.
 	constant real SLIDE_ADD = 1.8
 	
+	real time = 0.
+	
 	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	
 	public class Escaper extends UnitEntity
@@ -29,6 +31,7 @@ package Escaper
 		vec3 vortexVelocity = vec3(0,0,0)
 		
 		RegionData currentRegion
+		real lastAngle = 0.
 
 		
 		construct( vec3 pos, player owner, int typ )
@@ -53,6 +56,7 @@ package Escaper
 				flying = true
 				SetUnitPropWindow(actor, 0.)
 				
+				
 		override function onGround()
 			super.onGround()
 			if flying
@@ -67,11 +71,14 @@ package Escaper
 			
 			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 				let angle = actor.getFacing()
-				slideVelocity = vec3(Cos(angle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
+				if angle != lastAngle
+					lastAngle = angle
+				slideVelocity = vec3(Cos(lastAngle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(lastAngle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
 				sliding = true
 			else
 				slideVelocity *= 0.8
 				sliding = false
+
 				
 			// ebr (un)walkable
 			// print("tile " + currentRegion.unwalkableTile.toString())
@@ -80,6 +87,8 @@ package Escaper
 				kill()
 			else
 				onUnwalkable = false
+				
+			velocity*=0.0
 				
 		function kill()
 			if owner.getId() < 8
@@ -90,12 +99,15 @@ package Escaper
 		
 		override function update()
 			terrainZ = getTerrainZ( position.x, position.y )
-			
+			position.x = actor.getX()
+			position.y = actor.getY()
 			if position.z <= terrainZ + 1.
 				onGround()
+				print("ground")
 			else
 				inAir()
-				
+				print("air")
+
 			position += velocity
 			
 			position += slideVelocity
@@ -103,12 +115,14 @@ package Escaper
 			trackVelocity = vec3(0,0,0)
 			position += vortexVelocity
 			vortexVelocity = vec3(0,0,0)
-			
+			time += 0.015625000
 			if sliding
 				actor.setPos(position.x, position.y)
+				
+				print(time.toString())
 			else
 				actor.setXY(position.x, position.y)
-            SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
+            SetUnitFlyHeight( actor, position.z /*- getTerrainZ(position.x, position.y )*/, .0 )
             
 		static function revive()
 			var t = GetExpiredTimer()
@@ -134,7 +148,7 @@ package Escaper
             real y3 = GetWidgetY(w)
             var ttype = GetTerrainType(e.position.x, e.position.y)
             
-            if ttype == CONTROLLABLEICE or e.flying
+            if ttype == CONTROLLABLEICE
                 if w == null
 					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x2,y2))
                 else
