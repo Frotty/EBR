@@ -1,7 +1,6 @@
 package Jumper
 import Entity
 import Escaper
-import EventHandling
 import BaseObject
 
 constant int JUMPER_ID = 'n00B'
