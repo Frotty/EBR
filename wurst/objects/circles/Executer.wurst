@@ -95,7 +95,7 @@ package Executer
     		int c = 0
     		for unit eu from ENUM_GROUP
 	            Entity ee = eu.getUserData() castTo Entity
-	            if (obj.canKillerTrigger and e instanceof EscaperKiller) or (not obj.canKillerTrigger and e instanceof Escaper)
+	            if obj.canTrigger(ee)
 	                c++
             ENUM_GROUP.clear()
     		if c == 0

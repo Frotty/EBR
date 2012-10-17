@@ -1,17 +1,27 @@
 package Trap
 import BaseObject
 import Escaper
+import GroupUtils
 
 constant int TRAP_ID = 'h999'
 string array SFX_STRINGS
-string array ABILITY_STRINGS
-
+enum ABIL
+	KILL
+	STUN
+	POISON
+	SPEED
+	KNOCK
+	SHAKE
+	
 public class Trap extends StaticBaseObject
 	int sfxid
-	int abilityid
-	int interval
 	boolean onstep
+	real interval
 	timer traptimer
+	ABIL a
+	
+	real duration //Shake, Knockback, Speed, Stun
+	real value // Shake, Knockback, Speed
 	
 	construct( vec2 pos, player owner )
 			super(pos.toVec3(), CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , 50., function onStep)
@@ -24,34 +34,120 @@ public class Trap extends StaticBaseObject
         thistype obj = source.getUserData() castTo thistype
 		
 		if obj.onstep and e instanceof Escaper
-			obj.doEffect()
+			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+			var escaper = e castTo Escaper
+			obj.doEffect(escaper)
 	
-	function doEffect()
-		DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
-		IssueImmediateOrder(actor, ABILITY_STRINGS[abilityid])
+	static function onPeriod() //periodic
+		thistype obj = GetExpiredTimer().getData() castTo thistype
+		GroupEnumUnitsInRange(ENUM_GROUP,obj.actor.getX(), obj.actor.getY(), 30., null)
+		int c = 0
+		for unit u from ENUM_GROUP
+            Entity e = u.getUserData() castTo Entity
+            if e instanceof Escaper
+                var escaper = e castTo Escaper
+                obj.doEffect(escaper)
+        ENUM_GROUP.clear()
+			
+	function doEffect(Escaper e)
+		switch a
+			case ABIL.KILL
+				e.actor.kill() //etc
+			default
+				skip
 		
-	function onCast()
+	function addConfiger(boolean dur, boolean val)
+		UnitRemoveAbility(actor,KILL_ABIL)
+		UnitRemoveAbility(actor,STUN_ABIL)
+		UnitRemoveAbility(actor,SHAKE_ABIL)
+		UnitRemoveAbility(actor,SPEED_ABIL)
+		UnitRemoveAbility(actor,KNOCK_ABIL)
+		UnitRemoveAbility(actor,POISON_ABIL)
+		UnitAddAbility(actor,INCREASE_INTERVAL_ABIL)
+		UnitAddAbility(actor,DECREASE_INTERVAL_ABIL)
+		UnitAddAbility(actor,START_ABIL)
+		UnitAddAbility(actor,NEXT_SFX_ABIL)
+		UnitAddAbility(actor,PREV_SFX_ABIL)
+		if dur
+			UnitAddAbility(actor,INCREASE_DURATION_ABIL)
+			UnitAddAbility(actor,DECREASE_DURATION_ABIL)
+		if val
+			UnitAddAbility(actor,INCREASE_VALUE_ABIL)
+			UnitAddAbility(actor,DECREASE_VALUE_ABIL)
+	
+	static function onCast() returns boolean
 		unit source = GetSpellAbilityUnit()
         thistype obj = source.getUserData() castTo thistype
 		int spell_id = 2
-		
-		if spell_id == NEXT_SFX_ABIL
-			if obj.sfxid == 7
-				obj.sfxid = 0
-			else
-				obj.sfxid ++
-		
-		else if spell_id == PREV_SFX_ABIL
-			if obj.sfxid == 0
-				obj.sfxid = 7
-			else
-				obj.sfxid --
-		  
+		switch spell_id
+			case KILL_ABIL
+				obj.a = ABIL.KILL
+				obj.addConfiger(false, false)
+			case STUN_ABIL
+				obj.a = ABIL.STUN
+				obj.addConfiger(true, false)
+			case SPEED_ABIL
+				obj.a = ABIL.SPEED
+				obj.addConfiger(true, true)
+			case SHAKE_ABIL
+				obj.a = ABIL.SHAKE
+				obj.addConfiger(true, true)
+			case KNOCK_ABIL
+				obj.a = ABIL.KNOCK
+				obj.addConfiger(true, true)
+			case POISON_ABIL
+				obj.a = ABIL.POISON
+				obj.addConfiger(false, false)
+			case NEXT_SFX_ABIL
+				if obj.sfxid == 7
+					obj.sfxid = 0
+				else
+					obj.sfxid ++
+				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+			case PREV_SFX_ABIL
+				if obj.sfxid == 0
+					obj.sfxid = 7
+				else
+					obj.sfxid --
+				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+				
+			case INCREASE_INTERVAL_ABIL
+	            if obj.interval >= 10
+	        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Maximum intervall reached!")
+				else
+					obj.interval += 0.25
+					DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(obj.interval,1,2) )
+			case DECREASE_INTERVAL_ABIL
+	            if obj.interval < 0.75
+	        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Minimum intervall reached!")
+				else
+					obj.interval += 0.25
+					DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(obj.interval,1,2) )
+			case START_ABIL
+				obj.traptimer.startPeriodic(obj.interval, function onPeriod)
+				UnitRemoveAbility(obj.actor,START_ABIL)
+				UnitAddAbility(obj.actor,STOP_ABIL)
+			case STOP_ABIL
+				obj.traptimer.release()
+				UnitRemoveAbility(obj.actor,STOP_ABIL)
+				UnitAddAbility(obj.actor,START_ABIL)
+		return false
 
 int NEXT_SFX_ABIL
 int PREV_SFX_ABIL
-int NEXT_ABILITY_ABIL
-int PREV_ABILITY_ABIL
+
+int INCREASE_DURATION_ABIL
+int DECREASE_DURATION_ABIL
+int INCREASE_VALUE_ABIL
+int DECREASE_VALUE_ABIL
+
+int KILL_ABIL
+int STUN_ABIL
+int SPEED_ABIL
+int SHAKE_ABIL
+int KNOCK_ABIL
+int POISON_ABIL
+
 int INCREASE_INTERVAL_ABIL
 int DECREASE_INTERVAL_ABIL
 int START_ABIL
@@ -66,5 +162,3 @@ public function init_Trap()
 	SFX_STRINGS[5] = "Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl"
 	SFX_STRINGS[6] = "Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl"
 	SFX_STRINGS[7] = "Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl"
-
-
