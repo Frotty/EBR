@@ -4,6 +4,7 @@ package SetupObject
     import Terrain
     import Trigger
    
+	public code CODE_NULL = null
     /**
     	Objects which are unclickable for escapers,
     	but clickable for builders.     
@@ -77,7 +78,7 @@ package SetupObject
                 var obj = entity castTo DynamicSetupObject
                 print("order3")
                 if OrderId2String(order) == "smart" and u == null
-                    AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
+                    // AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
                     IssuePointOrder(obj.setup, "move", x+GetRandomReal(-1,1), y)
 
                 else

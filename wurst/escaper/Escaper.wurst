@@ -32,6 +32,8 @@ package Escaper
 		
 		RegionData currentRegion
 		real lastAngle = 0.
+		
+		boolean alive = true
 
 		
 		construct( vec3 pos, player owner, int typ )
@@ -96,6 +98,7 @@ package Escaper
 			else
 				getTimer().start(3., function Escaper.revive).setData(this castTo int)
 			actor.kill()
+			alive = false
 		
 		override function update()
 			terrainZ = getTerrainZ( position.x, position.y )
@@ -103,10 +106,8 @@ package Escaper
 			position.y = actor.getY()
 			if position.z <= terrainZ + 1.
 				onGround()
-				print("ground")
 			else
 				inAir()
-				print("air")
 
 			position += velocity
 			
@@ -134,7 +135,7 @@ package Escaper
                     ClearSelection()
                     SelectUnit(e.actor, true)
 				
-			
+			e.alive = true
 			t.release()
             
 		static function changeAngle()

@@ -6,6 +6,7 @@ package EscaperKiller
    
     public constant real COLL_SIZE_SK = 72
 	public constant real COLL_SIZE_BK = 96
+	public constant real COLL_SIZE_GLAIVE = 54
 	
     public class EscaperKiller extends DynamicSetupObject
         

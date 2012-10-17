@@ -47,7 +47,7 @@ public class Powernode extends Entity
 			for Link l in links
 				MoveLightning(l.sfx, false, position.x, position.y, l.linkedNode.position.x, l.linkedNode.position.y)
 				for Escaper e in escapers
-					if e.position.toVec2().distToSegmentSquared(position.toVec2(), l.linkedNode.position.toVec2() ) < ACTIVATION_DIST
+					if e.alive and e.position.toVec2().distToSegmentSquared(position.toVec2(), l.linkedNode.position.toVec2() ) < ACTIVATION_DIST
 						e.kill()
 						AddSpecialEffect( KILL_EFFECT , e.position.x, e.position.y ) 
 				
@@ -66,10 +66,14 @@ public class Powernode extends Entity
 				var data = target.getUserData() castTo Entity
 				if data instanceof Powernode
 					print("node cast link is node")
+					var isNew = true
 					for Link l in node.links
 						if l.linkedNode.actor == target
 							node.unlink(l)
-					node.link(data castTo Powernode)
+							isNew = false
+							break
+					if isNew
+						node.link(data castTo Powernode)
 		return false
 					
 	ondestroy

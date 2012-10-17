@@ -4,13 +4,16 @@ package Waypoint
     import Escaper
     import EscaperKiller
     
-	constant int 	WAYPOINT_ID   = 'n00C'
+	constant int 	WAYPOINT_ID   = 'n004'
 		
 	constant real 	EVENT_RADIUS	= 32.
 
 
-    class Waypoint extends StaticBaseObject
+    public class Waypoint extends StaticBaseObject
         
+        construct( vec2 pos, player owner )
+        	super( pos.toVec3(), CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
+        	
         static function orderMove()
             unit source = GetTriggeringTrigger().getSource()
             unit u = GetTriggerUnit()
@@ -21,25 +24,7 @@ package Waypoint
             if e instanceof EscaperKiller
                 IssuePointOrder(u, "move", rx, ry )
 
-        
-        static function register()
-            unit u = GetConstructedStructure()
-            u.setUserData( new Waypoint( GetUnitX(u), GetUnitY(u), u, 50 ) castTo int )
 
-        
-        construct( real x, real y, unit u, real radius )
-        	super( vec3(x, y, getTerrainZ(x,y)), u, EVENT_RADIUS, function Waypoint.orderMove ) 
-
-        
-        static function filter() returns boolean
-            return GetUnitTypeId( GetFilterUnit() ) == WAYPOINT_ID
-
-        
-    
-    
-    public function init_Waypoint( trigger t )
-        //t.registerAnyUnitEvent( Condition( function Waypoint.filter  ) )
-        t.addAction( function Waypoint.register )
 
 
 endpackage

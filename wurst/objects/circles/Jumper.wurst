@@ -18,4 +18,3 @@ public class Jumper extends StaticBaseObject
 		if data instanceof Escaper
 			var edata = data castTo Escaper
 			edata.setTarget(jdata.getRallyX(), jdata.getRallyY(), 15., jdata.getRallyAngle())
-			AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", jdata.getRallyX(), jdata.getRallyY())
