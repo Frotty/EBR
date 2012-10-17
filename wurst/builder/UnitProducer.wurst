@@ -49,15 +49,15 @@ package UnitProducer
 			
 			
 	public function init_UnitProducer()
-		unitTable.saveInt('A05G','u008')
-		unitTable.saveInt('A05H','u00F')
-		unitTable.saveInt('A05I','u00Q')
-		unitTable.saveInt('A05J','u006')
-		unitTable.saveInt('A05L','u00K')
-		unitTable.saveInt('A05M','u001')
-		unitTable.saveInt('A05N','u00B')
-		unitTable.saveInt('A05O','u00Y')
-		unitTable.saveInt('A05P','u004')
+		unitTable.saveInt('A05G','u008') // Big Random Killer
+		unitTable.saveInt('A05H','u00F') // Glaive
+		unitTable.saveInt('A05I','h00Q') // Pointer
+		unitTable.saveInt('A05J','u006') // Small Random Killer
+		unitTable.saveInt('A05L','h00K') // Terrainchanger
+		unitTable.saveInt('A05M','h001') //tank
+		unitTable.saveInt('A05N','u00B') //TeleporterTarget
+		unitTable.saveInt('A05O','h00Y') //Bomber
+		unitTable.saveInt('A05P','u004') //Attacktarget
 
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function UnitProducer.spawnUnit)
