@@ -5,74 +5,112 @@ package Unitcreator
     import CustomSpellBook
     import TimerUtils
     import RegionData
+	import EventHandling
     
-	constant int 	UNITCREATOR_ID   = 'n00C'
+	constant int 	UNITCREATOR_ID   = 'n006'
 
 
-    class Unitcreator extends StaticBaseObject
+    public class Unitcreator extends StaticBaseObject
         real interval = 5.
         boolean ON = false
-        int spawnUnitType
+        int spawnUnitType = 'BIGK'
         timer spawn
         
         construct( vec2 pos, player owner)
         	super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., function Unitcreator.create )
+			actor.registerCastEvent(Condition(function Unitcreator.onCast))
+			actor.setUserData(this castTo int)
         	spawn = getTimer()
         	
         static function create()
-            thistype obj = GetExpiredTimer().getData() castTo thistype
+            var obj = GetExpiredTimer().getData() castTo Unitcreator
             var rX = obj.getRallyX()
             var rY = obj.getRallyY()
+            var X = obj.actor.getX()
+            var Y = obj.actor.getY()
+            var angle = angleBetweenCoordsD(X,Y,rX,rY)
             var data = getRegionData(rX,rY)
-            if obj.spawnUnitType == 'BIGK'
-				new EscaperKiller(vec3(rX, rY, 0), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), COLL_SIZE_BK)
-			else if obj.spawnUnitType == 'SMAL'
-				new EscaperKiller(vec3(rX, rY, 0), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
-			else
-				var u = CreateUnit(obj.owner, SPAWN_TYPE_ABIL.loadInt(obj.spawnUnitType), rX, rY, 0. )
+            print("creating...")
+            EscaperKiller ek
+            switch obj.spawnUnitType
+            	case 'BIGK'
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, data.bigKillerId, X, Y, angle ), CreateUnit(obj.owner, data.bigKillerId, X, Y, angle ), COLL_SIZE_BK)
+        			IssuePointOrder(ek.setup, "move" , rX,rY)
+				case 'SMAL'
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), COLL_SIZE_SK)
+        			IssuePointOrder(ek.setup, "move" , rX,rY)
+				case 'u00A'
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, 'u00F', X, Y, angle ) , CreateUnit(obj.owner, 'u00F', X, Y, angle ), COLL_SIZE_GLAIVE)
+        			IssuePointOrder(ek.setup, "move" , rX,rY)
+            	case 'h001'
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_BK)
+        			IssuePointOrder(ek.setup, "move" , rX,rY)
+            	case 'u008'
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_BK)
+        			IssuePointOrder(ek.setup, "move" , rX,rY)
+            	case 'u006'
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_SK)
+        			IssuePointOrder(ek.setup, "move" , rX,rY)
         	obj.spawn.start(obj.interval, function create)
             
-        function onCast()
-            int id = 0
+        static function onCast() returns boolean
+            var id = GetSpellAbilityId()
+			var obj = GetTriggerUnit().getUserData() castTo Unitcreator
             
-            if id == INCREASE_INTERVAL_ABIL
-                if interval >= 10
-            		createTTExForPlayer(position, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), owner  )
-				else
-					interval += 0.25
-					createTTExForPlayer(position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorRGBA(255,255,255,0), owner  )
-			else if id == DECREASE_INTERVAL_ABIL
-                if interval < 0.75
-            		createTTExForPlayer(position, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), owner  )
-				else
-					interval += 0.25
-					createTTExForPlayer(position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorRGBA(255,255,255,0), owner  )
-					//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
-			else if SPAWN_TYPE_ABIL.hasInt(id)
-				spawnUnitType = SPAWN_TYPE_ABIL.loadInt(id)
-			else if id == START_ABIL
-				UnitRemoveAbility(actor,START_ABIL)
-				UnitAddAbility(actor,PAUSE_ABIL)
-				spawn.startPeriodic(interval, function create)
-			else if id == PAUSE_ABIL
-				UnitRemoveAbility(actor,PAUSE_ABIL)
-				UnitAddAbility(actor,START_ABIL)
-				spawn.release()
+            switch id 
+            	case INCREASE_INTERVAL_ABIL
+	                if obj.interval >= 10
+	            		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					else
+						obj.interval += 0.25
+						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+				case DECREASE_INTERVAL_ABIL
+	                if obj.interval < 0.75
+	            		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					else
+						obj.interval -= 0.25
+						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
+				case START_ABIL
+					obj.spawn.startPeriodic(obj.interval, function create)
+					obj.spawn.setData(obj castTo int)
+					print("start")
+					UnitRemoveAbility(obj.actor,START_ABIL)
+					UnitAddAbility(obj.actor,PAUSE_ABIL)
+				case PAUSE_ABIL
+					print("pause")
+					UnitRemoveAbility(obj.actor,PAUSE_ABIL)
+					UnitAddAbility(obj.actor,START_ABIL)
+					obj.spawn.release()
+				case 'A045' // Big killer
+					obj.spawnUnitType = 'BIGK'
+				case 'A046' // Small killer
+					obj.spawnUnitType = 'SMAL'
+				case 'A048' // Big Random killer
+					obj.spawnUnitType = 'u008'
+				case 'A04D' // Small Random killer
+					obj.spawnUnitType = 'u006'
+				case 'A04W' // Glaive
+					obj.spawnUnitType = 'u00A'
+				case 'A04C' // Tank
+					obj.spawnUnitType = 'h001'
+				case 'A04B' // Pointer
+					obj.spawnUnitType = 'h00Q'
+			return false
 
-    int INCREASE_INTERVAL_ABIL
-    int DECREASE_INTERVAL_ABIL
-    int START_ABIL
-    int PAUSE_ABIL
+    int INCREASE_INTERVAL_ABIL = 'A01P'
+    int DECREASE_INTERVAL_ABIL = 'A01R'
+    int START_ABIL = 'A00A'
+    int PAUSE_ABIL = 'Tank'
     Table SPAWN_TYPE_ABIL
     
     public function init_Unitcreator()
-		SPAWN_TYPE_ABIL.saveInt('A05F','BIGK') // Big Killer
-		SPAWN_TYPE_ABIL.saveInt('A05K','SMAL') // Small Killer
-		SPAWN_TYPE_ABIL.saveInt('A05G','u008') // Big Random Killer
-		SPAWN_TYPE_ABIL.saveInt('A05H','u00F') // Glaive
-		SPAWN_TYPE_ABIL.saveInt('A05I','h00Q') // Pointer
-		SPAWN_TYPE_ABIL.saveInt('A05J','u006') // Small Random Killer
-		SPAWN_TYPE_ABIL.saveInt('A05M','h001') // tank
-
+		SPAWN_TYPE_ABIL.saveInt('A045','BIGK') // Big Killer
+		SPAWN_TYPE_ABIL.saveInt('A046','SMAL') // Small Killer
+		SPAWN_TYPE_ABIL.saveInt('A048','u008') // Big Random Killer
+		SPAWN_TYPE_ABIL.saveInt('A04W','u00A') // Glaive
+		SPAWN_TYPE_ABIL.saveInt('A04B','h00Q') // Pointer
+		SPAWN_TYPE_ABIL.saveInt('A04D','u006') // Small Random Killer
+		SPAWN_TYPE_ABIL.saveInt('A04C','h001') // tank
 
 endpackage
