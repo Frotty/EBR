@@ -2,8 +2,10 @@ package Trap
 import BaseObject
 import Escaper
 import GroupUtils
+import Knockback
+import EventHandling
 
-constant int TRAP_ID = 'h999'
+constant int TRAP_ID = 'n00I'
 string array SFX_STRINGS
 enum ABIL
 	KILL
@@ -14,20 +16,24 @@ enum ABIL
 	SHAKE
 	
 public class Trap extends StaticBaseObject
-	int sfxid
-	boolean onstep
+	int sfxid = 3
+	boolean onstep = true
 	real interval
 	timer traptimer
 	ABIL a
 	
-	real duration //Shake, Knockback, Speed, Stun
+	real duration //Shake,  Speed, Stun
 	real value // Shake, Knockback, Speed
 	
 	construct( vec2 pos, player owner )
 			super(pos.toVec3(), CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , 50., function onStep)
+			actor.registerCastEvent(Condition(function Trap.onCast))
+			actor.setUserData(this castTo int)
 			traptimer = getTimer()
+			DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 			
 	static function onStep()
+		print("Trap step")
 		unit source = GetTriggeringTrigger().getSource()
         unit u = GetTriggerUnit()
         Entity e = u.getUserData() castTo Entity
@@ -37,6 +43,9 @@ public class Trap extends StaticBaseObject
 			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
+	
+	function canTrigger(Entity e) returns boolean
+		return false
 	
 	static function onPeriod() //periodic
 		thistype obj = GetExpiredTimer().getData() castTo thistype
@@ -50,11 +59,23 @@ public class Trap extends StaticBaseObject
         ENUM_GROUP.clear()
 			
 	function doEffect(Escaper e)
+		print("Trap Effect")
 		switch a
 			case ABIL.KILL
-				e.actor.kill() //etc
+				e.kill()
+			case ABIL.KNOCK
+				IssueImmediateOrder(e.actor, "stop")
+				var angle = angleBetweenCoordsD(actor.getX(), actor.getY(),e.actor.getX(), e.actor.getY())
+				e.setForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),90)
+				print("fork you")
+				//new Knockback( actor, e.actor, value, 0.5,  )
 			default
 				skip
+		
+	static function endStun()
+		Escaper e = GetExpiredTimer().getData() castTo Escaper
+		if UnitHasBuffBJ(e.actor, STUN_BUFF)
+			PauseUnit(e.actor, false)
 		
 	function addConfiger(boolean dur, boolean val)
 		UnitRemoveAbility(actor,KILL_ABIL)
@@ -76,15 +97,32 @@ public class Trap extends StaticBaseObject
 			UnitAddAbility(actor,DECREASE_VALUE_ABIL)
 	
 	static function onCast() returns boolean
+		print("Trap Casting")
 		unit source = GetSpellAbilityUnit()
         thistype obj = source.getUserData() castTo thistype
-		int spell_id = 2
+		int spell_id = GetSpellAbilityId()
 		switch spell_id
+			case NEXT_SFX_ABIL
+				print(obj.sfxid.toString())
+				if obj.sfxid >= 7
+					obj.sfxid = 0
+				else
+					obj.sfxid ++
+				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+			case PREV_SFX_ABIL
+				print(obj.sfxid.toString())
+				if obj.sfxid <= 0
+					obj.sfxid = 7
+				else
+					obj.sfxid --
+				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+			
 			case KILL_ABIL
 				obj.a = ABIL.KILL
 				obj.addConfiger(false, false)
 			case STUN_ABIL
 				obj.a = ABIL.STUN
+				obj.duration = 1.
 				obj.addConfiger(true, false)
 			case SPEED_ABIL
 				obj.a = ABIL.SPEED
@@ -94,23 +132,12 @@ public class Trap extends StaticBaseObject
 				obj.addConfiger(true, true)
 			case KNOCK_ABIL
 				obj.a = ABIL.KNOCK
-				obj.addConfiger(true, true)
+				obj.value = 200.
+				obj.addConfiger(false, true)
 			case POISON_ABIL
 				obj.a = ABIL.POISON
 				obj.addConfiger(false, false)
-			case NEXT_SFX_ABIL
-				if obj.sfxid == 7
-					obj.sfxid = 0
-				else
-					obj.sfxid ++
-				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
-			case PREV_SFX_ABIL
-				if obj.sfxid == 0
-					obj.sfxid = 7
-				else
-					obj.sfxid --
-				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
-				
+					
 			case INCREASE_INTERVAL_ABIL
 	            if obj.interval >= 10
 	        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Maximum intervall reached!")
@@ -133,25 +160,27 @@ public class Trap extends StaticBaseObject
 				UnitAddAbility(obj.actor,START_ABIL)
 		return false
 
-int NEXT_SFX_ABIL
-int PREV_SFX_ABIL
+int NEXT_SFX_ABIL = 'A06D'
+int PREV_SFX_ABIL = 'A06C'
 
 int INCREASE_DURATION_ABIL
 int DECREASE_DURATION_ABIL
 int INCREASE_VALUE_ABIL
 int DECREASE_VALUE_ABIL
 
-int KILL_ABIL
-int STUN_ABIL
-int SPEED_ABIL
-int SHAKE_ABIL
-int KNOCK_ABIL
-int POISON_ABIL
+int KILL_ABIL = 'A06E'
+int STUN_ABIL = 'A06G'
+int SPEED_ABIL = 'A06I'
+int SHAKE_ABIL = '0060'
+int KNOCK_ABIL = 'A06H'
+int POISON_ABIL = 'A06F'
 
-int INCREASE_INTERVAL_ABIL
-int DECREASE_INTERVAL_ABIL
-int START_ABIL
-int STOP_ABIL
+int STUN_BUFF = 'BUFF'
+
+int INCREASE_INTERVAL_ABIL = '0060'
+int DECREASE_INTERVAL_ABIL = '0060'
+int START_ABIL = '0060'
+int STOP_ABIL = '0060'
 
 public function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"

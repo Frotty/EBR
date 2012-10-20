@@ -12,6 +12,7 @@ import Jumper
 import Teleporter
 import Waypoint
 import Unitcreator
+import Trap
 
 constant int dummy = 'h00G'
         
@@ -67,7 +68,9 @@ function callback()
 	        case buildorders[23]
 	        	new Tracks(vec2(x,y), u.getOwner())	
 	        case buildorders[25]
-	        	new Powernode(vec2(x,y), u.getOwner())		
+	        	new Powernode(vec2(x,y), u.getOwner())	
+	        case buildorders[26]
+	        	new Trap(vec2(x,y), u.getOwner())		
 	        
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
@@ -138,4 +141,5 @@ init
     buildorders[23] = 'n01C' // Tracks
     buildorders[24] = 'h00H'
     buildorders[25] = 'h0nn' // Powernode
+    buildorders[26] = 'n00I' // Trap
 
