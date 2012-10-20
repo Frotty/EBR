@@ -68,8 +68,8 @@ package Escaper
 			var ttype = GetTerrainType(position.x, position.y)
 				
 			// pathing
-			if not isTerrainWalkable(position.x, position.y)
-				velocity = vec3(0.,0.,velocity.z)
+			//if not isTerrainWalkable(position.x, position.y)
+				//velocity = vec3(0.,0.,velocity.z)
 			
 			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 				let angle = actor.getFacing()
@@ -90,7 +90,7 @@ package Escaper
 			else
 				onUnwalkable = false
 				
-			velocity*=0.8
+			velocity *= 0.95
 				
 		function kill()
 			if owner.getId() < 8
