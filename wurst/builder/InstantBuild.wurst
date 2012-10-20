@@ -11,6 +11,7 @@ import Tracks
 import Jumper
 import Teleporter
 import Waypoint
+import Spinner
 
 constant int dummy = 'h00G'
         
@@ -61,6 +62,8 @@ function callback()
 	        	new Teleporter(vec2(x,y), u.getOwner())
 	    	case buildorders[15]
 	        	new Door(vec2(x,y), u.getOwner())
+	        case buildorders[21]
+	        	new Spinner(vec2(x,y), u.getOwner())	
 	        case buildorders[23]
 	        	new Tracks(vec2(x,y), u.getOwner())	
 	        case buildorders[25]
@@ -130,7 +133,7 @@ init
     buildorders[18] = 'n010'
     buildorders[19] = 'n013'
     buildorders[20] = 'n006'
-    buildorders[21] = 'h01M'
+    buildorders[21] = 'h01M' // Spinner
     buildorders[22] = 'n00P'
     buildorders[23] = 'n01C' // Tracks
     buildorders[24] = 'h00H'

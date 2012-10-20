@@ -90,7 +90,7 @@ package Escaper
 			else
 				onUnwalkable = false
 				
-			velocity*=0.0
+			velocity*=0.8
 				
 		function kill()
 			if owner.getId() < 8

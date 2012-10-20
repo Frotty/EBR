@@ -46,6 +46,11 @@ package SetupObject
                 inRangeTrig.addAction( c )
                 
             setup.setUserData( this castTo int )
+            
+        function setNewPos(vec3 pos)
+            position = pos
+            actor.setPos(pos.x, pos.y)
+            setup.setPos(pos.x, pos.y)
 		
 		override function update()
         override function onGround()
