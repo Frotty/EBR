@@ -66,7 +66,7 @@ public class Trap extends StaticBaseObject
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				var angle = angleBetweenCoordsD(actor.getX(), actor.getY(),e.actor.getX(), e.actor.getY())
-				e.setForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),90)
+				e.addForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),10.)
 				print("fork you")
 				//new Knockback( actor, e.actor, value, 0.5,  )
 			default
@@ -132,7 +132,7 @@ public class Trap extends StaticBaseObject
 				obj.addConfiger(true, true)
 			case KNOCK_ABIL
 				obj.a = ABIL.KNOCK
-				obj.value = 200.
+				obj.value = 2.
 				obj.addConfiger(false, true)
 			case POISON_ABIL
 				obj.a = ABIL.POISON
