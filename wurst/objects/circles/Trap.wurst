@@ -2,8 +2,8 @@ package Trap
 import BaseObject
 import Escaper
 import GroupUtils
-import Knockback
 import EventHandling
+import DummyCaster
 
 constant int TRAP_ID = 'n00I'
 string array SFX_STRINGS
@@ -30,7 +30,7 @@ public class Trap extends StaticBaseObject
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
 			traptimer = getTimer()
-			DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
+			// DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() )) Really :D ?
 			
 	static function onStep()
 		print("Trap step")
@@ -63,19 +63,29 @@ public class Trap extends StaticBaseObject
 		switch a
 			case ABIL.KILL
 				e.kill()
+			case ABIL.STUN
+				print("stun start")
+				var dc = new DummyCaster(STUN_BUFF, "thunderbolt", DUMMY_PLAYER, true)
+				dc.recycledelay = 0.5
+				dc.castOnTarget(e.actor)
+				timer tim = getTimer()
+				tim.start(duration, function endStun)
+				tim.setData(e castTo int)
+				print("stun end")
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				var angle = angleBetweenCoordsD(actor.getX(), actor.getY(),e.actor.getX(), e.actor.getY())
-				e.addForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD), 0.)
-				print("fork you")
-				//new Knockback( actor, e.actor, value, 0.5,  )
+				e.addForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.)
+
 			default
 				skip
 		
 	static function endStun()
+		print("stun over")
 		Escaper e = GetExpiredTimer().getData() castTo Escaper
 		if UnitHasBuffBJ(e.actor, STUN_BUFF)
 			PauseUnit(e.actor, false)
+			UnitRemoveBuffs(e.actor, false, true )
 		
 	function addConfiger(boolean dur, boolean val)
 		UnitRemoveAbility(actor,KILL_ABIL)
@@ -122,7 +132,7 @@ public class Trap extends StaticBaseObject
 				obj.addConfiger(false, false)
 			case STUN_ABIL
 				obj.a = ABIL.STUN
-				obj.duration = 1.
+				obj.duration = 2.
 				obj.addConfiger(true, false)
 			case SPEED_ABIL
 				obj.a = ABIL.SPEED
@@ -159,6 +169,9 @@ public class Trap extends StaticBaseObject
 				UnitRemoveAbility(obj.actor,STOP_ABIL)
 				UnitAddAbility(obj.actor,START_ABIL)
 		return false
+		
+	ondestroy
+		traptimer.release()
 
 int NEXT_SFX_ABIL = 'A06D'
 int PREV_SFX_ABIL = 'A06C'
@@ -175,7 +188,7 @@ int SHAKE_ABIL = '0060'
 int KNOCK_ABIL = 'A06H'
 int POISON_ABIL = 'A06F'
 
-int STUN_BUFF = 'BUFF'
+int STUN_BUFF = 'A06J'
 
 int INCREASE_INTERVAL_ABIL = '0060'
 int DECREASE_INTERVAL_ABIL = '0060'
