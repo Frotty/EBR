@@ -1,0 +1,55 @@
+package Spinner
+import Entity
+import Lists
+import EventHandling
+import SetupObject
+
+constant int SPINNER_ID      = 'h01M'
+constant int SPELL_ID        = 'A01B'
+constant int SPELL2_ID       = 'A04M'
+constant int INC_ID          = 'A01F'
+constant int DEC_ID          = 'A01G'
+
+class SpinNode
+	DynamicSetupObject obj
+	real angle
+	real dist
+	
+	construct(DynamicSetupObject ent, real angl, real dist)
+		obj = ent
+		angle = angl
+		this.dist = dist
+
+public class Spinner extends UnitEntity
+	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
+	real speed = 2.
+
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), 0., CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0))
+		actor.registerCastEvent(Condition(function onCast))
+		
+		
+	override function update()
+		super.update()
+		real angle
+		real dist
+		for node in spinningEntities
+			node.obj.setNewPos( vec3(polarProjectionXR(position.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(position.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
+			node.angle += speed*DEGTORAD
+
+		
+	static function onCast() returns boolean
+		var id = GetSpellAbilityId()
+		var sdata = GetTriggerUnit().getUserData() castTo Spinner
+		switch id
+			case SPELL_ID
+				print("right cast")
+				var u = GetSpellTargetUnit()
+				var data = u.getUserData() castTo Entity
+				if data instanceof DynamicSetupObject
+					print("is setup")
+					sdata.spinningEntities.add(new SpinNode(data castTo DynamicSetupObject, angleBetweenCoordsR(sdata.position.x, sdata.position.y, data.position.x, data.position.y), distanceBetweenCoords(sdata.position.x, sdata.position.y, data.position.x, data.position.y) ))
+
+		return false
+	
+		
