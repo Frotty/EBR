@@ -12,6 +12,7 @@ import Jumper
 import Teleporter
 import Waypoint
 import Spinner
+import Unitcreator
 
 constant int dummy = 'h00G'
         
@@ -64,6 +65,8 @@ function callback()
 	        	new Door(vec2(x,y), u.getOwner())
 	        case buildorders[21]
 	        	new Spinner(vec2(x,y), u.getOwner())	
+	    	case buildorders[20]
+	    		new Unitcreator(vec2(x,y), u.getOwner())
 	        case buildorders[23]
 	        	new Tracks(vec2(x,y), u.getOwner())	
 	        case buildorders[25]
@@ -116,7 +119,7 @@ init
     buildorders[1] = 'n00B' // Jumper
     buildorders[2] = 'n000' // Revivepoint
     buildorders[3] = 'n01B'
-    buildorders[4] = 'n001'
+    buildorders[4] = 'n001' 
     buildorders[5] = 'h019'
     buildorders[6] = 'n012' // Vortex
     buildorders[7] = 'h009'
@@ -132,7 +135,7 @@ init
     buildorders[17] = 'obBD'
     buildorders[18] = 'n010'
     buildorders[19] = 'n013'
-    buildorders[20] = 'n006'
+    buildorders[20] = 'n006' // Unitcreator
     buildorders[21] = 'h01M' // Spinner
     buildorders[22] = 'n00P'
     buildorders[23] = 'n01C' // Tracks
