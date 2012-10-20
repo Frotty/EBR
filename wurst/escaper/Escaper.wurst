@@ -38,7 +38,10 @@ package Escaper
 		
 		construct( vec3 pos, player owner, int typ )
 			super(pos, COLL_RADIUS, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
-
+			actor.addAbility('Aloc')
+			.hide()
+    		.removeAbility('Aloc')
+    		.show()
     		
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
             TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
