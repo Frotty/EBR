@@ -9,7 +9,7 @@ package Escaper
 	import ItemObject
 	import Key
 	import Revivepoint
-	import Lists
+	import LinkedList
 	
 	public Table escaperTable = new Table()
 	

@@ -91,7 +91,6 @@ public class RegionData
 				return false
 								
 	static function enterRect()
-		print("YESSSSSSSSSSSS entered")
 		var u = GetTriggerUnit()
 		var data = u.getUserData() castTo Entity
 		var rdata = regionTable.loadInt(GetHandleId(GetTriggeringTrigger().getSourceRect())) castTo RegionData

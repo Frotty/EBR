@@ -1,8 +1,9 @@
 package Spinner
 import Entity
-import Lists
+import LinkedList
 import EventHandling
 import SetupObject
+import GroupUtils
 
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
@@ -37,18 +38,37 @@ public class Spinner extends UnitEntity
 			node.obj.setNewPos( vec3(polarProjectionXR(position.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(position.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
 			node.angle += speed*DEGTORAD
 
-		
+	function checkObj(Entity e)
+		if e instanceof DynamicSetupObject
+			var dobj = e castTo DynamicSetupObject
+			boolean isNew = true
+			int i = 0
+			for node in spinningEntities
+				if node.obj == dobj
+					isNew = false
+					destroy spinningEntities.get(i)
+					spinningEntities.removeAt(i)
+					break
+				i++
+			if isNew
+				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(position.x, position.y, dobj.position.x, dobj.position.y), distanceBetweenCoords(position.x, position.y, dobj.position.x, dobj.position.y) ))
+
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var sdata = GetTriggerUnit().getUserData() castTo Spinner
 		switch id
 			case SPELL_ID
-				print("right cast")
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo Entity
-				if data instanceof DynamicSetupObject
-					print("is setup")
-					sdata.spinningEntities.add(new SpinNode(data castTo DynamicSetupObject, angleBetweenCoordsR(sdata.position.x, sdata.position.y, data.position.x, data.position.y), distanceBetweenCoords(sdata.position.x, sdata.position.y, data.position.x, data.position.y) ))
+				sdata.checkObj(data)
+			case SPELL2_ID
+				var tx = GetSpellTargetX()
+				var ty = GetSpellTargetX()
+				GroupEnumUnitsInRange(ENUM_GROUP, tx, ty, 300., null)
+				for gu in ENUM_GROUP
+					if gu.getUserData() > 0
+						sdata.checkObj(gu.getUserData() castTo Entity)
+				ENUM_GROUP.clear()
 
 		return false
 	
