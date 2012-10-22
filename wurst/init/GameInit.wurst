@@ -10,6 +10,7 @@ package GameInit
     import TerrainModder
     import Executer
     import Trap
+    import Texter
     
     function initGame()
 
@@ -26,6 +27,7 @@ package GameInit
         init_Builder()
         init_Trap()
         init_Door()
+        init_Texter()
         if init_EntityManagement()
             print("Finished Init - Game started")
 			startChoose()

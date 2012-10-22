@@ -14,6 +14,7 @@ import Waypoint
 import Spinner
 import Unitcreator
 import Trap
+import Texter
 
 constant int dummy = 'h00G'
         
@@ -54,6 +55,8 @@ function callback()
 	    		new Jumper(vec2(x,y), u.getOwner())
 	    	case buildorders[2]
 	    		new RevivePoint(vec2(x,y), u.getOwner())
+	    	case buildorders[3]
+	    		new Texter(vec2(x,y), u.getOwner())
 	    	case buildorders[6]
 	    		new Vortex(vec2(x,y), u.getOwner())
 	    	case buildorders[8]
@@ -121,7 +124,7 @@ init
     buildorders[0] = 'n00G'
     buildorders[1] = 'n00B' // Jumper
     buildorders[2] = 'n000' // Revivepoint
-    buildorders[3] = 'n01B'
+    buildorders[3] = 'n01B' // Texter
     buildorders[4] = 'n001' 
     buildorders[5] = 'h019'
     buildorders[6] = 'n012' // Vortex
