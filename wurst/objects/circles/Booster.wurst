@@ -24,8 +24,9 @@ package Booster
             Entity e = u.getUserData() castTo Entity
             thistype obj = source.getUserData() castTo thistype
             if e instanceof EscaperKiller
-                SetUnitMoveSpeed(obj.actor, obj.boostspeed)
-                SetUnitMoveSpeed(obj.setup, obj.boostspeed)
+                EscaperKiller ek = e castTo EscaperKiller
+                SetUnitMoveSpeed(ek.actor, obj.boostspeed)
+                SetUnitMoveSpeed(ek.setup, obj.boostspeed)
 
 		static function onCast() returns boolean
             var id = GetSpellAbilityId()
