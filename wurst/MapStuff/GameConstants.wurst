@@ -7,7 +7,7 @@ package GameConstants
 	public string array colorcode
 	public integer array expBounds
 	public string array ranks
-	public constant int cplayerCount = 13
+	public constant int cplayerCount = 14
 	
 	public constant string MAP_VER = "EBR 0.70"
 	

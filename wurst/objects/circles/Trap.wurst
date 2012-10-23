@@ -4,6 +4,7 @@ import Escaper
 import GroupUtils
 import EventHandling
 import DummyCaster
+import Camera
 
 constant int TRAP_ID = 'n00I'
 string array SFX_STRINGS
@@ -18,7 +19,7 @@ enum ABIL
 public class Trap extends StaticBaseObject
 	int sfxid = 3
 	boolean onstep = true
-	real interval
+	real interval = 2.
 	timer traptimer
 	ABIL a
 	
@@ -47,16 +48,18 @@ public class Trap extends StaticBaseObject
 	function canTrigger(Entity e) returns boolean
 		return false
 	
-	static function onPeriod() //periodic
+	static function onTimedTrap() //periodic
 		thistype obj = GetExpiredTimer().getData() castTo thistype
-		GroupEnumUnitsInRange(ENUM_GROUP,obj.actor.getX(), obj.actor.getY(), 30., null)
-		int c = 0
-		for unit u from ENUM_GROUP
+		DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+		GroupEnumUnitsInRange(ENUM_GROUP,obj.actor.getX(), obj.actor.getY(), 50., null)
+		for unit u in ENUM_GROUP
             Entity e = u.getUserData() castTo Entity
             if e instanceof Escaper
                 var escaper = e castTo Escaper
                 obj.doEffect(escaper)
         ENUM_GROUP.clear()
+		obj.traptimer.release()
+        obj.traptimer.start(obj.interval, function onTimedTrap)
 			
 	function doEffect(Escaper e)
 		print("Trap Effect")
@@ -64,14 +67,14 @@ public class Trap extends StaticBaseObject
 			case ABIL.KILL
 				e.kill()
 			case ABIL.STUN
-				print("stun start")
 				var dc = new DummyCaster(STUN_BUFF, "thunderbolt", DUMMY_PLAYER, true)
+				dc.level = duration.toInt()
 				dc.recycledelay = 0.5
 				dc.castOnTarget(e.actor)
-				timer tim = getTimer()
-				tim.start(duration, function endStun)
-				tim.setData(e castTo int)
-				print("stun end")
+			case ABIL.SHAKE
+				setCameraNoiseTimed(owner, value, 1000, duration)
+			case ABIL.SPEED
+				skip
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				var angle = angleBetweenCoordsD(actor.getX(), actor.getY(),e.actor.getX(), e.actor.getY())
@@ -80,12 +83,6 @@ public class Trap extends StaticBaseObject
 			default
 				skip
 		
-	static function endStun()
-		print("stun over")
-		Escaper e = GetExpiredTimer().getData() castTo Escaper
-		if UnitHasBuffBJ(e.actor, STUN_BUFF)
-			PauseUnit(e.actor, false)
-			UnitRemoveBuffs(e.actor, false, true )
 		
 	function addConfiger(boolean dur, boolean val)
 		UnitRemoveAbility(actor,KILL_ABIL)
@@ -132,13 +129,15 @@ public class Trap extends StaticBaseObject
 				obj.addConfiger(false, false)
 			case STUN_ABIL
 				obj.a = ABIL.STUN
-				obj.duration = 2.
+				obj.duration = 1.
 				obj.addConfiger(true, false)
 			case SPEED_ABIL
 				obj.a = ABIL.SPEED
 				obj.addConfiger(true, true)
 			case SHAKE_ABIL
 				obj.a = ABIL.SHAKE
+				obj.value = 500
+				obj.duration = 3.
 				obj.addConfiger(true, true)
 			case KNOCK_ABIL
 				obj.a = ABIL.KNOCK
@@ -150,21 +149,115 @@ public class Trap extends StaticBaseObject
 					
 			case INCREASE_INTERVAL_ABIL
 	            if obj.interval >= 10
-	        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Maximum intervall reached!")
+	        		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 				else
 					obj.interval += 0.25
-					DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(obj.interval,1,2) )
+					createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.value,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 			case DECREASE_INTERVAL_ABIL
 	            if obj.interval < 0.75
-	        		DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Minimum intervall reached!")
+	        		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 				else
-					obj.interval += 0.25
-					DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(obj.interval,1,2) )
+					obj.interval -= 0.25
+					createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.value,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+			
+			case INCREASE_VALUE_ABIL
+				switch obj.a
+					case ABIL.KNOCK
+						if obj.value >= 50
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.value += 5
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Force "+ R2SW(obj.value,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SHAKE
+						if obj.value >= 1500
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.value += 100
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(obj.value,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SPEED
+						if obj.value >= 250
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.value += 10
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(obj.value,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					default
+						skip
+			case DECREASE_VALUE_ABIL
+				switch obj.a
+					case ABIL.KNOCK
+						if obj.value <= 5
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.value -= 5
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Force "+ obj.value.toInt().toString(), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SHAKE
+						if obj.value <= 100
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.value -= 100
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intensity "+ obj.value.toInt().toString(), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SPEED
+						if obj.value <= 10
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.value -= 10
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString(), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					default
+						skip
+			
+			case INCREASE_DURATION_ABIL
+				switch obj.a
+					case ABIL.STUN
+						if obj.duration >= 4
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.duration += 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SHAKE
+						if obj.duration >= 20
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.duration += 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SPEED
+						if obj.duration >= 20
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.duration += 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					default
+						skip	
+			case DECREASE_DURATION_ABIL
+				switch obj.a
+					case ABIL.STUN
+						if obj.duration <= 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.duration -= 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SHAKE
+						if obj.duration <= 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.duration -= 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					case ABIL.SPEED
+						if obj.duration <= 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						else
+							obj.duration -= 1
+							createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					default
+						skip
+			
 			case START_ABIL
-				obj.traptimer.startPeriodic(obj.interval, function onPeriod)
+				obj.onstep = false
+				obj.traptimer.start(obj.interval, function onTimedTrap)
+				obj.traptimer.setData(obj castTo int)
 				UnitRemoveAbility(obj.actor,START_ABIL)
 				UnitAddAbility(obj.actor,STOP_ABIL)
 			case STOP_ABIL
+				obj.onstep = true
 				obj.traptimer.release()
 				UnitRemoveAbility(obj.actor,STOP_ABIL)
 				UnitAddAbility(obj.actor,START_ABIL)
@@ -176,24 +269,24 @@ public class Trap extends StaticBaseObject
 int NEXT_SFX_ABIL = 'A06D'
 int PREV_SFX_ABIL = 'A06C'
 
-int INCREASE_DURATION_ABIL
-int DECREASE_DURATION_ABIL
-int INCREASE_VALUE_ABIL
-int DECREASE_VALUE_ABIL
+int INCREASE_DURATION_ABIL = 'A06M'
+int DECREASE_DURATION_ABIL = 'A06L'
+int INCREASE_VALUE_ABIL = 'A06N'
+int DECREASE_VALUE_ABIL = 'A06O'
 
 int KILL_ABIL = 'A06E'
 int STUN_ABIL = 'A06G'
 int SPEED_ABIL = 'A06I'
-int SHAKE_ABIL = '0060'
+int SHAKE_ABIL = 'A06K'
 int KNOCK_ABIL = 'A06H'
 int POISON_ABIL = 'A06F'
 
 int STUN_BUFF = 'A06J'
 
-int INCREASE_INTERVAL_ABIL = '0060'
-int DECREASE_INTERVAL_ABIL = '0060'
-int START_ABIL = '0060'
-int STOP_ABIL = '0060'
+int INCREASE_INTERVAL_ABIL = 'A06P'
+int DECREASE_INTERVAL_ABIL = 'A06O'
+int START_ABIL = 'A06R'
+int STOP_ABIL = 'A06S'
 
 public function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"

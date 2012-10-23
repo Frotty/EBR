@@ -1,0 +1,11 @@
+package Bomber
+import SetupObject
+
+constant int ID = 'h00Y'
+
+
+public class Bomber extends DynamicSetupObject
+	
+	construct( vec2 pos, player owner )
+		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0.), CreateUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		

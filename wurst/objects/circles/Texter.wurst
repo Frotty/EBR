@@ -1,0 +1,134 @@
+package Texter
+	import GroupUtils
+    import BaseObject
+    import Terrain
+    import RegionData
+    import Escaper
+    import GameConstants
+    
+	constant int 	TEXTER_ID   = 'n01B'
+	constant real 	EVENT_RADIUS	= 32.
+	string array stdcolors
+
+    public class Texter extends StaticBaseObject
+    	texttag text = CreateTextTag()
+    	color col = color(255,255,255)
+        
+        construct( vec2 pos, player owner )
+        	super( pos.toVec3(), CreateUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep ) 
+			actor.setUserData(this castTo int)
+            text.setColor( col.red,col.green,col.blue, 0 ).setPos( actor.getX(),actor.getY(), 0 ).setVisibility( false ).setPermanent( true )
+            
+        static function onStep()
+            unit u = GetTriggerUnit()
+            Entity e = u.getUserData() castTo Entity
+            thistype obj = GetTriggeringTrigger().getSource().getUserData() castTo thistype
+            if e instanceof Escaper
+				RegionData data = getRegionData(obj.actor.getX(), obj.actor.getY())
+				obj.text.setVisibility( true )
+
+		static function show()
+			for unit u in getSelectedTexters(GetTriggerPlayer())
+				thistype obj = u.getUserData() castTo thistype
+				obj.text.setVisibility( true )
+		
+		static function hide()
+			for unit u in getSelectedTexters(GetTriggerPlayer())
+				thistype obj = u.getUserData() castTo thistype
+				obj.text.setVisibility( false )
+		
+		static function setText()
+			string chatmsg = GetEventPlayerChatString()
+			string ttext = ""
+			if SubString(chatmsg, 0, 4) == "-st "
+				ttext = SubString(chatmsg, 4, StringLength(chatmsg))
+			else if SubString(chatmsg, 0, 9) == "-settext "
+				ttext = SubString(chatmsg, 9, StringLength(chatmsg))
+			for unit u in getSelectedTexters(GetTriggerPlayer())
+				thistype obj = u.getUserData() castTo thistype
+				obj.text.setText(ttext , 0.0276)
+		
+		static function setColor()
+			string chatmsg = GetEventPlayerChatString()
+			color textcolor = color(255,255,255)
+			if SubString(chatmsg, 0, 4) == "-sc "
+				textcolor = getColorFromString(SubString(chatmsg, 4, StringLength(chatmsg)) + " ")
+			else if SubString(chatmsg, 0, 10) == "-setcolor "
+				textcolor = getColorFromString(SubString(chatmsg, 10, StringLength(chatmsg))+ " ")
+			for unit u in getSelectedTexters(GetTriggerPlayer())
+				thistype obj = u.getUserData() castTo thistype
+				if obj.col != textcolor
+					obj.col = textcolor
+					obj.text.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
+					createTTExForPlayer(obj.position, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
+
+		ondestroy
+			DestroyTextTag(text)
+		
+	function getSelectedTexters(player p) returns group
+		GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(TEXTER_ID), null)
+		group g = CreateGroup()
+		for unit u in ENUM_GROUP
+			if IsUnitSelected( u, p) and GetOwningPlayer(u) == p
+				GroupAddUnit(g, u)
+		ENUM_GROUP.clear()
+		return g
+
+	function getColorFromString(string s) returns color
+		boolean isstdcolor = false
+		color stringcolor = color(255,255,255)
+		for int i = 0 to 12
+			if stdcolors[i] == s
+				stringcolor = colors[i]
+				isstdcolor = true
+		if not isstdcolor
+			int component = 0
+			string tempstring = ""
+			for int ii = 0 to StringLength( s ) - 1
+				if SubString( s, ii, ii + 1 ) != " " 
+					tempstring += SubString( s, ii, ii + 1 )
+				else
+					switch component
+						case 0
+							stringcolor.red = S2I(tempstring)
+						case 1
+							stringcolor.green = S2I(tempstring)
+						case 2
+							stringcolor.blue = S2I(tempstring)
+					component++
+					tempstring = ""
+		return stringcolor
+		
+	public function init_Texter()
+		trigger textrig = CreateTrigger()
+		trigger coltrig = CreateTrigger()
+		trigger shotrig = CreateTrigger()
+		trigger hidtrig = CreateTrigger()
+		for int i = 8 to 8
+			TriggerRegisterPlayerChatEvent(textrig,Player(i), "-st ", false)
+			TriggerRegisterPlayerChatEvent(textrig,Player(i), "-settext ", false)
+			TriggerAddAction(textrig, function Texter.setText)
+			TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-sc ", false)
+			TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-setcolor ", false)
+			TriggerAddAction(coltrig, function Texter.setColor)
+			TriggerRegisterPlayerChatEvent(shotrig,Player(i), "-showtext", true)
+			TriggerRegisterPlayerChatEvent(shotrig,Player(i), "-sht", true)
+			TriggerAddAction(shotrig, function Texter.show)
+			TriggerRegisterPlayerChatEvent(hidtrig,Player(i), "-ht", true)
+			TriggerRegisterPlayerChatEvent(hidtrig,Player(i), "-hidetext",true)
+			TriggerAddAction(hidtrig, function Texter.hide)
+		stdcolors[0] = "white"
+		stdcolors[1] = "red"
+		stdcolors[2] = "blue"
+		stdcolors[3] = "teal"
+		stdcolors[4] = "purple"
+		stdcolors[5] = "yellow"
+		stdcolors[6] = "orange"
+		stdcolors[7] = "green"
+		stdcolors[8] = "pink"
+		stdcolors[9] = "gray"
+		stdcolors[10] = "lightblue"
+		stdcolors[11] = "darkgreen"
+		stdcolors[12] = "brown"
+		
+endpackage
