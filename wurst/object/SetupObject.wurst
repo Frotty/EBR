@@ -51,6 +51,11 @@ package SetupObject
             position = pos
             actor.setPos(pos.x, pos.y)
             setup.setPos(pos.x, pos.y)
+            
+        function setNewXY(vec3 pos)
+            position = pos
+            actor.setXY(pos.x, pos.y)
+            setup.setXY(pos.x, pos.y)
 		
 		override function update()
         override function onGround()

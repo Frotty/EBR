@@ -14,6 +14,7 @@ import Waypoint
 import Spinner
 import Unitcreator
 import Trap
+import Tree
 
 constant int dummy = 'h00G'
         
@@ -62,8 +63,10 @@ function callback()
 	        	new Waypoint(vec2(x,y), u.getOwner())
 	        case buildorders[14]
 	        	new Teleporter(vec2(x,y), u.getOwner())
-	    	case buildorders[15]
+	        case buildorders[15]
 	        	new Door(vec2(x,y), u.getOwner())
+	    	case buildorders[18]
+	        	new Tree(vec2(x,y), u.getOwner())
 	        case buildorders[21]
 	        	new Spinner(vec2(x,y), u.getOwner())	
 	    	case buildorders[20]
@@ -136,7 +139,7 @@ init
     buildorders[15] = 'h002' // Door
     buildorders[16] = 'obSD'
     buildorders[17] = 'obBD'
-    buildorders[18] = 'n010'
+    buildorders[18] = 'n010' // Tree
     buildorders[19] = 'n013'
     buildorders[20] = 'n006' // Unitcreator
     buildorders[21] = 'h01M' // Spinner

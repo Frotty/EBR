@@ -1,0 +1,25 @@
+package Tree
+import Entity
+import RegionData
+
+
+constant int TREEDUMMY_ID 	= 'n010'
+constant int TREE_ID 		= 'n00H'
+
+public class Tree extends Entity
+    destructable dummy
+    unit setup
+    
+    construct(vec2 pos, player owner)
+		super(pos.toVec3(), 0., owner)
+        setup = CreateUnit( owner, TREE_ID, pos.x, pos.y, 0 )
+        setup.setUserData(this castTo int)
+        var rdata = getRegionData( pos.x, pos.y )
+        dummy = CreateDestructable( rdata.treeId, pos.x, pos.y, GetRandomReal(0,360), GetRandomReal(0.8,1.2), GetRandomInt(0,2) )
+
+    
+    ondestroy
+        RemoveDestructable( this.dummy )
+
+	override function onGround()
+	override function inAir()

@@ -35,7 +35,7 @@ public class Spinner extends UnitEntity
 		real angle
 		real dist
 		for node in spinningEntities
-			node.obj.setNewPos( vec3(polarProjectionXR(position.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(position.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
+			node.obj.setNewXY( vec3(polarProjectionXR(position.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(position.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
 			node.angle += speed*DEGTORAD
 
 	function checkObj(Entity e)
