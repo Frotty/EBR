@@ -6,6 +6,7 @@ package UnitProducer
 	import PlayerData
 	import BuilderConstants
 	import TeleporterTarget
+	import Bomber
 	
 	constant int ID = 'H00A'
 	
@@ -43,6 +44,8 @@ package UnitProducer
 						new EscaperKiller(vec3(rX, rY, 0),CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
 					case 'A05N'
 						new TeleporterTarget( vec2(rX,rY), obj.owner )
+					case 'A05N'
+						new Bomber( vec2(rX,rY), obj.owner )
 					case 'A05H'
 						new EscaperKiller(vec3(rX, rY, 0),CreateUnit(obj.owner, 'u00F', rX, rY, 0. ), CreateUnit(obj.owner, 'u00F', rX, rY, 0. ), COLL_SIZE_GLAIVE)
 			else
