@@ -110,6 +110,11 @@ package SetupObject
         
         trigger inRangeTrig // Trigger for inRange detection
         
+        construct( vec3 pos, real radius, code c )
+        	super( pos, radius, setup.getOwner() )
+			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+                inRangeTrig = CreateTrigger()
+                inRangeTrig.addAction( c )
                         
         construct( vec3 pos, unit u, unit setup, real radius, code c )
         	super( pos, radius, setup.getOwner() )

@@ -17,6 +17,7 @@ import Trap
 import Tree
 import Texter
 import Booster
+import Obstacle
 
 
 constant int dummy = 'h00G'
@@ -72,6 +73,10 @@ function callback()
 	        	new Teleporter(vec2(x,y), u.getOwner())
 	        case buildorders[15]
 	        	new Door(vec2(x,y), u.getOwner())
+	        case buildorders[16]
+	        	new SmallObstacle(vec2(x,y), u.getOwner())
+	        case buildorders[17]
+	        	new BigObstacle(vec2(x,y), u.getOwner())
 	    	case buildorders[18]
 	        	new Tree(vec2(x,y), u.getOwner())
 	        case buildorders[21]
@@ -144,8 +149,8 @@ init
     buildorders[13] = 'n004' // Waypoint
     buildorders[14] = 'n00C' // Teleporter
     buildorders[15] = 'h002' // Door
-    buildorders[16] = 'obSD'
-    buildorders[17] = 'obBD'
+    buildorders[16] = 'obSD' // Small Obstacle
+    buildorders[17] = 'obBD' // Big Obstacle
     buildorders[18] = 'n010' // Tree
     buildorders[19] = 'n013'
     buildorders[20] = 'n006' // Unitcreator
