@@ -36,6 +36,9 @@ package Entity
 			
 		abstract function onGround()
 		abstract function inAir()
+		
+		function terminate()
+			done = true
 
 		
 		function update()			

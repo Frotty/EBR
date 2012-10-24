@@ -73,7 +73,8 @@ package SetupObject
         
         ondestroy
             actor.clearRegister()
-            
+            actor.remove()
+            setup.remove()
             
         static function onOrderEvent()
         	var entity = GetTriggerUnit().getUserData() castTo Entity
@@ -149,6 +150,8 @@ package SetupObject
         
         ondestroy
             actor.clearRegister()
+            actor.remove()
+            setup.remove()
             
 
 

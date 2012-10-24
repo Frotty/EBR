@@ -13,7 +13,9 @@ public class ItemObject extends Entity
 		SetItemUserData(actorItem, this castTo int)
 		setup.setUserData(this castTo int)
 		
-		
+	ondestroy
+		setup.remove()
+		actorItem.remove()
 		
 	override function onGround()
 	override function inAir()

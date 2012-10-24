@@ -136,6 +136,9 @@ package Door
                     pathing  = CreateUnit( owner, DOORPATH, position.x, position.y, 0 )
 					print("yäs2")
 			colorize()
+			
+		ondestroy
+			pathing.remove()
     
 		static function onSpellCast()
 			print("casted")

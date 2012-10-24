@@ -5,8 +5,8 @@ package Obstacle
     import RegionData
     //import Regions
     
-	constant int 	BIGOBSTACLE_ID  	= 'obBD'
-	constant int 	SMALLOBSTACLE_ID	= 'obSD'
+	constant int 	BIGOBSTACLE_ID  	= 'n002'
+	constant int 	SMALLOBSTACLE_ID	= 'n002'
 		
 	constant real 	EVENT_RADIUS_SMALL	= 32.
 	constant real 	EVENT_RADIUS_BIG	= 64.

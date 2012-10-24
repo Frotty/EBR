@@ -110,6 +110,7 @@ package BaseObject
         
         ondestroy
             actor.clearRegister()
+            actor.remove()
 
     
 
