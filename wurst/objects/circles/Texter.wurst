@@ -12,6 +12,7 @@ package Texter
 
     public class Texter extends StaticBaseObject
     	texttag text = CreateTextTag()
+    	boolean hidden = true
     	color col = color(255,255,255)
         
         construct( vec2 pos, player owner )
@@ -26,16 +27,21 @@ package Texter
             if e instanceof Escaper
 				RegionData data = getRegionData(obj.actor.getX(), obj.actor.getY())
 				obj.text.setVisibility( true )
-
+				obj.hidden = false
+				
 		static function show()
 			for unit u in getSelectedTexters(GetTriggerPlayer())
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setVisibility( true )
+				obj.hidden = false
+				createTTExForPlayer(obj.position, vec2(0,0.05), "Shown", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 		
 		static function hide()
 			for unit u in getSelectedTexters(GetTriggerPlayer())
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setVisibility( false )
+				obj.hidden = true
+				createTTExForPlayer(obj.position, vec2(0,0.05), "Hidden", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 		
 		static function setText()
 			string chatmsg = GetEventPlayerChatString()
@@ -47,6 +53,8 @@ package Texter
 			for unit u in getSelectedTexters(GetTriggerPlayer())
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setText(ttext , 0.0276)
+				if obj.hidden
+					createTTExForPlayer(obj.position, vec2(0,0.05), ttext, 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 		
 		static function setColor()
 			string chatmsg = GetEventPlayerChatString()
@@ -78,7 +86,7 @@ package Texter
 		boolean isstdcolor = false
 		color stringcolor = color(255,255,255)
 		for int i = 0 to 12
-			if stdcolors[i] == s
+			if stdcolors[i]+ " " == s 
 				stringcolor = colors[i]
 				isstdcolor = true
 		if not isstdcolor

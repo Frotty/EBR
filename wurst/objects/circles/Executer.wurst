@@ -1,4 +1,5 @@
 package Executer
+	import RGBA
     import BaseObject
     import Terrain
     import Rect
@@ -43,10 +44,10 @@ package Executer
         Emode eventMode
         Amode actionMode
         boolean ON = false// only for lever and pressureplate
-        effect oneffect
-        int tiletype
-        int nottiletype = '0001'
-        int verticalTileSize = 0
+        effect oneffect // when lever and pressurplate is active
+        int tiletype //Terrain Change tile type
+        int nottiletype = '0001' // The basic is Unwalkable
+        int verticalTileSize = 0 
         int horizontalTileSize = 0
         unit unitToMove // for unitMover
         ActionUnit actionUnit // only for UnitCreator Executer 
@@ -368,15 +369,17 @@ package Executer
 	        		obj.unitToMove = GetSpellTargetUnit()
 	        	
 	        	case TERRAIN_INCREASE_H_ABIL
-	        		obj.horizontalTileSize ++
-	        		print(obj.horizontalTileSize.toString())
+	        		if not obj.horizontalTileSize > 3
+						obj.horizontalTileSize ++
 				case TERRAIN_INCREASE_V_ABIL
-	        		obj.verticalTileSize ++
+					if not obj.verticalTileSize > 3
+						obj.verticalTileSize ++
 				case TERRAIN_DECREASE_H_ABIL
-	        		obj.horizontalTileSize --
-	        		print(obj.horizontalTileSize.toString())
+					if not obj.horizontalTileSize < 1
+						obj.horizontalTileSize --
 				case TERRAIN_DECREASE_V_ABIL
-	        		obj.verticalTileSize --
+					if not obj.verticalTileSize < 1
+						obj.verticalTileSize --
 	        return false
 	
     int TANKID = 'h001'
