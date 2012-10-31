@@ -72,9 +72,14 @@ package SetupObject
                           
         
         ondestroy
+        	print("fuck1")
             actor.clearRegister()
+            print("fuck2")
             actor.remove()
+            print("fuck3")
             setup.remove()
+			print("fuck4")
+			inRangeTrig.destr()         
             
         static function onOrderEvent()
         	var entity = GetTriggerUnit().getUserData() castTo Entity
@@ -152,7 +157,7 @@ package SetupObject
             actor.clearRegister()
             actor.remove()
             setup.remove()
-            
+            inRangeTrig.destr()
 
 
 
