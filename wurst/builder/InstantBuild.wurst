@@ -83,12 +83,18 @@ function callback()
 	        	new Spinner(vec2(x,y), u.getOwner())	
 	    	case buildorders[20]
 	    		new Unitcreator(vec2(x,y), u.getOwner())
+	    	case buildorders[22]
+	    		CreateUnit(u.getOwner(),buildorders[22],x,y, 0.)
 	        case buildorders[23]
 	        	new Tracks(vec2(x,y), u.getOwner())	
 	        case buildorders[25]
 	        	new Powernode(vec2(x,y), u.getOwner())	
 	        case buildorders[26]
-	        	new Trap(vec2(x,y), u.getOwner())		
+	        	new Trap(vec2(x,y), u.getOwner())	
+	        case buildorders[27]
+	    		CreateUnit(u.getOwner(),buildorders[27],x,y, 90.)	
+	        case buildorders[28]
+	    		CreateUnit(u.getOwner(),buildorders[28],x,y, 90.)
 	        
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
@@ -155,9 +161,11 @@ init
     buildorders[19] = 'n013'
     buildorders[20] = 'n006' // Unitcreator
     buildorders[21] = 'h01M' // Spinner
-    buildorders[22] = 'n00P'
+    buildorders[22] = 'n00P' // Wall
     buildorders[23] = 'n01C' // Tracks
     buildorders[24] = 'h00H'
     buildorders[25] = 'h0nn' // Powernode
     buildorders[26] = 'n00I' // Trap
+    buildorders[27] = 'n00Q' // Horizontal Wall
+    buildorders[28] = 'n011' // Vertical Wall
 

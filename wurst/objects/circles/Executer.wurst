@@ -1,4 +1,5 @@
 package Executer
+	import RGBA
     import BaseObject
     import Terrain
     import Rect
@@ -12,6 +13,9 @@ package Executer
     
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
+	constant int 	LEVER_DUMMY_ID = 'DTlv'
+	constant int 	PLATE_DUMMY_ID = 'DTfx'
+	
 	
 	constant real 	EVENT_RADIUS	= 32.
 
@@ -37,19 +41,21 @@ package Executer
 		GLAIVE
 
     public class Executer extends StaticBaseObject
-        boolean canKillerTrigger = false
+        boolean canKillerTrigger = true
         rect eventRect // only for pressureplate
         Emode eventMode
         Amode actionMode
         boolean ON = false// only for lever and pressureplate
-        effect oneffect
-        int tiletype
-        int nottiletype = '0001'
-        int verticalTileSize = 0
+        //effect oneffect // when lever and pressurplate is active
+        int tiletype //Terrain Change tile type
+        int nottiletype = '0001' // The basic is Unwalkable
+        int verticalTileSize = 0 
         int horizontalTileSize = 0
         unit unitToMove // for unitMover
         ActionUnit actionUnit // only for UnitCreator Executer 
         string moveOrderString // only for unitMover
+        
+        destructable dummy // model for pressure plate, and lever
         
         construct( vec2 pos, player owner)
         	super( pos.toVec3(), CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent ) 
@@ -73,35 +79,42 @@ package Executer
 	        			if obj.ON
 	                        obj.negativeAction()
 	                        obj.ON = false
-	                        DestroyEffect(obj.oneffect)
+	                        SetDestructableAnimation(obj.dummy, "death")
 	                    else
 	                        obj.findAction()
 	                        obj.ON = true
-							obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
+	                        SetDestructableAnimation(obj.dummy, "stand")
+							//obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
 	        		case Emode.PRESSUREPLATE
-	        			if not obj.ON
-	                        obj.findAction()
-	                        obj.ON = true
-							obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
-	                default
-	                	print("Bug- ExecuterEvent")
+	        			skip
         
         static function onLeaveEvent()
-            unit u = GetTriggerUnit()
             region r = GetTriggeringRegion()
-            Entity e = u.getUserData() castTo Entity
             thistype obj = r.loadRegionData() castTo thistype
     		GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
     		int c = 0
-    		for unit eu from ENUM_GROUP
-	            Entity ee = eu.getUserData() castTo Entity
-	            if obj.canTrigger(ee)
+    		print(CountUnitsInGroup(ENUM_GROUP).toString())
+    		for unit u in ENUM_GROUP
+	            Entity e = u.getUserData() castTo Entity
+	            if obj.canTrigger(e)
 	                c++
+	            print("now c is" + c.toString())
             ENUM_GROUP.clear()
     		if c == 0
                 obj.negativeAction()
                 obj.ON = false
-	            DestroyEffect(obj.oneffect)
+	            SetDestructableAnimation(obj.dummy, "stand alternate")
+	            
+		static function onEnterEvent()
+            unit u = GetTriggerUnit()
+            region r = GetTriggeringRegion()
+            Entity e = u.getUserData() castTo Entity
+	        thistype obj = r.loadRegionData() castTo thistype
+	        if obj.canTrigger(e)
+	    		if not obj.ON
+		            obj.findAction()
+		            obj.ON = true
+		            SetDestructableAnimation(obj.dummy, "death")
     		
 
         function findAction()
@@ -151,6 +164,7 @@ package Executer
             	case Amode.OPENDOOR
             		Door openingdoor = getRallyUnit().getUserData() castTo Door
             		if openingdoor == null
+                        print("Enums are noob, coz the first case triggers if my enum is null")
                         DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
             		else
             			openingdoor.closeDoor()
@@ -268,12 +282,17 @@ package Executer
         
         function registerRect(real centerX, real centerY, real offset)
             //note: with movable circles, itll be necessary to move the rect too.
+            DestroyTrigger(inRangeTrig)
+            
         	region eventRegion = CreateRegion()
         	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
         	RegionAddRect(eventRegion,eventRect)
-        	TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
         	eventRegion.setRegionData(this castTo int)
+        	TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
         	executerUnitLeave.addAction(function onLeaveEvent)
+        	
+        	TriggerRegisterEnterRegion(executerUnitEnter,eventRegion, null)
+        	executerUnitEnter.addAction(function onEnterEvent)
         
         ondestroy
         	actor.remove()
@@ -305,12 +324,21 @@ package Executer
 	        		obj.eventMode = Emode.LEVER
 	        		obj.addActionAbilsReversable()
 	        		obj.removeModeAbils()
+	        		obj.dummy = CreateDestructable( LEVER_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
+	        		SetDestructableAnimation(obj.dummy, "death")
 	        	case PRESSURE_ABIL
 	        		obj.eventMode = Emode.PRESSUREPLATE
 	        		obj.addActionAbilsReversable()
 	        		obj.removeModeAbils()
 	        		obj.registerRect(obj.actor.getX(), obj.actor.getY(), 50)
+	        		obj.dummy = CreateDestructable( PLATE_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
+	        		SetDestructableAnimation(obj.dummy, "stand alternate")
 	        		
+	        	case KILLER_TRIGGER_ABIL
+	        		obj.canKillerTrigger = true
+	        	case ESCAPER_TRIGGER_ABIL
+	        		obj.canKillerTrigger = false	        		
+	        	
 	        	case DOOR_OPEN_ABIL
 	        		obj.actionMode = Amode.OPENDOOR
 	        		obj.removeActionAbils()
@@ -367,15 +395,17 @@ package Executer
 	        		obj.unitToMove = GetSpellTargetUnit()
 	        	
 	        	case TERRAIN_INCREASE_H_ABIL
-	        		obj.horizontalTileSize ++
-	        		print(obj.horizontalTileSize.toString())
+	        		if not obj.horizontalTileSize > 3
+						obj.horizontalTileSize ++
 				case TERRAIN_INCREASE_V_ABIL
-	        		obj.verticalTileSize ++
+					if not obj.verticalTileSize > 3
+						obj.verticalTileSize ++
 				case TERRAIN_DECREASE_H_ABIL
-	        		obj.horizontalTileSize --
-	        		print(obj.horizontalTileSize.toString())
+					if not obj.horizontalTileSize < 1
+						obj.horizontalTileSize --
 				case TERRAIN_DECREASE_V_ABIL
-	        		obj.verticalTileSize --
+					if not obj.verticalTileSize < 1
+						obj.verticalTileSize --
 	        return false
 	
     int TANKID = 'h001'
@@ -387,6 +417,9 @@ package Executer
 	int REPEATING_ABIL = 'A069'
 	int LEVER_ABIL = 'A067'
 	int PRESSURE_ABIL = 'A066'
+	
+	int KILLER_TRIGGER_ABIL
+	int ESCAPER_TRIGGER_ABIL
 	
 	int TERRAIN_WALKABLE_ABIL = 'A015'
 	int TERRAIN_UNWALKABLE_ABIL = 'A016'
@@ -407,6 +440,8 @@ package Executer
 	int MOVE_UNIT_SELECT_ABIL = 'A06A'
 	
 	trigger executerUnitLeave = CreateTrigger()
+	trigger executerUnitEnter = CreateTrigger()
+	
     
     public function init_Executer()
         //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) 
