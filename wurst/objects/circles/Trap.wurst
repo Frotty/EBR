@@ -1,7 +1,6 @@
 package Trap
 import BaseObject
 import Escaper
-import GroupUtils
 import EventHandling
 import DummyCaster
 import Camera

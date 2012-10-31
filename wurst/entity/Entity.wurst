@@ -87,6 +87,9 @@ package Entity
 			super.update()
 			position += velocity
 		
+		ondestroy
+			print("destroyed dyn")
+
 		
 			
 	public class UnitEntity extends DynamicEntity

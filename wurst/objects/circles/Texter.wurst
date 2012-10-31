@@ -1,5 +1,4 @@
 package Texter
-	import GroupUtils
     import BaseObject
     import Terrain
     import RegionData

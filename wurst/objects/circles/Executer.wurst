@@ -2,7 +2,6 @@ package Executer
     import BaseObject
     import Terrain
     import Rect
-    import GroupUtils
     import Escaper
     import EscaperKiller
     import CustomSpellBook

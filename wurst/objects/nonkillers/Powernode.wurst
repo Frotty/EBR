@@ -44,9 +44,9 @@ public class Powernode extends DynamicSetupObject
 		if links.size > 0
 			print(links.size.toString())
 			var i = 0
-			while i <= links.size
+			while i < links.size
 				Link l = links.get(i)
-				if l.linkedNode != null
+				if not l.linkedNode.done 
 					MoveLightning(l.sfx, false, position.x, position.y, l.linkedNode.position.x, l.linkedNode.position.y)
 					for Escaper e in escapers
 						if e.alive and e.position.toVec2().distToSegmentSquared(position.toVec2(), l.linkedNode.position.toVec2() ) < ACTIVATION_DIST
@@ -54,24 +54,32 @@ public class Powernode extends DynamicSetupObject
 							AddSpecialEffect( KILL_EFFECT , e.position.x, e.position.y ) 
 				else
 					links.removeAt(i)
+					print("before DESTROY")
 					destroy l
+					print("after DESTROY")
 					if i == links.size
 						break
 					i--
+				i++
 				
-				
-	override function onGround()
-	override function inAir()
 	
-	ondestroy
-		print("nodey " + links.size.toString())
+	function removeAllLinks()
 		while links.size > 0
 			print("gotta move dat gear")
 			Link l = links.get(0)
 			print("got link " + (l castTo int).toString())
 			links.removeAt(0)
 			destroy l
-
+		destroy links		
+				
+	override function onGround()
+	override function inAir()
+	
+	
+	ondestroy
+		actor.unregisterCastEvent()
+		print("nodey " + links.size.toString())
+		removeAllLinks()
 	
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -84,16 +92,24 @@ public class Powernode extends DynamicSetupObject
 				var data = target.getUserData() castTo Entity
 				if data instanceof Powernode
 					print("node cast link is node")
+					var pdata = data castTo Powernode
 					var isNew = true
-					for Link l in node.links
-						if l.linkedNode.actor == target
-							node.unlink(l)
+					var i = 0
+					while i < node.links.size
+						print("check existing")
+						Link l = node.links.get(i)
+						if l.linkedNode == pdata 
+							node.links.removeAt(i)
+							print("before DESTROY")
+							destroy l
+							print("after DESTROY")
 							isNew = false
 							break
+							
+						i++
 					if isNew
 						node.link(data castTo Powernode)
+
 		return false
-					
-	ondestroy
-		actor.unregisterCastEvent()
-	
+
+		
