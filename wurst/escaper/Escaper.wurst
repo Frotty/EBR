@@ -125,7 +125,7 @@ package Escaper
 				print(time.toString())
 			else
 				actor.setXY(position.x, position.y)
-            SetUnitFlyHeight( actor, position.z /*- getTerrainZ(position.x, position.y )*/, .0 )
+            SetUnitFlyHeight( actor, position.z - terrainZ, .0 )
             
 		static function revive()
 			var t = GetExpiredTimer()

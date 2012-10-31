@@ -44,7 +44,7 @@ package Entity
 		function update()			
 			terrainZ = getTerrainZ( position.x, position.y )
 			
-			if position.z <= terrainZ + 1.
+			if position.z <= terrainZ + .2
 				onGround()
 			else
 				inAir()
@@ -124,7 +124,7 @@ package Entity
 			super.update()
 			SetUnitX( actor, position.x )
             SetUnitY( actor, position.y )
-            SetUnitFlyHeight( actor, position.z - getTerrainZ(position.x, position.y ), .0 )
+            SetUnitFlyHeight( actor, position.z - terrainZ, .0 )
 				
 			
 		ondestroy
