@@ -20,12 +20,14 @@ package Executer
 	constant real 	EVENT_RADIUS	= 32.
 
 	enum Emode
+		NONE
 		REPEATING
 		ONESHOT
 		LEVER
 		PRESSUREPLATE
 	
 	enum Amode
+		NONE
 		OPENDOOR
 		CLOSEDOOR
 		CREATEUNIT
@@ -34,10 +36,10 @@ package Executer
 
 		
 	enum ActionUnit
+		TANK
 		SMALLKILLER
 		BIGKILLER
 		POINTER
-		TANK
 		GLAIVE
 
     public class Executer extends StaticBaseObject
@@ -62,7 +64,6 @@ package Executer
 			actor.registerCastEvent(Condition(function Executer.onCast))
 			
         static function onEvent()
-        	print("executer on Event")
             unit source = GetTriggeringTrigger().getSource()
             unit u = GetTriggerUnit()
             Entity e = u.getUserData() castTo Entity
@@ -70,6 +71,8 @@ package Executer
             
             if obj.canTrigger(e)
 	        	switch obj.eventMode
+	        		case Emode.NONE
+	        			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Please select an Event Mode for the Executer")
 	        		case Emode.REPEATING
 	        			obj.findAction()
 	        		case Emode.ONESHOT
@@ -93,12 +96,10 @@ package Executer
             thistype obj = r.loadRegionData() castTo thistype
     		GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
     		int c = 0
-    		print(CountUnitsInGroup(ENUM_GROUP).toString())
     		for unit u in ENUM_GROUP
 	            Entity e = u.getUserData() castTo Entity
 	            if obj.canTrigger(e)
 	                c++
-	            print("now c is" + c.toString())
             ENUM_GROUP.clear()
     		if c == 0
                 obj.negativeAction()
@@ -118,7 +119,6 @@ package Executer
     		
 
         function findAction()
-            print("executer on action")
             unit u = GetTriggerUnit()
             Entity e = u.getUserData() castTo Entity
             
@@ -126,8 +126,10 @@ package Executer
             var ry = getRallyY()
             
             switch actionMode
+            	case Amode.NONE
+	        			DisplayTextToPlayer( owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
             	case Amode.CLOSEDOOR
-            		Door closingdoor = getRallyUnit().getUserData() castTo Door
+	        		Door closingdoor = getRallyUnit().getUserData() castTo Door
             		if closingdoor == null
                         DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
                     else
@@ -211,7 +213,6 @@ package Executer
             var rY = getRallyY()
             RegionData data
             int tileID
-            print("Tiletype: " + tiletype.toString())
             if isAction
                 tileID = tiletype
             else
@@ -227,8 +228,7 @@ package Executer
                             tileID = data.walkableTile
                     	else if tileID== '0001'
                             tileID = data.unwalkableTile
-                        print("changingTerrain " + tileID.toString() + " " + x.toString() + "," + y.toString())
-                    	SetTerrainType(x, y, tileID, -1, 1, 1 )
+                        SetTerrainType(x, y, tileID, -1, 1, 1 )
 		
 		function addActionAbilsNormal()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -418,8 +418,8 @@ package Executer
 	int LEVER_ABIL = 'A067'
 	int PRESSURE_ABIL = 'A066'
 	
-	int KILLER_TRIGGER_ABIL
-	int ESCAPER_TRIGGER_ABIL
+	int KILLER_TRIGGER_ABIL = 102
+	int ESCAPER_TRIGGER_ABIL = 210
 	
 	int TERRAIN_WALKABLE_ABIL = 'A015'
 	int TERRAIN_UNWALKABLE_ABIL = 'A016'
