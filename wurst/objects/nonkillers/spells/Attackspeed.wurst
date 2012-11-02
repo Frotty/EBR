@@ -1,0 +1,17 @@
+package Attackspeed
+
+public constant integer ATTACK_SPEED_RATE_ID = 'A023'
+public constant integer ATTACK_SPEED_DUMMY_ID = 'A024'
+constant integer INCREASE = 'A044'
+constant integer DECREASE = 'A043'
+
+public function onAttackspeedCast()
+	var i = GetSpellAbilityId()
+	var u = GetSpellAbilityUnit()
+	switch i
+		case INCREASE
+			SetUnitAbilityLevel(u, ATTACK_SPEED_RATE_ID, GetUnitAbilityLevel(u, ATTACK_SPEED_RATE_ID) + 1 )
+			SetUnitAbilityLevel(u, ATTACK_SPEED_DUMMY_ID, GetUnitAbilityLevel(u, ATTACK_SPEED_RATE_ID) )
+		case DECREASE
+			SetUnitAbilityLevel(u, ATTACK_SPEED_RATE_ID, GetUnitAbilityLevel(u, ATTACK_SPEED_RATE_ID) - 1 )
+			SetUnitAbilityLevel(u, ATTACK_SPEED_DUMMY_ID, GetUnitAbilityLevel(u, ATTACK_SPEED_RATE_ID) )

@@ -1,5 +1,6 @@
 package Bomber
 import SetupObject
+import Attackspeed
 
 constant int ID = 'h00Y'
 
