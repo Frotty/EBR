@@ -43,7 +43,7 @@ package Executer
 		GLAIVE
 
     public class Executer extends StaticBaseObject
-        boolean canKillerTrigger = true
+        boolean canKillerTrigger = false
         rect eventRect // only for pressureplate
         Emode eventMode
         Amode actionMode
@@ -56,7 +56,7 @@ package Executer
         unit unitToMove // for unitMover
         ActionUnit actionUnit // only for UnitCreator Executer 
         string moveOrderString // only for unitMover
-        
+        boolean disabled = false // only for oneshot, so you can re-activate
         destructable dummy // model for pressure plate, and lever
         
         construct( vec2 pos, player owner)
@@ -76,8 +76,9 @@ package Executer
 	        		case Emode.REPEATING
 	        			obj.findAction()
 	        		case Emode.ONESHOT
-	        			obj.findAction()
-	        			destroy obj
+	        			if not obj.disabled
+	        				obj.findAction()
+	        				obj.disable()
 	        		case Emode.LEVER
 	        			if obj.ON
 	                        obj.negativeAction()
@@ -294,9 +295,19 @@ package Executer
         	TriggerRegisterEnterRegion(executerUnitEnter,eventRegion, null)
         	executerUnitEnter.addAction(function onEnterEvent)
         
+        function disable()
+        	SetUnitVertexColor(actor, 44,44,44,255)
+        	disabled = true
+        	UnitAddAbility(actor, REACTIVATE_ABIL)
+        	createTTExForPlayer(position, vec2(0,0.05), "Deactivated", 10,  2., colorRGBA(50,50,50,0), owner )
+        
         ondestroy
         	actor.remove()
-        	RemoveRect(eventRect)
+        	if eventMode == Emode.PRESSUREPLATE
+                RemoveDestructable(dummy)
+                RemoveRect(eventRect)
+        	else if eventMode == Emode.LEVER
+                RemoveDestructable(dummy)
         
 		function canTrigger(Entity e) returns boolean
 			if (not canKillerTrigger and e instanceof Escaper)
@@ -334,6 +345,11 @@ package Executer
 	        		obj.dummy = CreateDestructable( PLATE_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
 	        		SetDestructableAnimation(obj.dummy, "stand alternate")
 	        		
+	        	case REACTIVATE_ABIL
+	        		obj.disabled = false
+	        		SetUnitVertexColor(obj.actor, 0,128,0,255)
+        			UnitRemoveAbility(obj.actor, REACTIVATE_ABIL)
+	        	
 	        	case KILLER_TRIGGER_ABIL
 	        		obj.canKillerTrigger = true
 	        	case ESCAPER_TRIGGER_ABIL
@@ -382,7 +398,6 @@ package Executer
 	        	case MOVE_UNIT_DIRECT_ABIL
 	        		obj.moveOrderString = "move"
 	        		if obj.actionMode == null
-	                    print("BANG")
 	        			obj.actionMode = Amode.MOVEUNIT
 	        			obj.removeActionAbils()
 	        			obj.addMoveUnitAdjuster()
@@ -417,6 +432,8 @@ package Executer
 	int REPEATING_ABIL = 'A069'
 	int LEVER_ABIL = 'A067'
 	int PRESSURE_ABIL = 'A066'
+	
+	int REACTIVATE_ABIL = 'A05Z'
 	
 	int KILLER_TRIGGER_ABIL = 102
 	int ESCAPER_TRIGGER_ABIL = 210

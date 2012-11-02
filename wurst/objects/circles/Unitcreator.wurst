@@ -40,7 +40,7 @@ package Unitcreator
 					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), COLL_SIZE_SK)
         			IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'u00A'
-					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, 'u00F', X, Y, angle ) , CreateUnit(obj.owner, 'u00F', X, Y, angle ), COLL_SIZE_GLAIVE)
+					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, 'u00A', X, Y, angle ) , CreateUnit(obj.owner, 'u00A', X, Y, angle ), COLL_SIZE_GLAIVE)
         			IssuePointOrder(ek.setup, "move" , rX,rY)
             	case 'h001'
 					ek = new EscaperKiller(vec3(X, Y, 0), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_BK)
