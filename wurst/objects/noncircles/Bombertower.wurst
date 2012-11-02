@@ -33,7 +33,7 @@ package Bombertower
 		static function onCast() returns boolean
 			var id = GetSpellAbilityId()
 			var obj = GetTriggerUnit().getUserData() castTo Bombertower
-			onAttackspeedCast()
+			onAttackspeedCast(id, obj.dummy)
 			return false
 	
 	function checkAttackOrder()
