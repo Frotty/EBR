@@ -1,15 +1,17 @@
 package PlayerData
     import MultiboardClass
     import GameConstants
-    import LinkedListModule
     import Escaper
     import Builder
+    import LinkedList
     
     public int playercount = 0
-
+    
+    trigger leaveTrig
+	
+	public LinkedList<PlayerData> players = new LinkedList<PlayerData>()
 
     public class PlayerData //just the player's (constant) stuff
-    	use LinkedListModule
     	
     	int id
         int gameId
@@ -34,7 +36,7 @@ package PlayerData
             print("1")
             id = GetPlayerId(p)
             print("2")
-            gameId = PlayerData.size - 1
+            gameId = players.size
             name = GetPlayerName(p)
             mbname = name
             print("3")
@@ -48,7 +50,8 @@ package PlayerData
                     break
 			print("5")
             mbname = colorcode[ id ] + mbname
-            
+            print("MBNAME: " + mbname)
+            players.add(this)
             
 		function updateRank ()
             int i = 0
@@ -71,8 +74,21 @@ package PlayerData
         function setMbIcon(int typ)
 			playerboard.updateIcon(gameId+1, 0, mbPic[typ])
 			
+		ondestroy
+			DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., colorcode[p.getId()] + p.getName() + "|r |cffFFCC33has left the game!") 
+			PlaySoundBJ( gg_snd_QuestFailed )
+			destroy escaper
+			playerboard.removeRow(gameId+1)
+			if gameId < playercount
+				for p2 in players
+					if p2.gameId > gameId
+						p2.gameId--
+			if id > 7
+				destroy builder
+			playercount--
+			
 	public function isPlayerEscaper(player p) returns boolean //not sure if its proper
-		if GetPlayerId(p) < 7
+		if GetPlayerId(p) < 8
 			return true
 		return false
 		
@@ -82,40 +98,25 @@ package PlayerData
     function initMB()
         playerboard = new Board(playercount+1,3)
         
-		PlayerData pd = PlayerData.first
-		
-        int i = 1
-		while pd != null
+        for i = 0 to players.size
             playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
             playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
             playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
-            pd.setMBRow(i)
-            i++
-            pd = pd.next
+
+		for pd in players
+            pd.setMBRow(pd.gameId+1)
+
+
             
         playerboard.board.getItem(0,0).setStyle(true,false).setWidth(0.1)
         playerboard.board.getItem(0,2).setWidth(0.05)
-        playerboard.updateItem(0,0,"Player",null)
+        playerboard.setNewItem(0,0,"Player",null)
         playerboard.board.getItem(0,1).setStyle(false,true).setWidth(0.015)
-        playerboard.updateItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
-        playerboard.updateItem(0,2,"Rank",null)
+        playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
+        playerboard.setNewItem(0,2,"Rank",null)
         playerboard.board.display(true)
-                
         
-    init
-        int r = 0
-        for i = 0 to 11
-            print(i.toString())
-            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
-                pData[i] = new PlayerData(Player(i))
-                r++
-        playercount = r
-        TimerStart(CreateTimer(), 1., false,function initMB)
-        TimerStart(CreateTimer(), 1., true, function setTime)
-       
-	int minutes = 0
-	int seconds = 0
-	
+        
 	function setTime()
 		seconds++
 		string secs = "|cffffffff"
@@ -140,6 +141,33 @@ package PlayerData
 		if seconds >= 60
 			seconds = 0
 			minutes++
+			     
+    function playerLeft()
+        var p = GetTriggerPlayer()
+        var pd = pData[p.getId()]
+        players.remove(pd)
+        destroy pd
+
+
+        
+    init
+    	leaveTrig = CreateTrigger()
+    	leaveTrig.addAction(function playerLeft)
+        int r = 0
+        for i = 0 to 11
+            print(i.toString())
+            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
+                pData[i] = new PlayerData(Player(i))
+                leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
+                r++
+        playercount = r
+        TimerStart(CreateTimer(), 1., false,function initMB)
+        TimerStart(CreateTimer(), 1., true, function setTime)
+       
+	int minutes = 0
+	int seconds = 0
+	
+
 		
 		
 endpackage 

@@ -75,7 +75,10 @@ public class Builder extends UnitEntity
 		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
 		            wasMenu = true
 				case KEY_SPELL_ID
-					new Key(vec2(ox,oy), builder.owner)
+					if getRegionData(ox,oy).isOwner(builder.owner.getId())
+						new Key(vec2(ox,oy), builder.owner)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 					
 					
 			if wasMenu
@@ -97,14 +100,12 @@ public function init_Builder()
 	itemTrigger = CreateTrigger()
 	itemTrigger.addAction(function Builder.claimRegion)
 	
-	PlayerData pd = PlayerData.first
-	while pd != null
+	for pd in players
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
 			UnitAddItemById(pd.builder.actor,'I000')
             UnitAddItemById(pd.builder.actor,'I001')
 			UnitAddItemById(pd.builder.actor,'I002')
             UnitAddItemById(pd.builder.actor,'I003')	
-		pd = pd.next
 	
 	

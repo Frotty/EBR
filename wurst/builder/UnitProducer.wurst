@@ -69,10 +69,8 @@ package UnitProducer
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function UnitProducer.spawnUnit)
 		
-		PlayerData pd = PlayerData.first
-		while pd != null
+		for pd in players
 			if pd.id > 7
 				new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
-			pd = pd.next
 
 endpackage

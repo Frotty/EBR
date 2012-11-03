@@ -86,7 +86,8 @@ package Escaper
 			// print("tile " + currentRegion.unwalkableTile.toString())
 			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
 				onUnwalkable = true
-				kill()
+				if alive
+					kill()
 			else
 				onUnwalkable = false
 				
@@ -95,8 +96,11 @@ package Escaper
 
 				
 		function kill()
-			if owner.getId() < 8
-				getTimer().start(.1, function Escaper.revive).setData(this castTo int)
+			print("died")
+			if owner.getId() >= 8
+				print("is builder")
+				getTimer().setData(this castTo int).start(.1, function Escaper.revive)
+				print("started")
 			else
 				getTimer().start(3., function Escaper.revive).setData(this castTo int)
 			actor.kill()
@@ -128,6 +132,7 @@ package Escaper
             SetUnitFlyHeight( actor, position.z - terrainZ, .0 )
             
 		static function revive()
+			print("rev")
 			var t = GetExpiredTimer()
 			Escaper e = t.getData() castTo Escaper
 			ReviveHero(e.actor, currentRevivepoint.position.x, currentRevivepoint.position.y, false)

@@ -7,7 +7,7 @@ package Revivepoint
 
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'
-    boolean isFirst = true
+    boolean isFirst = false
     
     public RevivePoint currentRevivepoint
 
@@ -24,7 +24,7 @@ package Revivepoint
 	        Entity e = u.getUserData() castTo Entity
 	        thistype obj = source.getUserData() castTo thistype
 	        
-            if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+            if not obj.reached and e instanceof Escaper // and isPlayerEscaper(GetOwningPlayer(u))
                 if not isFirst
                 	PlaySoundBJ(gg_snd_Rescue)
                 	DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
@@ -33,6 +33,8 @@ package Revivepoint
                 SetUnitColor( source, PLAYER_COLOR_BLUE )
                 obj.reached = true
                 currentRevivepoint = obj
+                for Escaper es in escapers
+                    es.setNewPos(obj.position)
 
 
 		static function filter() returns boolean

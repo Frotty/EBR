@@ -1,0 +1,23 @@
+package Invisible
+import BaseObject
+import Entity
+
+constant int VIS_ID = 'A04F'
+constant int INVIS_ID = 'A005'
+
+trigger castTrig
+
+function changeVisibility()
+	var id = GetSpellAbilityId()
+	var caster = GetSpellAbilityUnit()
+	if id == VIS_ID
+		caster.removeAbility('Agho').addAbility('Aeth')
+		caster.removeAbility(VIS_ID).addAbility(INVIS_ID)
+	else if id == INVIS_ID
+		caster.removeAbility('Aeth').addAbility('Agho')
+		caster.removeAbility(INVIS_ID).addAbility(VIS_ID)	
+
+init
+	castTrig = CreateTrigger()
+	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	castTrig.addAction(function changeVisibility)

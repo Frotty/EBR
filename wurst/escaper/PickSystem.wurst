@@ -18,8 +18,7 @@ constant int BLINK_ID = 'A001'
 
 public function startChoose()
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
-	PlayerData pd = PlayerData.first
-	while pd != null
+	for pd in players
 		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
 	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
@@ -27,7 +26,7 @@ public function startChoose()
 	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
 	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
 	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
-	    pd = pd.next
+
 	EnablePreSelect( true, false )
 	getTimer().start(.60, function allow )
 	
@@ -40,11 +39,7 @@ function keyleft()
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
-	PlayerData pd = PlayerData.first
-	while pd != null
-		if pd.p == p
-			break
-		pd = pd.next
+	PlayerData pd = pData[p.getId()]
 		
 	if not pd.picked
 		if id <= 1
@@ -70,11 +65,7 @@ function keyright()
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
-	PlayerData pd = PlayerData.first
-	while pd != null
-		if pd.p == p
-			break
-		pd = pd.next
+	PlayerData pd = pData[p.getId()]
 		
 	if not pd.picked
 		print("currentView " + id.toString() )
@@ -100,11 +91,7 @@ function keyright()
 	
 function keypick()
 	var p = GetTriggerPlayer()
-	PlayerData pd = PlayerData.first
-	while pd != null
-		if pd.p == p
-			break
-		pd = pd.next
+	PlayerData pd = pData[p.getId()]
 		
 	if not pd.picked
 		pd.picked = true
@@ -145,14 +132,12 @@ public function init_Choose()
     heroinfos[1] = "|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat."
     heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can turn invisible."
 
-    PlayerData pd = PlayerData.first 
-    while pd != null
+    for pd in players
         currentView[pd.id] = 1
         TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
         TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)
         TriggerRegisterPlayerEvent(pick, pd.p, EVENT_PLAYER_ARROW_DOWN_DOWN)
         print( GetPlayerName(pd.p) + " registered" )
-        pd = pd.next
 
 
     TriggerAddAction( left, function keyleft )

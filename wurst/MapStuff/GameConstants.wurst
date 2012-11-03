@@ -79,7 +79,7 @@ package GameConstants
 		names   [13] = "kleinerhauck"
 		tags    [13] = "|cff9C94E6[Tester]"
 		names	[14] = "kari0003"
-		tags	[14] = "|cffFFE87C[Lightbringer]"
+		tags	[14] = "|cffFFE87C[Adept]"
 
 		colorcode[ 0 ] = "|cffFF0202" // red
 		colorcode[ 1 ] = "|cff0041FF" // blue
