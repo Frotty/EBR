@@ -18,6 +18,7 @@ import Tree
 import Texter
 import Booster
 import Obstacle
+import Bombertower
 
 
 constant int dummy = 'h00G'
@@ -61,6 +62,8 @@ function callback()
 	    		new RevivePoint(vec2(x,y), u.getOwner())
 	    	case buildorders[3]
 	    		new Texter(vec2(x,y), u.getOwner())
+	    	case buildorders[5]
+	    		new Bombertower(vec2(x,y), u.getOwner())
 	    	case buildorders[6]
 	    		new Vortex(vec2(x,y), u.getOwner())
 	    	case buildorders[8]
@@ -144,7 +147,7 @@ init
     buildorders[2] = 'n000' // Revivepoint
     buildorders[3] = 'n01B' // Texter
     buildorders[4] = 'n001' 
-    buildorders[5] = 'h019'
+    buildorders[5] = 'h019' // BomberTower
     buildorders[6] = 'n012' // Vortex
     buildorders[7] = 'h009'
     buildorders[8] = 'n01D'  // Executer

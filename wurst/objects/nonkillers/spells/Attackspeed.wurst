@@ -1,0 +1,15 @@
+package Attackspeed
+
+public constant integer ATTACK_SPEED_RATE_ID = 'A023'
+public constant integer ATTACK_SPEED_DUMMY_ID = 'A024'
+constant integer INCREASE = 'A044'
+constant integer DECREASE = 'A043'
+
+public function onAttackspeedCast(int spellid, unit actor)
+	switch spellid
+		case INCREASE
+			SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) + 1 )
+			SetUnitAbilityLevel(actor, ATTACK_SPEED_DUMMY_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) )
+		case DECREASE
+			SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) - 1 )
+			SetUnitAbilityLevel(actor, ATTACK_SPEED_DUMMY_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) )
