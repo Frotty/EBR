@@ -28,7 +28,6 @@ public class SetupBox extends Entity
 		
 		
 	static function onCast()
-		print("cast")
 		var id = GetSpellAbilityId()
 		var box = GetSpellAbilityUnit().getUserData() castTo SetupBox
 		switch id
@@ -51,19 +50,19 @@ public class SetupBox extends Entity
 					box.rdata.poisonDmg += .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
 			case PD_ID
-				if box.rdata.poisonDmg <= MAX_DOT_DMG
+				if box.rdata.poisonDmg <= .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Minimum" )
 				else
 					box.rdata.poisonDmg -= .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
 			case LI_ID
-				if box.rdata.lavaDmg >= MAX_DOT_DMG
+				if box.rdata.lavaDmg >= -MAX_DOT_DMG
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Maximum" )
 				else
 					box.rdata.lavaDmg += .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
 			case LD_ID
-				if box.rdata.lavaDmg <= MAX_DOT_DMG
+				if box.rdata.lavaDmg <= .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Minimum" )
 				else
 					box.rdata.lavaDmg -= .1
