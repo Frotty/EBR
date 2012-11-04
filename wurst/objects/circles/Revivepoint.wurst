@@ -4,6 +4,7 @@ package Revivepoint
     import PlayerData
     import Escaper
     import GameConstants
+    import RegionData
 
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'
@@ -33,8 +34,10 @@ package Revivepoint
                 SetUnitColor( source, PLAYER_COLOR_BLUE )
                 obj.reached = true
                 currentRevivepoint = obj
+                var rdata = getRegionData(obj.position.x, obj.position.y)
                 for Escaper es in escapers
                     es.setNewPos(obj.position)
+                    es.currentRegion = rdata
 
 
 		static function filter() returns boolean

@@ -1,0 +1,20 @@
+package UnitRemover
+import BaseObject
+import EventHandling
+import SetupObject
+
+constant int ID = 'n003'
+
+public class UnitRemover extends StaticBaseObject
+
+	construct( vec2 pos, player owner)
+        super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0), 64., function UnitRemover.removeUnit )
+
+
+	static function removeUnit()
+		var u = GetTriggerUnit()
+		var data = u.getUserData()
+		if data > 0
+			var edata = data castTo Entity
+			if edata instanceof DynamicSetupObject
+				edata.terminate()

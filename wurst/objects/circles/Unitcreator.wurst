@@ -1,4 +1,4 @@
-package Unitcreator
+package UnitCreator
     import BaseObject
     import Terrain
     import EscaperKiller
@@ -6,24 +6,24 @@ package Unitcreator
     import TimerUtils
     import RegionData
 	import EventHandling
+
     
 	constant int 	UNITCREATOR_ID   = 'n006'
 
 
-    public class Unitcreator extends StaticBaseObject
+    public class UnitCreator extends StaticBaseObject
         real interval = 5.
         boolean ON = false
         int spawnUnitType = 'BIGK'
         timer spawn
         
         construct( vec2 pos, player owner)
-        	super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., function Unitcreator.create )
-			actor.registerCastEvent(Condition(function Unitcreator.onCast))
-			actor.setUserData(this castTo int)
+        	super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
+			actor.registerCastEvent(Condition(function UnitCreator.onCast))
         	spawn = getTimer()
         	
         static function create()
-            var obj = GetExpiredTimer().getData() castTo Unitcreator
+            var obj = GetExpiredTimer().getData() castTo UnitCreator
             var rX = obj.getRallyX()
             var rY = obj.getRallyY()
             var X = obj.actor.getX()
@@ -55,7 +55,7 @@ package Unitcreator
             
         static function onCast() returns boolean
             var id = GetSpellAbilityId()
-			var obj = GetTriggerUnit().getUserData() castTo Unitcreator
+			var obj = GetTriggerUnit().getUserData() castTo UnitCreator
             
             switch id 
             	case INCREASE_INTERVAL_ABIL

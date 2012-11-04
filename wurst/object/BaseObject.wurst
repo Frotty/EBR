@@ -5,6 +5,7 @@ package BaseObject
     import Trigger
     
 
+	public code CODE_NULL = null
     
     trigger rallyTrigger
     

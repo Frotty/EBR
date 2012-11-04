@@ -107,6 +107,10 @@ package Entity
 			
 		function setNewPos(vec3 pos)
 			position = pos
+			actor.setPos(pos.x, pos.y).setFlyHeight(pos.z, 0)
+		
+		function setNewXYZ(vec3 pos)
+			position = pos
 			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
 			
 		function setNewActor(unit u)

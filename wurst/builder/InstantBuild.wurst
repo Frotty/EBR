@@ -19,9 +19,8 @@ import Texter
 import Booster
 import Obstacle
 import Bombertower
+import UnitRemover
 
-
-constant int dummy = 'h00G'
         
 real x
 real y
@@ -70,6 +69,8 @@ function callback()
 	        	new Executer(vec2(x,y), u.getOwner())
 	        case buildorders[11]
 	        	new Booster(vec2(x,y), u.getOwner())
+	        case buildorders[12]
+	        	new UnitRemover(vec2(x,y), u.getOwner())
 	        case buildorders[13]
 	        	new Waypoint(vec2(x,y), u.getOwner())
 	        case buildorders[14]
@@ -154,7 +155,7 @@ init
     buildorders[9] = 'n01E'
     buildorders[10] = 'n00F'
     buildorders[11] = 'n00J' // Booster
-    buildorders[12] = 'n003'
+    buildorders[12] = 'n003' // UnitRemover
     buildorders[13] = 'n004' // Waypoint
     buildorders[14] = 'n00C' // Teleporter
     buildorders[15] = 'h002' // Door

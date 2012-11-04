@@ -16,6 +16,10 @@ package Escaper
 	constant real COLL_RADIUS = 32.
 	constant real SLIDE_ADD = 1.8
 	
+	constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
+    constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+
+	
 	real time = 0.
 	
 	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
@@ -25,6 +29,11 @@ package Escaper
 		boolean flying = false
 		boolean sliding = false
 		boolean onUnwalkable = false
+		boolean poisoned = false
+		boolean onLava = false
+		
+		effect lavaEffect
+		effect poisonEffect
 		
 		vec3 slideVelocity = vec3(0,0,0)
 		vec3 trackVelocity = vec3(0,0,0)
@@ -83,17 +92,54 @@ package Escaper
 
 				
 			// ebr (un)walkable
-			// print("tile " + currentRegion.unwalkableTile.toString())
 			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
 				onUnwalkable = true
+				setLava(false)
+				setPoison(false)
 				if alive
 					kill()
-			else
+			else 
 				onUnwalkable = false
-				
+				if ttype == 1147958883 and not onLava
+					setLava(true)
+				else if ttype == POISON
+					setLava(false)
+					if not poisoned
+						setPoison(true)
+				else
+					setLava(false)
+
+					
+			if onLava
+				var hp = actor.getHP()
+				if hp > .405
+					actor.setHP(hp-currentRegion.lavaDmg)
+				else
+					kill()
+			if poisoned
+				var hp2 = actor.getHP()
+				if hp2 > .405
+					actor.setHP(hp2-currentRegion.poisonDmg)
+				else
+					kill()
 
 			velocity *= 0.95
 
+		function setLava(boolean add)
+			if add and not onLava
+				lavaEffect = AddSpecialEffectTarget(LAVA_EFFECT, actor, "origin")
+				onLava = true
+			else if not add and onLava
+				lavaEffect.destr()
+				onLava = false
+				
+		function setPoison(boolean add)
+			if add and not poisoned
+				poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, actor, "chest")
+				poisoned = true
+			else if not add and poisoned
+				poisonEffect.destr()
+				poisoned = false
 				
 		function kill()
 			print("died")
@@ -105,6 +151,9 @@ package Escaper
 				getTimer().start(3., function Escaper.revive).setData(this castTo int)
 			actor.kill()
 			alive = false
+			setPoison(false)
+			setLava(false)
+			flying = false
 		
 		override function update()
 			terrainZ = getTerrainZ( position.x, position.y )
