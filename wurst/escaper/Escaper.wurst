@@ -10,6 +10,7 @@ package Escaper
 	import Key
 	import Revivepoint
 	import LinkedList
+	import EscaperClasses
 	
 	public Table escaperTable = new Table()
 	
@@ -135,10 +136,20 @@ package Escaper
 			print("rev")
 			var t = GetExpiredTimer()
 			Escaper e = t.getData() castTo Escaper
-			ReviveHero(e.actor, currentRevivepoint.position.x, currentRevivepoint.position.y, false)
+			var revX = currentRevivepoint.position.x
+			var revY = currentRevivepoint.position.y
+			if e instanceof Holy_Escaper
+				var he = e castTo Holy_Escaper
+				if he.revivetomb != null
+					revX = he.revivetomb.getX()
+					revY = he.revivetomb.getY()
+					if e.owner.getId() < 8
+						RemoveUnit(he.revivetomb)
+						he.revivetomb = null
+			ReviveHero(e.actor, revX, revY, false)
 			if e.owner.getId() < 8
 				if (GetLocalPlayer() == e.owner)
-                    PanCameraToTimed(currentRevivepoint.position.x, currentRevivepoint.position.y, 0)
+                    PanCameraToTimed(revX, revY, 0)
                     ClearSelection()
                     SelectUnit(e.actor, true)
 				

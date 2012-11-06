@@ -1,0 +1,25 @@
+package Reincarnation
+import BaseObject
+import Escaper
+import EscaperClasses
+
+constant int REINCARNATION_ID = 'A056'
+constant int TOMB_DUMMY_ID = 'hphx'
+
+function castReincarnation()
+	int id = GetSpellAbilityId()
+	var escaper = GetSpellAbilityUnit().getUserData() castTo Entity
+	if id == REINCARNATION_ID
+		if escaper instanceof Escaper
+			var e = escaper castTo Holy_Escaper
+			if e.revivetomb != null
+				e.revivetomb.remove()
+			e.revivetomb = CreateUnit(escaper.owner, TOMB_DUMMY_ID, escaper.position.x, escaper.position.y, 0.)
+
+
+
+public function init_Reincarnation()
+	trigger castTrig = CreateTrigger()
+	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	castTrig.addAction(function castReincarnation)
+

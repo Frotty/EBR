@@ -286,6 +286,8 @@ package Executer
 			UnitRemoveAbility(actor,TERRAIN_UNICE_ABIL)
 			UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 			
+			UnitRemoveAbility(obj.actor, KILLER_TRIGGER_ABIL)
+			
 		function addTerrainAdjuster()
 			UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
 			UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)

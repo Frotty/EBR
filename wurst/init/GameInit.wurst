@@ -12,6 +12,7 @@ package GameInit
     import Trap
     import Texter
     import Bombertower
+    import Reincarnation
     
     function initGame()
 
@@ -30,6 +31,7 @@ package GameInit
         init_Door()
         init_Texter()
         init_Bombertower()
+        init_Reincarnation()
         if init_EntityManagement()
             print("Finished Init - Game started")
 			startChoose()

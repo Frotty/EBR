@@ -1,6 +1,7 @@
 package PickSystem
 import PlayerData
 import Escaper
+import EscaperClasses
 
 unit array pickheros
 int array herotypes
@@ -95,7 +96,13 @@ function keypick()
 		
 	if not pd.picked
 		pd.picked = true
-        pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[currentView[pd.id]-1]) )
+		switch currentView[pd.id]-1
+			case 0
+				pd.escaper = new Holy_Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[0]) )
+			case 1
+        		pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[1]) )
+			case 2
+        		pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[2]) )
         pd.setMbIcon(currentView[pd.id]-1)
         if pd.id > 7
             UnitAddAbility( pd.escaper.actor, BLINK_ID )
