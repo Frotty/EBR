@@ -72,6 +72,8 @@ public class Trap extends StaticBaseObject
 				dc.castOnTarget(e.actor)
 			case ABIL.SHAKE
 				setCameraNoiseTimed(owner, value, 1000, duration)
+			case ABIL.POISON
+				skip
 			case ABIL.SPEED
 				skip
 			case ABIL.KNOCK

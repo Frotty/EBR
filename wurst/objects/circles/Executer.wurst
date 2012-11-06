@@ -30,6 +30,7 @@ package Executer
 		NONE
 		OPENDOOR
 		CLOSEDOOR
+		TOGGLEDOOR
 		CREATEUNIT
 		MOVEUNIT
 		CHANGETERRAIN
@@ -44,6 +45,7 @@ package Executer
 
     public class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
+        boolean canEscaperTrigger = true
         rect eventRect // only for pressureplate
         Emode eventMode
         Amode actionMode
@@ -135,6 +137,15 @@ package Executer
                         DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
                     else
             			closingdoor.closeDoor()
+            	case Amode.TOGGLEDOOR
+	        		Door togglingdoor = getRallyUnit().getUserData() castTo Door
+            		if togglingdoor == null
+                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+                    else
+                        if togglingdoor.opened
+            				togglingdoor.closeDoor()
+                        else
+            				togglingdoor.openDoor()
             	case Amode.OPENDOOR
             		Door openingdoor = getRallyUnit().getUserData() castTo Door
             		if openingdoor == null
@@ -164,10 +175,18 @@ package Executer
                         DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
             		else
             			closingdoor.openDoor()
+            	case Amode.TOGGLEDOOR
+	        		Door togglingdoor = getRallyUnit().getUserData() castTo Door
+            		if togglingdoor == null
+                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+                    else
+                        if togglingdoor.opened
+            				togglingdoor.closeDoor()
+                        else
+            				togglingdoor.openDoor()
             	case Amode.OPENDOOR
             		Door openingdoor = getRallyUnit().getUserData() castTo Door
             		if openingdoor == null
-                        print("Enums are noob, coz the first case triggers if my enum is null")
                         DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
             		else
             			openingdoor.closeDoor()
@@ -234,6 +253,7 @@ package Executer
 		function addActionAbilsNormal()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
 			UnitAddAbility(actor,DOOR_OPEN_ABIL)
+			UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
 			UnitAddAbility(actor,TERRAIN_WALKABLE_ABIL)
 			UnitAddAbility(actor,TERRAIN_ICE_ABIL)
 			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
@@ -244,6 +264,7 @@ package Executer
 		function addActionAbilsReversable()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
 			UnitAddAbility(actor,DOOR_OPEN_ABIL)
+			UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
 			UnitAddAbility(actor,TERRAIN_WALKABLE_ABIL)
 			UnitAddAbility(actor,TERRAIN_ICE_ABIL)
 			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
@@ -258,6 +279,7 @@ package Executer
 		function removeActionAbils()
 			UnitRemoveAbility(actor,DOOR_CLOSE_ABIL)
 			UnitRemoveAbility(actor,DOOR_OPEN_ABIL)
+			UnitRemoveAbility(actor,DOOR_TOGGLE_ABIL)
 			UnitRemoveAbility(actor,TERRAIN_WALKABLE_ABIL)
 			UnitRemoveAbility(actor,TERRAIN_ICE_ABIL)
 			UnitRemoveAbility(actor,TERRAIN_UNWALKABLE_ABIL)
@@ -278,8 +300,21 @@ package Executer
 			UnitAddAbility(actor, MOVE_UNIT_PATROL_ABIL)
 			UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
 				
-
-            		
+		function changeVis(boolean invis)
+			print("meh")
+			if eventMode == Emode.PRESSUREPLATE
+				if invis
+					RemoveDestructable(dummy)
+					print("meh meh")
+				else
+					dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
+	        		SetDestructableAnimation(dummy, "death")
+	        else if eventMode == Emode.LEVER
+				if invis
+					RemoveDestructable(dummy)
+				else
+					dummy = CreateDestructable( PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
+	        		SetDestructableAnimation(dummy, "stand alternate")
         
         function registerRect(real centerX, real centerY, real offset)
             //note: with movable circles, itll be necessary to move the rect too.
@@ -310,9 +345,9 @@ package Executer
                 RemoveDestructable(dummy)
         
 		function canTrigger(Entity e) returns boolean
-			if (not canKillerTrigger and e instanceof Escaper)
+			if (canEscaperTrigger and e instanceof Escaper)
 				return true
-			else if (canKillerTrigger and e instanceof EscaperKiller)
+			if (canKillerTrigger and e instanceof EscaperKiller)
 	    		return true
 	    	return false
 
@@ -349,17 +384,38 @@ package Executer
 	        		obj.disabled = false
 	        		SetUnitVertexColor(obj.actor, 0,128,0,255)
         			UnitRemoveAbility(obj.actor, REACTIVATE_ABIL)
+						
+				case VIS_ID
+					print("meh")
+					obj.changeVis(true)
+				case INVIS_ID
+					print("meh")
+					obj.changeVis(false)
 	        	
 	        	case KILLER_TRIGGER_ABIL
 	        		obj.canKillerTrigger = true
+	        		obj.canEscaperTrigger = false
+					UnitRemoveAbility(obj.actor, KILLER_TRIGGER_ABIL)
+					UnitAddAbility(obj.actor, BOTH_TRIGGER_ABIL)
 	        	case ESCAPER_TRIGGER_ABIL
-	        		obj.canKillerTrigger = false	        		
+	        		obj.canKillerTrigger = false
+	        		obj.canEscaperTrigger = true
+					UnitRemoveAbility(obj.actor, ESCAPER_TRIGGER_ABIL)
+					UnitAddAbility(obj.actor, KILLER_TRIGGER_ABIL)
+	        	case BOTH_TRIGGER_ABIL
+	        		obj.canKillerTrigger = true
+	        		obj.canEscaperTrigger = true
+					UnitRemoveAbility(obj.actor, BOTH_TRIGGER_ABIL)
+					UnitAddAbility(obj.actor, ESCAPER_TRIGGER_ABIL)
 	        	
 	        	case DOOR_OPEN_ABIL
 	        		obj.actionMode = Amode.OPENDOOR
 	        		obj.removeActionAbils()
 				case DOOR_CLOSE_ABIL
 	        		obj.actionMode = Amode.CLOSEDOOR
+	        		obj.removeActionAbils()
+				case DOOR_TOGGLE_ABIL
+	        		obj.actionMode = Amode.TOGGLEDOOR
 	        		obj.removeActionAbils()
 	        		
 	        	case TERRAIN_WALKABLE_ABIL
@@ -422,7 +478,7 @@ package Executer
 					if not obj.verticalTileSize < 1
 						obj.verticalTileSize --
 	        return false
-	
+
     int TANKID = 'h001'
 	int GLAIVEID = 'u00A'
 	int POINTERID 
@@ -435,8 +491,9 @@ package Executer
 	
 	int REACTIVATE_ABIL = 'A05Z'
 	
-	int KILLER_TRIGGER_ABIL = 102
-	int ESCAPER_TRIGGER_ABIL = 210
+	int KILLER_TRIGGER_ABIL = 'A00M'
+	int ESCAPER_TRIGGER_ABIL = 'A027'
+	int BOTH_TRIGGER_ABIL = 'A05I'
 	
 	int TERRAIN_WALKABLE_ABIL = 'A015'
 	int TERRAIN_UNWALKABLE_ABIL = 'A016'
@@ -450,14 +507,19 @@ package Executer
 	
 	int DOOR_OPEN_ABIL = 'A018'
 	int DOOR_CLOSE_ABIL = 'A01N'
+	int DOOR_TOGGLE_ABIL = 'A057'
 	
 	int MOVE_UNIT_DIRECT_ABIL = 'A04R'
 	int MOVE_UNIT_PATROL_ABIL = 'A064'
 	int MOVE_UNIT_STOP_ABIL = 'A065'
 	int MOVE_UNIT_SELECT_ABIL = 'A06A'
 	
+	constant int VIS_ID = 'A04F'
+	constant int INVIS_ID = 'A005'	
+	
 	trigger executerUnitLeave = CreateTrigger()
 	trigger executerUnitEnter = CreateTrigger()
+	
 	
     
     public function init_Executer()
