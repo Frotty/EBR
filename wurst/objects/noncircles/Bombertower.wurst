@@ -24,9 +24,6 @@ package Bombertower
         	dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
             dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
             dummy.addAbility('Aloc').removeAbility('Aloc')
-            dummy.addAbility(ATTACK_SPEED_DUMMY_ID)
-			SetUnitAbilityLevel(dummy, ATTACK_SPEED_DUMMY_ID, 10)
-			SetUnitAbilityLevel(dummy, ATTACK_SPEED_RATE_ID, 10)
             SetUnitPathing(dummy, true)
             print("Were building it up, to burn it back down!!!")
         	

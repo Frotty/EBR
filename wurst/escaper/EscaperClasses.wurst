@@ -1,0 +1,9 @@
+package EscaperClasses
+
+import Escaper
+
+public class Holy_Escaper extends Escaper
+	unit revivetomb
+
+	construct( vec3 pos, player owner, int typ )
+		super( pos, owner, typ )
