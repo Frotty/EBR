@@ -20,9 +20,8 @@ package EscaperKiller
             	var es = ent castTo Escaper
             	es.kill() 
         
-        construct( vec3 pos, unit u, unit setup, real radius )
-        	super( pos, u, setup, radius, function EscaperKiller.onInRangeEvent ) 
-
+        construct( unit u, unit setup, real radius )
+        	super( vec3(setup.getX(), setup.getY(), 0), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
 
 endpackage

@@ -58,6 +58,8 @@ package SetupObject
             setup.setXY(pos.x, pos.y)
 		
 		override function update()
+			position = setup.getPos().toVec3()
+			
         override function onGround()
         override function inAir()
         

@@ -22,7 +22,6 @@ package GameInit
     	VolumeGroupReset()
         EndThematicMusic()
         init_TerrainModder()
-        init_Executer()
         init_UnitProducer()
         init_Regions()
         init_Choose()

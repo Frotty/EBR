@@ -215,17 +215,18 @@ package Executer
 			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
-						u = CreateUnit(owner, data.smallKillerId,rX, rY, 0.)
+						new EscaperKiller(CreateUnit(owner, data.smallKillerId, getRallyX(), getRallyY(), 0. ), CreateUnit(owner, data.smallKillerId, getRallyX(), getRallyY(), 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGKILLER
-						u = CreateUnit(owner, data.bigKillerId,rX, rY, 0.)
+						new EscaperKiller(CreateUnit(owner, data.bigKillerId, getRallyX(), getRallyY(), 0. ), CreateUnit(owner, data.bigKillerId, getRallyX(), getRallyY(), 0.), COLL_SIZE_BK)
 					case ActionUnit.TANK
-						u = CreateUnit(owner, TANKID,rX, rY, 0.)
+						new EscaperKiller(CreateUnit(owner, 'h001', getRallyX(), getRallyY(), 0. ), CreateUnit(owner, 'h001', getRallyX(), getRallyY(), 0.), COLL_SIZE_TANK)
 					case ActionUnit.GLAIVE
-						u = CreateUnit(owner, GLAIVEID,rX, rY, 0.)
+						new EscaperKiller(CreateUnit(owner, 'u00A', getRallyX(), getRallyY(), 0. ), CreateUnit(owner, 'u00A', getRallyX(), getRallyY(), 0.), COLL_SIZE_GLAIVE)
 					case ActionUnit.POINTER
-						u = CreateUnit(owner, POINTERID,rX, rY, 0.)
+						// new Pointer
+						skip
 					default
-						print("Bug- ExecuterCreateUnit")
+						printError("Unitcreator - Wrong Unittype")
 			
 		function changeTerrain(boolean isAction)
 		
@@ -481,40 +482,38 @@ package Executer
 						obj.verticalTileSize --
 	        return false
 
-    int TANKID = 'h001'
-	int GLAIVEID = 'u00A'
-	int POINTERID 
+
 	
 	//ABILITY ID-s
-	int ONESHOT_ABIL = 'A068'
-	int REPEATING_ABIL = 'A069'
-	int LEVER_ABIL = 'A067'
-	int PRESSURE_ABIL = 'A066'
+	constant int ONESHOT_ABIL = 'A068'
+	constant int REPEATING_ABIL = 'A069'
+	constant int LEVER_ABIL = 'A067'
+	constant int PRESSURE_ABIL = 'A066'
 	
-	int REACTIVATE_ABIL = 'A05Z'
+	constant int REACTIVATE_ABIL = 'A05Z'
 	
-	int KILLER_TRIGGER_ABIL = 'A00M'
-	int ESCAPER_TRIGGER_ABIL = 'A027'
-	int BOTH_TRIGGER_ABIL = 'A05I'
+	constant int KILLER_TRIGGER_ABIL = 'A00M'
+	constant int ESCAPER_TRIGGER_ABIL = 'A027'
+	constant int BOTH_TRIGGER_ABIL = 'A05I'
 	
-	int TERRAIN_WALKABLE_ABIL = 'A015'
-	int TERRAIN_UNWALKABLE_ABIL = 'A016'
-	int TERRAIN_ICE_ABIL = 'A019'
-	int TERRAIN_UNICE_ABIL = 'A01A'
-	int TERRAIN_INCREASE_H_ABIL = 'A01K'
-	int TERRAIN_INCREASE_V_ABIL = 'A01M'
-	int TERRAIN_DECREASE_H_ABIL = 'A01U'
-	int TERRAIN_DECREASE_V_ABIL = 'A01T'
-	int TERRAIN_BOOK_ABIL = 'A06B'
+	constant int TERRAIN_WALKABLE_ABIL = 'A015'
+	constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
+	constant int TERRAIN_ICE_ABIL = 'A019'
+	constant int TERRAIN_UNICE_ABIL = 'A01A'
+	constant int TERRAIN_INCREASE_H_ABIL = 'A01K'
+	constant int TERRAIN_INCREASE_V_ABIL = 'A01M'
+	constant int TERRAIN_DECREASE_H_ABIL = 'A01U'
+	constant int TERRAIN_DECREASE_V_ABIL = 'A01T'
+	constant int TERRAIN_BOOK_ABIL = 'A06B'
 	
-	int DOOR_OPEN_ABIL = 'A018'
-	int DOOR_CLOSE_ABIL = 'A01N'
-	int DOOR_TOGGLE_ABIL = 'A057'
+	constant int DOOR_OPEN_ABIL = 'A018'
+	constant int DOOR_CLOSE_ABIL = 'A01N'
+	constant int DOOR_TOGGLE_ABIL = 'A01Q'
 	
-	int MOVE_UNIT_DIRECT_ABIL = 'A04R'
-	int MOVE_UNIT_PATROL_ABIL = 'A064'
-	int MOVE_UNIT_STOP_ABIL = 'A065'
-	int MOVE_UNIT_SELECT_ABIL = 'A06A'
+	constant int MOVE_UNIT_DIRECT_ABIL = 'A04R'
+	constant int MOVE_UNIT_PATROL_ABIL = 'A064'
+	constant int MOVE_UNIT_STOP_ABIL = 'A065'
+	constant int MOVE_UNIT_SELECT_ABIL = 'A06A'
 	
 	constant int VIS_ID = 'A04F'
 	constant int INVIS_ID = 'A005'	
@@ -522,10 +521,5 @@ package Executer
 	trigger executerUnitLeave = CreateTrigger()
 	trigger executerUnitEnter = CreateTrigger()
 	
-	
-    
-    public function init_Executer()
-        //t.registerAnyUnitEvent( Condition( function Teleporter.filter  ) 
-        skip
 
 endpackage
