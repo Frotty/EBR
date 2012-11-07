@@ -3,10 +3,12 @@ import ItemObject
 import GameConstants
 import Escaper
 import BuilderConstants
+import EventHandling
 
 int array keyIds
 
-trigger castTrig
+constant int DYN_ID = 'A00M'
+constant int STATIC_ID = 'A01O'
 
 public class Key extends ItemObject
 	COLOR col = COLOR.WHITE
@@ -16,7 +18,7 @@ public class Key extends ItemObject
 	
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
-		TriggerRegisterUnitEvent(castTrig, setup, EVENT_UNIT_SPELL_CAST)
+		setup.registerCastEvent(Condition(function Key.onCast))
 		
 	function recolor()
 		RemoveItem(actorItem)
@@ -35,6 +37,7 @@ public class Key extends ItemObject
 		setup.show()
 		actorItem = CreateItem( keyIds[col castTo int], position.x, position.y )
 		actorItem.setUserData(this castTo int)
+
 		
 		
 	override function update()
@@ -44,7 +47,7 @@ public class Key extends ItemObject
 				
 			
 		
-	static function onCast()
+	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var data = GetTriggerUnit().getUserData() castTo Key
 		switch id
@@ -66,7 +69,14 @@ public class Key extends ItemObject
 				data.col = COLOR.GREEN
 			case colorSpells[8]
 				data.col = COLOR.PINK
+			case DYN_ID
+				data.followWalkable = false
+				data.setup.removeAbility(DYN_ID).addAbility(STATIC_ID)
+			case STATIC_ID
+				data.followWalkable = true
+				data.setup.removeAbility(STATIC_ID).addAbility(DYN_ID)
 		data.recolor()
+		return false
 		
 	ondestroy
 		dropTrig.disable()
@@ -77,9 +87,7 @@ public class Key extends ItemObject
 		
 		
 init
-	castTrig = CreateTrigger()
-	castTrig.addAction(function Key.onCast)
-	
+
 	keyIds[0] = 'I009'
 	keyIds[1] = 'I00C'
 	keyIds[2] = 'I004'
