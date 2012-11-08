@@ -8,7 +8,7 @@ package Revivepoint
 
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'
-    boolean isFirst = false
+    boolean isFirst = true
     
     public RevivePoint currentRevivepoint
 
@@ -24,13 +24,20 @@ package Revivepoint
 	        
 	        Entity e = u.getUserData() castTo Entity
 	        thistype obj = source.getUserData() castTo thistype
+	        if isFirst and e instanceof Escaper
+				SetUnitColor( source, PLAYER_COLOR_BLUE )
+                obj.reached = true
+                currentRevivepoint = obj
+                var rdata1 = getRegionData(obj.position.x, obj.position.y)
+                for Escaper es1 in escapers
+                    es1.setNewPos(obj.position)
+                    es1.currentRegion = rdata1
+				isFirst = false
+				return
 	        
-            if not obj.reached and e instanceof Escaper // and isPlayerEscaper(GetOwningPlayer(u))
-                if not isFirst
-                	PlaySoundBJ(gg_snd_Rescue)
-                	DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
-                else
-                    isFirst = false
+            if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+            	PlaySoundBJ(gg_snd_Rescue)
+            	DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
                 SetUnitColor( source, PLAYER_COLOR_BLUE )
                 obj.reached = true
                 currentRevivepoint = obj
