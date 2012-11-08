@@ -97,6 +97,9 @@ package Unitcreator
 				case 'A04B' // Pointer
 					obj.spawnUnitType = 'h00Q'
 			return false
+			
+		ondestroy
+			spawn.release()
 
     int INCREASE_INTERVAL_ABIL = 'A01P'
     int DECREASE_INTERVAL_ABIL = 'A01R'

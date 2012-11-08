@@ -1,0 +1,65 @@
+package Startmazes
+import Revivepoint
+import Door
+import Obstacle
+import Key
+
+public function pickTwoMazes()
+
+
+public function initBaseObjects()
+	group g = CreateGroup()
+	GroupEnumUnitsOfType(g, "custom_n000", null )
+	for u in g
+		new RevivePoint(vec2(u.getX(), u.getY()), Player(11))
+		u.remove()
+		
+	g.clear()
+
+	GroupEnumUnitsOfType(g, "custom_h00C", null )
+	for u2 in g
+		new Door(vec2(u2.getX(), u2.getY()), Player(11))
+		u2.remove()
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n00S", null )
+	for u3 in g
+		new BigObstacle(vec2(u3.getX(), u3.getY()), Player(11))
+		u3.remove()
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n00R", null )
+	for u4 in g
+		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		u4.remove()
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n00X", null )
+	for u5 in g
+		new SmallObstacle(vec2(u5.getX(), u5.getY()), Player(11))
+		u5.remove()
+		
+	g.clear()
+	
+	
+	EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
+	
+	
+	
+	
+	
+function correctKeys()
+	item itm = GetEnumItem()
+	new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
+	itm.remove()
+	
+	
+	
+	
+	
+	
+	
+	

@@ -13,6 +13,7 @@ package GameInit
     import Texter
     import Bombertower
     import Reincarnation
+    import Startmazes
     
     function initGame()
 
@@ -31,6 +32,8 @@ package GameInit
         init_Texter()
         init_Bombertower()
         init_Reincarnation()
+        
+        initBaseObjects()
         if init_EntityManagement()
             print("Finished Init - Game started")
 			startChoose()

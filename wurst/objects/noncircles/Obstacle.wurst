@@ -43,6 +43,7 @@ package Obstacle
 
             setup = CreateUnit(owner, BIGOBSTACLE_ID, pos.x, pos.y, 0.)
             setup.setUserData( this castTo int )
+            inRangeTrig.registerUnitInRangeSource( setup, radius )
 			
         static function kill()
             unit source = GetTriggeringTrigger().getSource()
