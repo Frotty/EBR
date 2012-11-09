@@ -4,8 +4,10 @@ import Escaper
 import EventHandling
 import DummyCaster
 import Camera
+import GameConstants
 
 constant int TRAP_ID = 'n00I'
+constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
 string array SFX_STRINGS
 enum ABIL
 	KILL
@@ -19,7 +21,8 @@ public class Trap extends StaticBaseObject
 	int sfxid = 3
 	boolean onstep = true
 	real interval = 2.
-	timer traptimer
+	real timerreal = 0.2
+	//timer traptimer
 	ABIL a
 	
 	real duration //Shake,  Speed, Stun
@@ -29,8 +32,7 @@ public class Trap extends StaticBaseObject
 			super(pos.toVec3(), CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , 50., function onStep)
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
-			traptimer = getTimer()
-			// DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() )) Really :D ?
+			//traptimer = getTimer()
 			
 	static function onStep()
 		print("Trap step")
@@ -47,19 +49,29 @@ public class Trap extends StaticBaseObject
 	function canTrigger(Entity e) returns boolean
 		return false
 	
-	static function onTimedTrap() //periodic
+	override function update()
+		print(". . . "+timerreal.toString())
+		super.update()
+		if onstep != true
+			if timerreal <= 0.0
+				DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
+				GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), 50., null)
+				for unit u in ENUM_GROUP
+		            Entity e = u.getUserData() castTo Entity
+		            if e instanceof Escaper
+		                var escaper = e castTo Escaper
+		                doEffect(escaper)
+		        ENUM_GROUP.clear()
+		        timerreal = interval
+			else
+				timerreal -= ANIMATION_PERIOD
+				
+/*	static function onTimedTrap() //periodic
 		thistype obj = GetExpiredTimer().getData() castTo thistype
-		DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
-		GroupEnumUnitsInRange(ENUM_GROUP,obj.actor.getX(), obj.actor.getY(), 50., null)
-		for unit u in ENUM_GROUP
-            Entity e = u.getUserData() castTo Entity
-            if e instanceof Escaper
-                var escaper = e castTo Escaper
-                obj.doEffect(escaper)
-        ENUM_GROUP.clear()
+		
 		obj.traptimer.release()
         obj.traptimer.start(obj.interval, function onTimedTrap)
-			
+			*/
 	function doEffect(Escaper e)
 		print("Trap Effect")
 		switch a
@@ -73,7 +85,9 @@ public class Trap extends StaticBaseObject
 			case ABIL.SHAKE
 				setCameraNoiseTimed(owner, value, 1000, duration)
 			case ABIL.POISON
-				skip
+				if not e.poisoned
+					e.poisoned = true
+					e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
 			case ABIL.SPEED
 				skip
 			case ABIL.KNOCK
@@ -153,13 +167,15 @@ public class Trap extends StaticBaseObject
 	        		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 				else
 					obj.interval += 0.25
-					createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.value,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					obj.timerreal = obj.interval
 			case DECREASE_INTERVAL_ABIL
 	            if obj.interval < 0.75
 	        		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 				else
 					obj.interval -= 0.25
-					createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.value,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					obj.timerreal = obj.interval
+					createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 			
 			case INCREASE_VALUE_ABIL
 				switch obj.a
@@ -253,25 +269,22 @@ public class Trap extends StaticBaseObject
 			
 			case START_ABIL
 				obj.onstep = false
-				obj.traptimer.start(obj.interval, function onTimedTrap)
-				obj.traptimer.setData(obj castTo int)
 				UnitRemoveAbility(obj.actor,START_ABIL)
 				UnitAddAbility(obj.actor,STOP_ABIL)
 			case STOP_ABIL
 				obj.onstep = true
-				obj.traptimer.release()
 				UnitRemoveAbility(obj.actor,STOP_ABIL)
 				UnitAddAbility(obj.actor,START_ABIL)
 		return false
 		
-	ondestroy
-		traptimer.release()
+	//ondestroy
+		//traptimer.release()
 
 int NEXT_SFX_ABIL = 'A06D'
 int PREV_SFX_ABIL = 'A06C'
 
-int INCREASE_DURATION_ABIL = 'A06M'
-int DECREASE_DURATION_ABIL = 'A06L'
+int INCREASE_DURATION_ABIL = 'A026'
+int DECREASE_DURATION_ABIL = 'A025'
 int INCREASE_VALUE_ABIL = 'A023'
 int DECREASE_VALUE_ABIL = 'A01S'
 
@@ -284,10 +297,10 @@ int POISON_ABIL = 'A06F'
 
 int STUN_BUFF = 'A06J'
 
-int INCREASE_INTERVAL_ABIL = 'A06P'
-int DECREASE_INTERVAL_ABIL = 'A06O'
-int START_ABIL = 'A06R'
-int STOP_ABIL = 'A06S'
+int INCREASE_INTERVAL_ABIL = 'A02O'
+int DECREASE_INTERVAL_ABIL = 'A02Q'
+int START_ABIL = 'A02T'
+int STOP_ABIL = 'A02U'
 
 public function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"

@@ -287,8 +287,6 @@ package Executer
 			UnitRemoveAbility(actor,TERRAIN_UNICE_ABIL)
 			UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 			
-			UnitRemoveAbility(actor, KILLER_TRIGGER_ABIL)
-			
 		function addTerrainAdjuster()
 			UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
 			UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)
@@ -341,10 +339,9 @@ package Executer
         
         ondestroy
         	actor.remove()
-        	if eventMode == Emode.PRESSUREPLATE
-                RemoveDestructable(dummy)
+        	if eventRect != null
                 RemoveRect(eventRect)
-        	else if eventMode == Emode.LEVER
+        	if dummy != null
                 RemoveDestructable(dummy)
         
 		function canTrigger(Entity e) returns boolean
@@ -492,9 +489,9 @@ package Executer
 	
 	constant int REACTIVATE_ABIL = 'A05Z'
 	
-	constant int KILLER_TRIGGER_ABIL = 'A00M'
-	constant int ESCAPER_TRIGGER_ABIL = 'A027'
-	constant int BOTH_TRIGGER_ABIL = 'A05I'
+	constant int KILLER_TRIGGER_ABIL = 'A012'
+	constant int ESCAPER_TRIGGER_ABIL = 'A009'
+	constant int BOTH_TRIGGER_ABIL = 'A014'
 	
 	constant int TERRAIN_WALKABLE_ABIL = 'A015'
 	constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
