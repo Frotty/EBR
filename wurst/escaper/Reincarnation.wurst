@@ -3,8 +3,8 @@ import BaseObject
 import Escaper
 import EscaperClasses
 
-constant int REINCARNATION_ID = 'A056'
-constant int TOMB_DUMMY_ID = 'hphx'
+constant int REINCARNATION_ID = 'A02X'
+constant int TOMB_DUMMY_ID = 'u00D'
 
 function castReincarnation()
 	int id = GetSpellAbilityId()

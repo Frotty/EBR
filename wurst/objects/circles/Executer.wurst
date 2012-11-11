@@ -96,18 +96,20 @@ package Executer
         
         static function onLeaveEvent()
             region r = GetTriggeringRegion()
+            Entity leaver = GetLeavingUnit().getUserData() castTo Entity
             thistype obj = r.loadRegionData() castTo thistype
-    		GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
-    		int c = 0
-    		for unit u in ENUM_GROUP
-	            Entity e = u.getUserData() castTo Entity
-	            if obj.canTrigger(e)
-	                c++
-            ENUM_GROUP.clear()
-    		if c == 0
-                obj.negativeAction()
-                obj.ON = false
-	            SetDestructableAnimation(obj.dummy, "stand alternate")
+            if obj.canTrigger(leaver)
+    			GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
+    			int c = 0
+	    		for unit u in ENUM_GROUP
+		            Entity e = u.getUserData() castTo Entity
+		            if obj.canTrigger(e)
+		                c++
+	            ENUM_GROUP.clear()
+	    		if c == 0
+	                obj.negativeAction()
+	                obj.ON = false
+		            SetDestructableAnimation(obj.dummy, "stand alternate")
 	            
 		static function onEnterEvent()
             unit u = GetTriggerUnit()

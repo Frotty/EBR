@@ -1,21 +1,19 @@
 package BomberTarget
-    import Entity
-    import Terrain
-    import SetupObject
-    import Escaper
+import Entity
+import Terrain
+import EventHandling
+import Escaper
+constant int BTARGET_ID = 'u004'
     
-    public class BomberTarget extends DynamicSetupObject 
+public class BomberTarget extends UnitEntity
         
-        construct( real x, real y, unit u, unit setup, real radius )
-        	super( vec3(x, y, getTerrainZ(x,y)), u, setup, 0., function BomberTarget.onInRangeEvent ) 
-        	
-        static function onInRangeEvent()
-            print("wut")
+    construct(vec2 pos, player owner)
+		super(pos.toVec3(), 0., CreateUnit(owner, BTARGET_ID, pos.x, pos.y, 0))
+		actor.registerCastEvent(Condition(function onCast))
+		
+    static function onInRangeEvent()
+        print("wut")
+       
+    static function onCast() returns boolean
+    	return false
 
-        override function update()
-        	print("yes")
-			setup.setX( actor.getX() )
-			setup.setY( actor.getY() )
-
-
-endpackage
