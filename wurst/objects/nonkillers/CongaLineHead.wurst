@@ -1,0 +1,61 @@
+package CongaLineHead
+import SetupObject
+import EventHandling
+import LinkedList
+
+constant int UNIT_ID = '0000'
+
+constant int ADD_ID = '0000'
+
+public class CongaLineHead extends DynamicSetupObject
+	LinkedList<DynamicEntity> segments
+	
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
+		segments = new LinkedList<DynamicEntity>()
+		
+	override function update()
+		super.update()
+		int i = 0
+		DynamicEntity se = null
+		for e in segments
+			if i == 0
+				e.setNewPos(calculateSegmentPos(position.toVec2(), position.toVec2(), 64))
+			else
+				e.setNewPos(calculateSegmentPos(se.position.toVec2(), se.next.position.toVec2(), 64))
+				
+			se = e
+			i++
+		
+	function addSegment(DynamicEntity e)
+		boolean isNew = true
+		for de in segments
+			if de == e
+				isNew = false
+				break
+		if isNew
+			segments.add(e)
+		else
+			segments.remove(e)
+	
+	static function onCast() returns boolean
+		var id = GetSpellAbilityId()
+		var t = GetSpellTargetUnit()
+		var data = GetSpellAbilityUnit().getUserData() castTo CongaLineHead
+		switch id
+			case ADD_ID
+				data.addSegment(t.getUserData() castTo DynamicEntity)
+				
+		return false
+		
+function DynamicEntity.setNewPos( vec2 pos)
+	if this instanceof DynamicSetupObject
+		(this castTo DynamicSetupObject).setNewPos(pos.toVec3())
+		
+function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
+	let angle = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)
+	return vec2(pos1.x - Cos(angle) * segLength,
+				pos1.y - Sin(angle) * segLength)
+				
