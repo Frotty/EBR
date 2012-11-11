@@ -1,7 +1,7 @@
 package Attackspeed
 
-public constant integer ATTACK_SPEED_RATE_ID = 'A009'
-public constant integer ATTACK_SPEED_RATE_QUARTER_ID = 'A012'
+public constant integer ATTACK_SPEED_RATE_POSITIVE_ID = 'A02W'
+public constant integer ATTACK_SPEED_RATE_NEGATIVE_ID = 'A02V'
 public constant integer ATTACK_SPEED_DUMMY_ID = 'A024'
 constant integer INCREASE = 'A044'
 constant integer DECREASE = 'A043'
@@ -9,39 +9,40 @@ constant integer DECREASE = 'A043'
 public function onAttackspeedCast(int spellid, unit actor)
 	switch spellid
 		case INCREASE
-			if not (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) == 4 and GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) == 4)
-				int bonus = ((GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID)*5)+GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID))*20 + 20
-				createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), bonus.toString() + " %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
-			if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) == 4
-				if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) == 4
+			int pos = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID))
+			int neg = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID))
+			if neg >= 1
+				if neg == 1
+					UnitRemoveAbility(actor,ATTACK_SPEED_RATE_NEGATIVE_ID)
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"0.00 %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+				else
+					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID, neg - 1 )
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-" + ((neg-1)*20).toString() + " %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+			else if pos >= 1
+				if pos < 4
+					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID, pos + 1 )
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"+" + ((pos+1)*20).toString() + " %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+				else
 					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Max", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
-				else
-					if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) == 0
-						actor.addAbility(ATTACK_SPEED_RATE_ID)
-					else
-						SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) + 1 )
-					actor.removeAbility(ATTACK_SPEED_RATE_QUARTER_ID)
 			else
-				if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) == 0
-					actor.addAbility(ATTACK_SPEED_RATE_QUARTER_ID)
-				else
-					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) + 1 )
+				UnitAddAbility(actor, ATTACK_SPEED_RATE_POSITIVE_ID)
+				createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"+20.0 %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
 		case DECREASE
-			if not (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) == 0 and GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) == 0)
-				bonus = ((GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID)*5)+GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID))*20 - 20
-				createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), bonus.toString() + " %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
-			if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) == 0
-				if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) == 0
-					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Min", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+			pos = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID))
+			neg = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID))
+			if pos >= 1
+				if pos == 1
+					UnitRemoveAbility(actor,ATTACK_SPEED_RATE_POSITIVE_ID)
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"0.00 %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
 				else
-					if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) == 1
-						actor.removeAbility(ATTACK_SPEED_RATE_ID)
-					else
-						SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_ID) - 1 )
-					actor.addAbility(ATTACK_SPEED_RATE_QUARTER_ID)
-					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID, 4 )
+					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID, pos - 1 )
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"+" + ((pos-1)*20).toString() + " %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+			else if neg >= 1
+				if neg < 4
+					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID, neg + 1 )
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-" + ((neg+1)*20).toString() + " %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+				else
+					createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Max", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
 			else
-				if GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) == 1
-					actor.removeAbility(ATTACK_SPEED_RATE_QUARTER_ID)
-				else
-					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID, GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_QUARTER_ID) - 1 )
+				UnitAddAbility(actor, ATTACK_SPEED_RATE_NEGATIVE_ID)
+				createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-20.0 %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
