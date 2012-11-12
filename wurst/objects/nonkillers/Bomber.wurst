@@ -1,12 +1,19 @@
 package Bomber
 import SetupObject
 import Attackspeed
+import EventHandling
 
-constant int ID = 'h00Y'
+constant int BOMBER_ID = 'h00Y'
 
 
-public class Bomber extends DynamicSetupObject
+public class Bomber extends UnitEntity
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0.), CreateUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		super(pos.toVec3(), 0., CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0))
+		actor.registerCastEvent(Condition(function onCast))
 		
+	static function onCast() returns boolean
+		var id = GetSpellAbilityId()
+		var obj = GetTriggerUnit().getUserData() castTo Bomber
+		onAttackspeedCast(id, obj.actor)
+		return false

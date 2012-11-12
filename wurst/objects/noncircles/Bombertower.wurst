@@ -9,14 +9,16 @@ package Bombertower
 	constant int 	BOMBERTOWER_ID   = 'h019'
 	constant int	ATTACK_ORDER = 851983
 	constant int	ATTACK_GROUND_ORDER = 851984
+	constant int	STOP_ORDER = 851972
 	trigger orderTrigger
 
     public class Bombertower extends StaticBaseObject
         unit dummy
+        boolean realorder = true
         
         construct( vec2 pos, player owner )
         	super( pos.toVec3(), CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
-            TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
+            TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_ORDER)
             TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
             TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)
         	actor.registerCastEvent(Condition(function Bombertower.onCast))
@@ -32,20 +34,35 @@ package Bombertower
 			var obj = GetTriggerUnit().getUserData() castTo Bombertower
 			onAttackspeedCast(id, obj.dummy)
 			return false
+			
+			
+		static function orderSetup()
+			var obj = GetExpiredTimer().getData() castTo Bombertower
+			obj.realorder = false
+			IssueImmediateOrderById(obj.actor, STOP_ORDER)
+			
+		ondestroy
+			dummy.remove()
 	
 	function checkAttackOrder()
 		var i = GetIssuedOrderId()
-        print(i.toString())
-        if i == ATTACK_GROUND_ORDER or i == ATTACK_ORDER
-            var e = GetOrderedUnit().getUserData() castTo Entity
-            if e instanceof Bombertower 
-                var obj = e castTo Bombertower
-	            if GetOrderedUnit() == obj.actor
-	            	IssueImmediateOrder(obj.actor, "stop")
-	        		if i == ATTACK_GROUND_ORDER
-	            		IssuePointOrderById(obj.dummy,i, GetOrderPointX(),GetOrderPointY())
-					else if i == ATTACK_ORDER
-	            		IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
+    	print(i.toString())
+        var e = GetOrderedUnit().getUserData() castTo Entity
+        if e instanceof Bombertower 
+            var obj = e castTo Bombertower
+        	if GetOrderedUnit() == obj.actor
+	        	if i == ATTACK_GROUND_ORDER
+	            	IssuePointOrderById(obj.dummy,i, GetOrderPointX(),GetOrderPointY())
+					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
+				else if i == ATTACK_ORDER
+	            	IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
+					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
+				else if i == STOP_ORDER 
+					if obj.realorder == false
+		            	IssueImmediateOrderById(obj.dummy, STOP_ORDER)
+		            else 
+						obj.realorder = true
+	            	
 	
 	public function init_Bombertower()
 		orderTrigger = CreateTrigger()
