@@ -29,7 +29,7 @@ package Revivepoint
                 obj.reached = true
                 currentRevivepoint = obj
                 var rdata1 = getRegionData(obj.position.x, obj.position.y)
-                for Escaper es1 in escapers
+                for es1 in escapers
                     es1.setNewPos(obj.position)
                     es1.currentRegion = rdata1
 				isFirst = false

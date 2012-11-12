@@ -52,6 +52,7 @@ public class Spinner extends UnitEntity
 				i++
 			if isNew
 				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(position.x, position.y, dobj.position.x, dobj.position.y), distanceBetweenCoords(position.x, position.y, dobj.position.x, dobj.position.y) ))
+			
 
 /*	ondestroy
 		while spinningEntities.size > 0

@@ -2,10 +2,11 @@ package CongaLineHead
 import SetupObject
 import EventHandling
 import LinkedList
+import Spinner
 
-constant int UNIT_ID = '0000'
+constant int UNIT_ID = 'h000'
 
-constant int ADD_ID = '0000'
+constant int ADD_ID = 'A02Y'
 
 public class CongaLineHead extends DynamicSetupObject
 	LinkedList<DynamicEntity> segments
@@ -22,9 +23,9 @@ public class CongaLineHead extends DynamicSetupObject
 		DynamicEntity se = null
 		for e in segments
 			if i == 0
-				e.setNewPos(calculateSegmentPos(position.toVec2(), position.toVec2(), 64))
+				e.setNewPos(calculateSegmentPos(position.toVec2(), e.position.toVec2(), 64))
 			else
-				e.setNewPos(calculateSegmentPos(se.position.toVec2(), se.next.position.toVec2(), 64))
+				e.setNewPos(calculateSegmentPos(se.position.toVec2(), e.position.toVec2(), 64))
 				
 			se = e
 			i++
@@ -53,6 +54,8 @@ public class CongaLineHead extends DynamicSetupObject
 function DynamicEntity.setNewPos( vec2 pos)
 	if this instanceof DynamicSetupObject
 		(this castTo DynamicSetupObject).setNewPos(pos.toVec3())
+	else if this instanceof Spinner
+		(this castTo Spinner).setNewPos(pos.toVec3())
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angle = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)

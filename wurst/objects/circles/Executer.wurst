@@ -10,6 +10,7 @@ package Executer
     import Door
     import BuilderConstants
     import EventHandling
+    import TempGroups
     
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
@@ -421,7 +422,7 @@ package Executer
 	        		obj.removeActionAbils()
 	        		
 	        	case TERRAIN_WALKABLE_ABIL
-	        		if obj.actionMode == null
+	        		if obj.actionMode == Amode.NONE
 	        			obj.actionMode = Amode.CHANGETERRAIN
 	        			obj.removeActionAbils()
 	        			obj.addTerrainAdjuster()
@@ -429,7 +430,7 @@ package Executer
 	        		else
 	                    obj.nottiletype = '0000'
 	        	case TERRAIN_UNWALKABLE_ABIL
-	        		if obj.actionMode == null
+	        		if obj.actionMode == Amode.NONE
 	        			obj.actionMode = Amode.CHANGETERRAIN
 	        			obj.removeActionAbils()
 	        			obj.addTerrainAdjuster()
@@ -437,7 +438,7 @@ package Executer
 	        		else
 	        			obj.nottiletype = '0001'
 	        	case TERRAIN_ICE_ABIL
-	        		if obj.actionMode == null
+	        		if obj.actionMode == Amode.NONE
 	        			obj.actionMode = Amode.CHANGETERRAIN
 	        			obj.removeActionAbils()
 	        			obj.addTerrainAdjuster()
@@ -445,7 +446,7 @@ package Executer
 	        		else
 	        			obj.nottiletype = CONTROLLABLEICE
 	        	case TERRAIN_UNICE_ABIL
-	        		if obj.actionMode == null
+	        		if obj.actionMode == Amode.NONE
 	        			obj.actionMode = Amode.CHANGETERRAIN
 	        			obj.removeActionAbils()
 	        			obj.addTerrainAdjuster()
@@ -455,7 +456,7 @@ package Executer
 	        	
 	        	case MOVE_UNIT_DIRECT_ABIL
 	        		obj.moveOrderString = "move"
-	        		if obj.actionMode == null
+	        		if obj.actionMode == Amode.NONE
 	        			obj.actionMode = Amode.MOVEUNIT
 	        			obj.removeActionAbils()
 	        			obj.addMoveUnitAdjuster()

@@ -89,12 +89,9 @@ package SetupObject
         	var x = GetOrderPointX()
         	var y = GetOrderPointY()
         	var u = GetOrderTargetUnit()
-        	print("order")
         	
         	if entity instanceof DynamicSetupObject
-                print("order2")
                 var obj = entity castTo DynamicSetupObject
-                print("order3")
                 if OrderId2String(order) == "smart" and u == null
                     // AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
                     IssuePointOrder(obj.setup, "move", x+GetRandomReal(-1,1), y)

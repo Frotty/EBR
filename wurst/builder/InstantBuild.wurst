@@ -20,6 +20,7 @@ import Booster
 import Obstacle
 import Bombertower
 import UnitRemover
+import CongaLineHead
 
         
 real x
@@ -99,6 +100,8 @@ function callback()
 	    		CreateUnit(u.getOwner(),buildorders[27],x,y, 90.)	
 	        case buildorders[28]
 	    		CreateUnit(u.getOwner(),buildorders[28],x,y, 90.)
+	    	case buildorders[29]
+	    		new CongaLineHead(vec2(x,y), u.getOwner())
 	        
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
@@ -172,4 +175,5 @@ init
     buildorders[26] = 'n00I' // Trap
     buildorders[27] = 'n00Q' // Horizontal Wall
     buildorders[28] = 'n011' // Vertical Wall
-
+    buildorders[29] = 'h000' // Conga Line
+    
