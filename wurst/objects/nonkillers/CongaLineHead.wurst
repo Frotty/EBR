@@ -7,10 +7,12 @@ import Spinner
 constant int UNIT_ID = 'h000'
 
 constant int ADD_ID = 'A02Y'
+constant int INC_ID = 'A02Z'
+constant int DEC_ID = 'A030'
 
 public class CongaLineHead extends DynamicSetupObject
 	LinkedList<DynamicEntity> segments
-	
+	real segLength = 50.
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
@@ -23,9 +25,9 @@ public class CongaLineHead extends DynamicSetupObject
 		DynamicEntity se = null
 		for e in segments
 			if i == 0
-				e.setNewPos(calculateSegmentPos(position.toVec2(), e.position.toVec2(), 64))
+				e.setNewPos(calculateSegmentPos(position.toVec2(), e.position.toVec2(), 64.))
 			else
-				e.setNewPos(calculateSegmentPos(se.position.toVec2(), e.position.toVec2(), 64))
+				e.setNewPos(calculateSegmentPos(se.position.toVec2(), e.position.toVec2(), segLength))
 				
 			se = e
 			i++
@@ -48,14 +50,29 @@ public class CongaLineHead extends DynamicSetupObject
 		switch id
 			case ADD_ID
 				data.addSegment(t.getUserData() castTo DynamicEntity)
+			case INC_ID
+				if data.segLength < 500.
+					data.segLength += 25
+					createTTExForPlayer(data.position, vec2(0,0.05), "|cffC51019Sping-Speed "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+				else
+					createTTExForPlayer(data.position, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+			case DEC_ID
+				if data.segLength > 25
+					data.segLength -= 25
+					createTTExForPlayer(data.position, vec2(0,0.05), "|cffC51019Sping-Speed "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+				else
+					createTTExForPlayer(data.position, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+			
 				
 		return false
 		
 function DynamicEntity.setNewPos( vec2 pos)
 	if this instanceof DynamicSetupObject
 		(this castTo DynamicSetupObject).setNewPos(pos.toVec3())
+		(this castTo DynamicSetupObject).setAngle(angleBetweenCoordsD(this.position.x, this.position.y, pos.x, pos.y))
 	else if this instanceof Spinner
 		(this castTo Spinner).setNewPos(pos.toVec3())
+		(this castTo Spinner).actor.setFacing(angleBetweenCoordsD(this.position.x, this.position.y, pos.x, pos.y))
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angle = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)

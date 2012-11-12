@@ -105,9 +105,10 @@ package Entity
 			
 			unitEntityCount++
 			
-		function setNewPos(vec3 pos)
+		function setNewPos(vec3 pos) returns thistype
 			position = pos
 			actor.setPos(pos.x, pos.y).setFlyHeight(pos.z, 0)
+			return this
 		
 		function setNewXYZ(vec3 pos)
 			position = pos
