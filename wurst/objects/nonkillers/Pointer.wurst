@@ -1,0 +1,35 @@
+package Pointer
+import Entity
+import Escaper
+
+constant int POINTER_ID = 'h01Q'
+
+public class Pointer extends UnitEntity
+	real turnspeed
+	real angle = 0.
+	boolean turning
+	
+	unit setup
+	
+	trigger trig
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), 64., CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.))
+		actor.addAbility(LOCUST_ID)
+		setup = CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
+		setup.addAbility('Agho')
+		trig = CreateTrigger()
+		trig.registerUnitInRangeSource(setup, 64.)
+		trig.addAction(function Pointer.turnUnit)
+		
+	override function update()
+		position = vec3(setup.getX(), setup.getY(), 0.)
+		super.update()
+		actor.setFacing(angle)
+
+	static function turnUnit()
+		var edata = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggeringTrigger().getSource().getUserData() castTo Pointer
+		if edata instanceof Escaper
+			var es = edata castTo Escaper
+			es.actor.setFacing(data.angle)

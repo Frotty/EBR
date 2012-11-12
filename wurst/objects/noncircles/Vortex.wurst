@@ -3,6 +3,7 @@ import Entity
 import OnCast
 import Escaper
 import EventHandling
+import LinkedList
 
 constant int ID = 'n013'
 constant int INC_ID = 'A04J'

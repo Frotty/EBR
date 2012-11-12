@@ -1,0 +1,24 @@
+package MoveSpeed
+
+import SetupObject
+import Entity
+
+constant int INC_ID = 'A04F'
+constant int DEC_ID = 'A005'
+
+trigger castTrig
+
+function changeSpeed()
+	var id = GetSpellAbilityId()
+	var caster = GetSpellAbilityUnit()
+	if id == INC_ID
+		caster.removeAbility('Agho').addAbility('Aeth')
+		caster.removeAbility(VIS_ID).addAbility(INVIS_ID)
+	else if id == INC_ID
+		caster.removeAbility('Aeth').addAbility('Agho')
+		caster.removeAbility(INVIS_ID).addAbility(VIS_ID)	
+
+init
+	castTrig = CreateTrigger()
+	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	castTrig.addAction(function changeSpeed)
