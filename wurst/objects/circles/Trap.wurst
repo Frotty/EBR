@@ -92,7 +92,15 @@ public class Trap extends StaticBaseObject
 				skip
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
-				var angle = angleBetweenCoordsD(actor.getX(), actor.getY(),e.actor.getX(), e.actor.getY())
+				real rX = getRallyX()
+				real rY = getRallyY()
+				real aX = actor.getX()
+				real aY = actor.getY()
+				if distanceBetweenCoords(rX, rY, aX, aY) < 20 
+					var angle = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
+				else	
+					angle = angleBetweenCoordsD(aX, aY,rX, rY)
+					print("LOOOOOOOOOOOOOOOOOOOOOOOOOOOL")
 				e.addForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.)
 
 			default
@@ -158,6 +166,7 @@ public class Trap extends StaticBaseObject
 				obj.a = ABIL.KNOCK
 				obj.value = 10.
 				obj.addConfiger(false, true)
+				obj.actor.addAbility('ARal')
 			case POISON_ABIL
 				obj.a = ABIL.POISON
 				obj.addConfiger(false, false)

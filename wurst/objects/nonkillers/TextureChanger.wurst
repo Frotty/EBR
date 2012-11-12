@@ -1,0 +1,43 @@
+package TextureChanger
+import Entity
+import EventHandling
+import SetupObject
+import RegionData
+
+
+constant int TEXTURECHANGER_ID	= 'sdgs'
+
+public class TextureChanger extends UnitEntity
+	int sizeX = 1
+	int sizeY = 1
+	int innerTile = '0000'
+	int outerTile = '0001' 
+
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), 0., CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0))
+		//actor.registerCastEvent(Condition(function onCast))
+		
+		
+	override function update()
+		super.update()
+		var rX = position.x
+        var rY = position.y
+        RegionData data
+        int tileID
+        for int i = 0 to (sizeY*2)+2
+            for int j = 0 to (sizeX*2)+2
+                var y = rY+ (128*(i-sizeY))
+                var x = rX+ (128*(j-sizeX))
+                if ((j == 0) or (j == (sizeX*2)+2)) and ((i == 0)or(i ==(sizeX*2)+2))
+                    tileID = outerTile
+                else
+                    tileID = innerTile
+                data = getRegionData(x,y)
+        		if data.isOwner(GetPlayerId(owner))
+                    if tileID == '0000'
+                        tileID = data.walkableTile
+                	else if tileID == '0001'
+                        tileID = data.unwalkableTile
+                    SetTerrainType(x, y, tileID, -1, 1, 1 )
+	
+		
