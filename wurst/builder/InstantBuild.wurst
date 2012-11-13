@@ -22,6 +22,7 @@ import Bombertower
 import UnitRemover
 import CongaLineHead
 import TerrainBlocker
+import Fountain
         
 real x
 real y
@@ -92,6 +93,8 @@ function callback()
 	    		CreateUnit(u.getOwner(),buildorders[22],x,y, 0.)
 	        case buildorders[23]
 	        	new Tracks(vec2(x,y), u.getOwner())	
+	        case buildorders[24]
+	        	new Fountain(vec2(x,y), u.getOwner())	
 	        case buildorders[25]
 	        	new Powernode(vec2(x,y), u.getOwner())	
 	        case buildorders[26]
@@ -172,7 +175,7 @@ init
     buildorders[21] = 'h01M' // Spinner
     buildorders[22] = 'n00P' // Wall
     buildorders[23] = 'n01C' // Tracks
-    buildorders[24] = 'h00H'
+    buildorders[24] = 'h00H' // Fountain
     buildorders[25] = 'h0nn' // Powernode
     buildorders[26] = 'n00I' // Trap
     buildorders[27] = 'n00Q' // Horizontal Wall
