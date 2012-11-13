@@ -11,12 +11,17 @@ trigger castTrig
 function changeSpeed()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
-	if id == INC_ID
-		caster.removeAbility('Agho').addAbility('Aeth')
-		caster.removeAbility(VIS_ID).addAbility(INVIS_ID)
-	else if id == INC_ID
-		caster.removeAbility('Aeth').addAbility('Agho')
-		caster.removeAbility(INVIS_ID).addAbility(VIS_ID)	
+	var data = caster.getUserData() castTo Entity
+	if data instanceof DynamicSetupObject
+		var ddata = data castTo DynamicSetupObject
+		var speed = ddata.setup.getMoveSpeed()
+		if id == INC_ID
+			if speed < 500
+				ddata.setup.setMoveSpeed(speed+25.)
+		else if id == DEC_ID
+			if speed > 0
+				ddata.setup.setMoveSpeed(speed-25.)
+		createTTExForPlayer(ddata.position, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
 
 init
 	castTrig = CreateTrigger()

@@ -28,8 +28,8 @@ public function onAttackspeedCast(int spellid, unit actor)
 				UnitAddAbility(actor, ATTACK_SPEED_RATE_POSITIVE_ID)
 				createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"+20.0 %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
 		case DECREASE
-			pos = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID))
-			neg = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID))
+			int pos = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID))
+			int neg = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID))
 			if pos >= 1
 				if pos == 1
 					UnitRemoveAbility(actor,ATTACK_SPEED_RATE_POSITIVE_ID)
@@ -46,3 +46,4 @@ public function onAttackspeedCast(int spellid, unit actor)
 			else
 				UnitAddAbility(actor, ATTACK_SPEED_RATE_NEGATIVE_ID)
 				createTTExForPlayer(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-20.0 %", 10,  2., colorRGBA(255,255,255,0), GetOwningPlayer(actor) )
+				
