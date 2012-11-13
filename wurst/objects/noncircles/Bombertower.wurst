@@ -58,7 +58,7 @@ package Bombertower
 	            	IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
 					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
 				else if i == STOP_ORDER 
-					if obj.realorder == false
+					if obj.realorder == true
 		            	IssueImmediateOrderById(obj.dummy, STOP_ORDER)
 		            else 
 						obj.realorder = true

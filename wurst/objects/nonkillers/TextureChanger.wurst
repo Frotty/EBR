@@ -3,41 +3,98 @@ import Entity
 import EventHandling
 import SetupObject
 import RegionData
-
+import TerrainBlocker
+import BuilderConstants
 
 constant int TEXTURECHANGER_ID	= 'h01K'
+
+constant int TERRAIN_O_WALKABLE_ID = 'A02G'
+constant int TERRAIN_O_UNWALKABLE_ID = 'A02C'
+constant int TERRAIN_O_ICE_ID = 'A02B'
+constant int TERRAIN_O_UNICE_ID = 'A02E'
+constant int TERRAIN_I_WALKABLE_ID = 'A02H'
+constant int TERRAIN_I_UNWALKABLE_ID = 'A02F'
+constant int TERRAIN_I_ICE_ID = 'A02A'
+constant int TERRAIN_I_UNICE_ID = 'A02D'
+constant int TERRAIN_INC_H_ID = 'A01K'
+constant int TERRAIN_INC_V_ID = 'A01M'
+constant int TERRAIN_DEC_H_ID = 'A01U'
+constant int TERRAIN_DEC_V_ID = 'A01T'
 
 public class TextureChanger extends UnitEntity
 	int sizeX = 1
 	int sizeY = 1
 	int innerTile = '0000'
-	int outerTile = '0001' 
+	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), 0., CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0))
-		//actor.registerCastEvent(Condition(function onCast))
+		actor.registerCastEvent(Condition(function TextureChanger.onCast))
 		
 		
 	override function update()
 		super.update()
-		var rX = position.x
-        var rY = position.y
+		var tX = round(position.x/128)
+        var tY = round(position.y/128)
         RegionData data
         int tileID
-        for int i = -(sizeY)-1 to sizeY+1
-            for int j = -(sizeX)-1 to sizeX+1
-                var y = rY+ (128*(i-sizeY))
-                var x = rX+ (128*(j-sizeX))
-                if (j == -(sizeX)-1) or (j == (sizeX)+1) or (i == -(sizeY)-1) or (i == (sizeY)+1)
-                    tileID = outerTile
-                else
-                    tileID = innerTile
-                data = getRegionData(x,y)
-        		if data.isOwner(GetPlayerId(owner))
-                    if tileID == '0000'
-                        tileID = data.walkableTile
-                	else if tileID == '0001'
-                        tileID = data.unwalkableTile
-                    SetTerrainType(x, y, tileID, -1, 1, 1 )
+        for int i = -(sizeY+1) to sizeY+1
+            for int j = -(sizeX+1) to sizeX+1
+                if not blockermatrix.loadBoolean(tX+j, tY+i)
+	                var x = (tX+j)*128.
+	                var y = (tY+i)*128.
+	                if (j == -(sizeX+1)) or (j == sizeX+1) or (i == -(sizeY+1)) or (i == sizeY+1)
+	                    tileID = outerTile
+	                else
+	                    tileID = innerTile
+	                data = getRegionData(x,y)
+	        		if data.isOwner(GetPlayerId(owner))
+	                    if tileID == '0000'
+	                        tileID = data.walkableTile
+	                	else if tileID == '0001'
+	                        tileID = data.unwalkableTile
+	                    if GetTerrainType(x, y) != tileID
+	                    	SetTerrainType(x, y, tileID, -1, 1, 1 )
 	
-		
+	static function onCast() returns boolean
+	        var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger
+	        int i = GetSpellAbilityId()
+			
+			switch i
+				case TERRAIN_INC_H_ID
+					if obj.sizeX < 3
+						obj.sizeX ++
+					else
+						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+				case TERRAIN_INC_V_ID
+					if obj.sizeY < 3
+						obj.sizeY ++
+					else
+						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+				case TERRAIN_DEC_H_ID
+					if obj.sizeX > 0
+						obj.sizeX --
+					else
+						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+				case TERRAIN_DEC_V_ID
+					if obj.sizeY > 0
+						obj.sizeY --
+					else
+						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+				case TERRAIN_I_WALKABLE_ID
+					obj.innerTile = '0000'
+				case TERRAIN_I_UNWALKABLE_ID
+					obj.innerTile = '0001'
+				case TERRAIN_I_ICE_ID
+					obj.innerTile = CONTROLLABLEICE
+				case TERRAIN_I_UNICE_ID
+					obj.innerTile = UNCONTROLLABLEICE
+				case TERRAIN_O_WALKABLE_ID
+					obj.outerTile = '0000'
+				case TERRAIN_O_UNWALKABLE_ID
+					obj.outerTile = '0001'
+				case TERRAIN_O_ICE_ID
+					obj.outerTile = CONTROLLABLEICE
+				case TERRAIN_O_UNICE_ID
+					obj.outerTile = UNCONTROLLABLEICE
+			return false

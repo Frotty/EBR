@@ -11,6 +11,7 @@ package UnitProducer
 	import Bomber
 	import EventHandling
 	import Pointer
+	import Bomber
 	import LinkedList
 	
 	constant int ID = 'H00A'
@@ -55,6 +56,8 @@ package UnitProducer
 						new TextureChanger( vec2(rX,rY), obj.owner )
 					case 'A05I'
 						new Pointer(vec2(rX,rY), obj.owner)
+					case 'A05O'
+						new Bomber(vec2(rX,rY), obj.owner)
 			else
 				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 			return false

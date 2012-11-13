@@ -11,6 +11,7 @@ package Executer
     import BuilderConstants
     import EventHandling
     import TempGroups
+    import Pointer
     
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
@@ -38,11 +39,14 @@ package Executer
 
 		
 	enum ActionUnit
+		NONE
 		TANK
+		GLAIVE
 		SMALLKILLER
 		BIGKILLER
+		SMALLRANDOMKILLER
+		BIGRANDOMKILLER
 		POINTER
-		GLAIVE
 
     public class Executer extends StaticBaseObject
         boolean canKillerTrigger = false
@@ -210,7 +214,6 @@ package Executer
 				
 		function createUnit()
 			unit u
-			
 			var rX = getRallyX()
             var rY = getRallyY()
             var data = getRegionData(rX, rY)
@@ -218,18 +221,23 @@ package Executer
 			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
-						new EscaperKiller(CreateUnit(owner, data.smallKillerId, getRallyX(), getRallyY(), 0. ), CreateUnit(owner, data.smallKillerId, getRallyX(), getRallyY(), 0.), COLL_SIZE_SK)
+						new EscaperKiller(CreateUnit(owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(owner, data.smallKillerId, rX, rY, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGKILLER
-						new EscaperKiller(CreateUnit(owner, data.bigKillerId, getRallyX(), getRallyY(), 0. ), CreateUnit(owner, data.bigKillerId, getRallyX(), getRallyY(), 0.), COLL_SIZE_BK)
+						new EscaperKiller(CreateUnit(owner, data.bigKillerId,rX, rY, 0. ), CreateUnit(owner, data.bigKillerId, rX, rY, 0.), COLL_SIZE_BK)
+					case ActionUnit.SMALLRANDOMKILLER
+						new EscaperKiller(CreateUnit(owner, 'u006', rX, rY, 0. ), CreateUnit(owner, 'u006', rX, rY, 0.), COLL_SIZE_SK)
+					case ActionUnit.BIGRANDOMKILLER
+						new EscaperKiller(CreateUnit(owner, 'u008',rX, rY, 0. ), CreateUnit(owner, 'u008', rX, rY, 0.), COLL_SIZE_BK)
 					case ActionUnit.TANK
-						new EscaperKiller(CreateUnit(owner, 'h001', getRallyX(), getRallyY(), 0. ), CreateUnit(owner, 'h001', getRallyX(), getRallyY(), 0.), COLL_SIZE_TANK)
+						new EscaperKiller(CreateUnit(owner, 'h001', rX, rY, 0. ), CreateUnit(owner, 'h001', rX, rY, 0.), COLL_SIZE_TANK)
 					case ActionUnit.GLAIVE
-						new EscaperKiller(CreateUnit(owner, 'u00A', getRallyX(), getRallyY(), 0. ), CreateUnit(owner, 'u00A', getRallyX(), getRallyY(), 0.), COLL_SIZE_GLAIVE)
+						new EscaperKiller(CreateUnit(owner, 'u00A', rX, rY, 0. ), CreateUnit(owner, 'u00A', rX, rY, 0.), COLL_SIZE_GLAIVE)
 					case ActionUnit.POINTER
-						// new Pointer
-						skip
+						new Pointer(vec2(rX,rY), owner)
 					default
 						printError("Unitcreator - Wrong Unittype")
+			else
+				DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place units in this region!")
 			
 		function changeTerrain(boolean isAction)
 		
@@ -263,6 +271,7 @@ package Executer
 			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
 			UnitAddAbility(actor,TERRAIN_UNICE_ABIL)
 			UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
+			UnitAddAbility(actor,TRAIN_BK_ABIL)
 				
 			
 		function addActionAbilsReversable()
@@ -289,6 +298,7 @@ package Executer
 			UnitRemoveAbility(actor,TERRAIN_UNWALKABLE_ABIL)
 			UnitRemoveAbility(actor,TERRAIN_UNICE_ABIL)
 			UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
+			UnitRemoveAbility(actor,TRAIN_BK_ABIL)
 			
 		function addTerrainAdjuster()
 			UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
@@ -305,11 +315,11 @@ package Executer
 			UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
 				
 		function changeVis(boolean invis)
-			print("meh")
+			print("meh changing VIS")
 			if eventMode == Emode.PRESSUREPLATE
 				if invis
 					RemoveDestructable(dummy)
-					print("meh meh")
+					print("meh meh destructable removed")
 				else
 					dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 	        		SetDestructableAnimation(dummy, "death")
@@ -454,6 +464,27 @@ package Executer
 	        		else
 	        			obj.nottiletype = UNCONTROLLABLEICE
 	        	
+	        	case TRAIN_BK_ABIL
+	        		if obj.actionUnit == ActionUnit.NONE
+	        			obj.actionMode = Amode.CREATEUNIT
+						obj.actionUnit = ActionUnit.TANK
+	        			obj.removeActionAbils()
+						UnitAddAbility(obj.actor,TRAIN_BOOK_ABIL)
+					else
+						obj.actionUnit = ActionUnit.BIGKILLER
+				case TRAIN_SK_ABIL
+					obj.actionUnit = ActionUnit.SMALLKILLER
+				case TRAIN_BRK_ABIL
+					obj.actionUnit = ActionUnit.BIGRANDOMKILLER
+				case TRAIN_SRK_ABIL
+					obj.actionUnit = ActionUnit.SMALLRANDOMKILLER
+				case TRAIN_TANK_ABIL
+					obj.actionUnit = ActionUnit.TANK
+				case TRAIN_GLAIVE_ABIL
+					obj.actionUnit = ActionUnit.GLAIVE
+				case TRAIN_POINTER_ABIL
+					obj.actionUnit = ActionUnit.POINTER
+					
 	        	case MOVE_UNIT_DIRECT_ABIL
 	        		obj.moveOrderString = "move"
 	        		if obj.actionMode == Amode.NONE
@@ -516,7 +547,17 @@ package Executer
 	constant int MOVE_UNIT_SELECT_ABIL = 'A06A'
 	
 	constant int VIS_ID = 'A04F'
-	constant int INVIS_ID = 'A005'	
+	constant int INVIS_ID = 'A005'
+	
+	constant int TRAIN_BOOK_ABIL = 'A042'
+	
+	constant int TRAIN_BK_ABIL = 'A045'
+	constant int TRAIN_SK_ABIL = 'A046'
+	constant int TRAIN_BRK_ABIL = 'A048'
+	constant int TRAIN_SRK_ABIL = 'A04B'
+	constant int TRAIN_TANK_ABIL = 'A04C'
+	constant int TRAIN_GLAIVE_ABIL = 'A04W'
+	constant int TRAIN_POINTER_ABIL = 'A04D'
 	
 	trigger executerUnitLeave = CreateTrigger()
 	trigger executerUnitEnter = CreateTrigger()
