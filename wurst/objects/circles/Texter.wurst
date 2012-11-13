@@ -5,6 +5,7 @@ package Texter
     import Escaper
     import GameConstants
     import TempGroups
+    import Texttag
     
 	constant int 	TEXTER_ID   = 'n01B'
 	constant real 	EVENT_RADIUS	= 32.

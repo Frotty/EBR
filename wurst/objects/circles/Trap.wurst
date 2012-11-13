@@ -6,6 +6,7 @@ import DummyCaster
 import Camera
 import GameConstants
 import TempGroups
+import Texttag
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
