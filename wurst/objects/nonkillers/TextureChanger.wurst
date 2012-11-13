@@ -5,7 +5,7 @@ import SetupObject
 import RegionData
 
 
-constant int TEXTURECHANGER_ID	= 'sdgs'
+constant int TEXTURECHANGER_ID	= 'h01K'
 
 public class TextureChanger extends UnitEntity
 	int sizeX = 1
@@ -24,11 +24,11 @@ public class TextureChanger extends UnitEntity
         var rY = position.y
         RegionData data
         int tileID
-        for int i = 0 to (sizeY*2)+2
-            for int j = 0 to (sizeX*2)+2
+        for int i = -(sizeY)-1 to sizeY+1
+            for int j = -(sizeX)-1 to sizeX+1
                 var y = rY+ (128*(i-sizeY))
                 var x = rX+ (128*(j-sizeX))
-                if ((j == 0) or (j == (sizeX*2)+2)) and ((i == 0)or(i ==(sizeX*2)+2))
+                if (j == -(sizeX)-1) or (j == (sizeX)+1) or (i == -(sizeY)-1) or (i == (sizeY)+1)
                     tileID = outerTile
                 else
                     tileID = innerTile
