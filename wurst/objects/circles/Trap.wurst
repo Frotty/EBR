@@ -99,11 +99,14 @@ public class Trap extends StaticBaseObject
 				real aX = actor.getX()
 				real aY = actor.getY()
 				real angle
-				if distanceBetweenCoords(rX, rY, aX, aY) < 20 
+				if getRallyUnit() == actor
+					rX = aX
+					rY = aY
+				print("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString())
+				if distanceBetweenCoords(rX, rY, aX, aY) < 20
 					angle = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
 					angle = angleBetweenCoordsD(aX, aY,rX, rY)
-					print("LOOOOOOOOOOOOOOOOOOOOOOOOOOOL")
 				e.addForce( value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.)
 
 			default
@@ -158,8 +161,9 @@ public class Trap extends StaticBaseObject
 				obj.duration = 1.
 				obj.addConfiger(true, false)
 			case SPEED_ABIL
-				obj.a = ABIL.SPEED
-				obj.addConfiger(true, true)
+				createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+				//obj.a = ABIL.SPEED
+				//obj.addConfiger(true, true)
 			case SHAKE_ABIL
 				obj.a = ABIL.SHAKE
 				obj.value = 500
@@ -303,7 +307,7 @@ int DECREASE_VALUE_ABIL = 'A01S'
 int KILL_ABIL = 'A06E'
 int STUN_ABIL = 'A06G'
 int SPEED_ABIL = 'A06I'
-int SHAKE_ABIL = 'A06K'
+int SHAKE_ABIL = 'A033'
 int KNOCK_ABIL = 'A06H'
 int POISON_ABIL = 'A06F'
 

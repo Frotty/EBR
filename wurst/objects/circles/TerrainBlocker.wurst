@@ -1,0 +1,25 @@
+package TerrainBlocker
+import BaseObject
+
+public hashtable blockermatrix = InitHashtable()
+
+constant int BLOCKER_ID = 'h009'
+tuple matrixpos (int x, int y)
+
+public class TerrainBlocker extends StaticBaseObject
+	matrixpos m
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), CreateUnit(owner, BLOCKER_ID, (round(pos.x/128))*128., (round(pos.y/128))*128., 0. ), 0, null)
+		var x = round(pos.x/128)
+		var y = round(pos.y/128)
+		m = matrixpos(x,y)
+		blockermatrix.saveBoolean(x, y, true)
+
+	ondestroy
+		blockermatrix.saveBoolean(m.x, m.y, false)
+		
+public function round (real r) returns integer
+        if r > 0
+            return R2I(r+.5)
+        return R2I(r-.5)

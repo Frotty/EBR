@@ -7,9 +7,11 @@ package UnitProducer
 	import BuilderConstants
 	import TeleporterTarget
 	import BomberTarget
+	import TextureChanger
 	import Bomber
 	import EventHandling
 	import Pointer
+	import Bomber
 	import LinkedList
 	
 	constant int ID = 'H00A'
@@ -50,8 +52,12 @@ package UnitProducer
 						new EscaperKiller(CreateUnit(obj.owner, 'u00A', rX, rY, 0. ), CreateUnit(obj.owner, 'u00A', rX, rY, 0. ), COLL_SIZE_GLAIVE)
 					case 'A05P'
 						new BomberTarget( vec2(rX,rY), obj.owner )
+					case 'A05L'
+						new TextureChanger( vec2(rX,rY), obj.owner )
 					case 'A05I'
 						new Pointer(vec2(rX,rY), obj.owner)
+					case 'A05O'
+						new Bomber(vec2(rX,rY), obj.owner)
 			else
 				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 			return false
