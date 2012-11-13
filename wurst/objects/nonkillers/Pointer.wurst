@@ -1,11 +1,18 @@
 package Pointer
 import Entity
 import Escaper
+import EventHandling
+import Texttag
 
 constant int POINTER_ID = 'h01Q'
 
+constant int INC_ID = 'A01F'
+constant int DEC_ID = 'A01G'
+constant int START_ID = 'A031'
+constant int STOP_ID = 'A032'
+
 public class Pointer extends UnitEntity
-	real turnspeed
+	real turnspeed = 2.
 	real angle = 0.
 	boolean turning
 	
@@ -21,11 +28,40 @@ public class Pointer extends UnitEntity
 		trig = CreateTrigger()
 		trig.registerUnitInRangeSource(setup, 64.)
 		trig.addAction(function Pointer.turnUnit)
+		setup.registerCastEvent(Condition(function Pointer.onCast))
+		setup.setUserData(this castTo int)
 		
 	override function update()
 		position = vec3(setup.getX(), setup.getY(), 0.)
-		super.update()
+		actor.setPos(position.x, position.y)
 		actor.setFacing(angle)
+		if turning
+			angle += turnspeed
+			
+	static function onCast() returns boolean
+		var id = GetSpellAbilityId()
+		var data = GetSpellAbilityUnit().getUserData() castTo Pointer
+		switch id
+			case INC_ID
+				if data.turnspeed < 6.
+					data.turnspeed += 0.5
+					createTTExForPlayer(data.position, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+				else
+					createTTExForPlayer(data.position, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+			case DEC_ID
+				if data.turnspeed > -6.
+					data.turnspeed -= 0.5
+					createTTExForPlayer(data.position, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+				else
+					createTTExForPlayer(data.position, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+			case START_ID
+				data.turning = true
+				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
+			case STOP_ID
+				data.turning = false
+				data.setup.removeAbility(STOP_ID).addAbility(START_ID)
+					
+		return false
 
 	static function turnUnit()
 		var edata = GetTriggerUnit().getUserData() castTo Entity
@@ -33,3 +69,8 @@ public class Pointer extends UnitEntity
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
 			es.actor.setFacing(data.angle)
+			
+	ondestroy
+		actor.remove()
+		setup.remove()
+		trig.destr()

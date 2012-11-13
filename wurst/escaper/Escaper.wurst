@@ -15,7 +15,7 @@ package Escaper
 	public Table escaperTable = new Table()
 	
 	constant real COLL_RADIUS = 32.
-	constant real SLIDE_ADD = 1.8
+	constant real SLIDE_ADD = 5.1
 	
 	constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
     constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"

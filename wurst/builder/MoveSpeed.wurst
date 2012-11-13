@@ -4,8 +4,8 @@ import Texttag
 import SetupObject
 import Entity
 
-constant int INC_ID = 'A04F'
-constant int DEC_ID = 'A005'
+constant int INC_ID = 'A01E'
+constant int DEC_ID = 'A01H'
 
 trigger castTrig
 
@@ -16,13 +16,20 @@ function changeSpeed()
 	if data instanceof DynamicSetupObject
 		var ddata = data castTo DynamicSetupObject
 		var speed = ddata.setup.getMoveSpeed()
+		print("casted")
 		if id == INC_ID
-			if speed < 500
+			print("inc")
+			if speed < 500.
+				print("fine")
 				ddata.setup.setMoveSpeed(speed+25.)
+				ddata.actor.setMoveSpeed(speed+25.)
+				createTTExForPlayer(ddata.position, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
 		else if id == DEC_ID
-			if speed > 0
+			if speed > 0.
 				ddata.setup.setMoveSpeed(speed-25.)
-		createTTExForPlayer(ddata.position, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
+				ddata.actor.setMoveSpeed(speed-25.)
+				createTTExForPlayer(ddata.position, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
+		
 
 init
 	castTrig = CreateTrigger()

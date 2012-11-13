@@ -39,6 +39,7 @@ package Waypoint
                 if obj.delay < .25
                 	IssuePointOrder(u, "move", rx, ry )
                 else
+                    IssueImmediateOrder(u, "stop" )
                     getTimer().start(obj.delay, function Waypoint.delayMove).setData(new DelayData(kllr, vec2(rx,ry))castTo int)
                     
         static function delayMove()

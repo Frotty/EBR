@@ -83,13 +83,13 @@ public class Spinner extends UnitEntity
 			case INC_ID
 				if sdata.speed < 10.
 					sdata.speed += .5
-					createTTExForPlayer(sdata.position, vec2(0,0.05), "|cffC51019Sping-Speed "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTExForPlayer(sdata.position, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 				else
 					createTTExForPlayer(sdata.position, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 			case DEC_ID
 				if sdata.speed > -10.
 					sdata.speed -= .5
-					createTTExForPlayer(sdata.position, vec2(0,0.05), "|cffC51019Sping-Speed "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTExForPlayer(sdata.position, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 				else
 					createTTExForPlayer(sdata.position, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 

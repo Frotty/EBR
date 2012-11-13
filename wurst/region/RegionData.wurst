@@ -10,7 +10,7 @@ public class RegionData
 	int unwalkableTile
 	int walkableTile
 	
-	real slidespeed = 3.
+	real slidespeed = 2.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
 	
