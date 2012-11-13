@@ -60,7 +60,6 @@ public class RegionData
 					theRect.changeTerrain(unwalkableTile)
 				break
 				
-				
 	function allow(int playerid)
 		switch playerid
 			case 8

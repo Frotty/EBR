@@ -13,9 +13,7 @@ package SetupObject
     
     trigger orderTrigger
     
-    public class DynamicSetupObject extends DynamicEntity
-        player owner
-        
+    public class DynamicSetupObject extends DynamicEntity        
         unit actor        
         
         unit setup
@@ -51,6 +49,11 @@ package SetupObject
             position = pos
             actor.setPos(pos.x, pos.y)
             setup.setPos(pos.x, pos.y)
+
+        
+        function setAngle(real angle)
+            actor.setFacing(angle)
+            setup.setFacing(angle)
             
         function setNewXY(vec3 pos)
             position = pos

@@ -5,6 +5,7 @@ package Revivepoint
     import Escaper
     import GameConstants
     import RegionData
+    import LinkedList
 
     constant real EVENT_RADIUS = 80.
     constant int REVIVEPOINT_ID = 'n000'

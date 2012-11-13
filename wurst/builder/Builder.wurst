@@ -5,6 +5,8 @@ import BuilderConstants
 import RegionData
 import Key
 import SetupBox
+import TempGroups
+import LinkedList
 
 trigger swapTrigger
 trigger itemTrigger

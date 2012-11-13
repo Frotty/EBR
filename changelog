@@ -2,8 +2,9 @@ EBR 0.70
 
 Additions:
 *New Object: Trap
-    -configureable circleobject with many options to choose from
+    -configureable circleobject with many options to choose from (type of sfx and type of trap)
 *New Object: Different Walls
+*New Object: Conga Line Head
 *New Escaper: Slide Escaper
 
 Global Changes:
@@ -13,10 +14,12 @@ Global Changes:
 *Most units are unclickable for escapers now
 *Improved most tooltips & rechecked all hotkeys
 *Improved the Instantbuild again, making it really instant.
+*All circle objects can be activated by EscaperKilelrs too
 
 Object Changes:
 *Executer
     -now offers 3 different modes(pressure plate, lever, standard)
+	-new actions (move unit, toggle door mode, ...)
 *Door
     -can now be colored to restrict it to same colored keys
 *Key
@@ -38,6 +41,7 @@ Object Changes:
 Cosmetics:
 *Imported changed tiletextures to make the pathing more clear
 *Added some specialeffects here and there
+*Added SFX for unconfigured obejcts
 *Smooth movement
 *New Stuff for EXP
 *You can't rightclick Escapers anymore

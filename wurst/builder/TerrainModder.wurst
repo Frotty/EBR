@@ -5,6 +5,7 @@ package TerrainModder
 	import SetupObject
 	import RegionData
 	import PlayerData
+	import LinkedList
 	
 	constant int ICECONTROL = 'H007'
     constant int ICEUNCONTROL = 'H008'

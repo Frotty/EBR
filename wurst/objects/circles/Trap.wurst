@@ -5,6 +5,7 @@ import EventHandling
 import DummyCaster
 import Camera
 import GameConstants
+import TempGroups
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
@@ -96,8 +97,9 @@ public class Trap extends StaticBaseObject
 				real rY = getRallyY()
 				real aX = actor.getX()
 				real aY = actor.getY()
+				real angle
 				if distanceBetweenCoords(rX, rY, aX, aY) < 20 
-					var angle = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
+					angle = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
 					angle = angleBetweenCoordsD(aX, aY,rX, rY)
 					print("LOOOOOOOOOOOOOOOOOOOOOOOOOOOL")
