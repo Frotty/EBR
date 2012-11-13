@@ -1,4 +1,5 @@
 package Attackspeed
+import Texttag
 
 public constant integer ATTACK_SPEED_RATE_POSITIVE_ID = 'A02W'
 public constant integer ATTACK_SPEED_RATE_NEGATIVE_ID = 'A02V'

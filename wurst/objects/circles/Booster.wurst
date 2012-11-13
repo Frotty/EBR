@@ -4,6 +4,7 @@ package Booster
     import Escaper
     import EscaperKiller
     import EventHandling
+    import Texttag
     
 	constant int 	WAYPOINT_ID   = 'n00J'
 		

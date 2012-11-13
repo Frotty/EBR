@@ -4,6 +4,7 @@ package Waypoint
     import Escaper
     import EscaperKiller
     import EventHandling
+    import Texttag
     
 	constant int 	WAYPOINT_ID   = 'n004'
 	constant int INC_ID = 'A054'

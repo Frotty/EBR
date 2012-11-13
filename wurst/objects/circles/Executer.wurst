@@ -11,6 +11,7 @@ package Executer
     import BuilderConstants
     import EventHandling
     import TempGroups
+    import Texttag
     
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"

@@ -1,4 +1,5 @@
 package MoveSpeed
+import Texttag
 
 import SetupObject
 import Entity

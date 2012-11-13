@@ -9,7 +9,7 @@ int array herotypes
 string array heroinfos
 texttag array herott
 int array currentView
-constant int herocount = 3
+constant int herocount = 4
 
 constant real SX = 6398
 constant real SY = -6791
@@ -135,10 +135,12 @@ public function init_Choose()
 	herotypes[0] = 'H00B'
     herotypes[1] = 'H003'
     herotypes[2] = 'H00D'
+    herotypes[3] = 'H00E'
 
     heroinfos[0] = "|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation."
     heroinfos[1] = "|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat."
     heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can turn invisible."
+    heroinfos[3] = "|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice."
 
     for pd in players
         currentView[pd.id] = 1

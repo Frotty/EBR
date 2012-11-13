@@ -4,7 +4,7 @@ import LinkedList
 import EventHandling
 import SetupObject
 import TempGroups
-
+import Texttag
 
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
