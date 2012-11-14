@@ -13,7 +13,8 @@ package SetupObject
 	
 	trigger orderTrigger
 	
-	public abstract class DynamicSetupObject extends UnitEntity		
+	public abstract class DynamicSetupObject extends UnitEntity
+		real radius	
 		unit setup
 		
 		trigger inRangeTrig // Trigger for inRange detection
@@ -21,6 +22,7 @@ package SetupObject
 						
 		construct( vec3 pos, unit u, unit setup, real radius, code c )
 			super( pos, u )
+			this.radius = radius
 			actor.addAbility('Aloc').removeAbility('Aloc')
 			SetUnitPathing(actor, true)
 			
@@ -101,12 +103,14 @@ package SetupObject
 		  
 					
 	public abstract class StaticSetupObject extends UnitEntity
+		real radius
 		unit setup
 		
 		trigger inRangeTrig // Trigger for inRange detection
 		
 		construct( vec3 pos, real radius, code c )
 			super( pos, setup )
+			this.radius = radius
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.addAction( c )
@@ -145,8 +149,6 @@ package SetupObject
 
 
 
-
-	
 	init
 		orderTrigger = CreateTrigger()
 		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )

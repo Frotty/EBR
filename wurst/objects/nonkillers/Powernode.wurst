@@ -36,22 +36,22 @@ public class Powernode extends DynamicSetupObject
 		destroy l
 		
 	function link( Powernode p )
-		links.add(new Link(p, AddLightning(EFFECT_STRING, false, position.x, position.y, p.position.x, p.position.y)))
+		links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y)))
 		
 	override function update()
-		position.x = setup.getX()
-		position.y = setup.getY()
+		pos.x = setup.getX()
+		pos.y = setup.getY()
 		if links.size > 0
 			print(links.size.toString())
 			var i = 0
 			while i < links.size
 				Link l = links.get(i)
 				if not l.linkedNode.done 
-					MoveLightning(l.sfx, false, position.x, position.y, l.linkedNode.position.x, l.linkedNode.position.y)
+					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
 					for Escaper e in escapers
-						if e.alive and e.position.toVec2().distToSegmentSquared(position.toVec2(), l.linkedNode.position.toVec2() ) < ACTIVATION_DIST
+						if e.alive and e.pos.toVec2().distToSegmentSquared(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST
 							e.kill()
-							AddSpecialEffect( KILL_EFFECT , e.position.x, e.position.y ) 
+							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ) 
 				else
 					links.removeAt(i)
 					print("before DESTROY")
@@ -72,9 +72,6 @@ public class Powernode extends DynamicSetupObject
 			destroy l
 		destroy links		
 				
-	override function onGround()
-	override function inAir()
-	
 	
 	ondestroy
 		actor.unregisterCastEvent()

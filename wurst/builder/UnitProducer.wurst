@@ -11,7 +11,6 @@ package UnitProducer
 	import Bomber
 	import EventHandling
 	import Pointer
-	import Bomber
 	import LinkedList
 	
 	constant int ID = 'H00A'

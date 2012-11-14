@@ -1,0 +1,77 @@
+package PhysicsEntity
+import Entity
+import Terrain
+import PhysicsConstants
+
+// Base Entity Class
+public abstract class PhysicsEntity extends Entity
+	// Affected by gravity
+	boolean affectedByGravity = true
+	
+	real terrainZ = 0.
+	
+	// Physical factors
+	
+	// The higher the more slide. Should be < 1.
+	real friction = 0.9
+	// Defines the bounciness
+	real restitution = 0.6
+	// Speedfactor
+	real speedFactor = 1.
+	
+
+	construct( vec3 pos, player owner )
+		super(pos,owner)
+		
+	construct( vec3 pos, vec3 vel, player owner )
+		super(pos,vel,owner)
+		
+		
+	// This function is called every ANIMATION_PERIOD tick if the Entity is active
+	override function update()
+		terrainZ = getTerrainZ(pos.x, pos.y)
+		if pos.z <= terrainZ + .2
+			onGround()
+		else
+			inAir()
+			
+		pos += (vel * speedFactor)
+		
+	// When the Entity is on or near the ground	
+	function onGround()
+		// If the Entity is moving towards 
+		vec3 normal = getTerrainNormal(pos.x, pos.y, 2.)
+		// Is the Entity going away from the ground?
+		if vel.dot(normal) > 0 
+			return
+
+		vec3 pv = vel.project(normal)
+		pv *= (-1.5)
+		if pv.z > 4.
+			vel += pv
+		else	
+			vel *= friction
+			
+		pos.z = terrainZ
+		
+	function inAir()
+		if affectedByGravity
+			vel += gravity
+			
+abstract public class PhysicsUnitEntity extends PhysicsEntity
+	unit actor
+	
+	construct( vec3 pos, unit actor )
+		super(pos, actor.getOwner())
+		this.actor = actor
+		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		
+	function setNewActor(unit u)
+		actor.remove()
+		actor = u
+		actor.setUserData(this castTo int)
+		
+	function setNewPos(vec3 tpos)
+		pos = tpos
+		actor.setPos(tpos.x,tpos.y)
+		

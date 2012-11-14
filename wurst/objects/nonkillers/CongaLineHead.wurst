@@ -12,28 +12,28 @@ constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
 
 public class CongaLineHead extends DynamicSetupObject
-	LinkedList<DynamicEntity> segments
+	LinkedList<Entity> segments
 	real segLength = 50.
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
-		segments = new LinkedList<DynamicEntity>()
+		segments = new LinkedList<Entity>()
 		
 	override function update()
 		super.update()
 		int i = 0
-		DynamicEntity se = null
+		Entity se = null
 		for e in segments
 			if i == 0
-				e.setNewPos(calculateSegmentPos(position.toVec2(), e.position.toVec2(), 64.))
+				e.setNewPos(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 64.))
 			else
-				e.setNewPos(calculateSegmentPos(se.position.toVec2(), e.position.toVec2(), segLength))
+				e.setNewPos(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength))
 				
 			se = e
 			i++
 		
-	function addSegment(DynamicEntity e)
+	function addSegment(Entity e)
 		boolean isNew = true
 		for de in segments
 			if de == e
@@ -50,30 +50,30 @@ public class CongaLineHead extends DynamicSetupObject
 		var data = GetSpellAbilityUnit().getUserData() castTo CongaLineHead
 		switch id
 			case ADD_ID
-				data.addSegment(t.getUserData() castTo DynamicEntity)
+				data.addSegment(t.getUserData() castTo Entity)
 			case INC_ID
 				if data.segLength < 500.
 					data.segLength += 25
-					createTTExForPlayer(data.position, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.position, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			case DEC_ID
 				if data.segLength > 25
 					data.segLength -= 25
-					createTTExForPlayer(data.position, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.position, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			
 				
 		return false
 		
-function DynamicEntity.setNewPos( vec2 pos)
+function Entity.setNewPos( vec2 pos)
 	if this instanceof DynamicSetupObject
 		(this castTo DynamicSetupObject).setNewPos(pos.toVec3())
-		(this castTo DynamicSetupObject).setAngle(angleBetweenCoordsD(this.position.x, this.position.y, pos.x, pos.y))
+		(this castTo DynamicSetupObject).setAngle(angleBetweenCoordsD(this.pos.x, this.pos.y, pos.x, pos.y))
 	else if this instanceof Spinner
 		(this castTo Spinner).setNewPos(pos.toVec3())
-		(this castTo Spinner).actor.setFacing(angleBetweenCoordsD(this.position.x, this.position.y, pos.x, pos.y))
+		(this castTo Spinner).actor.setFacing(angleBetweenCoordsD(this.pos.x, this.pos.y, pos.x, pos.y))
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angle = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)

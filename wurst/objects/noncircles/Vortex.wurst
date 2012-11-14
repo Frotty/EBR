@@ -10,14 +10,14 @@ constant int ID = 'n013'
 constant int INC_ID = 'A04J'
 constant int DEC_ID = 'A04K'
 
-constant real GRAV_RADIUS = 445
+constant real GRAV_RADIUS_SQ = 198025 //445
 
 public class Vortex extends Entity
 	unit actor
 	real gravity = 2.
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), GRAV_RADIUS, owner )
+		super( pos.toVec3(), owner )
 		actor = CreateUnit(owner, ID, pos.x, pos.y, 0)
 		actor.registerCastEvent(Condition(function Vortex.onCast))
 		actor.setUserData(this castTo int)
@@ -25,7 +25,7 @@ public class Vortex extends Entity
 		
 	override function update()
 		for e in escapers
-			if pos.toVec2().distToVecSquared( e.pos.toVec2() ) < GRAV_RADIUS.squared() and not e.flying
+			if pos.toVec2().distToVecSquared( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
 				var angle = e.pos.toVec2().angleTo(pos.toVec2())
 				e.vortexVelocity += vec3( Cos(angle) * gravity, Sin(angle) * gravity, 0 )
 		

@@ -3,6 +3,7 @@ import PlayerData
 import Escaper
 import EscaperClasses
 import LinkedList
+import Entity
 
 unit array pickheros
 int array herotypes

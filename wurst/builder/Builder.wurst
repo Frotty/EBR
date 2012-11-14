@@ -13,8 +13,7 @@ trigger itemTrigger
 
 
 public class Builder extends UnitEntity
-	
-	
+
 	construct( player p )
 		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
 		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )

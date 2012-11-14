@@ -1,6 +1,7 @@
 package SetupBox
 import Entity
 import RegionData
+import EventHandling
 
 constant int SETUP_BOX = 'n00A'
 constant int ICEI_ID = 'A057'
@@ -13,21 +14,18 @@ constant int LD_ID = 'A05A'
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
 
-trigger castTrig
-
-public class SetupBox extends Entity
-	unit actor
+public class SetupBox extends UnitEntity
 	RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
-		super( pos.toVec3(), 0., owner)
-		actor = CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 )
-		castTrig.registerUnitEvent( actor, EVENT_UNIT_SPELL_EFFECT )
-		actor.setUserData(this castTo int)
+		super( pos.toVec3(), CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 ))
+		actor.registerCastEvent(Condition(function SetupBox.onCast))
 		rdata = data
 		
+	override function update()
 		
-	static function onCast()
+		
+	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var box = GetSpellAbilityUnit().getUserData() castTo SetupBox
 		switch id
@@ -67,11 +65,7 @@ public class SetupBox extends Entity
 				else
 					box.rdata.lavaDmg -= .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
-					
-	
-	
-init
-	castTrig = CreateTrigger()
-	castTrig.addAction(function SetupBox.onCast)
+		return false
+
 	
 	

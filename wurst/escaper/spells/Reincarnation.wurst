@@ -14,7 +14,7 @@ function castReincarnation()
 			var e = escaper castTo Holy_Escaper
 			if e.revivetomb != null
 				e.revivetomb.remove()
-			e.revivetomb = CreateUnit(escaper.owner, TOMB_DUMMY_ID, escaper.position.x, escaper.position.y, 0.)
+			e.revivetomb = CreateUnit(escaper.owner, TOMB_DUMMY_ID, escaper.pos.x, escaper.pos.y, 0.)
 
 
 

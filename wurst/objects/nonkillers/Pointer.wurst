@@ -21,7 +21,7 @@ public class Pointer extends UnitEntity
 	trigger trig
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), 64., CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.))
+		super(pos.toVec3(), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.))
 		actor.addAbility(LOCUST_ID)
 		setup = CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
 		setup.addAbility('Agho')
@@ -32,8 +32,8 @@ public class Pointer extends UnitEntity
 		setup.setUserData(this castTo int)
 		
 	override function update()
-		position = vec3(setup.getX(), setup.getY(), 0.)
-		actor.setPos(position.x, position.y)
+		pos = vec3(setup.getX(), setup.getY(), 0.)
+		actor.setPos(pos.x, pos.y)
 		actor.setFacing(angle)
 		if turning
 			angle += turnspeed
@@ -45,15 +45,15 @@ public class Pointer extends UnitEntity
 			case INC_ID
 				if data.turnspeed < 6.
 					data.turnspeed += 0.5
-					createTTExForPlayer(data.position, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.position, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			case DEC_ID
 				if data.turnspeed > -6.
 					data.turnspeed -= 0.5
-					createTTExForPlayer(data.position, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.position, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTExForPlayer(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			case START_ID
 				data.turning = true
 				data.setup.removeAbility(START_ID).addAbility(STOP_ID)

@@ -22,7 +22,7 @@ public class Key extends ItemObject
 		
 	function recolor()
 		RemoveItem(actorItem)
-		actorItem = CreateItem( keyIds[col castTo int], position.x, position.y )
+		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
 		actorItem.setUserData(this castTo int)
 		
 	function pickedUp(Escaper holder)
@@ -33,9 +33,9 @@ public class Key extends ItemObject
 	function dropped()
 		picked = false
 		holder = null
-		setup.setXYVec(position.toVec2())
+		setup.setXYVec(pos.toVec2())
 		setup.show()
-		actorItem = CreateItem( keyIds[col castTo int], position.x, position.y )
+		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
 		actorItem.setUserData(this castTo int)
 
 		
@@ -43,7 +43,7 @@ public class Key extends ItemObject
 	override function update()
 		if picked and followWalkable
 			if not holder.flying and not holder.sliding and not holder.onUnwalkable
-				position = holder.position
+				pos = holder.pos
 				
 			
 		

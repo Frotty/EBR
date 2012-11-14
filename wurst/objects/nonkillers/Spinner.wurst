@@ -27,7 +27,7 @@ public class Spinner extends UnitEntity
 	real speed = 2.
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), 0., CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0))
+		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0))
 		actor.registerCastEvent(Condition(function onCast))
 		
 		
@@ -36,7 +36,7 @@ public class Spinner extends UnitEntity
 		real angle
 		real dist
 		for node in spinningEntities
-			node.obj.setNewXY( vec3(polarProjectionXR(position.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(position.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
+			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
 			node.angle += speed*DEGTORAD
 			
 	function checkObj(Entity e)
@@ -52,14 +52,14 @@ public class Spinner extends UnitEntity
 					break
 				i++
 			if isNew
-				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(position.x, position.y, dobj.position.x, dobj.position.y), distanceBetweenCoords(position.x, position.y, dobj.position.x, dobj.position.y) ))
+				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(pos.x, pos.y, dobj.pos.x, dobj.pos.y), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
 			
 
 	ondestroy
 		while spinningEntities.size > 0
-			 SpinNode n = spinningEntities.get(0)
-			 spinningEntities.removeAt(0)
-			 destroy n 
+			SpinNode n = spinningEntities.get(0)
+			spinningEntities.removeAt(0)
+			destroy n 
 				
 	
 
@@ -83,15 +83,15 @@ public class Spinner extends UnitEntity
 			case INC_ID
 				if sdata.speed < 10.
 					sdata.speed += .5
-					createTTExForPlayer(sdata.position, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTExForPlayer(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 				else
-					createTTExForPlayer(sdata.position, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTExForPlayer(sdata.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 			case DEC_ID
 				if sdata.speed > -10.
 					sdata.speed -= .5
-					createTTExForPlayer(sdata.position, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTExForPlayer(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 				else
-					createTTExForPlayer(sdata.position, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTExForPlayer(sdata.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
 
 		return false
 	

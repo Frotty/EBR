@@ -4,16 +4,16 @@ import Terrain
 import EventHandling
 import Escaper
 constant int BTARGET_ID = 'u004'
-    
+
+
 public class BomberTarget extends UnitEntity
-        
-    construct(vec2 pos, player owner)
-		super(pos.toVec3(), 0., CreateUnit(owner, BTARGET_ID, pos.x, pos.y, 0))
+		
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), CreateUnit(owner, BTARGET_ID, pos.x, pos.y, 0))
 		actor.registerCastEvent(Condition(function onCast))
 		
-    static function onInRangeEvent()
-        print("wut")
-       
-    static function onCast() returns boolean
-    	return false
+	override function update()
+	   
+	static function onCast() returns boolean
+		return false
 

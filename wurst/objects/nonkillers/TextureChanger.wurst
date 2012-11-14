@@ -29,59 +29,59 @@ public class TextureChanger extends UnitEntity
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), 0., CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0))
+		super(pos.toVec3(), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0))
 		actor.registerCastEvent(Condition(function TextureChanger.onCast))
 		
 		
 	override function update()
 		super.update()
-		var tX = round(position.x/128)
-        var tY = round(position.y/128)
-        RegionData data
-        int tileID
-        for int i = -(sizeY+1) to sizeY+1
-            for int j = -(sizeX+1) to sizeX+1
-                if not blockermatrix.loadBoolean(tX+j, tY+i)
-	                var x = (tX+j)*128.
-	                var y = (tY+i)*128.
-	                if (j == -(sizeX+1)) or (j == sizeX+1) or (i == -(sizeY+1)) or (i == sizeY+1)
-	                    tileID = outerTile
-	                else
-	                    tileID = innerTile
-	                data = getRegionData(x,y)
-	        		if data.isOwner(GetPlayerId(owner))
-	                    if tileID == '0000'
-	                        tileID = data.walkableTile
-	                	else if tileID == '0001'
-	                        tileID = data.unwalkableTile
-	                    if GetTerrainType(x, y) != tileID
-	                    	SetTerrainType(x, y, tileID, -1, 1, 1 )
+		var tX = round(pos.x/128)
+		var tY = round(pos.y/128)
+		RegionData data
+		int tileID
+		for int i = -(sizeY+1) to sizeY+1
+			for int j = -(sizeX+1) to sizeX+1
+				if not blockermatrix.loadBoolean(tX+j, tY+i)
+					var x = (tX+j)*128.
+					var y = (tY+i)*128.
+					if (j == -(sizeX+1)) or (j == sizeX+1) or (i == -(sizeY+1)) or (i == sizeY+1)
+						tileID = outerTile
+					else
+						tileID = innerTile
+					data = getRegionData(x,y)
+					if data.isOwner(GetPlayerId(owner))
+						if tileID == '0000'
+							tileID = data.walkableTile
+						else if tileID == '0001'
+							tileID = data.unwalkableTile
+						if GetTerrainType(x, y) != tileID
+							SetTerrainType(x, y, tileID, -1, 1, 1 )
 	
 	static function onCast() returns boolean
-	        var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger
-	        int i = GetSpellAbilityId()
+			var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger
+			int i = GetSpellAbilityId()
 			
 			switch i
 				case TERRAIN_INC_H_ID
 					if obj.sizeX < 3
 						obj.sizeX ++
 					else
-						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_INC_V_ID
 					if obj.sizeY < 3
 						obj.sizeY ++
 					else
-						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_DEC_H_ID
 					if obj.sizeX > 0
 						obj.sizeX --
 					else
-						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_DEC_V_ID
 					if obj.sizeY > 0
 						obj.sizeY --
 					else
-						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_I_WALKABLE_ID
 					obj.innerTile = '0000'
 				case TERRAIN_I_UNWALKABLE_ID
