@@ -22,7 +22,9 @@ import Bombertower
 import UnitRemover
 import CongaLineHead
 import TerrainBlocker
+import Fountain
 		
+
 real x
 real y
 real ox
@@ -56,6 +58,7 @@ function callback()
 	var rdata = getRegionData(x, y)
 	if rdata.isOwner(owner.getId())
 		switch ord
+
 			case buildorders[1]
 				new Jumper(vec2(x,y), u.getOwner())
 			case buildorders[2]
@@ -92,6 +95,8 @@ function callback()
 				CreateUnit(u.getOwner(),buildorders[22],x,y, 0.)
 			case buildorders[23]
 				new Tracks(vec2(x,y), u.getOwner())	
+			case buildorders[24]
+				new Fountain(vec2(x,y), u.getOwner())	
 			case buildorders[25]
 				new Powernode(vec2(x,y), u.getOwner())	
 			case buildorders[26]
@@ -104,8 +109,8 @@ function callback()
 				new CongaLineHead(vec2(x,y), u.getOwner())
 			case buildorders[30]
 				new TerrainBlocker(vec2(x,y), u.getOwner())
-			
-	else
+
+
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null
 
@@ -172,7 +177,7 @@ init
 	buildorders[21] = 'h01M' // Spinner
 	buildorders[22] = 'n00P' // Wall
 	buildorders[23] = 'n01C' // Tracks
-	buildorders[24] = 'h00H'
+	buildorders[24] = 'h00H' // Fountain
 	buildorders[25] = 'h0nn' // Powernode
 	buildorders[26] = 'n00I' // Trap
 	buildorders[27] = 'n00Q' // Horizontal Wall
@@ -180,3 +185,4 @@ init
 	buildorders[29] = 'h000' // Conga Line
 	buildorders[30] = 'h009' // TerrainBlocker
 	
+

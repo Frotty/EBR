@@ -11,6 +11,7 @@ package EscaperKiller
 	public constant real COLL_SIZE_TANK = 80
 	public constant real COLL_SIZE_GLAIVE = 54
 	
+
 	public class EscaperKiller extends DynamicSetupObject
 		
 		static function onInRangeEvent()
@@ -18,10 +19,12 @@ package EscaperKiller
 			
 			if ent instanceof Escaper
 				var es = ent castTo Escaper
-				es.kill() 
+				if not es.flying
+					es.kill() 
 		
 		construct( unit u, unit setup, real radius )
 			super( vec3(setup.getX(), setup.getY(), 0), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
+
 
 
 endpackage

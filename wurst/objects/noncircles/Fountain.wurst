@@ -1,0 +1,30 @@
+package Fountain
+	import BaseObject
+	import Terrain
+	import Escaper
+	import EventHandling
+	
+	constant int 	FOUNTAIN_ID   = 'h00H'
+	constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+
+	public class Fountain extends StaticBaseObject
+		unit dummy
+		
+		construct( vec2 pos, player owner )
+			super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 90. ), 150., function Fountain.cure )
+			dummy = CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 90. )
+		
+		
+		static function cure()
+			Fountain obj = GetTriggeringTrigger().getSource().getUserData() castTo Fountain
+			Entity e = GetTriggerUnit().getUserData() castTo Entity
+			if e instanceof Escaper
+				var es = e castTo Escaper
+				if es.poisoned and not es.flying
+					DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y ))
+					es.setPoison(false)
+		
+		ondestroy
+			dummy.remove()
+		
+endpackage
