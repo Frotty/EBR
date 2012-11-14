@@ -16,7 +16,7 @@ public class Builder extends UnitEntity
 	
 	
 	construct( player p )
-		super( vec3(0,0,0), 0., CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
+		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
 		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )
 		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_PICKUP_ITEM )
 	
@@ -25,22 +25,22 @@ public class Builder extends UnitEntity
 		var u = GetTriggerUnit()
 		var id = GetItemTypeId(GetManipulatedItem())
 		var builder = u.getUserData() castTo Builder
-		var rdata = getRegionData(builder.position.x, builder.position.y)
+		var rdata = getRegionData(builder.pos.x, builder.pos.y)
 		if rdata.isTerrainItem(id)
 			rdata.setType(id, true)
 			rdata.allow(builder.owner.getId())
 			RemoveItem( GetManipulatedItem())
 			
-			GroupEnumUnitsInRange(ENUM_GROUP,builder.position.x, builder.position.y, 512., Filter( function filter))
+			GroupEnumUnitsInRange(ENUM_GROUP,builder.pos.x, builder.pos.y, 512., Filter( function filter))
 			for shop in ENUM_GROUP
 				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
 				shop.remove()				
 			GroupClear(ENUM_GROUP)
 			
 			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
-            new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
+			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
 			
-			
+	override function update()
 	
 	static function swapPages()
 		var data = GetTriggerUnit().getUserData() castTo Entity
@@ -53,29 +53,23 @@ public class Builder extends UnitEntity
 			boolean wasMenu = false
 			switch id
 				case MENU_1
-					builder.actor.remove()
-		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
-		            wasMenu = true
-		        case MENU_2
-		            builder.actor.remove()
-		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit())))
-		            wasMenu = true
-		        case MENU_3
-		            builder.actor.remove()
-		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit()) ) )
-		            wasMenu = true
-		        case MENU_4
-		            builder.actor.remove()
-		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit()) ) )
-		            wasMenu = true
-		        case MENU_5
-		            builder.actor.remove()
-		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
-		            wasMenu = true
-		        case MENU_6
-		            builder.actor.remove()
-		            builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.position.x, data.position.y, GetUnitFacing(GetTriggerUnit() )) )
-		            wasMenu = true
+					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+					wasMenu = true
+				case MENU_2
+					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit())))
+					wasMenu = true
+				case MENU_3
+					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+					wasMenu = true
+				case MENU_4
+					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+					wasMenu = true
+				case MENU_5
+					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+					wasMenu = true
+				case MENU_6
+					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+					wasMenu = true
 				case KEY_SPELL_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId())
 						new Key(vec2(ox,oy), builder.owner)
@@ -86,11 +80,11 @@ public class Builder extends UnitEntity
 			if wasMenu
 				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
 				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
-	            UnitAddItemById(builder.actor,'I000')
-	            UnitAddItemById(builder.actor,'I001')
-	            UnitAddItemById(builder.actor,'I002')
-	            UnitAddItemById(builder.actor,'I003')		            
-	            SelectUnitForPlayerSingle( builder.actor, builder.owner )
+				UnitAddItemById(builder.actor,'I000')
+				UnitAddItemById(builder.actor,'I001')
+				UnitAddItemById(builder.actor,'I002')
+				UnitAddItemById(builder.actor,'I003')					
+				SelectUnitForPlayerSingle( builder.actor, builder.owner )
 
 
 function filter() returns boolean
@@ -106,8 +100,8 @@ public function init_Builder()
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
 			UnitAddItemById(pd.builder.actor,'I000')
-            UnitAddItemById(pd.builder.actor,'I001')
+			UnitAddItemById(pd.builder.actor,'I001')
 			UnitAddItemById(pd.builder.actor,'I002')
-            UnitAddItemById(pd.builder.actor,'I003')	
+			UnitAddItemById(pd.builder.actor,'I003')	
 	
 	

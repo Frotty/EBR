@@ -1,19 +1,19 @@
 package Executer
 	import RGBA
-    import BaseObject
-    import Terrain
-    import Rect
-    import Escaper
-    import EscaperKiller
-    import CustomSpellBook
-    import RegionData
-    import Door
-    import BuilderConstants
-    import EventHandling
-    import TempGroups
-    import Texttag
-    import Pointer
-    
+	import BaseObject
+	import Terrain
+	import Rect
+	import Escaper
+	import EscaperKiller
+	import CustomSpellBook
+	import RegionData
+	import Door
+	import BuilderConstants
+	import EventHandling
+	import TempGroups
+	import Texttag
+	import Pointer
+	
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
 	constant int 	LEVER_DUMMY_ID = 'DTlv'
@@ -49,176 +49,176 @@ package Executer
 		BIGRANDOMKILLER
 		POINTER
 
-    public class Executer extends StaticBaseObject
-        boolean canKillerTrigger = false
-        boolean canEscaperTrigger = true
-        rect eventRect // only for pressureplate
-        Emode eventMode
-        Amode actionMode
-        boolean ON = false// only for lever and pressureplate
-        //effect oneffect // when lever and pressurplate is active
-        int tiletype //Terrain Change tile type
-        int nottiletype = '0001' // The basic is Unwalkable
-        int verticalTileSize = 0 
-        int horizontalTileSize = 0
-        unit unitToMove // for unitMover
-        ActionUnit actionUnit // only for UnitCreator Executer 
-        string moveOrderString // only for unitMover
-        boolean disabled = false // only for oneshot, so you can re-activate
-        destructable dummy // model for pressure plate, and lever
-        
-        construct( vec2 pos, player owner)
-        	super( pos.toVec3(), CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent ) 
+	public class Executer extends StaticBaseObject
+		boolean canKillerTrigger = false
+		boolean canEscaperTrigger = true
+		rect eventRect // only for pressureplate
+		Emode eventMode
+		Amode actionMode
+		boolean ON = false// only for lever and pressureplate
+		//effect oneffect // when lever and pressurplate is active
+		int tiletype //Terrain Change tile type
+		int nottiletype = '0001' // The basic is Unwalkable
+		int verticalTileSize = 0 
+		int horizontalTileSize = 0
+		unit unitToMove // for unitMover
+		ActionUnit actionUnit // only for UnitCreator Executer 
+		string moveOrderString // only for unitMover
+		boolean disabled = false // only for oneshot, so you can re-activate
+		destructable dummy // model for pressure plate, and lever
+		
+		construct( vec2 pos, player owner)
+			super( pos.toVec3(), CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent ) 
 			actor.registerCastEvent(Condition(function Executer.onCast))
 			
-        static function onEvent()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            
-            if obj.canTrigger(e)
-	        	switch obj.eventMode
-	        		case Emode.NONE
-	        			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Please select an Event Mode for the Executer")
-	        		case Emode.REPEATING
-	        			obj.findAction()
-	        		case Emode.ONESHOT
-	        			if not obj.disabled
-	        				obj.findAction()
-	        				obj.disable()
-	        		case Emode.LEVER
-	        			if obj.ON
-	                        obj.negativeAction()
-	                        obj.ON = false
-	                        SetDestructableAnimation(obj.dummy, "death")
-	                    else
-	                        obj.findAction()
-	                        obj.ON = true
-	                        SetDestructableAnimation(obj.dummy, "stand")
+		static function onEvent()
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = source.getUserData() castTo thistype
+			
+			if obj.canTrigger(e)
+				switch obj.eventMode
+					case Emode.NONE
+						DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Please select an Event Mode for the Executer")
+					case Emode.REPEATING
+						obj.findAction()
+					case Emode.ONESHOT
+						if not obj.disabled
+							obj.findAction()
+							obj.disable()
+					case Emode.LEVER
+						if obj.ON
+							obj.negativeAction()
+							obj.ON = false
+							SetDestructableAnimation(obj.dummy, "death")
+						else
+							obj.findAction()
+							obj.ON = true
+							SetDestructableAnimation(obj.dummy, "stand")
 							//obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
-	        		case Emode.PRESSUREPLATE
-	        			skip
-        
-        static function onLeaveEvent()
-            region r = GetTriggeringRegion()
-            Entity leaver = GetLeavingUnit().getUserData() castTo Entity
-            thistype obj = r.loadRegionData() castTo thistype
-            if obj.canTrigger(leaver)
-    			GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
-    			int c = 0
-	    		for unit u in ENUM_GROUP
-		            Entity e = u.getUserData() castTo Entity
-		            if obj.canTrigger(e)
-		                c++
-	            ENUM_GROUP.clear()
-	    		if c == 0
-	                obj.negativeAction()
-	                obj.ON = false
-		            SetDestructableAnimation(obj.dummy, "stand alternate")
-	            
+					case Emode.PRESSUREPLATE
+						skip
+		
+		static function onLeaveEvent()
+			region r = GetTriggeringRegion()
+			Entity leaver = GetLeavingUnit().getUserData() castTo Entity
+			thistype obj = r.loadRegionData() castTo thistype
+			if obj.canTrigger(leaver)
+				GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
+				int c = 0
+				for unit u in ENUM_GROUP
+					Entity e = u.getUserData() castTo Entity
+					if obj.canTrigger(e)
+						c++
+				ENUM_GROUP.clear()
+				if c == 0
+					obj.negativeAction()
+					obj.ON = false
+					SetDestructableAnimation(obj.dummy, "stand alternate")
+				
 		static function onEnterEvent()
-            unit u = GetTriggerUnit()
-            region r = GetTriggeringRegion()
-            Entity e = u.getUserData() castTo Entity
-	        thistype obj = r.loadRegionData() castTo thistype
-	        if obj.canTrigger(e)
-	    		if not obj.ON
-		            obj.findAction()
-		            obj.ON = true
-		            SetDestructableAnimation(obj.dummy, "death")
-    		
+			unit u = GetTriggerUnit()
+			region r = GetTriggeringRegion()
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = r.loadRegionData() castTo thistype
+			if obj.canTrigger(e)
+				if not obj.ON
+					obj.findAction()
+					obj.ON = true
+					SetDestructableAnimation(obj.dummy, "death")
+			
 
-        function findAction()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            
-            var rx = getRallyX()
-            var ry = getRallyY()
-            
-            switch actionMode
-            	case Amode.NONE
-	        			DisplayTextToPlayer( owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
-            	case Amode.CLOSEDOOR
-	        		Door closingdoor = getRallyUnit().getUserData() castTo Door
-            		if closingdoor == null
-                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-                    else
-            			closingdoor.closeDoor()
-            	case Amode.TOGGLEDOOR
-	        		Door togglingdoor = getRallyUnit().getUserData() castTo Door
-            		if togglingdoor == null
-                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-                    else
-                        if togglingdoor.opened
-            				togglingdoor.closeDoor()
-                        else
-            				togglingdoor.openDoor()
-            	case Amode.OPENDOOR
-            		Door openingdoor = getRallyUnit().getUserData() castTo Door
-            		if openingdoor == null
-                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-            		else
-            			openingdoor.openDoor()
-            	case Amode.CHANGETERRAIN
-            		changeTerrain(true)
-            	case Amode.MOVEUNIT
-            		moveUnit()
-            	case Amode.CREATEUNIT
-            		createUnit()
-            	default
-            		print("Bug - ExecuterAction")
-	            		
+		function findAction()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			
+			var rx = getRallyX()
+			var ry = getRallyY()
+			
+			switch actionMode
+				case Amode.NONE
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
+				case Amode.CLOSEDOOR
+					Door closingdoor = getRallyUnit().getUserData() castTo Door
+					if closingdoor == null
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					else
+						closingdoor.closeDoor()
+				case Amode.TOGGLEDOOR
+					Door togglingdoor = getRallyUnit().getUserData() castTo Door
+					if togglingdoor == null
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					else
+						if togglingdoor.opened
+							togglingdoor.closeDoor()
+						else
+							togglingdoor.openDoor()
+				case Amode.OPENDOOR
+					Door openingdoor = getRallyUnit().getUserData() castTo Door
+					if openingdoor == null
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					else
+						openingdoor.openDoor()
+				case Amode.CHANGETERRAIN
+					changeTerrain(true)
+				case Amode.MOVEUNIT
+					moveUnit()
+				case Amode.CREATEUNIT
+					createUnit()
+				default
+					print("Bug - ExecuterAction")
+						
 		function negativeAction()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            
-            var rx = getRallyX()
-            var ry = getRallyY()
-            
-            switch actionMode
-            	case Amode.CLOSEDOOR
-            		Door closingdoor = getRallyUnit().getUserData() castTo Door
-            		if closingdoor == null
-                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-            		else
-            			closingdoor.openDoor()
-            	case Amode.TOGGLEDOOR
-	        		Door togglingdoor = getRallyUnit().getUserData() castTo Door
-            		if togglingdoor == null
-                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-                    else
-                        if togglingdoor.opened
-            				togglingdoor.closeDoor()
-                        else
-            				togglingdoor.openDoor()
-            	case Amode.OPENDOOR
-            		Door openingdoor = getRallyUnit().getUserData() castTo Door
-            		if openingdoor == null
-                        DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-            		else
-            			openingdoor.closeDoor()
-            	case Amode.CHANGETERRAIN
-            		changeTerrain(false)
-            	default
-            		print("Bug - ExecuterNotAction")
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			
+			var rx = getRallyX()
+			var ry = getRallyY()
+			
+			switch actionMode
+				case Amode.CLOSEDOOR
+					Door closingdoor = getRallyUnit().getUserData() castTo Door
+					if closingdoor == null
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					else
+						closingdoor.openDoor()
+				case Amode.TOGGLEDOOR
+					Door togglingdoor = getRallyUnit().getUserData() castTo Door
+					if togglingdoor == null
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					else
+						if togglingdoor.opened
+							togglingdoor.closeDoor()
+						else
+							togglingdoor.openDoor()
+				case Amode.OPENDOOR
+					Door openingdoor = getRallyUnit().getUserData() castTo Door
+					if openingdoor == null
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					else
+						openingdoor.closeDoor()
+				case Amode.CHANGETERRAIN
+					changeTerrain(false)
+				default
+					print("Bug - ExecuterNotAction")
 		
 		function moveUnit()
 			var rX = getRallyX()
-            var rY = getRallyY()
-            if moveOrderString == "stop"
-                IssueImmediateOrder(unitToMove, moveOrderString)
-            else
-            	IssuePointOrder(unitToMove, moveOrderString, rX, rY)
+			var rY = getRallyY()
+			if moveOrderString == "stop"
+				IssueImmediateOrder(unitToMove, moveOrderString)
+			else
+				IssuePointOrder(unitToMove, moveOrderString, rX, rY)
 		
 
 				
 		function createUnit()
 			unit u
 			var rX = getRallyX()
-            var rY = getRallyY()
-            var data = getRegionData(rX, rY)
-            
+			var rY = getRallyY()
+			var data = getRegionData(rX, rY)
+			
 			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
@@ -243,25 +243,25 @@ package Executer
 		function changeTerrain(boolean isAction)
 		
 			var rX = getRallyX()
-            var rY = getRallyY()
-            RegionData data
-            int tileID
-            if isAction
-                tileID = tiletype
-            else
-                tileID = nottiletype
-            
-            for int i = 0 to (verticalTileSize*2)
-                for int j = 0 to (horizontalTileSize*2)
-                    var y = rY+ (128*(i-verticalTileSize))
-                    var x = rX+ (128*(j-horizontalTileSize))
-                    data = getRegionData(x,y)
-            		if data.isOwner(GetPlayerId(owner))
-                        if tileID == '0000'
-                            tileID = data.walkableTile
-                    	else if tileID== '0001'
-                            tileID = data.unwalkableTile
-                        SetTerrainType(x, y, tileID, -1, 1, 1 )
+			var rY = getRallyY()
+			RegionData data
+			int tileID
+			if isAction
+				tileID = tiletype
+			else
+				tileID = nottiletype
+			
+			for int i = 0 to (verticalTileSize*2)
+				for int j = 0 to (horizontalTileSize*2)
+					var y = rY+ (128*(i-verticalTileSize))
+					var x = rX+ (128*(j-horizontalTileSize))
+					data = getRegionData(x,y)
+					if data.isOwner(GetPlayerId(owner))
+						if tileID == '0000'
+							tileID = data.walkableTile
+						else if tileID== '0001'
+							tileID = data.unwalkableTile
+						SetTerrainType(x, y, tileID, -1, 1, 1 )
 		
 		function addActionAbilsNormal()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -323,81 +323,81 @@ package Executer
 					print("meh meh destructable removed")
 				else
 					dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
-	        		SetDestructableAnimation(dummy, "death")
-	        else if eventMode == Emode.LEVER
+					SetDestructableAnimation(dummy, "death")
+			else if eventMode == Emode.LEVER
 				if invis
 					RemoveDestructable(dummy)
 				else
 					dummy = CreateDestructable( PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
-	        		SetDestructableAnimation(dummy, "stand alternate")
-        
-        function registerRect(real centerX, real centerY, real offset)
-            //note: with movable circles, itll be necessary to move the rect too.
-            DestroyTrigger(inRangeTrig)
-            
-        	region eventRegion = CreateRegion()
-        	eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
-        	RegionAddRect(eventRegion,eventRect)
-        	eventRegion.setRegionData(this castTo int)
-        	TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
-        	executerUnitLeave.addAction(function onLeaveEvent)
-        	
-        	TriggerRegisterEnterRegion(executerUnitEnter,eventRegion, null)
-        	executerUnitEnter.addAction(function onEnterEvent)
-        
-        function disable()
-        	SetUnitVertexColor(actor, 44,44,44,255)
-        	disabled = true
-        	UnitAddAbility(actor, REACTIVATE_ABIL)
-        	createTTExForPlayer(position, vec2(0,0.05), "Deactivated", 10,  2., colorRGBA(50,50,50,0), owner )
-        
-        ondestroy
-        	actor.remove()
-        	if eventRect != null
-                RemoveRect(eventRect)
-        	if dummy != null
-                RemoveDestructable(dummy)
-        
+					SetDestructableAnimation(dummy, "stand alternate")
+		
+		function registerRect(real centerX, real centerY, real offset)
+			//note: with movable circles, itll be necessary to move the rect too.
+			DestroyTrigger(inRangeTrig)
+			
+			region eventRegion = CreateRegion()
+			eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
+			RegionAddRect(eventRegion,eventRect)
+			eventRegion.setRegionData(this castTo int)
+			TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
+			executerUnitLeave.addAction(function onLeaveEvent)
+			
+			TriggerRegisterEnterRegion(executerUnitEnter,eventRegion, null)
+			executerUnitEnter.addAction(function onEnterEvent)
+		
+		function disable()
+			SetUnitVertexColor(actor, 44,44,44,255)
+			disabled = true
+			UnitAddAbility(actor, REACTIVATE_ABIL)
+			createTTExForPlayer(pos, vec2(0,0.05), "Deactivated", 10,  2., colorRGBA(50,50,50,0), owner )
+		
+		ondestroy
+			actor.remove()
+			if eventRect != null
+				RemoveRect(eventRect)
+			if dummy != null
+				RemoveDestructable(dummy)
+		
 		function canTrigger(Entity e) returns boolean
 			if (canEscaperTrigger and e instanceof Escaper)
 				return true
 			if (canKillerTrigger and e instanceof EscaperKiller)
-	    		return true
-	    	return false
+				return true
+			return false
 
 		static function onCast() returns boolean
-	        print("Executer casts")
+			print("Executer casts")
 			unit source = GetSpellAbilityUnit()
-	        Executer obj = source.getUserData() castTo Executer
-	        
-	        int i = GetSpellAbilityId()
-	        switch i
-	        	case ONESHOT_ABIL
-	        		obj.eventMode = Emode.ONESHOT
-	        		obj.addActionAbilsNormal()
-	        		obj.removeModeAbils()
-	        	case REPEATING_ABIL
-	        		obj.eventMode = Emode.REPEATING
-	        		obj.addActionAbilsNormal()
-	        		obj.removeModeAbils()
-	        	case LEVER_ABIL
-	        		obj.eventMode = Emode.LEVER
-	        		obj.addActionAbilsReversable()
-	        		obj.removeModeAbils()
-	        		obj.dummy = CreateDestructable( LEVER_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
-	        		SetDestructableAnimation(obj.dummy, "death")
-	        	case PRESSURE_ABIL
-	        		obj.eventMode = Emode.PRESSUREPLATE
-	        		obj.addActionAbilsReversable()
-	        		obj.removeModeAbils()
-	        		obj.registerRect(obj.actor.getX(), obj.actor.getY(), 50)
-	        		obj.dummy = CreateDestructable( PLATE_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
-	        		SetDestructableAnimation(obj.dummy, "stand alternate")
-	        		
-	        	case REACTIVATE_ABIL
-	        		obj.disabled = false
-	        		SetUnitVertexColor(obj.actor, 0,128,0,255)
-        			UnitRemoveAbility(obj.actor, REACTIVATE_ABIL)
+			Executer obj = source.getUserData() castTo Executer
+			
+			int i = GetSpellAbilityId()
+			switch i
+				case ONESHOT_ABIL
+					obj.eventMode = Emode.ONESHOT
+					obj.addActionAbilsNormal()
+					obj.removeModeAbils()
+				case REPEATING_ABIL
+					obj.eventMode = Emode.REPEATING
+					obj.addActionAbilsNormal()
+					obj.removeModeAbils()
+				case LEVER_ABIL
+					obj.eventMode = Emode.LEVER
+					obj.addActionAbilsReversable()
+					obj.removeModeAbils()
+					obj.dummy = CreateDestructable( LEVER_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
+					SetDestructableAnimation(obj.dummy, "death")
+				case PRESSURE_ABIL
+					obj.eventMode = Emode.PRESSUREPLATE
+					obj.addActionAbilsReversable()
+					obj.removeModeAbils()
+					obj.registerRect(obj.actor.getX(), obj.actor.getY(), 50)
+					obj.dummy = CreateDestructable( PLATE_DUMMY_ID, obj.actor.getX(), obj.actor.getY(), 0,1,0)
+					SetDestructableAnimation(obj.dummy, "stand alternate")
+					
+				case REACTIVATE_ABIL
+					obj.disabled = false
+					SetUnitVertexColor(obj.actor, 0,128,0,255)
+					UnitRemoveAbility(obj.actor, REACTIVATE_ABIL)
 						
 				case VIS_ID
 					print("meh")
@@ -405,71 +405,71 @@ package Executer
 				case INVIS_ID
 					print("meh")
 					obj.changeVis(false)
-	        	
-	        	case KILLER_TRIGGER_ABIL
-	        		obj.canKillerTrigger = true
-	        		obj.canEscaperTrigger = false
+				
+				case KILLER_TRIGGER_ABIL
+					obj.canKillerTrigger = true
+					obj.canEscaperTrigger = false
 					UnitRemoveAbility(obj.actor, KILLER_TRIGGER_ABIL)
 					UnitAddAbility(obj.actor, BOTH_TRIGGER_ABIL)
-	        	case ESCAPER_TRIGGER_ABIL
-	        		obj.canKillerTrigger = false
-	        		obj.canEscaperTrigger = true
+				case ESCAPER_TRIGGER_ABIL
+					obj.canKillerTrigger = false
+					obj.canEscaperTrigger = true
 					UnitRemoveAbility(obj.actor, ESCAPER_TRIGGER_ABIL)
 					UnitAddAbility(obj.actor, KILLER_TRIGGER_ABIL)
-	        	case BOTH_TRIGGER_ABIL
-	        		obj.canKillerTrigger = true
-	        		obj.canEscaperTrigger = true
+				case BOTH_TRIGGER_ABIL
+					obj.canKillerTrigger = true
+					obj.canEscaperTrigger = true
 					UnitRemoveAbility(obj.actor, BOTH_TRIGGER_ABIL)
 					UnitAddAbility(obj.actor, ESCAPER_TRIGGER_ABIL)
-	        	
-	        	case DOOR_OPEN_ABIL
-	        		obj.actionMode = Amode.OPENDOOR
-	        		obj.removeActionAbils()
+				
+				case DOOR_OPEN_ABIL
+					obj.actionMode = Amode.OPENDOOR
+					obj.removeActionAbils()
 				case DOOR_CLOSE_ABIL
-	        		obj.actionMode = Amode.CLOSEDOOR
-	        		obj.removeActionAbils()
+					obj.actionMode = Amode.CLOSEDOOR
+					obj.removeActionAbils()
 				case DOOR_TOGGLE_ABIL
-	        		obj.actionMode = Amode.TOGGLEDOOR
-	        		obj.removeActionAbils()
-	        		
-	        	case TERRAIN_WALKABLE_ABIL
-	        		if obj.actionMode == Amode.NONE
-	        			obj.actionMode = Amode.CHANGETERRAIN
-	        			obj.removeActionAbils()
-	        			obj.addTerrainAdjuster()
-	        			obj.tiletype = '0000'
-	        		else
-	                    obj.nottiletype = '0000'
-	        	case TERRAIN_UNWALKABLE_ABIL
-	        		if obj.actionMode == Amode.NONE
-	        			obj.actionMode = Amode.CHANGETERRAIN
-	        			obj.removeActionAbils()
-	        			obj.addTerrainAdjuster()
-	        			obj.tiletype = '0001'
-	        		else
-	        			obj.nottiletype = '0001'
-	        	case TERRAIN_ICE_ABIL
-	        		if obj.actionMode == Amode.NONE
-	        			obj.actionMode = Amode.CHANGETERRAIN
-	        			obj.removeActionAbils()
-	        			obj.addTerrainAdjuster()
-	        			obj.tiletype = CONTROLLABLEICE
-	        		else
-	        			obj.nottiletype = CONTROLLABLEICE
-	        	case TERRAIN_UNICE_ABIL
-	        		if obj.actionMode == Amode.NONE
-	        			obj.actionMode = Amode.CHANGETERRAIN
-	        			obj.removeActionAbils()
-	        			obj.addTerrainAdjuster()
-	        			obj.tiletype = UNCONTROLLABLEICE
-	        		else
-	        			obj.nottiletype = UNCONTROLLABLEICE
-	        	
-	        	case TRAIN_BK_ABIL
-	        		if obj.actionUnit == ActionUnit.NONE
-	        			obj.actionMode = Amode.CREATEUNIT
+					obj.actionMode = Amode.TOGGLEDOOR
+					obj.removeActionAbils()
+					
+				case TERRAIN_WALKABLE_ABIL
+					if obj.actionMode == Amode.NONE
+						obj.actionMode = Amode.CHANGETERRAIN
+						obj.removeActionAbils()
+						obj.addTerrainAdjuster()
+						obj.tiletype = '0000'
+					else
+						obj.nottiletype = '0000'
+				case TERRAIN_UNWALKABLE_ABIL
+					if obj.actionMode == Amode.NONE
+						obj.actionMode = Amode.CHANGETERRAIN
+						obj.removeActionAbils()
+						obj.addTerrainAdjuster()
+						obj.tiletype = '0001'
+					else
+						obj.nottiletype = '0001'
+				case TERRAIN_ICE_ABIL
+					if obj.actionMode == Amode.NONE
+						obj.actionMode = Amode.CHANGETERRAIN
+						obj.removeActionAbils()
+						obj.addTerrainAdjuster()
+						obj.tiletype = CONTROLLABLEICE
+					else
+						obj.nottiletype = CONTROLLABLEICE
+				case TERRAIN_UNICE_ABIL
+					if obj.actionMode == Amode.NONE
+						obj.actionMode = Amode.CHANGETERRAIN
+						obj.removeActionAbils()
+						obj.addTerrainAdjuster()
+						obj.tiletype = UNCONTROLLABLEICE
+					else
+						obj.nottiletype = UNCONTROLLABLEICE
+				
+				case TRAIN_BK_ABIL
+					if obj.actionUnit == ActionUnit.NONE
+						obj.actionMode = Amode.CREATEUNIT
 						obj.actionUnit = ActionUnit.TANK
-	        			obj.removeActionAbils()
+						obj.removeActionAbils()
 						UnitAddAbility(obj.actor,TRAIN_BOOK_ABIL)
 					else
 						obj.actionUnit = ActionUnit.BIGKILLER
@@ -486,22 +486,22 @@ package Executer
 				case TRAIN_POINTER_ABIL
 					obj.actionUnit = ActionUnit.POINTER
 					
-	        	case MOVE_UNIT_DIRECT_ABIL
-	        		obj.moveOrderString = "move"
-	        		if obj.actionMode == Amode.NONE
-	        			obj.actionMode = Amode.MOVEUNIT
-	        			obj.removeActionAbils()
-	        			obj.addMoveUnitAdjuster()
-	        	case MOVE_UNIT_PATROL_ABIL
-	        		obj.moveOrderString = "patrol"
-	        	case MOVE_UNIT_STOP_ABIL
-	        		obj.moveOrderString = "stop"
-	        	case MOVE_UNIT_SELECT_ABIL
-	        		print(GetUnitTypeId(GetSpellTargetUnit()).toString())
-	        		obj.unitToMove = GetSpellTargetUnit()
-	        	
-	        	case TERRAIN_INCREASE_H_ABIL
-	        		if not obj.horizontalTileSize > 3
+				case MOVE_UNIT_DIRECT_ABIL
+					obj.moveOrderString = "move"
+					if obj.actionMode == Amode.NONE
+						obj.actionMode = Amode.MOVEUNIT
+						obj.removeActionAbils()
+						obj.addMoveUnitAdjuster()
+				case MOVE_UNIT_PATROL_ABIL
+					obj.moveOrderString = "patrol"
+				case MOVE_UNIT_STOP_ABIL
+					obj.moveOrderString = "stop"
+				case MOVE_UNIT_SELECT_ABIL
+					print(GetUnitTypeId(GetSpellTargetUnit()).toString())
+					obj.unitToMove = GetSpellTargetUnit()
+				
+				case TERRAIN_INCREASE_H_ABIL
+					if not obj.horizontalTileSize > 3
 						obj.horizontalTileSize ++
 				case TERRAIN_INCREASE_V_ABIL
 					if not obj.verticalTileSize > 3
@@ -512,7 +512,7 @@ package Executer
 				case TERRAIN_DECREASE_V_ABIL
 					if not obj.verticalTileSize < 1
 						obj.verticalTileSize --
-	        return false
+			return false
 
 
 	

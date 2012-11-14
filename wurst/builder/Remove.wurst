@@ -10,7 +10,7 @@ function removeObject()
 		var data = GetTriggerUnit().getUserData()
 		if data > 0
 			var e = data castTo Entity
-			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , e.position.x, e.position.y)
+			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , e.pos.x, e.pos.y)
 			e.terminate()
 
 init

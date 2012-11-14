@@ -1,23 +1,22 @@
 package ItemObject
 import Entity
 
-public class ItemObject extends Entity
+public abstract class ItemObject extends Entity
 	unit setup
 	item actorItem
 
 
 	construct( vec2 pos, item i, unit setup )
-		super( pos.toVec3(), 0., DUMMY_PLAYER )
+		super( pos.toVec3(), DUMMY_PLAYER )
 		this.setup = setup
 		actorItem = i
 		SetItemUserData(actorItem, this castTo int)
 		setup.setUserData(this castTo int)
 		
+		
 	ondestroy
 		setup.remove()
 		actorItem.remove()
 		
-	override function onGround()
-	override function inAir()
 
 

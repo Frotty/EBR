@@ -1,77 +1,77 @@
 package PlayerData
-    import MultiboardClass
-    import GameConstants
-    import Escaper
-    import Builder
-    import LinkedList
-    
-    public int playercount = 0
-    
-    trigger leaveTrig
+	import MultiboardClass
+	import GameConstants
+	import Escaper
+	import Builder
+	import LinkedList
+	
+	public int playercount = 0
+	
+	trigger leaveTrig
 	
 	public LinkedList<PlayerData> players = new LinkedList<PlayerData>()
 
-    public class PlayerData //just the player's (constant) stuff
-    	
-    	int id
-        int gameId
-        player p
-        string name
-        string mbname //Basically the output name
-        string rank = "Newbie"
-        string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
-        boolean left = false
-        
-        int deaths = 0
-        Escaper escaper
-        Builder builder
-        int XP = 40
-        
-        boolean gridClickActivated = false
-        boolean picked = false
-    
-        construct (player p)
-        	print("0")
-            this.p = p
-            print("1")
-            id = GetPlayerId(p)
-            print("2")
-            gameId = players.size
-            name = GetPlayerName(p)
-            mbname = name
-            print("3")
-            if mbname == "Frotty" or mbname == "FrottyZ"
-                rank = "|cffADD642Creator"
+	public class PlayerData //just the player's (constant) stuff
+		
+		int id
+		int gameId
+		player p
+		string name
+		string mbname //Basically the output name
+		string rank = "Newbie"
+		string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+		boolean left = false
+		
+		int deaths = 0
+		Escaper escaper
+		Builder builder
+		int XP = 40
+		
+		boolean gridClickActivated = false
+		boolean picked = false
+	
+		construct (player p)
+			print("0")
+			this.p = p
+			print("1")
+			id = GetPlayerId(p)
+			print("2")
+			gameId = players.size
+			name = GetPlayerName(p)
+			mbname = name
+			print("3")
+			if mbname == "Frotty" or mbname == "FrottyZ"
+				rank = "|cffADD642Creator"
 			print("4")
-            for int i = 0 to cplayerCount
-                print(i.toString())
-                if mbname == names[i]
-                    mbname = tags[i] + "|r" + colorcode[ id ] + mbname
-                    break
+			for int i = 0 to cplayerCount
+				print(i.toString())
+				if mbname == names[i]
+					mbname = tags[i] + "|r" + colorcode[ id ] + mbname
+					break
 			print("5")
-            mbname = colorcode[ id ] + mbname
-            print("MBNAME: " + mbname)
-            players.add(this)
-            
+			mbname = colorcode[ id ] + mbname
+			print("MBNAME: " + mbname)
+			players.add(this)
+			
 		function updateRank ()
-            int i = 0
-            while XP >= expBounds[i]
-                i++
-            rank = ranks[i-1]
-            if XP > 500
-                AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper.actor, "chest" )
-            else if XP > 300
-                AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
-            else if XP > 99
-                AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
-                DisplayTextToForce( bj_FORCE_ALL_PLAYERS, name + " has loaded his Player Rank" )
-                
+			int i = 0
+			while XP >= expBounds[i]
+				i++
+			rank = ranks[i-1]
+			if XP > 500
+				AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper.actor, "chest" )
+			else if XP > 300
+				AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
+			else if XP > 99
+				AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
+				DisplayTextToForce( bj_FORCE_ALL_PLAYERS, name + " has loaded his Player Rank" )
+				
 		function setMBRow(int r)
-            playerboard.updateItem(r,0,mbname,icon)
-            playerboard.updateValue(r,1,deaths.toString())
-            playerboard.updateValue(r,2,rank)  
-        
-        function setMbIcon(int typ)
+			playerboard.updateItem(r,0,mbname,icon)
+			playerboard.updateValue(r,1,deaths.toString())
+			playerboard.updateValue(r,2,rank)  
+		
+		function setMbIcon(int typ)
 			playerboard.updateIcon(gameId+1, 0, mbPic[typ])
 			
 		ondestroy
@@ -93,30 +93,30 @@ package PlayerData
 		return false
 		
 	public Board playerboard
-    public PlayerData array pData
-    
-    function initMB()
-        playerboard = new Board(playercount+1,3)
-        
-        for i = 0 to players.size
-            playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
-            playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
-            playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
+	public PlayerData array pData
+	
+	function initMB()
+		playerboard = new Board(playercount+1,3)
+		
+		for i = 0 to players.size
+			playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
+			playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
+			playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
 
 		for pd in players
-            pd.setMBRow(pd.gameId+1)
+			pd.setMBRow(pd.gameId+1)
 
 
-            
-        playerboard.board.getItem(0,0).setStyle(true,false).setWidth(0.1)
-        playerboard.board.getItem(0,2).setWidth(0.05)
-        playerboard.setNewItem(0,0,"Player",null)
-        playerboard.board.getItem(0,1).setStyle(false,true).setWidth(0.015)
-        playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
-        playerboard.setNewItem(0,2,"Rank",null)
-        playerboard.board.display(true)
-        
-        
+			
+		playerboard.board.getItem(0,0).setStyle(true,false).setWidth(0.1)
+		playerboard.board.getItem(0,2).setWidth(0.05)
+		playerboard.setNewItem(0,0,"Player",null)
+		playerboard.board.getItem(0,1).setStyle(false,true).setWidth(0.015)
+		playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
+		playerboard.setNewItem(0,2,"Rank",null)
+		playerboard.board.display(true)
+		
+		
 	function setTime()
 		seconds++
 		string secs = "|cffffffff"
@@ -141,29 +141,29 @@ package PlayerData
 		if seconds >= 60
 			seconds = 0
 			minutes++
-			     
-    function playerLeft()
-        var p = GetTriggerPlayer()
-        var pd = pData[p.getId()]
-        players.remove(pd)
-        destroy pd
+				 
+	function playerLeft()
+		var p = GetTriggerPlayer()
+		var pd = pData[p.getId()]
+		players.remove(pd)
+		destroy pd
 
 
-        
-    init
-    	leaveTrig = CreateTrigger()
-    	leaveTrig.addAction(function playerLeft)
-        int r = 0
-        for i = 0 to 11
-            print(i.toString())
-            if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
-                pData[i] = new PlayerData(Player(i))
-                leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
-                r++
-        playercount = r
-        TimerStart(CreateTimer(), 1., false,function initMB)
-        TimerStart(CreateTimer(), 1., true, function setTime)
-       
+		
+	init
+		leaveTrig = CreateTrigger()
+		leaveTrig.addAction(function playerLeft)
+		int r = 0
+		for i = 0 to 11
+			print(i.toString())
+			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
+				pData[i] = new PlayerData(Player(i))
+				leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
+				r++
+		playercount = r
+		TimerStart(CreateTimer(), 1., false,function initMB)
+		TimerStart(CreateTimer(), 1., true, function setTime)
+	   
 	int minutes = 0
 	int seconds = 0
 	

@@ -1,57 +1,57 @@
 package Revivepoint
-    import BaseObject
-    import Terrain
-    import PlayerData
-    import Escaper
-    import GameConstants
-    import RegionData
-    import LinkedList
+	import BaseObject
+	import Terrain
+	import PlayerData
+	import Escaper
+	import GameConstants
+	import RegionData
+	import LinkedList
 
-    constant real EVENT_RADIUS = 80.
-    constant int REVIVEPOINT_ID = 'n000'
-    boolean isFirst = true
-    
-    public RevivePoint currentRevivepoint
+	constant real EVENT_RADIUS = 80.
+	constant int REVIVEPOINT_ID = 'n000'
+	boolean isFirst = true
+	
+	public RevivePoint currentRevivepoint
 
-    public class RevivePoint extends StaticBaseObject
-        boolean reached = false
-        
-        construct( vec2 pos, player owner)
-        	super( pos.toVec3(), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
-        
-        static function reach()
-	        unit source = GetTriggeringTrigger().getSource()
-	        unit u = GetTriggerUnit()
-	        
-	        Entity e = u.getUserData() castTo Entity
-	        thistype obj = source.getUserData() castTo thistype
-	        if isFirst and e instanceof Escaper
+	public class RevivePoint extends StaticBaseObject
+		boolean reached = false
+		
+		construct( vec2 pos, player owner)
+			super( pos.toVec3(), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+		
+		static function reach()
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = source.getUserData() castTo thistype
+			if isFirst and e instanceof Escaper
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
-                obj.reached = true
-                currentRevivepoint = obj
-                var rdata1 = getRegionData(obj.position.x, obj.position.y)
-                for es1 in escapers
-                    es1.setNewPos(obj.position)
-                    es1.currentRegion = rdata1
+				obj.reached = true
+				currentRevivepoint = obj
+				var rdata1 = getRegionData(obj.pos.x, obj.pos.y)
+				for es1 in escapers
+					es1.setNewPos(obj.pos)
+					es1.currentRegion = rdata1
 				isFirst = false
 				return
-	        
-            if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
-            	PlaySoundBJ(gg_snd_Rescue)
-            	DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
-                SetUnitColor( source, PLAYER_COLOR_BLUE )
-                obj.reached = true
-                currentRevivepoint = obj
-                var rdata = getRegionData(obj.position.x, obj.position.y)
-                for Escaper es in escapers
-                    es.setNewPos(obj.position)
-                    es.currentRegion = rdata
+			
+			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+				PlaySoundBJ(gg_snd_Rescue)
+				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
+				SetUnitColor( source, PLAYER_COLOR_BLUE )
+				obj.reached = true
+				currentRevivepoint = obj
+				var rdata = getRegionData(obj.pos.x, obj.pos.y)
+				for Escaper es in escapers
+					es.setNewPos(obj.pos)
+					es.currentRegion = rdata
 
 
 		static function filter() returns boolean
 			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
-    
-    
+	
+	
 
 
 endpackage 

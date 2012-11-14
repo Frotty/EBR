@@ -1,21 +1,16 @@
 package EntityManagement
-	import Entity
-	
+import public Entity
 
-	function updateEntities()
-		Entity e = Entity.first
-		while e != null
-			if e.done
-				destroy e
-			else if e.active
-				e.update()
-			e = e.next
+function updateEntities()
+	Entity e = Entity.first
+	while e != null
+		if e.done
+			destroy e
+			print("destroyed")
+		else 
+			e.update()
+		e = e.next
 
-			
-		
-	public function init_EntityManagement() returns boolean
-		TimerStart(CreateTimer(), ANIMATION_PERIOD, true, function updateEntities)
-		return true
-
-		
-endpackage
+public function startEntityLoop() returns boolean
+	getTimer().startPeriodic(ANIMATION_PERIOD, function updateEntities)
+	return true

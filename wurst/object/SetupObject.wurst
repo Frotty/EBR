@@ -1,165 +1,147 @@
 package SetupObject
-    import public Entity
-    import Vectors
-    import Terrain
-    import Trigger
+	import public Entity
+	import Vectors
+	import Terrain
+	import Trigger
    
 	public code CODE_NULL = null
-    /**
-    	Objects which are unclickable for escapers,
-    	but clickable for builders.     
-    
-    */
-    
-    trigger orderTrigger
-    
-    public class DynamicSetupObject extends DynamicEntity        
-        unit actor        
-        
-        unit setup
-        
-        trigger inRangeTrig // Trigger for inRange detection
-        
-                        
-        construct( vec3 pos, unit u, unit setup, real radius, code c )
-        	super( pos, radius, u.getOwner() )
-            actor = u
-            actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            actor.addAbility('Aloc').removeAbility('Aloc')
-            SetUnitPathing(actor, true)
-            
-            this.setup = setup
-            TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
-            TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
-            TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
+	/**
+		Objects which are unclickable for escapers,
+		but clickable for builders.	 
+	
+	*/
+	
+	trigger orderTrigger
+	
+	public abstract class DynamicSetupObject extends UnitEntity		
+		unit setup
+		
+		trigger inRangeTrig // Trigger for inRange detection
+		
+						
+		construct( vec3 pos, unit u, unit setup, real radius, code c )
+			super( pos, u )
+			actor.addAbility('Aloc').removeAbility('Aloc')
+			SetUnitPathing(actor, true)
+			
+			this.setup = setup
+			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
+			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
+			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
 
-           
-            setup.setX( actor.getX() )
+		   
+			setup.setX( actor.getX() )
 			setup.setY( actor.getY() )
 			setup.addAbility('Agho')
-            
-            if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-                inRangeTrig = CreateTrigger()
-                inRangeTrig.registerUnitInRangeSource( actor, radius )
-                inRangeTrig.addAction( c )
-                
-            setup.setUserData( this castTo int )
-            
-        function setNewPos(vec3 pos)
-            position = pos
-            actor.setPos(pos.x, pos.y)
-            setup.setPos(pos.x, pos.y)
-
-        
-        function setAngle(real angle)
-            actor.setFacing(angle)
-            setup.setFacing(angle)
-            
-        function setNewXY(vec3 pos)
-            position = pos
-            actor.setXY(pos.x, pos.y)
-            setup.setXY(pos.x, pos.y)
-		
-		override function update()
-			position = setup.getPos().toVec3()
 			
-        override function onGround()
-        override function inAir()
-        
-        function setX( real x )
-            SetUnitX( actor, x )
-
-        function setY( real y )
-            SetUnitY( actor, y )
-            
-        function setZ( real z )
-            SetUnitFlyHeight( actor, z, 0. )
-                          
-        
-        ondestroy
-        	print("fuck1")
-            actor.clearRegister()
-            print("fuck2")
-            actor.remove()
-            print("fuck3")
-            setup.remove()
-			print("fuck4")
-			inRangeTrig.destr()         
-            
-        static function onOrderEvent()
-        	var entity = GetTriggerUnit().getUserData() castTo Entity
-        	var order = GetIssuedOrderId()
-        	var x = GetOrderPointX()
-        	var y = GetOrderPointY()
-        	var u = GetOrderTargetUnit()
-        	
-        	if entity instanceof DynamicSetupObject
-                var obj = entity castTo DynamicSetupObject
-                if OrderId2String(order) == "smart" and u == null
-                    // AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
-                    IssuePointOrder(obj.setup, "move", x+GetRandomReal(-1,1), y)
-
-                else
-	                if u != null
-	                    IssueTargetOrderById(obj.actor, order, u)
-	                else if x != 0.    
-	                    IssuePointOrderById(obj.actor, order, x, y)
-	                else
-	                    IssueImmediateOrderById(obj.actor, order)
-
-
-
-          
-                    
-    public class StaticSetupObject extends Entity
-        unit actor        
-        
-        unit setup
-        
-        trigger inRangeTrig // Trigger for inRange detection
-        
-        construct( vec3 pos, real radius, code c )
-        	super( pos, radius, setup.getOwner() )
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-                inRangeTrig = CreateTrigger()
-                inRangeTrig.addAction( c )
-                        
-        construct( vec3 pos, unit u, unit setup, real radius, code c )
-        	super( pos, radius, setup.getOwner() )
-        	print("nou1")
-            actor = u
-            actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            actor.addAbility('Aloc')
-            print("nou1")
-            this.setup = setup
-            print("nou1")
-            if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-                inRangeTrig = CreateTrigger()
-                inRangeTrig.registerUnitInRangeSource( setup, radius )
-                inRangeTrig.addAction( c )
-            print("nou1")    
-            setup.setUserData( this castTo int )
+				inRangeTrig = CreateTrigger()
+				inRangeTrig.registerUnitInRangeSource( actor, radius )
+				inRangeTrig.addAction( c )
+				
+			setup.setUserData( this castTo int )
+			
+		override function setNewPos(vec3 pos)
+			this.pos = pos
+			actor.setPos(pos.x, pos.y)
+			setup.setPos(pos.x, pos.y)
+
+		
+		function setAngle(real angle)
+			actor.setFacing(angle)
+			setup.setFacing(angle)
+			
+		function setNewXY(vec3 pos)
+			this.pos = pos
+			actor.setXY(pos.x, pos.y)
+			setup.setXY(pos.x, pos.y)
 		
 		override function update()
-        override function onGround()
-        override function inAir()
-        
-        function setX( real x )
-            SetUnitX( actor, x )
+			pos = setup.getPos().toVec3()
+		
+		function setX( real x )
+			SetUnitX( actor, x )
 
-        function setY( real y )
-            SetUnitY( actor, y )
-            
-        function setZ( real z )
-            SetUnitFlyHeight( actor, z, 0. )
-            
-                          
-        
-        ondestroy
-            actor.clearRegister()
-            actor.remove()
-            setup.remove()
-            inRangeTrig.destr()
+		function setY( real y )
+			SetUnitY( actor, y )
+			
+		function setZ( real z )
+			SetUnitFlyHeight( actor, z, 0. )
+						  
+		
+		ondestroy
+			actor.clearRegister()
+			actor.remove()
+			setup.remove()
+			inRangeTrig.destr()		 
+			
+		static function onOrderEvent()
+			var entity = GetTriggerUnit().getUserData() castTo Entity
+			var order = GetIssuedOrderId()
+			var x = GetOrderPointX()
+			var y = GetOrderPointY()
+			var u = GetOrderTargetUnit()
+			
+			if entity instanceof DynamicSetupObject
+				var obj = entity castTo DynamicSetupObject
+				if OrderId2String(order) == "smart" and u == null
+					// AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
+					IssuePointOrder(obj.setup, "move", x+GetRandomReal(-1,1), y)
+
+				else
+					if u != null
+						IssueTargetOrderById(obj.actor, order, u)
+					else if x != 0.	
+						IssuePointOrderById(obj.actor, order, x, y)
+					else
+						IssueImmediateOrderById(obj.actor, order)
+
+
+
+		  
+					
+	public abstract class StaticSetupObject extends UnitEntity
+		unit setup
+		
+		trigger inRangeTrig // Trigger for inRange detection
+		
+		construct( vec3 pos, real radius, code c )
+			super( pos, setup )
+			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+				inRangeTrig = CreateTrigger()
+				inRangeTrig.addAction( c )
+						
+		construct( vec3 pos, unit u, unit setup, real radius, code c )
+			super( pos, setup )
+			actor.addAbility('Aloc')
+			print("nou1")
+			this.setup = setup
+			print("nou1")
+			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+				inRangeTrig = CreateTrigger()
+				inRangeTrig.registerUnitInRangeSource( setup, radius )
+				inRangeTrig.addAction( c )
+			print("nou1")	
+			setup.setUserData( this castTo int )
+		
+		
+		function setX( real x )
+			SetUnitX( actor, x )
+
+		function setY( real y )
+			SetUnitY( actor, y )
+			
+		function setZ( real z )
+			SetUnitFlyHeight( actor, z, 0. )
+			
+		override function update()
+			
+
+		ondestroy
+			actor.clearRegister()
+			actor.remove()
+			setup.remove()
+			inRangeTrig.destr()
 
 
 

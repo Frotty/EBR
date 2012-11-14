@@ -1,5 +1,5 @@
 package Escaper
-	import Entity
+	import PhysicsEntity
 	import Vectors
 	import Physics
 	import Terrain
@@ -18,14 +18,14 @@ package Escaper
 	constant real SLIDE_ADD = 5.1
 	
 	constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
-    constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+	constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
 
 	
 	real time = 0.
 	
 	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	
-	public class Escaper extends UnitEntity
+	public class Escaper extends PhysicsUnitEntity
 		int deaths 		= 0
 		boolean flying = false
 		boolean sliding = false
@@ -47,22 +47,22 @@ package Escaper
 
 		
 		construct( vec3 pos, player owner, int typ )
-			super(pos, COLL_RADIUS, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
+			super(pos, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
 			actor.addAbility('Aloc')
 			.hide()
     		.removeAbility('Aloc')
     		.show()
     		
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-            TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-            TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
-            TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
+			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+			TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
+			TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 			currentRegion = regions[0]
 			escapers.add(this)
 
 		override function inAir()
-			velocity += gravity
+			vel += gravity
 			super.inAir()
 			if not flying
 				flying = true
@@ -75,11 +75,11 @@ package Escaper
 				flying = false
 				SetUnitPropWindow(actor, 60.)
 				
-			var ttype = GetTerrainType(position.x, position.y)
+			var ttype = GetTerrainType(pos.x, pos.y)
 				
 			// pathing
-			//if not isTerrainWalkable(position.x, position.y)
-				//velocity = vec3(0.,0.,velocity.z)
+			//if not isTerrainWalkable(pos.x, pos.y)
+				//vel = vec3(0.,0.,vel.z)
 			
 			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 				let angle = actor.getFacing()
@@ -124,7 +124,7 @@ package Escaper
 				else
 					kill()
 
-			velocity *= 0.95
+			vel *= 0.95
 
 		function setLava(boolean add)
 			if add and not onLava
@@ -157,36 +157,36 @@ package Escaper
 			flying = false
 		
 		override function update()
-			terrainZ = getTerrainZ( position.x, position.y )
-			position.x = actor.getX()
-			position.y = actor.getY()
-			if position.z <= terrainZ + 1.
+			terrainZ = getTerrainZ( pos.x, pos.y )
+			pos.x = actor.getX()
+			pos.y = actor.getY()
+			if pos.z <= terrainZ + 1.
 				onGround()
 			else
 				inAir()
 
-			position += velocity
+			pos += vel
 			
-			position += slideVelocity
-			position += trackVelocity
+			pos += slideVelocity
+			pos += trackVelocity
 			trackVelocity = vec3(0,0,0)
-			position += vortexVelocity
+			pos += vortexVelocity
 			vortexVelocity = vec3(0,0,0)
 			time += 0.015625000
 			if sliding
-				actor.setPos(position.x, position.y)
+				actor.setPos(pos.x, pos.y)
 				
 				print(time.toString())
 			else
-				actor.setXY(position.x, position.y)
-            SetUnitFlyHeight( actor, position.z - terrainZ, .0 )
+				actor.setXY(pos.x, pos.y)
+			SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
             
 		static function revive()
 			print("rev")
 			var t = GetExpiredTimer()
 			Escaper e = t.getData() castTo Escaper
-			var revX = currentRevivepoint.position.x
-			var revY = currentRevivepoint.position.y
+			var revX = currentRevivepoint.pos.x
+			var revY = currentRevivepoint.pos.y
 			if e instanceof Holy_Escaper
 				var he = e castTo Holy_Escaper
 				if he.revivetomb != null
@@ -198,9 +198,9 @@ package Escaper
 			ReviveHero(e.actor, revX, revY, false)
 			if e.owner.getId() < 8
 				if (GetLocalPlayer() == e.owner)
-                    PanCameraToTimed(revX, revY, 0)
-                    ClearSelection()
-                    SelectUnit(e.actor, true)
+					PanCameraToTimed(revX, revY, 0)
+					ClearSelection()
+					SelectUnit(e.actor, true)
 				
 			e.alive = true
 			t.release()
@@ -210,22 +210,22 @@ package Escaper
 			Escaper e = u.getUserData() castTo Escaper
 			var w = GetOrderTarget()
 			unit tu = GetOrderTargetUnit()
-            real x2 = GetOrderPointX()
-            real y2 = GetOrderPointY()
-            real x3 = GetWidgetX(w)
-            real y3 = GetWidgetY(w)
-            var ttype = GetTerrainType(e.position.x, e.position.y)
+			real x2 = GetOrderPointX()
+			real y2 = GetOrderPointY()
+			real x3 = GetWidgetX(w)
+			real y3 = GetWidgetY(w)
+			var ttype = GetTerrainType(e.pos.x, e.pos.y)
             
-            if ttype == CONTROLLABLEICE
-                if w == null
-					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x2,y2))
-                else
-					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x3,y3))
+			if ttype == CONTROLLABLEICE
+				if w == null
+					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x2,y2))
+				else
+					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x3,y3))
 			else if ttype == REVICE
-                if w == null
-					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x2,y2)-180)
-                else
-					e.actor.setFacing(angleBetweenCoordsD(e.position.x,e.position.y,x3,y3)-180)
+				if w == null
+					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x2,y2)-180)
+				else
+					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x3,y3)-180)
 					
 		static function pickupItem()
 			var pickedItem = GetManipulatedItem()

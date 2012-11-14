@@ -22,7 +22,7 @@ import Bombertower
 import UnitRemover
 import CongaLineHead
 import TerrainBlocker
-        
+		
 real x
 real y
 real ox
@@ -33,150 +33,150 @@ timer t = CreateTimer()
 int ord
 int array buildorders
 
-    
+	
 function condition() returns boolean
-    return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
+	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
   
 
 function isOrderBuildOrder( int o ) returns boolean
-    int i = 0
-    
-    while buildorders[i] != 0
-        if buildorders[i] == o
-            return true 
-        i++
-    return false
+	int i = 0
+	
+	while buildorders[i] != 0
+		if buildorders[i] == o
+			return true 
+		i++
+	return false
 
 
 function callback()
-    SetUnitPosition(u,x,y)
-    SetUnitX(u,ox)
-    SetUnitY(u,oy)
-    var owner = u.getOwner()
-    var rdata = getRegionData(x, y)
-    if rdata.isOwner(owner.getId())
+	SetUnitPosition(u,x,y)
+	SetUnitX(u,ox)
+	SetUnitY(u,oy)
+	var owner = u.getOwner()
+	var rdata = getRegionData(x, y)
+	if rdata.isOwner(owner.getId())
 		switch ord
-	    	case buildorders[1]
-	    		new Jumper(vec2(x,y), u.getOwner())
-	    	case buildorders[2]
-	    		new RevivePoint(vec2(x,y), u.getOwner())
-	    	case buildorders[3]
-	    		new Texter(vec2(x,y), u.getOwner())
-	    	case buildorders[5]
-	    		new Bombertower(vec2(x,y), u.getOwner())
-	    	case buildorders[6]
-	    		new Vortex(vec2(x,y), u.getOwner())
-	    	case buildorders[8]
-	        	new Executer(vec2(x,y), u.getOwner())
-	        case buildorders[11]
-	        	new Booster(vec2(x,y), u.getOwner())
-	        case buildorders[12]
-	        	new UnitRemover(vec2(x,y), u.getOwner())
-	        case buildorders[13]
-	        	new Waypoint(vec2(x,y), u.getOwner())
-	        case buildorders[14]
-	        	new Teleporter(vec2(x,y), u.getOwner())
-	        case buildorders[15]
-	        	new Door(vec2(x,y), u.getOwner())
-	        case buildorders[16]
-	        	new SmallObstacle(vec2(x,y), u.getOwner())
-	        case buildorders[17]
-	        	new BigObstacle(vec2(x,y), u.getOwner())
-	    	case buildorders[18]
-	        	new Tree(vec2(x,y), u.getOwner())
-	        case buildorders[21]
-	        	new Spinner(vec2(x,y), u.getOwner())	
-	    	case buildorders[20]
-	    		new UnitCreator(vec2(x,y), u.getOwner())
-	    	case buildorders[22]
-	    		CreateUnit(u.getOwner(),buildorders[22],x,y, 0.)
-	        case buildorders[23]
-	        	new Tracks(vec2(x,y), u.getOwner())	
-	        case buildorders[25]
-	        	new Powernode(vec2(x,y), u.getOwner())	
-	        case buildorders[26]
-	        	new Trap(vec2(x,y), u.getOwner())	
-	        case buildorders[27]
-	    		CreateUnit(u.getOwner(),buildorders[27],x,y, 90.)	
-	        case buildorders[28]
-	    		CreateUnit(u.getOwner(),buildorders[28],x,y, 90.)
-	    	case buildorders[29]
-	    		new CongaLineHead(vec2(x,y), u.getOwner())
-	    	case buildorders[30]
-	    		new TerrainBlocker(vec2(x,y), u.getOwner())
-	        
+			case buildorders[1]
+				new Jumper(vec2(x,y), u.getOwner())
+			case buildorders[2]
+				new RevivePoint(vec2(x,y), u.getOwner())
+			case buildorders[3]
+				new Texter(vec2(x,y), u.getOwner())
+			case buildorders[5]
+				new Bombertower(vec2(x,y), u.getOwner())
+			case buildorders[6]
+				new Vortex(vec2(x,y), u.getOwner())
+			case buildorders[8]
+				new Executer(vec2(x,y), u.getOwner())
+			case buildorders[11]
+				new Booster(vec2(x,y), u.getOwner())
+			case buildorders[12]
+				new UnitRemover(vec2(x,y), u.getOwner())
+			case buildorders[13]
+				new Waypoint(vec2(x,y), u.getOwner())
+			case buildorders[14]
+				new Teleporter(vec2(x,y), u.getOwner())
+			case buildorders[15]
+				new Door(vec2(x,y), u.getOwner())
+			case buildorders[16]
+				new SmallObstacle(vec2(x,y), u.getOwner())
+			case buildorders[17]
+				new BigObstacle(vec2(x,y), u.getOwner())
+			case buildorders[18]
+				new Tree(vec2(x,y), u.getOwner())
+			case buildorders[21]
+				new Spinner(vec2(x,y), u.getOwner())	
+			case buildorders[20]
+				new UnitCreator(vec2(x,y), u.getOwner())
+			case buildorders[22]
+				CreateUnit(u.getOwner(),buildorders[22],x,y, 0.)
+			case buildorders[23]
+				new Tracks(vec2(x,y), u.getOwner())	
+			case buildorders[25]
+				new Powernode(vec2(x,y), u.getOwner())	
+			case buildorders[26]
+				new Trap(vec2(x,y), u.getOwner())	
+			case buildorders[27]
+				CreateUnit(u.getOwner(),buildorders[27],x,y, 90.)	
+			case buildorders[28]
+				CreateUnit(u.getOwner(),buildorders[28],x,y, 90.)
+			case buildorders[29]
+				new CongaLineHead(vec2(x,y), u.getOwner())
+			case buildorders[30]
+				new TerrainBlocker(vec2(x,y), u.getOwner())
+			
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
-    d = null
+	d = null
 
 
 function conac() 
-    
-    widget w = GetOrderTarget()
-    ord = GetIssuedOrderId()
-    u = GetTriggerUnit()
-    var owner = u.getOwner()
-    if isOrderBuildOrder(ord)
-        x = GetLocationX(GetOrderPointLoc())
-        y = GetLocationY(GetOrderPointLoc())
-        ox = GetUnitX(u)
-        oy = GetUnitY(u)
-        TimerStart(t,0.00,false, function callback)
+	
+	widget w = GetOrderTarget()
+	ord = GetIssuedOrderId()
+	u = GetTriggerUnit()
+	var owner = u.getOwner()
+	if isOrderBuildOrder(ord)
+		x = GetLocationX(GetOrderPointLoc())
+		y = GetLocationY(GetOrderPointLoc())
+		ox = GetUnitX(u)
+		oy = GetUnitY(u)
+		TimerStart(t,0.00,false, function callback)
 		
 
-    else
-        if w == null
-            SetUnitX(u,GetOrderPointX())
-            SetUnitY(u,GetOrderPointY())
-            SetUnitFacing(u, angleBetweenCoordsD(GetUnitX(u), GetUnitY(u), GetOrderPointX(), GetOrderPointY()) )
-        else
-            SetUnitFacing( u, angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetWidgetX(w), GetWidgetY(w) ) )
-            SetUnitX(u,GetWidgetX(w))
-            SetUnitY(u,GetWidgetY(w))
+	else
+		if w == null
+			SetUnitX(u,GetOrderPointX())
+			SetUnitY(u,GetOrderPointY())
+			SetUnitFacing(u, angleBetweenCoordsD(GetUnitX(u), GetUnitY(u), GetOrderPointX(), GetOrderPointY()) )
+		else
+			SetUnitFacing( u, angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetWidgetX(w), GetWidgetY(w) ) )
+			SetUnitX(u,GetWidgetX(w))
+			SetUnitY(u,GetWidgetY(w))
 
 
-    w = null
+	w = null
 
 
 
 
 
 init
-    trigger trig = CreateTrigger()
-    TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
-    TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
-    TriggerAddCondition( trig, Condition( function condition ) )
-    TriggerAddAction( trig,  function conac  )
-    
-    buildorders[0] = 'n00G'
-    buildorders[1] = 'n00B' // Jumper
-    buildorders[2] = 'n000' // Revivepoint
-    buildorders[3] = 'n01B' // Texter
-    buildorders[4] = 'n001' 
-    buildorders[5] = 'h019' // BomberTower
-    buildorders[6] = 'n012' // Vortex
-    buildorders[7] = 'h009'
-    buildorders[8] = 'n01D'  // Executer
-    buildorders[9] = 'n01E'
-    buildorders[10] = 'n00F'
-    buildorders[11] = 'n00J' // Booster
-    buildorders[12] = 'n003' // UnitRemover
-    buildorders[13] = 'n004' // Waypoint
-    buildorders[14] = 'n00C' // Teleporter
-    buildorders[15] = 'h002' // Door
-    buildorders[16] = 'obSD' // Small Obstacle
-    buildorders[17] = 'obBD' // Big Obstacle
-    buildorders[18] = 'n010' // Tree
-    buildorders[19] = 'n013'
-    buildorders[20] = 'n006' // Unitcreator
-    buildorders[21] = 'h01M' // Spinner
-    buildorders[22] = 'n00P' // Wall
-    buildorders[23] = 'n01C' // Tracks
-    buildorders[24] = 'h00H'
-    buildorders[25] = 'h0nn' // Powernode
-    buildorders[26] = 'n00I' // Trap
-    buildorders[27] = 'n00Q' // Horizontal Wall
-    buildorders[28] = 'n011' // Vertical Wall
-    buildorders[29] = 'h000' // Conga Line
-    buildorders[30] = 'h009' // TerrainBlocker
-    
+	trigger trig = CreateTrigger()
+	TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
+	TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
+	TriggerAddCondition( trig, Condition( function condition ) )
+	TriggerAddAction( trig,  function conac  )
+	
+	buildorders[0] = 'n00G'
+	buildorders[1] = 'n00B' // Jumper
+	buildorders[2] = 'n000' // Revivepoint
+	buildorders[3] = 'n01B' // Texter
+	buildorders[4] = 'n001' 
+	buildorders[5] = 'h019' // BomberTower
+	buildorders[6] = 'n012' // Vortex
+	buildorders[7] = 'h009'
+	buildorders[8] = 'n01D'  // Executer
+	buildorders[9] = 'n01E'
+	buildorders[10] = 'n00F'
+	buildorders[11] = 'n00J' // Booster
+	buildorders[12] = 'n003' // UnitRemover
+	buildorders[13] = 'n004' // Waypoint
+	buildorders[14] = 'n00C' // Teleporter
+	buildorders[15] = 'h002' // Door
+	buildorders[16] = 'obSD' // Small Obstacle
+	buildorders[17] = 'obBD' // Big Obstacle
+	buildorders[18] = 'n010' // Tree
+	buildorders[19] = 'n013'
+	buildorders[20] = 'n006' // Unitcreator
+	buildorders[21] = 'h01M' // Spinner
+	buildorders[22] = 'n00P' // Wall
+	buildorders[23] = 'n01C' // Tracks
+	buildorders[24] = 'h00H'
+	buildorders[25] = 'h0nn' // Powernode
+	buildorders[26] = 'n00I' // Trap
+	buildorders[27] = 'n00Q' // Horizontal Wall
+	buildorders[28] = 'n011' // Vertical Wall
+	buildorders[29] = 'h000' // Conga Line
+	buildorders[30] = 'h009' // TerrainBlocker
+	

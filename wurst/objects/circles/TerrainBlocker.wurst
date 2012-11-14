@@ -20,6 +20,6 @@ public class TerrainBlocker extends StaticBaseObject
 		blockermatrix.saveBoolean(m.x, m.y, false)
 		
 public function round (real r) returns integer
-        if r > 0
-            return R2I(r+.5)
-        return R2I(r-.5)
+		if r > 0
+			return R2I(r+.5)
+		return R2I(r-.5)

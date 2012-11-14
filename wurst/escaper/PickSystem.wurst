@@ -23,21 +23,21 @@ public function startChoose()
 	for pd in players
 		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
-	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
-	    SetCameraTargetControllerNoZForPlayer( pd.p, pickheros[0], 0, 0, false ) 
-	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
-	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
-	    SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
+		SetCameraTargetControllerNoZForPlayer( pd.p, pickheros[0], 0, 0, false ) 
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
 
 	EnablePreSelect( true, false )
 	getTimer().start(.60, function allow )
 	
 function allow()
 	EnableUserControl(true)
-    EnableOcclusion(true)
+	EnableOcclusion(true)
 
 function keyleft()
-    print("yes")
+	print("yes")
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
@@ -101,82 +101,82 @@ function keypick()
 			case 0
 				pd.escaper = new Holy_Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[0]) )
 			case 1
-        		pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[1]) )
+				pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[1]) )
 			case 2
-        		pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[2]) )
-        pd.setMbIcon(currentView[pd.id]-1)
-        if pd.id > 7
-            UnitAddAbility( pd.escaper.actor, BLINK_ID )
-            ResetToGameCameraForPlayer(p,0.5)
-            PanCameraToTimedForPlayer(p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
-            SelectUnitForPlayerSingle( pd.builder.actor,p)
-            CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
-        else
-            ResetToGameCameraForPlayer(p,0.5)
-            PanCameraToTimedForPlayer(p,SX,SY,0)
+				pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[2]) )
+		pd.setMbIcon(currentView[pd.id]-1)
+		if pd.id > 7
+			UnitAddAbility( pd.escaper.actor, BLINK_ID )
+			ResetToGameCameraForPlayer(p,0.5)
+			PanCameraToTimedForPlayer(p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
+			SelectUnitForPlayerSingle( pd.builder.actor,p)
+			CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
+		else
+			ResetToGameCameraForPlayer(p,0.5)
+			PanCameraToTimedForPlayer(p,SX,SY,0)
 			SelectUnitForPlayerSingle( pd.escaper.actor,p)
 			
-        if GetLocalPlayer() == p
-            SetTextTagVisibility(herott[currentView[pd.id]-1],false)
+		if GetLocalPlayer() == p
+			SetTextTagVisibility(herott[currentView[pd.id]-1],false)
 			SetUnitVertexColor( pickheros[currentView[pd.id]-1], 0, 0, 0, 0 )
 			SetTextTagVisibility(herott[herocount],false)
 
 	else
-        return
+		return
 
 	
 	
 public function init_Choose()
-    trigger t = CreateTrigger()
-    trigger left = CreateTrigger()
-    trigger right = CreateTrigger()
-    trigger pick = CreateTrigger()
-
+	trigger t = CreateTrigger()
+	trigger left = CreateTrigger()
+	trigger right = CreateTrigger()
+	trigger pick = CreateTrigger()
+	
 	herotypes[0] = 'H00B'
-    herotypes[1] = 'H003'
-    herotypes[2] = 'H00D'
-    herotypes[3] = 'H00E'
+	herotypes[1] = 'H003'
+	herotypes[2] = 'H00D'
+	herotypes[3] = 'H00E'
+	
+	heroinfos[0] = "|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation."
+	heroinfos[1] = "|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat."
+	heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can turn invisible."
+	heroinfos[3] = "|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice."
 
-    heroinfos[0] = "|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation."
-    heroinfos[1] = "|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat."
-    heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can turn invisible."
-    heroinfos[3] = "|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice."
-
-    for pd in players
-        currentView[pd.id] = 1
-        TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
-        TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)
-        TriggerRegisterPlayerEvent(pick, pd.p, EVENT_PLAYER_ARROW_DOWN_DOWN)
-        print( GetPlayerName(pd.p) + " registered" )
+	for pd in players
+		currentView[pd.id] = 1
+		TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
+		TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)
+		TriggerRegisterPlayerEvent(pick, pd.p, EVENT_PLAYER_ARROW_DOWN_DOWN)
+		print( GetPlayerName(pd.p) + " registered" )
 
 
-    TriggerAddAction( left, function keyleft )
-    TriggerAddAction( right, function keyright )
-    TriggerAddAction( pick, function keypick )
-    
-
-    var x2 = PX + 140 * Cos(180 * bj_DEGTORAD)
-    var y2 = PY + 140 * Sin(180 * bj_DEGTORAD)
-    for i = 0 to herocount-1
-    	pickheros[i] = CreateUnit(DUMMY_PLAYER, herotypes[i], PX, PY, 315)
+	TriggerAddAction( left, function keyleft )
+	TriggerAddAction( right, function keyright )
+	TriggerAddAction( pick, function keypick )
+	
+	
+	var x2 = PX + 140 * Cos(180 * bj_DEGTORAD)
+	var y2 = PY + 140 * Sin(180 * bj_DEGTORAD)
+	for i = 0 to herocount-1
+		pickheros[i] = CreateUnit(DUMMY_PLAYER, herotypes[i], PX, PY, 315)
 		herott[i] = CreateTextTag()
-        SetTextTagText(herott[i],heroinfos[i],12* 0.023 / 10)
-        SetTextTagPermanent(herott[i],true)
-        SetTextTagVisibility(herott[i],true)
-        
-        SetTextTagPos(herott[i],x2,y2,110)
+		SetTextTagText(herott[i],heroinfos[i],12* 0.023 / 10)
+		SetTextTagPermanent(herott[i],true)
+		SetTextTagVisibility(herott[i],true)
+		
+		SetTextTagPos(herott[i],x2,y2,110)
 		if i > 0
 			SetUnitVertexColor( pickheros[i], 0, 0, 0, 0 )
 			SetTextTagVisibility(herott[i],false)
 		pickheros[i].addAbility(LOCUST_ID)
 		
 	x2 = PX + 150 * Cos(360 * bj_DEGTORAD)
-    y2 = PY + 150 * Sin(360 * bj_DEGTORAD)
-    herott[herocount] = CreateTextTag()
-    SetTextTagText(herott[herocount],"Press the |cff2194EFLeft|r/|cff08B552Right|r |cffB5B5B5Arrowkey|r to switch the escaper.\nChoose by Pressing the |cff2194EFDown|r |cffB5B5B5Arrowkey|r. ",10* 0.023 / 10)
-    SetTextTagPermanent(herott[herocount],true)
-    SetTextTagVisibility(herott[herocount],true)
-    SetTextTagPos(herott[herocount],x2,y2,70)
+	y2 = PY + 150 * Sin(360 * bj_DEGTORAD)
+	herott[herocount] = CreateTextTag()
+	SetTextTagText(herott[herocount],"Press the |cff2194EFLeft|r/|cff08B552Right|r |cffB5B5B5Arrowkey|r to switch the escaper.\nChoose by Pressing the |cff2194EFDown|r |cffB5B5B5Arrowkey|r. ",10* 0.023 / 10)
+	SetTextTagPermanent(herott[herocount],true)
+	SetTextTagVisibility(herott[herocount],true)
+	SetTextTagPos(herott[herocount],x2,y2,70)
 
 		
 		

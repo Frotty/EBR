@@ -1,53 +1,54 @@
 package GameInit
-    import PlayerData
-    import Entity
-    import UnitProducer
-    import Escaper
-    import RegionData
-    import PickSystem
-    import Builder
-    import Door
-    import TerrainModder
-    import Executer
-    import Trap
-    import Texter
-    import Bombertower
-    import Reincarnation
-    import Startmazes
-    
-    function initGame()
+	import PlayerData
+	import Entity
+	import UnitProducer
+	import Escaper
+	import RegionData
+	import PickSystem
+	import Builder
+	import Door
+	import TerrainModder
+	import Executer
+	import Trap
+	import Texter
+	import Bombertower
+	import Reincarnation
+	import Startmazes
+	import EntityManagement
+	
+	function initGame()
 
-        print("Starting Init")
-        EnableUserControl(false)
-    	EnableOcclusion(false)
-    	VolumeGroupReset()
-        EndThematicMusic()
-        init_TerrainModder()
-        init_UnitProducer()
-        init_Regions()
-        init_Choose()
-        init_Builder()
-        init_Trap()
-        init_Door()
-        init_Texter()
-        init_Bombertower()
-        init_Reincarnation()
-        
-        initBaseObjects()
-        if init_EntityManagement()
-            print("Finished Init - Game started")
+		print("Starting Init")
+		EnableUserControl(false)
+		EnableOcclusion(false)
+		VolumeGroupReset()
+		EndThematicMusic()
+		init_TerrainModder()
+		init_UnitProducer()
+		init_Regions()
+		init_Choose()
+		init_Builder()
+		init_Trap()
+		init_Door()
+		init_Texter()
+		init_Bombertower()
+		init_Reincarnation()
+		
+		initBaseObjects()
+		if startEntityLoop()
+			print("Finished Init - Game started")
 			startChoose()
-        else
-            printError("gamestart malfunction")
+		else
+			printError("gamestart malfunction")
 
-    init
-    	print("ja")
-    	EnableUserControl(false)
-    	EnableOcclusion(false)
-    	VolumeGroupReset()
-        EndThematicMusic()
-        trigger t = CreateTrigger()
-        TriggerRegisterTimerEvent( t, .1, false )
-        TriggerAddAction( t, function initGame )
+	init
+		print("ja")
+		EnableUserControl(false)
+		EnableOcclusion(false)
+		VolumeGroupReset()
+		EndThematicMusic()
+		trigger t = CreateTrigger()
+		TriggerRegisterTimerEvent( t, .1, false )
+		TriggerAddAction( t, function initGame )
 
 endpackage 

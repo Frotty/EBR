@@ -1,52 +1,53 @@
 package Booster
-    import BaseObject
-    import Terrain
-    import Escaper
-    import EscaperKiller
-    import EventHandling
-    import Texttag
-    
+	import BaseObject
+	import Terrain
+	import Escaper
+	import EscaperKiller
+	import EventHandling
+	import Texttag
+	
 	constant int 	WAYPOINT_ID   = 'n00J'
 		
 	constant real 	EVENT_RADIUS	= 32.
 
 
-    public class Booster extends StaticBaseObject
-        real boostspeed = 200
-        
-        construct( vec2 pos, player owner )
-        	super( pos.toVec3(), CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Booster.orderMove ) 
-        	actor.registerCastEvent(Condition(function Booster.onCast))
+	public class Booster extends StaticBaseObject
+		real boostspeed = 200
+		
+		construct( vec2 pos, player owner )
+			super( pos.toVec3(), CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Booster.orderMove ) 
+			actor.registerCastEvent(Condition(function Booster.onCast))
 			actor.setUserData(this castTo int)
-        	
-        static function orderMove()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            if e instanceof EscaperKiller
-                EscaperKiller ek = e castTo EscaperKiller
-                SetUnitMoveSpeed(ek.actor, obj.boostspeed)
-                SetUnitMoveSpeed(ek.setup, obj.boostspeed)
+			
+		static function orderMove()
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = source.getUserData() castTo thistype
+			if e instanceof EscaperKiller
+				EscaperKiller ek = e castTo EscaperKiller
+				SetUnitMoveSpeed(ek.actor, obj.boostspeed)
+				SetUnitMoveSpeed(ek.setup, obj.boostspeed)
 
 		static function onCast() returns boolean
-            var id = GetSpellAbilityId()
+			var id = GetSpellAbilityId()
 			var obj = GetTriggerUnit().getUserData() castTo Booster
-            
-            switch id 
-            	case INCREASE_SPEED_ABIL
-	                if obj.boostspeed >= 520
-	            		createTTExForPlayer(obj.position, vec2(0,0.05), "Max", 10,  2., colorRGBA(255,55,55,0), obj.owner  )
+			
+			switch id 
+				case INCREASE_SPEED_ABIL
+					if obj.boostspeed >= 520
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "Max", 10,  2., colorRGBA(255,55,55,0), obj.owner  )
 					else
 						obj.boostspeed += 10
-						createTTExForPlayer(obj.position, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorRGBA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorRGBA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
 				case DECREASE_SPEED_ABIL
-	                if obj.boostspeed < 30
-	            		createTTExForPlayer(obj.position, vec2(0,0.05), "Min", 10,  2., colorRGBA(255,55,55,0), obj.owner  )
+					if obj.boostspeed < 30
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "Min", 10,  2., colorRGBA(255,55,55,0), obj.owner  )
 					else
 						obj.boostspeed -= 10
-						createTTExForPlayer(obj.position, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorRGBA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorRGBA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
 			return false
+
 
 	int INCREASE_SPEED_ABIL = 'A04O'
 	int DECREASE_SPEED_ABIL = 'A04Q'

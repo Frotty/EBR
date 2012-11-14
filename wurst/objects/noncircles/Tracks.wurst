@@ -8,12 +8,12 @@ import Texttag
 int array TRACKS
 
 constant int TRACK_ID 			= 'n01S'
-constant int INC_ID          	= 'A04S'
-constant int DEC_ID          	= 'A04T'
-constant int LEFT_ID         	= 'A04L'
-constant int RIGHT_ID       	= 'A04U'
+constant int INC_ID		  	= 'A04S'
+constant int DEC_ID		  	= 'A04T'
+constant int LEFT_ID		 	= 'A04L'
+constant int RIGHT_ID	   	= 'A04U'
 constant int INCLENGTH_ID   	= 'A04H'
-constant int DECLENGTH_ID    	= 'A050'
+constant int DECLENGTH_ID		= 'A050'
 
 public class Tracks extends Entity
 	unit actor
@@ -26,7 +26,7 @@ public class Tracks extends Entity
 	int angle = 0
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), 0. , owner )
+		super( pos.toVec3(), owner )
 		actor = CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0)
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.registerCastEvent(Condition(function Tracks.onCast))
@@ -35,15 +35,15 @@ public class Tracks extends Entity
 		
 	override function update()
 		for escaper in escapers
-			if ( escaper.position.x > position.x - width * 128 - 64 and escaper.position.x < position.x + width * 128 + 64 
-				and escaper.position.y > position.y - height * 128 - 64 and escaper.position.y < position.y + height * 128 + 64 )
+			if ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
+				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
 				escaper.trackVelocity += vec3(Cos((angle+90) * DEGTORAD) * speed, Sin((angle+90) * DEGTORAD) * speed, 0. )
 		
 				
 	function recreateDummy()
 		actor.remove()
-		actor = CreateUnit(owner, TRACKS[size], position.x, position.y, angle.toReal())
+		actor = CreateUnit(owner, TRACKS[size], pos.x, pos.y, angle.toReal())
 				
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -52,11 +52,11 @@ public class Tracks extends Entity
 			case INC_ID
 				if tracks.speed < 20.
 					tracks.speed++
-					createTTExForPlayer(tracks.position, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
+					createTTExForPlayer(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
 			case DEC_ID
 				if tracks.speed > 1.
 					tracks.speed--
-					createTTExForPlayer(tracks.position, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
+					createTTExForPlayer(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
 			case INCLENGTH_ID
 				if tracks.size < 2
 					tracks.size++
@@ -89,11 +89,8 @@ public class Tracks extends Entity
 		return false
 		
 	
-	override function onGround()
-	override function inAir()
-	
 init
 	TRACKS[0] = 'n01R'
-    TRACKS[1] = 'n01L'
-    TRACKS[2] = 'n01N'
-    
+	TRACKS[1] = 'n01L'
+	TRACKS[2] = 'n01N'
+	

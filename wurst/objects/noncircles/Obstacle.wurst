@@ -1,57 +1,57 @@
 package Obstacle
-    import SetupObject
-    import Terrain
-    import Escaper
-    import RegionData
-    //import Regions
-    
+	import SetupObject
+	import Terrain
+	import Escaper
+	import RegionData
+	//import Regions
+	
 	constant int 	BIGOBSTACLE_ID  	= 'n002'
 	constant int 	SMALLOBSTACLE_ID	= 'n002'
 		
 	constant real 	EVENT_RADIUS_SMALL	= 32.
 	constant real 	EVENT_RADIUS_BIG	= 64.
 
-    public class SmallObstacle extends StaticSetupObject
-        
-        construct( vec2 pos, player owner )
+	public class SmallObstacle extends StaticSetupObject
+		
+		construct( vec2 pos, player owner )
 			super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_SMALL, function SmallObstacle.kill )
 			var rdata = getRegionData(pos.x, pos.y)
 			actor = CreateUnit(owner, rdata.smallObstacleId, pos.x, pos.y, GetRandomReal(0,360) )
-            actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            actor.addAbility(LOCUST_ID)
+			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			actor.addAbility(LOCUST_ID)
 
-            setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
-            setup.setUserData( this castTo int )
-            inRangeTrig.registerUnitInRangeSource( setup, radius )
+			setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
+			setup.setUserData( this castTo int )
+			inRangeTrig.registerUnitInRangeSource( setup, radius )
 			
-        static function kill()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            if e instanceof Escaper
-                (e castTo Escaper).kill() //or whatever
+		static function kill()
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = source.getUserData() castTo thistype
+			if e instanceof Escaper
+				(e castTo Escaper).kill() //or whatever
 
 	public class BigObstacle extends StaticSetupObject
-        
-        construct( vec2 pos, player owner )
+		
+		construct( vec2 pos, player owner )
 			super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_BIG, function BigObstacle.kill )
 			var rdata = getRegionData(pos.x, pos.y)
 			actor = CreateUnit(owner, rdata.bigObstacleId, pos.x, pos.y, GetRandomReal(0,360) )
-            actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            actor.addAbility(LOCUST_ID)
+			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			actor.addAbility(LOCUST_ID)
 
-            setup = CreateUnit(owner, BIGOBSTACLE_ID, pos.x, pos.y, 0.)
-            setup.setUserData( this castTo int )
-            inRangeTrig.registerUnitInRangeSource( setup, radius )
+			setup = CreateUnit(owner, BIGOBSTACLE_ID, pos.x, pos.y, 0.)
+			setup.setUserData( this castTo int )
+			inRangeTrig.registerUnitInRangeSource( setup, radius )
 			
-        static function kill()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            if e instanceof Escaper
-                (e castTo Escaper).kill() //or whatever
+		static function kill()
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = source.getUserData() castTo thistype
+			if e instanceof Escaper
+				(e castTo Escaper).kill() //or whatever
 
 
 

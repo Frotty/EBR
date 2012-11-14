@@ -1,27 +1,27 @@
 package EscaperKiller
-    import Entity
-    import Terrain
-    import SetupObject
-    import Escaper
+	import Entity
+	import Terrain
+	import SetupObject
+	import Escaper
    
-    public constant real COLL_SIZE_SK = 72
+	public constant real COLL_SIZE_SK = 72
 	public constant real COLL_SIZE_BK = 96
 	public constant real COLL_SIZE_SRK = 70
 	public constant real COLL_SIZE_BRK = 90
 	public constant real COLL_SIZE_TANK = 80
 	public constant real COLL_SIZE_GLAIVE = 54
 	
-    public class EscaperKiller extends DynamicSetupObject
-        
-        static function onInRangeEvent()
-            var ent = GetTriggerUnit().getUserData() castTo Entity
-            
-            if ent instanceof Escaper
-            	var es = ent castTo Escaper
-            	es.kill() 
-        
-        construct( unit u, unit setup, real radius )
-        	super( vec3(setup.getX(), setup.getY(), 0), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
+	public class EscaperKiller extends DynamicSetupObject
+		
+		static function onInRangeEvent()
+			var ent = GetTriggerUnit().getUserData() castTo Entity
+			
+			if ent instanceof Escaper
+				var es = ent castTo Escaper
+				es.kill() 
+		
+		construct( unit u, unit setup, real radius )
+			super( vec3(setup.getX(), setup.getY(), 0), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
 
 endpackage

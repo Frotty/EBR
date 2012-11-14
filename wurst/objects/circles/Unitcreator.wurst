@@ -1,76 +1,76 @@
 package Unitcreator
-    import BaseObject
-    import Terrain
-    import EscaperKiller
-    import CustomSpellBook
-    import TimerUtils
-    import RegionData
+	import BaseObject
+	import Terrain
+	import EscaperKiller
+	import CustomSpellBook
+	import TimerUtils
+	import RegionData
 	import EventHandling
 	import Texttag
 
-    
+	
 	constant int 	UNITCREATOR_ID   = 'n006'
 
 
-    public class UnitCreator extends StaticBaseObject
-        real interval = 5.
-        boolean ON = false
-        int spawnUnitType = 'BIGK'
-        timer spawn
-        
-        construct( vec2 pos, player owner)
-        	super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
+	public class UnitCreator extends StaticBaseObject
+		real interval = 5.
+		boolean ON = false
+		int spawnUnitType = 'BIGK'
+		timer spawn
+		
+		construct( vec2 pos, player owner)
+			super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
 			actor.registerCastEvent(Condition(function UnitCreator.onCast))
-        	spawn = getTimer()
-        	
-        static function create()
-            var obj = GetExpiredTimer().getData() castTo UnitCreator
-            var rX = obj.getRallyX()
-            var rY = obj.getRallyY()
-            var X = obj.actor.getX()
-            var Y = obj.actor.getY()
-            var angle = angleBetweenCoordsD(X,Y,rX,rY)
-            var data = getRegionData(rX,rY)
-            print("creating...")
-            EscaperKiller ek
-            switch obj.spawnUnitType
-            	case 'BIGK'
+			spawn = getTimer()
+			
+		static function create()
+			var obj = GetExpiredTimer().getData() castTo UnitCreator
+			var rX = obj.getRallyX()
+			var rY = obj.getRallyY()
+			var X = obj.actor.getX()
+			var Y = obj.actor.getY()
+			var angle = angleBetweenCoordsD(X,Y,rX,rY)
+			var data = getRegionData(rX,rY)
+			print("creating...")
+			EscaperKiller ek
+			switch obj.spawnUnitType
+				case 'BIGK'
 					ek = new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, X, Y, angle ), CreateUnit(obj.owner, data.bigKillerId, X, Y, angle ), COLL_SIZE_BK)
-        			IssuePointOrder(ek.setup, "move" , rX,rY)
+					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'SMAL'
 					ek = new EscaperKiller(CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), COLL_SIZE_SK)
-        			IssuePointOrder(ek.setup, "move" , rX,rY)
+					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'u00A'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ) , CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_GLAIVE)
-        			IssuePointOrder(ek.setup, "move" , rX,rY)
-            	case 'h001'
+					IssuePointOrder(ek.setup, "move" , rX,rY)
+				case 'h001'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_TANK)
-        			IssuePointOrder(ek.setup, "move" , rX,rY)
-            	case 'u008'
+					IssuePointOrder(ek.setup, "move" , rX,rY)
+				case 'u008'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_BRK)
-        			IssuePointOrder(ek.setup, "move" , rX,rY)
-            	case 'u006'
+					IssuePointOrder(ek.setup, "move" , rX,rY)
+				case 'u006'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_SRK)
-        			IssuePointOrder(ek.setup, "move" , rX,rY)
-        	obj.spawn.start(obj.interval, function create)
-            
-        static function onCast() returns boolean
-            var id = GetSpellAbilityId()
+					IssuePointOrder(ek.setup, "move" , rX,rY)
+			obj.spawn.start(obj.interval, function create)
+			
+		static function onCast() returns boolean
+			var id = GetSpellAbilityId()
 			var obj = GetTriggerUnit().getUserData() castTo UnitCreator
-            
-            switch id 
-            	case INCREASE_INTERVAL_ABIL
-	                if obj.interval >= 10
-	            		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+			
+			switch id 
+				case INCREASE_INTERVAL_ABIL
+					if obj.interval >= 10
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 					else
 						obj.interval += 0.25
-						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 				case DECREASE_INTERVAL_ABIL
-	                if obj.interval < 0.75
-	            		createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					if obj.interval < 0.75
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 					else
 						obj.interval -= 0.25
-						createTTExForPlayer(obj.position, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 						//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 				case START_ABIL
 					obj.spawn.startPeriodic(obj.interval, function create)
@@ -102,13 +102,13 @@ package Unitcreator
 		ondestroy
 			spawn.release()
 
-    int INCREASE_INTERVAL_ABIL = 'A01P'
-    int DECREASE_INTERVAL_ABIL = 'A01R'
-    int START_ABIL = 'A00A'
-    int PAUSE_ABIL = 'Tank'
-    Table SPAWN_TYPE_ABIL
-    
-    public function init_Unitcreator()
+	int INCREASE_INTERVAL_ABIL = 'A01P'
+	int DECREASE_INTERVAL_ABIL = 'A01R'
+	int START_ABIL = 'A00A'
+	int PAUSE_ABIL = 'Tank'
+	Table SPAWN_TYPE_ABIL
+	
+	public function init_Unitcreator()
 		SPAWN_TYPE_ABIL.saveInt('A045','BIGK') // Big Killer
 		SPAWN_TYPE_ABIL.saveInt('A046','SMAL') // Small Killer
 		SPAWN_TYPE_ABIL.saveInt('A048','u008') // Big Random Killer

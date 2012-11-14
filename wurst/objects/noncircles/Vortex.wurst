@@ -25,8 +25,8 @@ public class Vortex extends Entity
 		
 	override function update()
 		for e in escapers
-			if position.toVec2().distToVecSquared( e.position.toVec2() ) < GRAV_RADIUS.squared() and not e.flying
-				var angle = e.position.toVec2().angleTo(position.toVec2())
+			if pos.toVec2().distToVecSquared( e.pos.toVec2() ) < GRAV_RADIUS.squared() and not e.flying
+				var angle = e.pos.toVec2().angleTo(pos.toVec2())
 				e.vortexVelocity += vec3( Cos(angle) * gravity, Sin(angle) * gravity, 0 )
 		
 	static function onCast() returns boolean
@@ -36,17 +36,13 @@ public class Vortex extends Entity
 			case INC_ID
 				if vdata.gravity < 8.
 					vdata.gravity += .5
-					createTTExForPlayer(vdata.position, vec2(0,0.5), "Gravity : " + vdata.gravity.toString(), 12,  2., colorRGBA(255,255,255,0), vdata.owner  )
+					createTTExForPlayer(vdata.pos, vec2(0,0.5), "Gravity : " + vdata.gravity.toString(), 12,  2., colorRGBA(255,255,255,0), vdata.owner  )
 			case DEC_ID
 				if vdata.gravity > -8.
 					vdata.gravity -= .5
-					createTTExForPlayer(vdata.position, vec2(0,0.05), "Gravity : " + vdata.gravity.toString(), 12,  2., colorRGBA(255,255,255,0), vdata.owner  )
+					createTTExForPlayer(vdata.pos, vec2(0,0.05), "Gravity : " + vdata.gravity.toString(), 12,  2., colorRGBA(255,255,255,0), vdata.owner  )
 		return false
 
-		
-	
-	override function onGround()
-	override function inAir()		
 
 	ondestroy
 		actor.unregisterCastEvent()

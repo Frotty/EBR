@@ -23,12 +23,12 @@ function changeSpeed()
 				print("fine")
 				ddata.setup.setMoveSpeed(speed+25.)
 				ddata.actor.setMoveSpeed(speed+25.)
-				createTTExForPlayer(ddata.position, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
+				createTTExForPlayer(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
 		else if id == DEC_ID
 			if speed > 0.
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)
-				createTTExForPlayer(ddata.position, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
+				createTTExForPlayer(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
 		
 
 init

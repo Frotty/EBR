@@ -68,9 +68,6 @@ public class SetupBox extends Entity
 					box.rdata.lavaDmg -= .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
 					
-		
-	override function onGround()
-	override function inAir()
 	
 	
 init

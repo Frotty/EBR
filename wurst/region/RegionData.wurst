@@ -26,8 +26,8 @@ public class RegionData
 	trigger visTrig
 	
 	boolean isGreyOwner
-    boolean isLBOwner
-    boolean isDGOwner
+	boolean isLBOwner
+	boolean isDGOwner
             
 	construct( rect r )
 		theRect = r
@@ -104,19 +104,19 @@ public class RegionData
 				
 				
 function rect.changeTerrain( integer ttype )
-    real xmax = GetRectMaxX(this)-32
-    real xmin = GetRectMinX(this)+32
-    real ymax = GetRectMaxY(this)-32
-    real ymin = GetRectMinY(this)+32
-    real x = xmin
-    real y = ymin
-    while y <= ymax
-        while x <= xmax
-            SetTerrainType( x, y, ttype, -1, 1, 1 )
-            x = x + 128
+	real xmax = GetRectMaxX(this)-32
+	real xmin = GetRectMinX(this)+32
+	real ymax = GetRectMaxY(this)-32
+	real ymin = GetRectMinY(this)+32
+	real x = xmin
+	real y = ymin
+	while y <= ymax
+		while x <= xmax
+			SetTerrainType( x, y, ttype, -1, 1, 1 )
+			x = x + 128
 
-        x = xmin
-        y = y + 128
+		x = xmin
+		y = y + 128
 
         
 
@@ -155,30 +155,30 @@ public function init_Regions()
 	regions[0] = new RegionData( gg_rct_Region_024 )
 	regions[0].setType('I00D', false)
 	print("RegionData set")
-    regions[1] = new RegionData( gg_rct_Region_018 )
-    regions[1].setType('I00G', false)
-    regions[2] = new RegionData( gg_rct_Region_000 )
-    regions[2].setType('I00E', false)
-    regions[3] = new RegionData( gg_rct_Region_003 )
-    regions[3].setType('I00H', false)
-    regions[4] = new RegionData( gg_rct_Region_004 )
-    regions[5] = new RegionData( gg_rct_Region_005 )
-    regions[6] = new RegionData( gg_rct_Region_006 )
-    regions[7] = new RegionData( gg_rct_Region_007 )
-    regions[8] = new RegionData( gg_rct_Region_008 )
-    regions[9] = new RegionData( gg_rct_Region_009 )
-    regions[10] = new RegionData( gg_rct_Region_010 )
-    regions[11] = new RegionData( gg_rct_Region_011 )
-    regions[12] = new RegionData( gg_rct_Region_012 )
-    regions[13] = new RegionData( gg_rct_Region_013 )
-    regions[14] = new RegionData( gg_rct_Region_014 )
-    regions[15] = new RegionData( gg_rct_Region_015 )
-    regions[16] = new RegionData( gg_rct_Region_016 )
-    regions[17] = new RegionData( gg_rct_Region_017 )
-    regions[18] = new RegionData( gg_rct_Region_002 )
-    regions[19] = new RegionData( gg_rct_Region_022 )
-    regions[20] = new RegionData( gg_rct_Region_001 )
-    regions[21] = new RegionData( gg_rct_Region_026 )
+	regions[1] = new RegionData( gg_rct_Region_018 )
+	regions[1].setType('I00G', false)
+	regions[2] = new RegionData( gg_rct_Region_000 )
+	regions[2].setType('I00E', false)
+	regions[3] = new RegionData( gg_rct_Region_003 )
+	regions[3].setType('I00H', false)
+	regions[4] = new RegionData( gg_rct_Region_004 )
+	regions[5] = new RegionData( gg_rct_Region_005 )
+	regions[6] = new RegionData( gg_rct_Region_006 )
+	regions[7] = new RegionData( gg_rct_Region_007 )
+	regions[8] = new RegionData( gg_rct_Region_008 )
+	regions[9] = new RegionData( gg_rct_Region_009 )
+	regions[10] = new RegionData( gg_rct_Region_010 )
+	regions[11] = new RegionData( gg_rct_Region_011 )
+	regions[12] = new RegionData( gg_rct_Region_012 )
+	regions[13] = new RegionData( gg_rct_Region_013 )
+	regions[14] = new RegionData( gg_rct_Region_014 )
+	regions[15] = new RegionData( gg_rct_Region_015 )
+	regions[16] = new RegionData( gg_rct_Region_016 )
+	regions[17] = new RegionData( gg_rct_Region_017 )
+	regions[18] = new RegionData( gg_rct_Region_002 )
+	regions[19] = new RegionData( gg_rct_Region_022 )
+	regions[20] = new RegionData( gg_rct_Region_001 )
+	regions[21] = new RegionData( gg_rct_Region_026 )
     
    
 function initTerrainTypes()

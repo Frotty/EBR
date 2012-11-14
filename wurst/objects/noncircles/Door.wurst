@@ -1,60 +1,60 @@
 package Door
-    import BaseObject
-    import Terrain
-    import Escaper
-    import SetupObject
-    import GameConstants
-    import RGBA
-    import BuilderConstants
-    import Key
-    
+	import BaseObject
+	import Terrain
+	import Escaper
+	import SetupObject
+	import GameConstants
+	import RGBA
+	import BuilderConstants
+	import Key
+	
 	//NOTE: Some parts of this are from the old ebr  O.o   >:0
-    int array colorRGBv
-    constant int DOORDUMMY_ID = 'h002'
-    constant int DOORORDER_ID = 'h00C'
-    constant int DOORPATH = 'h006'
-    constant int DOORPATH_O = 'h00F'
-    constant int DOOROPEN_ABILITY_ID = 'A00J'
-    constant int DOORTURN_ABILITY_ID = 'A01W'
-    constant int DOORPLACEKEY_ABILITY_ID = 'Av42'
-    constant real EVENT_RADIUS = 192
-    //Item type ids
-    // doesn't work yet
-    int array KEY_COLOR_ID
-    trigger castTrig
-    
-    
-    
-    
-    public class Door extends StaticSetupObject
-        unit pathing
-        COLOR col = COLOR.WHITE
-        
-        boolean vertical = false
-        boolean opened = false
-        
-        construct( vec2 pos, player owner )
-	    	super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
-	    						CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
+	int array colorRGBv
+	constant int DOORDUMMY_ID = 'h002'
+	constant int DOORORDER_ID = 'h00C'
+	constant int DOORPATH = 'h006'
+	constant int DOORPATH_O = 'h00F'
+	constant int DOOROPEN_ABILITY_ID = 'A00J'
+	constant int DOORTURN_ABILITY_ID = 'A01W'
+	constant int DOORPLACEKEY_ABILITY_ID = 'Av42'
+	constant real EVENT_RADIUS = 192
+	//Item type ids
+	// doesn't work yet
+	int array KEY_COLOR_ID
+	trigger castTrig
+	
+	
+	
+	
+	public class Door extends StaticSetupObject
+		unit pathing
+		COLOR col = COLOR.WHITE
+		
+		boolean vertical = false
+		boolean opened = false
+		
+		construct( vec2 pos, player owner )
+			super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
+								CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
 			pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
 			TriggerRegisterUnitEvent( castTrig, setup, EVENT_UNIT_SPELL_CAST )
 
-        
-        static function keyopen() //open with item and color conditions
-        	unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            Door door = source.getUserData() castTo Door
-            if e instanceof Escaper
+		
+		static function keyopen() //open with item and color conditions
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			Door door = source.getUserData() castTo Door
+			if e instanceof Escaper
 				item i = UnitItemInSlot(u, 0)
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) and door.opened == false //WARNING BJ function//
-            		var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
-            		destroy kdata
-            		if not door.opened
-                        door.openDoor()
-            		
-        function changeColor( int id )
-            switch id
+					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
+					destroy kdata
+					if not door.opened
+						door.openDoor()
+					
+		function changeColor( int id )
+			switch id
 				case colorSpells[0]
 					col = COLOR.WHITE
 				case colorSpells[1]
@@ -73,104 +73,104 @@ package Door
 					col = COLOR.GREEN
 				case colorSpells[8]
 					col = COLOR.PINK
-                    
-            colorize()
-                    
-        function colorize()
-            color c = color(0,0,0)
-            if col == COLOR.YELLOW
-            	c = colors[col castTo int +1]
-            else if col == COLOR.ORANGE
-            	c = colors[col castTo int -1]
-            else
-                c = colors[col castTo int]
-            SetUnitVertexColor(actor,c.red,c.green,c.blue,255)
-        
-        function toggleOpen()
-        	if opened
-                closeDoor()
-            else
-                openDoor()
-        
-        function closeDoor()
-            SetUnitAnimation( actor, "stand" )
-            RemoveUnit( pathing )
-            opened = false
-            if vertical
-                pathing  = CreateUnit( owner, DOORPATH, position.x, position.y, 0 )
-            else
-                pathing  = CreateUnit( owner, DOORPATH, position.x, position.y, 270 )
-    
-        function openDoor()
-            SetUnitAnimation( actor, "Death Alternate" )
-            RemoveUnit( pathing )
-            opened = true
-            if vertical
-                pathing  = CreateUnit( owner, DOORPATH_O, position.x, position.y, 0 )
-            else
-                pathing  = CreateUnit( owner, DOORPATH_O, position.x, position.y, 270 )
-        
-        function turn()
-            if vertical
-                RemoveUnit( pathing )
-                RemoveUnit( actor )
-                vertical = false
-                if opened
-                    actor = CreateUnit( owner, DOORDUMMY_ID , position.x, position.y, 270 )
-                    SetUnitAnimation( actor, "Death Alternate" )
-                    pathing  = CreateUnit( owner, DOORPATH_O, position.x, position.y, 270 )
-                else
-                    actor = CreateUnit( owner, DOORDUMMY_ID , position.x, position.y, 270 )
-                    pathing  = CreateUnit( owner, DOORPATH, position.x, position.y, 270 )
-            else
-                RemoveUnit( pathing )
-                RemoveUnit( actor )
-                vertical = true
-                if opened 
-                    actor = CreateUnit(owner, DOORDUMMY_ID , position.x, position.y, 0 )
-                    SetUnitAnimation( actor, "Death Alternate" )
-                    pathing  = CreateUnit( owner, DOORPATH_O, position.x, position.y, 0 )
-                else
-                    print("yäs " + GetPlayerId(owner).toString())
-                    actor = CreateUnit( owner, DOORDUMMY_ID , position.x, position.y, 0 )
-                    pathing  = CreateUnit( owner, DOORPATH, position.x, position.y, 0 )
+					
+			colorize()
+					
+		function colorize()
+			color c = color(0,0,0)
+			if col == COLOR.YELLOW
+				c = colors[col castTo int +1]
+			else if col == COLOR.ORANGE
+				c = colors[col castTo int -1]
+			else
+				c = colors[col castTo int]
+			SetUnitVertexColor(actor,c.red,c.green,c.blue,255)
+		
+		function toggleOpen()
+			if opened
+				closeDoor()
+			else
+				openDoor()
+		
+		function closeDoor()
+			SetUnitAnimation( actor, "stand" )
+			RemoveUnit( pathing )
+			opened = false
+			if vertical
+				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
+			else
+				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 270 )
+	
+		function openDoor()
+			SetUnitAnimation( actor, "Death Alternate" )
+			RemoveUnit( pathing )
+			opened = true
+			if vertical
+				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
+			else
+				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
+		
+		function turn()
+			if vertical
+				RemoveUnit( pathing )
+				RemoveUnit( actor )
+				vertical = false
+				if opened
+					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
+					SetUnitAnimation( actor, "Death Alternate" )
+					pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
+				else
+					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
+					pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 270 )
+			else
+				RemoveUnit( pathing )
+				RemoveUnit( actor )
+				vertical = true
+				if opened 
+					actor = CreateUnit(owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
+					SetUnitAnimation( actor, "Death Alternate" )
+					pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
+				else
+					print("yäs " + GetPlayerId(owner).toString())
+					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
+					pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
 					print("yäs2")
 			colorize()
 			
 		ondestroy
 			pathing.remove()
-    
+	
 		static function onSpellCast()
 			print("casted")
-	        unit u = GetTriggerUnit()
-	        print("casted2")
-	        Door door = u.getUserData() castTo Door
-	        print(door.position.toString())
-	        int id = GetSpellAbilityId()
-	        print("casted3")
-	        switch id 
-	        	case DOOROPEN_ABILITY_ID
-	            	door.toggleOpen()
-	        	case DOORTURN_ABILITY_ID
-	            	door.turn()
-	        	default 
-	            	door.changeColor(id)
+			unit u = GetTriggerUnit()
+			print("casted2")
+			Door door = u.getUserData() castTo Door
+			print(door.pos.toString())
+			int id = GetSpellAbilityId()
+			print("casted3")
+			switch id 
+				case DOOROPEN_ABILITY_ID
+					door.toggleOpen()
+				case DOORTURN_ABILITY_ID
+					door.turn()
+				default 
+					door.changeColor(id)
 
-	    
-    
-    public function init_Door()
+		
+	
+	public function init_Door()
 		castTrig = CreateTrigger()
 		castTrig.addAction(function Door.onSpellCast)
-        //color id        unit id
-        KEY_COLOR_ID[0] = 'I009' //white
-        KEY_COLOR_ID[1] = 'I00C' //red
-        KEY_COLOR_ID[2] = 'I004' //blue
-        KEY_COLOR_ID[3] = 'I008' //teal
-        KEY_COLOR_ID[4] = 'I008' //purple
-        KEY_COLOR_ID[5] = 'I005' //yellow
-        KEY_COLOR_ID[6] = 'I00O' //orange
-        KEY_COLOR_ID[7] = 'I00B' //green
-        KEY_COLOR_ID[8] = 'I006' //pink
+		//color id		unit id
+		KEY_COLOR_ID[0] = 'I009' //white
+		KEY_COLOR_ID[1] = 'I00C' //red
+		KEY_COLOR_ID[2] = 'I004' //blue
+		KEY_COLOR_ID[3] = 'I008' //teal
+		KEY_COLOR_ID[4] = 'I008' //purple
+		KEY_COLOR_ID[5] = 'I005' //yellow
+		KEY_COLOR_ID[6] = 'I00O' //orange
+		KEY_COLOR_ID[7] = 'I00B' //green
+		KEY_COLOR_ID[8] = 'I006' //pink
 
 
 endpackage

@@ -1,138 +1,81 @@
 package Entity
-	import public Vectors
-	import public EntityManagement
-	import LinkedListModule
-	import Debug
-	import Terrain
-	import Physics
-	
-	// bound factor for unit-unit collision
-	public constant BOUNCE_FACTOR = 0.6
-	
-	
-	public abstract class Entity
-		use LinkedListModule
-		
-		vec3 position
-		
-		real radius
-		real mass = .1
-		player owner
-		real terrainZ
-		
-		boolean isStatic = false
-		boolean active = true
-		boolean done = false
-		
-		construct( vec3 pos, real radius, player p )
-			position = pos
-			owner = p
-			this.radius = radius
-			entityCount++
-			currentEntityCount++
-			print("current Entities: " + currentEntityCount.toString() )
-			
+import LinkedListModule
+import Terrain
+import PhysicsConstants
 
-			
-		abstract function onGround()
-		abstract function inAir()
-		
-		function terminate()
-			done = true
-
-		
-		function update()			
-			terrainZ = getTerrainZ( position.x, position.y )
-			
-			if position.z <= terrainZ + .2
-				onGround()
-			else
-				inAir()
-			
-		ondestroy
-			print("destroyed")
-			currentEntityCount--
+// Base Entity Class
+public abstract class Entity
+	use LinkedListModule
 	
-		
-	public abstract class DynamicEntity extends Entity
-		vec3 velocity
-		
-		real factor = 1.
+	// 3d vector position
+	vec3 pos
+	// 3d vector velocity
+	vec3 vel
+	
+	// owning player
+	player owner
+	
+	// flag for being static
+	boolean isStatic 	= false
+	// sleeping or active?
+	boolean active 		= true
+	// for removing
+	boolean done 		= false
 
-		construct( vec3 pos, real radius, player p )
-			super(pos, radius, p)
-			velocity = vec3(0,0,0)
-			dynamicEntityCount++
-			
-		function addForce(real x, real y, real z)
-			velocity += vec3(x,y,z)
+	construct( vec3 pos, player owner )
+		this.pos = pos
+		this.vel = vec3(0,0,0)
+		this.owner = owner
+		print("wtf: " + (this castTo int).toString())
 		
-		function setForce(real x, real y, real z)
-			velocity = vec3(x,y,z)
-			
-		function setTarget( real x, real y, real speed, real angle )
-			var t = distanceBetweenCoords(position.x, position.y, x, y)/speed
-			let e = getTerrainZ(x,y)
-			
-			if t < 300./speed
-				t = 300./speed
-			
-			let startZVelocity = ((-gravity.z * t) / 2 - position.z/t + e/t)
-			if startZVelocity > .5
-				this.position.z = 1.1
-			this.setForce( Cos(angle) * speed, Sin(angle) * speed, startZVelocity )
-			update()
-			
-		override function update()
-			super.update()
-			position += velocity
+	construct( vec3 pos, vec3 vel, player owner )
+		this.pos = pos
+		this.vel = vel
+		this.owner = owner
 		
-		ondestroy
-			print("destroyed dyn")
+	function setPos( vec3 pos )
+		this.pos = pos
+		
+	function setVel( vec3 vel )
+		this.vel = vel
+	
+	function addVel( vec3 vel )
+		this.vel += vel
+		
+	function setTarget( vec3 tpos, real speed )
+			var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
+			let angle = angleBetweenCoordsR(pos.x, pos.y, tpos.x, tpos.y)
+			let e = getTerrainZ(tpos.x,tpos.y)
+			
+			if t < 1.
+				t = 1./speed
+			
+			let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
+			this.setVel( vec3( Cos(angle) * speed, Sin(angle) * speed, startZVelocity) )
+		
+	function terminate()
+		done = true
+		
+	// This function is called every ANIMATION_PERIOD tick if the Entity is active
+	abstract function update()
+	
+abstract public class UnitEntity extends Entity
+	unit actor
+	
+	construct( vec3 pos, unit actor )
+		super(pos, actor.getOwner())
+		this.actor = actor
+		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		
+	function setNewActor(unit u)
+		actor.remove()
+		actor = u
+		actor.setUserData(this castTo int)
+		
+	function setNewPos(vec3 tpos)
+		pos = tpos
+		actor.setPos(tpos.x,tpos.y)
 
-		
-			
-	public class UnitEntity extends DynamicEntity
-		unit actor
-		
-		construct( vec3 pos, real radius, unit u )
-			super(pos,radius, u.getOwner())
-			print(position.toString())
-			actor = u
-			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-			owner = GetOwningPlayer(u)
-			actor.setUserData(this castTo int)
-			
-			unitEntityCount++
-			
-		function setNewPos(vec3 pos) returns thistype
-			position = pos
-			actor.setPos(pos.x, pos.y).setFlyHeight(pos.z, 0)
-			return this
-		
-		function setNewXYZ(vec3 pos)
-			position = pos
-			actor.setX(pos.x).setY(pos.y).setFlyHeight(pos.z, 0)
-			
-		function setNewActor(unit u)
-			actor = u
-			actor.setUserData(this castTo int)
-			
-		override function onGround()
-			position = vec3( actor.getX(), actor.getY(), terrainZ )
-			
-		override function inAir()
-			position = vec3( actor.getX(), actor.getY(), position.z )
-		
-			
-		override function update()
-			super.update()
-			SetUnitX( actor, position.x )
-            SetUnitY( actor, position.y )
-            SetUnitFlyHeight( actor, position.z - terrainZ, .0 )
-				
-			
-		ondestroy
-			actor.remove()
-			
-endpackage
+
+
+	

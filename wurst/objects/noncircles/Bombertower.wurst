@@ -1,34 +1,34 @@
 package Bombertower
-    import BaseObject
-    import Terrain
-    import Escaper
-    import EscaperKiller
-    import EventHandling
-    import Attackspeed
-    
+	import BaseObject
+	import Terrain
+	import Escaper
+	import EscaperKiller
+	import EventHandling
+	import Attackspeed
+	
 	constant int 	BOMBERTOWER_ID   = 'h019'
 	constant int	ATTACK_ORDER = 851983
 	constant int	ATTACK_GROUND_ORDER = 851984
 	constant int	STOP_ORDER = 851972
 	trigger orderTrigger
 
-    public class Bombertower extends StaticBaseObject
-        unit dummy
-        boolean realorder = true
-        
-        construct( vec2 pos, player owner )
-        	super( pos.toVec3(), CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
-            TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_ORDER)
-            TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
-            TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)
-        	actor.registerCastEvent(Condition(function Bombertower.onCast))
+	public class Bombertower extends StaticBaseObject
+		unit dummy
+		boolean realorder = true
+		
+		construct( vec2 pos, player owner )
+			super( pos.toVec3(), CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
+			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_ORDER)
+			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
+			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)
+			actor.registerCastEvent(Condition(function Bombertower.onCast))
 			actor.addAbility('Agho')
-        	dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
-            dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-            dummy.addAbility('Aloc').removeAbility('Aloc')
-            SetUnitPathing(dummy, true)
-            print("Were building it up, to burn it back down!!!")
-        	
+			dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
+			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			dummy.addAbility('Aloc').removeAbility('Aloc')
+			SetUnitPathing(dummy, true)
+			print("Were building it up, to burn it back down!!!")
+			
 		static function onCast() returns boolean
 			var id = GetSpellAbilityId()
 			var obj = GetTriggerUnit().getUserData() castTo Bombertower
@@ -46,26 +46,26 @@ package Bombertower
 	
 	function checkAttackOrder()
 		var i = GetIssuedOrderId()
-    	print(i.toString())
-        var e = GetOrderedUnit().getUserData() castTo Entity
-        if e instanceof Bombertower 
-            var obj = e castTo Bombertower
-        	if GetOrderedUnit() == obj.actor
-	        	if i == ATTACK_GROUND_ORDER
-	            	IssuePointOrderById(obj.dummy,i, GetOrderPointX(),GetOrderPointY())
+		print(i.toString())
+		var e = GetOrderedUnit().getUserData() castTo Entity
+		if e instanceof Bombertower 
+			var obj = e castTo Bombertower
+			if GetOrderedUnit() == obj.actor
+				if i == ATTACK_GROUND_ORDER
+					IssuePointOrderById(obj.dummy,i, GetOrderPointX(),GetOrderPointY())
 					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
 				else if i == ATTACK_ORDER
-	            	IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
+					IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
 					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
 				else if i == STOP_ORDER 
 					if obj.realorder == true
-		            	IssueImmediateOrderById(obj.dummy, STOP_ORDER)
-		            else 
+						IssueImmediateOrderById(obj.dummy, STOP_ORDER)
+					else 
 						obj.realorder = true
-	            	
+					
 	
 	public function init_Bombertower()
 		orderTrigger = CreateTrigger()
-        orderTrigger.addAction(function checkAttackOrder)
-        
+		orderTrigger.addAction(function checkAttackOrder)
+		
 endpackage

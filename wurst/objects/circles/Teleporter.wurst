@@ -1,12 +1,12 @@
 package Teleporter
-    import BaseObject
-    import Terrain
-    import Escaper
-    import EscaperKiller
-    import EventHandling
-    import TeleporterTarget
-    import SetupObject
-    
+	import BaseObject
+	import Terrain
+	import Escaper
+	import EscaperKiller
+	import EventHandling
+	import TeleporterTarget
+	import SetupObject
+	
 	constant int 	TELEPORTER_ID   = 'n00C'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 	constant int ESC_ID = 'A009'
@@ -16,38 +16,38 @@ package Teleporter
 	constant real 	EVENT_RADIUS	= 32.
 
 
-    public class Teleporter extends StaticBaseObject
-        int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
-        
-        construct( vec2 pos, player owner )
-        	super( pos.toVec3(), CreateUnit(owner, TELEPORTER_ID, pos.x, pos.y, 0. ), EVENT_RADIUS, function Teleporter.teleport ) 
-        	actor.registerCastEvent(Condition(function Teleporter.onCast))
-        	
-        static function teleport()
-            unit source = GetTriggeringTrigger().getSource()
-            unit u = GetTriggerUnit()
-            Entity e = u.getUserData() castTo Entity
-            thistype obj = source.getUserData() castTo thistype
-            var rx = obj.getRallyX()
-            var ry = obj.getRallyY()
-            DynamicSetupObject dyn
-            if obj.mode == 0 and e instanceof Escaper
-                SetUnitPosition( u, rx, ry )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-                PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-            else if obj.mode == 1  
-            	if e instanceof EscaperKiller or e instanceof TeleporterTarget
-                    dyn = e castTo DynamicSetupObject
-                	dyn.setNewPos(vec3(rx,ry,0))
-                	DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                	DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-            else if obj.mode == 2  
-            	if e instanceof EscaperKiller or e instanceof Escaper
-                    dyn = e castTo DynamicSetupObject
-                	dyn.setNewPos(vec3(rx,ry,0))
-                	DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.position.x, obj.position.y ) )
-                	DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+	public class Teleporter extends StaticBaseObject
+		int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
+		
+		construct( vec2 pos, player owner )
+			super( pos.toVec3(), CreateUnit(owner, TELEPORTER_ID, pos.x, pos.y, 0. ), EVENT_RADIUS, function Teleporter.teleport ) 
+			actor.registerCastEvent(Condition(function Teleporter.onCast))
+			
+		static function teleport()
+			unit source = GetTriggeringTrigger().getSource()
+			unit u = GetTriggerUnit()
+			Entity e = u.getUserData() castTo Entity
+			thistype obj = source.getUserData() castTo thistype
+			var rx = obj.getRallyX()
+			var ry = obj.getRallyY()
+			DynamicSetupObject dyn
+			if obj.mode == 0 and e instanceof Escaper
+				u.setPos(rx, ry)
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+				PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
+			else if obj.mode == 1  
+				if e instanceof EscaperKiller or e instanceof TeleporterTarget
+					dyn = e castTo DynamicSetupObject
+					dyn.setNewPos(vec3(rx,ry,0))
+					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+			else if obj.mode == 2  
+				if e instanceof EscaperKiller or e instanceof Escaper
+					dyn = e castTo DynamicSetupObject
+					dyn.setNewPos(vec3(rx,ry,0))
+					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
 	
 		override function update()
 			skip
