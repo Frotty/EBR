@@ -34,7 +34,11 @@ package GameInit
 		initBaseObjects()
 		initEscaperKillers()
 		initMazeUnits(0)
-
+		
+		initMazeUnits(1)
+		CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
+		initMazeUnits(2)
+		initMazeUnits(3)
 		
 		startChoose()
 
@@ -46,5 +50,6 @@ package GameInit
 		trigger t = CreateTrigger()
 		TriggerRegisterTimerEvent( t, .01, false )
 		TriggerAddAction( t, function initGame )
+		startEntityLoop()
 
 endpackage 

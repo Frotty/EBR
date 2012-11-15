@@ -5,6 +5,12 @@ import Obstacle
 import Key
 import EscaperKiller
 import Teleporter
+import Executer
+import BuilderConstants
+import Unitcreator
+import UnitRemover
+import Spinner
+import Entity
 
 public function pickTwoMazes()
 
@@ -53,6 +59,12 @@ public function initBaseObjects()
 		
 	g.clear()
 	
+	GroupEnumUnitsOfType(g, "custom_n003", null )
+	for u7 in g
+		new UnitRemover(vec2(u7.getX(), u7.getY()), Player(11))
+		u7.remove()
+		
+	g.clear()
 	
 	EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 	
@@ -77,6 +89,12 @@ public function initEscaperKillers()
 		
 	g.clear()
 	
+	GroupEnumUnitsOfType(g, "custom_h01I", null )
+	for u2 in g
+		new EscaperKiller(u2, null, COLL_SIZE_BK) 
+		
+	g.clear()
+	
 	GroupEnumUnitsOfType(g, "custom_n00D", null )
 	for u3 in g
 		new EscaperKiller(u3, null, COLL_SIZE_SK) 
@@ -85,7 +103,7 @@ public function initEscaperKillers()
 	
 	GroupEnumUnitsOfType(g, "custom_n00E", null )
 	for u4 in g
-		new EscaperKiller(u4, null, COLL_SIZE_SK) 
+		new EscaperKiller(u4, CreateUnit(Player(11), 'h00E', u4.getX(), u4.getY(), 0. ), COLL_SIZE_SK) 
 		
 	g.clear()
 	
@@ -102,15 +120,170 @@ public function initEscaperKillers()
 	g.clear()
 
 public function initMazeUnits(int maze) //from 0 to 4
+	Teleporter t
 	switch maze
 		case 0
 			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
 			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
-			Teleporter t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
+			t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
 			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
+			gg_unit_n00C_0057.remove()
 			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
 			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
+			gg_unit_n00C_0058.remove()
+		case 1
+			IssuePointOrder(gg_unit_n00D_0121, "patrol", 3612, -4650 )
+			IssuePointOrder(gg_unit_n00D_0122, "patrol", 3574, -5253 )
+			IssuePointOrder(gg_unit_n00D_0120, "patrol", 3834, -5380 )
+			IssuePointOrder(gg_unit_n00D_0123, "patrol", 2932, -5615 )
+			IssuePointOrder(gg_unit_n00D_0125, "patrol", 3747, -5848 )
+			IssuePointOrder(gg_unit_n00D_0124, "patrol", 4000, -6340 )
+			IssuePointOrder(gg_unit_h01H_0127, "patrol", 3449, -6652 )
+			IssuePointOrder(gg_unit_h01H_0128, "patrol", 2618, -6917 )
+			IssuePointOrder(gg_unit_h01H_0081, "patrol", 1840, -6537 )
+			IssuePointOrder(gg_unit_h01H_0080, "patrol", 1293, -6286 )
+			IssuePointOrder(gg_unit_h01H_0104, "patrol", 1293, -6286 )
+			t = new Teleporter(vec2(gg_unit_n00C_0141.getX(),gg_unit_n00C_0141.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
+			gg_unit_n00C_0141.remove()
+		case 2
+			IssuePointOrder(gg_unit_h018_0149, "patrol", 368, -6647 )
+			IssuePointOrder(gg_unit_h018_0150, "patrol", 128, -6130 )
+			IssuePointOrder(gg_unit_h018_0151, "patrol", -284, -6315 )
+			IssuePointOrder(gg_unit_h018_0148, "patrol", -237, -6525 )
+    
+			IssuePointOrder(gg_unit_n009_0154, "patrol", 786, -6000 )
+			IssuePointOrder(gg_unit_n009_0152, "patrol", 775, -6400 )
+			IssuePointOrder(gg_unit_n009_0153, "patrol", 624, -6648 )
+			IssuePointOrder(gg_unit_n009_0155, "patrol", 752, -5644 )
+			IssuePointOrder(gg_unit_n009_0177, "patrol", -1050, -5609 )
+			IssuePointOrder(gg_unit_n009_0178, "patrol", -1270, -5609 )
+			IssuePointOrder(gg_unit_n009_0143, "patrol", -1921, -4364 )
+			IssuePointOrder(gg_unit_n009_0205, "patrol", -1922, -4482 )
+			IssuePointOrder(gg_unit_n009_0203, "patrol", 390, -3855 )
+			IssuePointOrder(gg_unit_n009_0204, "patrol", 780, -4222 )
+        	
+			UnitCreator u = new UnitCreator(vec2(gg_unit_n006_0165.getX(),gg_unit_n006_0165.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1024,-6785 )
+			start_creator(u)
+			gg_unit_n006_0165.remove()
+			u = new UnitCreator(vec2(gg_unit_n006_0166.getX(),gg_unit_n006_0166.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1024,-6400 )
+			start_creator(u)
+			u = new UnitCreator(vec2(gg_unit_n006_0175.getX(),gg_unit_n006_0175.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1666,-6982 )
+			start_creator(u)
+			gg_unit_n006_0175.remove()
+			u = new UnitCreator(vec2(gg_unit_n006_0168.getX(),gg_unit_n006_0168.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1728,-6147 )
+			start_creator(u)
+			gg_unit_n006_0168.remove()
+			u = new UnitCreator(vec2(gg_unit_n006_0167.getX(),gg_unit_n006_0167.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1410,-7100 )
+			start_creator(u)
+			gg_unit_n006_0167.remove()
+			u = new UnitCreator(vec2(gg_unit_n006_0169.getX(),gg_unit_n006_0169.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally",  -1159,-7037 )
+			start_creator(u)
+			gg_unit_n006_0169.remove()
+			
+			u = new UnitCreator(vec2(gg_unit_n006_0188.getX(),gg_unit_n006_0188.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -896,-3974 )
+			start_creator(u)
+			gg_unit_n006_0188.remove()
+			u = new UnitCreator(vec2(gg_unit_n006_0189.getX(),gg_unit_n006_0189.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1600,-3777 )
+			start_creator(u)
+			gg_unit_n006_0189.remove()
+			u = new UnitCreator(vec2(gg_unit_n006_0190.getX(),gg_unit_n006_0190.getY()),Player(11))
+			IssuePointOrder(u.actor, "setrally", -1346,-4225)
+			start_creator(u)
+			gg_unit_n006_0190.remove()
+			
+			IssueTargetOrder(gg_unit_h019_0159, "attack", gg_unit_u004_0161 )
+			IssuePointOrder(gg_unit_u004_0161, "patrol", -771, -5372 )
+			IssueTargetOrder(gg_unit_h019_0158, "attack", gg_unit_u004_0162 )
+			IssuePointOrder(gg_unit_u004_0162, "patrol", -128, -5100 )
+			IssueTargetOrder(gg_unit_h019_0157, "attack", gg_unit_u004_0163 )
+			IssuePointOrder(gg_unit_u004_0163, "patrol", 512, -4870 )
+			IssueTargetOrder(gg_unit_h019_0160, "attack", gg_unit_u004_0164 )
+			IssuePointOrder(gg_unit_u004_0164, "patrol", -758, -4888 )
+			
+			t = new Teleporter(vec2(gg_unit_n00C_0202.getX(),gg_unit_n00C_0202.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
+			gg_unit_n00C_0202.remove()
+		 
+			Executer e = new Executer(vec2(gg_unit_n01D_0186.getX(),gg_unit_n01D_0186.getY()),Player(11))
+			e.eventMode = Emode.ONESHOT
+			e.actionMode = Amode.CHANGETERRAIN
+			e.tiletype = CONTROLLABLEICE
+			IssuePointOrder( e.actor, "setrally", -128,-3812 )
+			gg_unit_n01D_0186.remove()
+			e = new Executer(vec2(gg_unit_n01D_0187.getX(),gg_unit_n01D_0187.getY()),Player(11))
+			e.eventMode = Emode.ONESHOT
+			e.actionMode = Amode.CHANGETERRAIN
+			e.tiletype = CONTROLLABLEICE
+			IssuePointOrder( e.actor, "setrally", 0,-3812 )
+			gg_unit_n01D_0187.remove()
+		case 3
+			IssuePointOrder(gg_unit_n00E_0263, "patrol", -2948, -6192 )
+			IssuePointOrder(gg_unit_n00E_0264, "patrol", -2645, -6798 )
+			IssuePointOrder(gg_unit_n00E_0265, "patrol", -3129, -6798 )
+			IssuePointOrder(gg_unit_n00E_0268, "patrol", -3552, -6419 )
+			IssuePointOrder(gg_unit_n00E_0269, "patrol", -4317, -5883 )
+			IssuePointOrder(gg_unit_n00E_0267, "patrol", -4045, -6441 )
+			IssuePointOrder(gg_unit_n00E_0270, "patrol", -4719, -6655 )
+			IssuePointOrder(gg_unit_n00E_0210, "patrol", -4544, -6881 )
+			IssuePointOrder(gg_unit_n00E_0211, "patrol", -4553, -7000 )
+			IssuePointOrder(gg_unit_n00E_0219, "patrol", -4754, -7185 )
+			IssuePointOrder(gg_unit_n00E_0218, "patrol", -4720, -7060 )
+			IssuePointOrder(gg_unit_n00E_0214, "patrol", -2710, -5120 )
+			IssuePointOrder(gg_unit_n00E_0213, "patrol", -2728, -5100 )
+			IssuePointOrder(gg_unit_n00E_0221, "patrol", -4576, -4748 )
+			IssuePointOrder(gg_unit_n00E_0222, "patrol", -4320, -5164 )
+        
+			IssuePointOrder(gg_unit_h01I_0266, "patrol", -2533, -7195 )
+			IssuePointOrder(gg_unit_h01I_0262, "patrol", -3502, -6077 )
+			IssuePointOrder(gg_unit_h01I_0280, "patrol", -3953, -5678 )
+			IssuePointOrder(gg_unit_h01I_0225, "patrol", -4648, -3995 )
+			
+			t = new Teleporter(vec2(gg_unit_n00C_0234.getX(),gg_unit_n00C_0234.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
+			gg_unit_n00C_0234.remove()
+
+			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
+			gg_unit_h01M_0258.remove()
+		/*	s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0261.getUserData() castTo Entity )
+			s.speed = 6
+        
+			s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), Player(11))
+			gg_unit_h01M_0257.remove()
+			s.checkObj( gg_unit_n00E_0271.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0272.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0273.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0274.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0275.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0276.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0277.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0278.getUserData() castTo Entity )
+			s.speed = 3
+			
+			s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
+			gg_unit_h01M_0259.remove()
+			s.checkObj( gg_unit_n00E_0215.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
+			s.speed = 5
+			SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
+			IssuePointOrder( gg_unit_h01M_0259, "patrol", -3820, -4661 )
+        
+			s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), Player(11))
+			gg_unit_h01M_0212.remove()
+			s.checkObj( gg_unit_h01I_0220.getUserData() castTo Entity )
+			s.speed = 7
+			*/
 function correctKeys()
 	item itm = GetEnumItem()
 	new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
