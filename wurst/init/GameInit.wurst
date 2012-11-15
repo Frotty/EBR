@@ -19,8 +19,6 @@ package GameInit
 	function initGame()
 
 		print("Starting Init")
-		EnableUserControl(false)
-		EnableOcclusion(false)
 		VolumeGroupReset()
 		EndThematicMusic()
 		init_TerrainModder()
@@ -33,24 +31,20 @@ package GameInit
 		init_Texter()
 		init_Bombertower()
 		init_Reincarnation()
-		
 		initBaseObjects()
 		initEscaperKillers()
 		initMazeUnits(0)
-		if startEntityLoop()
-			print("Finished Init - Game started")
-			startChoose()
-		else
-			printError("gamestart malfunction")
+
+		
+		startChoose()
+
 
 	init
-		print("ja")
-		EnableUserControl(false)
-		EnableOcclusion(false)
 		VolumeGroupReset()
 		EndThematicMusic()
+		startEntityLoop()
 		trigger t = CreateTrigger()
-		TriggerRegisterTimerEvent( t, .1, false )
+		TriggerRegisterTimerEvent( t, .01, false )
 		TriggerAddAction( t, function initGame )
 
 endpackage 

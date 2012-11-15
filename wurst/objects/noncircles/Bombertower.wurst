@@ -17,7 +17,7 @@ package Bombertower
 		boolean realorder = true
 		
 		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
+			super( pos, CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
 			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_ORDER)
 			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
 			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)

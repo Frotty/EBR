@@ -15,7 +15,7 @@ package Booster
 		real boostspeed = 200
 		
 		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Booster.orderMove ) 
+			super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Booster.orderMove ) 
 			actor.registerCastEvent(Condition(function Booster.onCast))
 			actor.setUserData(this castTo int)
 			

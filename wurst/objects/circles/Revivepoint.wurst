@@ -17,8 +17,9 @@ package Revivepoint
 		boolean reached = false
 		
 		construct( vec2 pos, player owner)
-			super( pos.toVec3(), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
-		
+			super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+
+
 		static function reach()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()

@@ -52,6 +52,8 @@ package Escaper
     		.removeAbility('Aloc')
     		.show()
     		
+			affectedByGravity = true
+    		
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 			TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
@@ -61,18 +63,20 @@ package Escaper
 			escapers.add(this)
 
 		override function inAir()
-			vel += gravity
 			super.inAir()
 			if not flying
 				flying = true
-				//SetUnitPropWindow(actor, 0.)
+				SetUnitPropWindow(actor, 0.)
 				
 				
 		override function onGround()
-			super.onGround()
 			if flying
 				flying = false
-				//SetUnitPropWindow(actor, 60.)
+				SetUnitPropWindow(actor, 60.)
+				vel *= 0.25
+				vel.z = 0.
+				pos.z = terrainZ
+				
 				
 			var ttype = GetTerrainType(pos.x, pos.y)
 				
@@ -157,7 +161,7 @@ package Escaper
 			terrainZ = getTerrainZ( pos.x, pos.y )
 			pos.x = actor.getX()
 			pos.y = actor.getY()
-			if pos.z <= terrainZ + 1.
+			if pos.z <= terrainZ + .2
 				onGround()
 			else
 				inAir()
@@ -252,7 +256,7 @@ package Escaper
 			
 	init
 		slideAssist = CreateTrigger()
-		//slideAssist.addAction(function Escaper.changeAngle)
+		slideAssist.addAction(function Escaper.changeAngle)
 		pickupTrig = CreateTrigger()
 		pickupTrig.addAction( function Escaper.pickupItem )
 		dropTrig = CreateTrigger()

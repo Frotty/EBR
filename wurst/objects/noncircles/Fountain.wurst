@@ -11,7 +11,7 @@ package Fountain
 		unit dummy
 		
 		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 90. ), 150., function Fountain.cure )
+			super( pos, CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 90. ), 150., function Fountain.cure )
 			dummy = CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 90. )
 		
 		

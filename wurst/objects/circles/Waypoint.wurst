@@ -24,7 +24,7 @@ package Waypoint
 		real delay = 0.
 		
 		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
+			super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
 			actor.registerCastEvent(Condition(function Waypoint.onCast))
 			
 		static function orderMove()

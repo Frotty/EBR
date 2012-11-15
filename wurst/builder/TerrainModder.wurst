@@ -29,7 +29,7 @@ package TerrainModder
 		int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 		construct( vec2 pos, player owner, unit u)
-			super(pos.toVec3(), u , 0., function changeTerrain)
+			super(pos, u , 0., function changeTerrain)
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_EFFECT )
 

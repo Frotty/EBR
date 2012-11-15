@@ -19,7 +19,7 @@ package Unitcreator
 		timer spawn
 		
 		construct( vec2 pos, player owner)
-			super( pos.toVec3(), CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
+			super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
 			actor.registerCastEvent(Condition(function UnitCreator.onCast))
 			spawn = getTimer()
 			

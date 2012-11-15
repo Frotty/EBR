@@ -100,11 +100,11 @@ function keypick()
 		pd.picked = true
 		switch currentView[pd.id]-1
 			case 0
-				pd.escaper = new Holy_Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[0]) )
+				pd.escaper = new Holy_Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[0]) )
 			case 1
-				pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[1]) )
+				pd.escaper = new Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[1]) )
 			case 2
-				pd.escaper = new Escaper( vec3(SX,SY,0), p, GetUnitTypeId(pickheros[2]) )
+				pd.escaper = new Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[2]) )
 		pd.setMbIcon(currentView[pd.id]-1)
 		if pd.id > 7
 			UnitAddAbility( pd.escaper.actor, BLINK_ID )

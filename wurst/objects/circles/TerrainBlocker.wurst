@@ -10,7 +10,7 @@ public class TerrainBlocker extends StaticBaseObject
 	matrixpos m
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, BLOCKER_ID, (round(pos.x/128))*128., (round(pos.y/128))*128., 0. ), 0, null)
+		super(pos, CreateUnit(owner, BLOCKER_ID, (round(pos.x/128))*128., (round(pos.y/128))*128., 0. ), 0, null)
 		var x = round(pos.x/128)
 		var y = round(pos.y/128)
 		m = matrixpos(x,y)

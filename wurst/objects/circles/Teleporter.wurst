@@ -20,7 +20,7 @@ package Teleporter
 		int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
 		
 		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner, TELEPORTER_ID, pos.x, pos.y, 0. ), EVENT_RADIUS, function Teleporter.teleport ) 
+			super( pos, CreateUnit(owner, TELEPORTER_ID, pos.x, pos.y, 0. ), EVENT_RADIUS, function Teleporter.teleport ) 
 			actor.registerCastEvent(Condition(function Teleporter.onCast))
 			
 		static function teleport()

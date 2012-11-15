@@ -109,8 +109,7 @@ function callback()
 				new CongaLineHead(vec2(x,y), u.getOwner())
 			case buildorders[30]
 				new TerrainBlocker(vec2(x,y), u.getOwner())
-
-
+	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null
 

@@ -23,12 +23,12 @@ package BaseObject
 		
 		trigger inRangeTrig // Trigger for inRange detection
 		
-		construct( vec3 pos, unit u, real radius, code c )
-			super( pos, u )
+		construct( vec2 pos, unit u, real radius, code c )
+			super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
 			active = false
 
 
-			rallyPoint = pos
+			rallyPoint = this.pos
 			
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
@@ -47,8 +47,7 @@ package BaseObject
 			real y		= GetOrderPointY()
 			thistype obj  = GetUnitUserData( u ) castTo StaticBaseObject
 			
-			if u == u2
-				u2 = null
+
 				
 			if GetIssuedOrderId() == 0xD000C or GetIssuedOrderId() == 851971//IDs of Rally(to be sure)
 				if u2 == null
