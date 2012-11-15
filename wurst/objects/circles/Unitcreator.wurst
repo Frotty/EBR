@@ -15,7 +15,7 @@ package Unitcreator
 	public class UnitCreator extends StaticBaseObject
 		real interval = 5.
 		boolean ON = false
-		int spawnUnitType = 'BIGK'
+		int spawnUnitType = 'h001'
 		timer spawn
 		
 		construct( vec2 pos, player owner)
@@ -73,11 +73,7 @@ package Unitcreator
 						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 						//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 				case START_ABIL
-					obj.spawn.startPeriodic(obj.interval, function create)
-					obj.spawn.setData(obj castTo int)
-					print("start")
-					UnitRemoveAbility(obj.actor,START_ABIL)
-					UnitAddAbility(obj.actor,PAUSE_ABIL)
+					start_creator(obj)
 				case PAUSE_ABIL
 					print("pause")
 					UnitRemoveAbility(obj.actor,PAUSE_ABIL)
@@ -101,7 +97,13 @@ package Unitcreator
 			
 		ondestroy
 			spawn.release()
-
+	
+	public function start_creator(UnitCreator uc)
+		uc.spawn.startPeriodic(uc.interval, function UnitCreator.create)
+		uc.spawn.setData(uc castTo int)
+		UnitRemoveAbility(uc.actor,START_ABIL)
+		UnitAddAbility(uc.actor,PAUSE_ABIL)
+		
 	int INCREASE_INTERVAL_ABIL = 'A01P'
 	int DECREASE_INTERVAL_ABIL = 'A01R'
 	int START_ABIL = 'A00A'

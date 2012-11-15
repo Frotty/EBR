@@ -22,14 +22,14 @@ package Executer
 	
 	constant real 	EVENT_RADIUS	= 32.
 
-	enum Emode
+	public enum Emode
 		NONE
 		REPEATING
 		ONESHOT
 		LEVER
 		PRESSUREPLATE
 	
-	enum Amode
+	public enum Amode
 		NONE
 		OPENDOOR
 		CLOSEDOOR
@@ -241,6 +241,7 @@ package Executer
 				DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place units in this region!")
 			
 		function changeTerrain(boolean isAction)
+			print("changing")
 		
 			var rX = getRallyX()
 			var rY = getRallyY()

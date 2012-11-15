@@ -12,5 +12,5 @@ function updateEntities()
 		e = e.next
 
 public function startEntityLoop() returns boolean
-	getTimer().startPeriodic(ANIMATION_PERIOD, function updateEntities)
+	getTimer().startPeriodic(0.03, function updateEntities)
 	return true
