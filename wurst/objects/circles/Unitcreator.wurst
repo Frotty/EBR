@@ -61,16 +61,16 @@ package Unitcreator
 			switch id 
 				case INCREASE_INTERVAL_ABIL
 					if obj.interval >= 10
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 					else
 						obj.interval += 0.25
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 				case DECREASE_INTERVAL_ABIL
 					if obj.interval < 0.75
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 					else
 						obj.interval -= 0.25
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 						//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 				case START_ABIL
 					obj.spawn.startPeriodic(obj.interval, function create)

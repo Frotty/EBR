@@ -41,8 +41,7 @@ package Escaper
 		vec3 vortexVelocity = vec3(0,0,0)
 		
 		RegionData currentRegion
-		real lastAngle = 0.
-		
+
 		boolean alive = true
 
 		
@@ -66,14 +65,14 @@ package Escaper
 			super.inAir()
 			if not flying
 				flying = true
-				SetUnitPropWindow(actor, 0.)
+				//SetUnitPropWindow(actor, 0.)
 				
 				
 		override function onGround()
 			super.onGround()
 			if flying
 				flying = false
-				SetUnitPropWindow(actor, 60.)
+				//SetUnitPropWindow(actor, 60.)
 				
 			var ttype = GetTerrainType(pos.x, pos.y)
 				
@@ -83,9 +82,7 @@ package Escaper
 			
 			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 				let angle = actor.getFacing()
-				if angle != lastAngle
-					lastAngle = angle
-				slideVelocity = vec3(Cos(lastAngle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(lastAngle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
+				slideVelocity = vec3(Cos(angle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
 				sliding = true
 			else
 				slideVelocity *= 0.8
@@ -172,7 +169,7 @@ package Escaper
 			trackVelocity = vec3(0,0,0)
 			pos += vortexVelocity
 			vortexVelocity = vec3(0,0,0)
-			time += 0.015625000
+			time += 1
 			if sliding
 				actor.setPos(pos.x, pos.y)
 				
@@ -255,7 +252,7 @@ package Escaper
 			
 	init
 		slideAssist = CreateTrigger()
-		slideAssist.addAction(function Escaper.changeAngle)
+		//slideAssist.addAction(function Escaper.changeAngle)
 		pickupTrig = CreateTrigger()
 		pickupTrig.addAction( function Escaper.pickupItem )
 		dropTrig = CreateTrigger()

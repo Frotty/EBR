@@ -33,7 +33,7 @@ public class Key extends ItemObject
 	function dropped()
 		picked = false
 		holder = null
-		setup.setXYVec(pos.toVec2())
+		setup.setXY(pos.toVec2())
 		setup.show()
 		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
 		actorItem.setUserData(this castTo int)

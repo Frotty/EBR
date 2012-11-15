@@ -66,22 +66,22 @@ public class TextureChanger extends UnitEntity
 					if obj.sizeX < 3
 						obj.sizeX ++
 					else
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_INC_V_ID
 					if obj.sizeY < 3
 						obj.sizeY ++
 					else
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_DEC_H_ID
 					if obj.sizeX > 0
 						obj.sizeX --
 					else
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_DEC_V_ID
 					if obj.sizeY > 0
 						obj.sizeY --
 					else
-						createTTExForPlayer(obj.pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
+						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorRGBA(255,255,255,0), obj.owner )
 				case TERRAIN_I_WALKABLE_ID
 					obj.innerTile = '0000'
 				case TERRAIN_I_UNWALKABLE_ID

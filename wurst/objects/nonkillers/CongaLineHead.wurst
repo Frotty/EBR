@@ -54,15 +54,15 @@ public class CongaLineHead extends DynamicSetupObject
 			case INC_ID
 				if data.segLength < 500.
 					data.segLength += 25
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			case DEC_ID
 				if data.segLength > 25
 					data.segLength -= 25
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			
 				
 		return false

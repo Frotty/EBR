@@ -52,11 +52,11 @@ public class Tracks extends Entity
 			case INC_ID
 				if tracks.speed < 20.
 					tracks.speed++
-					createTTExForPlayer(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
+					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
 			case DEC_ID
 				if tracks.speed > 1.
 					tracks.speed--
-					createTTExForPlayer(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
+					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
 			case INCLENGTH_ID
 				if tracks.size < 2
 					tracks.size++

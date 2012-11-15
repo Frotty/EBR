@@ -40,6 +40,7 @@ public class Builder extends UnitEntity
 			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
 			
 	override function update()
+		pos = actor.getPos().toVec3()
 	
 	static function swapPages()
 		var data = GetTriggerUnit().getUserData() castTo Entity

@@ -45,15 +45,15 @@ public class Pointer extends UnitEntity
 			case INC_ID
 				if data.turnspeed < 6.
 					data.turnspeed += 0.5
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			case DEC_ID
 				if data.turnspeed > -6.
 					data.turnspeed -= 0.5
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 				else
-					createTTExForPlayer(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			case START_ID
 				data.turning = true
 				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
