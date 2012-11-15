@@ -3,6 +3,8 @@ import Revivepoint
 import Door
 import Obstacle
 import Key
+import EscaperKiller
+import Teleporter
 
 public function pickTwoMazes()
 
@@ -37,10 +39,17 @@ public function initBaseObjects()
 		
 	g.clear()
 	
-	GroupEnumUnitsOfType(g, "custom_n00X", null )
+	GroupEnumUnitsOfType(g, "custom_n01I", null )
 	for u5 in g
 		new SmallObstacle(vec2(u5.getX(), u5.getY()), Player(11))
 		u5.remove()
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n00X", null )
+	for u6 in g
+		new SmallObstacle(vec2(u6.getX(), u6.getY()), Player(11))
+		u6.remove()
 		
 	g.clear()
 	
@@ -48,9 +57,60 @@ public function initBaseObjects()
 	EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 	
 	
+function initEscaperKillers()
+	group g = CreateGroup()
+	GroupEnumUnitsOfType(g, "custom_h015", null )
+	for u in g
+		new EscaperKiller(u, null, COLL_SIZE_BK) //CreateUnit(Player(11), 'h015', u.getX(),u.getY(),0),COLL_SIZE_BK)
+		
+	g.clear()
 	
+	GroupEnumUnitsOfType(g, "custom_h01H", null )
+	for u1 in g
+		new EscaperKiller(u1, null, COLL_SIZE_BK) //CreateUnit(Player(11), 'h01H', u.getX(),u.getY(),0),COLL_SIZE_BK)
+		
+	g.clear()
 	
+	GroupEnumUnitsOfType(g, "custom_h018", null )
+	for u2 in g
+		new EscaperKiller(u2, null, COLL_SIZE_BK) 
+		
+	g.clear()
 	
+	GroupEnumUnitsOfType(g, "custom_n00D", null )
+	for u3 in g
+		new EscaperKiller(u3, null, COLL_SIZE_SK) 
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n00E", null )
+	for u4 in g
+		new EscaperKiller(u4, null, COLL_SIZE_SK) 
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n009", null )
+	for u5 in g
+		new EscaperKiller(u5, null, COLL_SIZE_SK) 
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n008", null )
+	for u6 in g
+		new EscaperKiller(u6, null, COLL_SIZE_BRK) 
+		
+	g.clear()
+
+function initMazeUnits(int maze) //from 0 to 4
+	switch maze
+		case 0
+			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
+			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
+			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
+			Teleporter t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
+			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
 function correctKeys()
 	item itm = GetEnumItem()
 	new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
