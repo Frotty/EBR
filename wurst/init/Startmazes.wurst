@@ -57,7 +57,7 @@ public function initBaseObjects()
 	EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 	
 	
-function initEscaperKillers()
+public function initEscaperKillers()
 	group g = CreateGroup()
 	GroupEnumUnitsOfType(g, "custom_h015", null )
 	for u in g
@@ -95,13 +95,13 @@ function initEscaperKillers()
 		
 	g.clear()
 	
-	GroupEnumUnitsOfType(g, "custom_n008", null )
+	GroupEnumUnitsOfType(g, "custom_u008", null )
 	for u6 in g
-		new EscaperKiller(u6, null, COLL_SIZE_BRK) 
+		new EscaperKiller(u6, null, COLL_SIZE_BRK)
 		
 	g.clear()
 
-function initMazeUnits(int maze) //from 0 to 4
+public function initMazeUnits(int maze) //from 0 to 4
 	switch maze
 		case 0
 			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )

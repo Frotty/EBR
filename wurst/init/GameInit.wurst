@@ -35,6 +35,8 @@ package GameInit
 		init_Reincarnation()
 		
 		initBaseObjects()
+		initEscaperKillers()
+		initMazeUnits(0)
 		if startEntityLoop()
 			print("Finished Init - Game started")
 			startChoose()
