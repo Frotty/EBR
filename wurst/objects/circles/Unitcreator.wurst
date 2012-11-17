@@ -97,6 +97,7 @@ package Unitcreator
 			
 		ondestroy
 			spawn.release()
+			actor.unregisterCastEvent()
 	
 	public function start_creator(UnitCreator uc)
 		uc.spawn.startPeriodic(uc.interval, function UnitCreator.create)

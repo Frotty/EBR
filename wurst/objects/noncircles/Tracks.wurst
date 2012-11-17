@@ -15,8 +15,7 @@ constant int RIGHT_ID	   	= 'A04U'
 constant int INCLENGTH_ID   	= 'A04H'
 constant int DECLENGTH_ID		= 'A050'
 
-public class Tracks extends Entity
-	unit actor
+public class Tracks extends UnitEntity
 	unit setup
 	
 	real speed = 2
@@ -26,8 +25,7 @@ public class Tracks extends Entity
 	int angle = 0
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), owner )
-		actor = CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0)
+		super( pos.toVec3(), CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0) )
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.registerCastEvent(Condition(function Tracks.onCast))
 		setup.setUserData(this castTo int)
@@ -44,6 +42,11 @@ public class Tracks extends Entity
 	function recreateDummy()
 		actor.remove()
 		actor = CreateUnit(owner, TRACKS[size], pos.x, pos.y, angle.toReal())
+		
+	ondestroy
+		setup.remove()
+		setup.unregisterCastEvent()
+		actor.remove()
 				
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()

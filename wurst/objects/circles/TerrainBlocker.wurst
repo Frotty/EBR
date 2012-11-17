@@ -13,6 +13,8 @@ public class TerrainBlocker extends StaticBaseObject
 		super(pos, CreateUnit(owner, BLOCKER_ID, (round(pos.x/128))*128., (round(pos.y/128))*128., 0. ), 0, null)
 		var x = round(pos.x/128)
 		var y = round(pos.y/128)
+		this.pos.x = x.toReal()
+		this.pos.y = y.toReal()
 		m = matrixpos(x,y)
 		blockermatrix.saveBoolean(x, y, true)
 

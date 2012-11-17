@@ -6,6 +6,7 @@ import SetupObject
 import TempGroups
 import Texttag
 
+
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
 constant int SPELL2_ID       = 'A04M'
@@ -13,22 +14,22 @@ constant int INC_ID          = 'A01F'
 constant int DEC_ID          = 'A01G'
 
 class SpinNode
-	DynamicSetupObject obj
+	UnitEntity obj
 	real angle
 	real dist
 	
-	construct(DynamicSetupObject ent, real angl, real dist)
+	construct(UnitEntity ent, real angl, real dist)
 		obj = ent
 		angle = angl
 		this.dist = dist
 
-public class Spinner extends UnitEntity
+public class Spinner extends DynamicSetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
 	real speed = 2.
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0))
-		actor.registerCastEvent(Condition(function onCast))
+		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		setup.registerCastEvent(Condition(function onCast))
 		
 		
 	override function update()
@@ -36,6 +37,7 @@ public class Spinner extends UnitEntity
 		real angle
 		real dist
 		for node in spinningEntities
+			debugPrint("spinning", 3)
 			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
 			node.angle += speed*DEGTORAD
 			
@@ -53,9 +55,9 @@ public class Spinner extends UnitEntity
 				i++
 			if isNew
 				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(pos.x, pos.y, dobj.pos.x, dobj.pos.y), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
-			
 
 	ondestroy
+		setup.unregisterCastEvent()
 		while spinningEntities.size > 0
 			SpinNode n = spinningEntities.get(0)
 			spinningEntities.removeAt(0)
@@ -69,7 +71,7 @@ public class Spinner extends UnitEntity
 		switch id
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
-				var data = u.getUserData() castTo Entity
+				var data = u.getUserData() castTo UnitEntity
 				if data.owner == sdata.owner
 					sdata.checkObj(data)
 			case SPELL2_ID

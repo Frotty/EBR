@@ -7,6 +7,7 @@ package Door
 	import RGBA
 	import BuilderConstants
 	import Key
+	import EventHandling
 	
 	//NOTE: Some parts of this are from the old ebr  O.o   >:0
 	int array colorRGBv
@@ -21,9 +22,6 @@ package Door
 	//Item type ids
 
 	int array KEY_COLOR_ID
-	trigger castTrig
-	
-	
 	
 	
 	public class Door extends StaticSetupObject
@@ -37,7 +35,7 @@ package Door
 			super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
 								CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
 			pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
-			TriggerRegisterUnitEvent( castTrig, setup, EVENT_UNIT_SPELL_CAST )
+			setup.registerCastEvent(Condition(function onCast))
 
 		
 		static function keyopen() //open with item and color conditions
@@ -140,8 +138,9 @@ package Door
 			
 		ondestroy
 			pathing.remove()
+			setup.unregisterCastEvent()
 	
-		static function onSpellCast()
+		static function onCast() returns boolean
 			debugPrint("casted", 1)
 			unit u = GetTriggerUnit()
 			Door door = u.getUserData() castTo Door
@@ -154,12 +153,11 @@ package Door
 					door.turn()
 				default 
 					door.changeColor(id)
+			return false
 
 		
 	
 	public function init_Door()
-		castTrig = CreateTrigger()
-		castTrig.addAction(function Door.onSpellCast)
 		//color id		unit id
 		KEY_COLOR_ID[0] = 'I009' //white
 		KEY_COLOR_ID[1] = 'I00C' //red

@@ -23,6 +23,7 @@ import UnitRemover
 import CongaLineHead
 import TerrainBlocker
 import Fountain
+
 		
 
 real x
@@ -108,7 +109,13 @@ function callback()
 			case buildorders[29]
 				new CongaLineHead(vec2(x,y), u.getOwner())
 			case buildorders[30]
-				new TerrainBlocker(vec2(x,y), u.getOwner())
+				var x2 = round(x/128)
+				var y2 = round(y/128)
+				if not blockermatrix.loadBoolean(x2, y2)
+					new TerrainBlocker(vec2(x,y), u.getOwner())
+				else
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blocker so I put a "
+						+"TC-Blocker in your TC-Blocker so you can block while block.|nIn other words: Why would you block a tile twice?") 
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null

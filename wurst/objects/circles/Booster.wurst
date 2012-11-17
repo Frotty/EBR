@@ -19,6 +19,9 @@ package Booster
 			actor.registerCastEvent(Condition(function Booster.onCast))
 			actor.setUserData(this castTo int)
 			
+		ondestroy
+			actor.unregisterCastEvent()
+			
 		static function orderMove()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()

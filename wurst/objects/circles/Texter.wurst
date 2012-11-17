@@ -73,6 +73,7 @@ package Texter
 
 		ondestroy
 			DestroyTextTag(text)
+			
 		
 	function getSelectedTexters(player p) returns group
 		GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(TEXTER_ID), null)

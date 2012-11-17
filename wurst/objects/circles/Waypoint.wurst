@@ -30,6 +30,9 @@ package Waypoint
 			super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
 			actor.registerCastEvent(Condition(function Waypoint.onCast))
 			
+		ondestroy
+			actor.unregisterCastEvent()
+		
 		static function orderMove()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()

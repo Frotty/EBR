@@ -16,5 +16,5 @@ public class Jumper extends StaticBaseObject
 		var jdata = GetTriggeringTrigger().getSource().getUserData() castTo Jumper
 		if data instanceof Escaper
 			var edata = data castTo Escaper
-			edata.setTarget(jdata.getRallyPoint(), 20.)
+			edata.setTarget(jdata.getRallyPoint(), 30.)
 			AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()

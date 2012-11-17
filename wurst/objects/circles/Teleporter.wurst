@@ -23,6 +23,9 @@ package Teleporter
 			super( pos, CreateUnit(owner, TELEPORTER_ID, pos.x, pos.y, 0. ), EVENT_RADIUS, function Teleporter.teleport ) 
 			actor.registerCastEvent(Condition(function Teleporter.onCast))
 			
+		ondestroy
+			actor.unregisterCastEvent()
+			
 		static function teleport()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()

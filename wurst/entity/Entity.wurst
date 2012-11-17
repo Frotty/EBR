@@ -28,8 +28,8 @@ public abstract class Entity
 		this.vel = vec3(0,0,0)
 		this.owner = owner
 		entityCount++
-		debugPrint("EntityCount: " + entityCount.toString(), 2)
-		debugPrint("UnitEntityCount: " + unitEntityCount.toString(), 2)
+		debugPrint("EntityCount: " + entityCount.toString(), 1)
+		debugPrint("UnitEntityCount: " + unitEntityCount.toString(), 1)
 		
 	construct( vec3 pos, vec3 vel, player owner )
 		this.pos = pos
@@ -82,6 +82,10 @@ abstract public class UnitEntity extends Entity
 	function setNewPos(vec3 tpos)
 		pos = tpos
 		actor.setPos(tpos.x,tpos.y)
+		
+	function setNewXY(vec3 tpos)
+		pos = tpos
+		actor.setXY(tpos.x,tpos.y)
 
 
 

@@ -6,14 +6,11 @@ import RegionData
 constant int TREEDUMMY_ID 	= 'n010'
 constant int TREE_ID 		= 'n00H'
 
-public class Tree extends Entity
+public class Tree extends UnitEntity
 	destructable dummy
-	unit setup
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), owner)
-		setup = CreateUnit( owner, TREE_ID, pos.x, pos.y, 0 )
-		setup.setUserData(this castTo int)
+		super(pos.toVec3(), CreateUnit( owner, TREE_ID, pos.x, pos.y, 0 ))
 		var rdata = getRegionData( pos.x, pos.y )
 		dummy = CreateDestructable( rdata.treeId, pos.x, pos.y, GetRandomReal(0,360), GetRandomReal(0.8,1.2), GetRandomInt(0,2) )
 
@@ -21,4 +18,5 @@ public class Tree extends Entity
 	
 	ondestroy
 		RemoveDestructable( this.dummy )
+		actor.remove()
 

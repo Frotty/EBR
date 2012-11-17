@@ -98,7 +98,6 @@ public function init_Builder()
 	for pd in players
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
-			UnitAddItemById(pd.builder.actor,'I000')
 			UnitAddItemById(pd.builder.actor,'I001')
 			UnitAddItemById(pd.builder.actor,'I002')
 			UnitAddItemById(pd.builder.actor,'I003')	

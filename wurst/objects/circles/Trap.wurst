@@ -293,8 +293,8 @@ public class Trap extends StaticBaseObject
 				UnitAddAbility(obj.actor,START_ABIL)
 		return false
 		
-	//ondestroy
-		//traptimer.release()
+	ondestroy
+		actor.unregisterCastEvent()
 
 int NEXT_SFX_ABIL = 'A06D'
 int PREV_SFX_ABIL = 'A06C'

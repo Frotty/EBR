@@ -248,11 +248,22 @@ package Escaper
 				RemoveItem(kdata.actorItem)
 				kdata.dropped()
 				dropTrig.enable()
+				
+		ondestroy
+			lavaEffect.destr()
+			poisonEffect.destr()
+			actor.remove()
+			escapers.remove(this)
+			
 
 			
 	trigger slideAssist
 	trigger pickupTrig
 	public trigger dropTrig
+	
+	function correctRegion()
+		for e in escapers
+			e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 			
 	init
 		slideAssist = CreateTrigger()
@@ -261,5 +272,6 @@ package Escaper
 		pickupTrig.addAction( function Escaper.pickupItem )
 		dropTrig = CreateTrigger()
 		dropTrig.addAction( function Escaper.dropItem )
+		getTimer().start(1., function correctRegion)
 		
 endpackage 

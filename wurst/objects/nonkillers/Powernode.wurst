@@ -61,19 +61,16 @@ public class Powernode extends DynamicSetupObject
 				i++
 				
 	
-	function removeAllLinks()
+	
+	ondestroy
+		actor.unregisterCastEvent()
+		print("nodey " + links.size.toString())
 		while links.size > 0
 			Link l = links.get(0)
 			debugPrint("got link " + (l castTo int).toString(), 1)
 			links.removeAt(0)
 			destroy l
-		destroy links		
-				
-	
-	ondestroy
-		actor.unregisterCastEvent()
-		print("nodey " + links.size.toString())
-		removeAllLinks()
+		destroy links	
 	
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()

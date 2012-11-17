@@ -150,15 +150,14 @@ public function init_Regions()
 
 	initTerrainTypes()
 	
-	print("RegionData init")
+
 	regions[0] = new RegionData( gg_rct_Region_024 )
 	regions[0].setType('I00D', false)
-	print("RegionData set")
 	regions[1] = new RegionData( gg_rct_Region_018 )
 	regions[1].setType('I00G', false)
 	regions[2] = new RegionData( gg_rct_Region_000 )
 	regions[2].setType('I00E', false)
-	regions[3] = new RegionData( gg_rct_Region_003 )
+	regions[3] = new RegionData( gg_rct_Region_001 )
 	regions[3].setType('I00H', false)
 	regions[4] = new RegionData( gg_rct_Region_004 )
 	regions[5] = new RegionData( gg_rct_Region_005 )
@@ -176,7 +175,7 @@ public function init_Regions()
 	regions[17] = new RegionData( gg_rct_Region_017 )
 	regions[18] = new RegionData( gg_rct_Region_002 )
 	regions[19] = new RegionData( gg_rct_Region_022 )
-	regions[20] = new RegionData( gg_rct_Region_001 )
+	regions[20] = new RegionData( gg_rct_Region_003 )
 	regions[21] = new RegionData( gg_rct_Region_026 )
     
    

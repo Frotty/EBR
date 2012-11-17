@@ -351,6 +351,7 @@ package Executer
 			createTTEx(pos, vec2(0,0.05), "Deactivated", 10,  2., colorRGBA(50,50,50,0), owner )
 		
 		ondestroy
+			actor.unregisterCastEvent()
 			actor.remove()
 			if eventRect != null
 				RemoveRect(eventRect)
