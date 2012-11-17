@@ -99,3 +99,6 @@ public class TextureChanger extends UnitEntity
 				case TERRAIN_O_UNICE_ID
 					obj.outerTile = UNCONTROLLABLEICE
 			return false
+		
+	ondestroy
+		actor.remove()

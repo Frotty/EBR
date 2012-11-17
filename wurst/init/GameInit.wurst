@@ -32,7 +32,6 @@ package GameInit
 		init_Bombertower()
 		init_Reincarnation()
 		initBaseObjects()
-		initEscaperKillers()
 		initMazeUnits(0)
 		
 		initMazeUnits(1)
