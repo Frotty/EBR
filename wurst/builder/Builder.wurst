@@ -80,7 +80,6 @@ public class Builder extends UnitEntity
 			if wasMenu
 				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
 				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
-				UnitAddItemById(builder.actor,'I000')
 				UnitAddItemById(builder.actor,'I001')
 				UnitAddItemById(builder.actor,'I002')
 				UnitAddItemById(builder.actor,'I003')					
@@ -99,7 +98,6 @@ public function init_Builder()
 	for pd in players
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
-			UnitAddItemById(pd.builder.actor,'I000')
 			UnitAddItemById(pd.builder.actor,'I001')
 			UnitAddItemById(pd.builder.actor,'I002')
 			UnitAddItemById(pd.builder.actor,'I003')	

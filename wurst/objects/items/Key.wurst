@@ -83,6 +83,7 @@ public class Key extends ItemObject
 		actorItem.remove()
 		dropTrig.enable()
 		holder = null
+		setup.unregisterCastEvent()
 		setup.remove()
 		
 		

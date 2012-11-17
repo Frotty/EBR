@@ -16,16 +16,17 @@ function changeSpeed()
 	if data instanceof DynamicSetupObject
 		var ddata = data castTo DynamicSetupObject
 		var speed = ddata.setup.getMoveSpeed()
-		print("casted")
+		debugPrint("casted", 1)
 		if id == INC_ID
-			print("inc")
+			debugPrint("inc", 1)
 			if speed < 500.
-				print("fine")
+				debugPrint("fine", 1)
 				ddata.setup.setMoveSpeed(speed+25.)
 				ddata.actor.setMoveSpeed(speed+25.)
 				createTTEx(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )
 		else if id == DEC_ID
 			if speed > 0.
+				debugPrint("no", 1)
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)
 				createTTEx(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorRGBA(255,255,255,0), ddata.owner  )

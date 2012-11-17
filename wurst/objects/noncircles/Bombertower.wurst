@@ -27,7 +27,7 @@ package Bombertower
 			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			dummy.addAbility('Aloc').removeAbility('Aloc')
 			SetUnitPathing(dummy, true)
-			print("Were building it up, to burn it back down!!!")
+
 			
 		static function onCast() returns boolean
 			var id = GetSpellAbilityId()
@@ -43,10 +43,11 @@ package Bombertower
 			
 		ondestroy
 			dummy.remove()
+			actor.unregisterCastEvent()
 	
 	function checkAttackOrder()
 		var i = GetIssuedOrderId()
-		print(i.toString())
+		debugPrint(i.toString(), 1)
 		var e = GetOrderedUnit().getUserData() castTo Entity
 		if e instanceof Bombertower 
 			var obj = e castTo Bombertower

@@ -167,7 +167,7 @@ package Executer
 				case Amode.CREATEUNIT
 					createUnit()
 				default
-					print("Bug - ExecuterAction")
+					printError("ExecuterAction")
 						
 		function negativeAction()
 			unit u = GetTriggerUnit()
@@ -201,7 +201,7 @@ package Executer
 				case Amode.CHANGETERRAIN
 					changeTerrain(false)
 				default
-					print("Bug - ExecuterNotAction")
+					printError("ExecuterNotAction")
 		
 		function moveUnit()
 			var rX = getRallyX()
@@ -240,9 +240,7 @@ package Executer
 			else
 				DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place units in this region!")
 			
-		function changeTerrain(boolean isAction)
-			print("changing")
-		
+		function changeTerrain(boolean isAction)		
 			var rX = getRallyX()
 			var rY = getRallyY()
 			RegionData data
@@ -317,11 +315,11 @@ package Executer
 			UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
 				
 		function changeVis(boolean invis)
-			print("meh changing VIS")
+			debugPrint("changing VIS",1)
 			if eventMode == Emode.PRESSUREPLATE
 				if invis
 					RemoveDestructable(dummy)
-					print("meh meh destructable removed")
+					debugPrint("meh meh destructable removed", 1)
 				else
 					dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 					SetDestructableAnimation(dummy, "death")
@@ -353,6 +351,7 @@ package Executer
 			createTTEx(pos, vec2(0,0.05), "Deactivated", 10,  2., colorRGBA(50,50,50,0), owner )
 		
 		ondestroy
+			actor.unregisterCastEvent()
 			actor.remove()
 			if eventRect != null
 				RemoveRect(eventRect)
@@ -367,7 +366,7 @@ package Executer
 			return false
 
 		static function onCast() returns boolean
-			print("Executer casts")
+			debugPrint("Executer casts", 1)
 			unit source = GetSpellAbilityUnit()
 			Executer obj = source.getUserData() castTo Executer
 			
@@ -401,10 +400,8 @@ package Executer
 					UnitRemoveAbility(obj.actor, REACTIVATE_ABIL)
 						
 				case VIS_ID
-					print("meh")
 					obj.changeVis(true)
 				case INVIS_ID
-					print("meh")
 					obj.changeVis(false)
 				
 				case KILLER_TRIGGER_ABIL
@@ -498,7 +495,7 @@ package Executer
 				case MOVE_UNIT_STOP_ABIL
 					obj.moveOrderString = "stop"
 				case MOVE_UNIT_SELECT_ABIL
-					print(GetUnitTypeId(GetSpellTargetUnit()).toString())
+					debugPrint(GetUnitTypeId(GetSpellTargetUnit()).toString(), 1)
 					obj.unitToMove = GetSpellTargetUnit()
 				
 				case TERRAIN_INCREASE_H_ABIL

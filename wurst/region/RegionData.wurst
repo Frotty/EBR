@@ -10,7 +10,7 @@ public class RegionData
 	int unwalkableTile
 	int walkableTile
 	
-	real slidespeed = 2.
+	real slidespeed = 3.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
 	
@@ -43,11 +43,10 @@ public class RegionData
 		return false
 		
 	function setType( int itemId, boolean changeTerrain )
-		print("wtf")
 		for i = 0 to 4
-			print("RegionData check " + itemId.toString() + " == " + ritem[i].toString() )
+			debugPrint("RegionData check " + itemId.toString() + " == " + ritem[i].toString(), 2 )
 			if itemId == ritem[i]
-				print("RegionData is " + i.toString() )
+				debugPrint("RegionData is " + i.toString(), 1 )
 				unwalkableTile = rectuw[i]
 				walkableTile = rectw[i]
 				bigKillerId = rectbk[i]
@@ -55,7 +54,7 @@ public class RegionData
 				smallObstacleId = sobst[i]
 				bigObstacleId = bobst[i]
 				treeId = trees[i]
-				print("RegionData set " + i.toString())
+				debugPrint("RegionData set " + i.toString(), 1)
 				if changeTerrain
 					theRect.changeTerrain(unwalkableTile)
 				break
@@ -151,15 +150,14 @@ public function init_Regions()
 
 	initTerrainTypes()
 	
-	print("RegionData init")
+
 	regions[0] = new RegionData( gg_rct_Region_024 )
 	regions[0].setType('I00D', false)
-	print("RegionData set")
 	regions[1] = new RegionData( gg_rct_Region_018 )
 	regions[1].setType('I00G', false)
 	regions[2] = new RegionData( gg_rct_Region_000 )
 	regions[2].setType('I00E', false)
-	regions[3] = new RegionData( gg_rct_Region_003 )
+	regions[3] = new RegionData( gg_rct_Region_001 )
 	regions[3].setType('I00H', false)
 	regions[4] = new RegionData( gg_rct_Region_004 )
 	regions[5] = new RegionData( gg_rct_Region_005 )
@@ -177,7 +175,7 @@ public function init_Regions()
 	regions[17] = new RegionData( gg_rct_Region_017 )
 	regions[18] = new RegionData( gg_rct_Region_002 )
 	regions[19] = new RegionData( gg_rct_Region_022 )
-	regions[20] = new RegionData( gg_rct_Region_001 )
+	regions[20] = new RegionData( gg_rct_Region_003 )
 	regions[21] = new RegionData( gg_rct_Region_026 )
     
    

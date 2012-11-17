@@ -38,7 +38,6 @@ function allow()
 	EnableOcclusion(true)
 
 function keyleft()
-	print("yes")
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
@@ -64,14 +63,13 @@ function keyleft()
 			SetTextTagVisibility(herott[id-1],true)
 	
 function keyright()
-	print("yes")
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
 	PlayerData pd = pData[p.getId()]
 		
 	if not pd.picked
-		print("currentView " + id.toString() )
+		debugPrint("currentView " + id.toString(), 2 )
 		if id >= herocount
 			currentView[pi] = 1
 			id = 1
@@ -105,6 +103,8 @@ function keypick()
 				pd.escaper = new Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[1]) )
 			case 2
 				pd.escaper = new Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[2]) )
+			case 3
+				pd.escaper = new Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[3]) )
 		pd.setMbIcon(currentView[pd.id]-1)
 		if pd.id > 7
 			UnitAddAbility( pd.escaper.actor, BLINK_ID )
@@ -148,7 +148,7 @@ public function init_Choose()
 		TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
 		TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)
 		TriggerRegisterPlayerEvent(pick, pd.p, EVENT_PLAYER_ARROW_DOWN_DOWN)
-		print( GetPlayerName(pd.p) + " registered" )
+		debugPrint( GetPlayerName(pd.p) + " registered", 2 )
 
 
 	TriggerAddAction( left, function keyleft )

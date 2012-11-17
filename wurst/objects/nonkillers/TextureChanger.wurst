@@ -55,7 +55,7 @@ public class TextureChanger extends UnitEntity
 						else if tileID == '0001'
 							tileID = data.unwalkableTile
 						if GetTerrainType(x, y) != tileID
-							SetTerrainType(x, y, tileID, -1, 1, 1 )
+							SetTerrainType(x, y, tileID, 0, 1, 1 )
 	
 	static function onCast() returns boolean
 			var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger

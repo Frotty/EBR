@@ -11,16 +11,17 @@ import Unitcreator
 import UnitRemover
 import Spinner
 import Entity
+import RegionData
 
-public function pickTwoMazes()
-
+group g = CreateGroup()
 
 public function initBaseObjects()
-	group g = CreateGroup()
+	g.clear()
 	GroupEnumUnitsOfType(g, "custom_n000", null )
 	for u in g
-		new RevivePoint(vec2(u.getX(), u.getY()), Player(11))
-		u.remove()
+		if u.getHP() > .405
+			new RevivePoint(vec2(u.getX(), u.getY()), Player(11))
+			u.remove()
 		
 	g.clear()
 
@@ -66,11 +67,8 @@ public function initBaseObjects()
 		
 	g.clear()
 	
-	EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
-	
 
-
-public function initMazeUnits(int maze) //from 0 to 4
+public function initMazeUnits(int maze, int rnd) //from 0 to 4
 	Teleporter t
 	group g = CreateGroup()
 	switch maze
@@ -95,6 +93,15 @@ public function initMazeUnits(int maze) //from 0 to 4
 			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
 			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
 			gg_unit_n00C_0058.remove()
+			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
+			if rnd == 1
+				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
+			else if rnd == 2
+				IssuePointOrder(t.actor, "setrally", 826,-7041 )
+			else if rnd == 3
+				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
+			gg_unit_n00C_0061.remove()
+			EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 		case 1
 	
 			GroupEnumUnitsOfType(g, "custom_h01H", null )
@@ -121,6 +128,7 @@ public function initMazeUnits(int maze) //from 0 to 4
 			t = new Teleporter(vec2(gg_unit_n00C_0141.getX(),gg_unit_n00C_0141.getY()),Player(11))
 			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
 			gg_unit_n00C_0141.remove()
+			EnumItemsInRect(gg_rct_Region_018, null, function correctKeys)
 		case 2
 			GroupEnumUnitsOfType(g, "custom_h018", null )
 			for u2 in g
@@ -212,6 +220,7 @@ public function initMazeUnits(int maze) //from 0 to 4
 			e.tiletype = CONTROLLABLEICE
 			IssuePointOrder( e.actor, "setrally", 0,-3812 )
 			gg_unit_n01D_0187.remove()
+			EnumItemsInRect(gg_rct_Region_000, null, function correctKeys)
 		case 3
 			
 			GroupEnumUnitsOfType(g, "custom_h01I", null )
@@ -251,9 +260,10 @@ public function initMazeUnits(int maze) //from 0 to 4
 			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
 			gg_unit_n00C_0234.remove()
 
-			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
+			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), DUMMY_PLAYER)
 			gg_unit_h01M_0258.remove()
-		/*	s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
+			s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
+			debugPrint("Spinner done..." , 3)
 			s.checkObj( gg_unit_n00E_0261.getUserData() castTo Entity )
 			s.speed = 6
         
@@ -282,11 +292,32 @@ public function initMazeUnits(int maze) //from 0 to 4
 			gg_unit_h01M_0212.remove()
 			s.checkObj( gg_unit_h01I_0220.getUserData() castTo Entity )
 			s.speed = 7
-			*/
+			EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
+			
+public function clearEBRRect(int r)
+	var rd = regions[r]
+	print("R = " + r.toString() + " region unwalkable: " + rd.unwalkableTile.toString())
+	g.clear()
+	GroupEnumUnitsInRect(g, rd.theRect, null)
+	for u in g
+		u.remove()
+	g.clear()
+	EnumItemsInRect(rd.theRect, null, function deleteKeys)
+	EnumDestructablesInRectAll(rd.theRect, function deleteDes)
+
+function deleteDes()
+	var d = GetEnumDestructable()
+	RemoveDestructable(d)
+	
+function deleteKeys()
+	item itm = GetEnumItem()
+	itm.remove()		
+	
 function correctKeys()
 	item itm = GetEnumItem()
-	new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
-	itm.remove()
+	if GetItemTypeId(itm) == 'I009'
+		new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
+		itm.remove()
 	
 	
 	

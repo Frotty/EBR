@@ -22,8 +22,8 @@ package EscaperKiller
 				if not es.flying
 					es.kill() 
 		
-		construct( unit u, unit setup, real radius )
-			super( vec3(setup.getX(), setup.getY(), 0), u, setup, radius, function EscaperKiller.onInRangeEvent ) 
+		construct( unit actor, unit setup, real radius )
+			super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function EscaperKiller.onInRangeEvent ) 
 
 
 

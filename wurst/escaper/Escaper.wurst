@@ -15,7 +15,7 @@ package Escaper
 	public Table escaperTable = new Table()
 	
 	constant real COLL_RADIUS = 32.
-	constant real SLIDE_ADD = 5.1
+	constant real SLIDE_ADD = 3.3
 	
 	constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 	constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
@@ -144,11 +144,11 @@ package Escaper
 				poisoned = false
 				
 		function kill()
-			print("died")
+			debugPrint("died", 1)
 			if owner.getId() >= 8
-				print("is builder")
+				debugPrint("is builder", 1)
 				getTimer().setData(this castTo int).start(.1, function Escaper.revive)
-				print("started")
+				debugPrint("started", 1)
 			else
 				getTimer().start(3., function Escaper.revive).setData(this castTo int)
 			actor.kill()
@@ -173,17 +173,16 @@ package Escaper
 			trackVelocity = vec3(0,0,0)
 			pos += vortexVelocity
 			vortexVelocity = vec3(0,0,0)
-			time += 1
+
 			if sliding
 				actor.setPos(pos.x, pos.y)
-				
-				print(time.toString())
+
 			else
 				actor.setXY(pos.x, pos.y)
 			SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
             
 		static function revive()
-			print("rev")
+			debugPrint("rev", 1)
 			var t = GetExpiredTimer()
 			Escaper e = t.getData() castTo Escaper
 			var revX = currentRevivepoint.pos.x
@@ -203,6 +202,7 @@ package Escaper
 					ClearSelection()
 					SelectUnit(e.actor, true)
 				
+			e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 			e.alive = true
 			t.release()
             
@@ -248,11 +248,22 @@ package Escaper
 				RemoveItem(kdata.actorItem)
 				kdata.dropped()
 				dropTrig.enable()
+				
+		ondestroy
+			lavaEffect.destr()
+			poisonEffect.destr()
+			actor.remove()
+			escapers.remove(this)
+			
 
 			
 	trigger slideAssist
 	trigger pickupTrig
 	public trigger dropTrig
+	
+	function correctRegion()
+		for e in escapers
+			e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 			
 	init
 		slideAssist = CreateTrigger()
@@ -261,5 +272,6 @@ package Escaper
 		pickupTrig.addAction( function Escaper.pickupItem )
 		dropTrig = CreateTrigger()
 		dropTrig.addAction( function Escaper.dropItem )
+		getTimer().start(1., function correctRegion)
 		
 endpackage 
