@@ -18,29 +18,45 @@ package GameInit
 	
 	function initGame()
 
-		print("Starting Init")
+		debugPrint("Starting Init", 2)
 		VolumeGroupReset()
 		EndThematicMusic()
+		debugPrint("Init - Music", 2)
 		init_TerrainModder()
+		debugPrint("Init - TMod", 2)
 		init_UnitProducer()
+		debugPrint("Init - UP", 2)
 		init_Regions()
+		debugPrint("Init - Regions", 2)
 		init_Choose()
+		debugPrint("Init - Choose", 2)
 		init_Builder()
+		debugPrint("Init - Builder", 2)
 		init_Trap()
+		debugPrint("Init - Trap", 2)
 		init_Door()
+		debugPrint("Init - Door", 2)
 		init_Texter()
+		debugPrint("Init - Txter", 2)
 		init_Bombertower()
+		debugPrint("Init - BTower", 2)
 		init_Reincarnation()
+		debugPrint("Init - Reinc", 2)
 		initBaseObjects()
+		debugPrint("Init - BObj", 2)
 		initEscaperKillers()
+		debugPrint("Init - EKill", 2)
 		initMazeUnits(0)
+		debugPrint("Init - Startmazes", 2)
 		
 		initMazeUnits(1)
 		CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 		initMazeUnits(2)
 		initMazeUnits(3)
 		
+		debugPrint("Init - Finished", 2)
 		startChoose()
+		debugPrint("Starting choose...", 2)
 
 
 	init
@@ -50,6 +66,6 @@ package GameInit
 		trigger t = CreateTrigger()
 		TriggerRegisterTimerEvent( t, .01, false )
 		TriggerAddAction( t, function initGame )
-		startEntityLoop()
+
 
 endpackage 

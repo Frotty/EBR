@@ -2,6 +2,7 @@ package SetupBox
 import Entity
 import RegionData
 import EventHandling
+import GameConstants
 
 constant int SETUP_BOX = 'n00A'
 constant int ICEI_ID = 'A057'
@@ -10,6 +11,7 @@ constant int PI_ID = 'A011'
 constant int PD_ID = 'A059'
 constant int LI_ID = 'A058'
 constant int LD_ID = 'A05A'
+constant int ALLOW_ID = 'A01X'
 
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
@@ -33,13 +35,13 @@ public class SetupBox extends UnitEntity
 				if box.rdata.slidespeed >= MAX_SLIDESPEED
 					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed is on Maximum" )
 				else
-					box.rdata.slidespeed += .1
+					box.rdata.slidespeed += .25
 					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed: " + box.rdata.slidespeed.toString() )
 			case ICED_ID
 				if box.rdata.slidespeed <= -MAX_SLIDESPEED
 					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed is on Minimum" )
 				else
-					box.rdata.slidespeed -= .1
+					box.rdata.slidespeed -= .25
 					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed: " + box.rdata.slidespeed.toString() )
 			case PI_ID
 				if box.rdata.poisonDmg >= MAX_DOT_DMG
@@ -65,6 +67,16 @@ public class SetupBox extends UnitEntity
 				else
 					box.rdata.lavaDmg -= .1
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
+			case ALLOW_ID
+				var p = GetSpellTargetUnit().getOwner()
+				var id = p.getId()
+				if id > 7
+					if box.rdata.isOwner(id)
+						box.rdata.disallow(id)
+						DisplayTextToPlayer( box.owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id] + p.getName() + " to build in your region." )
+					else
+						box.rdata.allow(id)
+						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id] + p.getName() + " to build in your region." )
 		return false
 
 	

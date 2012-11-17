@@ -6,7 +6,7 @@ function updateEntities()
 	while e != null
 		if e.done
 			destroy e
-			print("destroyed")
+			debugPrint("destroyed Entity", 0)
 		else 
 			e.update()
 		e = e.next

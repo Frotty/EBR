@@ -10,7 +10,7 @@ public class RegionData
 	int unwalkableTile
 	int walkableTile
 	
-	real slidespeed = 2.
+	real slidespeed = 3.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
 	
@@ -43,11 +43,10 @@ public class RegionData
 		return false
 		
 	function setType( int itemId, boolean changeTerrain )
-		print("wtf")
 		for i = 0 to 4
-			print("RegionData check " + itemId.toString() + " == " + ritem[i].toString() )
+			debugPrint("RegionData check " + itemId.toString() + " == " + ritem[i].toString(), 2 )
 			if itemId == ritem[i]
-				print("RegionData is " + i.toString() )
+				debugPrint("RegionData is " + i.toString(), 1 )
 				unwalkableTile = rectuw[i]
 				walkableTile = rectw[i]
 				bigKillerId = rectbk[i]
@@ -55,7 +54,7 @@ public class RegionData
 				smallObstacleId = sobst[i]
 				bigObstacleId = bobst[i]
 				treeId = trees[i]
-				print("RegionData set " + i.toString())
+				debugPrint("RegionData set " + i.toString(), 1)
 				if changeTerrain
 					theRect.changeTerrain(unwalkableTile)
 				break

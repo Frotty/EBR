@@ -31,26 +31,20 @@ package PlayerData
 		boolean picked = false
 	
 		construct (player p)
-			print("0")
 			this.p = p
-			print("1")
 			id = GetPlayerId(p)
-			print("2")
 			gameId = players.size
 			name = GetPlayerName(p)
 			mbname = name
-			print("3")
 			if mbname == "Frotty" or mbname == "FrottyZ"
 				rank = "|cffADD642Creator"
-			print("4")
 			for int i = 0 to cplayerCount
 				print(i.toString())
 				if mbname == names[i]
 					mbname = tags[i] + "|r" + colorcode[ id ] + mbname
 					break
-			print("5")
 			mbname = colorcode[ id ] + mbname
-			print("MBNAME: " + mbname)
+			debugPrint("MBNAME: " + mbname, 1)
 			players.add(this)
 			
 		function updateRank ()
@@ -155,7 +149,7 @@ package PlayerData
 		leaveTrig.addAction(function playerLeft)
 		int r = 0
 		for i = 0 to 11
-			print(i.toString())
+			debugPrint(i.toString(), 1)
 			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
 				pData[i] = new PlayerData(Player(i))
 				leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)

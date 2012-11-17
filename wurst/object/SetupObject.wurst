@@ -116,16 +116,13 @@ package SetupObject
 				inRangeTrig.addAction( c )
 						
 		construct( vec3 pos, unit u, unit setup, real radius, code c )
-			super( pos, setup )
+			super( pos, u )
 			actor.addAbility('Aloc')
-			print("nou1")
 			this.setup = setup
-			print("nou1")
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.registerUnitInRangeSource( setup, radius )
 				inRangeTrig.addAction( c )
-			print("nou1")	
 			setup.setUserData( this castTo int )
 		
 		

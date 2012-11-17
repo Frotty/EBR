@@ -70,15 +70,18 @@ public class Spinner extends UnitEntity
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo Entity
-				sdata.checkObj(data)
+				if data.owner == sdata.owner
+					sdata.checkObj(data)
 			case SPELL2_ID
 				var tx = GetSpellTargetX()
 				var ty = GetSpellTargetY()
 				GroupEnumUnitsInRange(ENUM_GROUP, tx, ty, 300., null)
 				for gu in ENUM_GROUP
-					if gu != sdata.actor
+					if gu != sdata.actor 
 						if gu.getUserData() > 0
-							sdata.checkObj(gu.getUserData() castTo Entity)
+							var ed = gu.getUserData() castTo Entity
+							if ed.owner == sdata.owner
+								sdata.checkObj(gu.getUserData() castTo Entity)
 				ENUM_GROUP.clear()
 			case INC_ID
 				if sdata.speed < 10.

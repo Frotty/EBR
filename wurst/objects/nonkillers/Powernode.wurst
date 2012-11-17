@@ -21,7 +21,7 @@ class Link
 		
 	ondestroy
 		DestroyLightning(sfx)
-		print("destryoed")
+
 
 public class Powernode extends DynamicSetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
@@ -42,7 +42,7 @@ public class Powernode extends DynamicSetupObject
 		pos.x = setup.getX()
 		pos.y = setup.getY()
 		if links.size > 0
-			print(links.size.toString())
+			debugPrint(links.size.toString(), 1)
 			var i = 0
 			while i < links.size
 				Link l = links.get(i)
@@ -54,9 +54,7 @@ public class Powernode extends DynamicSetupObject
 							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ) 
 				else
 					links.removeAt(i)
-					print("before DESTROY")
 					destroy l
-					print("after DESTROY")
 					if i == links.size
 						break
 					i--
@@ -65,9 +63,8 @@ public class Powernode extends DynamicSetupObject
 	
 	function removeAllLinks()
 		while links.size > 0
-			print("gotta move dat gear")
 			Link l = links.get(0)
-			print("got link " + (l castTo int).toString())
+			debugPrint("got link " + (l castTo int).toString(), 1)
 			links.removeAt(0)
 			destroy l
 		destroy links		
@@ -82,24 +79,21 @@ public class Powernode extends DynamicSetupObject
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		print("node cast " + (node castTo int).toString())
+		debugPrint("node cast " + (node castTo int).toString(), 1)
 		switch id
 			case LINK_ID
-				print("node cast link")
+				debugPrint("node cast link", 1)
 				var data = target.getUserData() castTo Entity
 				if data instanceof Powernode
-					print("node cast link is node")
+					debugPrint("node cast link is node", 1)
 					var pdata = data castTo Powernode
 					var isNew = true
 					var i = 0
 					while i < node.links.size
-						print("check existing")
 						Link l = node.links.get(i)
 						if l.linkedNode == pdata 
 							node.links.removeAt(i)
-							print("before DESTROY")
 							destroy l
-							print("after DESTROY")
 							isNew = false
 							break
 							

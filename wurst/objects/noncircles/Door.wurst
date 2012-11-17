@@ -19,7 +19,7 @@ package Door
 	constant int DOORPLACEKEY_ABILITY_ID = 'Av42'
 	constant real EVENT_RADIUS = 192
 	//Item type ids
-	// doesn't work yet
+
 	int array KEY_COLOR_ID
 	trigger castTrig
 	
@@ -91,6 +91,7 @@ package Door
 				closeDoor()
 			else
 				openDoor()
+				
 		
 		function closeDoor()
 			SetUnitAnimation( actor, "stand" )
@@ -122,6 +123,7 @@ package Door
 				else
 					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
 					pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 270 )
+				
 			else
 				RemoveUnit( pathing )
 				RemoveUnit( actor )
@@ -131,23 +133,20 @@ package Door
 					SetUnitAnimation( actor, "Death Alternate" )
 					pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
 				else
-					print("yäs " + GetPlayerId(owner).toString())
+					debugPrint("yäs " + GetPlayerId(owner).toString(), 1)
 					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
 					pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
-					print("yäs2")
 			colorize()
 			
 		ondestroy
 			pathing.remove()
 	
 		static function onSpellCast()
-			print("casted")
+			debugPrint("casted", 1)
 			unit u = GetTriggerUnit()
-			print("casted2")
 			Door door = u.getUserData() castTo Door
-			print(door.pos.toString())
+			debugPrint(door.pos.toString(), 1)
 			int id = GetSpellAbilityId()
-			print("casted3")
 			switch id 
 				case DOOROPEN_ABILITY_ID
 					door.toggleOpen()

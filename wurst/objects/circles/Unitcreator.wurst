@@ -31,7 +31,7 @@ package Unitcreator
 			var Y = obj.actor.getY()
 			var angle = angleBetweenCoordsD(X,Y,rX,rY)
 			var data = getRegionData(rX,rY)
-			print("creating...")
+			debugPrint("creating...", 1)
 			EscaperKiller ek
 			switch obj.spawnUnitType
 				case 'BIGK'
@@ -75,7 +75,7 @@ package Unitcreator
 				case START_ABIL
 					start_creator(obj)
 				case PAUSE_ABIL
-					print("pause")
+					debugPrint("pause", 1)
 					UnitRemoveAbility(obj.actor,PAUSE_ABIL)
 					UnitAddAbility(obj.actor,START_ABIL)
 					obj.spawn.release()

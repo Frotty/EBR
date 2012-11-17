@@ -37,7 +37,7 @@ public class Trap extends StaticBaseObject
 			//traptimer = getTimer()
 			
 	static function onStep()
-		print("Trap step")
+		debugPrint("Trap step", 1)
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getUserData() castTo Entity
@@ -52,7 +52,7 @@ public class Trap extends StaticBaseObject
 		return false
 	
 	override function update()
-		print(". . . "+timerreal.toString())
+		debugPrint(". . . "+timerreal.toString(), 1)
 		super.update()
 		if onstep != true
 			if timerreal <= 0.0
@@ -75,7 +75,7 @@ public class Trap extends StaticBaseObject
 		obj.traptimer.start(obj.interval, function onTimedTrap)
 			*/
 	function doEffect(Escaper e)
-		print("Trap Effect")
+		debugPrint("Trap Effect", 1)
 		switch a
 			case ABIL.KILL
 				e.kill()
@@ -102,7 +102,7 @@ public class Trap extends StaticBaseObject
 				if getRallyUnit() == actor
 					rX = aX
 					rY = aY
-				print("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString())
+				debugPrint("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString(), 1)
 				if distanceBetweenCoords(rX, rY, aX, aY) < 20
 					angle = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
@@ -133,20 +133,20 @@ public class Trap extends StaticBaseObject
 			UnitAddAbility(actor,DECREASE_VALUE_ABIL)
 	
 	static function onCast() returns boolean
-		print("Trap Casting")
+		debugPrint("Trap Casting", 1)
 		unit source = GetSpellAbilityUnit()
 		thistype obj = source.getUserData() castTo thistype
 		int spell_id = GetSpellAbilityId()
 		switch spell_id
 			case NEXT_SFX_ABIL
-				print(obj.sfxid.toString())
+				debugPrint(obj.sfxid.toString(), 1)
 				if obj.sfxid >= 7
 					obj.sfxid = 0
 				else
 					obj.sfxid ++
 				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
 			case PREV_SFX_ABIL
-				print(obj.sfxid.toString())
+				debugPrint(obj.sfxid.toString(), 1)
 				if obj.sfxid <= 0
 					obj.sfxid = 7
 				else

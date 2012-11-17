@@ -50,7 +50,9 @@ public class CongaLineHead extends DynamicSetupObject
 		var data = GetSpellAbilityUnit().getUserData() castTo CongaLineHead
 		switch id
 			case ADD_ID
-				data.addSegment(t.getUserData() castTo Entity)
+				var ed = t.getUserData() castTo Entity
+				if ed.owner == data.owner
+					data.addSegment(ed)
 			case INC_ID
 				if data.segLength < 500.
 					data.segLength += 25

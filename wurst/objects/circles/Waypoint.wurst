@@ -2,26 +2,29 @@ package Waypoint
 	import BaseObject
 	import Terrain
 	import Escaper
-	import EscaperKiller
+	import SetupObject
 	import EventHandling
 	import Texttag
+	import TeleporterTarget
 	
 	constant int 	WAYPOINT_ID   = 'n004'
 	constant int INC_ID = 'A054'
 	constant int DEC_ID = 'A055'
+	constant int WISP_ID = 'A027'
 		
 	constant real 	EVENT_RADIUS	= 32.
 
 	class DelayData
-		EscaperKiller kllr
+		UnitEntity entity
 		vec2 pos
 		
-		construct(EscaperKiller k, vec2 t)
-			kllr = k
+		construct(UnitEntity k, vec2 t)
+			entity = k
 			pos = t
 
 	public class Waypoint extends StaticBaseObject
 		real delay = 0.
+		boolean wisps = true
 		
 		construct( vec2 pos, player owner )
 			super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
@@ -34,18 +37,24 @@ package Waypoint
 			thistype obj = source.getUserData() castTo thistype
 			var rx = obj.getRallyX()
 			var ry = obj.getRallyY()
-			if e instanceof EscaperKiller
-				var kllr = e castTo EscaperKiller
+			if e instanceof UnitEntity
+				var data = e castTo UnitEntity
+				if not obj.wisps and data instanceof TeleporterTarget
+					return
 				if obj.delay < .25
 					IssuePointOrder(u, "move", rx, ry )
 				else
 					IssueImmediateOrder(u, "stop" )
-					getTimer().start(obj.delay, function Waypoint.delayMove).setData(new DelayData(kllr, vec2(rx,ry))castTo int)
+					getTimer().start(obj.delay, function Waypoint.delayMove).setData(new DelayData(data, vec2(rx,ry))castTo int)
 					
 		static function delayMove()
 			var t = GetExpiredTimer()
 			DelayData data = t.getData() castTo DelayData
-			IssuePointOrder(data.kllr.setup, "move", data.pos.x, data.pos.y )
+			if data.entity instanceof DynamicSetupObject
+				var ed = data.entity castTo DynamicSetupObject
+				IssuePointOrder(ed.setup, "move", data.pos.x, data.pos.y )
+			else
+				IssuePointOrder(data.entity.actor, "move", data.pos.x, data.pos.y )
 			destroy data
 			t.release()
 
@@ -65,6 +74,13 @@ package Waypoint
 						createTTEx(data.pos, vec2(0,0.05), "Delay " + data.delay.toString(), 10,  2., colorRGBA(255,255,255,0), data.owner  )
 					else
 						createTTEx(data.pos, vec2(0,0.05), "Minimum Delay", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+				case WISP_ID
+					if data.wisps
+						data.wisps = false
+						createTTEx(data.pos, vec2(0,0.05), "Wisps inactive", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					else
+						data.wisps = true
+						createTTEx(data.pos, vec2(0,0.05), "Wisps active", 10,  2., colorRGBA(255,255,255,0), data.owner  )
 			return false
 
 endpackage
