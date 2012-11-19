@@ -56,6 +56,9 @@ public class TextureChanger extends UnitEntity
 							tileID = data.unwalkableTile
 						if GetTerrainType(x, y) != tileID
 							SetTerrainType(x, y, tileID, 0, 1, 1 )
+							
+	ondestroy
+		actor.unregisterCastEvent()
 	
 	static function onCast() returns boolean
 			var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger
@@ -99,3 +102,5 @@ public class TextureChanger extends UnitEntity
 				case TERRAIN_O_UNICE_ID
 					obj.outerTile = UNCONTROLLABLEICE
 			return false
+			
+	

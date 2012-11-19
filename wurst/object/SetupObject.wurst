@@ -73,15 +73,10 @@ package SetupObject
 						  
 		
 		ondestroy
-			print("destroy1")
 			actor.clearRegister()
-			print("destroy2")
 			actor.remove()
-			print("destroy3")
 			setup.remove()
-			print("destroy4")
 			inRangeTrig.destr()
-			print("destroy5") 
 			
 		static function onOrderEvent()
 			var entity = GetTriggerUnit().getUserData() castTo Entity
@@ -147,15 +142,10 @@ package SetupObject
 			
 
 		ondestroy
-			print("destroy1")
 			actor.clearRegister()
-			print("destroy2")
 			actor.remove()
-			print("destroy3")
 			setup.remove()
-			print("destroy4")
 			inRangeTrig.destr()
-			print("destroy5")
 
 
 

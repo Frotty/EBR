@@ -3,6 +3,9 @@ import Entity
 import RegionData
 import EventHandling
 import GameConstants
+import TempGroups
+import Escaper
+import Builder
 
 constant int SETUP_BOX = 'n00A'
 constant int ICEI_ID = 'A057'
@@ -12,6 +15,7 @@ constant int PD_ID = 'A059'
 constant int LI_ID = 'A058'
 constant int LD_ID = 'A05A'
 constant int ALLOW_ID = 'A01X'
+constant int CLEAR_ID = 'A020'
 
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
@@ -79,6 +83,13 @@ public class SetupBox extends UnitEntity
 					else
 						box.rdata.allow(id)
 						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id] + p.getName() + " to build in your region." )
+			case CLEAR_ID
+				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
+				for u in ENUM_GROUP
+					var data = u.getUserData() castTo Entity
+					if not data instanceof Escaper and not data instanceof Builder and data != box
+						data.terminate()
+						
 		return false
 
 	

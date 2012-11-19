@@ -1,7 +1,7 @@
 package Remove
 import Entity
 
-constant int REMOVE_ID = 'A00K'
+public constant int REMOVE_ID = 'A00K'
 trigger castTrig
 
 function removeObject()

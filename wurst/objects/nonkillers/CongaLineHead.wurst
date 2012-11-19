@@ -4,6 +4,7 @@ import EventHandling
 import LinkedList
 import Spinner
 import Texttag
+import Remove
 
 constant int UNIT_ID = 'h000'
 
@@ -12,29 +13,30 @@ constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
 
 public class CongaLineHead extends DynamicSetupObject
-	LinkedList<UnitEntity> segments
+	LinkedList<DynamicSetupObject> segments
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
-		segments = new LinkedList<UnitEntity>()
+		segments = new LinkedList<DynamicSetupObject>()
 		
 	override function update()
 		super.update()
 		int i = 0
 		UnitEntity se = null
 		for e in segments
-			if e != null
-				if i == 0
-					e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), angleBetweenCoordsD(e.pos.x, e.pos.y, pos.x, pos.y))
-				else
-					e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), angleBetweenCoordsD(e.pos.x, e.pos.y, se.pos.x, se.pos.y))
-					
-				se = e
-				i++
+
+			if i == 0
+				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), angleBetweenCoordsD(e.pos.x, e.pos.y, pos.x, pos.y))
+			else
+				e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), angleBetweenCoordsD(e.pos.x, e.pos.y, se.pos.x, se.pos.y))
+				
+			se = e
+			i++
+
 		
-	function addSegment(UnitEntity e)
+	function addSegment(DynamicSetupObject e)
 		boolean isNew = true
 		for de in segments
 			if de == e
@@ -42,8 +44,10 @@ public class CongaLineHead extends DynamicSetupObject
 				break
 		if isNew
 			segments.add(e)
+			e.setup.removeAbility(REMOVE_ID)
 		else
 			segments.remove(e)
+			e.setup.addAbility(REMOVE_ID)
 	
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -52,8 +56,8 @@ public class CongaLineHead extends DynamicSetupObject
 		switch id
 			case ADD_ID
 				var ed = t.getUserData() castTo UnitEntity
-				if ed.owner == data.owner
-					data.addSegment(ed)
+				if ed.owner == data.owner and ed instanceof DynamicSetupObject
+					data.addSegment(ed castTo DynamicSetupObject)
 			case INC_ID
 				if data.segLength < 500.
 					data.segLength += 25
@@ -70,12 +74,19 @@ public class CongaLineHead extends DynamicSetupObject
 				
 		return false
 		
+	ondestroy
+		setup.unregisterCastEvent()
+		for DynamicSetupObject dso in segments
+			dso.setup.addAbility(REMOVE_ID)
+		destroy segments
+
+		
 function UnitEntity.setNewPosA( vec2 tpos, real angle)
 	if this instanceof DynamicSetupObject
-		(this castTo DynamicSetupObject).setNewPos(tpos.toVec3())
+		(this castTo DynamicSetupObject).setNewXY(tpos.toVec3())
 		(this castTo DynamicSetupObject).setAngle(angle)
 	else if this instanceof Spinner
-		(this castTo Spinner).setNewPos(tpos.toVec3())
+		(this castTo Spinner).setNewXY(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angle)
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2

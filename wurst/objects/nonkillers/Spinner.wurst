@@ -5,6 +5,7 @@ import EventHandling
 import SetupObject
 import TempGroups
 import Texttag
+import Remove
 
 
 constant int SPINNER_ID      = 'h01M'
@@ -14,11 +15,11 @@ constant int INC_ID          = 'A01F'
 constant int DEC_ID          = 'A01G'
 
 class SpinNode
-	UnitEntity obj
+	DynamicSetupObject obj
 	real angle
 	real dist
 	
-	construct(UnitEntity ent, real angl, real dist)
+	construct(DynamicSetupObject ent, real angl, real dist)
 		obj = ent
 		angle = angl
 		this.dist = dist
@@ -49,11 +50,13 @@ public class Spinner extends DynamicSetupObject
 			for node in spinningEntities
 				if node.obj == dobj
 					isNew = false
+					node.obj.setup.addAbility(REMOVE_ID)
 					destroy spinningEntities.get(i)
 					spinningEntities.removeAt(i)
 					break
 				i++
 			if isNew
+				dobj.setup.removeAbility(REMOVE_ID)
 				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(pos.x, pos.y, dobj.pos.x, dobj.pos.y), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
 
 	ondestroy
@@ -62,6 +65,7 @@ public class Spinner extends DynamicSetupObject
 			SpinNode n = spinningEntities.get(0)
 			spinningEntities.removeAt(0)
 			destroy n 
+		destroy spinningEntities
 				
 	
 
