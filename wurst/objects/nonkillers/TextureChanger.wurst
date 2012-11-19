@@ -59,6 +59,7 @@ public class TextureChanger extends UnitEntity
 							
 	ondestroy
 		actor.unregisterCastEvent()
+		actor.remove()
 	
 	static function onCast() returns boolean
 			var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger
@@ -102,5 +103,5 @@ public class TextureChanger extends UnitEntity
 				case TERRAIN_O_UNICE_ID
 					obj.outerTile = UNCONTROLLABLEICE
 			return false
-			
-	
+
+

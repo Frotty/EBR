@@ -19,7 +19,7 @@ package MultiboardClass
 			
 		function setNewItem(int i,int j,string value, string icon)
 			SaveInteger(mbdata,i,j,counter)
-			data[counter] = new MbItem(value, icon)
+			data[counter] = MbItem(value, icon)
 			board.getItem(i,j).setValue(value)
 			board.getItem(i,j).setIcon(icon)
 			counter +=1
@@ -28,13 +28,15 @@ package MultiboardClass
 			for int j =0 to board.getColumnCount()   
 				for int i =r to board.getRowCount()
 					if i == board.getRowCount()-1
-						RemoveSavedInteger(mbdata,i,j)
+						//destroy data[LoadInteger(mbdata,i,j)]
+						RemoveSavedInteger(mbdata,i,j) //clear the last row
 					else
-						updateItem(i,j,data[LoadInteger(mbdata,i+1,j)].value,data[LoadInteger(mbdata,i+1,j)].icon)
+						var nextitem = data[LoadInteger(mbdata,i+1,j)]
+						updateItem(i,j,nextitem.value,nextitem.icon)
 			board.setRowCount(board.getRowCount()-1)
 			
 		function updateItem(int i,int j,string value, string icon)
-			data[LoadInteger(mbdata,i,j)] = new MbItem(value , icon)
+			data[LoadInteger(mbdata,i,j)] = MbItem(value , icon)
 			if value != null
 				updateValue(i,j,value)
 				if icon != null
@@ -64,12 +66,14 @@ package MultiboardClass
 			DestroyMultiboard(board)
 			FlushParentHashtable(mbdata)
 			
+	tuple MbItem(string value, string icon)
+	/*
 	class MbItem
 		string value
 		string icon
 		
 		construct (string s, string i)
 			value = s
-			icon = i
+			icon = i*/
 			
 endpackage

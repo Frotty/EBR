@@ -139,6 +139,7 @@ package PlayerData
 	function playerLeft()
 		var p = GetTriggerPlayer()
 		var pd = pData[p.getId()]
+		destroy pd.escaper
 		players.remove(pd)
 		destroy pd
 

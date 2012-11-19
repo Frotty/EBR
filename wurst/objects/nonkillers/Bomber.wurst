@@ -19,3 +19,6 @@ public class Bomber extends UnitEntity
 		var obj = GetTriggerUnit().getUserData() castTo Bomber
 		onAttackspeedCast(id, obj.actor)
 		return false
+	
+	ondestroy 
+		actor.unregisterCastEvent()

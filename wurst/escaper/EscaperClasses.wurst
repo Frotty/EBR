@@ -7,3 +7,9 @@ public class Holy_Escaper extends Escaper
 
 	construct( vec3 pos, player owner, int typ )
 		super( pos, owner, typ )
+		
+
+public class Ice_Escaper extends Escaper
+	
+	construct(vec3 pos, player owner, int typ )
+		super(pos, owner, typ)

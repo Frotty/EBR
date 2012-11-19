@@ -67,63 +67,23 @@ public function initBaseObjects()
 		
 	g.clear()
 	
-	
-
-	
-public function initEscaperKillers()
-	g.clear()
-	GroupEnumUnitsOfType(g, "custom_h015", null )
-	for u in g
-		new EscaperKiller(u, null, COLL_SIZE_BK) //CreateUnit(Player(11), 'h015', u.getX(),u.getY(),0),COLL_SIZE_BK)
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_h01H", null )
-	for u1 in g
-		new EscaperKiller(u1, null, COLL_SIZE_BK) //CreateUnit(Player(11), 'h01H', u.getX(),u.getY(),0),COLL_SIZE_BK)
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_h018", null )
-	for u2 in g
-		new EscaperKiller(u2, null, COLL_SIZE_BK) 
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_h01I", null )
-	for u2 in g
-		new EscaperKiller(u2, null, COLL_SIZE_BK) 
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n00D", null )
-	for u3 in g
-		new EscaperKiller(u3, null, COLL_SIZE_SK) 
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n00E", null )
-	for u4 in g
-		new EscaperKiller(u4, CreateUnit(Player(11), 'h00E', u4.getX(), u4.getY(), 0. ), COLL_SIZE_SK) 
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n009", null )
-	for u5 in g
-		new EscaperKiller(u5, null, COLL_SIZE_SK) 
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_u008", null )
-	for u6 in g
-		new EscaperKiller(u6, null, COLL_SIZE_BRK)
-		
-	g.clear()
 
 public function initMazeUnits(int maze, int rnd) //from 0 to 4
 	Teleporter t
+	group g = CreateGroup()
 	switch maze
 		case 0
+			GroupEnumUnitsOfType(g, "custom_h015", null )
+			for u in g
+				new EscaperKiller(u, null, COLL_SIZE_BK)
+				
+			g.clear()
+			GroupEnumUnitsOfType(g, "custom_u008", null )
+			for u6 in g
+				new EscaperKiller(u6, null, COLL_SIZE_BRK)
+				
+			g.clear()
+			
 			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
 			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
@@ -143,6 +103,17 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			gg_unit_n00C_0061.remove()
 			EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 		case 1
+	
+			GroupEnumUnitsOfType(g, "custom_h01H", null )
+			for u1 in g
+				new EscaperKiller(u1, null, COLL_SIZE_BK)
+				
+			g.clear()
+			GroupEnumUnitsOfType(g, "custom_n00D", null )
+			for u3 in g
+				new EscaperKiller(u3, null, COLL_SIZE_SK) 
+				
+			g.clear()
 			IssuePointOrder(gg_unit_n00D_0121, "patrol", 3612, -4650 )
 			IssuePointOrder(gg_unit_n00D_0122, "patrol", 3574, -5253 )
 			IssuePointOrder(gg_unit_n00D_0120, "patrol", 3834, -5380 )
@@ -159,6 +130,18 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			gg_unit_n00C_0141.remove()
 			EnumItemsInRect(gg_rct_Region_018, null, function correctKeys)
 		case 2
+			GroupEnumUnitsOfType(g, "custom_h018", null )
+			for u2 in g
+				new EscaperKiller(u2, null, COLL_SIZE_BK) 
+				
+			g.clear()
+			
+			GroupEnumUnitsOfType(g, "custom_n009", null )
+			for u5 in g
+				new EscaperKiller(u5, null, COLL_SIZE_SK) 
+				
+			g.clear()
+			
 			IssuePointOrder(gg_unit_h018_0149, "patrol", 368, -6647 )
 			IssuePointOrder(gg_unit_h018_0150, "patrol", 128, -6130 )
 			IssuePointOrder(gg_unit_h018_0151, "patrol", -284, -6315 )
@@ -239,6 +222,19 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			gg_unit_n01D_0187.remove()
 			EnumItemsInRect(gg_rct_Region_000, null, function correctKeys)
 		case 3
+			
+			GroupEnumUnitsOfType(g, "custom_h01I", null )
+			for u in g
+				new EscaperKiller(u, null, COLL_SIZE_BK) 
+				
+			g.clear()
+			
+			GroupEnumUnitsOfType(g, "custom_n00E", null )
+			for u in g
+				new EscaperKiller(u, null, COLL_SIZE_SK) 
+				
+			g.clear()
+		
 			IssuePointOrder(gg_unit_n00E_0263, "patrol", -2948, -6192 )
 			IssuePointOrder(gg_unit_n00E_0264, "patrol", -2645, -6798 )
 			IssuePointOrder(gg_unit_n00E_0265, "patrol", -3129, -6798 )
