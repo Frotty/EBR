@@ -71,6 +71,7 @@ public class Pointer extends UnitEntity
 			es.actor.setFacing(data.angle)
 			
 	ondestroy
+		actor.unregisterCastEvent()
 		actor.remove()
 		setup.remove()
 		trig.destr()

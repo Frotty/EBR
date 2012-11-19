@@ -68,12 +68,6 @@ public class Trap extends StaticBaseObject
 			else
 				timerreal -= ANIMATION_PERIOD
 				
-/*	static function onTimedTrap() //periodic
-		thistype obj = GetExpiredTimer().getData() castTo thistype
-		
-		obj.traptimer.release()
-		obj.traptimer.start(obj.interval, function onTimedTrap)
-			*/
 	function doEffect(Escaper e)
 		debugPrint("Trap Effect", 1)
 		switch a
@@ -87,9 +81,10 @@ public class Trap extends StaticBaseObject
 			case ABIL.SHAKE
 				setCameraNoiseTimed(owner, value, 1000, duration)
 			case ABIL.POISON
-				if not e.poisoned
-					e.poisoned = true
-					e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
+				e.setPoison(true)
+				//if not e.poisoned
+				//	e.poisoned = true
+				//	e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
 			case ABIL.SPEED
 				skip
 			case ABIL.KNOCK
@@ -172,10 +167,11 @@ public class Trap extends StaticBaseObject
 			case KNOCK_ABIL
 				obj.a = ABIL.KNOCK
 				obj.value = 10.
-				obj.addConfiger(false, true)
 				obj.actor.addAbility('ARal')
+				obj.addConfiger(false, true)
 			case POISON_ABIL
 				obj.a = ABIL.POISON
+				debugPrint("POISON",2)
 				obj.addConfiger(false, false)
 					
 			case INCREASE_INTERVAL_ABIL

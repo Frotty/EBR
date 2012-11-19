@@ -101,4 +101,5 @@ public class TextureChanger extends UnitEntity
 			return false
 		
 	ondestroy
+		actor.unregisterCastEvent()
 		actor.remove()
