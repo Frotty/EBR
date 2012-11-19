@@ -19,9 +19,10 @@ function castReincarnation()
 	if id == SPEEDWAVE_ID
 		if escaper instanceof Ice_Escaper
 			var e2 = escaper castTo Ice_Escaper
-			var angle = e2.actor.getFacing()
-			var value = 10 + GetUnitAbilityLevel(e2.actor,SPEEDWAVE_ID)*5.
-			e2.addVel( vec3(value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.))
+			if e2.sliding
+				var angle = e2.actor.getFacing()
+				var value = 10 + GetUnitAbilityLevel(e2.actor,SPEEDWAVE_ID)*5.
+				e2.addVel( vec3(value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.))
 
 
 public function init_Reincarnation()
