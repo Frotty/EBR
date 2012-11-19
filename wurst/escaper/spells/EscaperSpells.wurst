@@ -1,0 +1,31 @@
+package EscaperSpells
+import BaseObject
+import Escaper
+import EscaperClasses
+
+constant int REINCARNATION_ID = 'A02X'
+constant int SPEEDWAVE_ID = 'A034'
+constant int TOMB_DUMMY_ID = 'u00D'
+
+function castReincarnation()
+	int id = GetSpellAbilityId()
+	var escaper = GetSpellAbilityUnit().getUserData() castTo Entity
+	if id == REINCARNATION_ID
+		if escaper instanceof Escaper
+			var e = escaper castTo Holy_Escaper
+			if e.revivetomb != null
+				e.revivetomb.remove()
+			e.revivetomb = CreateUnit(escaper.owner, TOMB_DUMMY_ID, escaper.pos.x, escaper.pos.y, 0.)
+	if id == SPEEDWAVE_ID
+		if escaper instanceof Ice_Escaper
+			var e2 = escaper castTo Ice_Escaper
+			var angle = e2.actor.getFacing()
+			var value = 10 + GetUnitAbilityLevel(e2.actor,SPEEDWAVE_ID)*5.
+			e2.addVel( vec3(value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.))
+
+
+public function init_Reincarnation()
+	trigger castTrig = CreateTrigger()
+	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	castTrig.addAction(function castReincarnation)
+
