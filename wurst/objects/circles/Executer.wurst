@@ -266,22 +266,15 @@ package Executer
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
 			UnitAddAbility(actor,DOOR_OPEN_ABIL)
 			UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
-			UnitAddAbility(actor,TERRAIN_WALKABLE_ABIL)
-			UnitAddAbility(actor,TERRAIN_ICE_ABIL)
-			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
-			UnitAddAbility(actor,TERRAIN_UNICE_ABIL)
+			UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
 			UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 			UnitAddAbility(actor,TRAIN_BK_ABIL)
-				
 			
 		function addActionAbilsReversable()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
 			UnitAddAbility(actor,DOOR_OPEN_ABIL)
 			UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
-			UnitAddAbility(actor,TERRAIN_WALKABLE_ABIL)
-			UnitAddAbility(actor,TERRAIN_ICE_ABIL)
-			UnitAddAbility(actor,TERRAIN_UNWALKABLE_ABIL)
-			UnitAddAbility(actor,TERRAIN_UNICE_ABIL)
+			UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
 		
 		function removeModeAbils()
 			UnitRemoveAbility(actor, ONESHOT_ABIL)
@@ -293,10 +286,7 @@ package Executer
 			UnitRemoveAbility(actor,DOOR_CLOSE_ABIL)
 			UnitRemoveAbility(actor,DOOR_OPEN_ABIL)
 			UnitRemoveAbility(actor,DOOR_TOGGLE_ABIL)
-			UnitRemoveAbility(actor,TERRAIN_WALKABLE_ABIL)
-			UnitRemoveAbility(actor,TERRAIN_ICE_ABIL)
-			UnitRemoveAbility(actor,TERRAIN_UNWALKABLE_ABIL)
-			UnitRemoveAbility(actor,TERRAIN_UNICE_ABIL)
+			UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
 			UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 			UnitRemoveAbility(actor,TRAIN_BK_ABIL)
 			
@@ -305,8 +295,9 @@ package Executer
 			UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)
 			UnitAddAbility(actor, TERRAIN_DECREASE_V_ABIL)
 			UnitAddAbility(actor, TERRAIN_DECREASE_H_ABIL)
+			UnitAddAbility(actor, TERRAIN_BOOK_ABIL)
 			if eventMode == Emode.LEVER or eventMode == Emode.PRESSUREPLATE
-				UnitAddAbility(actor, TERRAIN_BOOK_ABIL)
+				UnitAddAbility(actor, TERRAIN_ANTIBOOK_ABIL)
 			
 		function addMoveUnitAdjuster()
 			UnitAddAbility(actor, MOVE_UNIT_STOP_ABIL)
@@ -430,38 +421,28 @@ package Executer
 					obj.actionMode = Amode.TOGGLEDOOR
 					obj.removeActionAbils()
 					
+				case TERRAIN_CHANGE_ABIL
+					obj.actionMode = Amode.CHANGETERRAIN
+					obj.removeActionAbils()
+					obj.addTerrainAdjuster()
+					obj.tiletype = '0000'
+					obj.nottiletype = '0001'
 				case TERRAIN_WALKABLE_ABIL
-					if obj.actionMode == Amode.NONE
-						obj.actionMode = Amode.CHANGETERRAIN
-						obj.removeActionAbils()
-						obj.addTerrainAdjuster()
-						obj.tiletype = '0000'
-					else
-						obj.nottiletype = '0000'
+					obj.tiletype = '0000'
+				case TERRAIN_W_O_ABIL
+					obj.nottiletype = '0000'
 				case TERRAIN_UNWALKABLE_ABIL
-					if obj.actionMode == Amode.NONE
-						obj.actionMode = Amode.CHANGETERRAIN
-						obj.removeActionAbils()
-						obj.addTerrainAdjuster()
-						obj.tiletype = '0001'
-					else
-						obj.nottiletype = '0001'
+					obj.tiletype = '0001'
+				case TERRAIN_UW_O_ABIL
+					obj.nottiletype = '0001'
 				case TERRAIN_ICE_ABIL
-					if obj.actionMode == Amode.NONE
-						obj.actionMode = Amode.CHANGETERRAIN
-						obj.removeActionAbils()
-						obj.addTerrainAdjuster()
-						obj.tiletype = CONTROLLABLEICE
-					else
-						obj.nottiletype = CONTROLLABLEICE
+					obj.tiletype = CONTROLLABLEICE
+				case TERRAIN_I_O_ABIL
+					obj.nottiletype = CONTROLLABLEICE
 				case TERRAIN_UNICE_ABIL
-					if obj.actionMode == Amode.NONE
-						obj.actionMode = Amode.CHANGETERRAIN
-						obj.removeActionAbils()
-						obj.addTerrainAdjuster()
-						obj.tiletype = UNCONTROLLABLEICE
-					else
-						obj.nottiletype = UNCONTROLLABLEICE
+					obj.tiletype = UNCONTROLLABLEICE
+				case TERRAIN_UI_O_ABIL
+					obj.nottiletype = UNCONTROLLABLEICE
 				
 				case TRAIN_BK_ABIL
 					if obj.actionUnit == ActionUnit.NONE
@@ -526,15 +507,21 @@ package Executer
 	constant int ESCAPER_TRIGGER_ABIL = 'A009'
 	constant int BOTH_TRIGGER_ABIL = 'A014'
 	
+	constant int TERRAIN_CHANGE_ABIL = 'A036'
 	constant int TERRAIN_WALKABLE_ABIL = 'A015'
 	constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
 	constant int TERRAIN_ICE_ABIL = 'A019'
 	constant int TERRAIN_UNICE_ABIL = 'A01A'
+	constant int TERRAIN_W_O_ABIL = 'A03A'
+	constant int TERRAIN_UW_O_ABIL = 'A039'
+	constant int TERRAIN_I_O_ABIL = 'A038'
+	constant int TERRAIN_UI_O_ABIL = 'A037'
 	constant int TERRAIN_INCREASE_H_ABIL = 'A01K'
 	constant int TERRAIN_INCREASE_V_ABIL = 'A01M'
 	constant int TERRAIN_DECREASE_H_ABIL = 'A01U'
 	constant int TERRAIN_DECREASE_V_ABIL = 'A01T'
-	constant int TERRAIN_BOOK_ABIL = 'A06B'
+	constant int TERRAIN_BOOK_ABIL = 'A035'
+	constant int TERRAIN_ANTIBOOK_ABIL = 'A06B'
 	
 	constant int DOOR_OPEN_ABIL = 'A018'
 	constant int DOOR_CLOSE_ABIL = 'A01N'

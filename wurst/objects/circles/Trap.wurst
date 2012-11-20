@@ -10,6 +10,7 @@ import Texttag
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
+constant real EVENT_RADIUS = 64.
 string array SFX_STRINGS
 enum ABIL
 	KILL
@@ -31,7 +32,7 @@ public class Trap extends StaticBaseObject
 	real value // Shake, Knockback, Speed
 	
 	construct( vec2 pos, player owner )
-			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , 50., function onStep)
+			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
 			//traptimer = getTimer()
@@ -57,7 +58,7 @@ public class Trap extends StaticBaseObject
 		if onstep != true
 			if timerreal <= 0.0
 				DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
-				GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), 50., null)
+				GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), EVENT_RADIUS, null)
 				for unit u in ENUM_GROUP
 					Entity e = u.getUserData() castTo Entity
 					if e instanceof Escaper

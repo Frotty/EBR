@@ -10,10 +10,9 @@ public class BomberTarget extends UnitEntity
 		
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, BTARGET_ID, pos.x, pos.y, 0))
-		actor.registerCastEvent(Condition(function onCast))
 		
 	override function update()
 	   
-	static function onCast() returns boolean
-		return false
+	ondestroy
+		actor.remove()
 

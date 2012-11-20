@@ -4,13 +4,26 @@ import Attackspeed
 import EventHandling
 
 constant int BOMBER_ID = 'h00Y'
-
+constant int	ATTACK_ORDER = 851983
+constant int	ATTACK_GROUND_ORDER = 851984
+constant int	STOP_ORDER = 851972
+constant int	MOVE_ORDER = 851971
+trigger orderTrigger
 
 public class Bomber extends UnitEntity
+	unit setup
+	boolean realorder = true
 	
 	construct( vec2 pos, player owner )
-		super(pos.toVec3(), CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0))
-		actor.registerCastEvent(Condition(function onCast))
+		super(pos.toVec3(), CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0.))
+		setup = CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0.)
+		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
+		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
+		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
+		actor.addAbility(LOCUST_ID)
+		setup.addAbility('Agho')
+		setup.registerCastEvent(Condition(function onCast))
+		setup.setUserData(this castTo int)
 		
 	override function update()
 		
@@ -19,6 +32,40 @@ public class Bomber extends UnitEntity
 		var obj = GetTriggerUnit().getUserData() castTo Bomber
 		onAttackspeedCast(id, obj.actor)
 		return false
-	
+		
+	static function orderSetup()
+		var obj = GetExpiredTimer().getData() castTo Bomber
+		obj.realorder = false
+		IssueImmediateOrderById(obj.setup, STOP_ORDER)
+		
 	ondestroy 
+		setup.remove()
+		actor.remove()
 		actor.unregisterCastEvent()
+	
+function checkOrder()
+	var i = GetIssuedOrderId()
+	debugPrint("Bomber Order", 1)
+	debugPrint(i.toString(), 1)
+	var e = GetOrderedUnit().getUserData() castTo Entity
+	if e instanceof Bomber
+		var obj = e castTo Bomber
+		if GetOrderedUnit() == obj.setup
+			if i == MOVE_ORDER
+				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
+			if i == ATTACK_GROUND_ORDER
+				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
+				getTimer().start(0.1, function Bomber.orderSetup).setData(obj castTo int)
+			else if i == ATTACK_ORDER
+				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
+				getTimer().start(0.1, function Bomber.orderSetup).setData(obj castTo int)
+			else if i == STOP_ORDER 
+				if obj.realorder == true
+					IssueImmediateOrderById(obj.actor, STOP_ORDER)
+				else 
+					obj.realorder = true
+						
+	
+public function init_Bomber()
+	orderTrigger = CreateTrigger()
+	orderTrigger.addAction(function checkOrder)

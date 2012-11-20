@@ -58,6 +58,7 @@ package Texter
 					createTTEx(obj.pos, vec2(0,0.05), ttext, 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 		
 		static function setColor()
+			debugPrint("setting texter color", 1)
 			string chatmsg = GetEventPlayerChatString()
 			color textcolor = color(255,255,255)
 			if SubString(chatmsg, 0, 4) == "-sc "
@@ -114,19 +115,19 @@ package Texter
 		trigger coltrig = CreateTrigger()
 		trigger shotrig = CreateTrigger()
 		trigger hidtrig = CreateTrigger()
-		for int i = 8 to 8
+		for int i = 8 to 10
 			TriggerRegisterPlayerChatEvent(textrig,Player(i), "-st ", false)
 			TriggerRegisterPlayerChatEvent(textrig,Player(i), "-settext ", false)
-			TriggerAddAction(textrig, function Texter.setText)
 			TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-sc ", false)
 			TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-setcolor ", false)
-			TriggerAddAction(coltrig, function Texter.setColor)
 			TriggerRegisterPlayerChatEvent(shotrig,Player(i), "-showtext", true)
 			TriggerRegisterPlayerChatEvent(shotrig,Player(i), "-sht", true)
-			TriggerAddAction(shotrig, function Texter.show)
 			TriggerRegisterPlayerChatEvent(hidtrig,Player(i), "-ht", true)
 			TriggerRegisterPlayerChatEvent(hidtrig,Player(i), "-hidetext",true)
-			TriggerAddAction(hidtrig, function Texter.hide)
+		TriggerAddAction(hidtrig, function Texter.hide)
+		TriggerAddAction(shotrig, function Texter.show)
+		TriggerAddAction(coltrig, function Texter.setColor)
+		TriggerAddAction(textrig, function Texter.setText)
 		stdcolors[0] = "white"
 		stdcolors[1] = "red"
 		stdcolors[2] = "blue"

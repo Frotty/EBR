@@ -13,7 +13,7 @@ package GameInit
 	import Texter
 	import Bombertower
 	import EscaperSpells
-
+	import Bomber
 	import Startmazes
 	import EntityManagement
 	
@@ -57,6 +57,8 @@ package GameInit
 		debugPrint("Init - Txter", 2)
 		init_Bombertower()
 		debugPrint("Init - BTower", 2)
+		init_Bomber()
+		debugPrint("Init - Bomber", 2)
 		init_Reincarnation()
 		debugPrint("Init - Reinc", 2)
 		getTimer().start(0.01, function initPartTwo)

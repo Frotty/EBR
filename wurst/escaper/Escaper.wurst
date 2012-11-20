@@ -58,6 +58,7 @@ package Escaper
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 			TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
 			TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
+			TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 			currentRegion = regions[0]
 			escapers.add(this)
@@ -142,7 +143,7 @@ package Escaper
 			else if not add and poisoned
 				poisonEffect.destr()
 				poisoned = false
-				
+		
 		function kill()
 			debugPrint("died", 1)
 			if owner.getId() >= 8
@@ -196,6 +197,7 @@ package Escaper
 						RemoveUnit(he.revivetomb)
 						he.revivetomb = null
 			ReviveHero(e.actor, revX, revY, false)
+			e.setVel(vec3(0,0,0))
 			if e.owner.getId() < 8
 				if (GetLocalPlayer() == e.owner)
 					PanCameraToTimed(revX, revY, 0)
@@ -249,6 +251,11 @@ package Escaper
 				kdata.dropped()
 				dropTrig.enable()
 				
+		static function neutralDeath()
+			var escaper = GetTriggerUnit().getUserData() castTo Escaper
+			if GetKillingUnit() != null
+				escaper.kill()
+				
 		ondestroy
 			lavaEffect.destr()
 			poisonEffect.destr()
@@ -259,6 +266,7 @@ package Escaper
 			
 	trigger slideAssist
 	trigger pickupTrig
+	trigger neutralDeathTrig
 	public trigger dropTrig
 	
 	function correctRegion()
@@ -272,6 +280,8 @@ package Escaper
 		pickupTrig.addAction( function Escaper.pickupItem )
 		dropTrig = CreateTrigger()
 		dropTrig.addAction( function Escaper.dropItem )
+		neutralDeathTrig = CreateTrigger()
+		neutralDeathTrig.addAction(function Escaper.neutralDeath)
 		getTimer().start(1., function correctRegion)
 		
 endpackage 
