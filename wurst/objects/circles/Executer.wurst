@@ -397,16 +397,16 @@ package Executer
 				
 				case KILLER_TRIGGER_ABIL
 					obj.canKillerTrigger = true
-					obj.canEscaperTrigger = false
+					obj.canEscaperTrigger = true
 					UnitRemoveAbility(obj.actor, KILLER_TRIGGER_ABIL)
 					UnitAddAbility(obj.actor, BOTH_TRIGGER_ABIL)
 				case ESCAPER_TRIGGER_ABIL
-					obj.canKillerTrigger = false
-					obj.canEscaperTrigger = true
+					obj.canKillerTrigger = true
+					obj.canEscaperTrigger = false
 					UnitRemoveAbility(obj.actor, ESCAPER_TRIGGER_ABIL)
 					UnitAddAbility(obj.actor, KILLER_TRIGGER_ABIL)
 				case BOTH_TRIGGER_ABIL
-					obj.canKillerTrigger = true
+					obj.canKillerTrigger = false
 					obj.canEscaperTrigger = true
 					UnitRemoveAbility(obj.actor, BOTH_TRIGGER_ABIL)
 					UnitAddAbility(obj.actor, ESCAPER_TRIGGER_ABIL)

@@ -22,6 +22,7 @@ function castReincarnation()
 			if e2.sliding
 				var angle = e2.actor.getFacing()
 				var value = 10 + GetUnitAbilityLevel(e2.actor,SPEEDWAVE_ID)*5.
+				DestroyEffect( AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", e2.pos.x, e2.pos.y))
 				e2.addVel( vec3(value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.))
 
 

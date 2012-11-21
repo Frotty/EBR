@@ -14,23 +14,32 @@ package Unitcreator
 
 	public class UnitCreator extends StaticBaseObject
 		real interval = 5.
+		real timerreal = 5.
 		boolean ON = false
 		int spawnUnitType = 'h001'
-		timer spawn
 		
 		construct( vec2 pos, player owner)
 			super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
 			actor.registerCastEvent(Condition(function UnitCreator.onCast))
-			spawn = getTimer()
+		
+		override function update()
+			super.update()
+			if ON
+				if timerreal <= 0.0
+					create(this)
+					timerreal = interval
+				else
+					timerreal -= ANIMATION_PERIOD	
+				
+					
 			
-		static function create()
-			var obj = GetExpiredTimer().getData() castTo UnitCreator
+		static function create(UnitCreator obj)
 			var rX = obj.getRallyX()
 			var rY = obj.getRallyY()
 			var X = obj.actor.getX()
 			var Y = obj.actor.getY()
 			var angle = angleBetweenCoordsD(X,Y,rX,rY)
-			var data = getRegionData(rX,rY)
+			var data = getRegionData(X,Y)
 			debugPrint("creating...", 1)
 			EscaperKiller ek
 			switch obj.spawnUnitType
@@ -52,7 +61,6 @@ package Unitcreator
 				case 'u006'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_SRK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
-			obj.spawn.start(obj.interval, function create)
 			
 		static function onCast() returns boolean
 			var id = GetSpellAbilityId()
@@ -73,12 +81,15 @@ package Unitcreator
 						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
 						//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 				case START_ABIL
-					start_creator(obj)
+					obj.ON = true
+					obj.timerreal = obj.interval
+					UnitAddAbility(obj.actor,PAUSE_ABIL)
+					UnitRemoveAbility(obj.actor,START_ABIL)
 				case PAUSE_ABIL
 					debugPrint("pause", 1)
 					UnitRemoveAbility(obj.actor,PAUSE_ABIL)
 					UnitAddAbility(obj.actor,START_ABIL)
-					obj.spawn.release()
+					obj.ON = false
 				case 'A045' // Big killer
 					obj.spawnUnitType = 'BIGK'
 				case 'A046' // Small killer
@@ -96,14 +107,7 @@ package Unitcreator
 			return false
 			
 		ondestroy
-			spawn.release()
 			actor.unregisterCastEvent()
-	
-	public function start_creator(UnitCreator uc)
-		uc.spawn.startPeriodic(uc.interval, function UnitCreator.create)
-		uc.spawn.setData(uc castTo int)
-		UnitRemoveAbility(uc.actor,START_ABIL)
-		UnitAddAbility(uc.actor,PAUSE_ABIL)
 		
 	int INCREASE_INTERVAL_ABIL = 'A01P'
 	int DECREASE_INTERVAL_ABIL = 'A01R'

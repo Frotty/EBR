@@ -160,39 +160,39 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
         	
 			UnitCreator u = new UnitCreator(vec2(gg_unit_n006_0165.getX(),gg_unit_n006_0165.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1024,-6785 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0165.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0166.getX(),gg_unit_n006_0166.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1024,-6400 )
-			start_creator(u)
+			u.ON = true
 			u = new UnitCreator(vec2(gg_unit_n006_0175.getX(),gg_unit_n006_0175.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1666,-6982 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0175.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0168.getX(),gg_unit_n006_0168.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1728,-6147 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0168.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0167.getX(),gg_unit_n006_0167.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1410,-7100 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0167.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0169.getX(),gg_unit_n006_0169.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally",  -1159,-7037 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0169.remove()
 			
 			u = new UnitCreator(vec2(gg_unit_n006_0188.getX(),gg_unit_n006_0188.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -896,-3974 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0188.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0189.getX(),gg_unit_n006_0189.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1600,-3777 )
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0189.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0190.getX(),gg_unit_n006_0190.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1346,-4225)
-			start_creator(u)
+			u.ON = true
 			gg_unit_n006_0190.remove()
 			
 			IssueTargetOrder(gg_unit_h019_0159, "attack", gg_unit_u004_0161 )
@@ -285,8 +285,8 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
 			s.speed = 5
-			SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
-			IssuePointOrder( gg_unit_h01M_0259, "patrol", -3820, -4661 )
+			//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
+			IssuePointOrder( s.setup, "patrol", -3820, -4661 )
         
 			s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), Player(11))
 			gg_unit_h01M_0212.remove()
