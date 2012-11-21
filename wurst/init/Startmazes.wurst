@@ -130,6 +130,8 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			gg_unit_n00C_0141.remove()
 			EnumItemsInRect(gg_rct_Region_018, null, function correctKeys)
 		case 2
+			RegionData data = getRegionData(368, -6647)
+			data.isBROwner = true
 			GroupEnumUnitsOfType(g, "custom_h018", null )
 			for u2 in g
 				new EscaperKiller(u2, null, COLL_SIZE_BK) 
