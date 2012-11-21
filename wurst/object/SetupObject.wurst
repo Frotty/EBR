@@ -85,7 +85,6 @@ package SetupObject
 			var y = GetOrderPointY()
 			var u = GetOrderTargetUnit()
 			string orderS = OrderId2String(order)
-			print(orderS)
 			if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
 				if entity instanceof DynamicSetupObject
 					var obj = entity castTo DynamicSetupObject

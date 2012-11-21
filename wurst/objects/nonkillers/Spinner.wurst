@@ -38,7 +38,7 @@ public class Spinner extends DynamicSetupObject
 		real angle
 		real dist
 		for node in spinningEntities
-			debugPrint("spinning", 3)
+			debugPrint("spinning", 0)
 			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
 			node.angle += speed*DEGTORAD
 			

@@ -25,7 +25,6 @@ public class Trap extends StaticBaseObject
 	boolean onstep = true
 	real interval = 2.
 	real timerreal = 0.2
-	//timer traptimer
 	ABIL a
 	
 	real duration //Shake,  Speed, Stun
@@ -35,7 +34,7 @@ public class Trap extends StaticBaseObject
 			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
-			//traptimer = getTimer()
+
 			
 	static function onStep()
 		debugPrint("Trap step", 1)
