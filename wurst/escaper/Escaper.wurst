@@ -76,7 +76,7 @@ package Escaper
 				SetUnitPropWindow(actor, 60.)
 				vel *= 0.25
 				vel.z = 0.
-				pos.z = terrainZ
+			pos.z = terrainZ+.1
 				
 				
 			var ttype = GetTerrainType(pos.x, pos.y)
@@ -198,6 +198,8 @@ package Escaper
 						he.revivetomb = null
 			ReviveHero(e.actor, revX, revY, false)
 			e.setVel(vec3(0,0,0))
+			e.slideVelocity = vec3(0,0,0)
+			e.setNewPos(vec3(revX, revY, 530.))
 			if e.owner.getId() < 8
 				if (GetLocalPlayer() == e.owner)
 					PanCameraToTimed(revX, revY, 0)
