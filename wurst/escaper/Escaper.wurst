@@ -11,6 +11,7 @@ package Escaper
 	import Revivepoint
 	import LinkedList
 	import EscaperClasses
+	import PlayerData
 	
 	public Table escaperTable = new Table()
 	
@@ -152,6 +153,7 @@ package Escaper
 				debugPrint("started", 1)
 			else
 				getTimer().start(3., function Escaper.revive).setData(this castTo int)
+			owner.addDeath()
 			actor.kill()
 			alive = false
 			setPoison(false)

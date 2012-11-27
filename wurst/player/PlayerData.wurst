@@ -110,6 +110,11 @@ package PlayerData
 		playerboard.setNewItem(0,2,"Rank",null)
 		playerboard.board.display(true)
 		
+	public function player.addDeath()
+		var pd = pData[this.getId()]
+		pd.deaths ++
+		playerboard.board.getItem(pd.gameId+1, 1).setValue(pd.deaths.toString())
+		debugPrint("Adding death: "+(pd.gameId+1).toString()+" ; "+pd.deaths.toString(),1)
 		
 	function setTime()
 		seconds++
