@@ -52,7 +52,7 @@ public class Trap extends StaticBaseObject
 		return false
 	
 	override function update()
-		debugPrint(". . . "+timerreal.toString(), 3)
+		debugPrint(". . . "+timerreal.toString(), 1)
 		super.update()
 		if onstep != true
 			if timerreal <= 0.0
@@ -171,7 +171,7 @@ public class Trap extends StaticBaseObject
 				obj.addConfiger(false, true)
 			case POISON_ABIL
 				obj.a = ABIL.POISON
-				debugPrint("POISON",2)
+				debugPrint("POISON",1)
 				obj.addConfiger(false, false)
 					
 			case INCREASE_INTERVAL_ABIL

@@ -323,6 +323,8 @@ package Executer
 		
 		function registerRect(real centerX, real centerY, real offset)
 			//note: with movable circles, itll be necessary to move the rect too.
+			inRangeTrig.clearConditions()
+			TriggerClearActions(inRangeTrig)
 			DestroyTrigger(inRangeTrig)
 			
 			region eventRegion = CreateRegion()
