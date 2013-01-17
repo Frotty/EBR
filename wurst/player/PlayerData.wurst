@@ -61,9 +61,9 @@ package PlayerData
 				DisplayTextToForce( bj_FORCE_ALL_PLAYERS, name + " has loaded his Player Rank" )
 				
 		function setMBRow(int r)
-			playerboard.updateItem(r,0,mbname,icon)
-			playerboard.updateValue(r,1,deaths.toString())
-			playerboard.updateValue(r,2,rank)  
+			playerboard.setNewItem(r,0,mbname,icon)
+			playerboard.setNewItem(r,1,deaths.toString() , null)
+			playerboard.setNewItem(r,2,rank, null)  
 		
 		function setMbIcon(int typ)
 			playerboard.updateIcon(gameId+1, 0, mbPic[typ])
@@ -81,7 +81,7 @@ package PlayerData
 				destroy builder
 			playercount--
 			
-	public function isPlayerEscaper(player p) returns boolean //not sure if its proper
+	public function isPlayerEscaper(player p) returns boolean 
 		if GetPlayerId(p) < 8
 			return true
 		return false
