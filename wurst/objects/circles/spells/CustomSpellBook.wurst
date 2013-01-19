@@ -28,7 +28,7 @@ package CustomSpellBook
 				
 				actor.setUserData(this castTo int)
 			else
-				print("Your selected units aren't all of the same type.\nMulti-Config only works with a selection of units on the same type.")
+				debugPrint("Your selected units aren't all of the same type.\nMulti-Config only works with a selection of units on the same type.",3)
 		
 		function addSpell(int id)
 			if actor != null

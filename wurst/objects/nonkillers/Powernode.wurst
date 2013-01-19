@@ -64,7 +64,7 @@ public class Powernode extends DynamicSetupObject
 	
 	ondestroy
 		actor.unregisterCastEvent()
-		print("nodey " + links.size.toString())
+		debugPrint("nodey " + links.size.toString(),3)
 		while links.size > 0
 			Link l = links.get(0)
 			debugPrint("got link " + (l castTo int).toString(), 1)

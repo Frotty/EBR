@@ -298,7 +298,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			
 public function clearEBRRect(int r)
 	var rd = regions[r]
-	print("R = " + r.toString() + " region unwalkable: " + rd.unwalkableTile.toString())
+	debugPrint("R = " + r.toString() + " region unwalkable: " + rd.unwalkableTile.toString(),3)
 	g.clear()
 	GroupEnumUnitsInRect(g, rd.theRect, null)
 	for u in g

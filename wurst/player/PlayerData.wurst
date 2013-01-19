@@ -39,7 +39,7 @@ package PlayerData
 			if mbname == "Frotty" or mbname == "FrottyZ"
 				rank = "|cffADD642Creator"
 			for int i = 0 to cplayerCount
-				print(i.toString())
+				debugPrint(i.toString(),3)
 				if mbname == names[i]
 					mbname = tags[i] + "|r" + colorcode[ id ] + mbname
 					break
