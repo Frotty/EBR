@@ -93,16 +93,16 @@ public class Trap extends StaticBaseObject
 				real rY = getRallyY()
 				real aX = actor.getX()
 				real aY = actor.getY()
-				real angle
+				real angl
 				if getRallyUnit() == actor
 					rX = aX
 					rY = aY
 				debugPrint("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString(), 1)
 				if distanceBetweenCoords(rX, rY, aX, aY) < 20
-					angle = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
+					angl = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
-					angle = angleBetweenCoordsD(aX, aY,rX, rY)
-				e.addVel( vec3(value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.))
+					angl = angleBetweenCoordsD(aX, aY,rX, rY)
+				e.addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
 
 			default
 				skip
@@ -156,7 +156,7 @@ public class Trap extends StaticBaseObject
 				obj.duration = 1.
 				obj.addConfiger(true, false)
 			case SPEED_ABIL
-				createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+				createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), obj.owner  )
 				//obj.a = ABIL.SPEED
 				//obj.addConfiger(true, true)
 			case SHAKE_ABIL
@@ -176,61 +176,61 @@ public class Trap extends StaticBaseObject
 					
 			case INCREASE_INTERVAL_ABIL
 				if obj.interval >= 10
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), obj.owner  )
 				else
 					obj.interval += 0.25
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
 					obj.timerreal = obj.interval
 			case DECREASE_INTERVAL_ABIL
 				if obj.interval < 0.75
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), obj.owner  )
 				else
 					obj.interval -= 0.25
 					obj.timerreal = obj.interval
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
 			
 			case INCREASE_VALUE_ABIL
 				switch obj.a
 					case ABIL.KNOCK
 						if obj.value >= 50
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value += 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(obj.value,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SHAKE
 						if obj.value >= 1500
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value += 100
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(obj.value,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SPEED
 						if obj.value >= 250
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value += 10
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(obj.value,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip
 			case DECREASE_VALUE_ABIL
 				switch obj.a
 					case ABIL.KNOCK
 						if obj.value <= 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value -= 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Force "+ obj.value.toInt().toString(), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Force "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SHAKE
 						if obj.value <= 100
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value -= 100
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ obj.value.toInt().toString(), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SPEED
 						if obj.value <= 10
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value -= 10
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString(), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip
 			
@@ -238,44 +238,44 @@ public class Trap extends StaticBaseObject
 				switch obj.a
 					case ABIL.STUN
 						if obj.duration >= 4
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration += 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SHAKE
 						if obj.duration >= 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration += 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SPEED
 						if obj.duration >= 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration += 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip	
 			case DECREASE_DURATION_ABIL
 				switch obj.a
 					case ABIL.STUN
 						if obj.duration <= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration -= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SHAKE
 						if obj.duration <= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration -= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SPEED
 						if obj.duration <= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration -= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip
 			

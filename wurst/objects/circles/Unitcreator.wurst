@@ -38,28 +38,28 @@ package Unitcreator
 			var rY = obj.getRallyY()
 			var X = obj.actor.getX()
 			var Y = obj.actor.getY()
-			var angle = angleBetweenCoordsD(X,Y,rX,rY)
+			var angl = angleBetweenCoordsD(X,Y,rX,rY)
 			var data = getRegionData(X,Y)
 			debugPrint("creating...", 1)
 			EscaperKiller ek
 			switch obj.spawnUnitType
 				case 'BIGK'
-					ek = new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, X, Y, angle ), CreateUnit(obj.owner, data.bigKillerId, X, Y, angle ), COLL_SIZE_BK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, X, Y, angl ), CreateUnit(obj.owner, data.bigKillerId, X, Y, angl ), COLL_SIZE_BK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'SMAL'
-					ek = new EscaperKiller(CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), CreateUnit(obj.owner, data.smallKillerId, X, Y, angle ), COLL_SIZE_SK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, data.smallKillerId, X, Y, angl ), CreateUnit(obj.owner, data.smallKillerId, X, Y, angl ), COLL_SIZE_SK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'u00A'
-					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ) , CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_GLAIVE)
+					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ) , CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), COLL_SIZE_GLAIVE)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'h001'
-					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_TANK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), COLL_SIZE_TANK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'u008'
-					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_BRK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), COLL_SIZE_BRK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'u006'
-					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angle ), COLL_SIZE_SRK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl ), COLL_SIZE_SRK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 			
 		static function onCast() returns boolean

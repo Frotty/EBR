@@ -22,7 +22,7 @@ public class Tracks extends UnitEntity
 	int size = 0
 	int height = 0
 	int width  = 0
-	int angle = 0
+	int angl = 0
 	
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0) )
@@ -36,12 +36,12 @@ public class Tracks extends UnitEntity
 			if ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
-				escaper.trackVelocity += vec3(Cos((angle+90) * DEGTORAD) * speed, Sin((angle+90) * DEGTORAD) * speed, 0. )
+				escaper.trackVelocity += vec3(Cos((angl+90) * DEGTORAD) * speed, Sin((angl+90) * DEGTORAD) * speed, 0. )
 		
 				
 	function recreateDummy()
 		actor.remove()
-		actor = CreateUnit(owner, TRACKS[size], pos.x, pos.y, angle.toReal())
+		actor = CreateUnit(owner, TRACKS[size], pos.x, pos.y, angl.toReal())
 		
 	ondestroy
 		setup.remove()
@@ -55,15 +55,15 @@ public class Tracks extends UnitEntity
 			case INC_ID
 				if tracks.speed < 20.
 					tracks.speed++
-					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
+					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
 			case DEC_ID
 				if tracks.speed > 1.
 					tracks.speed--
-					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorRGBA(255,255,255,0), tracks.owner  )
+					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
 			case INCLENGTH_ID
 				if tracks.size < 2
 					tracks.size++
-					if tracks.angle == 0 or tracks.angle == 180
+					if tracks.angl == 0 or tracks.angl == 180
 						tracks.height++
 					else
 						tracks.width++
@@ -71,19 +71,19 @@ public class Tracks extends UnitEntity
 			case DECLENGTH_ID
 				if tracks.size > 0
 					tracks.size--
-					if tracks.angle == 0 or tracks.angle == 180
+					if tracks.angl == 0 or tracks.angl == 180
 						tracks.height--
 					else
 						tracks.width--
 					tracks.recreateDummy()
 			case LEFT_ID
-				tracks.angle += 90
+				tracks.angl += 90
 				var temp1 = tracks.height
 				tracks.height = tracks.width
 				tracks.width = temp1
 				tracks.recreateDummy()
 			case RIGHT_ID
-				tracks.angle -= 90
+				tracks.angl -= 90
 				var temp2 = tracks.height
 				tracks.height = tracks.width
 				tracks.width = temp2

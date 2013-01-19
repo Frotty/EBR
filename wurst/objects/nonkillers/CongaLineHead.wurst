@@ -61,15 +61,15 @@ public class CongaLineHead extends DynamicSetupObject
 			case INC_ID
 				if data.segLength < 500.
 					data.segLength += 25
-					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
 			case DEC_ID
 				if data.segLength > 25
 					data.segLength -= 25
-					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
 			
 				
 		return false
@@ -81,16 +81,16 @@ public class CongaLineHead extends DynamicSetupObject
 		destroy segments
 
 		
-function UnitEntity.setNewPosA( vec2 tpos, real angle)
+function UnitEntity.setNewPosA( vec2 tpos, real angl)
 	if this instanceof DynamicSetupObject
 		(this castTo DynamicSetupObject).setNewXY(tpos.toVec3())
-		(this castTo DynamicSetupObject).setAngle(angle)
+		(this castTo DynamicSetupObject).setAngle(angl)
 	else if this instanceof Spinner
 		(this castTo Spinner).setNewXY(tpos.toVec3())
-		(this castTo Spinner).actor.setFacing(angle)
+		(this castTo Spinner).actor.setFacing(angl)
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
-	let angle = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)
-	return vec2(pos1.x - Cos(angle) * segLength,
-				pos1.y - Sin(angle) * segLength)
+	let angl = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)
+	return vec2(pos1.x - Cos(angl) * segLength,
+				pos1.y - Sin(angl) * segLength)
 				

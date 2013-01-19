@@ -87,8 +87,8 @@ package Escaper
 				//vel = vec3(0.,0.,vel.z)
 			
 			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
-				let angle = actor.getFacing()
-				slideVelocity = vec3(Cos(angle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angle*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
+				let angl = actor.getFacing()
+				slideVelocity = vec3(Cos(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
 				sliding = true
 			else
 				slideVelocity *= 0.8

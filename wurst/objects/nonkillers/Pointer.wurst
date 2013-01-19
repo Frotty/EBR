@@ -13,7 +13,7 @@ constant int STOP_ID = 'A032'
 
 public class Pointer extends UnitEntity
 	real turnspeed = 2.
-	real angle = 0.
+	real angl = 0.
 	boolean turning
 	
 	unit setup
@@ -34,9 +34,9 @@ public class Pointer extends UnitEntity
 	override function update()
 		pos = vec3(setup.getX(), setup.getY(), 0.)
 		actor.setPos(pos.x, pos.y)
-		actor.setFacing(angle)
+		actor.setFacing(angl)
 		if turning
-			angle += turnspeed
+			angl += turnspeed
 			
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -45,15 +45,15 @@ public class Pointer extends UnitEntity
 			case INC_ID
 				if data.turnspeed < 6.
 					data.turnspeed += 0.5
-					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
 			case DEC_ID
 				if data.turnspeed > -6.
 					data.turnspeed -= 0.5
-					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), data.owner  )
+					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
 			case START_ID
 				data.turning = true
 				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
@@ -68,7 +68,7 @@ public class Pointer extends UnitEntity
 		var data = GetTriggeringTrigger().getSource().getUserData() castTo Pointer
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
-			es.actor.setFacing(data.angle)
+			es.actor.setFacing(data.angl)
 			
 	ondestroy
 		actor.unregisterCastEvent()

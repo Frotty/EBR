@@ -16,12 +16,12 @@ constant int DEC_ID          = 'A01G'
 
 class SpinNode
 	DynamicSetupObject obj
-	real angle
+	real angl
 	real dist
 	
-	construct(DynamicSetupObject ent, real angl, real dist)
+	construct(DynamicSetupObject ent, real ang, real dist)
 		obj = ent
-		angle = angl
+		angl = ang
 		this.dist = dist
 
 public class Spinner extends DynamicSetupObject
@@ -35,12 +35,12 @@ public class Spinner extends DynamicSetupObject
 		
 	override function update()
 		super.update()
-		real angle
+		real angl
 		real dist
 		for node in spinningEntities
 			debugPrint("spinning", 0)
-			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angle+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angle+speed*DEGTORAD), 0. ) )
-			node.angle += speed*DEGTORAD
+			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angl+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angl+speed*DEGTORAD), 0. ) )
+			node.angl += speed*DEGTORAD
 			
 	function checkObj(Entity e)
 		if e instanceof DynamicSetupObject
@@ -92,15 +92,15 @@ public class Spinner extends DynamicSetupObject
 			case INC_ID
 				if sdata.speed < 10.
 					sdata.speed += .5
-					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
-					createTTEx(sdata.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTEx(sdata.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
 			case DEC_ID
 				if sdata.speed > -10.
 					sdata.speed -= .5
-					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
-					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorRGBA(255,255,255,0), sdata.owner  )
+					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
 
 		return false
 	

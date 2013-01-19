@@ -4,7 +4,7 @@ package Door
 	import Escaper
 	import SetupObject
 	import GameConstants
-	import RGBA
+	import Colors
 	import BuilderConstants
 	import Key
 	import EventHandling

@@ -74,15 +74,15 @@ public class SetupBox extends UnitEntity
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()
-				var id = p.getId()
+				var id2 = p.getId()
 				if id > 7
 					AddSpecialEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getX(), u.getY()).destr()
-					if box.rdata.isOwner(id)
-						box.rdata.disallow(id)
-						DisplayTextToPlayer( box.owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id] + p.getName() + " to build in your region." )
+					if box.rdata.isOwner(id2)
+						box.rdata.disallow(id2)
+						DisplayTextToPlayer( box.owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id2] + p.getName() + " to build in your region." )
 					else
-						box.rdata.allow(id)
-						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id] + p.getName() + " to build in your region." )
+						box.rdata.allow(id2)
+						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id2] + p.getName() + " to build in your region." )
 			case CLEAR_ID
 				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
 				for u in ENUM_GROUP

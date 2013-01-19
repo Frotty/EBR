@@ -1,5 +1,5 @@
 package Executer
-	import RGBA
+	import Colors
 	import BaseObject
 	import Terrain
 	import Rect
@@ -341,7 +341,7 @@ package Executer
 			SetUnitVertexColor(actor, 44,44,44,255)
 			disabled = true
 			UnitAddAbility(actor, REACTIVATE_ABIL)
-			createTTEx(pos, vec2(0,0.05), "Deactivated", 10,  2., colorRGBA(50,50,50,0), owner )
+			createTTEx(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
 		
 		ondestroy
 			actor.unregisterCastEvent()

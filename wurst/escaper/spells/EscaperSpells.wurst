@@ -20,10 +20,10 @@ function castReincarnation()
 		if escaper instanceof Ice_Escaper
 			var e2 = escaper castTo Ice_Escaper
 			if e2.sliding
-				var angle = e2.actor.getFacing()
+				var angl = e2.actor.getFacing()
 				var value = 10 + GetUnitAbilityLevel(e2.actor,SPEEDWAVE_ID)*5.
 				DestroyEffect( AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", e2.pos.x, e2.pos.y))
-				e2.addVel( vec3(value * Cos(angle * DEGTORAD),value * Sin(angle * DEGTORAD),0.))
+				e2.addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
 
 
 public function init_Reincarnation()

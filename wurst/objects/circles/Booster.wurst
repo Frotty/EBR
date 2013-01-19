@@ -39,16 +39,16 @@ package Booster
 			switch id 
 				case INCREASE_SPEED_ABIL
 					if obj.boostspeed >= 520
-						createTTEx(obj.pos, vec2(0,0.05), "Max", 10,  2., colorRGBA(255,55,55,0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), "Max", 10,  2., colorA(255,55,55,0), obj.owner  )
 					else
 						obj.boostspeed += 10
-						createTTEx(obj.pos, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorRGBA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
 				case DECREASE_SPEED_ABIL
 					if obj.boostspeed < 30
-						createTTEx(obj.pos, vec2(0,0.05), "Min", 10,  2., colorRGBA(255,55,55,0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), "Min", 10,  2., colorA(255,55,55,0), obj.owner  )
 					else
 						obj.boostspeed -= 10
-						createTTEx(obj.pos, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorRGBA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
+						createTTEx(obj.pos, vec2(0,0.05), R2S(obj.boostspeed), 10,  2., colorA(255,255-((obj.boostspeed-10)/2).toInt(),255-(obj.boostspeed/4).toInt(),0), obj.owner  )
 			return false
 
 

@@ -47,14 +47,14 @@ public abstract class Entity
 		
 	function setTarget( vec3 tpos, real speed )
 		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
-		let angle = angleBetweenCoordsR(pos.x, pos.y, tpos.x, tpos.y)
+		let angl = angleBetweenCoordsR(pos.x, pos.y, tpos.x, tpos.y)
 		let e = getTerrainZ(tpos.x,tpos.y)
 		
 		if t < 1.
 			t = 1./speed
 		
 		let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
-		this.setVel( vec3( Cos(angle) * speed, Sin(angle) * speed, startZVelocity) )
+		this.setVel( vec3( Cos(angl) * speed, Sin(angl) * speed, startZVelocity) )
 		
 	function terminate()
 		done = true

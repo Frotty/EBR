@@ -35,14 +35,14 @@ package Texter
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setVisibility( true )
 				obj.hidden = false
-				createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+				createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
 		
 		static function hide()
 			for unit u in getSelectedTexters(GetTriggerPlayer())
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setVisibility( false )
 				obj.hidden = true
-				createTTEx(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+				createTTEx(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), obj.owner  )
 		
 		static function setText()
 			string chatmsg = GetEventPlayerChatString()
@@ -55,7 +55,7 @@ package Texter
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setText(ttext , 0.0276)
 				if obj.hidden
-					createTTEx(obj.pos, vec2(0,0.05), ttext, 10,  2., colorRGBA(255,255,255,0), obj.owner  )
+					createTTEx(obj.pos, vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
 		
 		static function setColor()
 			debugPrint("setting texter color", 1)

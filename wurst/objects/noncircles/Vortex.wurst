@@ -22,8 +22,8 @@ public class Vortex extends UnitEntity
 	override function update()
 		for e in escapers
 			if pos.toVec2().distToVecSquared( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
-				var angle = e.pos.toVec2().angleTo(pos.toVec2())
-				e.vortexVelocity += vec3( Cos(angle) * gravity, Sin(angle) * gravity, 0 )
+				var angl = e.pos.toVec2().angleTo(pos.toVec2())
+				e.vortexVelocity += vec3( Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0 )
 		
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -32,11 +32,11 @@ public class Vortex extends UnitEntity
 			case INC_ID
 				if vdata.gravity < 8.
 					vdata.gravity += .5
-					createTTEx(vdata.pos, vec2(0,0.5), "Gravity : " + vdata.gravity.toString(), 12,  2., colorRGBA(255,255,255,0), vdata.owner  )
+					createTTEx(vdata.pos, vec2(0,0.5), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 			case DEC_ID
 				if vdata.gravity > -8.
 					vdata.gravity -= .5
-					createTTEx(vdata.pos, vec2(0,0.05), "Gravity : " + vdata.gravity.toString(), 12,  2., colorRGBA(255,255,255,0), vdata.owner  )
+					createTTEx(vdata.pos, vec2(0,0.05), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 		return false
 
 

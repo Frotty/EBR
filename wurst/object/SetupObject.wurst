@@ -49,9 +49,9 @@ package SetupObject
 			setup.setPos(pos.x, pos.y)
 
 		
-		function setAngle(real angle)
-			actor.setFacing(angle)
-			setup.setFacing(angle)
+		function setAngle(real angl)
+			actor.setFacing(angl)
+			setup.setFacing(angl)
 			
 		override function setNewXY(vec3 pos)
 			this.pos = pos
