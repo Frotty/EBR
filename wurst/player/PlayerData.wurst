@@ -71,14 +71,15 @@ package PlayerData
 		ondestroy
 			DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., colorcode[p.getId()] + p.getName() + "|r |cffFFCC33has left the game!") 
 			PlaySoundBJ( gg_snd_QuestFailed )
-			destroy escaper
 			playerboard.removeRow(gameId+1)
+			escaper.terminate()
+			players.remove(this)
 			if gameId < playercount
 				for p2 in players
 					if p2.gameId > gameId
 						p2.gameId--
 			if id > 7
-				destroy builder
+				builder.terminate()
 			playercount--
 			
 	public function isPlayerEscaper(player p) returns boolean 
@@ -144,8 +145,6 @@ package PlayerData
 	function playerLeft()
 		var p = GetTriggerPlayer()
 		var pd = pData[p.getId()]
-		pd.escaper.terminate()
-		players.remove(pd)
 		destroy pd
 
 
