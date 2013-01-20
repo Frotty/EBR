@@ -120,19 +120,15 @@ function callback()
 				new Decoration(vec2(x,y), u.getOwner(),ord)	
 			case buildorders[32]
 				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[33]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
 			case buildorders[34]
 				new Decoration(vec2(x,y), u.getOwner(),ord)
 			case buildorders[35]
 				new Decoration(vec2(x,y), u.getOwner(),ord)
 			case buildorders[36]
 				new Decoration(vec2(x,y), u.getOwner(),ord)
-			case buildorders[37]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
-			case buildorders[38]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
-			case buildorders[39]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
-	
+				
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null
@@ -214,8 +210,4 @@ init
 	buildorders[34] = 'n00Z' // Torch
 	buildorders[35] = 'n00T' // Rune
 	buildorders[36] = 'n01A' // Suppalight
-	buildorders[37] = 'n00P' // Wall
-	buildorders[38] = 'n00Q' // HWall
-	buildorders[39] = 'n011' // VWall
-	
 

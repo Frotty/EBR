@@ -5,5 +5,5 @@ import SetupObject
 public class Decoration extends DynamicSetupObject
 	
 	construct( vec2 pos, player owner, int ID )
-		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0.), CreateUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 270.), CreateUnit(owner, ID, pos.x, pos.y, 270.), 0., CODE_NULL )
 		
