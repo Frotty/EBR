@@ -3,6 +3,7 @@ import LinkedListModule
 import Terrain
 import PhysicsConstants
 import Debug
+import MapBounds
 
 // Base Entity Class
 public abstract class Entity
@@ -73,6 +74,10 @@ abstract public class UnitEntity extends Entity
 		
 	override function update()
 		pos = vec3(actor.getX(), actor.getY(), 0.)
+		if not pos.toVec2().inBounds()
+			printError("UnitEntity out of Bounds")
+			pos = vec3(0,0,0)
+			setNewPos(pos)
 		
 	function setNewActor(unit u)
 		actor.remove()

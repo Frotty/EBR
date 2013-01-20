@@ -3,6 +3,7 @@ import Entity
 import Terrain
 import PhysicsConstants
 import Debug
+import MapBounds
 
 // Base Entity Class
 public abstract class PhysicsEntity extends Entity
@@ -37,6 +38,10 @@ public abstract class PhysicsEntity extends Entity
 			inAir()
 			
 		pos += (vel * speedFactor)
+		if not pos.toVec2().inBounds()
+			printError("PhysicsEntity out of Bounds")
+			pos = vec3(0,0,0)
+
 		
 	// When the Entity is on or near the ground	
 	function onGround()
