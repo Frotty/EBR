@@ -209,9 +209,9 @@ init
 	buildorders[30] = 'h009' // TerrainBlocker
 	//Decoration
 	buildorders[31] = 'n00K' // Volcano
-	buildorders[32] = 'n00M' // Lantern
+	buildorders[32] = 'n00V' // Lantern
 	buildorders[33] = 'n00U' // Mushroom
-	buildorders[34] = 'n00V' // Torch
+	buildorders[34] = 'n00Z' // Torch
 	buildorders[35] = 'n00T' // Rune
 	buildorders[36] = 'n01A' // Suppalight
 	buildorders[37] = 'n00P' // Wall
