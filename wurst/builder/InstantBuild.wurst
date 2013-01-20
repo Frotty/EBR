@@ -23,7 +23,7 @@ import UnitRemover
 import CongaLineHead
 import TerrainBlocker
 import Fountain
-
+import Decoration
 		
 
 real x
@@ -116,6 +116,23 @@ function callback()
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blocker so I put a "
 						+"TC-Blocker in your TC-Blocker so you can block while block.|nIn other words: Why would you block a tile twice?") 
+			case buildorders[31]
+				new Decoration(vec2(x,y), u.getOwner(),ord)	
+			case buildorders[32]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[34]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[35]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[36]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[37]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[38]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+			case buildorders[39]
+				new Decoration(vec2(x,y), u.getOwner(),ord)
+	
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null
@@ -190,5 +207,15 @@ init
 	buildorders[28] = 'n011' // Vertical Wall
 	buildorders[29] = 'h000' // Conga Line
 	buildorders[30] = 'h009' // TerrainBlocker
+	//Decoration
+	buildorders[31] = 'n00K' // Volcano
+	buildorders[32] = 'n00V' // Lantern
+	buildorders[33] = 'n00U' // Mushroom
+	buildorders[34] = 'n00Z' // Torch
+	buildorders[35] = 'n00T' // Rune
+	buildorders[36] = 'n01A' // Suppalight
+	buildorders[37] = 'n00P' // Wall
+	buildorders[38] = 'n00Q' // HWall
+	buildorders[39] = 'n011' // VWall
 	
 
