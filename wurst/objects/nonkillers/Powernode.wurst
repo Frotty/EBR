@@ -9,7 +9,7 @@ constant int LINK_ID = 'A051'
 constant string EFFECT_STRING = "DRAM"
 constant string KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant int NODE_ID = 'h0nn'
-constant real ACTIVATION_DIST = 25.
+constant real ACTIVATION_DIST = 22.
 
 class Link
 	Powernode linkedNode
@@ -49,7 +49,7 @@ public class Powernode extends DynamicSetupObject
 				if not l.linkedNode.done 
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
 					for Escaper e in escapers
-						if e.alive and e.pos.toVec2().distToSegmentSquared(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST
+						if e.alive and e.pos.toVec2().distToSegmentSquared(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
 							e.kill()
 							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ) 
 				else

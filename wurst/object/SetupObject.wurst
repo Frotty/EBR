@@ -12,6 +12,7 @@ package SetupObject
 	*/
 	
 	trigger orderTrigger
+	timer fixPos = CreateTimer()
 	
 	public abstract class DynamicSetupObject extends UnitEntity
 		real radius	
@@ -145,11 +146,22 @@ package SetupObject
 			actor.remove()
 			setup.remove()
 			inRangeTrig.destr()
+			
+	function fixPositions()
+		Entity e = Entity.first
+		while e != null
+			if e instanceof DynamicSetupObject 
+				let ds = e castTo DynamicSetupObject
+				ds.actor.setXY(ds.pos.toVec2())
+
+			e = e.next
+		debugPrint(">>>>>pos fixed", 3)
 
 
 
 	init
 		orderTrigger = CreateTrigger()
 		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
+		fixPos.startPeriodic(15., function fixPositions)
 
 endpackage
