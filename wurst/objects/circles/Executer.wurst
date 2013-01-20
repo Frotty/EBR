@@ -17,7 +17,7 @@ package Executer
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
 	constant int 	LEVER_DUMMY_ID = 'DTlv'
-	constant int 	PLATE_DUMMY_ID = 'DTfx'
+	constant int 	PLATE_DUMMY_ID = 'B001'
 	
 	
 	constant real 	EVENT_RADIUS	= 32.
@@ -53,6 +53,7 @@ package Executer
 		boolean canKillerTrigger = false
 		boolean canEscaperTrigger = true
 		rect eventRect // only for pressureplate
+		region eventRegion
 		Emode eventMode
 		Amode actionMode
 		boolean ON = false// only for lever and pressureplate
@@ -338,11 +339,12 @@ package Executer
 		
 		function registerRect(real centerX, real centerY, real offset)
 			//note: with movable circles, itll be necessary to move the rect too.
+			debugPrint("rect registered", 3)
 			inRangeTrig.clearConditions()
 			TriggerClearActions(inRangeTrig)
 			DestroyTrigger(inRangeTrig)
 			
-			region eventRegion = CreateRegion()
+			eventRegion = CreateRegion()
 			eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
 			RegionAddRect(eventRegion,eventRect)
 			eventRegion.setRegionData(this castTo int)
@@ -363,6 +365,9 @@ package Executer
 			actor.remove()
 			if eventRect != null
 				RemoveRect(eventRect)
+			if eventRegion != null
+				eventRegion.removeRegionData()
+				eventRegion.destr()
 			if dummy != null
 				RemoveDestructable(dummy)
 		
