@@ -23,6 +23,9 @@ class SpinNode
 		obj = ent
 		angl = ang
 		this.dist = dist
+	
+	ondestroy
+		obj.setup.addAbility(REMOVE_ID)
 
 public class Spinner extends DynamicSetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
