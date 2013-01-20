@@ -47,8 +47,8 @@ package Door
 				item i = UnitItemInSlot(u, 0)
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) and door.opened == false //WARNING BJ function//
 					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
-					destroy kdata
 					if not door.opened
+						kdata.terminate()
 						door.openDoor()
 					
 		function changeColor( int id )
