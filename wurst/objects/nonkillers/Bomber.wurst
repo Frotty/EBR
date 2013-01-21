@@ -31,6 +31,14 @@ public class Bomber extends UnitEntity
 		var id = GetSpellAbilityId()
 		var obj = GetTriggerUnit().getUserData() castTo Bomber
 		onAttackspeedCast(id, obj.actor)
+		if id == 'A03B'
+			if GetUnitAcquireRange(obj.actor) <= 200.
+				SetUnitAcquireRange(obj.actor,2000.)
+				debugPrint("toggle bomber attack :on "+ GetUnitAcquireRange(obj.actor).toString(), 3)
+			else
+				SetUnitAcquireRange(obj.actor,10.)
+				debugPrint("toggle bomber attack :off "+ GetUnitAcquireRange(obj.actor).toString(), 3)
+				
 		return false
 		
 	static function orderSetup()
