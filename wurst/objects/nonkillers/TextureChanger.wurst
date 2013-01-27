@@ -22,15 +22,15 @@ constant int TERRAIN_INC_V_ID = 'A01M'
 constant int TERRAIN_DEC_H_ID = 'A01U'
 constant int TERRAIN_DEC_V_ID = 'A01T'
 
-public class TextureChanger extends UnitEntity
+public class TextureChanger extends DynamicSetupObject
 	int sizeX = 1
 	int sizeY = 1
 	int innerTile = '0000'
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0))
-		actor.registerCastEvent(Condition(function TextureChanger.onCast))
+		super(pos.toVec3(), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), 0, null)
+		setup.registerCastEvent(Condition(function TextureChanger.onCast))
 		
 		
 	override function update()
@@ -58,8 +58,8 @@ public class TextureChanger extends UnitEntity
 							SetTerrainType(x, y, tileID, 0, 1, 1 )
 							
 	ondestroy
-		actor.unregisterCastEvent()
-		actor.remove()
+		setup.unregisterCastEvent()
+
 	
 	static function onCast() returns boolean
 			var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger

@@ -45,8 +45,9 @@ package Revivepoint
 				currentRevivepoint = obj
 				var rdata = getRegionData(obj.pos.x, obj.pos.y)
 				for Escaper es in escapers
-					es.setNewPos(obj.pos)
-					es.currentRegion = rdata
+					if es.owner.getId() < 8
+						es.setNewPos(obj.pos)
+						es.currentRegion = rdata
 
 
 		static function filter() returns boolean
