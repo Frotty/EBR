@@ -3,16 +3,13 @@ import Entity
 import Terrain
 import EventHandling
 import Escaper
-constant int BTARGET_ID = 'u004'
+import SetupObject
+
+constant int ID = 'u004'
 
 
-public class BomberTarget extends UnitEntity
+public class BomberTarget extends DynamicSetupObject
 		
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, BTARGET_ID, pos.x, pos.y, 0))
-		
-	override function update()
-	   
-	ondestroy
-		actor.remove()
+		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0.), CreateUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 

@@ -13,3 +13,32 @@ public class Ice_Escaper extends Escaper
 	
 	construct(vec3 pos, player owner, int typ )
 		super(pos, owner, typ)
+		
+	
+public class Strong_Escaper extends Escaper
+	boolean invulnerable = false
+	effect shieldeffect
+	real shieldX
+	real shieldY
+	timer shieldtimer
+	
+	construct(vec3 pos, player owner, int typ )
+		super(pos, owner, typ)
+		
+	static function strongUpdate(Escaper e)
+		var se =e castTo Strong_Escaper
+		if se.invulnerable
+			if se.shieldX != se.pos.x
+				se.shieldtimer.setData(se castTo int)
+				se.shieldtimer.start(0,function Strong_Escaper.endShield)
+			else if se.shieldY != se.pos.y
+				se.shieldtimer.setData(se castTo int)
+				se.shieldtimer.start(0,function Strong_Escaper.endShield)
+				
+	static function endShield()
+		var e = GetExpiredTimer().getData() castTo Strong_Escaper
+		e.invulnerable =false
+		DestroyEffect(e.shieldeffect)
+		e.shieldtimer.release()
+		e.shieldX = 0.
+		e.shieldY = 0.

@@ -6,6 +6,7 @@ import SetupObject
 import TempGroups
 import Texttag
 import Remove
+import BomberTarget
 
 
 constant int SPINNER_ID      = 'h01M'

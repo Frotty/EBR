@@ -146,19 +146,26 @@ package Escaper
 				poisoned = false
 		
 		function kill()
-			debugPrint("died", 1)
-			if owner.getId() >= 8
-				debugPrint("is builder", 1)
-				getTimer().setData(this castTo int).start(.1, function Escaper.revive)
-				debugPrint("started", 1)
-			else
-				getTimer().start(3., function Escaper.revive).setData(this castTo int)
-			owner.addDeath()
-			actor.kill()
-			alive = false
-			setPoison(false)
-			setLava(false)
-			flying = false
+			var isinvurnerable = false
+			if this instanceof Strong_Escaper
+				var e = this castTo Strong_Escaper
+				if e.invulnerable == true
+					debugPrint("invulnerable",1)
+					isinvurnerable = true
+			if not isinvurnerable
+				debugPrint("died", 1)
+				if owner.getId() >= 8
+					debugPrint("is builder", 1)
+					getTimer().setData(this castTo int).start(.1, function Escaper.revive)
+					debugPrint("started", 1)
+				else
+					getTimer().start(3., function Escaper.revive).setData(this castTo int)
+				owner.addDeath()
+				actor.kill()
+				alive = false
+				setPoison(false)
+				setLava(false)
+				flying = false
 		
 		override function update()
 			terrainZ = getTerrainZ( pos.x, pos.y )
@@ -183,6 +190,9 @@ package Escaper
 			else
 				actor.setXY(pos.x, pos.y)
 			SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
+			
+			if this instanceof Strong_Escaper
+				Strong_Escaper.strongUpdate(this)
             
 		static function revive()
 			debugPrint("rev", 1)
@@ -211,6 +221,12 @@ package Escaper
 			e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 			e.alive = true
 			t.release()
+			if e instanceof Strong_Escaper
+				var se = e castTo Strong_Escaper
+				if se.invulnerable == true
+					DestroyEffect(se.shieldeffect)
+					se.shieldtimer.release()
+					se.invulnerable = false
             
 		static function changeAngle()
 			var u = GetTriggerUnit()
