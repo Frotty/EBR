@@ -21,6 +21,7 @@ public class Bomber extends UnitEntity
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
 		actor.addAbility(LOCUST_ID)
+		UnitAddType(setup, UNIT_TYPE_PEON)
 		setup.addAbility('Agho')
 		setup.registerCastEvent(Condition(function onCast))
 		setup.setUserData(this castTo int)
@@ -32,13 +33,17 @@ public class Bomber extends UnitEntity
 		var obj = GetTriggerUnit().getUserData() castTo Bomber
 		onAttackspeedCast(id, obj.actor)
 		if id == 'A03B'
-			if GetUnitAcquireRange(obj.actor) <= 200.
+			if IsUnitType(obj.setup, UNIT_TYPE_PEON)
+				UnitRemoveType(obj.actor, UNIT_TYPE_PEON)
+			else
+				UnitAddType(obj.actor, UNIT_TYPE_PEON)
+		/*	if GetUnitAcquireRange(obj.actor) <= 200.
 				SetUnitAcquireRange(obj.actor,2000.)
 				debugPrint("toggle bomber attack :on "+ GetUnitAcquireRange(obj.actor).toString(), 3)
 			else
 				SetUnitAcquireRange(obj.actor,10.)
 				debugPrint("toggle bomber attack :off "+ GetUnitAcquireRange(obj.actor).toString(), 3)
-				
+		*/		
 		return false
 		
 	static function orderSetup()

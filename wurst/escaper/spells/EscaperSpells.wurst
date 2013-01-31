@@ -28,6 +28,7 @@ function castReincarnation()
 	if id == STAGNANCYSHIELD_ID
 		if escaper instanceof Strong_Escaper
 			var e3 = escaper castTo Strong_Escaper
+			e3.actor.addAbility('Avul')
 			e3.invulnerable = true
 			e3.shieldX = e3.pos.x
 			e3.shieldY = e3.pos.y

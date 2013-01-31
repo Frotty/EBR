@@ -37,6 +37,7 @@ public class Strong_Escaper extends Escaper
 				
 	static function endShield()
 		var e = GetExpiredTimer().getData() castTo Strong_Escaper
+		e.actor.removeAbility('Avul')
 		e.invulnerable =false
 		DestroyEffect(e.shieldeffect)
 		e.shieldtimer.release()

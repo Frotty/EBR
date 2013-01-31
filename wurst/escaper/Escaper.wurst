@@ -226,6 +226,7 @@ package Escaper
 				if se.invulnerable == true
 					DestroyEffect(se.shieldeffect)
 					se.shieldtimer.release()
+					se.actor.removeAbility('Avul')
 					se.invulnerable = false
             
 		static function changeAngle()
