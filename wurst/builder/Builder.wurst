@@ -75,7 +75,22 @@ public class Builder extends UnitEntity
 						new Key(vec2(ox,oy), builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-					
+				case BOOTS_SPELL_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId())
+						CreateItem(BOOTS_ID, ox,oy)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+				/*case TOME_SPELL_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId())
+						CreateItem(TOME_ID, ox,oy)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+				case ANKH_SPELL_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId())
+						CreateItem(ANKH_ID, ox,oy)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+				*/
 					
 			if wasMenu
 				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
