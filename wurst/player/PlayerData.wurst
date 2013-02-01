@@ -4,6 +4,7 @@ package PlayerData
 	import Escaper
 	import Builder
 	import LinkedList
+	import RegionData
 	
 	public int playercount = 0
 	
@@ -81,9 +82,12 @@ package PlayerData
 						p2.gameId--
 			if id > 7 and builder != null
 				builder.terminate()
-				for int i=8 to 11
-					if Player(i) != this.p
-						SetPlayerAlliance(Player(i), this.p, ALLIANCE_SHARED_ADVANCED_CONTROL, true)
+				for int i=0 to 20
+					if regions[i].isOwner(this.id)
+						regions[i].isGreyOwner = true
+						regions[i].isLBOwner = true
+						regions[i].isDGOwner = true
+						
 			playercount--
 			
 	public function isPlayerEscaper(player p) returns boolean 
