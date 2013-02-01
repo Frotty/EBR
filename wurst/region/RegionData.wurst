@@ -123,7 +123,7 @@ function rect.changeTerrain( integer ttype )
         
 
 public function getRegionData(real x, real y) returns RegionData
-	for i = 0 to 21
+	for i = 0 to 20
 		if RectContainsCoords(regions[i].theRect, x, y)
 			return regions[i]
 			

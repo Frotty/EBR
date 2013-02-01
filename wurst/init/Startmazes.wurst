@@ -71,22 +71,27 @@ public function initBaseObjects()
 public function initMazeUnits(int maze, int rnd) //from 0 to 4
 	Teleporter t
 	group g = CreateGroup()
+	debugPrint("maze-0 " + maze.toString() +  rnd.toString(), 4)
 	switch maze
 		case 0
+			debugPrint("maze-0.1", 4)
 			GroupEnumUnitsOfType(g, "custom_h015", null )
+			debugPrint("maze-0.11", 4)
 			for u in g
+				debugPrint("maze-0.12", 4)
 				new EscaperKiller(u, null, COLL_SIZE_BK)
-				
+			debugPrint("maze-0.2", 4)
 			g.clear()
 			GroupEnumUnitsOfType(g, "custom_u008", null )
 			for u6 in g
 				new EscaperKiller(u6, null, COLL_SIZE_BRK)
-				
+			debugPrint("maze-0.3", 4)
 			g.clear()
-			
+			debugPrint("maze-1", 4)
 			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
 			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
+			debugPrint("maze-2", 4)
 			t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
 			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
 			gg_unit_n00C_0057.remove()
@@ -102,6 +107,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
 			gg_unit_n00C_0061.remove()
 			EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
+			debugPrint("maze-3", 4)
 		case 1
 	
 			GroupEnumUnitsOfType(g, "custom_h01H", null )
@@ -295,6 +301,8 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.checkObj( gg_unit_h01I_0220.getUserData() castTo Entity )
 			s.speed = 7
 			EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
+		default
+			debugPrint("noooo", 2)
 			
 public function clearEBRRect(int r)
 	var rd = regions[r]

@@ -72,13 +72,14 @@ package PlayerData
 			DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., colorcode[p.getId()] + p.getName() + "|r |cffFFCC33has left the game!") 
 			PlaySoundBJ( gg_snd_QuestFailed )
 			playerboard.removeRow(gameId+1)
-			escaper.terminate()
+			if escaper != null
+				escaper.terminate()
 			players.remove(this)
 			if gameId < playercount
 				for p2 in players
 					if p2.gameId > gameId
 						p2.gameId--
-			if id > 7
+			if id > 7 and builder != null
 				builder.terminate()
 			playercount--
 			

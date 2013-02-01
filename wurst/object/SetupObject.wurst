@@ -23,25 +23,28 @@ package SetupObject
 						
 		construct( vec3 pos, unit u, unit setup, real radius, code c )
 			super( pos, u )
+			debugPrint("ue-1",4)
 			this.radius = radius
 			actor.addAbility('Aloc').removeAbility('Aloc')
 			SetUnitPathing(actor, true)
-			
+			debugPrint("ue-2",4)
 			this.setup = setup
+			debugPrint("ue-2.1",4)
 			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
+			debugPrint("ue-2.2",4)
 			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
+			debugPrint("ue-2.3",4)
 			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
-
-		   
+			debugPrint("ue-3",4)
 			setup.setX( actor.getX() )
 			setup.setY( actor.getY() )
 			setup.addAbility('Agho')
-			
+			debugPrint("ue-4",4)
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.registerUnitInRangeSource( actor, radius )
 				inRangeTrig.addAction( c )
-				
+			debugPrint("ue-5",4)
 			setup.setUserData( this castTo int )
 			
 		override function setNewPos(vec3 pos)
@@ -159,9 +162,8 @@ package SetupObject
 //
 //
 //
-//	init
-//		orderTrigger = CreateTrigger()
-//		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
-//		fixPos.startPeriodic(15., function fixPositions)
+	init
+		orderTrigger = CreateTrigger()
+		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
 
 endpackage

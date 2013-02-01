@@ -6,8 +6,9 @@ import RegionData
 import TerrainBlocker
 import BuilderConstants
 import Texttag
+import LastOrder
 
-constant int TEXTURECHANGER_ID	= 'h01K'
+constant int TEXTURECHANGER_ID	= 'n01E'
 
 constant int TERRAIN_O_WALKABLE_ID = 'A02G'
 constant int TERRAIN_O_UNWALKABLE_ID = 'A02C'
@@ -102,6 +103,8 @@ public class TextureChanger extends DynamicSetupObject
 					obj.outerTile = CONTROLLABLEICE
 				case TERRAIN_O_UNICE_ID
 					obj.outerTile = UNCONTROLLABLEICE
+					
+			obj.setup.issuePastOrder(2)
 			return false
 
 

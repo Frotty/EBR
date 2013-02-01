@@ -17,6 +17,7 @@ public class Vortex extends UnitEntity
 	
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0) )
+		actor.registerCastEvent(Condition(function Vortex.onCast))
 	
 		
 	override function update()
@@ -32,11 +33,11 @@ public class Vortex extends UnitEntity
 			case INC_ID
 				if vdata.gravity < 8.
 					vdata.gravity += .5
-					createTTEx(vdata.pos, vec2(0,0.5), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
+					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 			case DEC_ID
 				if vdata.gravity > -8.
 					vdata.gravity -= .5
-					createTTEx(vdata.pos, vec2(0,0.05), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
+					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 		return false
 
 
