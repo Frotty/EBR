@@ -81,6 +81,9 @@ package PlayerData
 						p2.gameId--
 			if id > 7 and builder != null
 				builder.terminate()
+				for int i=8 to 11
+					if Player(i) != this.p
+						SetPlayerAlliance(Player(i), this.p, ALLIANCE_SHARED_ADVANCED_CONTROL, true)
 			playercount--
 			
 	public function isPlayerEscaper(player p) returns boolean 

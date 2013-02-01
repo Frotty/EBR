@@ -16,6 +16,7 @@ package GameInit
 	import Bomber
 	import Startmazes
 	import EntityManagement
+	import Pointer
 	
 	int rand = 0
 	
@@ -61,6 +62,8 @@ package GameInit
 		debugPrint("Init - Bomber", 2)
 		init_Reincarnation()
 		debugPrint("Init - Reinc", 2)
+		init_Pointer()
+		debugPrint("Init - Pointer", 2)
 		getTimer().start(0.01, function initPartTwo)
 		
 	function initPartTwo()

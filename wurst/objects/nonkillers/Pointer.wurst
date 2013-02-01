@@ -3,6 +3,7 @@ import Entity
 import Escaper
 import EventHandling
 import Texttag
+import TempGroups
 
 constant int POINTER_ID = 'h01Q'
 
@@ -69,9 +70,39 @@ public class Pointer extends UnitEntity
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
 			es.actor.setFacing(data.angl)
-			
+	
+	static function setfacing()
+		debugPrint("SETTING FACING",4)
+		string chatmsg = GetEventPlayerChatString()
+		real facing = 0
+		if SubString(chatmsg, 0, 4) == "-sa "
+			facing = S2R(SubString(chatmsg, 4, StringLength(chatmsg)))
+		else if SubString(chatmsg, 0, 10) == "-setangle "
+			facing = S2R(SubString(chatmsg, 10, StringLength(chatmsg)))
+		for unit u in getSelectedPointers(GetTriggerPlayer())
+			Pointer obj = u.getUserData() castTo Pointer
+			obj.angl = facing
+			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
+		
+				
 	ondestroy
 		actor.unregisterCastEvent()
 		actor.remove()
 		setup.remove()
 		trig.destr()
+		
+function getSelectedPointers(player p) returns group
+	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(POINTER_ID), null)
+	group g = CreateGroup()
+	for unit u in ENUM_GROUP
+		if IsUnitSelected( u, p) and GetOwningPlayer(u) == p
+			GroupAddUnit(g, u)
+	ENUM_GROUP.clear()
+	return g	
+	
+public function init_Pointer()
+	trigger t = CreateTrigger()
+	for int i = 8 to 10
+		TriggerRegisterPlayerChatEvent(t,Player(i), "-setangle ", false)
+		TriggerRegisterPlayerChatEvent(t,Player(i), "-sa ", false)
+	TriggerAddAction(t, function Pointer.setfacing)

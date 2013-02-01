@@ -2,6 +2,7 @@ package Bomber
 import SetupObject
 import Attackspeed
 import EventHandling
+import Texttag
 
 constant int BOMBER_ID = 'h00Y'
 constant int	ATTACK_ORDER = 851983
@@ -33,10 +34,12 @@ public class Bomber extends UnitEntity
 		var obj = GetTriggerUnit().getUserData() castTo Bomber
 		onAttackspeedCast(id, obj.actor)
 		if id == 'A03B'
-			if IsUnitType(obj.setup, UNIT_TYPE_PEON)
+			if IsUnitType(obj.actor, UNIT_TYPE_PEON)
 				UnitRemoveType(obj.actor, UNIT_TYPE_PEON)
+				createTTEx(obj.pos, vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), obj.owner  )
 			else
 				UnitAddType(obj.actor, UNIT_TYPE_PEON)
+				createTTEx(obj.pos, vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), obj.owner  )
 		/*	if GetUnitAcquireRange(obj.actor) <= 200.
 				SetUnitAcquireRange(obj.actor,2000.)
 				debugPrint("toggle bomber attack :on "+ GetUnitAcquireRange(obj.actor).toString(), 3)
