@@ -92,14 +92,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
 			debugPrint("maze-2", 6)
-			t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
-			gg_unit_n00C_0057.remove()
-			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
-			gg_unit_n00C_0058.remove()
 			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
 			debugPrint("maze-2.1 " + rnd.toString(), 6)
 			if rnd == 1
 				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
@@ -109,6 +102,13 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			else if rnd == 3
 				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
 			gg_unit_n00C_0061.remove()
+			t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
+			gg_unit_n00C_0057.remove()
+			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
+			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
+			gg_unit_n00C_0058.remove()
+			
 			EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 			debugPrint("maze-3", 7)
 		case 1
