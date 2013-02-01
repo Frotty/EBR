@@ -323,3 +323,4 @@ public function init_Trap()
 	SFX_STRINGS[5] = "Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl"
 	SFX_STRINGS[6] = "Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl"
 	SFX_STRINGS[7] = "Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl"
+	SFX_STRINGS[8] = "Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl"

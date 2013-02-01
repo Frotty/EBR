@@ -7,7 +7,7 @@ import TempGroups
 import Texttag
 import Remove
 import BomberTarget
-
+import LastOrder
 
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
@@ -105,7 +105,7 @@ public class Spinner extends DynamicSetupObject
 					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
 					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
-
+		sdata.setup.issuePastOrder(2)
 		return false
 	
 		

@@ -80,10 +80,10 @@ package Waypoint
 				case WISP_ID
 					if data.wisps
 						data.wisps = false
-						createTTEx(data.pos, vec2(0,0.05), "Wisps inactive", 10,  2., colorA(255,255,255,0), data.owner  )
+						createTTEx(data.pos, vec2(0,0.05), "Wisps |cffAD0821inactive", 10,  2., colorA(255,255,255,0), data.owner  )
 					else
 						data.wisps = true
-						createTTEx(data.pos, vec2(0,0.05), "Wisps active", 10,  2., colorA(255,255,255,0), data.owner  )
+						createTTEx(data.pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., colorA(255,255,255,0), data.owner  )
 			return false
 
 endpackage

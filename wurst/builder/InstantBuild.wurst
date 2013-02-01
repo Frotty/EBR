@@ -114,8 +114,8 @@ function callback()
 				if not blockermatrix.loadBoolean(x2, y2)
 					new TerrainBlocker(vec2(x,y), u.getOwner())
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blocker so I put a "
-						+"TC-Blocker in your TC-Blocker so you can block while block.|nIn other words: Why would you block a tile twice?") 
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
+						+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?") 
 			case buildorders[31]
 				new Decoration(vec2(x,y), u.getOwner(),ord)	
 			case buildorders[32]
