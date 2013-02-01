@@ -50,7 +50,9 @@ public class TextureChanger extends DynamicSetupObject
 					else
 						tileID = innerTile
 					data = getRegionData(x,y)
-					if data.isOwner(GetPlayerId(owner))
+					if data == null
+						return
+					else if data.isOwner(GetPlayerId(owner))
 						if tileID == '0000'
 							tileID = data.walkableTile
 						else if tileID == '0001'
