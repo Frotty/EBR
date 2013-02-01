@@ -31,6 +31,8 @@ package UnitProducer
 			var rX = obj.getRallyX()
 			var rY = obj.getRallyY() 
 			var data = getRegionData(rX, rY)
+			if data == null
+				return false
 			if data.isOwner(GetPlayerId(obj.owner))
 				switch id 
 					case 'A05F' // Big Killer

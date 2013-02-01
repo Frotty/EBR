@@ -135,7 +135,7 @@ public class Trap extends StaticBaseObject
 		switch spell_id
 			case NEXT_SFX_ABIL
 				debugPrint(obj.sfxid.toString(), 1)
-				if obj.sfxid >= 7
+				if obj.sfxid >= SFX_COUNT
 					obj.sfxid = 0
 				else
 					obj.sfxid ++
@@ -143,7 +143,7 @@ public class Trap extends StaticBaseObject
 			case PREV_SFX_ABIL
 				debugPrint(obj.sfxid.toString(), 1)
 				if obj.sfxid <= 0
-					obj.sfxid = 7
+					obj.sfxid = SFX_COUNT
 				else
 					obj.sfxid --
 				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
@@ -313,6 +313,8 @@ int INCREASE_INTERVAL_ABIL = 'A02O'
 int DECREASE_INTERVAL_ABIL = 'A02Q'
 int START_ABIL = 'A02T'
 int STOP_ABIL = 'A02U'
+
+constant int SFX_COUNT = 8
 
 public function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
