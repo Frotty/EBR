@@ -1,6 +1,7 @@
 package RegionData
 import Entity
 import Escaper
+import Builder
 import Rect
 
 // The "Area" RegionData a builder has to claim in order to build
@@ -29,6 +30,8 @@ public class RegionData
 	boolean isLBOwner
 	boolean isDGOwner
 	boolean isBROwner = false
+	
+	boolean isBossRegion = false
             
 	construct( rect r )
 		theRect = r
@@ -103,7 +106,9 @@ public class RegionData
 				rdata.visible = true
 			edata.currentRegion = rdata
 
-				
+		if data instanceof Builder
+			var bdata = data castTo Builder
+			bdata.setBossMenu(rdata)
 				
 function rect.changeTerrain( integer ttype )
 	real xmax = GetRectMaxX(this)-32

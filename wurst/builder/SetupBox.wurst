@@ -16,6 +16,7 @@ constant int LI_ID = 'A058'
 constant int LD_ID = 'A05A'
 constant int ALLOW_ID = 'A01X'
 constant int CLEAR_ID = 'A020'
+constant int BOSS_MODE_ID = 'A03E'
 
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
@@ -79,17 +80,31 @@ public class SetupBox extends UnitEntity
 					AddSpecialEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getX(), u.getY()).destr()
 					if box.rdata.isOwner(id2)
 						box.rdata.disallow(id2)
-						DisplayTextToPlayer( box.owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id2] + p.getName() + " to build in your region." )
+						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
+						DisplayTextToPlayer( p, 0, 0, colorcode[box.owner.getId()] + box.owner.getName() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region." )
+						if GetLocalPlayer() == p
+							PingMinimapEx((GetRectMinX(box.rdata.theRect)+GetRectMaxX(box.rdata.theRect))/2, (GetRectMinY(box.rdata.theRect)+GetRectMaxY(box.rdata.theRect))/2, 3, 156, 8, 8, false)
 					else
 						box.rdata.allow(id2)
-						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id2] + p.getName() + " to build in your region." )
+						DisplayTextToPlayer( box.owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
+						DisplayTextToPlayer( p, 0, 0, colorcode[box.owner.getId()] + box.owner.getName() + " |cff08B552allowed|r |cffffcc00 you to build in his region." )
+						if GetLocalPlayer() == p
+							PingMinimapEx((GetRectMaxX(box.rdata.theRect)+GetRectMinX(box.rdata.theRect))/2, (GetRectMaxY(box.rdata.theRect)+GetRectMinY(box.rdata.theRect))/2, 3, 8, 181, 82, false)
 			case CLEAR_ID
 				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
 				for u in ENUM_GROUP
 					var data = u.getUserData() castTo Entity
 					if not data instanceof Escaper and not data instanceof Builder and data != box
 						data.terminate()
-						
+			case BOSS_MODE_ID
+				box.rdata.isBossRegion = true
+				DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",box.actor.getX(),box.actor.getY() ))
+				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
+				for u in ENUM_GROUP
+					var data = u.getUserData() castTo Entity
+					if data instanceof Builder
+						var bdata = data castTo Builder
+						bdata.setBossMenu(box.rdata)
 		return false
 
 	
