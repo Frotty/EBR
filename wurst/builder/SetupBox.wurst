@@ -62,16 +62,16 @@ public class SetupBox extends UnitEntity
 					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
 			case LI_ID
 				if box.rdata.lavaDmg >= -MAX_DOT_DMG
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Maximum" )
+					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg is on Maximum" )
 				else
 					box.rdata.lavaDmg += .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
+					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg: " + box.rdata.lavaDmg.toString() )
 			case LD_ID
 				if box.rdata.lavaDmg <= .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Minimum" )
+					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg is on Minimum" )
 				else
 					box.rdata.lavaDmg -= .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.lavaDmg.toString() )
+					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg: " + box.rdata.lavaDmg.toString() )
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()

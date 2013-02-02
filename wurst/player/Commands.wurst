@@ -1,16 +1,16 @@
-package Commands
-
-function onCommandChat()
-	var str = GetEventPlayerChatString()
-	let p = GetTriggerPlayer()
-	str = str.substring(1, str.length())
-	switch str
-		case "clear"
-			if GetLocalPlayer() == p
-				ClearTextMessages()
-
-
-init
-	trigger trg = CreateTrigger()
-	trg.registerPlayerChatEvent(GetLocalPlayer(), "-", false)
-	trg.addAction(function onCommandChat)
+//package Commands
+//
+//function onCommandChat()
+//	var str = GetEventPlayerChatString()
+//	let p = GetTriggerPlayer()
+//	str = str.substring(1, str.length())
+//	switch str
+//		case "clear"
+//			if GetLocalPlayer() == p
+//				ClearTextMessages()
+//
+//
+//init
+//	trigger trg = CreateTrigger()
+//	trg.registerPlayerChatEvent(GetLocalPlayer(), "-", false)
+//	trg.addAction(function onCommandChat)

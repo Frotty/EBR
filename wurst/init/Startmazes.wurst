@@ -20,7 +20,7 @@ public function initBaseObjects()
 	GroupEnumUnitsOfType(g, "custom_n000", null )
 	for u in g
 		if u.getHP() > .405
-			new RevivePoint(vec2(u.getX(), u.getY()), Player(11))
+			new RevivePoint(vec3(u.getX(), u.getY(), 0.), Player(11))
 			u.remove()
 		
 	g.clear()

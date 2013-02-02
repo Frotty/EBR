@@ -27,13 +27,14 @@ public class Strong_Escaper extends Escaper
 		
 	static function strongUpdate(Escaper e)
 		var se =e castTo Strong_Escaper
+		debugPrint("strong upt", 8)
 		if se.invulnerable
-			if se.shieldX != se.pos.x
-				se.shieldtimer.setData(se castTo int)
-				se.shieldtimer.start(0,function Strong_Escaper.endShield)
-			else if se.shieldY != se.pos.y
-				se.shieldtimer.setData(se castTo int)
-				se.shieldtimer.start(0,function Strong_Escaper.endShield)
+			if se.shieldX != se.pos.x or se.shieldY != se.pos.y
+				se.shieldtimer.release()
+				se.actor.removeAbility('Avul')
+				se.invulnerable =false
+				DestroyEffect(se.shieldeffect)
+				
 				
 	static function endShield()
 		var e = GetExpiredTimer().getData() castTo Strong_Escaper
@@ -43,3 +44,4 @@ public class Strong_Escaper extends Escaper
 		e.shieldtimer.release()
 		e.shieldX = 0.
 		e.shieldY = 0.
+		

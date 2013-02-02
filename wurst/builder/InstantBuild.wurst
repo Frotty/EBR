@@ -25,6 +25,7 @@ import TerrainBlocker
 import Fountain
 import Decoration
 import Wall
+import LastOrder
 		
 
 real x
@@ -60,11 +61,10 @@ function callback()
 	var rdata = getRegionData(x, y)
 	if rdata.isOwner(owner.getId())
 		switch ord
-
 			case buildorders[1]
 				new Jumper(vec2(x,y), u.getOwner())
 			case buildorders[2]
-				new RevivePoint(vec2(x,y), u.getOwner())
+				new RevivePoint(vec3(x,y, 0.), u.getOwner())
 			case buildorders[3]
 				new Texter(vec2(x,y), u.getOwner())
 			case buildorders[5]
@@ -141,14 +141,17 @@ function callback()
 				new Decoration(vec2(x,y), u.getOwner(),ord)
 			case buildorders[42]
 				new Decoration(vec2(x,y), u.getOwner(),ord)
-				
+		u.abortOrder()
+		SetUnitPosition(u,x,y)
+		SetUnitX(u,ox)
+		SetUnitY(u,oy)
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null
 
 
+
 function conac() 
-	
 	widget w = GetOrderTarget()
 	ord = GetIssuedOrderId()
 	u = GetTriggerUnit()
@@ -160,18 +163,13 @@ function conac()
 		oy = GetUnitY(u)
 		TimerStart(t,0.00,false, function callback)
 		
-
 	else
 		if w == null
 			SetUnitX(u,GetOrderPointX())
 			SetUnitY(u,GetOrderPointY())
-			SetUnitFacing(u, angleBetweenCoordsD(GetUnitX(u), GetUnitY(u), GetOrderPointX(), GetOrderPointY()) )
 		else
-			SetUnitFacing( u, angleBetweenCoordsD( GetUnitX(u), GetUnitY(u), GetWidgetX(w), GetWidgetY(w) ) )
 			SetUnitX(u,GetWidgetX(w))
 			SetUnitY(u,GetWidgetY(w))
-
-
 	w = null
 
 
