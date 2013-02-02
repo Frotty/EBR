@@ -1,9 +1,8 @@
 package Decoration
-import BaseObject
+import SetupObject
 
 
-public class Decoration extends StaticBaseObject
+public class Decoration extends StaticSetupObject
 	
-	construct( vec2 pos, player owner, int ID )
-		super( pos, CreateUnit(owner, ID, pos.x, pos.y, GetRandomReal(0, 360) ), 0., CODE_NULL )
-		
+	construct( vec2 pos, player owner, int ID, real a )
+		super( vec3(pos.x,pos.y,0), CreateUnit(owner, ID, pos.x, pos.y, a ),CreateUnit(owner, ID, pos.x, pos.y, a ), 0., CODE_NULL )

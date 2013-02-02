@@ -47,6 +47,7 @@ package Revivepoint
 				for Escaper es in escapers
 					if es.owner.getId() < 8
 						es.setNewPos(obj.pos)
+						PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 						es.currentRegion = rdata
 
 

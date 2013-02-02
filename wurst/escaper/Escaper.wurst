@@ -212,6 +212,7 @@ package Escaper
 			e.setVel(vec3(0,0,0))
 			e.slideVelocity = vec3(0,0,0)
 			e.setNewPos(vec3(revX, revY, 530.))
+			CameraClearNoiseForPlayer(e.owner)
 			if e.owner.getId() < 8
 				if (GetLocalPlayer() == e.owner)
 					PanCameraToTimed(revX, revY, 0)

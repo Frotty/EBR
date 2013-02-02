@@ -256,7 +256,7 @@ public class Trap extends StaticBaseObject
 							obj.duration += 1
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SHAKE
-						if obj.duration >= 20
+						if obj.duration >= 5
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.duration += 1
