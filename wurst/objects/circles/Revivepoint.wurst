@@ -1,5 +1,5 @@
 package Revivepoint
-	import BaseObject
+	import SetupObject
 	import Terrain
 	import PlayerData
 	import Escaper
@@ -13,11 +13,11 @@ package Revivepoint
 	
 	public RevivePoint currentRevivepoint
 
-	public class RevivePoint extends StaticBaseObject
+	public class RevivePoint extends StaticSetupObject
 		boolean reached = false
 		
 		construct( vec2 pos, player owner)
-			super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+			super( vec3(pos.x,pos.y,0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0),CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
 
 
 		static function reach()
@@ -47,8 +47,9 @@ package Revivepoint
 				for Escaper es in escapers
 					if es.owner.getId() < 8
 						es.setNewPos(obj.pos)
-						PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 						es.currentRegion = rdata
+						if GetLocalPlayer() == es.owner
+							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 
 
 		static function filter() returns boolean
