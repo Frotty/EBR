@@ -7,6 +7,7 @@ import TerrainBlocker
 import BuilderConstants
 import Texttag
 import LastOrder
+import PreloadHandler
 
 constant int TEXTURECHANGER_ID	= 'n01E'
 
@@ -22,6 +23,7 @@ constant int TERRAIN_INC_H_ID = 'A01K'
 constant int TERRAIN_INC_V_ID = 'A01M'
 constant int TERRAIN_DEC_H_ID = 'A01U'
 constant int TERRAIN_DEC_V_ID = 'A01T'
+
 
 public class TextureChanger extends DynamicSetupObject
 	int sizeX = 1
@@ -106,5 +108,19 @@ public class TextureChanger extends DynamicSetupObject
 					
 			obj.setup.issuePastOrder(2)
 			return false
+			
+init
+	preloadAbility(TERRAIN_O_WALKABLE_ID)
+	preloadAbility(TERRAIN_O_UNWALKABLE_ID)
+	preloadAbility(TERRAIN_O_ICE_ID)
+	preloadAbility(TERRAIN_O_UNICE_ID)
+	preloadAbility(TERRAIN_I_WALKABLE_ID)
+	preloadAbility(TERRAIN_I_UNWALKABLE_ID)
+	preloadAbility(TERRAIN_I_ICE_ID)
+	preloadAbility(TERRAIN_I_UNICE_ID)
+	preloadAbility(TERRAIN_INC_H_ID)
+	preloadAbility(TERRAIN_INC_V_ID)
+	preloadAbility(TERRAIN_DEC_H_ID)
+	preloadAbility(TERRAIN_DEC_V_ID)
 
 

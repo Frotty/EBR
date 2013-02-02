@@ -4,6 +4,7 @@ import Escaper
 import EventHandling
 import Texttag
 import TempGroups
+import PreloadHandler
 
 constant int POINTER_ID = 'h01Q'
 
@@ -11,6 +12,7 @@ constant int INC_ID = 'A01F'
 constant int DEC_ID = 'A01G'
 constant int START_ID = 'A031'
 constant int STOP_ID = 'A032'
+
 
 public class Pointer extends UnitEntity
 	real turnspeed = 2.
@@ -106,3 +108,9 @@ public function init_Pointer()
 		TriggerRegisterPlayerChatEvent(t,Player(i), "-setangle ", false)
 		TriggerRegisterPlayerChatEvent(t,Player(i), "-sa ", false)
 	TriggerAddAction(t, function Pointer.setfacing)
+	
+init
+	preloadAbility(START_ID)
+	preloadAbility(STOP_ID)
+	preloadAbility(INC_ID)
+	preloadAbility(DEC_ID)

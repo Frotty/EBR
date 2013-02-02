@@ -1,11 +1,20 @@
 package Attackspeed
 import Texttag
+import PreloadHandler
 
 public constant integer ATTACK_SPEED_RATE_POSITIVE_ID = 'A02W'
 public constant integer ATTACK_SPEED_RATE_NEGATIVE_ID = 'A02V'
 public constant integer ATTACK_SPEED_DUMMY_ID = 'A024'
 constant integer INCREASE = 'A044'
 constant integer DECREASE = 'A043'
+
+init
+	preloadAbility(ATTACK_SPEED_RATE_POSITIVE_ID)
+	preloadAbility(ATTACK_SPEED_RATE_NEGATIVE_ID)
+	preloadAbility(ATTACK_SPEED_DUMMY_ID)
+	preloadAbility(INCREASE)
+	preloadAbility(DECREASE)
+	
 
 public function onAttackspeedCast(int spellid, unit actor)
 	switch spellid
