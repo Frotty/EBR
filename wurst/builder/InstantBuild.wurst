@@ -94,7 +94,7 @@ function callback()
 			case buildorders[20]
 				new UnitCreator(vec2(x,y), u.getOwner())
 			case buildorders[22]
-				new Wall(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,270.)
 			case buildorders[23]
 				new Tracks(vec2(x,y), u.getOwner())	
 			case buildorders[24]
@@ -104,9 +104,9 @@ function callback()
 			case buildorders[26]
 				new Trap(vec2(x,y), u.getOwner())	
 			case buildorders[27]
-				new Wall(vec2(x,y), u.getOwner(),ord)	
+				new Decoration(vec2(x,y), u.getOwner(),ord,270.)	
 			case buildorders[28]
-				new Wall(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,270.)
 			case buildorders[29]
 				new CongaLineHead(vec2(x,y), u.getOwner())
 			case buildorders[30]
@@ -118,33 +118,35 @@ function callback()
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
 						+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?") 
 			case buildorders[31]
-				new Decoration(vec2(x,y), u.getOwner(),ord)	
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))	
 			case buildorders[32]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[33]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[34]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[35]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[36]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[37]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[38]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[39]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[40]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[41]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[42]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 		u.abortOrder()
 		SetUnitPosition(u,x,y)
 		SetUnitX(u,ox)
-		SetUnitY(u,oy)
+		SetUnitY(u,oy)			
+				
+
 	else
 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	d = null

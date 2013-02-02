@@ -35,6 +35,7 @@ package Door
 			super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
 								CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
 			pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
+			pathing.setUserData(this castTo int)
 			setup.registerCastEvent(Condition(function onCast))
 
 		
