@@ -7,12 +7,15 @@ import Key
 import SetupBox
 import TempGroups
 import LinkedList
+import EscaperKiller
 
 trigger swapTrigger
 trigger itemTrigger
 
 
 public class Builder extends UnitEntity
+	
+	boolean hasBossMenu = false
 
 	construct( player p )
 		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
@@ -80,6 +83,11 @@ public class Builder extends UnitEntity
 						CreateItem(BOOTS_ID, ox,oy)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+				case BM_BOSS_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
+						new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				/*case TOME_SPELL_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId())
 						CreateItem(TOME_ID, ox,oy)
@@ -97,9 +105,22 @@ public class Builder extends UnitEntity
 				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
 				UnitAddItemById(builder.actor,'I001')
 				UnitAddItemById(builder.actor,'I002')
-				UnitAddItemById(builder.actor,'I003')					
+				UnitAddItemById(builder.actor,'I003')
+				if builder.hasBossMenu
+					builder.actor.addAbility(MENU_BOSS)					
 				SelectUnitForPlayerSingle( builder.actor, builder.owner )
-
+	
+	function setBossMenu(RegionData rdata)
+		if rdata.isOwner(owner.getId())
+			if rdata.isBossRegion and not hasBossMenu
+				actor.addAbility(MENU_BOSS)
+				hasBossMenu = true
+			if not rdata.isBossRegion and hasBossMenu
+				actor.removeAbility(MENU_BOSS)
+				hasBossMenu = false
+		else
+			actor.removeAbility(MENU_BOSS)
+			hasBossMenu = false
 
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'

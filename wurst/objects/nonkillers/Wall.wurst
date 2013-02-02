@@ -1,0 +1,9 @@
+package Wall
+import BaseObject
+
+
+public class Wall extends StaticBaseObject
+	
+	construct( vec2 pos, player owner, int ID )
+		super( pos, CreateUnit(owner, ID, pos.x, pos.y,270. ), 0., CODE_NULL )
+		

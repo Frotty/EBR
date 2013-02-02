@@ -12,6 +12,8 @@ function removeObject()
 			var e = data castTo Entity
 			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , e.pos.x, e.pos.y)
 			e.terminate()
+		else
+			GetSpellAbilityUnit().remove()
 
 init
 	castTrig = CreateTrigger()

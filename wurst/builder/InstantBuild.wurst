@@ -24,6 +24,7 @@ import CongaLineHead
 import TerrainBlocker
 import Fountain
 import Decoration
+import Wall
 		
 
 real x
@@ -93,7 +94,7 @@ function callback()
 			case buildorders[20]
 				new UnitCreator(vec2(x,y), u.getOwner())
 			case buildorders[22]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Wall(vec2(x,y), u.getOwner(),ord)
 			case buildorders[23]
 				new Tracks(vec2(x,y), u.getOwner())	
 			case buildorders[24]
@@ -103,9 +104,9 @@ function callback()
 			case buildorders[26]
 				new Trap(vec2(x,y), u.getOwner())	
 			case buildorders[27]
-				new Decoration(vec2(x,y), u.getOwner(),ord)	
+				new Wall(vec2(x,y), u.getOwner(),ord)	
 			case buildorders[28]
-				new Decoration(vec2(x,y), u.getOwner(),ord)
+				new Wall(vec2(x,y), u.getOwner(),ord)
 			case buildorders[29]
 				new CongaLineHead(vec2(x,y), u.getOwner())
 			case buildorders[30]

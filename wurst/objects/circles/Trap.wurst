@@ -86,7 +86,18 @@ public class Trap extends StaticBaseObject
 				//	e.poisoned = true
 				//	e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
 			case ABIL.SPEED
-				skip
+				int level = (value/20).toInt()
+				debugPrint("level= " +level.toString(),6)
+				if level < 5
+					var dc = new DummyCaster(SPEED_BUFF_NEG, "bloodlust", DUMMY_PLAYER, true)
+					dc.level = level
+					dc.recycledelay = 0.5
+					dc.castOnTarget(e.actor)
+				if level > 5
+					var dc = new DummyCaster(SPEED_BUFF_POS, "bloodlust", DUMMY_PLAYER, true)
+					dc.level = level-5
+					dc.recycledelay = 0.5
+					dc.castOnTarget(e.actor)
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				real rX = getRallyX()
@@ -156,9 +167,11 @@ public class Trap extends StaticBaseObject
 				obj.duration = 1.
 				obj.addConfiger(true, false)
 			case SPEED_ABIL
-				createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), obj.owner  )
-				//obj.a = ABIL.SPEED
-				//obj.addConfiger(true, true)
+				//createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), obj.owner  )
+				obj.a = ABIL.SPEED
+				obj.value = 100.
+				obj.duration = 1.
+				obj.addConfiger(false, true)
 			case SHAKE_ABIL
 				obj.a = ABIL.SHAKE
 				obj.value = 500
@@ -204,11 +217,11 @@ public class Trap extends StaticBaseObject
 							obj.value += 100
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SPEED
-						if obj.value >= 250
+						if obj.value >= 180
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
-							obj.value += 10
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							obj.value += 20
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(obj.value,1,0)+"%", 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip
 			case DECREASE_VALUE_ABIL
@@ -226,10 +239,10 @@ public class Trap extends StaticBaseObject
 							obj.value -= 100
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
 					case ABIL.SPEED
-						if obj.value <= 10
+						if obj.value <= 20
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
-							obj.value -= 10
+							obj.value -= 20
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip
@@ -308,6 +321,8 @@ int KNOCK_ABIL = 'A06H'
 int POISON_ABIL = 'A06F'
 
 int STUN_BUFF = 'A06J'
+int SPEED_BUFF_NEG = 'A03J'
+int SPEED_BUFF_POS = 'A03I'
 
 int INCREASE_INTERVAL_ABIL = 'A02O'
 int DECREASE_INTERVAL_ABIL = 'A02Q'

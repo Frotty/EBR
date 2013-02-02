@@ -23,11 +23,16 @@ public constant int MENU_3 = 'A05B'
 public constant int MENU_4 = 'A05C'
 public constant int MENU_5 = 'A05D'
 public constant int MENU_6 = 'A05E'
+public constant int MENU_BOSS = 'A03D'
 
 public constant int KEY_SPELL_ID = 'A03Z'
 public constant int TOME_SPELL_ID = 'A040'
 public constant int BOOTS_SPELL_ID = 'A03Y'
 public constant int ANKH_SPELL_ID = 'A041'
+
+public constant int BM_BOSS_ID = 'A03F'
+
+public constant int BOSS_ID = 'h00G'
 
 public constant int TOME_ID = 'I00A'
 public constant int BOOTS_ID = 'I00M'
