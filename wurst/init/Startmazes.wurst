@@ -288,14 +288,14 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.checkObj( gg_unit_n00E_0276.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0277.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0278.getUserData() castTo Entity )
-			s.speed = 2
+			s.speed = 2.
 			
 			s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
 			gg_unit_h01M_0259.remove()
 			s.checkObj( gg_unit_n00E_0215.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
-			s.speed = 4
+			s.speed = 4.
 			//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
 			IssuePointOrder( s.setup, "patrol", -3820, -4661 )
         

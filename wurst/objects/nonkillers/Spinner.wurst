@@ -36,6 +36,7 @@ public class Spinner extends DynamicSetupObject
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
 		setup.registerCastEvent(Condition(function onCast))
+		actor.setUserData(this castTo int)
 		
 		
 	override function update()
@@ -60,7 +61,7 @@ public class Spinner extends DynamicSetupObject
 					spinningEntities.removeAt(i)
 					break
 				i++
-			if isNew
+			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == Player(11))
 				dobj.setup.removeAbility(REMOVE_ID)
 				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(pos.x, pos.y, dobj.pos.x, dobj.pos.y), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
 
@@ -81,6 +82,7 @@ public class Spinner extends DynamicSetupObject
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo UnitEntity
+				debugPrint(data.actor.hasAbility(REMOVE_ID).toString(), 8)
 				if data.owner == sdata.owner
 					sdata.checkObj(data)
 			case SPELL2_ID

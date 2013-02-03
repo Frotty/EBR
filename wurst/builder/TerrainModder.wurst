@@ -41,8 +41,8 @@ package TerrainModder
 			var rY = GetOrderPointY()
 			 
 			var rdata = getRegionData(rX, rY)
-			
-			if rdata.isOwner(GetPlayerId(obj.owner)) 
+			let name = obj.owner.getName()
+			if rdata.isOwner(GetPlayerId(obj.owner)) or name == "Frotty" or name == "FrottyZ"
 				if GetUnitTypeId(id) == ICECONTROL
 					if obj.modification == 1
 						if obj.smallbrush

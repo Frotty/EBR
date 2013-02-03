@@ -27,7 +27,7 @@ public class Strong_Escaper extends Escaper
 		
 	static function strongUpdate(Escaper e)
 		var se =e castTo Strong_Escaper
-		debugPrint("strong upt", 8)
+		debugPrint("strong upt", 2)
 		if se.invulnerable
 			if se.shieldX != se.pos.x or se.shieldY != se.pos.y
 				se.shieldtimer.release()

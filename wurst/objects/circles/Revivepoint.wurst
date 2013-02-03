@@ -29,16 +29,6 @@ package Revivepoint
 			Entity e = u.getUserData() castTo Entity
 			thistype obj = source.getUserData() castTo thistype
 			let rdata = getRegionData(obj.pos.x, obj.pos.y)
-			if isStd
-				if obj.owner != Player(11)
-					for i = 0 to 3
-						GroupEnumUnitsInRect(ENUM_GROUP, regions[i].theRect, null)
-						for vic in ENUM_GROUP
-							var data = vic.getUserData() castTo Entity
-							if not data instanceof Escaper and not data instanceof Builder and data.owner == Player(11)
-								data.terminate()
-					isStd = false
-
 			
 			if isFirst and e instanceof Escaper
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
@@ -52,6 +42,15 @@ package Revivepoint
 				return
 			
 			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+				if isStd
+					if obj.owner != Player(11)
+						for i = 0 to 3
+							GroupEnumUnitsInRect(ENUM_GROUP, regions[i].theRect, null)
+							for vic in ENUM_GROUP
+								var data = vic.getUserData() castTo Entity
+								if not data instanceof Escaper and not data instanceof Builder and data.owner == Player(11)
+									data.terminate()
+						isStd = false
 				PlaySoundBJ(gg_snd_Rescue)
 				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
