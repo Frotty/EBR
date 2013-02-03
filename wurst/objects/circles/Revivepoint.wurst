@@ -8,6 +8,7 @@ package Revivepoint
 	import LinkedList
 	import TempGroups
 	import Builder
+	import Startmazes
 
 	constant real EVENT_RADIUS = 80.
 	constant int REVIVEPOINT_ID = 'n000'
@@ -50,6 +51,8 @@ package Revivepoint
 								var data = vic.getUserData() castTo Entity
 								if not data instanceof Escaper and not data instanceof Builder and data.owner == Player(11)
 									data.terminate()
+							ENUM_GROUP.clear()
+							clearEBRRect(i)
 						isStd = false
 				PlaySoundBJ(gg_snd_Rescue)
 				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
