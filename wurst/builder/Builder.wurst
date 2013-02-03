@@ -14,7 +14,6 @@ trigger itemTrigger
 
 
 public class Builder extends UnitEntity
-	
 	boolean hasBossMenu = false
 
 	construct( player p )

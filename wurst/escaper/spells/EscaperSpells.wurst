@@ -26,7 +26,7 @@ function castReincarnation()
 				var value = 10 + GetUnitAbilityLevel(e2.actor,SPEEDWAVE_ID)*5.
 				DestroyEffect( AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", e2.pos.x, e2.pos.y))
 				e2.addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
-			UnitResetCooldown( e2.actor)
+
 	if id == STAGNANCYSHIELD_ID
 		if escaper instanceof Strong_Escaper
 			var e3 = escaper castTo Strong_Escaper

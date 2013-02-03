@@ -106,8 +106,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
 			gg_unit_n00C_0057.remove()
 			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
-			//IssuePointOrder(t.actor, "setrally", 6660,-4866 )
-			IssuePointOrder(t.actor, "setrally", 5016,-5500 )
+			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
 			gg_unit_n00C_0058.remove()
 			
 			EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
@@ -272,7 +271,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
 			gg_unit_n00C_0234.remove()
 
-			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), DUMMY_PLAYER)
+			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
 			gg_unit_h01M_0258.remove()
 			s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
 			debugPrint("Spinner done..." , 3)

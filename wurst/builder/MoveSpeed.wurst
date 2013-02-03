@@ -1,6 +1,6 @@
 package MoveSpeed
 import Texttag
-
+import LastOrder
 import SetupObject
 import Entity
 
@@ -30,9 +30,14 @@ function changeSpeed()
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)
 				createTTEx(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
-		
+	caster.issuePastOrder(2)
+
+function isMoveSpell() returns boolean
+	let id = GetSpellAbilityId()
+	return id == INC_ID or id == DEC_ID
 
 init
 	castTrig = CreateTrigger()
 	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	castTrig.addCondition(Condition(function isMoveSpell))
 	castTrig.addAction(function changeSpeed)

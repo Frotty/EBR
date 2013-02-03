@@ -6,6 +6,7 @@ package TerrainModder
 	import RegionData
 	import PlayerData
 	import LinkedList
+	import EventHandling
 	
 	constant int ICECONTROL = 'H007'
 	constant int ICEUNCONTROL = 'H008'
@@ -24,14 +25,18 @@ package TerrainModder
 	
 	constant int SETUP_TYPE = 0
 	
-	class TerrainModder extends StaticBaseObject
+	class TerrainModder
+		unit actor
+		player owner
 		boolean smallbrush = true
 		int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 		construct( vec2 pos, player owner, unit u)
-			super(pos, u , 0., function changeTerrain)
+			this.owner = owner
+			actor = u
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-			TriggerRegisterUnitEvent( onTerrainModCast, actor, EVENT_UNIT_SPELL_EFFECT )
+			actor.registerCastEvent(Condition(function onCast))
+			actor.setUserData(this castTo int)
 
 		static function changeTerrain()
 			var id = GetTriggerUnit()
@@ -125,18 +130,20 @@ package TerrainModder
 					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "BigBrush")
 				default
 					printError("Terrainmodder Ability")
+
+					
+		ondestroy
+			actor.unregisterCastEvent()
 	
-	function oncast()
+	function onCast() returns boolean
 		var obj = GetSpellAbilityUnit().getUserData() castTo TerrainModder
 		obj.switchMode(GetSpellAbilityId())
+		return false
 		
-	trigger onTerrainModCast = CreateTrigger()
-	
+
 	public function init_TerrainModder()
 		castTrigger = CreateTrigger()
 		castTrigger.addAction(function TerrainModder.changeTerrain)
-		TriggerAddAction(onTerrainModCast, function oncast)
-
 		
 		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
 		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'

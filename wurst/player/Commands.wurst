@@ -1,4 +1,7 @@
 package Commands
+import TempGroups
+import Entity
+import Revivepoint
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -8,7 +11,8 @@ function onCommandChat()
 		case "clear"
 			if GetLocalPlayer() == p
 				ClearTextMessages()
-
+		case "c1"
+			clearStartMazes()
 
 init
 	trigger trg = CreateTrigger()

@@ -60,6 +60,9 @@ public abstract class Entity
 	function terminate()
 		done = true
 		
+	ondestroy
+		entityCount--
+		
 	// This function is called every ANIMATION_PERIOD tick if the Entity is active
 	abstract function update()
 	
@@ -91,6 +94,9 @@ abstract public class UnitEntity extends Entity
 	function setNewXY(vec3 tpos)
 		pos = tpos
 		actor.setXY(tpos.x,tpos.y)
+		
+	ondestroy
+		unitEntityCount--
 
 
 
