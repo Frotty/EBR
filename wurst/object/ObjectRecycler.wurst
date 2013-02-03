@@ -1,0 +1,13 @@
+//package ObjectRecycler
+//import Stack
+//import BaseObject
+//
+//Table objectLists = new Table()
+//
+//public function recycleUnit()
+//
+//public function getCircle(player p, int id, vec2 pos, angle facing) returns StaticBaseObject
+//	if objectLists.hasInt(id)
+//		let stack = objectLists.loadInt(id) castTo Stack<unit>
+//		return stack.pop()
+//	

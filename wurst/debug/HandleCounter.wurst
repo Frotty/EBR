@@ -1,83 +1,84 @@
-package HandleCounter
-
-constant string TITLE = "handles"
-
-constant string TIME_TEXT = "t"
-
-constant boolean SHOW_TIME = true
-
-constant real UPDATE_PERIOD = 0.25
-
-constant int STACK_END_TRESHOLD = 15
-
-constant player MAX = Player(0)
-
-constant player TIME = Player(1)
-
-
-
-public leaderboard LEADERBOARD = null 
-
-public timer CLOCK = null
-
-int CURRENT_HANDLE = 0
-
-int MAX_HANDLE = 0
-
-int SECONDS = 0
-
-
-
-function updateTime()
-	SECONDS++
-	LeaderboardSetItemLabel(LEADERBOARD, 1, TIME_TEXT)
-	LeaderboardSetItemValue(LEADERBOARD, 1, SECONDS)
-
-function callback()
-	location array loc
-	int a = 0
-	int index = 0
-	int prevIndex = 0
-
-	for next = 0 to STACK_END_TRESHOLD
-		loc[a] = Location(0., 0.)
-		index = GetHandleId(loc[a]) - 0x100000
-		a = a + 1
-		if index == prevIndex + 1
-			next = next + 1
-		else
-			next = 0
-
-		prevIndex = index
-
-	LeaderboardSetItemValue(LEADERBOARD, 0, index - a)
-
-	for ai = a -1 downto 0
-		RemoveLocation(loc[a])
-		loc[a] = null
-
-
-function actions()
-	timer tim = GetExpiredTimer()
-	LEADERBOARD = CreateLeaderboard()
-	LeaderboardSetLabel(LEADERBOARD, TITLE)
-	PlayerSetLeaderboard(GetLocalPlayer(), LEADERBOARD)
-	LeaderboardDisplay(LEADERBOARD, true)
-	TimerStart(tim, UPDATE_PERIOD, true, function callback)
-	LeaderboardAddItem(LEADERBOARD, "h-0x100000", 0, MAX)
-	LeaderboardSetSizeByItemCount(LEADERBOARD, 1)
-	if SHOW_TIME
-		CLOCK = CreateTimer()
-		TimerStart(CLOCK, 1., true, function updateTime)
-		LeaderboardAddItem(LEADERBOARD, "", 1, TIME)
-		LeaderboardSetItemLabel(LEADERBOARD, 1, TIME_TEXT)
-		LeaderboardSetItemValue(LEADERBOARD, 1, SECONDS)
-		LeaderboardSetSizeByItemCount(LEADERBOARD, 2)
-
-	tim = null
-
-
-
-
-init
-	TimerStart(CreateTimer() , 0., false, function actions)
+//package HandleCounter
+//
+//constant string TITLE = "handles"
+//
+//constant string TIME_TEXT = "t"
+//
+//constant boolean SHOW_TIME = true
+//
+//constant real UPDATE_PERIOD = 0.25
+//
+//constant int STACK_END_TRESHOLD = 15
+//
+//constant player MAX = Player(0)
+//
+//constant player TIME = Player(1)
+//
+//
+//
+//public leaderboard LEADERBOARD = null 
+//
+//public timer CLOCK = null
+//
+//int CURRENT_HANDLE = 0
+//
+//int MAX_HANDLE = 0
+//
+//int SECONDS = 0
+//
+//
+//
+//function updateTime()
+//	SECONDS++
+//	LeaderboardSetItemLabel(LEADERBOARD, 1, TIME_TEXT)
+//	LeaderboardSetItemValue(LEADERBOARD, 1, SECONDS)
+//
+//function callback()
+//	location array loc
+//	int a = 0
+//	int index = 0
+//	int prevIndex = 0
+//
+//	for next = 0 to STACK_END_TRESHOLD
+//		loc[a] = Location(0., 0.)
+//		index = GetHandleId(loc[a]) - 0x100000
+//		a = a + 1
+//		if index == prevIndex + 1
+//			next = next + 1
+//		else
+//			next = 0
+//
+//		prevIndex = index
+//
+//	LeaderboardSetItemValue(LEADERBOARD, 0, index - a)
+//
+//	for ai = a -1 downto 0
+//		RemoveLocation(loc[a])
+//		loc[a] = null
+//
+//
+//function actions()
+//	timer tim = GetExpiredTimer()
+//	LEADERBOARD = CreateLeaderboard()
+//	LeaderboardSetLabel(LEADERBOARD, TITLE)
+//	PlayerSetLeaderboard(GetLocalPlayer(), LEADERBOARD)
+//	LeaderboardDisplay(LEADERBOARD, true)
+//	TimerStart(tim, UPDATE_PERIOD, true, function callback)
+//	LeaderboardAddItem(LEADERBOARD, "h-0x100000", 0, MAX)
+//	LeaderboardSetSizeByItemCount(LEADERBOARD, 1)
+//	if SHOW_TIME
+//		CLOCK = CreateTimer()
+//		TimerStart(CLOCK, 1., true, function updateTime)
+//		LeaderboardAddItem(LEADERBOARD, "", 1, TIME)
+//		LeaderboardSetItemLabel(LEADERBOARD, 1, TIME_TEXT)
+//		LeaderboardSetItemValue(LEADERBOARD, 1, SECONDS)
+//		LeaderboardSetSizeByItemCount(LEADERBOARD, 2)
+//
+//	tim = null
+//
+//
+//
+//
+//init
+//	TimerStart(CreateTimer() , 0., false, function actions)
+//

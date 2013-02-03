@@ -1,4 +1,4 @@
-package Unitcreator
+package UnitCreator
 	import BaseObject
 	import Terrain
 	import EscaperKiller
@@ -20,6 +20,8 @@ package Unitcreator
 		
 		construct( vec2 pos, player owner)
 			super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
+			active = true
+			print("created UC")
 			actor.registerCastEvent(Condition(function UnitCreator.onCast))
 		
 		override function update()
