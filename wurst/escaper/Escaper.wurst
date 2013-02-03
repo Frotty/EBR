@@ -27,7 +27,6 @@ package Escaper
 	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	
 	public class Escaper extends PhysicsUnitEntity
-		int deaths 		= 0
 		boolean flying = false
 		boolean sliding = false
 		boolean onUnwalkable = false
@@ -118,13 +117,13 @@ package Escaper
 				var hp = actor.getHP()
 				if hp > .405
 					actor.setHP(hp-currentRegion.lavaDmg)
-				else
+				else if alive
 					kill()
 			if poisoned
 				var hp2 = actor.getHP()
 				if hp2 > .405
 					actor.setHP(hp2-currentRegion.poisonDmg)
-				else
+				else if alive
 					kill()
 
 			vel *= 0.95

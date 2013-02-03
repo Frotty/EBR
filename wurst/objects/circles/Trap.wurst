@@ -87,7 +87,7 @@ public class Trap extends StaticBaseObject
 				//	e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
 			case ABIL.SPEED
 				int level = (value/20).toInt()
-				debugPrint("level= " +level.toString(),6)
+				debugPrint("level= " +level.toString(),2)
 				if level < 5
 					var dc = new DummyCaster(SPEED_BUFF_NEG, "bloodlust", DUMMY_PLAYER, true)
 					dc.level = level
