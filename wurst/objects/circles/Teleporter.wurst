@@ -27,7 +27,6 @@ package Teleporter
 			actor.unregisterCastEvent()
 			
 		static function teleport()
-			debugPrint("inRange", 8)
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
 			Entity e = u.getUserData() castTo Entity

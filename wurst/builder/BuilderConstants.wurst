@@ -1,4 +1,5 @@
 package BuilderConstants
+import PreloadHandler
 
 public constant real hiddenX = -5448
 public constant real hiddenY = 6469
@@ -42,11 +43,20 @@ public int array colorSpells
 
 init
 	colorSpells[0] = 'A05T'
+	preloadAbility(colorSpells[0])
 	colorSpells[1] = 'A05U'
+	preloadAbility(colorSpells[1])
 	colorSpells[2] = 'A05V'
+	preloadAbility(colorSpells[2])
 	colorSpells[3] = 'A05W'
+	preloadAbility(colorSpells[3])
 	colorSpells[4] = 'A05S'
+	preloadAbility(colorSpells[4])
 	colorSpells[5] = 'A05X'
+	preloadAbility(colorSpells[5])
 	colorSpells[6] = 'A05Y'
+	preloadAbility(colorSpells[6])
 	colorSpells[7] = 'A05Z'
+	preloadAbility(colorSpells[7])
 	colorSpells[8] = 'A060'
+	preloadAbility(colorSpells[8])

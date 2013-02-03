@@ -6,34 +6,48 @@ package Revivepoint
 	import GameConstants
 	import RegionData
 	import LinkedList
+	import TempGroups
+	import Builder
 
 	constant real EVENT_RADIUS = 80.
 	constant int REVIVEPOINT_ID = 'n000'
 	boolean isFirst = true
+	boolean isStd = true
 	
 	public RevivePoint currentRevivepoint
 
 	public class RevivePoint extends StaticSetupObject
 		boolean reached = false
 		
-		construct( vec2 pos, player owner)
-			super( vec3(pos.x,pos.y,0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0),CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+		construct( vec3 pos, player owner)
+			super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
 
 
 		static function reach()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
-			
 			Entity e = u.getUserData() castTo Entity
 			thistype obj = source.getUserData() castTo thistype
+			let rdata = getRegionData(obj.pos.x, obj.pos.y)
+			if isStd
+				if obj.owner != Player(11)
+					for i = 0 to 3
+						GroupEnumUnitsInRect(ENUM_GROUP, regions[i].theRect, null)
+						for vic in ENUM_GROUP
+							var data = vic.getUserData() castTo Entity
+							if not data instanceof Escaper and not data instanceof Builder and data.owner == Player(11)
+								data.terminate()
+					isStd = false
+
+			
 			if isFirst and e instanceof Escaper
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
 				obj.reached = true
 				currentRevivepoint = obj
-				var rdata1 = getRegionData(obj.pos.x, obj.pos.y)
+				var rdata1 = rdata
 				for es1 in escapers
 					es1.setNewPos(obj.pos)
-					es1.currentRegion = rdata1
+					es1.currentRegion = rdata
 				isFirst = false
 				return
 			
@@ -43,7 +57,6 @@ package Revivepoint
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
 				obj.reached = true
 				currentRevivepoint = obj
-				var rdata = getRegionData(obj.pos.x, obj.pos.y)
 				for Escaper es in escapers
 					if es.owner.getId() < 8
 						es.setNewPos(obj.pos)

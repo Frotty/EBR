@@ -20,7 +20,7 @@ public function initBaseObjects()
 	GroupEnumUnitsOfType(g, "custom_n000", null )
 	for u in g
 		if u.getHP() > .405
-			new RevivePoint(vec2(u.getX(), u.getY()), Player(11))
+			new RevivePoint(vec3(u.getX(), u.getY(), 0.), Player(11))
 			u.remove()
 		
 	g.clear()
@@ -74,29 +74,29 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 	debugPrint("maze-0 " + maze.toString() +  rnd.toString(), 4)
 	switch maze
 		case 0
-			debugPrint("maze-0.1", 4)
+			debugPrint("maze-0.1", 1)
 			GroupEnumUnitsOfType(g, "custom_h015", null )
-			debugPrint("maze-0.11", 4)
+			debugPrint("maze-0.11", 1)
 			for u in g
-				debugPrint("maze-0.12", 4)
+				debugPrint("maze-0.12", 1)
 				new EscaperKiller(u, null, COLL_SIZE_BK)
-			debugPrint("maze-0.2", 4)
+			debugPrint("maze-0.2", 1)
 			g.clear()
 			GroupEnumUnitsOfType(g, "custom_u008", null )
 			for u6 in g
 				new EscaperKiller(u6, null, COLL_SIZE_BRK)
-			debugPrint("maze-0.3", 4)
+			debugPrint("maze-0.3", 1)
 			g.clear()
-			debugPrint("maze-1", 4)
+			debugPrint("maze-1", 1)
 			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
 			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
-			debugPrint("maze-2", 6)
+			debugPrint("maze-2", 1)
 			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
-			debugPrint("maze-2.1 " + rnd.toString(), 6)
+			debugPrint("maze-2.1 " + rnd.toString(), 1)
 			if rnd == 1
 				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
-				debugPrint("maze-2.2", 6)
+				debugPrint("maze-2.2", 1)
 			else if rnd == 2
 				IssuePointOrder(t.actor, "setrally", 826,-7041 )
 			else if rnd == 3

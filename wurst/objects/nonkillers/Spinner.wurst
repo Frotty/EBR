@@ -8,12 +8,13 @@ import Texttag
 import Remove
 import BomberTarget
 import LastOrder
+import PreloadHandler
 
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
 constant int SPELL2_ID       = 'A04M'
 constant int INC_ID          = 'A01F'
-constant int DEC_ID          = 'A01G'
+constant int DEC_ID          = 'A01G'	
 
 class SpinNode
 	DynamicSetupObject obj
@@ -108,4 +109,9 @@ public class Spinner extends DynamicSetupObject
 		sdata.setup.issuePastOrder(2)
 		return false
 	
+init
+	preloadAbility(SPELL_ID)
+	preloadAbility(SPELL2_ID)
+	preloadAbility(INC_ID)
+	preloadAbility(DEC_ID)
 		
