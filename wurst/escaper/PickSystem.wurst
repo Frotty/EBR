@@ -11,8 +11,8 @@ texttag array herott
 int array currentView
 constant int herocount = 4
 
-constant real SX = -5000//6398
-constant real SY = -5500//-6791
+constant real SX = 6398
+constant real SY = -6791
 constant real PX = -6743
 constant real PY = 6616
 

@@ -79,7 +79,8 @@ abstract public class UnitEntity extends Entity
 		pos = vec3(actor.getX(), actor.getY(), 0.)
 		if not pos.toVec2().inBounds()
 			printError("UnitEntity out of Bounds")
-			pos = vec3(0,0,0)
+			pos = vec3(0,0,520)
+			vel = vec3(0,0,0)
 			setNewPos(pos)
 		
 	function setNewActor(unit u)

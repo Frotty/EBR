@@ -41,12 +41,11 @@ public class Spinner extends DynamicSetupObject
 		
 	override function update()
 		super.update()
-		real angl
-		real dist
 		for node in spinningEntities
 			debugPrint("spinning", 0)
-			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angl+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angl+speed*DEGTORAD), 0. ) )
-			node.angl += speed*DEGTORAD
+			var rspeed = speed * DEGTORAD
+			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angl+rspeed), polarProjectionYR(pos.y, node.dist, node.angl+rspeed), 0. ) )
+			node.angl += rspeed
 			
 	function checkObj(Entity e)
 		if e instanceof DynamicSetupObject
@@ -90,7 +89,7 @@ public class Spinner extends DynamicSetupObject
 				var ty = GetSpellTargetY()
 				GroupEnumUnitsInRange(ENUM_GROUP, tx, ty, 300., null)
 				for gu in ENUM_GROUP
-					if gu != sdata.actor 
+					if gu != sdata.actor and gu != sdata.setup
 						if gu.getUserData() > 0
 							var ed = gu.getUserData() castTo Entity
 							if ed.owner == sdata.owner

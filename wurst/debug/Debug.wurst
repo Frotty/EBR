@@ -17,5 +17,5 @@ package Debug
 	
 	init
 		let tim = CreateTimer()
-		tim.startPeriodic(2.5, function showCount)
+		//tim.startPeriodic(2.5, function showCount)
 endpackage

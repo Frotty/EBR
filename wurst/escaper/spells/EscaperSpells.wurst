@@ -42,6 +42,6 @@ function castReincarnation()
 
 public function init_Reincarnation()
 	trigger castTrig = CreateTrigger()
-	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT)
 	castTrig.addAction(function castReincarnation)
 
