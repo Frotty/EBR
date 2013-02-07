@@ -15,6 +15,10 @@ constant int SPELL_ID        = 'A01B'
 constant int SPELL2_ID       = 'A04M'
 constant int INC_ID          = 'A01F'
 constant int DEC_ID          = 'A01G'	
+constant int CINC_ID          = 'A06K'
+constant int CDEC_ID          = 'A06L'	
+constant int SINC_ID          = 'A06M'
+constant int SDEC_ID          = 'A06N'	
 
 class SpinNode
 	DynamicSetupObject obj
@@ -31,21 +35,24 @@ class SpinNode
 
 public class Spinner extends DynamicSetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
-	real speed = 2.
+	real speed = 2. *DEGTORAD
+	real cosFactor = 1.
+	real sinFactor = 1.
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		super(pos.toVec3(), getUnitAloc(owner, SPINNER_ID, pos.x, pos.y, 0), getUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
 		setup.registerCastEvent(Condition(function onCast))
+		actor.setUserData(this castTo int)
 		
 		
 	override function update()
 		super.update()
-		real angl
-		real dist
 		for node in spinningEntities
 			debugPrint("spinning", 0)
-			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angl+speed*DEGTORAD), polarProjectionYR(pos.y, node.dist, node.angl+speed*DEGTORAD), 0. ) )
-			node.angl += speed*DEGTORAD
+
+			node.obj.setNewXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor,
+									pos.y + node.dist * Sin(node.angl+speed) * sinFactor, 0. ) )
+			node.angl += speed
 			
 	function checkObj(Entity e)
 		if e instanceof DynamicSetupObject
@@ -60,7 +67,7 @@ public class Spinner extends DynamicSetupObject
 					spinningEntities.removeAt(i)
 					break
 				i++
-			if isNew
+			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == Player(11))
 				dobj.setup.removeAbility(REMOVE_ID)
 				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(pos.x, pos.y, dobj.pos.x, dobj.pos.y), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
 
@@ -81,6 +88,7 @@ public class Spinner extends DynamicSetupObject
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo UnitEntity
+				debugPrint(data.actor.hasAbility(REMOVE_ID).toString(), 8)
 				if data.owner == sdata.owner
 					sdata.checkObj(data)
 			case SPELL2_ID
@@ -88,7 +96,7 @@ public class Spinner extends DynamicSetupObject
 				var ty = GetSpellTargetY()
 				GroupEnumUnitsInRange(ENUM_GROUP, tx, ty, 300., null)
 				for gu in ENUM_GROUP
-					if gu != sdata.actor 
+					if gu != sdata.actor and gu != sdata.setup
 						if gu.getUserData() > 0
 							var ed = gu.getUserData() castTo Entity
 							if ed.owner == sdata.owner
@@ -96,16 +104,40 @@ public class Spinner extends DynamicSetupObject
 				ENUM_GROUP.clear()
 			case INC_ID
 				if sdata.speed < 10.
-					sdata.speed += .5
-					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+					sdata.speed += (.5*DEGTORAD)
+					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed*RADTODEG,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
 					createTTEx(sdata.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
 			case DEC_ID
 				if sdata.speed > -10.
-					sdata.speed -= .5
-					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+					sdata.speed -= (.5*DEGTORAD)
+					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed*RADTODEG,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
 					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
+			case CINC_ID
+				if sdata.cosFactor < .95
+					sdata.cosFactor += .1
+					createTTEx(sdata.pos, vec2(0,0.05), "Cos-Factor: "+ R2SW(sdata.cosFactor,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+				else
+					createTTEx(sdata.pos, vec2(0,0.05), "Maximum Factor", 10,  2., colorA(255,255,255,0), sdata.owner  )
+			case CDEC_ID
+				if sdata.cosFactor > 0.05
+					sdata.cosFactor -= (.1)
+					createTTEx(sdata.pos, vec2(0,0.05), "Cos-Factor: "+ R2SW(sdata.cosFactor,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+				else
+					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Factor", 10,  2., colorA(255,255,255,0), sdata.owner  )
+			case SINC_ID
+				if sdata.sinFactor < .95
+					sdata.sinFactor += .1
+					createTTEx(sdata.pos, vec2(0,0.05), "Sin-Factor: "+ R2SW(sdata.sinFactor,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+				else
+					createTTEx(sdata.pos, vec2(0,0.05), "Maximum Factor", 10,  2., colorA(255,255,255,0), sdata.owner  )
+			case SDEC_ID
+				if sdata.sinFactor > 0.05
+					sdata.sinFactor -= (.1)
+					createTTEx(sdata.pos, vec2(0,0.05), "Sin-Factor: "+ R2SW(sdata.sinFactor,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+				else
+					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Factor", 10,  2., colorA(255,255,255,0), sdata.owner  )
 		sdata.setup.issuePastOrder(2)
 		return false
 	

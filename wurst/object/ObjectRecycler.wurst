@@ -1,0 +1,73 @@
+package ObjectRecycler
+import Stack
+import BaseObject
+import TypeCasting
+import MapBounds
+
+Table objectLists = new Table()
+Table alocObjectLists = new Table()
+
+constant int VIS_ID = 'A04F'
+constant int INVIS_ID = 'A005'
+
+public function unit.recycle()
+	let id = GetUnitTypeId(this)
+	if this.hasAbility(VIS_ID)
+		this.removeAbility('Agho').addAbility('Aeth')
+		this.removeAbility(VIS_ID).addAbility(INVIS_ID)
+	if this.hasAbility(LOCUST_ID)
+		if alocObjectLists.hasInt(id)
+			let stack = alocObjectLists.loadInt(id) castTo Stack<unit>
+			stack.push(this)
+			this.hide()
+			this.setPos(minx, maxy)
+		else
+			printError("trying to recycle a unit not created by 'getUnitAloc'!")
+	else
+		if objectLists.hasInt(id)
+			let stack = objectLists.loadInt(id) castTo Stack<unit>
+			stack.push(this)
+			this.hide()
+			this.setPos(minx, maxy)
+		else
+			printError("trying to recycle a unit not created by 'getUnit'!")
+	this.setUserData(0).setMoveSpeed(180)
+		
+	
+
+public function getUnit(player p, int id, vec2 pos, angle facing) returns unit
+	if objectLists.hasInt(id)
+		debugPrint("saved Int", 100)
+		let stack = objectLists.loadInt(id) castTo Stack<unit>
+		if stack.size > 0
+			debugPrint("saved Int - loaded from stack", 100)
+			return stack.pop().setPos(pos).setFacing(facing).show().unpause().issueRallyPoint(pos)
+		else
+			debugPrint("saved Int - but empty stack", 100)
+			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
+	else
+		debugPrint("no saved Int", 100)
+		objectLists.saveInt(id, (new Stack<unit>() )castTo int)
+		return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
+		
+public function getUnit(player p, int id, real x, real y, real facing) returns unit
+	return getUnit(p, id, vec2(x,y), angle(facing))
+	
+public function getUnitAloc(player p, int id, vec2 pos, angle facing) returns unit
+	if alocObjectLists.hasInt(id)
+		debugPrint("saved Int", 100)
+		let stack = alocObjectLists.loadInt(id) castTo Stack<unit>
+		if stack.size > 0
+			debugPrint("saved Int - loaded from stack", 100)
+			return stack.pop().setPos(pos).setFacing(facing).show().issueRallyPoint(pos)
+		else
+			debugPrint("saved Int - but empty stack", 100)
+			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
+	else
+		debugPrint("no saved Int", 100)
+		alocObjectLists.saveInt(id, (new Stack<unit>() )castTo int)
+		return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
+		
+public function getUnitAloc(player p, int id, real x, real y, real facing) returns unit
+	return getUnitAloc(p, id, vec2(x,y), angle(facing*DEGTORAD))
+

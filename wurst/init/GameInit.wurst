@@ -17,6 +17,7 @@ package GameInit
 	import Startmazes
 	import EntityManagement
 	import Pointer
+	import FileIO
 	
 	int rand = 0
 	
@@ -80,7 +81,12 @@ package GameInit
 		debugPrint("Init - Finished", 2)
 		startChoose()
 		debugPrint("Starting choose...", 2)
-
+		
+		debugPrint(File.isEnabled().toString(), 12)
+//		let file = File.open("Escape Builder[R] 0.81b", "test.sdata", Flag.WRITE)
+//		file.write("This is a motherfucking test")
+//		file.close()
+		
 
 	init
 		VolumeGroupReset()

@@ -27,7 +27,7 @@ package Waypoint
 		boolean wisps = true
 		
 		construct( vec2 pos, player owner )
-			super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
+			super( pos, getUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
 			actor.registerCastEvent(Condition(function Waypoint.onCast))
 			
 		ondestroy

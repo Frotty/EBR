@@ -32,7 +32,7 @@ public class TextureChanger extends DynamicSetupObject
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), 0, null)
+		super(pos.toVec3(), getUnitAloc(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), getUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), 0, null)
 		setup.registerCastEvent(Condition(function TextureChanger.onCast))
 		
 		

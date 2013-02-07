@@ -1,7 +1,21 @@
 package Debug
+	import Entity
 	
 	public int entityCount 			= 0
 	public int unitEntityCount 		= 0
 	
+
+	function showCount()
+		print("entities: " + entityCount.toString())
+		print("unitentities: " + unitEntityCount.toString())
+		Entity e = Entity.first
+		while e != null
+			print("id: " + (e castTo int).toString())
+			e = e.next
+		
+		
 	
+	init
+		let tim = CreateTimer()
+		//tim.startPeriodic(2.5, function showCount)
 endpackage

@@ -4,6 +4,7 @@ import Terrain
 import PhysicsConstants
 import Debug
 import MapBounds
+import ObjectRecycler
 
 // Base Entity Class
 public abstract class PhysicsEntity extends Entity
@@ -74,7 +75,7 @@ abstract public class PhysicsUnitEntity extends PhysicsEntity
 		unitEntityCount++
 		
 	function setNewActor(unit u)
-		actor.remove()
+		actor.recycle()
 		actor = u
 		actor.setUserData(this castTo int)
 		

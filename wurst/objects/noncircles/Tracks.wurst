@@ -4,6 +4,7 @@ import Escaper
 import EventHandling
 import LinkedList
 import Texttag
+import ObjectRecycler
 
 int array TRACKS
 
@@ -25,8 +26,8 @@ public class Tracks extends UnitEntity
 	int angl = 0
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0) )
-		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
+		super( pos.toVec3(), getUnitAloc(owner, TRACKS[0], pos.x, pos.y, 0) )
+		setup = getUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.registerCastEvent(Condition(function Tracks.onCast))
 		setup.setUserData(this castTo int)
 		
@@ -40,26 +41,28 @@ public class Tracks extends UnitEntity
 		
 				
 	function recreateDummy()
-		actor.remove()
-		actor = CreateUnit(owner, TRACKS[size], pos.x, pos.y, angl.toReal())
+		actor.recycle()
+		actor = getUnitAloc(owner, TRACKS[size], pos.x, pos.y, angl.toReal())
 		
 	ondestroy
-		setup.remove()
+		setup.recycle()
 		setup.unregisterCastEvent()
-		actor.remove()
+		actor.recycle()
 				
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var tracks = GetSpellAbilityUnit().getUserData() castTo Tracks
 		switch id
 			case INC_ID
-				if tracks.speed < 20.
-					tracks.speed++
+				if tracks.speed < 10.
+					tracks.speed+= .5
 					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
+					tracks.actor.setTimeScale(0.5+tracks.speed/6)
 			case DEC_ID
-				if tracks.speed > 1.
-					tracks.speed--
+				if tracks.speed > .5
+					tracks.speed-= .5
 					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
+					tracks.actor.setTimeScale(0.5+tracks.speed/6)
 			case INCLENGTH_ID
 				if tracks.size < 2
 					tracks.size++

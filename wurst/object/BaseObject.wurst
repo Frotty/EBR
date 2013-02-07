@@ -3,6 +3,7 @@ package BaseObject
 	import Vectors
 	import Terrain
 	import Trigger
+	import public ObjectRecycler
 	
 
 	public code CODE_NULL = null
@@ -104,7 +105,7 @@ package BaseObject
 		
 		ondestroy
 			actor.clearRegister()
-			actor.remove()
+			actor.recycle()
 			inRangeTrig.destr()
 
 	

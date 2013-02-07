@@ -8,6 +8,7 @@ package Revivepoint
 	import LinkedList
 	import TempGroups
 	import Builder
+	import Startmazes
 
 	constant real EVENT_RADIUS = 80.
 	constant int REVIVEPOINT_ID = 'n000'
@@ -20,7 +21,7 @@ package Revivepoint
 		boolean reached = false
 		
 		construct( vec3 pos, player owner)
-			super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+			super( pos, getUnitAloc(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), getUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
 
 
 		static function reach()
@@ -29,16 +30,6 @@ package Revivepoint
 			Entity e = u.getUserData() castTo Entity
 			thistype obj = source.getUserData() castTo thistype
 			let rdata = getRegionData(obj.pos.x, obj.pos.y)
-			if isStd
-				if obj.owner != Player(11)
-					for i = 0 to 3
-						GroupEnumUnitsInRect(ENUM_GROUP, regions[i].theRect, null)
-						for vic in ENUM_GROUP
-							var data = vic.getUserData() castTo Entity
-							if not data instanceof Escaper and not data instanceof Builder and data.owner == Player(11)
-								data.terminate()
-					isStd = false
-
 			
 			if isFirst and e instanceof Escaper
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
@@ -52,6 +43,11 @@ package Revivepoint
 				return
 			
 			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+				if isStd
+					if obj.owner != Player(11)
+						isStd = false
+						timer tim = getTimer()
+						tim.start(0.1, function clearStartMazes)
 				PlaySoundBJ(gg_snd_Rescue)
 				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
@@ -68,6 +64,28 @@ package Revivepoint
 		static function filter() returns boolean
 			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
 	
+	public function clearStartMazes()
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
+		for vicu in ENUM_GROUP
+			var data = vicu.getUserData() castTo Entity
+			if data != null
+				data.terminate()
+			else
+				vicu.recycle()
+		ENUM_GROUP.clear()
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
+		for vicu in ENUM_GROUP
+			var data = vicu.getUserData() castTo Entity
+			if data != null
+				data.terminate()
+			else
+				vicu.recycle()
+		ENUM_GROUP.clear()
+		for i = 0 to 3
+			EnumDestructablesInRect(regions[i].theRect, null, function killD)
+			
+	function killD()
+		RemoveDestructable(GetEnumDestructable())
 	
 
 

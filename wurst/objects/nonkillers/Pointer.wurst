@@ -5,6 +5,7 @@ import EventHandling
 import Texttag
 import TempGroups
 import PreloadHandler
+import ObjectRecycler
 
 constant int POINTER_ID = 'h01Q'
 
@@ -24,9 +25,9 @@ public class Pointer extends UnitEntity
 	trigger trig
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.))
+		super(pos.toVec3(), getUnitAloc(owner, POINTER_ID, pos.x, pos.y, 0.))
 		actor.addAbility(LOCUST_ID)
-		setup = CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
+		setup = getUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
 		setup.addAbility('Agho')
 		trig = CreateTrigger()
 		trig.registerUnitInRangeSource(setup, 64.)
@@ -89,8 +90,8 @@ public class Pointer extends UnitEntity
 				
 	ondestroy
 		actor.unregisterCastEvent()
-		actor.remove()
-		setup.remove()
+		actor.recycle()
+		setup.recycle()
 		trig.destr()
 		
 function getSelectedPointers(player p) returns group

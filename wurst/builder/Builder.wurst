@@ -8,17 +8,17 @@ import SetupBox
 import TempGroups
 import LinkedList
 import EscaperKiller
+import ObjectRecycler
 
 trigger swapTrigger
 trigger itemTrigger
 
 
 public class Builder extends UnitEntity
-	
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
+		super( vec3(0,0,0), getUnit(p, BUILDER_1, -5240, -5624, 0) )
 		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )
 		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_PICKUP_ITEM )
 	
@@ -56,22 +56,22 @@ public class Builder extends UnitEntity
 			boolean wasMenu = false
 			switch id
 				case MENU_1
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+					builder.setNewActor( getUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
 					wasMenu = true
 				case MENU_2
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit())))
+					builder.setNewActor( getUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit())))
 					wasMenu = true
 				case MENU_3
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+					builder.setNewActor( getUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
 					wasMenu = true
 				case MENU_4
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+					builder.setNewActor( getUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
 					wasMenu = true
 				case MENU_5
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+					builder.setNewActor( getUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
 					wasMenu = true
 				case MENU_6
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+					builder.setNewActor( getUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
 					wasMenu = true
 				case KEY_SPELL_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId())
@@ -85,7 +85,7 @@ public class Builder extends UnitEntity
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case BM_BOSS_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+						new EscaperKiller(getUnitAloc(builder.owner, BOSS_ID, ox, oy, 0. ), getUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				/*case TOME_SPELL_ID

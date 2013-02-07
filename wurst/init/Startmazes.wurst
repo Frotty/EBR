@@ -7,7 +7,7 @@ import EscaperKiller
 import Teleporter
 import Executer
 import BuilderConstants
-import Unitcreator
+import UnitCreator
 import UnitRemover
 import Spinner
 import Entity
@@ -207,12 +207,16 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			gg_unit_n006_0190.remove()
 			
 			IssueTargetOrder(gg_unit_h019_0159, "attack", gg_unit_u004_0161 )
+			gg_unit_h019_0159.addAbility(LOCUST_ID)
 			IssuePointOrder(gg_unit_u004_0161, "patrol", -771, -5372 )
 			IssueTargetOrder(gg_unit_h019_0158, "attack", gg_unit_u004_0162 )
+			gg_unit_h019_0158.addAbility(LOCUST_ID)
 			IssuePointOrder(gg_unit_u004_0162, "patrol", -128, -5100 )
 			IssueTargetOrder(gg_unit_h019_0157, "attack", gg_unit_u004_0163 )
+			gg_unit_h019_0157.addAbility(LOCUST_ID)
 			IssuePointOrder(gg_unit_u004_0163, "patrol", 512, -4870 )
 			IssueTargetOrder(gg_unit_h019_0160, "attack", gg_unit_u004_0164 )
+			gg_unit_h019_0160.addAbility(LOCUST_ID)
 			IssuePointOrder(gg_unit_u004_0164, "patrol", -758, -4888 )
 			
 			t = new Teleporter(vec2(gg_unit_n00C_0202.getX(),gg_unit_n00C_0202.getY()),Player(11))
@@ -271,7 +275,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			IssuePointOrder(t.actor, "setrally", -4905,-5518 )
 			gg_unit_n00C_0234.remove()
 
-			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), DUMMY_PLAYER)
+			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
 			gg_unit_h01M_0258.remove()
 			s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
 			debugPrint("Spinner done..." , 3)
@@ -288,14 +292,14 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.checkObj( gg_unit_n00E_0276.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0277.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0278.getUserData() castTo Entity )
-			s.speed = 2
+			s.speed = 2.
 			
 			s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
 			gg_unit_h01M_0259.remove()
 			s.checkObj( gg_unit_n00E_0215.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
-			s.speed = 4
+			s.speed = 4.
 			//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
 			IssuePointOrder( s.setup, "patrol", -3820, -4661 )
         

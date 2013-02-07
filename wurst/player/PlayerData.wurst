@@ -23,7 +23,7 @@ package PlayerData
 		string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 		boolean left = false
 		
-		int deaths = 0
+		private int deaths = 0
 		Escaper escaper
 		Builder builder
 		int XP = 40

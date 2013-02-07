@@ -31,7 +31,7 @@ public class Trap extends StaticBaseObject
 	real value // Shake, Knockback, Speed
 	
 	construct( vec2 pos, player owner )
-			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
+			super(pos, getUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
 
@@ -150,14 +150,20 @@ public class Trap extends StaticBaseObject
 					obj.sfxid = 0
 				else
 					obj.sfxid ++
-				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+				if obj.sfxid < SFX_COUNT
+					DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+				else
+					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), obj.owner  )
 			case PREV_SFX_ABIL
 				debugPrint(obj.sfxid.toString(), 1)
 				if obj.sfxid <= 0
 					obj.sfxid = SFX_COUNT
 				else
 					obj.sfxid --
-				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+				if obj.sfxid < SFX_COUNT
+					DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+				else
+					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), obj.owner  )
 			
 			case KILL_ABIL
 				obj.a = ABIL.KILL
@@ -329,7 +335,7 @@ int DECREASE_INTERVAL_ABIL = 'A02Q'
 int START_ABIL = 'A02T'
 int STOP_ABIL = 'A02U'
 
-constant int SFX_COUNT = 8
+constant int SFX_COUNT = 9
 
 public function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
@@ -341,3 +347,5 @@ public function init_Trap()
 	SFX_STRINGS[6] = "Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl"
 	SFX_STRINGS[7] = "Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl"
 	SFX_STRINGS[8] = "Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl"
+	SFX_STRINGS[9] = ""
+	
