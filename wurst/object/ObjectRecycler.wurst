@@ -1,13 +1,38 @@
-//package ObjectRecycler
+package ObjectRecycler
 //import Stack
 //import BaseObject
+//import TypeCasting
+//import MapBounds
 //
 //Table objectLists = new Table()
 //
-//public function recycleUnit()
-//
-//public function getCircle(player p, int id, vec2 pos, angle facing) returns StaticBaseObject
+//public function unit.recycle()
+//	skip
+//	let id = GetUnitTypeId(this)
 //	if objectLists.hasInt(id)
 //		let stack = objectLists.loadInt(id) castTo Stack<unit>
-//		return stack.pop()
+//		stack.push(this)
+//		this.hide()
+//		this.setPos(minx, maxy)
+//	else
+//		printError("trying to recycle a unit not created by 'getUnit'!")
 //	
+//
+//public function getUnit(player p, int id, vec2 pos, angle facing) returns unit
+//	if objectLists.hasInt(id)
+//		debugPrint("saved Int", 100)
+//		let stack = objectLists.loadInt(id) castTo Stack<unit>
+//		if stack.size > 0
+//			debugPrint("saved Int - loaded from stack", 100)
+//			return stack.pop().setFacing(facing).show()
+//		else
+//			debugPrint("saved Int - but empty stack", 100)
+//			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
+//	else
+//		debugPrint("no saved Int", 100)
+//		objectLists.saveInt(id, (new Stack<unit>() )castTo int)
+//		return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
+//		
+//public function getUnit(player p, int id, real x, real y, real facing) returns unit
+//	return getUnit(p, id, vec2(x,y), angle(facing))
+

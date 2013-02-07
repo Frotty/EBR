@@ -31,7 +31,9 @@ class SpinNode
 
 public class Spinner extends DynamicSetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
-	real speed = 2.
+	real speed = 2. *DEGTORAD
+	real cosFactor = .5
+	real sinFactor = 1.
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
@@ -43,9 +45,10 @@ public class Spinner extends DynamicSetupObject
 		super.update()
 		for node in spinningEntities
 			debugPrint("spinning", 0)
-			var rspeed = speed * DEGTORAD
-			node.obj.setNewXY( vec3(polarProjectionXR(pos.x, node.dist, node.angl+rspeed), polarProjectionYR(pos.y, node.dist, node.angl+rspeed), 0. ) )
-			node.angl += rspeed
+
+			node.obj.setNewXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor,
+									pos.y + node.dist * Sin(node.angl+speed) * sinFactor, 0. ) )
+			node.angl += speed
 			
 	function checkObj(Entity e)
 		if e instanceof DynamicSetupObject
@@ -97,14 +100,14 @@ public class Spinner extends DynamicSetupObject
 				ENUM_GROUP.clear()
 			case INC_ID
 				if sdata.speed < 10.
-					sdata.speed += .5
-					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+					sdata.speed += (.5*DEGTORAD)
+					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed*RADTODEG,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
 					createTTEx(sdata.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
 			case DEC_ID
 				if sdata.speed > -10.
-					sdata.speed -= .5
-					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
+					sdata.speed -= (.5*DEGTORAD)
+					createTTEx(sdata.pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(sdata.speed*RADTODEG,1,2), 10,  2., colorA(255,255,255,0), sdata.owner  )
 				else
 					createTTEx(sdata.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), sdata.owner  )
 		sdata.setup.issuePastOrder(2)

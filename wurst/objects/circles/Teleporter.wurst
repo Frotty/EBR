@@ -6,6 +6,7 @@ package Teleporter
 	import EventHandling
 	import TeleporterTarget
 	import SetupObject
+	import ObjectRecycler
 	
 	constant int 	TELEPORTER_ID   = 'n00C'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -20,7 +21,7 @@ package Teleporter
 		int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
 		
 		construct( vec2 pos, player owner )
-			super( pos, CreateUnit(owner, TELEPORTER_ID, pos.x, pos.y, 0. ), EVENT_RADIUS, function Teleporter.teleport ) 
+			super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0) ), EVENT_RADIUS, function Teleporter.teleport ) 
 			actor.registerCastEvent(Condition(function Teleporter.onCast))
 			
 		ondestroy

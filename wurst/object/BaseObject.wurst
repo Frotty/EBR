@@ -3,6 +3,7 @@ package BaseObject
 	import Vectors
 	import Terrain
 	import Trigger
+	import public ObjectRecycler
 	
 
 	public code CODE_NULL = null

@@ -53,13 +53,15 @@ public class Tracks extends UnitEntity
 		var tracks = GetSpellAbilityUnit().getUserData() castTo Tracks
 		switch id
 			case INC_ID
-				if tracks.speed < 20.
-					tracks.speed++
+				if tracks.speed < 10.
+					tracks.speed+= .5
 					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
+					tracks.actor.setTimeScale(0.5+tracks.speed/6)
 			case DEC_ID
-				if tracks.speed > 1.
-					tracks.speed--
+				if tracks.speed > .5
+					tracks.speed-= .5
 					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
+					tracks.actor.setTimeScale(0.5+tracks.speed/6)
 			case INCLENGTH_ID
 				if tracks.size < 2
 					tracks.size++
