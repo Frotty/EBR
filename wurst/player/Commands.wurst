@@ -6,13 +6,19 @@ import Revivepoint
 function onCommandChat()
 	var str = GetEventPlayerChatString()
 	let p = GetTriggerPlayer()
+	let id = p.getId()
 	str = str.substring(1, str.length())
 	switch str
 		case "clear"
 			if GetLocalPlayer() == p
 				ClearTextMessages()
-		case "c1"
+		case "clearStartMazes"
 			clearStartMazes()
+		case "debug"
+			if wantDebug[id] 
+				wantDebug[id] = false
+			else
+				wantDebug[id] = true
 
 init
 	trigger trg = CreateTrigger()

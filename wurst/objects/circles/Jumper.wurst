@@ -9,7 +9,7 @@ constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarg
 public class Jumper extends StaticBaseObject
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 32., function Jumper.inRange)
+		super(pos, getUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 32., function Jumper.inRange)
 		
 	static function inRange()
 		var data = GetTriggerUnit().getUserData() castTo Entity

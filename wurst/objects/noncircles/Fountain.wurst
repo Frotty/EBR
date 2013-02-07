@@ -11,8 +11,8 @@ package Fountain
 		unit dummy
 		
 		construct( vec2 pos, player owner )
-			super( pos, CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 270. ), 150., function Fountain.cure )
-			dummy = CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 270. )
+			super( pos, getUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 270. ), 150., function Fountain.cure )
+			dummy = getUnitAloc(owner, FOUNTAIN_ID, pos.x, pos.y, 270. )
 			dummy.addAbility(LOCUST_ID)
 		
 		
@@ -26,6 +26,6 @@ package Fountain
 					es.setPoison(false)
 		
 		ondestroy
-			dummy.remove()
+			dummy.recycle()
 		
 endpackage

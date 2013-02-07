@@ -1,5 +1,6 @@
 package ItemObject
 import Entity
+import ObjectRecycler
 
 public abstract class ItemObject extends Entity
 	unit setup
@@ -15,7 +16,7 @@ public abstract class ItemObject extends Entity
 		
 		
 	ondestroy
-		setup.remove()
+		setup.recycle()
 		actorItem.remove()
 		
 

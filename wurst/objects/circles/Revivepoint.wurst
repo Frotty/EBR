@@ -21,7 +21,7 @@ package Revivepoint
 		boolean reached = false
 		
 		construct( vec3 pos, player owner)
-			super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+			super( pos, getUnitAloc(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), getUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
 
 
 		static function reach()
@@ -71,7 +71,7 @@ package Revivepoint
 			if data != null
 				data.terminate()
 			else
-				vicu.remove()
+				vicu.recycle()
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
 		for vicu in ENUM_GROUP
@@ -79,7 +79,7 @@ package Revivepoint
 			if data != null
 				data.terminate()
 			else
-				vicu.remove()
+				vicu.recycle()
 		ENUM_GROUP.clear()
 		for i = 0 to 3
 			EnumDestructablesInRect(regions[i].theRect, null, function killD)

@@ -5,6 +5,7 @@ import Escaper
 import EventHandling
 import LinkedList
 import Texttag
+import ObjectRecycler
 
 constant int ID = 'n013'
 constant int INC_ID = 'A04J'
@@ -16,7 +17,7 @@ public class Vortex extends UnitEntity
 	real gravity = 2.
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0) )
+		super( pos.toVec3(), getUnit(owner, ID, pos.x, pos.y, 0) )
 		actor.registerCastEvent(Condition(function Vortex.onCast))
 	
 		
@@ -43,5 +44,5 @@ public class Vortex extends UnitEntity
 
 	ondestroy
 		actor.unregisterCastEvent()
-		actor.remove()
+		actor.recycle()
 				

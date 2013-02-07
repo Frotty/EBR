@@ -35,21 +35,21 @@ package UnitProducer
 			if data.isOwner(GetPlayerId(obj.owner))
 				switch id 
 					case 'A05F' // Big Killer
-						new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), COLL_SIZE_BK)
+						new EscaperKiller(getUnitAloc(obj.owner, data.bigKillerId, rX, rY, 0. ), getUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), COLL_SIZE_BK)
 					case 'A05K' // Small Killer
-						new EscaperKiller(CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
+						new EscaperKiller(getUnitAloc(obj.owner, data.smallKillerId, rX, rY, 0. ), getUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
 					case 'A05G' // Big Random Killer
-						new EscaperKiller(CreateUnit(obj.owner, 'u008', rX, rY, 0. ), CreateUnit(obj.owner, 'u008', rX, rY, 0. ), COLL_SIZE_BRK)
+						new EscaperKiller(getUnitAloc(obj.owner, 'u008', rX, rY, 0. ), getUnit(obj.owner, 'u008', rX, rY, 0. ), COLL_SIZE_BRK)
 					case 'A05J' // Small Random Killer
-						new EscaperKiller(CreateUnit(obj.owner, 'u006', rX, rY, 0. ), CreateUnit(obj.owner, 'u006', rX, rY, 0. ), COLL_SIZE_SRK)
+						new EscaperKiller(getUnitAloc(obj.owner, 'u006', rX, rY, 0. ), getUnit(obj.owner, 'u006', rX, rY, 0. ), COLL_SIZE_SRK)
 					case 'A05M' // Tank
-						new EscaperKiller(CreateUnit(obj.owner, 'h001', rX, rY, 0. ), CreateUnit(obj.owner, 'h001', rX, rY, 0. ), COLL_SIZE_TANK)
+						new EscaperKiller(getUnitAloc(obj.owner, 'h001', rX, rY, 0. ), getUnit(obj.owner, 'h001', rX, rY, 0. ), COLL_SIZE_TANK)
 					case 'A05N'
 						new TeleporterTarget( vec2(rX,rY), obj.owner )
 					case 'A05N'
 						new Bomber( vec2(rX,rY), obj.owner )
 					case 'A05H'
-						new EscaperKiller(CreateUnit(obj.owner, 'u00A', rX, rY, 0. ), CreateUnit(obj.owner, 'u00A', rX, rY, 0. ), COLL_SIZE_GLAIVE)
+						new EscaperKiller(getUnitAloc(obj.owner, 'u00A', rX, rY, 0. ), getUnit(obj.owner, 'u00A', rX, rY, 0. ), COLL_SIZE_GLAIVE)
 					case 'A05P'
 						new BomberTarget( vec2(rX,rY), obj.owner )
 					case 'A05L'

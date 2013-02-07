@@ -105,7 +105,7 @@ package BaseObject
 		
 		ondestroy
 			actor.clearRegister()
-			actor.remove()
+			actor.recycle()
 			inRangeTrig.destr()
 
 	

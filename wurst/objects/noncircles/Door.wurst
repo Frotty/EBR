@@ -32,9 +32,9 @@ package Door
 		boolean opened = false
 		
 		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
-								CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
-			pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
+			super( pos.toVec3(), getUnitAloc(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
+								getUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
+			pathing = getUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
 			pathing.setUserData(this castTo int)
 			setup.registerCastEvent(Condition(function onCast))
 
@@ -94,51 +94,51 @@ package Door
 		
 		function closeDoor()
 			SetUnitAnimation( actor, "stand" )
-			RemoveUnit( pathing )
+			pathing.recycle()
 			opened = false
 			if vertical
-				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
+				pathing  = getUnit( owner, DOORPATH, pos.x, pos.y, 0 )
 			else
-				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 270 )
+				pathing  = getUnit( owner, DOORPATH, pos.x, pos.y, 270 )
 	
 		function openDoor()
 			SetUnitAnimation( actor, "Death Alternate" )
-			RemoveUnit( pathing )
+			pathing.recycle()
 			opened = true
 			if vertical
-				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
+				pathing  = getUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
 			else
-				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
+				pathing  = getUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
 		
 		function turn()
 			if vertical
-				RemoveUnit( pathing )
-				RemoveUnit( actor )
+				pathing.recycle()
+				actor.recycle()
 				vertical = false
 				if opened
-					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
+					actor = getUnitAloc( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
 					SetUnitAnimation( actor, "Death Alternate" )
-					pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
+					pathing  = getUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
 				else
-					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
-					pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 270 )
+					actor = getUnitAloc( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
+					pathing  = getUnit( owner, DOORPATH, pos.x, pos.y, 270 )
 				
 			else
-				RemoveUnit( pathing )
-				RemoveUnit( actor )
+				pathing.recycle()
+				actor.recycle()
 				vertical = true
 				if opened 
-					actor = CreateUnit(owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
+					actor = getUnitAloc(owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
 					SetUnitAnimation( actor, "Death Alternate" )
-					pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
+					pathing  = getUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
 				else
 					debugPrint("yäs " + GetPlayerId(owner).toString(), 1)
-					actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
-					pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
+					actor = getUnitAloc( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
+					pathing  = getUnit( owner, DOORPATH, pos.x, pos.y, 0 )
 			colorize()
 			
 		ondestroy
-			pathing.remove()
+			pathing.recycle()
 			setup.unregisterCastEvent()
 	
 		static function onCast() returns boolean

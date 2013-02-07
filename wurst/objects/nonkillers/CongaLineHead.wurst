@@ -17,7 +17,7 @@ public class CongaLineHead extends DynamicSetupObject
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		super(pos.toVec3(), getUnitAloc(owner, UNIT_ID, pos.x, pos.y, 0.), getUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
 		segments = new LinkedList<DynamicSetupObject>()
 		

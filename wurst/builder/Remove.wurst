@@ -1,5 +1,6 @@
 package Remove
 import Entity
+import ObjectRecycler
 
 public constant int REMOVE_ID = 'A00K'
 trigger castTrig
@@ -13,7 +14,7 @@ function removeObject()
 			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , e.pos.x, e.pos.y)
 			e.terminate()
 		else
-			GetSpellAbilityUnit().remove()
+			GetSpellAbilityUnit().recycle()
 
 init
 	castTrig = CreateTrigger()
