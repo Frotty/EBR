@@ -12,6 +12,7 @@ import ObjectRecycler
 
 trigger swapTrigger
 trigger itemTrigger
+trigger orderTrigger
 
 
 public class Builder extends UnitEntity
@@ -21,6 +22,7 @@ public class Builder extends UnitEntity
 		super( vec3(0,0,0), getUnit(p, BUILDER_1, -5240, -5624, 0) )
 		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )
 		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_PICKUP_ITEM )
+		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 	
 	
 	static function claimRegion()
@@ -122,6 +124,12 @@ public class Builder extends UnitEntity
 			actor.removeAbility(MENU_BOSS)
 			hasBossMenu = false
 
+	static function itemRemovalOrder()
+		print(GetIssuedOrderId().toString())
+		//if GetIssuedOrderId() != stop 
+		//var bdata = GetTriggerUnit().getUserData() castTo Builder
+		
+		
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
 		
@@ -130,6 +138,8 @@ public function init_Builder()
 	swapTrigger.addAction(function Builder.swapPages)
 	itemTrigger = CreateTrigger()
 	itemTrigger.addAction(function Builder.claimRegion)
+	orderTrigger = CreateTrigger()
+	orderTrigger.addAction(function Builder.itemRemovalOrder)
 	
 	for pd in players
 		if pd.id > 7
