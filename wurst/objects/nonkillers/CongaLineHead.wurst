@@ -20,7 +20,7 @@ public class CongaLineHead extends DynamicSetupObject
 		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
 		segments = new LinkedList<DynamicSetupObject>()
-		
+		GetOrderTargetItem()
 		
 	override function update()
 		super.update()

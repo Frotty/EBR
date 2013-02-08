@@ -205,7 +205,7 @@ package Escaper
 					revX = he.revivetomb.getX()
 					revY = he.revivetomb.getY()
 					if e.owner.getId() < 8
-						he.revivetomb.recycle()
+						he.revivetomb.remove()
 						he.revivetomb = null
 			ReviveHero(e.actor, revX, revY, false)
 			e.setVel(vec3(0,0,0))

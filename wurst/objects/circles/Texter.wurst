@@ -17,7 +17,7 @@ package Texter
 		color col = color(255,255,255)
 		
 		construct( vec2 pos, player owner )
-			super( pos, getUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep ) 
+			super( pos, CreateUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep ) 
 			actor.setUserData(this castTo int)
 			text.setColor( col.red,col.green,col.blue, 0 ).setPos( actor.getX(),actor.getY(), 0 ).setVisibility( false ).setPermanent( true )
 			

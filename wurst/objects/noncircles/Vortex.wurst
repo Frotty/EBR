@@ -43,5 +43,5 @@ public class Vortex extends UnitEntity
 
 	ondestroy
 		actor.unregisterCastEvent()
-		actor.recycle()
+		actor.remove()
 				

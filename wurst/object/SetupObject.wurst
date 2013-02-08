@@ -78,8 +78,8 @@ package SetupObject
 		
 		ondestroy
 			actor.clearRegister()
-			actor.recycle()
-			setup.recycle()
+			actor.remove()
+			setup.remove()
 			inRangeTrig.destr()
 			
 		static function onOrderEvent()
@@ -146,8 +146,8 @@ package SetupObject
 
 		ondestroy
 			actor.clearRegister()
-			actor.recycle()
-			setup.recycle()
+			actor.remove()
+			setup.remove()
 			inRangeTrig.destr()
 //			
 //	function fixPositions()
