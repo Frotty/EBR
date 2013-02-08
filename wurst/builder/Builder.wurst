@@ -103,9 +103,10 @@ public class Builder extends UnitEntity
 			if wasMenu
 				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
 				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
-				UnitAddItemById(builder.actor,'I001')
-				UnitAddItemById(builder.actor,'I002')
-				UnitAddItemById(builder.actor,'I003')
+				if UnitItemInSlot(builder.actor, 0) == null
+					UnitAddItemById(builder.actor,'I001')
+					UnitAddItemById(builder.actor,'I002')
+					UnitAddItemById(builder.actor,'I003')
 				if builder.hasBossMenu
 					builder.actor.addAbility(MENU_BOSS)					
 				SelectUnitForPlayerSingle( builder.actor, builder.owner )

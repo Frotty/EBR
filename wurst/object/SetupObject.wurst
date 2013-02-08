@@ -26,7 +26,7 @@ package SetupObject
 			super( pos, u )
 			debugPrint("ue-1",4)
 			this.radius = radius
-			actor.addAbility('Aloc').removeAbility('Aloc')
+			actor.addAbility(LOCUST_ID)
 			SetUnitPathing(actor, true)
 			debugPrint("ue-2",4)
 			this.setup = setup

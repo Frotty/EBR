@@ -69,7 +69,7 @@ package Executer
 		destructable dummy // model for pressure plate, and lever
 		
 		construct( vec2 pos, player owner)
-			super( pos, getUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent )
+			super( pos, CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent )
 			actor.registerCastEvent(Condition(function Executer.onCast))
 			
 		static function onEvent()

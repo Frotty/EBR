@@ -25,7 +25,7 @@ package Bombertower
 			actor.addAbility('Agho')
 			dummy = getUnitAloc(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
 			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-			dummy.addAbility('Aloc').removeAbility('Aloc')
+			dummy.addAbility(LOCUST_ID)
 			SetUnitPathing(dummy, true)
 
 			

@@ -16,8 +16,10 @@ function onCommandChat()
 			clearStartMazes()
 		case "debug"
 			if wantDebug[id] 
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cff9C9C9CDEBUG - |r" + "disabled")
 				wantDebug[id] = false
 			else
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cff9C9C9CDEBUG - |r" + "enabled")
 				wantDebug[id] = true
 
 init

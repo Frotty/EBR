@@ -280,7 +280,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
 			debugPrint("Spinner done..." , 3)
 			s.checkObj( gg_unit_n00E_0261.getUserData() castTo Entity )
-			s.speed = 4.5
+			s.speed = 4.5 *DEGTORAD
         
 			s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), Player(11))
 			gg_unit_h01M_0257.remove()
@@ -292,21 +292,21 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.checkObj( gg_unit_n00E_0276.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0277.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0278.getUserData() castTo Entity )
-			s.speed = 2.
+			s.speed = 2. *DEGTORAD
 			
 			s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
 			gg_unit_h01M_0259.remove()
 			s.checkObj( gg_unit_n00E_0215.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
 			s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
-			s.speed = 4.
+			s.speed = 4. *DEGTORAD
 			//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
 			IssuePointOrder( s.setup, "patrol", -3820, -4661 )
         
 			s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), Player(11))
 			gg_unit_h01M_0212.remove()
 			s.checkObj( gg_unit_h01I_0220.getUserData() castTo Entity )
-			s.speed = 7
+			s.speed = 7 *DEGTORAD
 			EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
 		default
 			debugPrint("noooo", 2)

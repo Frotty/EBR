@@ -31,7 +31,7 @@ public class Trap extends StaticBaseObject
 	real value // Shake, Knockback, Speed
 	
 	construct( vec2 pos, player owner )
-			super(pos, getUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
+			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
 
