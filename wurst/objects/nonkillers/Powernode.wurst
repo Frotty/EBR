@@ -28,7 +28,7 @@ public class Powernode extends DynamicSetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
 
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), getUnitAloc( owner, NODE_ID, pos.x, pos.y, 0 ), getUnit( owner, NODE_ID, pos.x, pos.y, 0 ), 0., CODE_NULL )
+		super( pos.toVec3(), getUnitAloc( owner, NODE_ID, pos.x, pos.y, 0 ), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function onCast))
 
 		

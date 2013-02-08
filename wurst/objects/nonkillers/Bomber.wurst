@@ -17,7 +17,7 @@ public class Bomber extends UnitEntity
 	
 	construct( vec2 pos, player owner )
 		super(pos.toVec3(), getUnitAloc(owner, BOMBER_ID, pos.x, pos.y, 0.))
-		setup = getUnit(owner, BOMBER_ID, pos.x, pos.y, 0.)
+		setup = CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0.)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)

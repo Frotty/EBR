@@ -5,7 +5,6 @@ import EventHandling
 import Texttag
 import TempGroups
 import PreloadHandler
-import ObjectRecycler
 
 constant int POINTER_ID = 'h01Q'
 
@@ -25,9 +24,9 @@ public class Pointer extends UnitEntity
 	trigger trig
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), getUnitAloc(owner, POINTER_ID, pos.x, pos.y, 0.))
+		super(pos.toVec3(), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.))
 		actor.addAbility(LOCUST_ID)
-		setup = getUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
+		setup = CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
 		setup.addAbility('Agho')
 		trig = CreateTrigger()
 		trig.registerUnitInRangeSource(setup, 64.)

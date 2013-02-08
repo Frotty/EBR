@@ -236,17 +236,17 @@ package Executer
 			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
-						new EscaperKiller(getUnitAloc(owner, data.smallKillerId, rX, rY, 0. ), getUnit(owner, data.smallKillerId, rX, rY, 0.), COLL_SIZE_SK)
+						new EscaperKiller(CreateUnit(owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(owner, data.smallKillerId, rX, rY, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGKILLER
-						new EscaperKiller(getUnitAloc(owner, data.bigKillerId,rX, rY, 0. ), getUnit(owner, data.bigKillerId, rX, rY, 0.), COLL_SIZE_BK)
+						new EscaperKiller(CreateUnit(owner, data.bigKillerId,rX, rY, 0. ), CreateUnit(owner, data.bigKillerId, rX, rY, 0.), COLL_SIZE_BK)
 					case ActionUnit.SMALLRANDOMKILLER
-						new EscaperKiller(getUnitAloc(owner, 'u006', rX, rY, 0. ), getUnit(owner, 'u006', rX, rY, 0.), COLL_SIZE_SK)
+						new EscaperKiller(CreateUnit(owner, 'u006', rX, rY, 0. ), CreateUnit(owner, 'u006', rX, rY, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGRANDOMKILLER
-						new EscaperKiller(getUnitAloc(owner, 'u008',rX, rY, 0. ), getUnit(owner, 'u008', rX, rY, 0.), COLL_SIZE_BK)
+						new EscaperKiller(CreateUnit(owner, 'u008',rX, rY, 0. ), CreateUnit(owner, 'u008', rX, rY, 0.), COLL_SIZE_BK)
 					case ActionUnit.TANK
-						new EscaperKiller(getUnitAloc(owner, 'h001', rX, rY, 0. ), getUnit(owner, 'h001', rX, rY, 0.), COLL_SIZE_TANK)
+						new EscaperKiller(CreateUnit(owner, 'h001', rX, rY, 0. ), CreateUnit(owner, 'h001', rX, rY, 0.), COLL_SIZE_TANK)
 					case ActionUnit.GLAIVE
-						new EscaperKiller(getUnitAloc(owner, 'u00A', rX, rY, 0. ), getUnit(owner, 'u00A', rX, rY, 0.), COLL_SIZE_GLAIVE)
+						new EscaperKiller(CreateUnit(owner, 'u00A', rX, rY, 0. ), CreateUnit(owner, 'u00A', rX, rY, 0.), COLL_SIZE_GLAIVE)
 					case ActionUnit.POINTER
 						new Pointer(vec2(rX,rY), owner)
 					default

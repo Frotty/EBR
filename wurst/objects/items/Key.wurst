@@ -4,7 +4,6 @@ import GameConstants
 import Escaper
 import BuilderConstants
 import EventHandling
-import ObjectRecycler
 
 int array keyIds
 
@@ -18,7 +17,7 @@ public class Key extends ItemObject
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(keyIds[0], pos.x, pos.y), getUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
+		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
 		setup.registerCastEvent(Condition(function Key.onCast))
 		
 	function recolor()

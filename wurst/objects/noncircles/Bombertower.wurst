@@ -17,13 +17,13 @@ package Bombertower
 		boolean realorder = true
 		
 		construct( vec2 pos, player owner )
-			super( pos, getUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
+			super( pos, CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., function Bombertower.onCast )
 			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_ORDER)
 			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
 			TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)
 			actor.registerCastEvent(Condition(function Bombertower.onCast))
 			actor.addAbility('Agho')
-			dummy = getUnitAloc(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
+			dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
 			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			dummy.addAbility(LOCUST_ID)
 			SetUnitPathing(dummy, true)
@@ -42,7 +42,7 @@ package Bombertower
 			IssueImmediateOrderById(obj.actor, STOP_ORDER)
 			
 		ondestroy
-			dummy.recycle()
+			dummy.remove()
 			actor.unregisterCastEvent()
 	
 	function checkAttackOrder()
