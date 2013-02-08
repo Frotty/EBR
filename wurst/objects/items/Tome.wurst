@@ -3,8 +3,6 @@ import ItemObject
 import GameConstants
 import Escaper
 import BuilderConstants
-import EventHandling
-import ObjectRecycler
 
 constant int DYN_ID = 'A00M'
 constant int STATIC_ID = 'A01O'
@@ -15,7 +13,7 @@ public class Tome extends ItemObject
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(TOME_ID, pos.x, pos.y), getUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
+		super( pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
 		
 	function pickedUp(Escaper holder)
 		picked = true

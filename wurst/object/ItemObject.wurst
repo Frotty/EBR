@@ -1,6 +1,5 @@
 package ItemObject
 import Entity
-import ObjectRecycler
 
 public abstract class ItemObject extends Entity
 	unit setup

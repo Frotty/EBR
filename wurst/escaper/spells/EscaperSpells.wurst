@@ -3,7 +3,6 @@ import BaseObject
 import Escaper
 import EscaperClasses
 import LastOrder
-import ObjectRecycler
 
 constant int REINCARNATION_ID = 'A02X'
 constant int SPEEDWAVE_ID = 'A034'
@@ -18,7 +17,7 @@ function castReincarnation()
 			var e = escaper castTo Holy_Escaper
 			if e.revivetomb != null
 				e.revivetomb.recycle()
-			e.revivetomb = getUnitAloc(escaper.owner, TOMB_DUMMY_ID, escaper.pos.x, escaper.pos.y, 0.)
+			e.revivetomb = CreateUnit(escaper.owner, TOMB_DUMMY_ID, escaper.pos.x, escaper.pos.y, 0.)
 	if id == SPEEDWAVE_ID
 		if escaper instanceof Ice_Escaper
 			var e2 = escaper castTo Ice_Escaper

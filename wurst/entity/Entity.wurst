@@ -4,7 +4,6 @@ import Terrain
 import PhysicsConstants
 import Debug
 import MapBounds
-import ObjectRecycler
 
 // Base Entity Class
 public abstract class Entity

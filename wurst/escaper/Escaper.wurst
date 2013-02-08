@@ -12,7 +12,6 @@ package Escaper
 	import LinkedList
 	import EscaperClasses
 	import PlayerData
-	import ObjectRecycler
 	
 	public Table escaperTable = new Table()
 	

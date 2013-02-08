@@ -7,5 +7,5 @@ constant int ID = 'u00B'
 public class TeleporterTarget extends DynamicSetupObject
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), getUnitAloc(owner, ID, pos.x, pos.y, 0.), getUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		super( pos.toVec3(), getUnitAloc(owner, ID, pos.x, pos.y, 0.), CreateUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		
