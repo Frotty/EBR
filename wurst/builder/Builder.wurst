@@ -21,7 +21,7 @@ public class Builder extends UnitEntity
 		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
 		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )
 		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_PICKUP_ITEM )
-		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		TriggerRegisterUnitEvent( orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 	
 	
 	static function claimRegion()
@@ -39,6 +39,8 @@ public class Builder extends UnitEntity
 				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
 				shop.remove()				
 			GroupClear(ENUM_GROUP)
+			if GetLocalPlayer() == builder.owner
+				SelectUnit(builder.actor, true)
 			
 			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
 			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
@@ -84,11 +86,6 @@ public class Builder extends UnitEntity
 						CreateItem(BOOTS_ID, ox,oy)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case BM_BOSS_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				case TOME_SPELL_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId())
 						CreateItem(TOME_ID, ox,oy)
@@ -100,10 +97,17 @@ public class Builder extends UnitEntity
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				*/
+				case BM_BOSS_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
+						new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+				
 					
 			if wasMenu
 				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
 				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
+				TriggerRegisterUnitEvent( orderTrigger, builder.actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 				if UnitItemInSlot(builder.actor, 0) == null
 					UnitAddItemById(builder.actor,'I001')
 					UnitAddItemById(builder.actor,'I002')
@@ -125,13 +129,16 @@ public class Builder extends UnitEntity
 			hasBossMenu = false
 
 	static function itemRemovalOrder()
-		print(GetIssuedOrderId().toString())
 		var i = GetOrderTargetItem()
 		if i != null
-			if GetItemTypeId(i) == TOME_ID
+			debugPrint("itemRemovalOrder",3)
+			if GetTriggerUnit().getUserData() > 0
 				var bdata = GetTriggerUnit().getUserData() castTo Builder
-				if bdata != null
-					IssueImmediateOrder(bdata.actor, "stop")
+				IssueImmediateOrder(bdata.actor, "stop")
+				if i.getUserData() > 0
+					var idata = i.getUserData() castTo Entity
+					idata.terminate()
+				else 
 					RemoveItem(i)
 		
 		
