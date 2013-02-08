@@ -17,5 +17,5 @@ public class Tree extends UnitEntity
 	
 	ondestroy
 		RemoveDestructable( this.dummy )
-		actor.recycle()
+		actor.remove()
 

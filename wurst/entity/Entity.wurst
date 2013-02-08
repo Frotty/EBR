@@ -84,7 +84,7 @@ abstract public class UnitEntity extends Entity
 			setNewPos(pos)
 		
 	function setNewActor(unit u)
-		actor.recycle()
+		actor.remove()
 		actor = u
 		actor.setUserData(this castTo int)
 		

@@ -74,7 +74,7 @@ abstract public class PhysicsUnitEntity extends PhysicsEntity
 		unitEntityCount++
 		
 	function setNewActor(unit u)
-		actor.recycle()
+		actor.remove()
 		actor = u
 		actor.setUserData(this castTo int)
 		

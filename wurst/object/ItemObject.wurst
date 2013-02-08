@@ -15,7 +15,7 @@ public abstract class ItemObject extends Entity
 		
 		
 	ondestroy
-		setup.recycle()
+		setup.remove()
 		actorItem.remove()
 		
 

@@ -16,7 +16,7 @@ function castReincarnation()
 		if escaper instanceof Escaper
 			var e = escaper castTo Holy_Escaper
 			if e.revivetomb != null
-				e.revivetomb.recycle()
+				e.revivetomb.remove()
 			e.revivetomb = CreateUnit(escaper.owner, TOMB_DUMMY_ID, escaper.pos.x, escaper.pos.y, 0.)
 	if id == SPEEDWAVE_ID
 		if escaper instanceof Ice_Escaper

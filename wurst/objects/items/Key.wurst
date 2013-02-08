@@ -84,7 +84,7 @@ public class Key extends ItemObject
 		dropTrig.enable()
 		holder = null
 		setup.unregisterCastEvent()
-		setup.recycle()
+		setup.remove()
 		
 		
 init

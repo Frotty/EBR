@@ -57,7 +57,7 @@ public class Boots extends ItemObject
 		dropTrig.enable()
 		holder = null
 		setup.unregisterCastEvent()
-		setup.recycle()
+		setup.remove()
 	
 	
 	

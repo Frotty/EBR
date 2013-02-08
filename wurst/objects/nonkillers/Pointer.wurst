@@ -89,8 +89,8 @@ public class Pointer extends UnitEntity
 				
 	ondestroy
 		actor.unregisterCastEvent()
-		actor.recycle()
-		setup.recycle()
+		actor.remove()
+		setup.remove()
 		trig.destr()
 		
 function getSelectedPointers(player p) returns group
