@@ -90,12 +90,12 @@ public class Builder extends UnitEntity
 						new EscaperKiller(getUnitAloc(builder.owner, BOSS_ID, ox, oy, 0. ), getUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				/*case TOME_SPELL_ID
+				case TOME_SPELL_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId())
 						CreateItem(TOME_ID, ox,oy)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case ANKH_SPELL_ID
+				/*case ANKH_SPELL_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId())
 						CreateItem(ANKH_ID, ox,oy)
 					else
@@ -127,8 +127,13 @@ public class Builder extends UnitEntity
 
 	static function itemRemovalOrder()
 		print(GetIssuedOrderId().toString())
-		//if GetIssuedOrderId() != stop 
-		//var bdata = GetTriggerUnit().getUserData() castTo Builder
+		var i = GetOrderTargetItem()
+		if i != null
+			if GetItemTypeId(i) == TOME_ID
+				var bdata = GetTriggerUnit().getUserData() castTo Builder
+				if bdata != null
+					IssueImmediateOrder(bdata.actor, "stop")
+					RemoveItem(i)
 		
 		
 function filter() returns boolean
