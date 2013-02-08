@@ -21,15 +21,16 @@ constant int BOSS_MODE_ID = 'A03E'
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
 
-public class SetupBox extends UnitEntity
+public class SetupBox
+	unit actor
+	player owner
 	RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
-		super( pos.toVec3(), CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 ))
+		actor = CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 )
+		this.owner = owner
 		actor.registerCastEvent(Condition(function SetupBox.onCast))
 		rdata = data
-		
-	override function update()
 		
 		
 	static function onCast() returns boolean
@@ -94,7 +95,7 @@ public class SetupBox extends UnitEntity
 				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
 				for u in ENUM_GROUP
 					var data = u.getUserData() castTo Entity
-					if not data instanceof Escaper and not data instanceof Builder and data != box
+					if not data instanceof Escaper and not data instanceof Builder and data != null
 						data.terminate()
 			case BOSS_MODE_ID
 				box.rdata.isBossRegion = true

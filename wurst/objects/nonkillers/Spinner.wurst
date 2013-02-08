@@ -50,7 +50,6 @@ public class Spinner extends DynamicSetupObject
 		super.update()
 		for node in spinningEntities
 			debugPrint("spinning", 0)
-
 			node.obj.setNewXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor,
 									pos.y + node.dist * Sin(node.angl+speed) * sinFactor, 0. ) )
 			node.angl += speed

@@ -56,12 +56,10 @@ public class Tracks extends UnitEntity
 				if tracks.speed < 10.
 					tracks.speed+= .5
 					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
-					tracks.actor.setTimeScale(0.5+tracks.speed/6)
 			case DEC_ID
 				if tracks.speed > .5
 					tracks.speed-= .5
 					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
-					tracks.actor.setTimeScale(0.5+tracks.speed/6)
 			case INCLENGTH_ID
 				if tracks.size < 2
 					tracks.size++
@@ -90,7 +88,7 @@ public class Tracks extends UnitEntity
 				tracks.height = tracks.width
 				tracks.width = temp2
 				tracks.recreateDummy()
-					
+		tracks.actor.setTimeScale(0.5+tracks.speed/6)
 		return false
 		
 	

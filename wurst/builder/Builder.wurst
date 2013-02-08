@@ -32,7 +32,7 @@ public class Builder extends UnitEntity
 			rdata.allow(builder.owner.getId())
 			RemoveItem( GetManipulatedItem())
 			
-			GroupEnumUnitsInRange(ENUM_GROUP,builder.pos.x, builder.pos.y, 512., Filter( function filter))
+			GroupEnumUnitsInRange(ENUM_GROUP,builder.pos.x, builder.pos.y, 512., Filter(function filter))
 			for shop in ENUM_GROUP
 				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
 				shop.remove()				
@@ -45,70 +45,64 @@ public class Builder extends UnitEntity
 		pos = actor.getPos().toVec3()
 	
 	static function swapPages()
-		var data = GetTriggerUnit().getUserData() castTo Entity
-		
-		if data instanceof Builder
-			var builder = data castTo Builder
-			var id = GetSpellAbilityId()
-			var ox = GetSpellTargetX()
-			var oy = GetSpellTargetY()
-			boolean wasMenu = false
-			switch id
-				case MENU_1
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
-					wasMenu = true
-				case MENU_2
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit())))
-					wasMenu = true
-				case MENU_3
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
-					wasMenu = true
-				case MENU_4
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
-					wasMenu = true
-				case MENU_5
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
-					wasMenu = true
-				case MENU_6
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
-					wasMenu = true
-				case KEY_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						new Key(vec2(ox,oy), builder.owner)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case BOOTS_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						CreateItem(BOOTS_ID, ox,oy)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case BM_BOSS_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				/*case TOME_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						CreateItem(TOME_ID, ox,oy)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case ANKH_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						CreateItem(ANKH_ID, ox,oy)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				*/
+		var builder = GetTriggerUnit().getUserData() castTo Builder
+		var id = GetSpellAbilityId()
+		let ox = GetSpellTargetX()
+		let oy = GetSpellTargetY()
+		boolean wasMenu = false
+		switch id
+			case MENU_1
+				builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, builder.pos.x, builder.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+				wasMenu = true
+			case MENU_2
+				builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, builder.pos.x, builder.pos.y, GetUnitFacing(GetTriggerUnit())))
+				wasMenu = true
+			case MENU_3
+				builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, builder.pos.x, builder.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+				wasMenu = true
+			case MENU_4
+				builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, builder.pos.x, builder.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+				wasMenu = true
+			case MENU_5
+				builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, builder.pos.x, builder.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+				wasMenu = true
+			case MENU_6
+				builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, builder.pos.x, builder.pos.y, GetUnitFacing(GetTriggerUnit() )) )
+				wasMenu = true
+			case KEY_SPELL_ID
+				if getRegionData(ox,oy).isOwner(builder.owner.getId())
+					new Key(vec2(ox,oy), builder.owner)
+				else
+					DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			case BOOTS_SPELL_ID
+				if getRegionData(ox,oy).isOwner(builder.owner.getId())
+					CreateItem(BOOTS_ID, ox,oy)
+				else
+					DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			case BM_BOSS_ID
+				if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
+					new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+				else
+					DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+			/*case TOME_SPELL_ID
+				if getRegionData(ox,oy).isOwner(builder.owner.getId())
+					CreateItem(TOME_ID, ox,oy)
+				else
+					DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			case ANKH_SPELL_ID
+				if getRegionData(ox,oy).isOwner(builder.owner.getId())
+					CreateItem(ANKH_ID, ox,oy)
+				else
+					DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			*/
 					
-			if wasMenu
-				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
-				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
-				if UnitItemInSlot(builder.actor, 0) == null
-					UnitAddItemById(builder.actor,'I001')
-					UnitAddItemById(builder.actor,'I002')
-					UnitAddItemById(builder.actor,'I003')
-				if builder.hasBossMenu
-					builder.actor.addAbility(MENU_BOSS)					
-				SelectUnitForPlayerSingle( builder.actor, builder.owner )
+		if wasMenu
+			UnitAddItemById(builder.actor,'I001')
+			UnitAddItemById(builder.actor,'I002')
+			UnitAddItemById(builder.actor,'I003')
+			if builder.hasBossMenu
+				builder.actor.addAbility(MENU_BOSS)					
+			SelectUnitForPlayerSingle( builder.actor, builder.owner )
 	
 	function setBossMenu(RegionData rdata)
 		if rdata.isOwner(owner.getId())
@@ -124,13 +118,17 @@ public class Builder extends UnitEntity
 
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
+	
+function isBuilder() returns boolean
+	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
 		
 public function init_Builder()	
 	swapTrigger = CreateTrigger()
+	swapTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	swapTrigger.addCondition(Condition(function isBuilder))
 	swapTrigger.addAction(function Builder.swapPages)
-	itemTrigger = CreateTrigger()
-	itemTrigger.addAction(function Builder.claimRegion)
-	
+
+
 	for pd in players
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
