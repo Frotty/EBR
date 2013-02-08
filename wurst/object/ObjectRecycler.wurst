@@ -22,7 +22,8 @@ public function unit.recycle()
 			this.hide()
 			this.setPos(minx, maxy)
 		else
-			printError("trying to recycle a unit not created by 'getUnitAloc'!")
+			this.remove()
+			return
 	else
 		if objectLists.hasInt(id)
 			let stack = objectLists.loadInt(id) castTo Stack<unit>
@@ -30,7 +31,8 @@ public function unit.recycle()
 			this.hide()
 			this.setPos(minx, maxy)
 		else
-			printError("trying to recycle a unit not created by 'getUnit'!")
+			this.remove()
+			return
 	this.setUserData(0).setMoveSpeed(180)
 		
 	
@@ -41,7 +43,7 @@ public function getUnit(player p, int id, vec2 pos, angle facing) returns unit
 		let stack = objectLists.loadInt(id) castTo Stack<unit>
 		if stack.size > 0
 			debugPrint("saved Int - loaded from stack", 100)
-			return stack.pop().setPos(pos).setFacing(facing).show().unpause().issueRallyPoint(pos)
+			return stack.pop().setPos(pos).setFacing(facing).show().setOwner(p, true).issueRallyPoint(pos)
 		else
 			debugPrint("saved Int - but empty stack", 100)
 			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
@@ -59,7 +61,7 @@ public function getUnitAloc(player p, int id, vec2 pos, angle facing) returns un
 		let stack = alocObjectLists.loadInt(id) castTo Stack<unit>
 		if stack.size > 0
 			debugPrint("saved Int - loaded from stack", 100)
-			return stack.pop().setPos(pos).setFacing(facing).show().issueRallyPoint(pos)
+			return stack.pop().setPos(pos).setFacing(facing).show().setOwner(p, true).issueRallyPoint(pos).addAbility(LOCUST_ID)
 		else
 			debugPrint("saved Int - but empty stack", 100)
 			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
