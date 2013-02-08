@@ -9,6 +9,7 @@ package Revivepoint
 	import TempGroups
 	import Builder
 	import Startmazes
+	import LastOrder
 
 	constant real EVENT_RADIUS = 80.
 	constant int REVIVEPOINT_ID = 'n000'
@@ -56,6 +57,7 @@ package Revivepoint
 				for Escaper es in escapers
 					if es.owner.getId() < 8
 						es.setNewPos(obj.pos)
+						es.actor.abortOrder()
 						es.currentRegion = rdata
 						if GetLocalPlayer() == es.owner
 							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)

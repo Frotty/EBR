@@ -3,6 +3,7 @@ import Stack
 import BaseObject
 import TypeCasting
 import MapBounds
+import LastOrder
 
 Table objectLists = new Table()
 Table alocObjectLists = new Table()
@@ -15,23 +16,32 @@ public function unit.recycle()
 	if this.hasAbility(VIS_ID)
 		this.removeAbility('Agho').addAbility('Aeth')
 		this.removeAbility(VIS_ID).addAbility(INVIS_ID)
+	debugPrint("unit check",7)
 	if this.hasAbility(LOCUST_ID)
+		debugPrint("unit has locust",7)
 		if alocObjectLists.hasInt(id)
+			debugPrint("unit has locust and there is a stack",7)
 			let stack = alocObjectLists.loadInt(id) castTo Stack<unit>
 			stack.push(this)
-			this.hide()
+			debugPrint("unit has locust and there is a stack pushed",7)
+			this.removeAbility(LOCUST_ID)
+			this.hide().show().hide()
+			
 			this.setPos(minx, maxy)
 		else
-			printError("trying to recycle a unit not created by 'getUnitAloc'!")
+			this.remove()
+			return
 	else
+		debugPrint("unit check nonlocust",7)
 		if objectLists.hasInt(id)
 			let stack = objectLists.loadInt(id) castTo Stack<unit>
 			stack.push(this)
 			this.hide()
 			this.setPos(minx, maxy)
 		else
-			printError("trying to recycle a unit not created by 'getUnit'!")
-	this.setUserData(0).setMoveSpeed(180)
+			this.remove()
+			return
+	this.setUserData(0).setMoveSpeed(180).clearLastOrders().setOwner(DUMMY_PLAYER, false)
 		
 	
 
@@ -41,7 +51,7 @@ public function getUnit(player p, int id, vec2 pos, angle facing) returns unit
 		let stack = objectLists.loadInt(id) castTo Stack<unit>
 		if stack.size > 0
 			debugPrint("saved Int - loaded from stack", 100)
-			return stack.pop().setPos(pos).setFacing(facing).show().unpause().issueRallyPoint(pos)
+			return stack.pop().setPos(pos).setFacing(facing).show().setOwner(p, true).issueRallyPoint(pos)
 		else
 			debugPrint("saved Int - but empty stack", 100)
 			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())
@@ -59,7 +69,7 @@ public function getUnitAloc(player p, int id, vec2 pos, angle facing) returns un
 		let stack = alocObjectLists.loadInt(id) castTo Stack<unit>
 		if stack.size > 0
 			debugPrint("saved Int - loaded from stack", 100)
-			return stack.pop().setPos(pos).setFacing(facing).show().issueRallyPoint(pos)
+			return stack.pop().setPos(pos).setFacing(facing).show().addAbility(LOCUST_ID).setOwner(p, true).issueRallyPoint(pos)
 		else
 			debugPrint("saved Int - but empty stack", 100)
 			return CreateUnit(p, id, pos.x, pos.y, facing.degrees())

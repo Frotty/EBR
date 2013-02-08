@@ -57,14 +57,19 @@ package BaseObject
 					obj.rallyAngle = angleBetweenCoordsD( obj.pos.x, obj.pos.y, x, y )
 				else
 					obj.rallyUnit = u2
+
+						
 					
 		function getRallyPoint() returns vec3
 			if rallyUnit == null
 				return rallyPoint
 			else
-				real x = GetUnitX( rallyUnit )
-				real y = GetUnitY( rallyUnit )
-				return vec3( x, y, getTerrainZ( x, y ) )
+				if rallyUnit.getOwner() != DUMMY_PLAYER
+					real x = GetUnitX( rallyUnit )
+					real y = GetUnitY( rallyUnit )
+					return vec3( x, y, getTerrainZ( x, y ) )
+				else
+					return pos
 						
 		function getRallyUnit() returns unit
 			return rallyUnit

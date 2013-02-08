@@ -41,6 +41,7 @@ public class Spinner extends DynamicSetupObject
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), getUnitAloc(owner, SPINNER_ID, pos.x, pos.y, 0), getUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		actor.addAbility(LOCUST_ID)
 		setup.registerCastEvent(Condition(function onCast))
 		actor.setUserData(this castTo int)
 		
