@@ -117,6 +117,7 @@ package SetupObject
 		construct( vec3 pos, real radius, code c )
 			super( pos, setup )
 			this.radius = radius
+			active = false
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.addAction( c )

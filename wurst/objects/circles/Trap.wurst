@@ -32,6 +32,7 @@ public class Trap extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
+			active = true
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
 

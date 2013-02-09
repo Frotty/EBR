@@ -34,7 +34,7 @@ public class Builder extends UnitEntity
 			rdata.allow(builder.owner.getId())
 			RemoveItem( GetManipulatedItem())
 			
-			GroupEnumUnitsInRange(ENUM_GROUP,builder.pos.x, builder.pos.y, 512., Filter( function filter))
+			GroupEnumUnitsInRange(ENUM_GROUP,builder.pos.x, builder.pos.y, 512., Filter(function filter))
 			for shop in ENUM_GROUP
 				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
 				shop.remove()				
@@ -144,15 +144,19 @@ public class Builder extends UnitEntity
 		
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
+	
+function isBuilder() returns boolean
+	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
 		
 public function init_Builder()	
 	swapTrigger = CreateTrigger()
+	swapTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	swapTrigger.addCondition(Condition(function isBuilder))
 	swapTrigger.addAction(function Builder.swapPages)
 	itemTrigger = CreateTrigger()
 	itemTrigger.addAction(function Builder.claimRegion)
 	orderTrigger = CreateTrigger()
 	orderTrigger.addAction(function Builder.itemRemovalOrder)
-	
 	for pd in players
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )

@@ -20,14 +20,12 @@ public class CongaLineHead extends DynamicSetupObject
 		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
 		segments = new LinkedList<DynamicSetupObject>()
-		GetOrderTargetItem()
 		
 	override function update()
 		super.update()
 		int i = 0
 		UnitEntity se = null
 		for e in segments
-
 			if i == 0
 				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), angleBetweenCoordsD(e.pos.x, e.pos.y, pos.x, pos.y))
 			else

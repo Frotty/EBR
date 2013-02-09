@@ -27,17 +27,6 @@ import Decoration
 import Wall
 import LastOrder
 		
-
-real x
-real y
-real ox
-real oy
-unit u
-unit d
-timer t = CreateTimer()
-int ord
-int array buildorders
-
 	
 function condition() returns boolean
 	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
@@ -45,7 +34,6 @@ function condition() returns boolean
 
 function isOrderBuildOrder( int o ) returns boolean
 	int i = 0
-	
 	while buildorders[i] != 0
 		if buildorders[i] == o
 			return true 
@@ -175,7 +163,15 @@ function conac()
 	w = null
 
 
-
+real x
+real y
+real ox
+real oy
+unit u
+unit d
+timer t = CreateTimer()
+int ord
+int array buildorders
 
 
 init
