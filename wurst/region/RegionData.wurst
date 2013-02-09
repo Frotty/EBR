@@ -184,7 +184,8 @@ public function init_Regions()
 	regions[18] = new RegionData( gg_rct_Region_002 )
 	regions[19] = new RegionData( gg_rct_Region_003 )
 	regions[20] = new RegionData( gg_rct_Region_026 )
-    
+	regions[21] = new RegionData( gg_rct_Start )
+	regions[21].isBROwner = true    
    
 function initTerrainTypes()
 	//CITADEL
