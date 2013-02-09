@@ -18,8 +18,6 @@ public class Builder extends UnitEntity
 
 	construct( player p )
 		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -5240, -5624, 0) )
-		TriggerRegisterUnitEvent( swapTrigger, actor, EVENT_UNIT_SPELL_CAST )
-		TriggerRegisterUnitEvent( itemTrigger, actor, EVENT_UNIT_PICKUP_ITEM )
 	
 	
 	static function claimRegion()
@@ -127,6 +125,10 @@ public function init_Builder()
 	swapTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 	swapTrigger.addCondition(Condition(function isBuilder))
 	swapTrigger.addAction(function Builder.swapPages)
+	itemTrigger = CreateTrigger()
+	itemTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
+	itemTrigger.addCondition(Condition(function isBuilder))
+	itemTrigger.addAction(function Builder.claimRegion)
 
 
 	for pd in players

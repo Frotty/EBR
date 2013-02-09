@@ -314,10 +314,13 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 public function clearEBRRect(int r)
 	var rd = regions[r]
 	debugPrint("R = " + r.toString() + " region unwalkable: " + rd.unwalkableTile.toString(),3)
-	g.clear()
 	GroupEnumUnitsInRect(g, rd.theRect, null)
 	for u in g
-		u.remove()
+		let e =u.getUserData() castTo Entity
+		if (e != null )
+			e.terminate()
+		else
+			u.remove()
 	g.clear()
 	EnumItemsInRect(rd.theRect, null, function deleteKeys)
 	EnumDestructablesInRectAll(rd.theRect, function deleteDes)
