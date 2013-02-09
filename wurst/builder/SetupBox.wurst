@@ -31,6 +31,7 @@ public class SetupBox
 		this.owner = owner
 		actor.registerCastEvent(Condition(function SetupBox.onCast))
 		rdata = data
+		actor.setUserData(this castTo int)
 		
 		
 	static function onCast() returns boolean
@@ -77,7 +78,7 @@ public class SetupBox
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()
 				var id2 = p.getId()
-				if id > 7
+				if id > 7 and not p == box.owner
 					AddSpecialEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getX(), u.getY()).destr()
 					if box.rdata.isOwner(id2)
 						box.rdata.disallow(id2)
@@ -91,6 +92,12 @@ public class SetupBox
 						DisplayTextToPlayer( p, 0, 0, colorcode[box.owner.getId()] + box.owner.getName() + " |cff08B552allowed|r |cffffcc00 you to build in his region." )
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMaxX(box.rdata.theRect)+GetRectMinX(box.rdata.theRect))/2, (GetRectMaxY(box.rdata.theRect)+GetRectMinY(box.rdata.theRect))/2, 3, 8, 181, 82, false)
+				else if p == box.owner
+					DisplayTextToPlayer( box.owner, 0, 0, "|cffC51019You Can't disallow yourself in your region!" )
+				else
+					DisplayTextToPlayer( box.owner, 0, 0, "|cffC51019You Can't allow an escaper in your region!" )
+					
+						
 			case CLEAR_ID
 				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
 				for u in ENUM_GROUP

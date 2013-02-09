@@ -7,7 +7,8 @@ import Key
 import SetupBox
 import TempGroups
 import LinkedList
-import EscaperKiller
+import Boss
+import BossSpellTarget
 
 trigger swapTrigger
 trigger itemTrigger
@@ -36,11 +37,10 @@ public class Builder extends UnitEntity
 				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
 				shop.remove()				
 			GroupClear(ENUM_GROUP)
-			if GetLocalPlayer() == builder.owner
-				SelectUnit(builder.actor, true)
-			
 			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
 			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
+			if GetLocalPlayer() == builder.owner
+				SelectUnit(builder.actor, true)
 			
 	override function update()
 		pos = actor.getPos().toVec3()
@@ -95,16 +95,27 @@ public class Builder extends UnitEntity
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				*/
 				case BM_BOSS_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new EscaperKiller(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+					var rdata = getRegionData(ox,oy)
+					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
+						GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
+						boolean noBoss = true
+						for unit u in ENUM_GROUP
+							if GetUnitTypeId(u) == BOSS_ID
+								noBoss = false
+						ENUM_GROUP.clear()
+						if noBoss
+							new Boss(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+						else
+							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				
+				case BM_SPELLTARGET_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
+						new SpellTarget(vec2(ox,oy), builder.owner)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 					
 			if wasMenu
-				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
-				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
-				TriggerRegisterUnitEvent( orderTrigger, builder.actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 				if UnitItemInSlot(builder.actor, 0) == null
 					UnitAddItemById(builder.actor,'I001')
 					UnitAddItemById(builder.actor,'I002')
