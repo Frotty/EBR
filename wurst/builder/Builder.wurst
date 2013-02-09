@@ -116,9 +116,9 @@ public class Builder extends UnitEntity
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 					
 			if wasMenu
-				TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
+				/*TriggerRegisterUnitEvent( swapTrigger, builder.actor, EVENT_UNIT_SPELL_CAST )
 				TriggerRegisterUnitEvent( itemTrigger, builder.actor, EVENT_UNIT_PICKUP_ITEM )
-				TriggerRegisterUnitEvent( orderTrigger, builder.actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+				TriggerRegisterUnitEvent( orderTrigger, builder.actor, EVENT_UNIT_ISSUED_TARGET_ORDER )*/
 				if UnitItemInSlot(builder.actor, 0) == null
 					UnitAddItemById(builder.actor,'I001')
 					UnitAddItemById(builder.actor,'I002')
