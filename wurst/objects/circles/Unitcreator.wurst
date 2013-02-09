@@ -1,4 +1,4 @@
-package UnitCreator
+package Unitcreator
 	import BaseObject
 	import Terrain
 	import EscaperKiller
