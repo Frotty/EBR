@@ -1,0 +1,67 @@
+package Boss
+import Entity
+import Terrain
+import SetupObject
+import Escaper
+import EventHandling
+import PreloadHandler
+import BossSpellTarget
+import TempGroups
+import RegionData
+
+constant int HP_UP_ID = 'A001'
+constant int AOE_SPELL_ID = 'A001'
+
+public class Boss extends DynamicSetupObject
+	int aoe_id
+	string aoe_string
+		
+	static function onInRangeEvent()
+		var ent = GetTriggerUnit().getUserData() castTo Entity
+			
+		if ent instanceof Escaper
+			var es = ent castTo Escaper
+			if not es.flying
+				es.kill() 
+	
+	construct( unit actor, unit setup, real radius )
+		super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function Boss.onInRangeEvent ) 
+		
+	static function onCast()
+		var data = GetTriggerUnit().getUserData() castTo Entity
+		
+		if data instanceof Boss
+			var boss = data castTo Boss
+			var id = GetSpellAbilityId()
+			var ox = GetSpellTargetX()
+			var oy = GetSpellTargetY()
+			switch id
+				case HP_UP_ID
+					print("wictory")
+				case AOE_SPELL_ID
+					if getRegionData(ox,oy).isOwner(boss.owner.getId())
+						var g = boss.getSpellTargets(SpellType.AOE)
+						for unit u in g
+							var spt = u.getUserData() castTo SpellTarget
+							spt.castSpell(boss.aoe_id, boss.aoe_string)
+					else
+						DisplayTextToPlayer( boss.owner, 0, 0, "|cffC51019You have no permission to cast boss spells in this region!")
+			
+	
+	function getSpellTargets(SpellType stype) returns group
+		var ox = pos.x
+		var oy = pos.y
+		var rdata = getRegionData(ox,oy)
+		GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
+		group g = CreateGroup()
+		for unit u in ENUM_GROUP
+			if GetUnitTypeId(u) == SPELLTARGET_ID and GetOwningPlayer(u) == owner and u.getUserData() > 0
+				var spt = u.getUserData() castTo SpellTarget
+				if spt.stype == stype
+					GroupAddUnit(g, u)
+		ENUM_GROUP.clear()
+		return g
+	
+	
+init
+	preloadAbility(HP_UP_ID)

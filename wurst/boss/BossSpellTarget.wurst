@@ -1,0 +1,32 @@
+package BossSpellTarget
+
+import SetupObject
+import EventHandling
+import PreloadHandler
+import DummyCaster
+
+public constant int SPELLTARGET_ID = 'u00F'
+
+public enum SpellType
+	AOE
+	LINE
+	MISSILE
+
+public class SpellTarget extends DynamicSetupObject
+	SpellType stype
+
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		setup.registerCastEvent(Condition(function onCast))
+		
+	static function onCast() returns boolean
+		return false
+	
+	function castSpell(int spell_id, string spell_string)
+		var dc = new DummyCaster(spell_id, spell_string, DUMMY_PLAYER, true)
+		dc.level = 1
+		dc.recycledelay = 0.5
+		dc.castOnPoint(pos.x,pos.y)
+	
+init
+	preloadAbility('AAAA')
