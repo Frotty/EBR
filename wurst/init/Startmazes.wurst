@@ -47,6 +47,20 @@ public function initBaseObjects()
 		u4.remove()
 		
 	g.clear()
+		
+	GroupEnumUnitsOfType(g, "custom_n018", null )
+	for u4 in g
+		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		u4.remove()
+		
+	g.clear()
+	
+	GroupEnumUnitsOfType(g, "custom_n019", null )
+	for u4 in g
+		new BigObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		u4.remove()
+		
+	g.clear()
 	
 	GroupEnumUnitsOfType(g, "custom_n01I", null )
 	for u5 in g

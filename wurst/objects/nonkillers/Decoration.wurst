@@ -5,4 +5,4 @@ import SetupObject
 public class Decoration extends StaticSetupObject
 	
 	construct( vec2 pos, player owner, int ID, real a )
-		super( vec3(pos.x,pos.y,0), CreateUnit(owner, ID, pos.x, pos.y, a ),CreateUnit(owner, ID, pos.x, pos.y, a ), 0., CODE_NULL )
+		super( vec3(pos.x,pos.y,0), CreateUnit(owner, ID, pos.x, pos.y, a ),CreateUnit(owner, ID, pos.x, pos.y, a ), 0., null )

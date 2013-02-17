@@ -173,11 +173,15 @@ timer t = CreateTimer()
 int ord
 int array buildorders
 
+public function trigger.registerBuilderEvent(playerunitevent ev)
+	for i = 8 to 10
+		this.registerPlayerUnitEvent( Player(i), ev, null)
+
 
 init
 	trigger trig = CreateTrigger()
-	TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
-	TriggerRegisterAnyUnitEventBJ( trig, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
+	trig.registerBuilderEvent( EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
+	trig.registerBuilderEvent( EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
 	TriggerAddCondition( trig, Condition( function condition ) )
 	TriggerAddAction( trig,  function conac  )
 	
