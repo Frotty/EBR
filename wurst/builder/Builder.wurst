@@ -39,7 +39,7 @@ public class Builder extends UnitEntity
 				shop.remove()				
 			GroupClear(ENUM_GROUP)
 			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
-			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
+			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
 			if GetLocalPlayer() == builder.owner
 				SelectUnit(builder.actor, true)
 			

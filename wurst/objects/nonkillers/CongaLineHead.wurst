@@ -27,9 +27,9 @@ public class CongaLineHead extends DynamicSetupObject
 		UnitEntity se = null
 		for e in segments
 			if i == 0
-				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), angleBetweenCoordsD(e.pos.x, e.pos.y, pos.x, pos.y))
+				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), angleBetweenCoords(e.pos.x, e.pos.y, pos.x, pos.y).degrees())
 			else
-				e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), angleBetweenCoordsD(e.pos.x, e.pos.y, se.pos.x, se.pos.y))
+				e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), angleBetweenCoords(e.pos.x, e.pos.y, se.pos.x, se.pos.y).degrees())
 				
 			se = e
 			i++
@@ -89,7 +89,7 @@ function UnitEntity.setNewPosA( vec2 tpos, real angl)
 		(this castTo Spinner).actor.setFacing(angl)
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
-	let angl = angleBetweenCoordsR(pos2.x, pos2.y, pos1.x, pos1.y)
-	return vec2(pos1.x - Cos(angl) * segLength,
-				pos1.y - Sin(angl) * segLength)
+	let angl = angleBetweenCoords(pos2.x, pos2.y, pos1.x, pos1.y)
+	return vec2(pos1.x - Cos(angl.radians()) * segLength,
+				pos1.y - Sin(angl.radians()) * segLength)
 				

@@ -15,7 +15,7 @@ package Revivepoint
 	constant int REVIVEPOINT_ID = 'n000'
 	boolean isFirst = true
 	
-	public RevivePoint currentRevivepoint
+	public vec2 currentRevivepoint
 
 	public class RevivePoint extends StaticSetupObject
 		boolean reached = false
@@ -34,7 +34,7 @@ package Revivepoint
 			if isFirst and e instanceof Escaper
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
 				obj.reached = true
-				currentRevivepoint = obj
+				currentRevivepoint = obj.pos.toVec2()
 				var rdata1 = rdata
 				for es1 in escapers
 					es1.setNewPos(obj.pos)
@@ -50,7 +50,7 @@ package Revivepoint
 				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
 				obj.reached = true
-				currentRevivepoint = obj
+				currentRevivepoint = obj.pos.toVec2()
 				for Escaper es in escapers
 					if es.owner.getId() < 8
 						es.setNewPos(obj.pos)

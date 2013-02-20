@@ -69,7 +69,7 @@ public class Spinner extends DynamicSetupObject
 				i++
 			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == Player(11))
 				dobj.setup.removeAbility(REMOVE_ID)
-				spinningEntities.add(new SpinNode(dobj, angleBetweenCoordsR(pos.x, pos.y, dobj.pos.x, dobj.pos.y), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
+				spinningEntities.add(new SpinNode(dobj, angleBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y).radians(), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
 
 	ondestroy
 		setup.unregisterCastEvent()
