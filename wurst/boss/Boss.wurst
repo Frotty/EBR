@@ -10,6 +10,7 @@ import TempGroups
 import RegionData
 
 constant int HP_UP_ID = 'A001'
+constant int HP_DOWN_ID = 'A001'
 constant int AOE_SPELL_ID = 'A001'
 
 public class Boss extends DynamicSetupObject
@@ -64,4 +65,4 @@ public class Boss extends DynamicSetupObject
 	
 	
 init
-	preloadAbility(HP_UP_ID)
+	//preloadAbility(HP_UP_ID)

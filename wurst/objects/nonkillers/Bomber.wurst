@@ -5,6 +5,7 @@ import EventHandling
 import Texttag
 
 constant int BOMBER_ID = 'h00Y'
+constant int AUTOATTACK_ID = 'A03B'
 constant int	ATTACK_ORDER = 851983
 constant int	ATTACK_GROUND_ORDER = 851984
 constant int	STOP_ORDER = 851972
@@ -24,6 +25,7 @@ public class Bomber extends UnitEntity
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
 		actor.addAbility(LOCUST_ID)
 		UnitAddType(setup, UNIT_TYPE_PEON)
+		UnitAddType(actor, UNIT_TYPE_PEON)
 		setup.addAbility('Agho')
 		setup.registerCastEvent(Condition(function onCast))
 		setup.setUserData(this castTo int)
@@ -34,20 +36,13 @@ public class Bomber extends UnitEntity
 		var id = GetSpellAbilityId()
 		var obj = GetTriggerUnit().getUserData() castTo Bomber
 		onAttackspeedCast(id, obj.actor)
-		if id == 'A03B'
+		if id == AUTOATTACK_ID
 			if IsUnitType(obj.actor, UNIT_TYPE_PEON)
 				UnitRemoveType(obj.actor, UNIT_TYPE_PEON)
 				createTTEx(obj.pos, vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), obj.owner  )
 			else
 				UnitAddType(obj.actor, UNIT_TYPE_PEON)
 				createTTEx(obj.pos, vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), obj.owner  )
-		/*	if GetUnitAcquireRange(obj.actor) <= 200.
-				SetUnitAcquireRange(obj.actor,2000.)
-				debugPrint("toggle bomber attack :on "+ GetUnitAcquireRange(obj.actor).toString(), 3)
-			else
-				SetUnitAcquireRange(obj.actor,10.)
-				debugPrint("toggle bomber attack :off "+ GetUnitAcquireRange(obj.actor).toString(), 3)
-		*/		
 		return false
 		
 	static function orderSetup()

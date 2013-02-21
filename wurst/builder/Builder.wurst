@@ -115,6 +115,14 @@ public class Builder extends UnitEntity
 						new SpellTarget(vec2(ox,oy), builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+				case GRIDCLICK_ID
+					PlayerData pd = pData[builder.owner.getId()]
+					if pd.gridClickActivated
+						pd.gridClickActivated = false
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff9C0808OFF|r!") 
+					else
+						pd.gridClickActivated = true
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff08B552ON|r!") 
 					
 			if wasMenu
 				if UnitItemInSlot(builder.actor, 0) == null

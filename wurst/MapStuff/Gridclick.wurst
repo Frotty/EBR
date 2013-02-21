@@ -13,13 +13,13 @@ package Gridclick
 	
 	function checkRightOrder()
 		var i = GetIssuedOrderId()
-		//print(i.toString())
 		if pData[GetPlayerId(GetOwningPlayer(GetOrderedUnit()))].gridClickActivated == true // is this proper??
 			if (i == PATROL_ID or i == MOVE_ID or i == GROUND_ATTACK_ID)
 				var gridx = (round(GetOrderPointX()/ GRID) * GRID).toReal() //similar as placement of the terrainblocker circle??
 				var gridy = (round(GetOrderPointY()/ GRID) * GRID).toReal()
 				if not (gridx == GetOrderPointX() and gridy == GetOrderPointY())
 					IssuePointOrderById(GetOrderedUnit(),i,gridx, gridy)
+					debugPrint("Grid order", 2)
 	
 	public function round (real r) returns integer // this function could be imported from the terrainblocker circle!
 		if r > 0

@@ -1,50 +1,64 @@
-EBR 0.70
+EBR 0.80
 
 Additions:
 *New Object: Trap
-    -configureable circleobject with many options to choose from (type of sfx and type of trap)
+	-configureable circleobject with many options to choose from (type of sfx and type of trap)
+	-two modes: on step, periodic
 *New Object: Different Walls
 *New Object: Conga Line Head
 *New Escaper: Slide Escaper
+*New system: Gridclick
+	-Helps ordering the units for builder
+	-can be turned on/off
+*Replaced Lights Menu with Decorations Menu
+*Some changed Abilities for escapers.
 
 Global Changes:
 *Revamped Slidingsystem
 *Added 3 States of possible triggerunits (escaper,killer,both)
 *Much smoother movement of escapers when influenced by forces
-*Most units are unclickable for escapers now
+*All Builder units are unclickable for escapers now. However circles remained clickable.
 *Improved most tooltips & rechecked all hotkeys
 *Improved the Instantbuild again, making it really instant.
 *All circle objects can be activated by EscaperKilelrs too
 
 Object Changes:
 *Executer
-    -now offers 3 different modes(pressure plate, lever, standard)
+	-now offers 4 different modes(pressure plate, lever, standard, oneshot)
 	-new actions (move unit, toggle door mode, ...)
 *Door
-    -can now be colored to restrict it to same colored keys
+	-can now be colored to restrict it to same colored keys
 *Key
-    -added a keymodel
-    -can be colored
-    -now offers 2 modes on dropping (back to initial position or last walkable)
+	-added a keymodel
+	-can be colored
+	-now offers 2 modes on dropping (back to initial position or last walkable)
 *Powernode
-    -better intersection detection
-    -no more lagging lightings
+	-better intersection detection
+	-no more lagging lightings
 *Spinner
-    -spinned units don't spam "stop" anymore
-    -now permanently invisible
+	-spinned units don't spam "stop" anymore
+	-added more options to modify spin route.
+	-now permanently invisible
 *Unitspawner
-    -Uses Spells for instant spawning now
-
-
+	-Uses Spells for instant spawning now
+*Bomber
+	-can toggle autoattack, it is turned off when placed.
+*Pointer
+	-Has fixed facing when moving
+	-Added -setangle XXX (-sa) command
+*Texter
+	-added short commands (-st, -sht, -sc)
+*Removed Sounder for now
 
 
 Cosmetics:
 *Imported changed tiletextures to make the pathing more clear
-*Added some specialeffects here and there
-*Added SFX for unconfigured obejcts
+*Added some special effects here and there
+*Most modifications use floating texts now
 *Smooth movement
-*New Stuff for EXP
+*Tracks now has an animation speed related to their track speed.
 *You can't rightclick Escapers anymore
-
+*Changed regions and startmazes a bit.
+*Sharing region pings minimap for the builder.
 
 
