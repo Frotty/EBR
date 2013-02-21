@@ -25,11 +25,11 @@ function changeSpeed()
 				ddata.actor.setMoveSpeed(speed+25.)
 				createTTEx(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
 		else if id == DEC_ID
-			if speed > 0.
+			if speed > 25.5
 				debugPrint("no", 1)
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)
-				createTTEx(ddata.pos, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
+				createTTEx(ddata.pos, vec2(0,0.05), (speed-25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
 	caster.issuePastOrder(2)
 
 function isMoveSpell() returns boolean

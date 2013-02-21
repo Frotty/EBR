@@ -105,16 +105,16 @@ public class Trap extends StaticBaseObject
 				real rY = getRallyY()
 				real aX = actor.getX()
 				real aY = actor.getY()
-				real angl
+				angle angl
 				if getRallyUnit() == actor
 					rX = aX
 					rY = aY
 				debugPrint("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString(), 1)
 				if distanceBetweenCoords(rX, rY, aX, aY) < 20
-					angl = angleBetweenCoordsD(aX, aY,e.actor.getX(), e.actor.getY())
+					angl = angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
-					angl = angleBetweenCoordsD(aX, aY,rX, rY)
-				e.addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
+					angl = angleBetweenCoords(aX, aY,rX, rY)
+				e.addVel( vec3(value * Cos(angl.radians()),value * Sin(angl.radians() * DEGTORAD),0.))
 
 			default
 				skip

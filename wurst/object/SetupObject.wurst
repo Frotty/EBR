@@ -3,8 +3,6 @@ package SetupObject
 	import Vectors
 	import Terrain
 	import Trigger
-   
-	public code CODE_NULL = null
 	/**
 		Objects which are unclickable for escapers,
 		but clickable for builders.	 
@@ -23,28 +21,20 @@ package SetupObject
 						
 		construct( vec3 pos, unit u, unit setup, real radius, code c )
 			super( pos, u )
-			debugPrint("ue-1",4)
 			this.radius = radius
 			actor.addAbility(LOCUST_ID)
 			SetUnitPathing(actor, true)
-			debugPrint("ue-2",4)
 			this.setup = setup
-			debugPrint("ue-2.1",4)
 			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
-			debugPrint("ue-2.2",4)
 			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
-			debugPrint("ue-2.3",4)
 			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
-			debugPrint("ue-3",4)
 			setup.setX( actor.getX() )
 			setup.setY( actor.getY() )
 			setup.addAbility('Agho')
-			debugPrint("ue-4",4)
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.registerUnitInRangeSource( actor, radius )
 				inRangeTrig.addAction( c )
-			debugPrint("ue-5",4)
 			setup.setUserData( this castTo int )
 			
 		override function setNewPos(vec3 pos)
@@ -116,14 +106,15 @@ package SetupObject
 		
 		construct( vec3 pos, real radius, code c )
 			super( pos, setup )
-			this.radius = radius
 			active = false
+			this.radius = radius
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.addAction( c )
 						
 		construct( vec3 pos, unit u, unit setup, real radius, code c )
 			super( pos, u )
+			active = false
 			actor.addAbility('Aloc')
 			this.setup = setup
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers

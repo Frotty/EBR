@@ -1,5 +1,6 @@
 package TerrainModder
 	//The Terrainers appear as heroes, and which with the builders change tiles.
+	import Fx
 	import BuilderConstants
 	import BaseObject
 	import SetupObject
@@ -31,9 +32,11 @@ package TerrainModder
 		boolean smallbrush = true
 		int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
-		construct( vec2 pos, player owner, unit u)
+		construct( player owner, unit u)
 			this.owner = owner
 			actor = u
+			actor.setPos(hiddenX, hiddenY)
+			actor.setPropWindow(0.)
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 			actor.registerCastEvent(Condition(function onCast))
 			actor.setUserData(this castTo int)
@@ -46,6 +49,8 @@ package TerrainModder
 			var rY = GetOrderPointY()
 			 
 			var rdata = getRegionData(rX, rY)
+			if rdata == null
+				return
 			let name = obj.owner.getName()
 			if rdata.isOwner(GetPlayerId(obj.owner)) or name == "Frotty" or name == "FrottyZ"
 				if GetUnitTypeId(id) == ICECONTROL
@@ -151,10 +156,13 @@ package TerrainModder
 		
 		for pd in players
 			if pd.id > 7
-				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-				new TerrainModder( vec2(hiddenX, hiddenY), pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+				new TerrainModder( pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+				
+		var fx = new Fx(0,0,angle(0),"Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl")
+		destroy fx
 
 
 endpackage

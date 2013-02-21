@@ -9,6 +9,7 @@ import TempGroups
 import LinkedList
 import Boss
 import BossSpellTarget
+import InstantBuild
 
 trigger swapTrigger
 trigger itemTrigger
@@ -38,7 +39,7 @@ public class Builder extends UnitEntity
 				shop.remove()				
 			GroupClear(ENUM_GROUP)
 			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
-			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 128., GetRectMaxY(rdata.theRect) - 128. ), builder.owner, rdata )
+			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
 			if GetLocalPlayer() == builder.owner
 				SelectUnit(builder.actor, true)
 			
@@ -158,17 +159,17 @@ function isBuilder() returns boolean
 		
 public function init_Builder()	
 	swapTrigger = CreateTrigger()
-	swapTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+	swapTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 	swapTrigger.addCondition(Condition(function isBuilder))
 	swapTrigger.addAction(function Builder.swapPages)
 	itemTrigger = CreateTrigger()
-	itemTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
+	itemTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
 	itemTrigger.addCondition(Condition(function isBuilder))
 	itemTrigger.addAction(function Builder.claimRegion)
 	orderTrigger = CreateTrigger()
 	orderTrigger.addAction(function Builder.itemRemovalOrder)
 	orderTrigger.addCondition(Condition(function isBuilder))
-	orderTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
+	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
 	
 	for pd in players
 		if pd.id > 7

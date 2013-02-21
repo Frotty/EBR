@@ -14,9 +14,8 @@ package Revivepoint
 	constant real EVENT_RADIUS = 80.
 	constant int REVIVEPOINT_ID = 'n000'
 	boolean isFirst = true
-	boolean isStd = true
 	
-	public RevivePoint currentRevivepoint
+	public vec2 currentRevivepoint
 
 	public class RevivePoint extends StaticSetupObject
 		boolean reached = false
@@ -35,7 +34,7 @@ package Revivepoint
 			if isFirst and e instanceof Escaper
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
 				obj.reached = true
-				currentRevivepoint = obj
+				currentRevivepoint = obj.pos.toVec2()
 				var rdata1 = rdata
 				for es1 in escapers
 					es1.setNewPos(obj.pos)
@@ -44,16 +43,14 @@ package Revivepoint
 				return
 			
 			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
-				if isStd
-					if obj.owner != Player(11)
-						isStd = false
-						timer tim = getTimer()
-						tim.start(0.1, function clearStartMazes)
+				if getRegionData(obj.pos.x, obj.pos.y) == regions[26]
+					timer tim = getTimer()
+					tim.start(0.1, function clearStartMazes)
 				PlaySoundBJ(gg_snd_Rescue)
 				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
 				obj.reached = true
-				currentRevivepoint = obj
+				currentRevivepoint = obj.pos.toVec2()
 				for Escaper es in escapers
 					if es.owner.getId() < 8
 						es.setNewPos(obj.pos)
@@ -80,7 +77,7 @@ package Revivepoint
 			var data = vicu.getUserData() castTo Entity
 			if data != null
 				data.terminate()
-			else
+			else if GetUnitTypeId(vicu) != 'n008'
 				vicu.remove()
 		ENUM_GROUP.clear()
 		for i = 0 to 3

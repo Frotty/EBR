@@ -74,7 +74,7 @@ package Escaper
 			if flying
 				flying = false
 				SetUnitPropWindow(actor, 60.)
-				vel *= 0.25
+				vel *= 0.20
 				vel.z = 0.
 			pos.z = terrainZ+.1
 				
@@ -92,33 +92,30 @@ package Escaper
 			else
 				slideVelocity *= 0.8
 				sliding = false
-
-				
-			// ebr (un)walkable
-			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
-				onUnwalkable = true
-				setLava(false)
-				setPoison(false)
-				if alive
-					kill()
-			else 
-				onUnwalkable = false
-				if ttype == 1147958883 and not onLava
-					setLava(true)
-				else if ttype == POISON
+				if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
+					onUnwalkable = true
 					setLava(false)
-					if not poisoned
-						setPoison(true)
-				else
-					setLava(false)
-
+					setPoison(false)
+					if alive
+						kill()
+				else 
+					onUnwalkable = false
+					if ttype == 1147958883 and not onLava
+						setLava(true)
+						if onLava
+							var hp = actor.getHP()
+							if hp > .405
+								actor.setHP(hp-currentRegion.lavaDmg)
+							else if alive
+								kill()
+					else if ttype == POISON
+						setLava(false)
+						if not poisoned
+							setPoison(true)
+					else
+						setLava(false)
 					
-			if onLava
-				var hp = actor.getHP()
-				if hp > .405
-					actor.setHP(hp-currentRegion.lavaDmg)
-				else if alive
-					kill()
+			
 			if poisoned
 				var hp2 = actor.getHP()
 				if hp2 > .405
@@ -185,7 +182,6 @@ package Escaper
 
 			if sliding
 				actor.setPos(pos.x, pos.y)
-
 			else
 				actor.setXY(pos.x, pos.y)
 			SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
@@ -197,8 +193,8 @@ package Escaper
 			debugPrint("rev", 1)
 			var t = GetExpiredTimer()
 			Escaper e = t.getData() castTo Escaper
-			var revX = currentRevivepoint.pos.x
-			var revY = currentRevivepoint.pos.y
+			var revX = currentRevivepoint.x
+			var revY = currentRevivepoint.x
 			if e instanceof Holy_Escaper
 				var he = e castTo Holy_Escaper
 				if he.revivetomb != null
@@ -242,14 +238,14 @@ package Escaper
             
 			if ttype == CONTROLLABLEICE
 				if w == null
-					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x2,y2))
+					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2))
 				else
-					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x3,y3))
+					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3))
 			else if ttype == REVICE
 				if w == null
-					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x2,y2)-180)
+					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2)-angle(180*DEGTORAD))
 				else
-					e.actor.setFacing(angleBetweenCoordsD(e.pos.x,e.pos.y,x3,y3)-180)
+					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3)-angle(180*DEGTORAD))
 					
 		static function pickupItem()
 			var pickedItem = GetManipulatedItem()

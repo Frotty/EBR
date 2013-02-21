@@ -19,7 +19,7 @@ package BaseObject
 	public class StaticBaseObject extends UnitEntity
 		private vec3 rallyPoint
 		private unit rallyUnit
-		private real rallyAngle = 0.
+		private angle rallyAngle
 		
 		trigger inRangeTrig // Trigger for inRange detection
 		
@@ -53,7 +53,7 @@ package BaseObject
 				if u2 == null
 					obj.rallyUnit = null
 					obj.rallyPoint = vec3( x, y, getTerrainZ( x, y ) )
-					obj.rallyAngle = angleBetweenCoordsD( obj.pos.x, obj.pos.y, x, y )
+					obj.rallyAngle = angleBetweenCoords( obj.pos.x, obj.pos.y, x, y )
 				else
 					obj.rallyUnit = u2
 
@@ -103,7 +103,7 @@ package BaseObject
 					return rallyPoint.y
 					
 		function getRallyAngle() returns real
-			return angleBetweenCoordsR(pos.x, pos.y, getRallyX(), getRallyY())
+			return angleBetweenCoords(pos.x, pos.y, getRallyX(), getRallyY()).degrees()
 		
 		override function update()
 		
