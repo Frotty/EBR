@@ -4,6 +4,7 @@ package Revivepoint
 	import PlayerData
 	import Escaper
 	import GameConstants
+
 	import RegionData
 	import LinkedList
 	import TempGroups
@@ -15,7 +16,7 @@ package Revivepoint
 	constant int REVIVEPOINT_ID = 'n000'
 	boolean isFirst = true
 	
-	public vec2 currentRevivepoint
+	public vec2 currentRevivepoint = vec2(6398, -6791)
 
 	public class RevivePoint extends StaticSetupObject
 		boolean reached = false

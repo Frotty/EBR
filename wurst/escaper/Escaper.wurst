@@ -194,7 +194,7 @@ package Escaper
 			var t = GetExpiredTimer()
 			Escaper e = t.getData() castTo Escaper
 			var revX = currentRevivepoint.x
-			var revY = currentRevivepoint.x
+			var revY = currentRevivepoint.y
 			if e instanceof Holy_Escaper
 				var he = e castTo Holy_Escaper
 				if he.revivetomb != null
