@@ -24,7 +24,6 @@ package EscaperKiller
 		
 		construct( unit actor, unit setup, real radius )
 			super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function EscaperKiller.onInRangeEvent ) 
-			active = false
 
 
 

@@ -284,7 +284,7 @@ package Executer
 			UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
 			UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
 			UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
-			UnitAddAbility(actor,TRAIN_BK_ABIL)
+			UnitAddAbility(actor,SPAWN_UNIT_ID)
 			
 		function addActionAbilsReversable()
 			UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -304,7 +304,7 @@ package Executer
 			UnitRemoveAbility(actor,DOOR_TOGGLE_ABIL)
 			UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
 			UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
-			UnitRemoveAbility(actor,TRAIN_BK_ABIL)
+			UnitRemoveAbility(actor,SPAWN_UNIT_ID)
 			
 		function addTerrainAdjuster()
 			UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
@@ -467,14 +467,12 @@ package Executer
 					obj.tiletype = UNCONTROLLABLEICE
 				case TERRAIN_UI_O_ABIL
 					obj.nottiletype = UNCONTROLLABLEICE
-				
+				case SPAWN_UNIT_ID
+					obj.actionMode = Amode.CREATEUNIT
+					obj.actionUnit = ActionUnit.TANK
+					obj.removeActionAbils()
+					UnitAddAbility(obj.actor,TRAIN_BOOK_ABIL)
 				case TRAIN_BK_ABIL
-					if obj.actionUnit == ActionUnit.NONE
-						obj.actionMode = Amode.CREATEUNIT
-						obj.actionUnit = ActionUnit.TANK
-						obj.removeActionAbils()
-						UnitAddAbility(obj.actor,TRAIN_BOOK_ABIL)
-					else
 						obj.actionUnit = ActionUnit.BIGKILLER
 				case TRAIN_SK_ABIL
 					obj.actionUnit = ActionUnit.SMALLKILLER
@@ -561,6 +559,7 @@ package Executer
 	
 	constant int TRAIN_BOOK_ABIL = 'A042'
 	
+	constant int SPAWN_UNIT_ID = 'A06S'
 	constant int TRAIN_BK_ABIL = 'A045'
 	constant int TRAIN_SK_ABIL = 'A046'
 	constant int TRAIN_BRK_ABIL = 'A048'
