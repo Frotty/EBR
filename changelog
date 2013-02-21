@@ -1,8 +1,9 @@
-EBR 0.70
+EBR 0.80
 
 Additions:
 *New Object: Trap
     -configureable circleobject with many options to choose from (type of sfx and type of trap)
+	-with interval option
 *New Object: Different Walls
 *New Object: Conga Line Head
 *New Escaper: Slide Escaper
@@ -14,11 +15,11 @@ Global Changes:
 *Most units are unclickable for escapers now
 *Improved most tooltips & rechecked all hotkeys
 *Improved the Instantbuild again, making it really instant.
-*All circle objects can be activated by EscaperKilelrs too
+*Most Circle Objects can be activated by EscaperKillers now (3 activation modes)
 
 Object Changes:
 *Executer
-    -now offers 3 different modes(pressure plate, lever, standard)
+    -now offers 4 different modes(pressure plate, lever, one-shot, repeating)
 	-new actions (move unit, toggle door mode, ...)
 *Door
     -can now be colored to restrict it to same colored keys
@@ -31,7 +32,7 @@ Object Changes:
     -no more lagging lightings
 *Spinner
     -spinned units don't spam "stop" anymore
-    -now permanently invisible
+    -Added adjustable Cos- and Sin-factor (elliptical movement)
 *Unitspawner
     -Uses Spells for instant spawning now
 
