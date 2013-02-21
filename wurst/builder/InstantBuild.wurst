@@ -106,7 +106,7 @@ function callback()
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
 						+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?") 
 			case buildorders[31]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))	
+				new SmallObstacle(vec2(x,y), u.getOwner(), 256)
 			case buildorders[32]
 				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
 			case buildorders[33]
