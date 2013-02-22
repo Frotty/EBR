@@ -52,7 +52,7 @@ public function onAttackspeedCast(int spellid, unit actor)
 					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID, neg + 1 )
 					createTTEx(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-" + ((neg+1)*20).toString() + " %", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
 				else
-					createTTEx(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Max", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
+					createTTEx(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Min", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
 			else
 				UnitAddAbility(actor, ATTACK_SPEED_RATE_NEGATIVE_ID)
 				createTTEx(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-20.0 %", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )

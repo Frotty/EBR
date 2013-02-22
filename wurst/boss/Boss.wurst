@@ -52,12 +52,18 @@ public class Boss extends DynamicSetupObject
 					int smallhp = GetUnitAbilityLevel(boss.actor, REAL_HP_SMALL_ID)
 					if smallhp == 4
 						if bighp < 4
-							SetUnitAbilityLevel(boss.actor,REAL_HP_BIG_ID, bighp+1)
+							if bighp == 0
+								boss.actor.addAbility(REAL_HP_BIG_ID)
+							else
+								SetUnitAbilityLevel(boss.actor,REAL_HP_BIG_ID, bighp+1)
 							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, 0)
 						else
 							createTTEx(boss.pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), boss.owner  )
 					else 
-						SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp+1)
+						if smallhp == 0
+							boss.actor.addAbility(REAL_HP_SMALL_ID)
+						else
+							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp+1)
 				case HP_DOWN_ID
 					int bighp = GetUnitAbilityLevel(boss.actor, REAL_HP_BIG_ID)
 					int smallhp = GetUnitAbilityLevel(boss.actor, REAL_HP_SMALL_ID)

@@ -21,7 +21,7 @@ package Unitcreator
 		construct( vec2 pos, player owner)
 			super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
 			active = true
-			print("created UC")
+			debugPrint("created UC",2)
 			actor.registerCastEvent(Condition(function UnitCreator.onCast))
 		
 		override function update()
@@ -122,8 +122,8 @@ package Unitcreator
 		SPAWN_TYPE_ABIL.saveInt('A046','SMAL') // Small Killer
 		SPAWN_TYPE_ABIL.saveInt('A048','u008') // Big Random Killer
 		SPAWN_TYPE_ABIL.saveInt('A04W','u00A') // Glaive
-		SPAWN_TYPE_ABIL.saveInt('A04B','h00Q') // Pointer
-		SPAWN_TYPE_ABIL.saveInt('A04D','u006') // Small Random Killer
+		SPAWN_TYPE_ABIL.saveInt('A04D','h01Q') // Pointer
+		SPAWN_TYPE_ABIL.saveInt('A04B','u006') // Small Random Killer
 		SPAWN_TYPE_ABIL.saveInt('A04C','h001') // tank
 
 endpackage
