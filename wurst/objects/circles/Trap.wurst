@@ -176,7 +176,7 @@ public class Trap extends StaticBaseObject
 			case SPEED_ABIL
 				//createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), obj.owner  )
 				obj.a = ABIL.SPEED
-				obj.value = 100.
+				obj.value = 120.
 				obj.duration = 1.
 				obj.addConfiger(false, true)
 			case SHAKE_ABIL
@@ -250,7 +250,7 @@ public class Trap extends StaticBaseObject
 							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
 						else
 							obj.value -= 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
+							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), obj.owner  )
 					default
 						skip
 			

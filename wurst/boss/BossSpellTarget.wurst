@@ -4,8 +4,13 @@ import SetupObject
 import EventHandling
 import PreloadHandler
 import DummyCaster
+import Fx
+import MapBounds
+import Escaper
 
 public constant int SPELLTARGET_ID = 'u00F'
+public constant int AOE_ID = 'A06V' 
+public constant int MISSILE_ID = 'A06W' 
 
 public enum SpellType
 	AOE
@@ -20,6 +25,23 @@ public class SpellTarget extends DynamicSetupObject
 		setup.registerCastEvent(Condition(function onCast))
 		
 	static function onCast() returns boolean
+		var data = GetTriggerUnit().getUserData() castTo Entity
+		if data instanceof SpellTarget
+			var spt = data castTo SpellTarget
+			var id = GetSpellAbilityId()
+			var ox = GetSpellTargetX()
+			var oy = GetSpellTargetY()
+			switch id
+				case AOE_ID
+					spt.stype = SpellType.AOE
+					spt.actor.setVertexColor(255,255,0,0)
+					spt.actor.removeAbility(AOE_ID)
+					spt.actor.addAbility(MISSILE_ID)
+				case MISSILE_ID
+					spt.stype = SpellType.MISSILE
+					spt.actor.setVertexColor(0,255,255,0)
+					spt.actor.removeAbility(MISSILE_ID)
+					spt.actor.addAbility(AOE_ID)
 		return false
 	
 	function castSpell(int spell_id, string spell_string)
@@ -27,6 +49,35 @@ public class SpellTarget extends DynamicSetupObject
 		dc.level = 1
 		dc.recycledelay = 0.5
 		dc.castOnPoint(pos.x,pos.y)
+
+public class BossMissile extends Entity
+	Fx missile
+	SpellTarget target
+	real speed = 60
+	
+	construct (vec3 pos, string sfx, SpellTarget target)
+		super(pos,target.owner)
+		missile = new Fx(pos, angleBetweenCoords(missile.dummy.getX(), missile.dummy.getY(), target.actor.getX(), target.actor.getY()), sfx)
+		
+	override function update()
+		angle a = angleBetweenCoords(missile.dummy.getX(), missile.dummy.getY(), target.actor.getX(), target.actor.getY())
+		var x = polarProjectionX(missile.dummy.getX(), speed, a)
+		var y = polarProjectionY(missile.dummy.getY(), speed, a)
+		pos = vec3(x,y, 0.)
+		missile.dummy.setFacing(a)
+		if not pos.toVec2().inBounds()
+			printError("Missile out of Bounds")
+			pos = vec3(0,0,520)
+			vel = vec3(0,0,0)
+			
+			
+	function onInRangeEvent()
+		var ent = GetTriggerUnit().getUserData() castTo Entity
+		
+		if ent instanceof Escaper
+			var es = ent castTo Escaper
+			if not es.flying
+				missile.dummy.damageTarget(es.actor, 25)
 	
 init
-	preloadAbility(SPELLTARGET_ID)
+	preloadAbility(AOE_ID)

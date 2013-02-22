@@ -8,14 +8,23 @@ import PreloadHandler
 import BossSpellTarget
 import TempGroups
 import RegionData
+import Texttag
 
-constant int HP_UP_ID = 'A001'
-constant int HP_DOWN_ID = 'A001'
-constant int AOE_SPELL_ID = 'A001'
+constant int HP_UP_ID = 'A06U'
+constant int HP_DOWN_ID = 'A06T'
+constant int REAL_HP_BIG_ID = 'A06X'
+constant int REAL_HP_SMALL_ID = 'A06Y'
+constant int DMG_UP_ID = 'A001'
+constant int DMG_DOWN_ID = 'A001'
+constant int REAL_DMG_BIG_ID = 'A001'
+constant int REAL_DMG_SMALL_ID = 'A001'
+constant int AOE_SPELL_ID = 'A06V'
+constant int MISSILE_SPELL_ID = 'A06W'
 
 public class Boss extends DynamicSetupObject
 	int aoe_id
 	string aoe_string
+	string missile_sfx = "Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl"
 		
 	static function onInRangeEvent()
 		var ent = GetTriggerUnit().getUserData() castTo Entity
@@ -27,7 +36,8 @@ public class Boss extends DynamicSetupObject
 	
 	construct( unit actor, unit setup, real radius )
 		super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function Boss.onInRangeEvent ) 
-		
+		actor.addAbility(REAL_HP_BIG_ID)
+		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
 	static function onCast()
 		var data = GetTriggerUnit().getUserData() castTo Entity
 		
@@ -38,13 +48,41 @@ public class Boss extends DynamicSetupObject
 			var oy = GetSpellTargetY()
 			switch id
 				case HP_UP_ID
-					print("wictory")
+					int bighp = GetUnitAbilityLevel(boss.actor, REAL_HP_BIG_ID)
+					int smallhp = GetUnitAbilityLevel(boss.actor, REAL_HP_SMALL_ID)
+					if smallhp == 4
+						if bighp < 4
+							SetUnitAbilityLevel(boss.actor,REAL_HP_BIG_ID, bighp+1)
+							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, 0)
+						else
+							createTTEx(boss.pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), boss.owner  )
+					else 
+						SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp+1)
+				case HP_DOWN_ID
+					int bighp = GetUnitAbilityLevel(boss.actor, REAL_HP_BIG_ID)
+					int smallhp = GetUnitAbilityLevel(boss.actor, REAL_HP_SMALL_ID)
+					if smallhp == 0
+						if bighp > 0
+							SetUnitAbilityLevel(boss.actor,REAL_HP_BIG_ID, bighp-1)
+							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, 4)
+						else
+							createTTEx(boss.pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), boss.owner  )
+					else 
+						SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp-1)
 				case AOE_SPELL_ID
 					if getRegionData(ox,oy).isOwner(boss.owner.getId())
 						var g = boss.getSpellTargets(SpellType.AOE)
 						for unit u in g
 							var spt = u.getUserData() castTo SpellTarget
 							spt.castSpell(boss.aoe_id, boss.aoe_string)
+					else
+						DisplayTextToPlayer( boss.owner, 0, 0, "|cffC51019You have no permission to cast boss spells in this region!")
+				case MISSILE_SPELL_ID
+					if getRegionData(ox,oy).isOwner(boss.owner.getId())
+						var g = boss.getSpellTargets(SpellType.MISSILE)
+						for unit u in g
+							var spt = u.getUserData() castTo SpellTarget
+							new BossMissile(boss.pos, boss.missile_sfx, spt)
 					else
 						DisplayTextToPlayer( boss.owner, 0, 0, "|cffC51019You have no permission to cast boss spells in this region!")
 			
