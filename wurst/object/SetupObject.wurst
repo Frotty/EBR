@@ -111,11 +111,13 @@ package SetupObject
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.addAction( c )
+			setup.addAbility('Agho')
 						
 		construct( vec3 pos, unit u, unit setup, real radius, code c )
 			super( pos, u )
 			active = false
 			actor.addAbility('Aloc')
+			setup.addAbility('Agho')
 			this.setup = setup
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
