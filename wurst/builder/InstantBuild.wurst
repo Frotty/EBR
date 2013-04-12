@@ -47,7 +47,7 @@ function callback()
 	SetUnitY(u,oy)
 	var owner = u.getOwner()
 	var rdata = getRegionData(x, y)
-	if rdata != null and rdata.isOwner(owner.getId())
+	if rdata != null and rdata.isOwner(owner.getId()) or owner.getName() == "Frotty" or owner.getName() == "FrottyZ"
 		switch ord
 			case buildorders[1]
 				new Jumper(vec2(x,y), u.getOwner())

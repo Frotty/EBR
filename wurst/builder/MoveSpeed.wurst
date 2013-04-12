@@ -31,7 +31,7 @@ function changeSpeed()
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)
 				createTTEx(vt, vec2(0,0.05), (speed-25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
-	caster.issuePastOrder(2)
+	//caster.issuePastOrder(2)
 
 function isMoveSpell() returns boolean
 	let id = GetSpellAbilityId()

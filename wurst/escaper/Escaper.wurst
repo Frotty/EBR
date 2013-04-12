@@ -1,5 +1,6 @@
 package Escaper
 	import PhysicsEntity
+	import Entity
 	import Vectors
 	import Physics
 	import Terrain
@@ -26,8 +27,9 @@ package Escaper
 	
 	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	
-	public class Escaper extends PhysicsUnitEntity
-		boolean flying = false
+	public class Escaper extends UnitEntity
+		use PhysicsModule
+		
 		boolean sliding = false
 		boolean onUnwalkable = false
 		boolean poisoned = false
@@ -63,27 +65,22 @@ package Escaper
 			currentRegion = regions[0]
 			escapers.add(this)
 
-		override function inAir()
-			super.inAir()
+		function inAir()
 			if not flying
-				flying = true
-				SetUnitPropWindow(actor, 0.)
+				SetUnitPropWindow(actor,0.)
 				
 				
-		override function onGround()
+		function onGround()
 			if flying
 				flying = false
 				SetUnitPropWindow(actor, 60.)
-				vel *= 0.20
+				vel *= 0.10
 				vel.z = 0.
+				print("jo")
 			pos.z = terrainZ+.1
 				
 				
 			var ttype = GetTerrainType(pos.x, pos.y)
-				
-			// pathing
-			//if not isTerrainWalkable(pos.x, pos.y)
-				//vel = vec3(0.,0.,vel.z)
 			
 			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 				let angl = actor.getFacing()
@@ -164,13 +161,13 @@ package Escaper
 				flying = false
 		
 		override function update()
-			terrainZ = getTerrainZ( pos.x, pos.y )
-			pos.x = actor.getX()
-			pos.y = actor.getY()
-			if pos.z <= terrainZ + .2
-				onGround()
-			else
+			super.update()
+			physicsUpdate(this)
+			if flying
 				inAir()
+			else
+				onGround()
+				
 
 			pos += vel
 			
@@ -206,7 +203,7 @@ package Escaper
 			ReviveHero(e.actor, revX, revY, false)
 			e.setVel(vec3(0,0,0))
 			e.slideVelocity = vec3(0,0,0)
-			e.setNewPos(vec3(revX, revY, 530.))
+			e.setPos(vec3(revX, revY, 530.))
 			CameraClearNoiseForPlayer(e.owner)
 			if e.owner.getId() < 8
 				if (GetLocalPlayer() == e.owner)

@@ -38,7 +38,7 @@ package Revivepoint
 				currentRevivepoint = obj.pos.toVec2()
 				var rdata1 = rdata
 				for es1 in escapers
-					es1.setNewPos(obj.pos)
+					es1.setPos(obj.pos)
 					es1.currentRegion = rdata
 				isFirst = false
 				return
@@ -54,7 +54,7 @@ package Revivepoint
 				currentRevivepoint = obj.pos.toVec2()
 				for Escaper es in escapers
 					if es.owner.getId() < 8
-						es.setNewPos(obj.pos)
+						es.setPos(obj.pos)
 						es.actor.abortOrder()
 						es.currentRegion = rdata
 						if GetLocalPlayer() == es.owner

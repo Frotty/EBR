@@ -3,71 +3,112 @@ import LinkedListModule
 import Terrain
 import PhysicsConstants
 import Debug
-import MapBounds
+import Fx
+import Angle
+import EntityRegion
+import LastOrder
+import public LinkedList
 
-// Base Entity Class
+/** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
 	
-	// 3d vector position
-	vec3 pos
-	// 3d vector velocity
-	vec3 vel
+	/** 3d vector position */
+	protected vec3 pos
+	/** 3d vector velocity */
+	protected vec3 vel
 	
-	// owning player
+	/** radius */
+	real radius = 0.
+	/** speed factor (multiplies to added velocity) */
+	real speedFactor = 1.
+	
+	/** owning player */
 	player owner
 	
-	// flag for being static
+	/** flag for being static */
 	boolean isStatic 	= false
-	// sleeping or active?
+	/** sleeping or active? */
 	boolean active 		= true
-	// for removing
+	/** for removing */
 	boolean done 		= false
+
+	
+	EntityRegion currentEntityRegion
 
 	construct( vec3 pos, player owner )
 		this.pos = pos
 		this.vel = vec3(0,0,0)
 		this.owner = owner
+		currentEntityRegion = getEntityRegion(pos)
+		
 		entityCount++
-		debugPrint("EntityCount: " + entityCount.toString(), 1)
-		debugPrint("UnitEntityCount: " + unitEntityCount.toString(), 1)
+
+	construct( vec3 pos, real radius, player owner )
+		this.pos = pos
+		this.vel = vec3(0,0,0)
+		this.owner = owner
+		this.radius = radius
+		currentEntityRegion = getEntityRegion(pos)
+		
+		entityCount++
 		
 	construct( vec3 pos, vec3 vel, player owner )
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
+		currentEntityRegion = getEntityRegion(pos)
+		
+		entityCount++
+		
+	construct( vec3 pos, vec3 vel, real radius, player owner )
+		this.pos = pos
+		this.vel = vel
+		this.owner = owner
+		this.radius = radius
+		currentEntityRegion = getEntityRegion(pos)
+		
+		entityCount++
+		
+	function getPos() returns vec3
+		return pos
 		
 	function setPos( vec3 pos )
 		this.pos = pos
 		
+	function addPos( vec3 pos )
+		this.pos += pos
+		
+	function getVel() returns vec3
+		return vel
+		
 	function setVel( vec3 vel )
 		this.vel = vel
+		active = true
 	
 	function addVel( vec3 vel )
 		this.vel += vel
 		
 	function setTarget( vec3 tpos, real speed )
 		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
-		let angl = angleBetweenCoords(pos.x, pos.y, tpos.x, tpos.y)
+		let tangle = angleBetweenCoords(pos.x, pos.y, tpos.x, tpos.y)
 		let e = getTerrainZ(tpos.x,tpos.y)
 		
 		if t < 1.
 			t = 1./speed
 		
 		let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
-		this.setVel( vec3( Cos(angl.radians()) * speed, Sin(angl.radians()) * speed, startZVelocity) )
+		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
 		
 	function terminate()
 		done = true
 		
-	ondestroy
-		entityCount--
-		
-	// This function is called every ANIMATION_PERIOD tick if the Entity is active
+	/** This function is called every ANIMATION_PERIOD tick if the Entity is active */
 	abstract function update()
 	
 abstract public class UnitEntity extends Entity
-	unit actor
+	protected unit actor
+	
 	
 	construct( vec3 pos, unit actor )
 		super(pos, actor.getOwner())
@@ -75,29 +116,74 @@ abstract public class UnitEntity extends Entity
 		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 		unitEntityCount++
 		
+	construct( vec3 pos, real radius, unit actor )
+		super(pos, radius, actor.getOwner())
+		this.actor = actor
+		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		unitEntityCount++
+		
 	override function update()
-		pos = vec3(actor.getX(), actor.getY(), 0.)
-		if not pos.toVec2().inBounds()
-			printError("UnitEntity out of Bounds")
-			pos = vec3(0,0,520)
-			vel = vec3(0,0,0)
-			setNewPos(pos)
+		updatePos()
+		
+	function updatePos()
+		pos = vec3(actor.getX(), actor.getY(), pos.z)
 		
 	function setNewActor(unit u)
+		actor.clearLastOrders()
 		actor.remove()
 		actor = u
 		actor.setUserData(this castTo int)
 		
-	function setNewPos(vec3 tpos)
+	override function setPos(vec3 tpos)
 		pos = tpos
 		actor.setPos(tpos.x,tpos.y)
+		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
 		
-	function setNewXY(vec3 tpos)
+	function setXY(vec3 tpos)
 		pos = tpos
 		actor.setXY(tpos.x,tpos.y)
 		
 	ondestroy
-		unitEntityCount--
+		actor.clearLastOrders()
+
+abstract public class FxEntity extends Entity
+	protected Fx fx
+	
+	construct( vec3 pos, real radius, player owner, angle xyAngle, string sfxpath )
+		super(pos, radius, owner)
+		fx = new Fx(pos, xyAngle, sfxpath)
+		fx.setOwner(owner, true)
+		
+	construct( vec3 pos, real radius, player owner, angle xyAngle )
+		super(pos, radius, owner)
+		fx = new Fx(pos, xyAngle)
+		fx.setOwner(owner, true)
+	
+	construct( vec3 pos, player owner, angle xyAngle )
+		super(pos, 0., owner)
+		fx = new Fx(pos, xyAngle)
+		fx.setOwner(owner, true)
+		
+	override function update()
+		pos += (vel*speedFactor)
+		fx.setPos(pos)
+		
+	function setFx(string sfxpath)
+		fx.setFx(sfxpath)
+		
+	function setPos()
+		fx.setPos(pos)
+		
+	function getDummy() returns unit
+		return fx.dummy
+		
+	override function setPos(vec3 tpos)
+		pos = tpos
+		fx.setPos(tpos.x,tpos.y)
+		
+	ondestroy
+		destroy fx
+
 
 
 

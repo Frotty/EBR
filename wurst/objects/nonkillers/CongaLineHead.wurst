@@ -82,10 +82,10 @@ public class CongaLineHead extends DynamicSetupObject
 		
 function UnitEntity.setNewPosA( vec2 tpos, real angl)
 	if this instanceof DynamicSetupObject
-		(this castTo DynamicSetupObject).setNewXY(tpos.toVec3())
+		(this castTo DynamicSetupObject).setXY(tpos.toVec3())
 		(this castTo DynamicSetupObject).setAngle(angl)
 	else if this instanceof Spinner
-		(this castTo Spinner).setNewXY(tpos.toVec3())
+		(this castTo Spinner).setXY(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angl)
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2

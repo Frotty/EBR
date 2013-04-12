@@ -15,18 +15,16 @@ package Unitcreator
 	public class UnitCreator extends StaticBaseObject
 		real interval = 5.
 		real timerreal = 5.
-		boolean ON = false
 		int spawnUnitType = 'h001'
 		
 		construct( vec2 pos, player owner)
 			super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
-			active = true
-			debugPrint("created UC",2)
+			active = false
 			actor.registerCastEvent(Condition(function UnitCreator.onCast))
 		
 		override function update()
 			super.update()
-			if ON
+			if active
 				if timerreal <= 0.0
 					create(this)
 					timerreal = interval
@@ -43,7 +41,7 @@ package Unitcreator
 			var angl = angleBetweenCoords(X,Y,rX,rY)
 			var data = getRegionData(X,Y)
 			debugPrint("creating...", 1)
-			EscaperKiller ek
+			EscaperKiller ek = null
 			switch obj.spawnUnitType
 				case 'BIGK'
 					ek = new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, X, Y, angl.degrees() ), CreateUnit(obj.owner, data.bigKillerId, X, Y, angl.degrees() ), COLL_SIZE_BK)
@@ -63,6 +61,8 @@ package Unitcreator
 				case 'u006'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl.degrees() ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl.degrees() ), COLL_SIZE_SRK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
+					
+			debugPrint("Created Unit with handleId: " + ek.actor.getHandleId().toString(), 3)
 			
 		static function onCast() returns boolean
 			var id = GetSpellAbilityId()
@@ -83,7 +83,7 @@ package Unitcreator
 						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
 						//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 				case START_ABIL
-					obj.ON = true
+					obj.active = true
 					obj.timerreal = obj.interval
 					UnitAddAbility(obj.actor,PAUSE_ABIL)
 					UnitRemoveAbility(obj.actor,START_ABIL)
@@ -91,21 +91,21 @@ package Unitcreator
 					debugPrint("pause", 1)
 					UnitRemoveAbility(obj.actor,PAUSE_ABIL)
 					UnitAddAbility(obj.actor,START_ABIL)
-					obj.ON = false
+					obj.active = false
 				case 'A045' // Big killer
 					obj.spawnUnitType = 'BIGK'
 				case 'A046' // Small killer
 					obj.spawnUnitType = 'SMAL'
 				case 'A048' // Big Random killer
 					obj.spawnUnitType = 'u008'
-				case 'A04D' // Small Random killer
-					obj.spawnUnitType = 'u006'
+				case 'A04D' // Pointer
+					obj.spawnUnitType = 'h01Q'
 				case 'A04W' // Glaive
 					obj.spawnUnitType = 'u00A'
 				case 'A04C' // Tank
 					obj.spawnUnitType = 'h001'
-				case 'A04B' // Pointer
-					obj.spawnUnitType = 'h00Q'
+				case 'A04B' // Chicken
+					obj.spawnUnitType = 'u006'
 			return false
 			
 		ondestroy

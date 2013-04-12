@@ -42,15 +42,20 @@ package Teleporter
 			else if obj.mode == 1  
 				if e instanceof EscaperKiller or e instanceof TeleporterTarget
 					dyn = e castTo DynamicSetupObject
-					dyn.setNewPos(vec3(rx,ry,0))
+					dyn.setPos(vec3(rx,ry,0))
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
 			else if obj.mode == 2  
-				if e instanceof EscaperKiller or e instanceof Escaper
+				if e instanceof EscaperKiller
 					dyn = e castTo DynamicSetupObject
-					dyn.setNewPos(vec3(rx,ry,0))
+					dyn.setPos(vec3(rx,ry,0))
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+				else if e instanceof Escaper
+					u.setPos(rx, ry)
+					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+					PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
 	
 		override function update()
 			skip

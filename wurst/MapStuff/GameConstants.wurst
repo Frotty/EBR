@@ -9,7 +9,7 @@ package GameConstants
 	public string array ranks
 	public constant int cplayerCount = 14
 	
-	public constant string MAP_VER = "EBR 0.80"
+	public constant string MAP_VER = "EBR 0.81"
 	
 	
 	public enum COLOR

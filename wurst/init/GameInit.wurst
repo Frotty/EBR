@@ -33,7 +33,7 @@ package GameInit
 		debugPrint("Init - UP", 2)
 		init_Regions()
 		debugPrint("Init - Regions", 2)
-		rand = 3//GetRandomInt(1,3)
+		rand = GetRandomInt(1,3)
 		if rand != 3
 			debugPrint("Init - Regions Clear Start 3", 2)
 			clearEBRRect(3)

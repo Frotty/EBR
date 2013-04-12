@@ -17,5 +17,7 @@ public class Jumper extends StaticBaseObject
 		if data instanceof Escaper
 			var edata = data castTo Escaper
 			edata.setPos(jdata.pos.addReals(0,0,1.))
+			edata.sliding = false
+			edata.slideVelocity = vec3(0,0,0)
 			edata.setTarget(jdata.getRallyPoint(), 22.)
 			AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()

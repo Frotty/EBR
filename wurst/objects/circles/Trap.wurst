@@ -22,9 +22,8 @@ enum ABIL
 	
 public class Trap extends StaticBaseObject
 	int sfxid = 3
-	boolean onstep = true
 	real interval = 2.
-	real timerreal = 0.2
+	real timerreal = 0.
 	ABIL a
 	
 	real duration //Shake,  Speed, Stun
@@ -32,7 +31,7 @@ public class Trap extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
-			active = true
+			active = false
 			actor.registerCastEvent(Condition(function Trap.onCast))
 			actor.setUserData(this castTo int)
 
@@ -44,7 +43,7 @@ public class Trap extends StaticBaseObject
 		Entity e = u.getUserData() castTo Entity
 		thistype obj = source.getUserData() castTo thistype
 		
-		if obj.onstep and e instanceof Escaper
+		if not obj.active and e instanceof Escaper
 			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
@@ -55,7 +54,7 @@ public class Trap extends StaticBaseObject
 	override function update()
 		debugPrint(". . . "+timerreal.toString(), 1)
 		super.update()
-		if onstep != true
+		if active
 			if timerreal <= 0.0
 				DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), EVENT_RADIUS, null)
@@ -114,7 +113,7 @@ public class Trap extends StaticBaseObject
 					angl = angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
 					angl = angleBetweenCoords(aX, aY,rX, rY)
-				e.addVel( vec3(value * Cos(angl.radians()),value * Sin(angl.radians() * DEGTORAD),0.))
+				e.addVel( vec3(value * Cos(angl.radians()),value * Sin(angl.radians()),0.))
 
 			default
 				skip
@@ -200,13 +199,11 @@ public class Trap extends StaticBaseObject
 				else
 					obj.interval += 0.25
 					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
-					obj.timerreal = obj.interval
 			case DECREASE_INTERVAL_ABIL
 				if obj.interval < 0.75
 					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), obj.owner  )
 				else
 					obj.interval -= 0.25
-					obj.timerreal = obj.interval
 					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
 			
 			case INCREASE_VALUE_ABIL
@@ -300,11 +297,12 @@ public class Trap extends StaticBaseObject
 						skip
 			
 			case START_ABIL
-				obj.onstep = false
+				obj.active = true
 				UnitRemoveAbility(obj.actor,START_ABIL)
 				UnitAddAbility(obj.actor,STOP_ABIL)
 			case STOP_ABIL
-				obj.onstep = true
+				obj.active = false
+				obj.timerreal = 0.
 				UnitRemoveAbility(obj.actor,STOP_ABIL)
 				UnitAddAbility(obj.actor,START_ABIL)
 		return false

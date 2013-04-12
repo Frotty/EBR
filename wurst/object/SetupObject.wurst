@@ -3,6 +3,7 @@ package SetupObject
 	import Vectors
 	import Terrain
 	import Trigger
+	import LastOrder
 	/**
 		Objects which are unclickable for escapers,
 		but clickable for builders.	 
@@ -37,7 +38,7 @@ package SetupObject
 				inRangeTrig.addAction( c )
 			setup.setUserData( this castTo int )
 			
-		override function setNewPos(vec3 pos)
+		override function setPos(vec3 pos)
 			this.pos = pos
 			actor.setPos(pos.x, pos.y)
 			setup.setPos(pos.x, pos.y)
@@ -47,7 +48,7 @@ package SetupObject
 			actor.setFacing(angl)
 			setup.setFacing(angl)
 			
-		override function setNewXY(vec3 pos)
+		override function setXY(vec3 pos)
 			this.pos = pos
 			actor.setXY(pos.x, pos.y)
 			setup.setXY(pos.x, pos.y)
@@ -70,6 +71,7 @@ package SetupObject
 			actor.clearRegister()
 			actor.remove()
 			setup.remove()
+			setup.clearLastOrders()
 			inRangeTrig.destr()
 			
 		static function onOrderEvent()
@@ -99,7 +101,6 @@ package SetupObject
 		  
 					
 	public abstract class StaticSetupObject extends UnitEntity
-		real radius
 		unit setup
 		
 		trigger inRangeTrig // Trigger for inRange detection

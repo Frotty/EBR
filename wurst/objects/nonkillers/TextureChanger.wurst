@@ -107,7 +107,7 @@ public class TextureChanger extends DynamicSetupObject
 				case TERRAIN_O_UNICE_ID
 					obj.outerTile = UNCONTROLLABLEICE
 					
-			obj.setup.issuePastOrder(2)
+			//obj.setup.issuePastOrder(2)
 			return false
 			
 init

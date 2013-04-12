@@ -53,7 +53,7 @@ package Texter
 				ttext = SubString(chatmsg, 9, StringLength(chatmsg))
 			for unit u in getSelectedTexters(GetTriggerPlayer())
 				thistype obj = u.getUserData() castTo thistype
-				obj.text.setText(ttext , 0.0276)
+				obj.text.setText(ttext, 10)
 				if obj.hidden
 					createTTEx(obj.pos, vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
 		

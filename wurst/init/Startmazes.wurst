@@ -187,39 +187,39 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
         	
 			UnitCreator u = new UnitCreator(vec2(gg_unit_n006_0165.getX(),gg_unit_n006_0165.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1024,-6785 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0165.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0166.getX(),gg_unit_n006_0166.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1024,-6400 )
-			u.ON = true
+			u.active = true
 			u = new UnitCreator(vec2(gg_unit_n006_0175.getX(),gg_unit_n006_0175.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1666,-6982 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0175.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0168.getX(),gg_unit_n006_0168.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1728,-6147 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0168.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0167.getX(),gg_unit_n006_0167.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1410,-7100 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0167.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0169.getX(),gg_unit_n006_0169.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally",  -1159,-7037 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0169.remove()
 			
 			u = new UnitCreator(vec2(gg_unit_n006_0188.getX(),gg_unit_n006_0188.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -896,-3974 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0188.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0189.getX(),gg_unit_n006_0189.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1600,-3777 )
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0189.remove()
 			u = new UnitCreator(vec2(gg_unit_n006_0190.getX(),gg_unit_n006_0190.getY()),Player(11))
 			IssuePointOrder(u.actor, "setrally", -1346,-4225)
-			u.ON = true
+			u.active = true
 			gg_unit_n006_0190.remove()
 			
 			IssueTargetOrder(gg_unit_h019_0159, "attack", gg_unit_u004_0161 )

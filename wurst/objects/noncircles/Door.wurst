@@ -9,8 +9,6 @@ package Door
 	import Key
 	import EventHandling
 	
-	//NOTE: Some parts of this are from the old ebr  O.o   >:0
-	int array colorRGBv
 	constant int DOORDUMMY_ID = 'h002'
 	constant int DOORORDER_ID = 'h00C'
 	constant int DOORPATH = 'h006'
@@ -164,7 +162,7 @@ package Door
 		KEY_COLOR_ID[1] = 'I00C' //red
 		KEY_COLOR_ID[2] = 'I004' //blue
 		KEY_COLOR_ID[3] = 'I008' //teal
-		KEY_COLOR_ID[4] = 'I008' //purple
+		KEY_COLOR_ID[4] = 'I00J' //purple
 		KEY_COLOR_ID[5] = 'I005' //yellow
 		KEY_COLOR_ID[6] = 'I00O' //orange
 		KEY_COLOR_ID[7] = 'I00B' //green

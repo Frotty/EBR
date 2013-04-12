@@ -99,7 +99,7 @@ public class Powernode extends DynamicSetupObject
 					if isNew
 						node.link(data castTo Powernode)
 						
-		node.setup.issuePastOrder(2)
+		//node.setup.issuePastOrder(2)
 
 		return false
 

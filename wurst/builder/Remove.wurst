@@ -7,10 +7,11 @@ trigger castTrig
 function removeObject()
 	var id = GetSpellAbilityId()
 	if id == REMOVE_ID
-		var data = GetTriggerUnit().getUserData()
+		var u = GetTriggerUnit()
+		var data = u.getUserData()
 		if data > 0
 			var e = data castTo Entity
-			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , e.pos.x, e.pos.y)
+			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , u.getX(), u.getY())
 			e.terminate()
 		else
 			GetSpellAbilityUnit().remove()
