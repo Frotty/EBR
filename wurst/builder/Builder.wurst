@@ -145,7 +145,7 @@ public class Builder extends UnitEntity
 			actor.removeAbility(MENU_BOSS)
 			hasBossMenu = false
 
-	static function itemRemovalOrder()
+	static function onOrder()
 		var i = GetOrderTargetItem()
 		if i != null
 			debugPrint("itemRemovalOrder",3)
@@ -157,7 +157,33 @@ public class Builder extends UnitEntity
 					idata.terminate()
 				else 
 					RemoveItem(i)
+					
+		else
+			widget w = GetOrderTarget()
+			var ord = GetIssuedOrderId()
+			var u = GetTriggerUnit()
+			var owner = u.getOwner()
+			var ox = GetOrderPointX()
+			var oy = GetOrderPointY()
+			if isOrderBuildOrder(ord)
+				debugPrint((u.getUserData() castTo Builder).pos.toString(), 3)
+				getTimer().start(0.00, function callback)
+				.setData((new BuildData(u.getUserData() castTo Builder,
+							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
+				
+			else if ord > 0
+				if w == null
+					debugPrint("fuck eh " + ox.toString() + " " + oy.toString() + " " + ord.toString(), 3)
+					if ( ox > 0. or ox < 0. )
+						
+						SetUnitX(u,ox)
+						SetUnitY(u,oy)
+				else
+					debugPrint("fuck", 3)
+					SetUnitX(u,GetWidgetX(w))
+					SetUnitY(u,GetWidgetY(w))
 		
+
 		
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
@@ -175,9 +201,10 @@ public function init_Builder()
 	itemTrigger.addCondition(Condition(function isBuilder))
 	itemTrigger.addAction(function Builder.claimRegion)
 	orderTrigger = CreateTrigger()
-	orderTrigger.addAction(function Builder.itemRemovalOrder)
+	orderTrigger.addAction(function Builder.onOrder)
 	orderTrigger.addCondition(Condition(function isBuilder))
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
+	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 	
 	for pd in players
 		if pd.id > 7

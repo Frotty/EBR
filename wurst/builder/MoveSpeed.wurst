@@ -1,6 +1,5 @@
 package MoveSpeed
 import Texttag
-import LastOrder
 import SetupObject
 import Entity
 
@@ -20,13 +19,13 @@ function changeSpeed()
 		debugPrint("casted", 1)
 		if id == INC_ID
 			debugPrint("inc", 1)
-			if speed < 500.
+			if speed < 475.
 				debugPrint("fine", 1)
 				ddata.setup.setMoveSpeed(speed+25.)
 				ddata.actor.setMoveSpeed(speed+25.)
 				createTTEx(vt, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
 		else if id == DEC_ID
-			if speed > 25.5
+			if speed > 50.5
 				debugPrint("no", 1)
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)

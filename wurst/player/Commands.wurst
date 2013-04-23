@@ -2,13 +2,14 @@ package Commands
 import TempGroups
 import Entity
 import Revivepoint
+import SaveAndLoad
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
 	let p = GetTriggerPlayer()
 	let id = p.getId()
-	str = str.substring(1, str.length())
-	switch str
+	var cstr = str.substring(1, str.indexOf(" "))
+	switch cstr
 		case "clear"
 			if GetLocalPlayer() == p
 				ClearTextMessages()
@@ -21,6 +22,10 @@ function onCommandChat()
 			else
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cff9C9C9CDEBUG - |r" + "enabled")
 				wantDebug[id] = true
+//		case "save"
+//			saveString(str.substring(6, str.length()))
+			while true
+				exitwhen true
 
 init
 	trigger trg = CreateTrigger()

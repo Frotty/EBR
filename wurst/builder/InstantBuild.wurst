@@ -25,14 +25,13 @@ import TerrainBlocker
 import Fountain
 import Decoration
 import Wall
-import LastOrder
 		
 	
 function condition() returns boolean
 	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
   
 
-function isOrderBuildOrder( int o ) returns boolean
+public function isOrderBuildOrder( int o ) returns boolean
 	int i = 0
 	while buildorders[i] != 0
 		if buildorders[i] == o
@@ -40,137 +39,124 @@ function isOrderBuildOrder( int o ) returns boolean
 		i++
 	return false
 
+public class BuildData
+	Builder b
+	vec2 tpos
+	int oId
+	
+	construct(Builder b, vec2 tpos, int oId)
+		this. b = b
+		this.tpos = tpos
+		this.oId = oId
 
 function callback()
-	SetUnitPosition(u,x,y)
-	SetUnitX(u,ox)
-	SetUnitY(u,oy)
-	var owner = u.getOwner()
-	var rdata = getRegionData(x, y)
-	if rdata != null and rdata.isOwner(owner.getId()) or owner.getName() == "Frotty" or owner.getName() == "FrottyZ"
-		switch ord
+	var t = GetExpiredTimer()
+	var data = t.getData() castTo BuildData
+	data.b.updatePos()
+	debugPrint(data.b.pos.toString(), 3)
+	data.b.setPos(data.b.pos)
+	debugPrint(data.b.pos.toString(), 3)
+	var rdata = getRegionData(data.tpos.x, data.tpos.y)
+	if rdata != null and rdata.isOwner(data.b.owner.getId()) or data.b.owner.getName() == "Frotty" or data.b.owner.getName() == "FrottyZ"
+		switch data.oId
 			case buildorders[1]
-				new Jumper(vec2(x,y), u.getOwner())
+				new Jumper(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[2]
-				new RevivePoint(vec3(x,y, 0.), u.getOwner())
+				new RevivePoint(vec3(data.tpos.x,data.tpos.y, 0.), data.b.owner)
 			case buildorders[3]
-				new Texter(vec2(x,y), u.getOwner())
+				new Texter(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[5]
-				new Bombertower(vec2(x,y), u.getOwner())
+				new Bombertower(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[6]
-				new Vortex(vec2(x,y), u.getOwner())
+				new Vortex(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[8]
-				new Executer(vec2(x,y), u.getOwner())
+				new Executer(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[11]
-				new Booster(vec2(x,y), u.getOwner())
+				new Booster(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[12]
-				new UnitRemover(vec2(x,y), u.getOwner())
+				new UnitRemover(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[13]
-				new Waypoint(vec2(x,y), u.getOwner())
+				new Waypoint(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[14]
-				new Teleporter(vec2(x,y), u.getOwner())
+				new Teleporter(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[15]
-				new Door(vec2(x,y), u.getOwner())
+				new Door(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[16]
-				new SmallObstacle(vec2(x,y), u.getOwner())
+				new SmallObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[17]
-				new BigObstacle(vec2(x,y), u.getOwner())
+				new BigObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[18]
-				new Tree(vec2(x,y), u.getOwner())
+				new Tree(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[21]
-				new Spinner(vec2(x,y), u.getOwner())	
+				new Spinner(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
 			case buildorders[20]
-				new UnitCreator(vec2(x,y), u.getOwner())
+				new UnitCreator(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[22]
-				new Decoration(vec2(x,y), u.getOwner(),ord,270.)
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,270.)
 			case buildorders[23]
-				new Tracks(vec2(x,y), u.getOwner())	
+				new Tracks(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
 			case buildorders[24]
-				new Fountain(vec2(x,y), u.getOwner())	
+				new Fountain(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
 			case buildorders[25]
-				new Powernode(vec2(x,y), u.getOwner())	
+				new Powernode(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
 			case buildorders[26]
-				new Trap(vec2(x,y), u.getOwner())	
+				new Trap(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
 			case buildorders[27]
-				new Decoration(vec2(x,y), u.getOwner(),ord,270.)	
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,270.)	
 			case buildorders[28]
-				new Decoration(vec2(x,y), u.getOwner(),ord,270.)
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,270.)
 			case buildorders[29]
-				new CongaLineHead(vec2(x,y), u.getOwner())
+				new CongaLineHead(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[30]
-				var x2 = round(x/128)
-				var y2 = round(y/128)
+				var x2 = round(data.tpos.x/128)
+				var y2 = round(data.tpos.y/128)
 				if not blockermatrix.loadBoolean(x2, y2)
-					new TerrainBlocker(vec2(x,y), u.getOwner())
+					new TerrainBlocker(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
+					DisplayTextToPlayer( data.b.owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
 						+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?") 
 			case buildorders[31]
-				new SmallObstacle(vec2(x,y), u.getOwner(), 256)
+				new SmallObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner, 256)
 			case buildorders[32]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[33]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[34]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[35]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[36]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[37]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[38]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[39]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[40]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[41]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[42]
-				new Decoration(vec2(x,y), u.getOwner(),ord,GetRandomReal(0, 360))
-		u.abortOrder()
-		SetUnitPosition(u,x,y)
-		SetUnitX(u,ox)
-		SetUnitY(u,oy)			
+				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 				
-
+		data.b.actor.abortOrder()
 	else
-		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
-	d = null
+		DisplayTextToPlayer( data.b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
+	t.release()
+	destroy data
 
 
-
-function conac() 
-	widget w = GetOrderTarget()
-	ord = GetIssuedOrderId()
-	u = GetTriggerUnit()
-	var owner = u.getOwner()
-	if isOrderBuildOrder(ord)
-		x = GetLocationX(GetOrderPointLoc())
-		y = GetLocationY(GetOrderPointLoc())
-		ox = GetUnitX(u)
-		oy = GetUnitY(u)
-		TimerStart(t,0.00,false, function callback)
-		
+public function unit.abortOrder() returns boolean
+	if IsUnitPaused(this)
+		return false
 	else
-		if w == null
-			SetUnitX(u,GetOrderPointX())
-			SetUnitY(u,GetOrderPointY())
-		else
-			SetUnitX(u,GetWidgetX(w))
-			SetUnitY(u,GetWidgetY(w))
-	w = null
+		PauseUnit(this, true)
+		IssueImmediateOrder(this, "stop")
+		PauseUnit(this, false)
+	return true
 
 
-real x
-real y
-real ox
-real oy
-unit u
-unit d
-timer t = CreateTimer()
-int ord
 int array buildorders
 
 public function trigger.registerBuilderEvent(playerunitevent ev)
@@ -179,12 +165,6 @@ public function trigger.registerBuilderEvent(playerunitevent ev)
 
 
 init
-	trigger trig = CreateTrigger()
-	trig.registerBuilderEvent( EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
-	trig.registerBuilderEvent( EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
-	TriggerAddCondition( trig, Condition( function condition ) )
-	TriggerAddAction( trig,  function conac  )
-	
 	buildorders[0] = 'n00G'
 	buildorders[1] = 'n00B' // Jumper
 	buildorders[2] = 'n000' // Revivepoint

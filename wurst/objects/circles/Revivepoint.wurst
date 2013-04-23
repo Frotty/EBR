@@ -10,7 +10,7 @@ package Revivepoint
 	import TempGroups
 	import Builder
 	import Startmazes
-	import LastOrder
+	import InstantBuild
 
 	constant real EVENT_RADIUS = 80.
 	constant int REVIVEPOINT_ID = 'n000'
@@ -78,7 +78,7 @@ package Revivepoint
 			var data = vicu.getUserData() castTo Entity
 			if data != null
 				data.terminate()
-			else if GetUnitTypeId(vicu) != 'n008'
+			else if GetUnitTypeId(vicu) != 'n008' and GetUnitTypeId(vicu) != 'e000'
 				vicu.remove()
 		ENUM_GROUP.clear()
 		for i = 0 to 3

@@ -25,15 +25,15 @@ public class Strong_Escaper extends Escaper
 	construct(vec3 pos, player owner, int typ )
 		super(pos, owner, typ)
 		
-	static function strongUpdate(Escaper e)
-		var se =e castTo Strong_Escaper
-		debugPrint("strong upt", 2)
-		if se.invulnerable
-			if se.shieldX != se.pos.x or se.shieldY != se.pos.y
-				se.shieldtimer.release()
-				se.actor.removeAbility('Avul')
-				se.invulnerable =false
-				DestroyEffect(se.shieldeffect)
+	override function update()
+		super.update()
+		debugPrint("strong upt", 0)
+		if invulnerable
+			if shieldX != pos.x or shieldY != pos.y
+				shieldtimer.release()
+				actor.removeAbility('Avul')
+				invulnerable =false
+				DestroyEffect(shieldeffect)
 				
 				
 	static function endShield()

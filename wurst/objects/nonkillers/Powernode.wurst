@@ -4,7 +4,6 @@ import Entity
 import Escaper
 import EventHandling
 import SetupObject
-import LastOrder
 
 constant int LINK_ID = 'A051'
 constant string EFFECT_STRING = "DRAM"

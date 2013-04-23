@@ -2,7 +2,6 @@ package EscaperSpells
 import BaseObject
 import Escaper
 import EscaperClasses
-import LastOrder
 
 constant int REINCARNATION_ID = 'A02X'
 constant int SPEEDWAVE_ID = 'A06P'

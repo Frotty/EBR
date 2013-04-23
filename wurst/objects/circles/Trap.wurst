@@ -44,9 +44,11 @@ public class Trap extends StaticBaseObject
 		thistype obj = source.getUserData() castTo thistype
 		
 		if not obj.active and e instanceof Escaper
-			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
-			var escaper = e castTo Escaper
-			obj.doEffect(escaper)
+			var es = e castTo Escaper
+			if not es.flying
+				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+				var escaper = e castTo Escaper
+				obj.doEffect(escaper)
 	
 	function canTrigger(Entity e) returns boolean
 		return false
@@ -76,7 +78,6 @@ public class Trap extends StaticBaseObject
 			case ABIL.STUN
 				var dc = new DummyCaster(STUN_BUFF, "thunderbolt", DUMMY_PLAYER, true)
 				dc.level = duration.toInt()
-				dc.recycledelay = 0.5
 				dc.castOnTarget(e.actor)
 			case ABIL.SHAKE
 				setCameraNoiseTimed(e.owner, value, 1000, duration)
@@ -87,17 +88,20 @@ public class Trap extends StaticBaseObject
 				//	e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
 			case ABIL.SPEED
 				int level = (value/20).toInt()
-				debugPrint("level= " +level.toString(),2)
+				debugPrint("level = " +level.toString(),3)
 				if level < 5
+					debugPrint("DC created1", 3)
 					var dc = new DummyCaster(SPEED_BUFF_NEG, "bloodlust", DUMMY_PLAYER, true)
+					debugPrint("DC created2", 3)
 					dc.level = level
-					dc.recycledelay = 0.5
 					dc.castOnTarget(e.actor)
 				if level > 5
-					var dc = new DummyCaster(SPEED_BUFF_POS, "bloodlust", DUMMY_PLAYER, true)
-					dc.level = level-5
-					dc.recycledelay = 0.5
+					debugPrint("DC created1.1", 3)
+					var dc = new DummyCaster(SPEED_BUFF_POS, "bloodlust", owner, true)
+					debugPrint("DC created2.1", 3)
+					dc.setLevel(level-5)
 					dc.castOnTarget(e.actor)
+				debugPrint("finish", 3)
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				real rX = getRallyX()

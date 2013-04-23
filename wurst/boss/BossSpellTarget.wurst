@@ -47,8 +47,7 @@ public class SpellTarget extends DynamicSetupObject
 	function castSpell(int spell_id, string spell_string)
 		var dc = new DummyCaster(spell_id, spell_string, DUMMY_PLAYER, true)
 		dc.level = 1
-		dc.recycledelay = 0.5
-		dc.castOnPoint(pos.x,pos.y)
+		dc.castOnPoint(pos)
 
 public class BossMissile extends Entity
 	Fx missile

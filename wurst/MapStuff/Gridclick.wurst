@@ -28,7 +28,7 @@ package Gridclick
 	
 	init
 		trigger t = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
+		//TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 		TriggerAddAction(t,function checkRightOrder)
 	
 endpackage

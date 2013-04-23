@@ -7,7 +7,6 @@ import TempGroups
 import Texttag
 import Remove
 import BomberTarget
-import LastOrder
 import PreloadHandler
 
 constant int SPINNER_ID      = 'h01M'
@@ -69,6 +68,7 @@ public class Spinner extends DynamicSetupObject
 				i++
 			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == Player(11))
 				dobj.setup.removeAbility(REMOVE_ID)
+				dobj.updatePos()
 				spinningEntities.add(new SpinNode(dobj, angleBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y).radians(), distanceBetweenCoords(pos.x, pos.y, dobj.pos.x, dobj.pos.y) ))
 
 	ondestroy

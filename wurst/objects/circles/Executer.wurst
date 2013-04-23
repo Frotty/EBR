@@ -523,7 +523,7 @@ package Executer
 	constant int LEVER_ABIL = 'A067'
 	constant int PRESSURE_ABIL = 'A066'
 	
-	constant int REACTIVATE_ABIL = 'A05Z'
+	constant int REACTIVATE_ABIL = 'A06Z'
 	
 	constant int KILLER_TRIGGER_ABIL = 'A012'
 	constant int ESCAPER_TRIGGER_ABIL = 'A009'
