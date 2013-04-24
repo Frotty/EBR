@@ -7,6 +7,7 @@ import Camera
 import GameConstants
 import TempGroups
 import Texttag
+import Camerashakes
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
@@ -79,7 +80,8 @@ public class Trap extends StaticBaseObject
 				dc.recycledelay = 0.5
 				dc.castOnTarget(e.actor)
 			case ABIL.SHAKE
-				setCameraNoiseTimed(e.owner, value, 1000, duration)
+				newEventPlayer(e.owner,value)
+				//setCameraNoiseTimed(e.owner, value, 1000, duration)
 			case ABIL.POISON
 				e.setPoison(true)
 				//if not e.poisoned
