@@ -1,0 +1,58 @@
+package Weapon
+
+import ItemObject
+import Escaper
+
+enum ATTACK_TYPE
+	MELEE
+	RANGED
+
+class Weapon extends ItemObject
+	boolean picked = false
+	boolean followWalkable = true
+	Escaper holder
+	
+	construct(vec2 pos, player owner)
+		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
+		setup.registerCastEvent(Condition(function Key.onCast))
+		
+	function recolor()
+		RemoveItem(actorItem)
+		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
+		actorItem.setUserData(this castTo int)
+		
+	function pickedUp(Escaper holder)
+		picked = true
+		this.holder = holder
+		setup.hide()
+		
+	function dropped()
+		picked = false
+		holder = null
+		setup.setXY(pos.toVec2())
+		setup.show()
+		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
+		actorItem.setUserData(this castTo int)
+
+		
+		
+	override function update()
+		if picked and followWalkable
+			if not holder.flying and not holder.sliding and not holder.onUnwalkable
+				pos = holder.pos
+				
+			
+		
+	static function onCast() returns boolean
+		var id = GetSpellAbilityId()
+		data.recolor()
+		return false
+		
+	ondestroy
+		dropTrig.disable()
+		actorItem.remove()
+		dropTrig.enable()
+		holder = null
+		setup.unregisterCastEvent()
+		setup.remove()
+	
