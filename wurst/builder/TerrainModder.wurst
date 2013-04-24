@@ -38,6 +38,7 @@ package TerrainModder
 			actor.setPos(hiddenX, hiddenY)
 			actor.setPropWindow(0.)
 			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
+			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 			actor.registerCastEvent(Condition(function onCast))
 			actor.setUserData(this castTo int)
 
@@ -47,6 +48,11 @@ package TerrainModder
 			
 			var rX = GetOrderPointX()
 			var rY = GetOrderPointY()
+			
+			var oW = GetOrderTarget()
+			if oW != null
+				rX = oW.getX()
+				rY = oW.getY()
 			 
 			var rdata = getRegionData(rX, rY)
 			if rdata == null

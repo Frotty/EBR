@@ -3,6 +3,7 @@ package BaseObject
 	import Vectors
 	import Terrain
 	import Trigger
+	import SetupObject
 	
 
 	public code CODE_NULL = null
@@ -39,7 +40,7 @@ package BaseObject
 			
 			actor.setUserData(this castTo int)
 
-		
+
 		static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
 			unit u		= GetOrderedUnit()
 			unit u2	   = GetOrderTargetUnit()
@@ -55,7 +56,11 @@ package BaseObject
 					obj.rallyPoint = vec3( x, y, getTerrainZ( x, y ) )
 					obj.rallyAngle = angleBetweenCoords( obj.pos.x, obj.pos.y, x, y )
 				else
-					obj.rallyUnit = u2
+					var data = u2.getUserData() castTo Entity
+					if data != null and data instanceof DynamicSetupObject
+						obj.rallyUnit = (data castTo DynamicSetupObject).actor
+					else
+						obj.rallyUnit = u2
 
 						
 					

@@ -69,7 +69,12 @@ package GameInit
 		
 	function initPartTwo()
 		initBaseObjects()
-
+		var r = 0.00001379999957862310111522674560546875
+		var r2 = r * 100000000
+		print(r.toString())
+		print(r2.toString())
+		print( (r == 0.00001379999957862310111522674560546875).toString())
+		print( (0.00023 * 0.06 == 0.00001379999957862310111522674560546875).toString())
 		debugPrint("Init - BObj", 2)
 		initMazeUnits(0, rand)
 		debugPrint("Init - Startmazes", 2)

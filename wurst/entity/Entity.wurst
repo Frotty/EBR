@@ -6,7 +6,6 @@ import Debug
 import Fx
 import Angle
 import EntityRegion
-import LastOrder
 import public LinkedList
 
 /** Base Entity Class  */
@@ -129,7 +128,6 @@ abstract public class UnitEntity extends Entity
 		pos = vec3(actor.getX(), actor.getY(), pos.z)
 		
 	function setNewActor(unit u)
-		actor.clearLastOrders()
 		actor.remove()
 		actor = u
 		actor.setUserData(this castTo int)
@@ -143,8 +141,6 @@ abstract public class UnitEntity extends Entity
 		pos = tpos
 		actor.setXY(tpos.x,tpos.y)
 		
-	ondestroy
-		actor.clearLastOrders()
 
 abstract public class FxEntity extends Entity
 	protected Fx fx

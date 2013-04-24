@@ -6,7 +6,6 @@ import RegionData
 import TerrainBlocker
 import BuilderConstants
 import Texttag
-import LastOrder
 import PreloadHandler
 
 constant int TEXTURECHANGER_ID	= 'n01E'

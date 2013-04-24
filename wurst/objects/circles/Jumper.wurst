@@ -2,22 +2,69 @@ package Jumper
 import Entity
 import Escaper
 import BaseObject
+import EventHandling
+import Texttag 
 
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
 
+constant int FORCED_ID = 'A070'
+constant int UNFORCED_ID = 'A071'
+constant int INCREASE_ID = 'A072'
+constant int DECREASE_ID = 'A073'
+
+enum JumpMode
+	FORCED
+	UNFORCED
+
 public class Jumper extends StaticBaseObject
+	JumpMode mode = JumpMode.FORCED
+	real speed = 20.
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 32., function Jumper.inRange)
+		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange)
+		actor.registerCastEvent(Condition(function onCastEvent))
 		
 	static function inRange()
 		var data = GetTriggerUnit().getUserData() castTo Entity
 		var jdata = GetTriggeringTrigger().getSource().getUserData() castTo Jumper
 		if data instanceof Escaper
 			var edata = data castTo Escaper
-			edata.setPos(jdata.pos.addReals(0,0,1.))
-			edata.sliding = false
-			edata.slideVelocity = vec3(0,0,0)
-			edata.setTarget(jdata.getRallyPoint(), 22.)
-			AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
+			switch jdata.mode
+				case JumpMode.FORCED
+					edata.setPos(jdata.pos.addReals(0,0,1.))
+					edata.sliding = false
+					edata.slideVelocity = vec3(0,0,0)
+					edata.setTarget(jdata.getRallyPoint(), jdata.speed)
+					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
+				case JumpMode.UNFORCED
+					edata.addVel(vec3(0,0, jdata.speed))
+					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
+					
+	function onCast(int id)
+		switch id
+			case FORCED_ID
+				actor.removeAbility(FORCED_ID).addAbility(UNFORCED_ID)
+				mode = JumpMode.UNFORCED
+			case UNFORCED_ID
+				actor.removeAbility(UNFORCED_ID).addAbility(FORCED_ID)
+				mode = JumpMode.FORCED
+			case DECREASE_ID
+				if speed >5.
+					speed -= 1.
+					createTTEx(pos, vec2(0,0.05), "Speed: " + speed.toString(), 10,  2., colorA(255,255,255,0), owner  )
+			case INCREASE_ID
+				if speed < 35.
+					speed += 1.
+					createTTEx(pos, vec2(0,0.05), "Speed: " + speed.toString(), 10,  2., colorA(255,255,255,0), owner  )
+				
+	
+					
+	static function onCastEvent() returns boolean
+		var obj = GetTriggerUnit().getUserData() castTo Jumper
+		obj.onCast(GetSpellAbilityId())
+		return false
+		
+		
+		
+			

@@ -2,7 +2,6 @@ package Invisible
 import BaseObject
 import Entity
 import SetupObject
-import LastOrder
 
 constant int VIS_ID = 'A04F'
 constant int INVIS_ID = 'A005'

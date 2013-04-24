@@ -1,0 +1,24 @@
+package SaveAndLoad
+//
+//import FileIO
+//
+//
+//public function saveString(string s)
+//	if File.isEnabled()
+//		var f = File.open("EBR", "namedata", Flag.WRITE)
+//		f.write("AUG" + s + "UAG")
+//		f.close()
+//		print("saved")
+//	else
+//		print("not enabled")
+//		
+//public function loadString()
+//	if File.isEnabled()
+//		var f = File.open("EBR", "namedata", Flag.READ)
+//		string data = f.read()
+//		while line.length() > 0
+//			
+//		f.close()
+//		print("loaded")
+//	else
+//		print("not enabled")

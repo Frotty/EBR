@@ -27,13 +27,14 @@ package Escaper
 	
 	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	
-	public class Escaper extends UnitEntity
-		use PhysicsModule
-		
+	public class Escaper extends UnitEntity		
 		boolean sliding = false
+		boolean flying = false
 		boolean onUnwalkable = false
 		boolean poisoned = false
 		boolean onLava = false
+		
+		real terrainZ = 512.
 		
 		effect lavaEffect
 		effect poisonEffect
@@ -54,7 +55,6 @@ package Escaper
     		.removeAbility('Aloc')
     		.show()
     		
-			affectedByGravity = true
     		
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
@@ -65,62 +65,7 @@ package Escaper
 			currentRegion = regions[0]
 			escapers.add(this)
 
-		function inAir()
-			if not flying
-				SetUnitPropWindow(actor,0.)
-				
-				
-		function onGround()
-			if flying
-				flying = false
-				SetUnitPropWindow(actor, 60.)
-				vel *= 0.10
-				vel.z = 0.
-				print("jo")
-			pos.z = terrainZ+.1
-				
-				
-			var ttype = GetTerrainType(pos.x, pos.y)
-			
-			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
-				let angl = actor.getFacing()
-				slideVelocity = vec3(Cos(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
-				sliding = true
-			else
-				slideVelocity *= 0.8
-				sliding = false
-				if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
-					onUnwalkable = true
-					setLava(false)
-					setPoison(false)
-					if alive
-						kill()
-				else 
-					onUnwalkable = false
-					if ttype == 1147958883 and not onLava
-						setLava(true)
-						if onLava
-							var hp = actor.getHP()
-							if hp > .405
-								actor.setHP(hp-currentRegion.lavaDmg)
-							else if alive
-								kill()
-					else if ttype == POISON
-						setLava(false)
-						if not poisoned
-							setPoison(true)
-					else
-						setLava(false)
-					
-			
-			if poisoned
-				var hp2 = actor.getHP()
-				if hp2 > .405
-					actor.setHP(hp2-currentRegion.poisonDmg)
-				else if alive
-					kill()
-
-			vel *= 0.95
+		
 
 		function setLava(boolean add)
 			if add and not onLava
@@ -159,32 +104,89 @@ package Escaper
 				setPoison(false)
 				setLava(false)
 				flying = false
-		
-		override function update()
-			super.update()
-			physicsUpdate(this)
-			if flying
-				inAir()
-			else
-				onGround()
 				
-
-			pos += vel
+		function inAir()
+			if not flying
+				SetUnitPropWindow(actor,0.)
+				flying = true
+			vel += gravity
+			slideVelocity *= 0.99
+				
+				
+		function onGround()
+			if flying
+				flying = false
+				SetUnitPropWindow(actor, 60.)
+				vel *= 0.20
+				vel.z = 0.
+			pos.z = terrainZ+.1
+				
+				
+			var ttype = GetTerrainType(pos.x, pos.y)
 			
-			pos += slideVelocity
+			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
+				let angl = actor.getFacing()
+				slideVelocity = vec3(Cos(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
+				sliding = true
+				vel *= 0.99
+			else
+				vel *= 0.95
+				slideVelocity *= 0.8
+				sliding = false
+				if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
+					onUnwalkable = true
+					setLava(false)
+					setPoison(false)
+					if alive
+						kill()
+				else 
+					onUnwalkable = false
+					if ttype == 1147958883 and not onLava
+						setLava(true)
+						if onLava
+							var hp = actor.getHP()
+							if hp > .405
+								actor.setHP(hp-currentRegion.lavaDmg)
+							else if alive
+								kill()
+					else if ttype == POISON
+						setLava(false)
+						if not poisoned
+							setPoison(true)
+					else
+						setLava(false)
+					
+			
+			if poisoned
+				var hp2 = actor.getHP()
+				if hp2 > .405
+					actor.setHP(hp2-currentRegion.poisonDmg)
+				else if alive
+					kill()
+			
 			pos += trackVelocity
 			trackVelocity = vec3(0,0,0)
 			pos += vortexVelocity
 			vortexVelocity = vec3(0,0,0)
+			
+		
+		override function update()
+			super.update()
+			terrainZ = getTerrainZ(pos.x, pos.y)
+			if pos.z <= terrainZ + .2
+				onGround()
+			else
+				inAir()
+			
 
+			pos += vel
+			pos += slideVelocity
 			if sliding
 				actor.setPos(pos.x, pos.y)
 			else
 				actor.setXY(pos.x, pos.y)
 			SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
-			
-			if this instanceof Strong_Escaper
-				Strong_Escaper.strongUpdate(this)
+
             
 		static function revive()
 			debugPrint("rev", 1)
