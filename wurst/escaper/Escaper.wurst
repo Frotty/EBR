@@ -94,10 +94,10 @@ package Escaper
 				debugPrint("died", 1)
 				if owner.getId() >= 8
 					debugPrint("is builder", 1)
-					getTimer().setData(this castTo int).start(.1, function Escaper.revive)
+					getTimer().setData(this.owner.getId()).start(.1, function Escaper.revive)
 					debugPrint("started", 1)
 				else
-					getTimer().start(3., function Escaper.revive).setData(this castTo int)
+					getTimer().start(3., function Escaper.revive).setData(this.owner.getId())
 				owner.addDeath()
 				actor.kill()
 				alive = false
@@ -191,6 +191,10 @@ package Escaper
 		static function revive()
 			debugPrint("rev", 1)
 			var t = GetExpiredTimer()
+			var data = t.getData()
+			if pData[data] == null
+				t.release()
+				return
 			Escaper e = t.getData() castTo Escaper
 			var revX = currentRevivepoint.x
 			var revY = currentRevivepoint.y

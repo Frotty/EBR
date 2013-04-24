@@ -5,6 +5,8 @@ package PlayerData
 	import Builder
 	import LinkedList
 	import RegionData
+	import SaveAndLoad
+	import CodeManager
 	
 	public int playercount = 0
 	
@@ -47,7 +49,18 @@ package PlayerData
 			mbname = colorcode[ id ] + mbname
 			debugPrint("MBNAME: " + mbname, 1)
 			players.add(this)
-			
+		
+		function addXp(int amount)
+			print("add current xp:" + XP.toString())
+			XP += amount
+			print("add new xp:" + XP.toString())
+			savePlayerInformation(this)	
+		
+		function setXp(int amount)
+			print("set current xp:" + XP.toString())
+			XP = amount
+			print("set new xp:" + XP.toString())
+		
 		function updateRank ()
 			int i = 0
 			while XP >= expBounds[i]
@@ -76,6 +89,7 @@ package PlayerData
 			if escaper != null
 				escaper.terminate()
 			players.remove(this)
+			pData[id] = null
 			if gameId < playercount
 				for p2 in players
 					if p2.gameId > gameId
@@ -110,6 +124,13 @@ package PlayerData
 
 		for pd in players
 			pd.setMBRow(pd.gameId+1)
+			switch checkPlayer(pd.p)
+				case Playerstate.EXISTING
+					loadPlayerInformation(pd)
+				case Playerstate.NOTENABLED
+					skip
+				case Playerstate.NEW
+					savePlayerInformation(pd)
 
 
 			
@@ -120,6 +141,7 @@ package PlayerData
 		playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 		playerboard.setNewItem(0,2,"Rank",null)
 		playerboard.board.display(true)
+		GetExpiredTimer().release()
 		
 	public function player.addDeath()
 		var pd = pData[this.getId()]
@@ -170,11 +192,11 @@ package PlayerData
 				leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
 				r++
 		playercount = r
-		TimerStart(CreateTimer(), 1., false,function initMB)
+		TimerStart(getTimer(), 1., false,function initMB)
 		TimerStart(CreateTimer(), 1., true, function setTime)
 	   
-	int minutes = 0
-	int seconds = 0
+	public int minutes = 0
+	public int seconds = 0
 	
 
 		

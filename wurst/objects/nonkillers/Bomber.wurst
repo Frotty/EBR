@@ -49,6 +49,7 @@ public class Bomber extends UnitEntity
 		var obj = GetExpiredTimer().getData() castTo Bomber
 		obj.realorder = false
 		IssueImmediateOrderById(obj.setup, STOP_ORDER)
+		GetExpiredTimer().release()
 		
 	ondestroy 
 		setup.remove()

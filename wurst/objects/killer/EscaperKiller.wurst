@@ -14,6 +14,9 @@ package EscaperKiller
 
 	public class EscaperKiller extends DynamicSetupObject
 		
+		construct( unit actor, unit setup, real radius )
+			super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function EscaperKiller.onInRangeEvent ) 
+		
 		static function onInRangeEvent()
 			var ent = GetTriggerUnit().getUserData() castTo Entity
 			
@@ -21,10 +24,6 @@ package EscaperKiller
 				var es = ent castTo Escaper
 				if not es.flying
 					es.kill() 
-		
-		construct( unit actor, unit setup, real radius )
-			super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function EscaperKiller.onInRangeEvent ) 
-			active = false
 
 
 

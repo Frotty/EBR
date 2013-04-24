@@ -51,8 +51,8 @@ function updateEntityRegions()
 		e = e.next
 	
 	
-init
-	TimerStart(CreateTimer(), 1., true, function updateEntityRegions)
+//init
+//	TimerStart(CreateTimer(), 1., true, function updateEntityRegions)
 
 		
 

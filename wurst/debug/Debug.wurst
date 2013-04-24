@@ -6,16 +6,12 @@ package Debug
 	
 
 	function showCount()
-		print("entities: " + entityCount.toString())
-		print("unitentities: " + unitEntityCount.toString())
+		debugPrint("entities: " + entityCount.toString(), 1)
+		debugPrint("unitentities: " + unitEntityCount.toString(), 1)
 		Entity e = Entity.first
 		while e != null
-			print("id: " + (e castTo int).toString())
+			debugPrint("id: " + (e castTo int).toString(), 1)
 			e = e.next
 		
 		
-	
-	init
-		let tim = CreateTimer()
-		//tim.startPeriodic(2.5, function showCount)
 endpackage

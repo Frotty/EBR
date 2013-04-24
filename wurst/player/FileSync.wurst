@@ -1,0 +1,15 @@
+package FileSync
+
+public gamecache synccache = InitGameCache("Escape Builder[R] 0.82a.w3x")
+
+public enum loadType
+	PDATA
+	MAZE
+
+public function string.sync(player p, loadType typ)
+	let ss = p.getId().toString()
+	if typ == loadType.PDATA
+		if GetLocalPlayer() == p
+			StoreString(synccache, "", ss, this)
+		SyncStoredString(synccache, "", ss)
+		TriggerSyncReady()

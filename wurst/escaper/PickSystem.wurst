@@ -35,6 +35,7 @@ public function startChoose()
 function allow()
 	EnableUserControl(true)
 	EnableOcclusion(true)
+	GetExpiredTimer().release()
 
 function keyleft()
 	var p = GetTriggerPlayer()

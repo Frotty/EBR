@@ -1,0 +1,28 @@
+package CodeManager
+import PlayerData
+import CodeGenerator
+import SaveAndLoad
+import FileSync
+
+constant int XPMAX = 100000
+constant string MSG_PREFIX = "|cffDE7B19CodeManager|r :"
+
+public function savePlayerInformation(PlayerData pd)
+	Savecode scode = new Savecode()
+	scode.encode(pd.XP, XPMAX)
+	string sc = scode.save(pd.p, 341)
+	saveString(fhash(pd.p.getName()).toString() + sc, pd.p)
+	
+public function loadPlayerInformation(PlayerData pd)
+	loadString(pd.p)
+	let scode = new Savecode()
+	let lcode = GetStoredString(synccache, "", pd.id.toString())
+	if scode.load(pd.p, lcode, 341)
+		pd.setXp( scode.decode(XPMAX) )
+		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your saved information was decoded successfully!\nLoaded Xp:" + pd.XP.toString() )
+	else
+		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - Your saved information is invalid!"  )
+	
+
+
+	

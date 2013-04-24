@@ -1,5 +1,5 @@
 package BossSpellTarget
-
+import BaseObject
 import SetupObject
 import EventHandling
 import PreloadHandler
@@ -21,7 +21,7 @@ public class SpellTarget extends DynamicSetupObject
 	SpellType stype
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0, null)
+		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0, CODE_NULL)
 		setup.registerCastEvent(Condition(function onCast))
 		
 	static function onCast() returns boolean

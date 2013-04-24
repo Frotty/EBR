@@ -4,12 +4,9 @@ package BaseObject
 	import Terrain
 	import Trigger
 	import SetupObject
-	
 
-	public code CODE_NULL = null
-	
 	trigger rallyTrigger
-	
+
 	/*  ---Creating a new Baseobject---
 		Creating the baseobject will need 3 parameters
 		the unit u: in whichs Userdata the struct is saved
@@ -17,27 +14,29 @@ package BaseObject
 		the code c: name of the static method that is being called upon inRangeEvent
 	*/
 	
+	public code CODE_NULL = null
+
 	public class StaticBaseObject extends UnitEntity
 		private vec3 rallyPoint
 		private unit rallyUnit
 		private angle rallyAngle
-		
+
 		trigger inRangeTrig // Trigger for inRange detection
-		
+
 		construct( vec2 pos, unit u, real radius, code c )
 			super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
 			active = false
 
 
 			rallyPoint = this.pos
-			
+
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.registerUnitInRangeSource( actor, radius )
 				inRangeTrig.addAction( c )
 			TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER ) 
 			TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-			
+
 			actor.setUserData(this castTo int)
 
 
@@ -47,9 +46,9 @@ package BaseObject
 			real x		= GetOrderPointX()
 			real y		= GetOrderPointY()
 			thistype obj  = GetUnitUserData( u ) castTo StaticBaseObject
-			
 
-				
+
+
 			if GetIssuedOrderId() == 0xD000C or GetIssuedOrderId() == 851971//IDs of Rally(to be sure)
 				if u2 == null
 					obj.rallyUnit = null
@@ -62,8 +61,8 @@ package BaseObject
 					else
 						obj.rallyUnit = u2
 
-						
-					
+
+
 		function getRallyPoint() returns vec3
 			if rallyUnit == null
 				return rallyPoint
@@ -74,16 +73,16 @@ package BaseObject
 					return vec3( x, y, getTerrainZ( x, y ) )
 				else
 					return pos
-						
+
 		function getRallyUnit() returns unit
 			return rallyUnit
-			
+
 		function setX( real x )
 			SetUnitX( actor, x )
 
 		function setY( real y )
 			SetUnitY( actor, y )
-			
+
 		function setZ( real z )
 			SetUnitFlyHeight( actor, z, 0. )
 
@@ -106,18 +105,18 @@ package BaseObject
 				else
 					rallyUnit = null
 					return rallyPoint.y
-					
+
 		function getRallyAngle() returns real
 			return angleBetweenCoords(pos.x, pos.y, getRallyX(), getRallyY()).degrees()
-		
+
 		override function update()
-		
+
 		ondestroy
 			actor.clearRegister()
 			actor.remove()
 			inRangeTrig.destr()
 
-	
+
 
 	init
 		rallyTrigger = CreateTrigger()

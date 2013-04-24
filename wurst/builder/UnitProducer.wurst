@@ -20,7 +20,7 @@ package UnitProducer
 	public class UnitProducer extends StaticBaseObject
 
 		construct( vec2 pos, player owner )
-			super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., null)
+			super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL)
 			actor.registerCastEvent(Condition(function UnitProducer.onCast))
 
 		static function onCast() returns boolean
