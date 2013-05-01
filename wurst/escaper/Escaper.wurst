@@ -10,7 +10,7 @@ import BuilderConstants
 import ItemObject
 import Key
 import Revivepoint
-import HashList
+import LinkedList
 import EscaperClasses
 import PlayerData
 
@@ -25,7 +25,7 @@ constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameSt
 
 real time = 0.
 
-public HashList<Escaper> escapers = new HashList<Escaper>()
+public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
 public class Escaper extends UnitEntity		
 	boolean sliding = false

@@ -88,7 +88,4 @@ public function clearStartMazes()
 	for i = 0 to 3
 		EnumDestructablesInRect(regions[i].theRect, null, function killD)
 		
-		
-function killD()
-	RemoveDestructable(GetEnumDestructable())
-	
+

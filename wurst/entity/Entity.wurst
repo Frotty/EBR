@@ -5,7 +5,7 @@ import PhysicsConstants
 import Debug
 import Fx
 import Angle
-import public HashList
+import public LinkedList
 
 /** Base Entity Class  */
 public abstract class Entity

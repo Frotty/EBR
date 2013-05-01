@@ -1,9 +1,9 @@
 package Commands
 import TempGroups
 import Entity
-import Revivepoint
 import CodeManager
 import PlayerData
+import Startmazes
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -16,7 +16,7 @@ function onCommandChat()
 			if GetLocalPlayer() == p
 				ClearTextMessages()
 		case "clearStartMazes"
-			clearStartMazes()
+			clearStartRegion()
 		case "cam"
 			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
 			if nstr == "lock"

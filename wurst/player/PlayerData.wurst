@@ -3,7 +3,7 @@ import MultiboardClass
 import GameConstants
 import Escaper
 import Builder
-import HashList
+import LinkedList
 import RegionData
 import CodeManager
 
@@ -11,7 +11,7 @@ public int playercount = 0
 
 trigger leaveTrig
 
-public HashList<PlayerData> players = new HashList<PlayerData>()
+public LinkedList<PlayerData> players = new LinkedList<PlayerData>()
 
 public class PlayerData //just the player's (constant) stuff
 	
