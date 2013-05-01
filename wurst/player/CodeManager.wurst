@@ -1,28 +1,90 @@
 package CodeManager
 import PlayerData
 import CodeGenerator
-import SaveAndLoad
-import FileSync
+import FileIO
+import Sync
+
 
 constant int XPMAX = 100000
-constant string MSG_PREFIX = "|cffDE7B19CodeManager|r :"
+constant string FOLDER_NAME = "EBR"
+constant string FILE_NAME = "data"
+constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
+constant int saveTechnique = 331
 
-public function savePlayerInformation(PlayerData pd)
-	Savecode scode = new Savecode()
-	scode.encode(pd.XP, XPMAX)
-	string sc = scode.save(pd.p, 341)
-	saveString(fhash(pd.p.getName()).toString() + sc, pd.p)
+public gamecache synccache = InitGameCache("Escape Builder[R] 0.82a.w3x")
 	
-public function loadPlayerInformation(PlayerData pd)
-	loadString(pd.p)
-	let scode = new Savecode()
-	let lcode = GetStoredString(synccache, "", pd.id.toString())
-	if scode.load(pd.p, lcode, 341)
-		pd.setXp( scode.decode(XPMAX) )
-		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your saved information was decoded successfully!\nLoaded Xp:" + pd.XP.toString() )
+
+public function PlayerData.createNewPlayerFile()
+	var scode = new Savecode()
+	scode.encode(this.XP, XPMAX)
+	debugPrint("saving: " + this.XP.toString() + " XP", 1)
+	let lcode = fhash(this.name).toString() + scode.save(this.p, saveTechnique)
+	debugPrint("saving: " + lcode, 1)
+	if GetLocalPlayer() == this.p
+		if File.isEnabled()
+			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
+			f.write(lcode)
+			f.close()
+	debugPrint("saved new", 1)
+				
+public function PlayerData.loadPlayerFile()
+	string array lines
+	var count = 0
+	let ids = this.id.toString()
+	let nameHash = fhash(this.name).toString()
+	debugPrint("start " + this.name, 1 )
+	if GetLocalPlayer() == this.p
+		if File.isEnabled()
+			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+			lines[count] = f.read()
+			while lines[count] != null
+				count++
+				lines[count] = f.read()
+			f.close()		
+		else
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - You don't have local files enabled!"  )
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To enable local files, please run C:\\!! AllowLocalFiles\\AllowLocalFiles.bat" )
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You can do this after the game."  )
+			return
+	this.localFiles = true
+	debugPrint("load playerfile 5", 1)
+	let sCount = count.sync(this.p)
+	debugPrint("load playerfile 6", 1)
+	string array sLines
+	debugPrint(sCount.toString(), 1)
+	if sCount > 0
+		for i = 0 to sCount-1
+			sLines[i] = lines[i].sync(this.p)
+			debugPrint(sLines[i], 1)
+	debugPrint("syncing for " + this.id.toString() + " done", 1)
+	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your Data was loaded."  )
+	int idx = - 1
+	for i = 0 to sCount-1
+		if sLines[i].startsWith(nameHash)
+			debugPrint("character Found in Line " + i.toString(), 1)
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found."  )
+			idx = i
+	if idx > -1
+		this.slcode = sLines[idx].substring(nameHash.length(), sLines[idx].length())
+		var scode = new Savecode()
+		if scode.load(this.p, this.slcode, saveTechnique)
+			debugPrint("load success", 1)
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded."  )
+		else
+			
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - Your saved Character was invalid, a new one got created."  )
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You either have an old code-version or this is an EBR-Bug."  )
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To report a bug go to sunayama.de or tinyurl.com/EscapeBuilder."  )
+		this.setXp(scode.decode(XPMAX))
 	else
-		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - Your saved information is invalid!"  )
+		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You have no saved Character with this name, a new one was created."  )
+		this.createNewPlayerFile()
 	
 
+	
 
+		
+		
+		
+		
 	

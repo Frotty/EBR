@@ -2,11 +2,22 @@ package EscaperClasses
 
 import Escaper
 
+constant int REINCARNATION_ID = 'A02X'
+constant int SPEEDWAVE_ID = 'A06P'
+constant int TOMB_DUMMY_ID = 'u00D'
+constant int STAGNANCYSHIELD_ID = 'A008'
+
 public class Holy_Escaper extends Escaper
 	unit revivetomb
 
 	construct( vec3 pos, player owner, int typ )
 		super( pos, owner, typ )
+		
+	override function onCast(int id)
+		if id == REINCARNATION_ID
+			if revivetomb != null
+				revivetomb.remove()
+			revivetomb = CreateUnit(owner, TOMB_DUMMY_ID, pos.x, pos.y, 0.)
 		
 
 public class Ice_Escaper extends Escaper
@@ -14,13 +25,21 @@ public class Ice_Escaper extends Escaper
 	construct(vec3 pos, player owner, int typ )
 		super(pos, owner, typ)
 		
+	override function onCast(int id)
+		if id == SPEEDWAVE_ID
+			if sliding
+				var angl = actor.getFacing()
+				var value = 10 + GetUnitAbilityLevel(actor,SPEEDWAVE_ID)*2.5
+				DestroyEffect( AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", pos.x, pos.y))
+				addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
+		
 	
 public class Strong_Escaper extends Escaper
 	boolean invulnerable = false
-	effect shieldeffect
-	real shieldX
-	real shieldY
-	timer shieldtimer
+	effect shieldeffect = null
+	real shieldX = 0.
+	real shieldY = 0.
+	real shieldtimer = 0.
 	
 	construct(vec3 pos, player owner, int typ )
 		super(pos, owner, typ)
@@ -29,19 +48,22 @@ public class Strong_Escaper extends Escaper
 		super.update()
 		debugPrint("strong upt", 0)
 		if invulnerable
-			if shieldX != pos.x or shieldY != pos.y
-				shieldtimer.release()
+			shieldtimer -= ANIMATION_PERIOD
+			if shieldX != pos.x or shieldY != pos.y or shieldtimer <= 0
+				shieldtimer = 0
 				actor.removeAbility('Avul')
-				invulnerable =false
+				invulnerable = false
 				DestroyEffect(shieldeffect)
 				
 				
-	static function endShield()
-		var e = GetExpiredTimer().getData() castTo Strong_Escaper
-		e.actor.removeAbility('Avul')
-		e.invulnerable =false
-		DestroyEffect(e.shieldeffect)
-		e.shieldtimer.release()
-		e.shieldX = 0.
-		e.shieldY = 0.
-		
+	override function onCast(int id)
+		invulnerable = true
+		shieldtimer = GetUnitAbilityLevel(actor, id)*1.
+		actor.addAbility('Avul')
+		actor.setPos(pos.toVec2())
+		shieldX = pos.x
+		shieldY = pos.y
+		shieldeffect = AddSpecialEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", shieldX, shieldY)
+
+	
+

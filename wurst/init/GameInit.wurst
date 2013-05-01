@@ -12,7 +12,6 @@ package GameInit
 	import Trap
 	import Texter
 	import Bombertower
-	import EscaperSpells
 	import Bomber
 	import Startmazes
 	import EntityManagement
@@ -61,7 +60,6 @@ package GameInit
 		debugPrint("Init - BTower", 2)
 		init_Bomber()
 		debugPrint("Init - Bomber", 2)
-		init_Reincarnation()
 		debugPrint("Init - Reinc", 2)
 		init_Pointer()
 		debugPrint("Init - Pointer", 2)

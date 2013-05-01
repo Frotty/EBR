@@ -2,13 +2,14 @@ package Commands
 import TempGroups
 import Entity
 import Revivepoint
-import SaveAndLoad
+import CodeManager
 import PlayerData
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
 	let p = GetTriggerPlayer()
 	let id = p.getId()
+	let pd = pData[id]
 	var cstr = str.substring(1, str.indexOf(" "))
 	switch cstr
 		case "clear"
@@ -16,20 +17,23 @@ function onCommandChat()
 				ClearTextMessages()
 		case "clearStartMazes"
 			clearStartMazes()
-		case "debug"
-			if wantDebug[id] 
-				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cff9C9C9CDEBUG - |r" + "disabled")
-				wantDebug[id] = false
+		case "cam"
+			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
+			if nstr == "lock"
+				SetCameraTargetControllerNoZForPlayer(p, pd.escaper.actor, 0,0,true)
+			else if nstr == "unlock"
+				ResetToGameCameraForPlayer(p, 1.)
 			else
-				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cff9C9C9CDEBUG - |r" + "enabled")
-				wantDebug[id] = true
-		case "save"
-			saveString(str.substring(6, str.length()), p)
-		case "load"
-			loadString(p)
-		case "add"
-			let pd = pData[p.getId()]
-			pd.addXp(500)
+				var value = nstr.toInt() * 1.
+				if value > 2500
+					value = 2500
+					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Maximum Zoom is 2500")
+				else if value < 500
+					value = 500
+					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Minimum Zoom is 500")
+				SetCameraFieldForPlayer(p, CAMERA_FIELD_TARGET_DISTANCE, value , 1.)
+		default
+			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock")
 
 init
 	trigger trg = CreateTrigger()

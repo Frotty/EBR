@@ -33,7 +33,7 @@ package Revivepoint
 			let rdata = getRegionData(obj.pos.x, obj.pos.y)
 			
 			if isFirst and e instanceof Escaper
-				SetUnitColor( source, PLAYER_COLOR_BLUE )
+				SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
 				obj.reached = true
 				currentRevivepoint = obj.pos.toVec2()
 				var rdata1 = rdata
@@ -42,6 +42,12 @@ package Revivepoint
 					es1.currentRegion = rdata
 				isFirst = false
 				return
+				
+			if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
+				let bld = pData[obj.owner.getId()]
+				let esc = pData[u.getOwner().getId()]
+				esc.addXp(20, false)
+				bld.addXp(15, false)
 			
 			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
 				if getRegionData(obj.pos.x, obj.pos.y) == regions[26]

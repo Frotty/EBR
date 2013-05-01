@@ -106,6 +106,7 @@ function keypick()
 			case 3
 				pd.escaper = new Ice_Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[3]) )
 		pd.setMbIcon(currentView[pd.id]-1)
+		pd.updateRank()
 		if pd.id > 7
 			UnitAddAbility( pd.escaper.actor, BLINK_ID )
 			ResetToGameCameraForPlayer(p,0.5)

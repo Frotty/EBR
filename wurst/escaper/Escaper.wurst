@@ -61,6 +61,7 @@ package Escaper
 			TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
 			TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
 			TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
+			spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 			escaperTable.saveInt(GetHandleId(actor), this castTo int)
 			currentRegion = regions[0]
 			escapers.add(this)
@@ -130,7 +131,7 @@ package Escaper
 				sliding = true
 				vel *= 0.99
 			else
-				vel *= 0.95
+				vel *= 0.96
 				slideVelocity *= 0.8
 				sliding = false
 				if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
@@ -191,11 +192,11 @@ package Escaper
 		static function revive()
 			debugPrint("rev", 1)
 			var t = GetExpiredTimer()
-			var data = t.getData()
-			if pData[data] == null
+			var pdata = pData[t.getData()]
+			if pdata == null
 				t.release()
 				return
-			Escaper e = t.getData() castTo Escaper
+			Escaper e = pdata.escaper
 			var revX = currentRevivepoint.x
 			var revY = currentRevivepoint.y
 			if e instanceof Holy_Escaper
@@ -224,7 +225,7 @@ package Escaper
 				var se = e castTo Strong_Escaper
 				if se.invulnerable == true
 					DestroyEffect(se.shieldeffect)
-					se.shieldtimer.release()
+					se.shieldtimer = 0
 					se.actor.removeAbility('Avul')
 					se.invulnerable = false
             
@@ -276,6 +277,12 @@ package Escaper
 			if GetKillingUnit() != null
 				escaper.kill()
 				
+		static function onCastEvent()
+			let data = GetTriggerUnit().getUserData() castTo Escaper
+			data.onCast(GetSpellAbilityId())
+			
+		function onCast(int id)
+				
 		ondestroy
 			lavaEffect.destr()
 			poisonEffect.destr()
@@ -288,6 +295,7 @@ package Escaper
 	trigger pickupTrig
 	trigger neutralDeathTrig
 	public trigger dropTrig
+	trigger spellTrig
 	
 	function correctRegion()
 		for e in escapers
@@ -303,5 +311,7 @@ package Escaper
 		neutralDeathTrig = CreateTrigger()
 		neutralDeathTrig.addAction(function Escaper.neutralDeath)
 		getTimer().start(1., function correctRegion)
+		spellTrig = CreateTrigger()
+		spellTrig.addAction(function Escaper.onCastEvent)
 		
 endpackage 

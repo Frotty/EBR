@@ -12,6 +12,7 @@ import Camerashakes
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
 constant real EVENT_RADIUS = 64.
+
 string array SFX_STRINGS
 enum ABIL
 	KILL
@@ -29,6 +30,7 @@ public class Trap extends StaticBaseObject
 	
 	real duration //Shake,  Speed, Stun
 	real value // Shake, Knockback, Speed
+	boolean pull = false
 	
 	construct( vec2 pos, player owner )
 			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
@@ -46,10 +48,9 @@ public class Trap extends StaticBaseObject
 		
 		if not obj.active and e instanceof Escaper
 			var es = e castTo Escaper
-			if not es.flying
-				DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
-				var escaper = e castTo Escaper
-				obj.doEffect(escaper)
+			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+			var escaper = e castTo Escaper
+			obj.doEffect(escaper)
 	
 	function canTrigger(Entity e) returns boolean
 		return false
@@ -116,7 +117,10 @@ public class Trap extends StaticBaseObject
 					rY = aY
 				debugPrint("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString(), 1)
 				if distanceBetweenCoords(rX, rY, aX, aY) < 20
-					angl = angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY())
+					if pull
+						angl = (angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY()).degrees()-180.).asAngleDegrees()
+					else
+						angl = angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY())
 				else	
 					angl = angleBetweenCoords(aX, aY,rX, rY)
 				e.addVel( vec3(value * Cos(angl.radians()),value * Sin(angl.radians()),0.))
@@ -193,6 +197,7 @@ public class Trap extends StaticBaseObject
 				obj.a = ABIL.KNOCK
 				obj.value = 10.
 				obj.actor.addAbility('ARal')
+				obj.actor.addAbility(PULL_ID)
 				obj.addConfiger(false, true)
 			case POISON_ABIL
 				obj.a = ABIL.POISON
@@ -311,36 +316,47 @@ public class Trap extends StaticBaseObject
 				obj.timerreal = 0.
 				UnitRemoveAbility(obj.actor,STOP_ABIL)
 				UnitAddAbility(obj.actor,START_ABIL)
+			case PULL_ID
+				obj.pull = true
+				obj.actor.removeAbility(PULL_ID)
+				obj.actor.addAbility(PUSH_ID)
+			case PUSH_ID
+				obj.pull = false
+				obj.actor.removeAbility(PULL_ID)
+				obj.actor.addAbility(PUSH_ID)
 		return false
 		
 	ondestroy
 		actor.unregisterCastEvent()
 
-int NEXT_SFX_ABIL = 'A06D'
-int PREV_SFX_ABIL = 'A06C'
+constant int NEXT_SFX_ABIL = 'A06D'
+constant int PREV_SFX_ABIL = 'A06C'
 
-int INCREASE_DURATION_ABIL = 'A026'
-int DECREASE_DURATION_ABIL = 'A025'
-int INCREASE_VALUE_ABIL = 'A023'
-int DECREASE_VALUE_ABIL = 'A01S'
+constant int INCREASE_DURATION_ABIL = 'A026'
+constant int DECREASE_DURATION_ABIL = 'A025'
+constant int INCREASE_VALUE_ABIL = 'A023'
+constant int DECREASE_VALUE_ABIL = 'A01S'
 
-int KILL_ABIL = 'A06E'
-int STUN_ABIL = 'A06G'
-int SPEED_ABIL = 'A06I'
-int SHAKE_ABIL = 'A033'
-int KNOCK_ABIL = 'A06H'
-int POISON_ABIL = 'A06F'
+constant int KILL_ABIL = 'A06E'
+constant int STUN_ABIL = 'A06G'
+constant int SPEED_ABIL = 'A06I'
+constant int SHAKE_ABIL = 'A033'
+constant int KNOCK_ABIL = 'A06H'
+constant int POISON_ABIL = 'A06F'
 
-int STUN_BUFF = 'A06J'
-int SPEED_BUFF_NEG = 'A03J'
-int SPEED_BUFF_POS = 'A03I'
+constant int STUN_BUFF = 'A06J'
+constant int SPEED_BUFF_NEG = 'A03J'
+constant int SPEED_BUFF_POS = 'A03I'
 
-int INCREASE_INTERVAL_ABIL = 'A02O'
-int DECREASE_INTERVAL_ABIL = 'A02Q'
-int START_ABIL = 'A02T'
-int STOP_ABIL = 'A02U'
+constant int INCREASE_INTERVAL_ABIL = 'A02O'
+constant int DECREASE_INTERVAL_ABIL = 'A02Q'
+constant int START_ABIL = 'A02T'
+constant int STOP_ABIL = 'A02U'
 
-constant int SFX_COUNT = 9
+constant int PULL_ID = 'A074'
+constant int PUSH_ID = 'A075'
+
+constant SFX_COUNT = 9
 
 public function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"

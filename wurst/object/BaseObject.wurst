@@ -4,6 +4,7 @@ package BaseObject
 	import Terrain
 	import Trigger
 	import SetupObject
+	import Escaper
 
 	trigger rallyTrigger
 
@@ -33,12 +34,15 @@ package BaseObject
 			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 				inRangeTrig = CreateTrigger()
 				inRangeTrig.registerUnitInRangeSource( actor, radius )
+				inRangeTrig.addCondition(Condition(function isProper))
 				inRangeTrig.addAction( c )
 			TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER ) 
 			TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 
 			actor.setUserData(this castTo int)
 
+		static function isProper() returns boolean
+			return not (GetTriggerUnit().getUserData() castTo Escaper).flying
 
 		static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
 			unit u		= GetOrderedUnit()

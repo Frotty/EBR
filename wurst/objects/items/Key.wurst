@@ -5,7 +5,7 @@ import Escaper
 import BuilderConstants
 import EventHandling
 
-int array keyIds
+public int array keyIds
 
 constant int DYN_ID = 'A00M'
 constant int STATIC_ID = 'A01O'

@@ -5,7 +5,6 @@ package PlayerData
 	import Builder
 	import LinkedList
 	import RegionData
-	import SaveAndLoad
 	import CodeManager
 	
 	public int playercount = 0
@@ -29,18 +28,24 @@ package PlayerData
 		Escaper escaper
 		Builder builder
 		int XP = 40
+		effect lvlfx
 		
 		boolean gridClickActivated = false
 		boolean picked = false
+		string slcode = ""
+		boolean localFiles = false
+		int lastExpGain = 0
 	
 		construct (player p)
 			this.p = p
+			
 			id = GetPlayerId(p)
 			gameId = players.size
 			name = GetPlayerName(p)
 			mbname = name
 			if mbname == "Frotty" or mbname == "FrottyZ"
 				rank = "|cffADD642Creator"
+				AddSpecialEffectTarget( "Righteousness.MDX", escaper.actor, "chest" )
 			for int i = 0 to cplayerCount
 				debugPrint(i.toString(),3)
 				if mbname == names[i]
@@ -50,34 +55,49 @@ package PlayerData
 			debugPrint("MBNAME: " + mbname, 1)
 			players.add(this)
 		
-		function addXp(int amount)
-			print("add current xp:" + XP.toString())
-			XP += amount
-			print("add new xp:" + XP.toString())
-			savePlayerInformation(this)	
+		function addXp(int amount, boolean time)
+			if localFiles and playercount > 1
+				if time
+					XP += amount
+					this.createNewPlayerFile()	
+				else if lastExpGain < minutes
+					lastExpGain = minutes
+					debugPrint("add current xp:" + XP.toString(), 1)
+					XP += amount
+					debugPrint("add new xp:" + XP.toString(), 1)
+					this.createNewPlayerFile()	
 		
 		function setXp(int amount)
-			print("set current xp:" + XP.toString())
+			debugPrint("set current xp:" + XP.toString(), 1)
 			XP = amount
-			print("set new xp:" + XP.toString())
+			debugPrint("set new xp:" + XP.toString(), 1)
 		
-		function updateRank ()
+		function updateRank()
 			int i = 0
+			if lvlfx != null
+				lvlfx.destr()
 			while XP >= expBounds[i]
 				i++
 			rank = ranks[i-1]
-			if XP > 500
-				AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper.actor, "chest" )
-			else if XP > 300
-				AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
-			else if XP > 99
-				AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
-				DisplayTextToForce( bj_FORCE_ALL_PLAYERS, name + " has loaded his Player Rank" )
+			if XP > 10000
+				lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life High_Portrait.mdx", escaper.actor, "chest" )
+			else if XP > 7500
+				lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper.actor, "chest" )
+			else if XP > 4000
+				lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
+			else if XP > 1000
+				lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
+			
+			if name == "Frotty" or name == "FrottyZ"
+				lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+				print("attached")
+			setMBRow()
+
 				
-		function setMBRow(int r)
-			playerboard.setNewItem(r,0,mbname,icon)
-			playerboard.setNewItem(r,1,deaths.toString() , null)
-			playerboard.setNewItem(r,2,rank, null)  
+		function setMBRow()
+			playerboard.setNewItem(gameId+1,0,mbname,icon)
+			playerboard.setNewItem(gameId+1,1,deaths.toString() , null)
+			playerboard.setNewItem(gameId+1,2,rank, null)  
 		
 		function setMbIcon(int typ)
 			playerboard.updateIcon(gameId+1, 0, mbPic[typ])
@@ -121,31 +141,29 @@ package PlayerData
 			playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
 			playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
 			playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)
-
 		for pd in players
-			pd.setMBRow(pd.gameId+1)
-			switch checkPlayer(pd.p)
-				case Playerstate.EXISTING
-					loadPlayerInformation(pd)
-				case Playerstate.NOTENABLED
-					skip
-				case Playerstate.NEW
-					savePlayerInformation(pd)
-
-
-			
+			pd.setMBRow()
+		CameraSetSmoothingFactor(10.)
 		playerboard.board.getItem(0,0).setStyle(true,false).setWidth(0.1)
 		playerboard.board.getItem(0,2).setWidth(0.05)
 		playerboard.setNewItem(0,0,"Player",null)
-		playerboard.board.getItem(0,1).setStyle(false,true).setWidth(0.015)
+		playerboard.board.getItem(0,1).setStyle(false,true).setWidth(0.02)
 		playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 		playerboard.setNewItem(0,2,"Rank",null)
 		playerboard.board.display(true)
 		GetExpiredTimer().release()
+		debugPrint("mbinit done", 2)
+		for pd in players
+			pd.loadPlayerFile()
+		debugPrint("players loaded", 4)
+		DestroyTrigger(GetTriggeringTrigger())
+		
 		
 	public function player.addDeath()
 		var pd = pData[this.getId()]
 		pd.deaths ++
+		if pd.deaths % 25 == 0
+			pd.addXp(5, true)
 		playerboard.board.getItem(pd.gameId+1, 1).setValue(pd.deaths.toString())
 		debugPrint("Adding death: "+(pd.gameId+1).toString()+" ; "+pd.deaths.toString(),1)
 		
@@ -173,12 +191,14 @@ package PlayerData
 		if seconds >= 60
 			seconds = 0
 			minutes++
+			if minutes % 5 == 0
+				for pd in players
+					pd.addXp(10, true)
 				 
 	function playerLeft()
 		var p = GetTriggerPlayer()
 		var pd = pData[p.getId()]
 		destroy pd
-
 
 		
 	init
@@ -192,8 +212,9 @@ package PlayerData
 				leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
 				r++
 		playercount = r
-		TimerStart(getTimer(), 1., false,function initMB)
+		CreateTrigger().registerTimerEvent(1., false).addAction(function initMB)
 		TimerStart(CreateTimer(), 1., true, function setTime)
+
 	   
 	public int minutes = 0
 	public int seconds = 0

@@ -8,6 +8,7 @@ package Door
 	import BuilderConstants
 	import Key
 	import EventHandling
+	import PlayerData
 	
 	constant int DOORDUMMY_ID = 'h002'
 	constant int DOORORDER_ID = 'h00C'
@@ -51,6 +52,8 @@ package Door
 						if not door.opened
 							kdata.terminate()
 							door.openDoor()
+							let pd = pData[e.owner.getId()]
+							pd.addXp(10, false)
 					
 		function changeColor( int id )
 			switch id
