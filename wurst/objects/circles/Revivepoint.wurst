@@ -52,7 +52,7 @@ package Revivepoint
 			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
 				if getRegionData(obj.pos.x, obj.pos.y) == regions[26]
 					timer tim = getTimer()
-					tim.start(0.1, function clearStartMazes)
+					tim.start(0.1, function setupNextStartMaze)
 				PlaySoundBJ(gg_snd_Rescue)
 				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 				SetUnitColor( source, PLAYER_COLOR_BLUE )
@@ -69,30 +69,7 @@ package Revivepoint
 
 		static function filter() returns boolean
 			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
-	
-	public function clearStartMazes()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
-		for vicu in ENUM_GROUP
-			var data = vicu.getUserData() castTo Entity
-			if data != null
-				data.terminate()
-			else
-				vicu.remove()
-		ENUM_GROUP.clear()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
-		for vicu in ENUM_GROUP
-			var data = vicu.getUserData() castTo Entity
-			if data != null
-				data.terminate()
-			else if GetUnitTypeId(vicu) != 'n008' and GetUnitTypeId(vicu) != 'e000'
-				vicu.remove()
-		ENUM_GROUP.clear()
-		for i = 0 to 3
-			EnumDestructablesInRect(regions[i].theRect, null, function killD)
 			
-			
-	function killD()
-		RemoveDestructable(GetEnumDestructable())
 	
 
 

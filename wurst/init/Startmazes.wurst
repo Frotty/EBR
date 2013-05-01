@@ -12,10 +12,12 @@ import UnitRemover
 import Spinner
 import Entity
 import RegionData
+import TempGroups
 
 group g = CreateGroup()
 constant real STARTX = -6000
 constant real STARTY = -7000
+boolean array isRegionActive
 
 public function initBaseObjects()
 	g.clear()
@@ -88,6 +90,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 	Teleporter t
 	group g = CreateGroup()
 	debugPrint("maze-0 " + maze.toString() +  rnd.toString(), 4)
+	isRegionActive[maze] = true
 	switch maze
 		case 0
 			debugPrint("maze-0.1", 1)
@@ -325,7 +328,7 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			s.speed = 7 *DEGTORAD
 			EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
 		default
-			debugPrint("noooo", 2)
+			debugPrint("no such region", 2)
 			
 public function clearEBRRect(int r)
 	var rd = regions[r]
@@ -355,9 +358,38 @@ function correctKeys()
 		new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
 		itm.remove()
 	
+public function clearStartRegion()
+	for i = 0 to 3
+		if isRegionActive[i]
+			GroupEnumUnitsInRect(ENUM_GROUP, regions[i].theRect, null)
+			for u in ENUM_GROUP
+				if u.getOwner() == DUMMY_PLAYER or u.getOwner() == Player(11)
+					var data = u.getUserData() castTo Entity
+					if data != null
+						data.terminate()
+					else if GetUnitTypeId(u) != 'n008' and GetUnitTypeId(u) != 'e000'
+						u.remove()
+			ENUM_GROUP.clear()
+			EnumDestructablesInRect(regions[i].theRect, null, function killD)
+			isRegionActive[i] = false
+			
+function killD()
+	RemoveDestructable(GetEnumDestructable())
 	
 	
-	
+public function setupNextStartMaze()
+	CreateUnit(Player(11),'n01M', -6528.,-6908., 270.)
+	clearStartRegion()
+	GroupEnumUnitsInRect(ENUM_GROUP, regions[26].theRect, null)
+	for u in ENUM_GROUP
+		if u.getTypeId() == 'n00C'
+			var t = new Teleporter(vec2(u.getX(),u.getY()),Player(11))
+			if (gg_unit_n000_0085.getUserData()) != 0
+				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
+			else if (gg_unit_n000_0144.getUserData()) != 0
+				IssuePointOrder(t.actor, "setrally", 826,-7041 )
+			else if (gg_unit_n000_0226.getUserData()) != 0
+				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
 	
 	
 	
