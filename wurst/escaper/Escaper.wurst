@@ -1,317 +1,319 @@
 package Escaper
-	import PhysicsEntity
-	import Entity
-	import Vectors
-	import Physics
-	import Terrain
-	import TimerUtils
-	import RegionData
-	import BuilderConstants
-	import ItemObject
-	import Key
-	import Revivepoint
-	import LinkedList
-	import EscaperClasses
-	import PlayerData
+import PhysicsEntity
+import Entity
+import Vectors
+import Physics
+import Terrain
+import TimerUtils
+import RegionData
+import BuilderConstants
+import ItemObject
+import Key
+import Revivepoint
+import HashList
+import EscaperClasses
+import PlayerData
+
+public Table escaperTable = new Table()
+
+constant real COLL_RADIUS = 32.
+constant real SLIDE_ADD = 3.3
+
+constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
+constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+
+
+real time = 0.
+
+public HashList<Escaper> escapers = new HashList<Escaper>()
+
+public class Escaper extends UnitEntity		
+	boolean sliding = false
+	boolean flying = false
+	boolean onUnwalkable = false
+	boolean poisoned = false
+	boolean onLava = false
 	
-	public Table escaperTable = new Table()
+	real terrainZ = 512.
 	
-	constant real COLL_RADIUS = 32.
-	constant real SLIDE_ADD = 3.3
+	effect lavaEffect
+	effect poisonEffect
 	
-	constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
-	constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+	vec3 slideVelocity = vec3(0,0,0)
+	vec3 trackVelocity = vec3(0,0,0)
+	vec3 vortexVelocity = vec3(0,0,0)
+	
+	RegionData currentRegion
+
+	boolean alive = true
 
 	
-	real time = 0.
+	construct( vec3 pos, player owner, int typ )
+		super(pos, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
+		actor.addAbility('Aloc')
+		.hide()
+		.removeAbility('Aloc')
+		.show()
+		
+		
+		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
+		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
+		TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
+		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
+		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
+		escaperTable.saveInt(GetHandleId(actor), this castTo int)
+		currentRegion = regions[0]
+		escapers.add(this)
+
 	
-	public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
-	
-	public class Escaper extends UnitEntity		
-		boolean sliding = false
-		boolean flying = false
-		boolean onUnwalkable = false
-		boolean poisoned = false
-		boolean onLava = false
-		
-		real terrainZ = 512.
-		
-		effect lavaEffect
-		effect poisonEffect
-		
-		vec3 slideVelocity = vec3(0,0,0)
-		vec3 trackVelocity = vec3(0,0,0)
-		vec3 vortexVelocity = vec3(0,0,0)
-		
-		RegionData currentRegion
 
-		boolean alive = true
-
-		
-		construct( vec3 pos, player owner, int typ )
-			super(pos, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
-			actor.addAbility('Aloc')
-			.hide()
-    		.removeAbility('Aloc')
-    		.show()
-    		
-    		
-			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-			TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-			TriggerRegisterUnitEvent( pickupTrig, actor, EVENT_UNIT_PICKUP_ITEM )
-			TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
-			TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
-			spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
-			escaperTable.saveInt(GetHandleId(actor), this castTo int)
-			currentRegion = regions[0]
-			escapers.add(this)
-
-		
-
-		function setLava(boolean add)
-			if add and not onLava
-				lavaEffect = AddSpecialEffectTarget(LAVA_EFFECT, actor, "origin")
-				onLava = true
-			else if not add and onLava
-				lavaEffect.destr()
-				onLava = false
-				
-		function setPoison(boolean add)
-			if add and not poisoned
-				poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, actor, "chest")
-				poisoned = true
-			else if not add and poisoned
-				poisonEffect.destr()
-				poisoned = false
-		
-		function kill()
-			var isinvurnerable = false
-			if this instanceof Strong_Escaper
-				var e = this castTo Strong_Escaper
-				if e.invulnerable == true
-					debugPrint("invulnerable",1)
-					isinvurnerable = true
-			if not isinvurnerable
-				debugPrint("died", 1)
-				if owner.getId() >= 8
-					debugPrint("is builder", 1)
-					getTimer().setData(this.owner.getId()).start(.1, function Escaper.revive)
-					debugPrint("started", 1)
-				else
-					getTimer().start(3., function Escaper.revive).setData(this.owner.getId())
-				owner.addDeath()
-				actor.kill()
-				alive = false
-				setPoison(false)
-				setLava(false)
-				flying = false
-				
-		function inAir()
-			if not flying
-				SetUnitPropWindow(actor,0.)
-				flying = true
-			vel += gravity
-			slideVelocity *= 0.99
-				
-				
-		function onGround()
-			if flying
-				flying = false
-				SetUnitPropWindow(actor, 60.)
-				vel *= 0.20
-				vel.z = 0.
-			pos.z = terrainZ+.1
-				
-				
-			var ttype = GetTerrainType(pos.x, pos.y)
-			
-			if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
-				let angl = actor.getFacing()
-				slideVelocity = vec3(Cos(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
-				sliding = true
-				vel *= 0.99
-			else
-				vel *= 0.96
-				slideVelocity *= 0.8
-				sliding = false
-				if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
-					onUnwalkable = true
-					setLava(false)
-					setPoison(false)
-					if alive
-						kill()
-				else 
-					onUnwalkable = false
-					if ttype == 1147958883 and not onLava
-						setLava(true)
-						if onLava
-							var hp = actor.getHP()
-							if hp > .405
-								actor.setHP(hp-currentRegion.lavaDmg)
-							else if alive
-								kill()
-					else if ttype == POISON
-						setLava(false)
-						if not poisoned
-							setPoison(true)
-					else
-						setLava(false)
-					
-			
-			if poisoned
-				var hp2 = actor.getHP()
-				if hp2 > .405
-					actor.setHP(hp2-currentRegion.poisonDmg)
-				else if alive
-					kill()
-			
-			pos += trackVelocity
-			trackVelocity = vec3(0,0,0)
-			pos += vortexVelocity
-			vortexVelocity = vec3(0,0,0)
-			
-		
-		override function update()
-			super.update()
-			terrainZ = getTerrainZ(pos.x, pos.y)
-			if pos.z <= terrainZ + .2
-				onGround()
-			else
-				inAir()
-			
-
-			pos += vel
-			pos += slideVelocity
-			if sliding
-				actor.setPos(pos.x, pos.y)
-			else
-				actor.setXY(pos.x, pos.y)
-			SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
-
-            
-		static function revive()
-			debugPrint("rev", 1)
-			var t = GetExpiredTimer()
-			var pdata = pData[t.getData()]
-			if pdata == null
-				t.release()
-				return
-			Escaper e = pdata.escaper
-			var revX = currentRevivepoint.x
-			var revY = currentRevivepoint.y
-			if e instanceof Holy_Escaper
-				var he = e castTo Holy_Escaper
-				if he.revivetomb != null
-					revX = he.revivetomb.getX()
-					revY = he.revivetomb.getY()
-					//if e.owner.getId() < 8
-					he.revivetomb.remove()
-					he.revivetomb = null
-			ReviveHero(e.actor, revX, revY, false)
-			e.setVel(vec3(0,0,0))
-			e.slideVelocity = vec3(0,0,0)
-			e.setPos(vec3(revX, revY, 530.))
-			CameraClearNoiseForPlayer(e.owner)
-			if e.owner.getId() < 8
-				if (GetLocalPlayer() == e.owner)
-					PanCameraToTimed(revX, revY, 0)
-					ClearSelection()
-					SelectUnit(e.actor, true)
-				
-			e.currentRegion = getRegionData(e.pos.x, e.pos.y)
-			e.alive = true
-			t.release()
-			if e instanceof Strong_Escaper
-				var se = e castTo Strong_Escaper
-				if se.invulnerable == true
-					DestroyEffect(se.shieldeffect)
-					se.shieldtimer = 0
-					se.actor.removeAbility('Avul')
-					se.invulnerable = false
-            
-		static function changeAngle()
-			var u = GetTriggerUnit()
-			Escaper e = u.getUserData() castTo Escaper
-			var w = GetOrderTarget()
-			unit tu = GetOrderTargetUnit()
-			real x2 = GetOrderPointX()
-			real y2 = GetOrderPointY()
-			real x3 = GetWidgetX(w)
-			real y3 = GetWidgetY(w)
-			var ttype = GetTerrainType(e.pos.x, e.pos.y)
-            
-			if ttype == CONTROLLABLEICE
-				if w == null
-					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2))
-				else
-					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3))
-			else if ttype == REVICE
-				if w == null
-					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2)-angle(180*DEGTORAD))
-				else
-					e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3)-angle(180*DEGTORAD))
-					
-		static function pickupItem()
-			var pickedItem = GetManipulatedItem()
-			var escaper = GetTriggerUnit().getUserData() castTo Escaper
-			var idata = pickedItem.getUserData() castTo ItemObject
-			
-			if idata instanceof Key
-				var kdata = idata castTo Key
-				kdata.pickedUp(escaper)
-				
-		static function dropItem()
-			var pickedItem = GetManipulatedItem()
-			var escaper = GetTriggerUnit().getUserData() castTo Escaper
-			var idata = pickedItem.getUserData() castTo ItemObject
-			
-			if idata instanceof Key
-				var kdata = idata castTo Key
-				dropTrig.disable()
-				RemoveItem(kdata.actorItem)
-				kdata.dropped()
-				dropTrig.enable()
-				
-		static function neutralDeath()
-			var escaper = GetTriggerUnit().getUserData() castTo Escaper
-			if GetKillingUnit() != null
-				escaper.kill()
-				
-		static function onCastEvent()
-			let data = GetTriggerUnit().getUserData() castTo Escaper
-			data.onCast(GetSpellAbilityId())
-			
-		function onCast(int id)
-				
-		ondestroy
+	function setLava(boolean add)
+		if add and not onLava
+			lavaEffect = AddSpecialEffectTarget(LAVA_EFFECT, actor, "origin")
+			onLava = true
+		else if not add and onLava
 			lavaEffect.destr()
+			onLava = false
+			
+	function setPoison(boolean add)
+		if add and not poisoned
+			poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, actor, "chest")
+			poisoned = true
+		else if not add and poisoned
 			poisonEffect.destr()
-			actor.remove()
-			escapers.remove(this)
-			
-
-			
-	trigger slideAssist
-	trigger pickupTrig
-	trigger neutralDeathTrig
-	public trigger dropTrig
-	trigger spellTrig
+			poisoned = false
 	
-	function correctRegion()
-		for e in escapers
-			e.currentRegion = getRegionData(e.pos.x, e.pos.y)
+	function kill()
+		var isinvurnerable = false
+		if this instanceof Strong_Escaper
+			var e = this castTo Strong_Escaper
+			if e.invulnerable == true
+				debugPrint("invulnerable",1)
+				isinvurnerable = true
+		if not isinvurnerable
+			debugPrint("died", 3)
+			if owner.getId() >= 8
+				debugPrint("is builder", 3)
+				getTimer().setData(this.owner.getId()).start(.1, function Escaper.revive)
+				debugPrint("started", 3)
+			else
+				debugPrint("is escaper", 3)
+				getTimer().start(3., function Escaper.revive).setData(this.owner.getId())
+			owner.addDeath()
+			actor.kill()
+			alive = false
+			setPoison(false)
+			setLava(false)
+			flying = false
+			debugPrint("done", 3)
 			
-	init
-		slideAssist = CreateTrigger()
-		slideAssist.addAction(function Escaper.changeAngle)
-		pickupTrig = CreateTrigger()
-		pickupTrig.addAction( function Escaper.pickupItem )
-		dropTrig = CreateTrigger()
-		dropTrig.addAction( function Escaper.dropItem )
-		neutralDeathTrig = CreateTrigger()
-		neutralDeathTrig.addAction(function Escaper.neutralDeath)
-		getTimer().start(1., function correctRegion)
-		spellTrig = CreateTrigger()
-		spellTrig.addAction(function Escaper.onCastEvent)
+	function inAir()
+		if not flying
+			SetUnitPropWindow(actor,0.)
+			flying = true
+		vel += gravity
+		slideVelocity *= 0.99
+			
+			
+	function onGround()
+		if flying
+			flying = false
+			SetUnitPropWindow(actor, 60.)
+			vel *= 0.20
+			vel.z = 0.
+		pos.z = terrainZ+.1
+			
+			
+		var ttype = GetTerrainType(pos.x, pos.y)
 		
-endpackage 
+		if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
+			let angl = actor.getFacing()
+			slideVelocity = vec3(Cos(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
+			sliding = true
+			vel *= 0.99
+		else
+			vel *= 0.96
+			slideVelocity *= 0.8
+			sliding = false
+			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
+				onUnwalkable = true
+				setLava(false)
+				setPoison(false)
+				if alive
+					kill()
+			else 
+				onUnwalkable = false
+				if ttype == 1147958883 and not onLava
+					setLava(true)
+					if onLava
+						var hp = actor.getHP()
+						if hp > .405
+							actor.setHP(hp-currentRegion.lavaDmg)
+						else if alive
+							kill()
+				else if ttype == POISON
+					setLava(false)
+					if not poisoned
+						setPoison(true)
+				else
+					setLava(false)
+				
+		
+		if poisoned
+			var hp2 = actor.getHP()
+			if hp2 > .405
+				actor.setHP(hp2-currentRegion.poisonDmg)
+			else if alive
+				kill()
+		
+		pos += trackVelocity
+		trackVelocity = vec3(0,0,0)
+		pos += vortexVelocity
+		vortexVelocity = vec3(0,0,0)
+		
+	
+	override function update()
+		super.update()
+		terrainZ = getTerrainZ(pos.x, pos.y)
+		if pos.z <= terrainZ + .2
+			onGround()
+		else
+			inAir()
+		
+
+		pos += vel
+		pos += slideVelocity
+		if sliding
+			actor.setPos(pos.x, pos.y)
+		else
+			actor.setXY(pos.x, pos.y)
+		SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
+
+        
+	static function revive()
+		debugPrint("rev", 3)
+		var t = GetExpiredTimer()
+		debugPrint("rev1", 3)
+		var pdata = pData[t.getData()]
+		if pdata == null
+			t.release()
+			return
+		Escaper e = pdata.escaper
+		var revX = currentRevivepoint.x
+		var revY = currentRevivepoint.y
+		if e instanceof Holy_Escaper
+			var he = e castTo Holy_Escaper
+			if he.revivetomb != null
+				revX = he.revivetomb.getX()
+				revY = he.revivetomb.getY()
+				//if e.owner.getId() < 8
+				he.revivetomb.remove()
+				he.revivetomb = null
+		ReviveHero(e.actor, revX, revY, false)
+		e.setVel(vec3(0,0,0))
+		e.slideVelocity = vec3(0,0,0)
+		e.setPos(vec3(revX, revY, 530.))
+		CameraClearNoiseForPlayer(e.owner)
+		if e.owner.getId() < 8
+			if (GetLocalPlayer() == e.owner)
+				PanCameraToTimed(revX, revY, 0)
+				ClearSelection()
+				SelectUnit(e.actor, true)
+			
+		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
+		e.alive = true
+		t.release()
+		if e instanceof Strong_Escaper
+			var se = e castTo Strong_Escaper
+			if se.invulnerable == true
+				DestroyEffect(se.shieldeffect)
+				se.shieldtimer = 0
+				se.actor.removeAbility('Avul')
+				se.invulnerable = false
+        
+	static function changeAngle()
+		var u = GetTriggerUnit()
+		Escaper e = u.getUserData() castTo Escaper
+		var w = GetOrderTarget()
+		unit tu = GetOrderTargetUnit()
+		real x2 = GetOrderPointX()
+		real y2 = GetOrderPointY()
+		real x3 = GetWidgetX(w)
+		real y3 = GetWidgetY(w)
+		var ttype = GetTerrainType(e.pos.x, e.pos.y)
+        
+		if ttype == CONTROLLABLEICE
+			if w == null
+				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2))
+			else
+				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3))
+		else if ttype == REVICE
+			if w == null
+				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2)-angle(180*DEGTORAD))
+			else
+				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3)-angle(180*DEGTORAD))
+				
+	static function pickupItem()
+		var pickedItem = GetManipulatedItem()
+		var escaper = GetTriggerUnit().getUserData() castTo Escaper
+		var idata = pickedItem.getUserData() castTo ItemObject
+		
+		if idata instanceof Key
+			var kdata = idata castTo Key
+			kdata.pickedUp(escaper)
+			
+	static function dropItem()
+		var pickedItem = GetManipulatedItem()
+		var escaper = GetTriggerUnit().getUserData() castTo Escaper
+		var idata = pickedItem.getUserData() castTo ItemObject
+		
+		if idata instanceof Key
+			var kdata = idata castTo Key
+			dropTrig.disable()
+			RemoveItem(kdata.actorItem)
+			kdata.dropped()
+			dropTrig.enable()
+			
+	static function neutralDeath()
+		var escaper = GetTriggerUnit().getUserData() castTo Escaper
+		if GetKillingUnit() != null
+			escaper.kill()
+			
+	static function onCastEvent()
+		let data = GetTriggerUnit().getUserData() castTo Escaper
+		data.onCast(GetSpellAbilityId())
+		
+	function onCast(int id)
+			
+	ondestroy
+		lavaEffect.destr()
+		poisonEffect.destr()
+		actor.remove()
+		escapers.remove(this)
+		
+
+		
+trigger slideAssist
+trigger pickupTrig
+trigger neutralDeathTrig
+public trigger dropTrig
+trigger spellTrig
+
+function correctRegion()
+	for e in escapers
+		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
+		
+init
+	slideAssist = CreateTrigger()
+	slideAssist.addAction(function Escaper.changeAngle)
+	pickupTrig = CreateTrigger()
+	pickupTrig.addAction( function Escaper.pickupItem )
+	dropTrig = CreateTrigger()
+	dropTrig.addAction( function Escaper.dropItem )
+	neutralDeathTrig = CreateTrigger()
+	neutralDeathTrig.addAction(function Escaper.neutralDeath)
+	getTimer().startPeriodic(1., function correctRegion)
+	spellTrig = CreateTrigger()
+	spellTrig.addAction(function Escaper.onCastEvent)
+		

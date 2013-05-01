@@ -6,7 +6,6 @@ import RegionData
 import Key
 import SetupBox
 import TempGroups
-import LinkedList
 import Boss
 import BossSpellTarget
 import InstantBuild
@@ -151,7 +150,7 @@ public class Builder extends UnitEntity
 			debugPrint("itemRemovalOrder",3)
 			if GetTriggerUnit().getUserData() > 0
 				var bdata = GetTriggerUnit().getUserData() castTo Builder
-				IssueImmediateOrder(bdata.actor, "stop")
+				bdata.actor.abortOrder()
 				if i.getUserData() > 0
 					var idata = i.getUserData() castTo Entity
 					idata.terminate()
@@ -167,11 +166,11 @@ public class Builder extends UnitEntity
 			var oy = GetOrderPointY()
 			if isOrderBuildOrder(ord)
 				debugPrint((u.getUserData() castTo Builder).pos.toString(), 3)
-				getTimer().start(0.00, function callback)
+				getTimer().start(0.01, function callback)
 				.setData((new BuildData(u.getUserData() castTo Builder,
 							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
 				
-			else if ord > 0
+			else if OrderId2String(ord) == "smart" or OrderId2String(ord) == "move"
 				if w == null
 					debugPrint("fuck eh " + ox.toString() + " " + oy.toString() + " " + ord.toString(), 3)
 					if ( ox > 0. or ox < 0. )

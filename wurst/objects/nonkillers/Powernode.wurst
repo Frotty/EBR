@@ -1,5 +1,5 @@
 package Powernode
-import LinkedList
+import HashList
 import Entity
 import Escaper
 import EventHandling
@@ -25,7 +25,7 @@ class Link
 
 
 public class Powernode extends DynamicSetupObject
-	LinkedList<Link> links = new LinkedList<Link>()
+	HashList<Link> links = new HashList<Link>()
 
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), 0., CODE_NULL )

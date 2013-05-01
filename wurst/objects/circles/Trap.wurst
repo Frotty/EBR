@@ -322,8 +322,8 @@ public class Trap extends StaticBaseObject
 				obj.actor.addAbility(PUSH_ID)
 			case PUSH_ID
 				obj.pull = false
-				obj.actor.removeAbility(PULL_ID)
-				obj.actor.addAbility(PUSH_ID)
+				obj.actor.removeAbility(PUSH_ID)
+				obj.actor.addAbility(PULL_ID)
 		return false
 		
 	ondestroy

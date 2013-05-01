@@ -77,27 +77,27 @@ package GameConstants
 		colorcode[ 9 ] = "|cff7DBEF1" // lightblue
 		colorcode[ 10 ] = "|cff0F6145" // darkgreen
 
-		ranks[0] = "Newbie"
+		ranks[0] = "1:Newbie"
 		expBounds[0] = 100
-		ranks[1] = "Beginner"
+		ranks[1] = "|cffBDBDBD2:Beginner"
 		expBounds[1] = 250
-		ranks[2] = "Novice"
+		ranks[2] = "|cffFFE6AD3:Novice"
 		expBounds[2] = 400
-		ranks[3] = "Decent"
+		ranks[3] = "|cffFFD64A4:Descent"
 		expBounds[3] = 1000
-		ranks[4] = "Superior"
+		ranks[4] = "|cffFFCE195:Superior"
 		expBounds[4] = 2500
-		ranks[5] = "Major"
+		ranks[5] = "|cffFFA53A6:Major"
 		expBounds[5] = 4000
-		ranks[6] = "Pro"
+		ranks[6] = "7:Pro"
 		expBounds[6] = 7500
-		ranks[7] = "Expert"
+		ranks[7] = "|cff5A8CDE8:Expert"
 		expBounds[7] = 10000
-		ranks[8] = "Rooter"
+		ranks[8] = "|cff087BD69:Rooter"
 		expBounds[8] = 14000
-		ranks[9] = "Addict"
+		ranks[9] = "|cffD629219|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
 		expBounds[9] = 18000
-		ranks[10] = "Legend"
+		ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
 		expBounds[10] = 25000
 
 endpackage 

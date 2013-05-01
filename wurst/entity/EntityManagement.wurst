@@ -1,7 +1,7 @@
 package EntityManagement
 import public Entity
 
-function updateEntities()
+function updateEntities() returns boolean
 	Entity e = Entity.first
 	while e != null
 		if e.done
@@ -10,7 +10,8 @@ function updateEntities()
 		else if e.active
 			e.update()
 		e = e.next
+	return false
 
 public function startEntityLoop() returns boolean
-	getTimer().startPeriodic(0.03, function updateEntities)
+	CreateTrigger().registerTimerEvent(ANIMATION_PERIOD, true).addCondition(Condition(function updateEntities))
 	return true

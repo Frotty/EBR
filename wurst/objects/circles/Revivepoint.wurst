@@ -1,99 +1,94 @@
 package Revivepoint
-	import SetupObject
-	import Terrain
-	import PlayerData
-	import Escaper
-	import GameConstants
+import SetupObject
+import Terrain
+import PlayerData
+import Escaper
+import GameConstants
+import RegionData
+import TempGroups
+import Builder
+import Startmazes
+import InstantBuild
 
-	import RegionData
-	import LinkedList
-	import TempGroups
-	import Builder
-	import Startmazes
-	import InstantBuild
+constant real EVENT_RADIUS = 80.
+constant int REVIVEPOINT_ID = 'n000'
+boolean isFirst = true
 
-	constant real EVENT_RADIUS = 80.
-	constant int REVIVEPOINT_ID = 'n000'
-	boolean isFirst = true
+public vec2 currentRevivepoint = vec2(6398, -6791)
+
+public class RevivePoint extends StaticSetupObject
+	boolean reached = false
 	
-	public vec2 currentRevivepoint = vec2(6398, -6791)
+	construct( vec3 pos, player owner)
+		super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
 
-	public class RevivePoint extends StaticSetupObject
-		boolean reached = false
+
+	static function reach()
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getUserData() castTo Entity
+		thistype obj = source.getUserData() castTo thistype
+		let rdata = getRegionData(obj.pos.x, obj.pos.y)
 		
-		construct( vec3 pos, player owner)
-			super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
-
-
-		static function reach()
-			unit source = GetTriggeringTrigger().getSource()
-			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
-			thistype obj = source.getUserData() castTo thistype
-			let rdata = getRegionData(obj.pos.x, obj.pos.y)
+		if isFirst and e instanceof Escaper
+			SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
+			obj.reached = true
+			currentRevivepoint = obj.pos.toVec2()
+			var rdata1 = rdata
+			for es1 in escapers
+				es1.setPos(obj.pos)
+				es1.currentRegion = rdata
+			isFirst = false
+			return
 			
-			if isFirst and e instanceof Escaper
-				SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
-				obj.reached = true
-				currentRevivepoint = obj.pos.toVec2()
-				var rdata1 = rdata
-				for es1 in escapers
-					es1.setPos(obj.pos)
-					es1.currentRegion = rdata
-				isFirst = false
-				return
-				
-			if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
-				let bld = pData[obj.owner.getId()]
-				let esc = pData[u.getOwner().getId()]
-				esc.addXp(20, false)
-				bld.addXp(15, false)
-			
-			if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
-				if getRegionData(obj.pos.x, obj.pos.y) == regions[26]
-					timer tim = getTimer()
-					tim.start(0.1, function clearStartMazes)
-				PlaySoundBJ(gg_snd_Rescue)
-				DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
-				SetUnitColor( source, PLAYER_COLOR_BLUE )
-				obj.reached = true
-				currentRevivepoint = obj.pos.toVec2()
-				for Escaper es in escapers
-					if es.owner.getId() < 8
-						es.setPos(obj.pos)
-						es.actor.abortOrder()
-						es.currentRegion = rdata
-						if GetLocalPlayer() == es.owner
-							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
+		if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
+			let bld = pData[obj.owner.getId()]
+			let esc = pData[u.getOwner().getId()]
+			esc.addXp(20, false)
+			bld.addXp(15, false)
+		
+		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+			if getRegionData(obj.pos.x, obj.pos.y) == regions[26]
+				timer tim = getTimer()
+				tim.start(0.1, function clearStartMazes)
+			PlaySoundBJ(gg_snd_Rescue)
+			DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
+			SetUnitColor( source, PLAYER_COLOR_BLUE )
+			obj.reached = true
+			currentRevivepoint = obj.pos.toVec2()
+			for Escaper es in escapers
+				if es.owner.getId() < 8
+					es.setPos(obj.pos)
+					es.actor.abortOrder()
+					es.currentRegion = rdata
+					if GetLocalPlayer() == es.owner
+						PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 
 
-		static function filter() returns boolean
-			return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
+	static function filter() returns boolean
+		return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
+
+public function clearStartMazes()
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
+	for vicu in ENUM_GROUP
+		var data = vicu.getUserData() castTo Entity
+		if data != null
+			data.terminate()
+		else
+			vicu.remove()
+	ENUM_GROUP.clear()
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
+	for vicu in ENUM_GROUP
+		var data = vicu.getUserData() castTo Entity
+		if data != null
+			data.terminate()
+		else if GetUnitTypeId(vicu) != 'n008' and GetUnitTypeId(vicu) != 'e000'
+			vicu.remove()
+	ENUM_GROUP.clear()
+	for i = 0 to 3
+		EnumDestructablesInRect(regions[i].theRect, null, function killD)
+		
+		
+function killD()
+	RemoveDestructable(GetEnumDestructable())
 	
-	public function clearStartMazes()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
-		for vicu in ENUM_GROUP
-			var data = vicu.getUserData() castTo Entity
-			if data != null
-				data.terminate()
-			else
-				vicu.remove()
-		ENUM_GROUP.clear()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
-		for vicu in ENUM_GROUP
-			var data = vicu.getUserData() castTo Entity
-			if data != null
-				data.terminate()
-			else if GetUnitTypeId(vicu) != 'n008' and GetUnitTypeId(vicu) != 'e000'
-				vicu.remove()
-		ENUM_GROUP.clear()
-		for i = 0 to 3
-			EnumDestructablesInRect(regions[i].theRect, null, function killD)
-			
-			
-	function killD()
-		RemoveDestructable(GetEnumDestructable())
-	
-
-
-endpackage 

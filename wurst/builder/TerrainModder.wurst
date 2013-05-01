@@ -1,174 +1,171 @@
 package TerrainModder
-	//The Terrainers appear as heroes, and which with the builders change tiles.
-	import Fx
-	import BuilderConstants
-	import BaseObject
-	import SetupObject
-	import RegionData
-	import PlayerData
-	import LinkedList
-	import EventHandling
-	
-	constant int ICECONTROL = 'H007'
-	constant int ICEUNCONTROL = 'H008'
-	constant int UNWALKABLE = 'H005'
-	constant int WALKABLE = 'H004'
-	
-	constant int ICE_ABILITY = 'A063'
-	constant int REVICE_ABILITY = 'A00C'
-	int array UNWALKABLE_MOD_ABILITY_ID
-	
-	constant int SMALL_BRUSH_ABILITY = 'A061'
-	constant int BIG_BRUSH_ABILITY = 'A062'
-	
-	trigger castTrigger
-	
-	
-	constant int SETUP_TYPE = 0
-	
-	class TerrainModder
-		unit actor
-		player owner
-		boolean smallbrush = true
-		int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
+//The Terrainers appear as heroes, and which with the builders change tiles.
+import Fx
+import BuilderConstants
+import BaseObject
+import SetupObject
+import RegionData
+import PlayerData
+import EventHandling
 
-		construct( player owner, unit u)
-			this.owner = owner
-			actor = u
-			actor.setPos(hiddenX, hiddenY)
-			actor.setPropWindow(0.)
-			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-			TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-			actor.registerCastEvent(Condition(function onCast))
-			actor.setUserData(this castTo int)
+constant int ICECONTROL = 'H007'
+constant int ICEUNCONTROL = 'H008'
+constant int UNWALKABLE = 'H005'
+constant int WALKABLE = 'H004'
 
-		static function changeTerrain()
-			var id = GetTriggerUnit()
-			var obj = GetTriggerUnit().getUserData() castTo TerrainModder
-			
-			var rX = GetOrderPointX()
-			var rY = GetOrderPointY()
-			
-			var oW = GetOrderTarget()
-			if oW != null
-				rX = oW.getX()
-				rY = oW.getY()
-			 
-			var rdata = getRegionData(rX, rY)
-			if rdata == null
-				return
-			let name = obj.owner.getName()
-			if rdata.isOwner(GetPlayerId(obj.owner)) or name == "Frotty" or name == "FrottyZ"
-				if GetUnitTypeId(id) == ICECONTROL
-					if obj.modification == 1
-						if obj.smallbrush
-							SetTerrainType( rX, rY, REVICE, -1, 1, 1 )
-						else
-							SetTerrainType( rX, rY, REVICE, -1, 2, 1 )
-					else
-						if obj.smallbrush
-							SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 1, 1 )
-						else
-							SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 2, 1 )
-							
-				else if GetUnitTypeId(id) == ICEUNCONTROL
+constant int ICE_ABILITY = 'A063'
+constant int REVICE_ABILITY = 'A00C'
+int array UNWALKABLE_MOD_ABILITY_ID
+
+constant int SMALL_BRUSH_ABILITY = 'A061'
+constant int BIG_BRUSH_ABILITY = 'A062'
+
+trigger castTrigger
+
+
+constant int SETUP_TYPE = 0
+
+class TerrainModder
+	unit actor
+	player owner
+	boolean smallbrush = true
+	int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
+
+	construct( player owner, unit u)
+		this.owner = owner
+		actor = u
+		actor.setPos(hiddenX, hiddenY)
+		actor.setPropWindow(0.)
+		TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
+		TriggerRegisterUnitEvent(castTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		actor.registerCastEvent(Condition(function onCast))
+		actor.setUserData(this castTo int)
+
+	static function changeTerrain()
+		var id = GetTriggerUnit()
+		var obj = GetTriggerUnit().getUserData() castTo TerrainModder
+		
+		var rX = GetOrderPointX()
+		var rY = GetOrderPointY()
+		
+		var oW = GetOrderTarget()
+		if oW != null
+			rX = oW.getX()
+			rY = oW.getY()
+		 
+		var rdata = getRegionData(rX, rY)
+		if rdata == null
+			return
+		let name = obj.owner.getName()
+		if rdata.isOwner(GetPlayerId(obj.owner)) or name == "Frotty" or name == "FrottyZ"
+			if GetUnitTypeId(id) == ICECONTROL
+				if obj.modification == 1
 					if obj.smallbrush
-						SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 1, 1 )
+						SetTerrainType( rX, rY, REVICE, -1, 1, 1 )
 					else
-						SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 2, 1 )
-				else if GetUnitTypeId(id) == WALKABLE
+						SetTerrainType( rX, rY, REVICE, -1, 2, 1 )
+				else
 					if obj.smallbrush
-						SetTerrainType( rX, rY, rdata.walkableTile, -1, 1, 1 )
+						SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 1, 1 )
 					else
-						SetTerrainType( rX, rY, rdata.walkableTile, -1, 2, 1 )
-				else if GetUnitTypeId(id) == UNWALKABLE
-					if obj.modification == 0
-						if obj.smallbrush
-							SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 1, 1 )
-						else
-							SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 2, 1 )
-					else if obj.modification == 1
-						if obj.smallbrush
-							SetTerrainType( rX, rY, LAVA, -1, 1, 1 )
-						else
-							SetTerrainType( rX, rY, LAVA, -1, 2, 1 )
-					else if obj.modification == 2
-						if obj.smallbrush
-							SetTerrainType( rX, rY, POISON, -1, 1, 1 )
-						else
-							SetTerrainType( rX, rY, POISON, -1, 2, 1 )
-			else
-				DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
+						SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 2, 1 )
+						
+			else if GetUnitTypeId(id) == ICEUNCONTROL
+				if obj.smallbrush
+					SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 1, 1 )
+				else
+					SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 2, 1 )
+			else if GetUnitTypeId(id) == WALKABLE
+				if obj.smallbrush
+					SetTerrainType( rX, rY, rdata.walkableTile, -1, 1, 1 )
+				else
+					SetTerrainType( rX, rY, rdata.walkableTile, -1, 2, 1 )
+			else if GetUnitTypeId(id) == UNWALKABLE
+				if obj.modification == 0
+					if obj.smallbrush
+						SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 1, 1 )
+					else
+						SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 2, 1 )
+				else if obj.modification == 1
+					if obj.smallbrush
+						SetTerrainType( rX, rY, LAVA, -1, 1, 1 )
+					else
+						SetTerrainType( rX, rY, LAVA, -1, 2, 1 )
+				else if obj.modification == 2
+					if obj.smallbrush
+						SetTerrainType( rX, rY, POISON, -1, 1, 1 )
+					else
+						SetTerrainType( rX, rY, POISON, -1, 2, 1 )
+		else
+			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
-		function switchMode(int spell_id)
-			switch spell_id
-				case UNWALKABLE_MOD_ABILITY_ID[1]
-					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
-					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
-					modification = 1
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
-				case UNWALKABLE_MOD_ABILITY_ID[2]
-					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
-					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
-					modification = 2
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
-				case UNWALKABLE_MOD_ABILITY_ID[0]
-					UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
-					UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
-					modification = 0
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
-					
-				case ICE_ABILITY
-					UnitRemoveAbility(actor,ICE_ABILITY)
-					UnitAddAbility(actor,REVICE_ABILITY)
-					modification = 0
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
-				case REVICE_ABILITY
-					UnitRemoveAbility(actor,REVICE_ABILITY)
-					UnitAddAbility(actor,ICE_ABILITY)
-					modification = 1
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
-					
-				case SMALL_BRUSH_ABILITY
-					UnitRemoveAbility(actor,SMALL_BRUSH_ABILITY)
-					UnitAddAbility(actor,BIG_BRUSH_ABILITY)
-					smallbrush = true
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "SmallBrush")
-				case BIG_BRUSH_ABILITY
-					UnitRemoveAbility(actor,BIG_BRUSH_ABILITY)
-					UnitAddAbility(actor,SMALL_BRUSH_ABILITY)
-					smallbrush = false
-					DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "BigBrush")
-				default
-					printError("Terrainmodder Ability")
-
-					
-		ondestroy
-			actor.unregisterCastEvent()
-	
-	function onCast() returns boolean
-		var obj = GetSpellAbilityUnit().getUserData() castTo TerrainModder
-		obj.switchMode(GetSpellAbilityId())
-		return false
-		
-
-	public function init_TerrainModder()
-		castTrigger = CreateTrigger()
-		castTrigger.addAction(function TerrainModder.changeTerrain)
-		
-		UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
-		UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
-		UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'
-		
-		for pd in players
-			if pd.id > 7
-				new TerrainModder( pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-				new TerrainModder( pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-				new TerrainModder( pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-				new TerrainModder( pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+	function switchMode(int spell_id)
+		switch spell_id
+			case UNWALKABLE_MOD_ABILITY_ID[1]
+				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
+				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
+				modification = 1
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
+			case UNWALKABLE_MOD_ABILITY_ID[2]
+				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
+				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
+				modification = 2
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
+			case UNWALKABLE_MOD_ABILITY_ID[0]
+				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
+				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
+				modification = 0
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
 				
-		var fx = new Fx(0,0,angle(0),"Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl")
-		destroy fx
+			case ICE_ABILITY
+				UnitRemoveAbility(actor,ICE_ABILITY)
+				UnitAddAbility(actor,REVICE_ABILITY)
+				modification = 0
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+			case REVICE_ABILITY
+				UnitRemoveAbility(actor,REVICE_ABILITY)
+				UnitAddAbility(actor,ICE_ABILITY)
+				modification = 1
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
+				
+			case SMALL_BRUSH_ABILITY
+				UnitRemoveAbility(actor,SMALL_BRUSH_ABILITY)
+				UnitAddAbility(actor,BIG_BRUSH_ABILITY)
+				smallbrush = true
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "SmallBrush")
+			case BIG_BRUSH_ABILITY
+				UnitRemoveAbility(actor,BIG_BRUSH_ABILITY)
+				UnitAddAbility(actor,SMALL_BRUSH_ABILITY)
+				smallbrush = false
+				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "BigBrush")
+			default
+				printError("Terrainmodder Ability")
 
+				
+	ondestroy
+		actor.unregisterCastEvent()
 
-endpackage
+function onCast() returns boolean
+	var obj = GetSpellAbilityUnit().getUserData() castTo TerrainModder
+	obj.switchMode(GetSpellAbilityId())
+	return false
+	
+
+public function init_TerrainModder()
+	castTrigger = CreateTrigger()
+	castTrigger.addAction(function TerrainModder.changeTerrain)
+	
+	UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
+	UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
+	UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'
+	
+	for pd in players
+		if pd.id > 7
+			new TerrainModder( pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+			new TerrainModder( pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+			new TerrainModder( pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+			new TerrainModder( pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+			
+	var fx = new Fx(0,0,angle(0),"Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl")
+	destroy fx
+

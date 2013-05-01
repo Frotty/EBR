@@ -1,7 +1,7 @@
 package CongaLineHead
 import SetupObject
 import EventHandling
-import LinkedList
+import HashList
 import Spinner
 import Texttag
 import Remove
@@ -14,13 +14,13 @@ constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
 
 public class CongaLineHead extends DynamicSetupObject
-	LinkedList<DynamicSetupObject> segments
+	HashList<DynamicSetupObject> segments
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
 		setup.registerCastEvent(Condition(function CongaLineHead.onCast))
-		segments = new LinkedList<DynamicSetupObject>()
+		segments = new HashList<DynamicSetupObject>()
 		
 	override function update()
 		super.update()
