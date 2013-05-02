@@ -380,16 +380,24 @@ public function killD()
 public function setupNextStartMaze()
 	CreateUnit(Player(11),'n01M', -6528.,-6908., 270.)
 	clearStartRegion()
-	GroupEnumUnitsInRect(ENUM_GROUP, regions[26].theRect, null)
-	for u in ENUM_GROUP
-		if u.getTypeId() == 'n00C'
-			var t = new Teleporter(vec2(u.getX(),u.getY()),Player(11))
-			if (gg_unit_n000_0085.getUserData()) != 0
-				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
-			else if (gg_unit_n000_0144.getUserData()) != 0
-				IssuePointOrder(t.actor, "setrally", 826,-7041 )
-			else if (gg_unit_n000_0226.getUserData()) != 0
-				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
+	
+public function setTeleportBack(int tpid, int locid)
+	Teleporter t = null
+	switch tpid
+		case 0
+			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),Player(11))
+			gg_unit_n00C_0324.remove()
+		case 1
+			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),Player(11))
+			gg_unit_n00C_0323.remove()
+	switch locid
+		case 1
+			IssuePointOrder(t.actor, "setrally", 3456,-4160 )
+		case 2
+			IssuePointOrder(t.actor, "setrally", 826,-7041 )
+		case 3
+			IssuePointOrder(t.actor, "setrally", -2433,-6148 )
+				
 	
 	
 	
