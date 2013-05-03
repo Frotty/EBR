@@ -33,19 +33,17 @@ package GameInit
 		init_Regions()
 		debugPrint("Init - Regions", 2)
 		rand = GetRandomInt(1,3)
-		if rand != 3
-			debugPrint("Init - Regions Clear Start 3", 2)
-			clearEBRRect(3)
-			debugPrint("Init - Regions Clear End 3", 2)
-		if rand != 1
-			clearEBRRect(1)
-			debugPrint("Init - Regions Clear 1", 2)
-		if rand != 2
-			debugPrint("Init - Regions Clear Start 2", 2)
-			clearEBRRect(2)
-			debugPrint("Init - Regions Clear End 2", 2)
+		if rand == 3
+			setTeleportBack(1,2)
+			setTeleportBack(0,1)
+		if rand == 1
+			setTeleportBack(1,3)
+			setTeleportBack(0,2)
+		if rand == 2
+			setTeleportBack(1,3)
+			setTeleportBack(0,1)
 		
-		debugPrint("Init - ClearMazes", 2)
+		debugPrint("Init - SetTeleports", 2)
 		init_Choose()
 		debugPrint("Init - Choose", 2)
 		init_Builder()
@@ -73,7 +71,7 @@ package GameInit
 		CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 
 		initMazeUnits(rand, rand)
-		debugPrint("Init - Startmazes2", 2)
+		debugPrint("Init - Startmazes2", 2)		
 		
 		debugPrint("Init - Finished", 2)
 		startChoose()
