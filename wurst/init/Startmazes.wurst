@@ -384,12 +384,12 @@ public function setupNextStartMaze()
 	for u in ENUM_GROUP
 		if u.getTypeId() == 'n00C'
 			var t = new Teleporter(vec2(u.getX(),u.getY()),Player(11))
-			if (gg_unit_n000_0085.getUserData()) != 0
-				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
-			else if (gg_unit_n000_0144.getUserData()) != 0
-				IssuePointOrder(t.actor, "setrally", 826,-7041 )
-			else if (gg_unit_n000_0226.getUserData()) != 0
-				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
+//			if (gg_unit_n000_0085.getUserData()) != 0
+//				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
+//			else if (gg_unit_n000_0144.getUserData()) != 0
+//				IssuePointOrder(t.actor, "setrally", 826,-7041 )
+//			else if (gg_unit_n000_0226.getUserData()) != 0
+//				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
 	
 	
 	
