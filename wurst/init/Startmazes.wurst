@@ -113,13 +113,6 @@ public function initMazeUnits(int maze, int rnd) //from 0 to 4
 			debugPrint("maze-2", 1)
 			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
 			debugPrint("maze-2.1 " + rnd.toString(), 1)
-			if rnd == 1
-				IssuePointOrder(t.actor, "setrally", 3456,-4160 )
-				debugPrint("maze-2.2", 1)
-			else if rnd == 2
-				IssuePointOrder(t.actor, "setrally", 826,-7041 )
-			else if rnd == 3
-				IssuePointOrder(t.actor, "setrally", -2433,-6148 )
 			gg_unit_n00C_0061.remove()
 			t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
 			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
@@ -381,13 +374,16 @@ public function setupNextStartMaze()
 	CreateUnit(Player(11),'n01M', -6528.,-6908., 270.)
 	clearStartRegion()
 	
-public function setTeleportBack(int tpid, int locid)
+public function setStartTeleport(int tpid, int locid)
 	Teleporter t = null
 	switch tpid
 		case 0
+			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
+			gg_unit_n00C_0061.remove()
+		case 1
 			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),Player(11))
 			gg_unit_n00C_0324.remove()
-		case 1
+		case 2
 			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),Player(11))
 			gg_unit_n00C_0323.remove()
 	switch locid

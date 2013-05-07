@@ -51,7 +51,7 @@ public class RevivePoint extends StaticSetupObject
 		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
 			if getRegionData(obj.pos.x, obj.pos.y) == regions[26]
 				timer tim = getTimer()
-				tim.start(0.1, function clearStartMazes)
+				tim.start(0.1, function setupNextStartMaze)
 			PlaySoundBJ(gg_snd_Rescue)
 			DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 			SetUnitColor( source, PLAYER_COLOR_BLUE )
