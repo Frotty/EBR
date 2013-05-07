@@ -106,10 +106,13 @@ public class RegionData
 				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
 				rdata.visible = true
 				if rdata == regions[1]
+					clearStartRegion()
 					initMazeUnits(1)
 				if rdata == regions[2]
+					clearStartRegion()
 					initMazeUnits(2)
 				if rdata == regions[3]
+					clearStartRegion()
 					initMazeUnits(3)
 				if rdata == regions[4]
 					clearStartMazes()

@@ -17,6 +17,7 @@ package Teleporter
 
 
 	public class Teleporter extends StaticBaseObject
+		boolean isOneshot = false
 		int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
 		
 		construct( vec2 pos, player owner )
@@ -39,23 +40,31 @@ package Teleporter
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
 				PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
+				if obj.isOneshot
+					destroy(obj)
 			else if obj.mode == 1  
 				if e instanceof EscaperKiller or e instanceof TeleporterTarget
 					dyn = e castTo DynamicSetupObject
 					dyn.setPos(vec3(rx,ry,0))
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+					if obj.isOneshot
+						destroy(obj)
 			else if obj.mode == 2  
 				if e instanceof EscaperKiller
 					dyn = e castTo DynamicSetupObject
 					dyn.setPos(vec3(rx,ry,0))
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+					if obj.isOneshot
+						destroy(obj)
 				else if e instanceof Escaper
 					u.setPos(rx, ry)
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
 					PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
+					if obj.isOneshot
+						destroy(obj)
 	
 		override function update()
 			skip
