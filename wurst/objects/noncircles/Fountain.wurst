@@ -1,31 +1,56 @@
 package Fountain
-	import BaseObject
+	import SetupObject
 	import Terrain
 	import Escaper
 	import EventHandling
 	
-	constant int 	FOUNTAIN_ID   = 'h00H'
+	constant int 	FOUNTAIN_BOTH_ID   = 'h00H'
+	constant int 	FOUNTAIN_HEAL_ID   = 'h00I'
+	constant int 	FOUNTAIN_CURE_ID   = 'h00J'
+	
+	constant BOTH_ID = 'A077'
+	constant HEAL_ID = 'A078'
+	constant CURE_ID = 'A079'
 	constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
 
-	public class Fountain extends StaticBaseObject
-		unit dummy
-		
+	public class Fountain extends StaticSetupObject
+		boolean cure = true
 		construct( vec2 pos, player owner )
-			super( pos, CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 270. ), 200., function Fountain.cure )
-			dummy = CreateUnit(owner, FOUNTAIN_ID, pos.x, pos.y, 270. )
-			dummy.addAbility(LOCUST_ID)
+			super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), 200., function Fountain.cure )
+			setup.registerCastEvent(Condition(function Fountain.onCastEvent))
 		
 		
 		static function cure()
 			Fountain obj = GetTriggeringTrigger().getSource().getUserData() castTo Fountain
 			Entity e = GetTriggerUnit().getUserData() castTo Entity
-			if e instanceof Escaper
+			if e instanceof Escaper and obj.cure
 				var es = e castTo Escaper
 				if es.poisoned and not es.flying
 					DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y ))
 					es.setPoison(false)
-		
+					
+		static function onCastEvent() returns boolean
+			let id = GetSpellAbilityId()
+			let data = GetSpellAbilityUnit().getUserData() castTo Fountain
+			switch id
+				case BOTH_ID
+					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_HEAL_ID, data.pos.x, data.pos.y, 270. ))
+					data.actor.addAbility(LOCUST_ID)
+					data.cure = false
+					data.setup.removeAbility(BOTH_ID).addAbility(HEAL_ID)
+				case HEAL_ID
+					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_CURE_ID, data.pos.x, data.pos.y, 270. ))
+					data.actor.addAbility(LOCUST_ID)
+					data.cure = true
+					data.setup.removeAbility(HEAL_ID).addAbility(CURE_ID)
+				case CURE_ID
+					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_BOTH_ID, data.pos.x, data.pos.y, 270. ))
+					data.actor.addAbility(LOCUST_ID)
+					data.cure = true
+					data.setup.removeAbility(CURE_ID).addAbility(BOTH_ID)
+			return false
+
 		ondestroy
-			dummy.remove()
+			setup.unregisterCastEvent()
 		
 endpackage

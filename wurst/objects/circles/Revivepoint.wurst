@@ -42,10 +42,11 @@ public class RevivePoint extends StaticSetupObject
 			return
 			
 		if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
-			let bld = pData[obj.owner.getId()]
 			let esc = pData[u.getOwner().getId()]
 			esc.addXp(20, false)
-			bld.addXp(15, false)
+			if obj.owner.getId() < 11
+				let bld = pData[obj.owner.getId()]
+				bld.addXp(15, false)
 		
 		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
 			if getRegionData(obj.pos.x, obj.pos.y) == regions[26]

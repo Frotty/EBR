@@ -3,16 +3,15 @@ import PlayerData
 import CodeGenerator
 import FileIO
 import Sync
+import Thread
 
 
 constant int XPMAX = 100000
 constant string FOLDER_NAME = "EBR"
 constant string FILE_NAME = "data"
-constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
+public constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant int saveTechnique = 331
 
-public gamecache synccache = InitGameCache("Escape Builder[R] 0.82a.w3x")
-	
 
 public function PlayerData.createNewPlayerFile()
 	var scode = new Savecode()
@@ -20,33 +19,32 @@ public function PlayerData.createNewPlayerFile()
 	debugPrint("saving: " + this.XP.toString() + " XP", 1)
 	let lcode = fhash(this.name).toString() + scode.save(this.p, saveTechnique)
 	debugPrint("saving: " + lcode, 1)
+	synchronizeThread()
 	if GetLocalPlayer() == this.p
 		if File.isEnabled()
 			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
 			f.write(lcode)
 			f.close()
+	synchronizeThread()
 	debugPrint("saved new", 1)
 				
 public function PlayerData.loadPlayerFile()
+	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Will now check for saved data."  )
 	string array lines
 	var count = 0
 	let ids = this.id.toString()
 	let nameHash = fhash(this.name).toString()
-	debugPrint("start " + this.name, 1 )
+	debugPrint(  "start " + this.name, 1 )
+	synchronizeThread()
 	if GetLocalPlayer() == this.p
-		if File.isEnabled()
-			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+		var f = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+		lines[count] = f.read()
+		while lines[count] != null
+			count++
 			lines[count] = f.read()
-			while lines[count] != null
-				count++
-				lines[count] = f.read()
-			f.close()		
-		else
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - You don't have local files enabled!"  )
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To enable local files, please run C:\\!! AllowLocalFiles\\AllowLocalFiles.bat" )
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You can do this after the game."  )
-			return
-	this.localFiles = true
+		f.close()		
+	synchronizeThread()
+	
 	debugPrint("load playerfile 5", 1)
 	let sCount = count.sync(this.p)
 	debugPrint("load playerfile 6", 1)
@@ -76,11 +74,12 @@ public function PlayerData.loadPlayerFile()
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You either have an old code-version or this is an EBR-Bug."  )
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To report a bug go to sunayama.de or tinyurl.com/EscapeBuilder."  )
 		this.setXp(scode.decode(XPMAX))
+			
 	else
 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You have no saved Character with this name, a new one was created."  )
 		this.createNewPlayerFile()
-	
 
+	this.updateRank()
 	
 
 		

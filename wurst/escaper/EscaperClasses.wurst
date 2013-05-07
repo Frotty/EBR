@@ -57,13 +57,14 @@ public class Strong_Escaper extends Escaper
 				
 				
 	override function onCast(int id)
-		invulnerable = true
-		shieldtimer = GetUnitAbilityLevel(actor, id)*1.
-		actor.addAbility('Avul')
-		actor.setPos(pos.toVec2())
-		shieldX = pos.x
-		shieldY = pos.y
-		shieldeffect = AddSpecialEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", shieldX, shieldY)
+		if id == STAGNANCYSHIELD_ID
+			invulnerable = true
+			shieldtimer = GetUnitAbilityLevel(actor, id)*1.
+			actor.addAbility('Avul')
+			actor.setPos(pos.toVec2())
+			shieldX = pos.x
+			shieldY = pos.y
+			shieldeffect = AddSpecialEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", shieldX, shieldY)
 
 	
 

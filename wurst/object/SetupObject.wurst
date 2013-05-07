@@ -54,6 +54,7 @@ package SetupObject
 
 		
 		override function update()
+			super.update()
 			time++
 			if time > 1500
 				setup.setXY(actor.getX(), actor.getY())

@@ -79,4 +79,4 @@ public class BossMissile extends Entity
 				missile.dummy.damageTarget(es.actor, 25)
 	
 init
-	preloadAbility(AOE_ID)
+	//preloadAbility(AOE_ID)

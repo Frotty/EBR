@@ -6,6 +6,9 @@ import Builder
 import LinkedList
 import RegionData
 import CodeManager
+import FileIO
+import PickSystem
+import Sync
 
 public int playercount = 0
 
@@ -33,8 +36,10 @@ public class PlayerData //just the player's (constant) stuff
 	boolean gridClickActivated = false
 	boolean picked = false
 	string slcode = ""
-	boolean localFiles = false
+	boolean localFilesEnabled = false
 	int lastExpGain = 0
+	
+	boolean camLock = false
 
 	construct (player p)
 		this.p = p
@@ -55,7 +60,7 @@ public class PlayerData //just the player's (constant) stuff
 		players.add(this)
 	
 	function addXp(int amount, boolean time)
-		if localFiles and playercount > 1
+		if localFilesEnabled and playercount > 1
 			if time
 				XP += amount
 				this.createNewPlayerFile()	
@@ -88,11 +93,10 @@ public class PlayerData //just the player's (constant) stuff
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
 		
 		if name == "Frotty" or name == "FrottyZ"
-			rank  = "|cffADD642Creator"
+			rank  = "|cffADD642*Creator*"
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
-			print("attached")
-		setMBRow()
 
+		setMBRow()
 			
 	function setMBRow()
 		playerboard.setNewItem(gameId+1,0,mbname,icon)
@@ -100,6 +104,7 @@ public class PlayerData //just the player's (constant) stuff
 		playerboard.setNewItem(gameId+1,2,rank, null)  
 	
 	function setMbIcon(int typ)
+		icon = mbPic[typ]
 		playerboard.updateIcon(gameId+1, 0, mbPic[typ])
 		
 	ondestroy
@@ -152,8 +157,16 @@ function initMB()
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
 	debugPrint("mbinit done", 2)
+	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
 	for pd in players
-		pd.loadPlayerFile()
+		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
+		DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "              " + colorcode[pd.id] + pd.name + "|r checked. (" + pd.localFilesEnabled.toString() + ")")
+		if not pd.localFilesEnabled
+			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - You don't have local files enabled!"  )
+			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To enable local files, please run [Your Wc3 Directory]\\!! AllowLocalFiles\\AllowLocalFiles.bat" )
+			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Do this after the game, with wc3 closed. No EXP will be saved."  )
+	allow()
+	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            " + "|cffFF8429» |cff7BBD42All Players have been checked! You can now select an escaper.")
 	debugPrint("players loaded", 4)
 	DestroyTrigger(GetTriggeringTrigger())
 	
@@ -201,6 +214,9 @@ function playerLeft()
 
 	
 init
+	getTimer().start(0.01, function initPlayers)
+	
+function initPlayers()
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	int r = 0
@@ -211,8 +227,9 @@ init
 			leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
 			r++
 	playercount = r
-	CreateTrigger().registerTimerEvent(1., false).addAction(function initMB)
+	CreateTrigger().registerTimerEvent(0.1, false).addAction(function initMB)
 	TimerStart(CreateTimer(), 1., true, function setTime)
+	GetExpiredTimer().release()
 
    
 public int minutes = 0

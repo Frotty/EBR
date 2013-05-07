@@ -3,6 +3,7 @@ import PlayerData
 import Escaper
 import EscaperClasses
 import Entity
+import CodeManager
 
 unit array pickheros
 int array herotypes
@@ -17,6 +18,7 @@ constant real PX = -6743
 constant real PY = 6616
 
 constant int BLINK_ID = 'A001'
+boolean started= false
 
 public function startChoose()
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
@@ -28,21 +30,23 @@ public function startChoose()
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
+		
 
 	EnablePreSelect( true, false )
-	getTimer().start(.80, function allow )
 	
-function allow()
+public function allow()
 	EnableUserControl(true)
 	EnableOcclusion(true)
-	GetExpiredTimer().release()
+	started = true
 
 function keyleft()
+	if not started
+		return
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
 	PlayerData pd = pData[p.getId()]
-		
+	
 	if not pd.picked
 		if id <= 1
 			currentView[pi] = herocount
@@ -63,6 +67,8 @@ function keyleft()
 			SetTextTagVisibility(herott[id-1],true)
 	
 function keyright()
+	if not started
+		return
 	var p = GetTriggerPlayer()
 	var pi = GetPlayerId(p)
 	var id = currentView[pi]
@@ -91,6 +97,8 @@ function keyright()
 	
 	
 function keypick()
+	if not started
+		return
 	var p = GetTriggerPlayer()
 	PlayerData pd = pData[p.getId()]
 		
@@ -106,7 +114,6 @@ function keypick()
 			case 3
 				pd.escaper = new Ice_Escaper( vec3(SX,SY,520.), p, GetUnitTypeId(pickheros[3]) )
 		pd.setMbIcon(currentView[pd.id]-1)
-		pd.updateRank()
 		if pd.id > 7
 			UnitAddAbility( pd.escaper.actor, BLINK_ID )
 			ResetToGameCameraForPlayer(p,0.5)
@@ -122,6 +129,9 @@ function keypick()
 			SetTextTagVisibility(herott[currentView[pd.id]-1],false)
 			SetUnitVertexColor( pickheros[currentView[pd.id]-1], 0, 0, 0, 0 )
 			SetTextTagVisibility(herott[herocount],false)
+			
+		if pd.localFilesEnabled
+			pd.loadPlayerFile()
 
 	else
 		return

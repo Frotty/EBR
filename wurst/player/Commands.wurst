@@ -4,9 +4,12 @@ import Entity
 import CodeManager
 import PlayerData
 import Startmazes
+import Escaper
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
+	if not str.startsWith("-")
+		return
 	let p = GetTriggerPlayer()
 	let id = p.getId()
 	let pd = pData[id]
@@ -21,8 +24,10 @@ function onCommandChat()
 			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
 			if nstr == "lock"
 				SetCameraTargetControllerNoZForPlayer(p, pd.escaper.actor, 0,0,true)
+				pd.camLock = true
 			else if nstr == "unlock"
 				ResetToGameCameraForPlayer(p, 1.)
+				pd.camLock = false
 			else
 				var value = nstr.toInt() * 1.
 				if value > 2500
@@ -32,8 +37,12 @@ function onCommandChat()
 					value = 500
 					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Minimum Zoom is 500")
 				SetCameraFieldForPlayer(p, CAMERA_FIELD_TARGET_DISTANCE, value , 1.)
+		case "frev"
+			if not pd.escaper.alive
+				getTimer().start(0.5, function Escaper.revive)
 		default
-			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock")
+			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
+			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive)")
 
 init
 	trigger trg = CreateTrigger()

@@ -1,0 +1,13 @@
+package Questlog
+
+
+init
+	var q = CreateQuest()
+	QuestSetTitle(q, "Commands")
+	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
+	QuestSetDescription(q, "Available Commands:\n"
+							+ "-clear (clears textmessages)\n"
+							+ "-cam [value] (sets camera distance)\n"
+							+ "-cam lock (locks the camera onto your escaper)\n"
+							+ "-cam unlock (unlocks the camera)\n"
+							+ "-frev (revives your escaper, when he doesn't revive anymore due to a bug)\n" )

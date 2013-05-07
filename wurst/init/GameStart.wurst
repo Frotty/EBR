@@ -1,0 +1,23 @@
+package GameStart
+import Thread
+
+//boolean gameStarted = false
+//integer count = 0
+//
+//	
+//function isGameStarted() returns boolean
+//	return gameStarted
+//
+//function waitForGameToStart()
+//	while not gameStarted
+//		TriggerSyncStart()
+//		TriggerSyncReady()
+//
+//
+//init
+//	Thread thread = new Thread()
+//	thread.sync()
+//	thread.wait()
+//	destroy thread
+//	gameStarted = true
+//

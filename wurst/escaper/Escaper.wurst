@@ -224,6 +224,8 @@ public class Escaper extends UnitEntity
 		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 		e.alive = true
 		t.release()
+		if pData[e.owner.getId()].camLock
+			SetCameraTargetControllerNoZForPlayer(e.owner, e.actor, 0,0,true)
 		if e instanceof Strong_Escaper
 			var se = e castTo Strong_Escaper
 			if se.invulnerable == true
@@ -305,6 +307,7 @@ function correctRegion()
 		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 		
 init
+	print("e1")
 	slideAssist = CreateTrigger()
 	slideAssist.addAction(function Escaper.changeAngle)
 	pickupTrig = CreateTrigger()
@@ -316,4 +319,4 @@ init
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)
-		
+	print("e2")

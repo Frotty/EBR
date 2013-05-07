@@ -12,7 +12,9 @@ function changeVisibility()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
 	var dta = caster.getUserData() castTo UnitEntity
+	print("casted")
 	if dta instanceof DynamicSetupObject
+		print("casted1")
 		let data = dta castTo DynamicSetupObject
 		if id == VIS_ID
 			data.actor.removeAbility('Agho').addAbility('Aeth')
@@ -21,6 +23,7 @@ function changeVisibility()
 			data.actor.removeAbility('Aeth').addAbility('Agho')
 			data.setup.removeAbility(INVIS_ID).addAbility(VIS_ID)	
 	else 
+		print("casted2")
 		if id == VIS_ID
 			caster.removeAbility('Agho').addAbility('Aeth')
 			caster.removeAbility(VIS_ID).addAbility(INVIS_ID)
@@ -32,8 +35,10 @@ function isVisSpell() returns boolean
 	let id = GetSpellAbilityId()
 	return id == VIS_ID or id == INVIS_ID
 	
-init
+public function invis_init()
+	print("inited1")
 	castTrig = CreateTrigger()
 	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 	castTrig.addCondition(Condition(function isVisSpell))
 	castTrig.addAction(function changeVisibility)
+	print("inited2")
