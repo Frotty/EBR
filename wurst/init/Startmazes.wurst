@@ -355,18 +355,18 @@ function correctKeys()
 public function clearStartRegion()
 	for i = 0 to 3
 		if isRegionActive[i]
-			GroupEnumUnitsInRect(ENUM_GROUP, regions[i].theRect, null)
+			debugPrint("R = " + i.toString() + " region unwalkable: " + regions[i].unwalkableTile.toString(),3)
+			GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
 			for u in ENUM_GROUP
-				if u.getOwner() == DUMMY_PLAYER or u.getOwner() == Player(11)
-					var data = u.getUserData() castTo Entity
-					if data != null
-						data.terminate()
-					else if GetUnitTypeId(u) != 'n008' and GetUnitTypeId(u) != 'e000'
+				if getRegionData(u.getX(),u.getY()) == regions[i]
+					let e =u.getUserData() castTo Entity
+					if (e != null )
+						e.terminate()
+					else
 						u.remove()
 			ENUM_GROUP.clear()
 			EnumItemsInRect(regions[i].theRect, null, function deleteKeys)
 			EnumDestructablesInRectAll(regions[i].theRect, function deleteDes)
-			isRegionActive[i] = false
 			
 public function killD()
 	RemoveDestructable(GetEnumDestructable())
@@ -382,7 +382,6 @@ public function setStartTeleport(int tpid, int locid)
 		case 0
 			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
 			gg_unit_n00C_0061.remove()
-			t.isOneshot = true
 		case 1
 			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),Player(11))
 			gg_unit_n00C_0324.remove()
@@ -395,13 +394,13 @@ public function setStartTeleport(int tpid, int locid)
 	switch locid
 		case 1
 			IssuePointOrder(t.actor, "setrally", 3456,-4160 )
-			tt.setColor( 230,180,0, 0 ).setText("Desert Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setVisibility( false ).setPermanent( true )
+			tt.setColor( 230,180,0, 0 ).setText("Desert Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setPermanent( true ).setVisibility( true )
 		case 2
 			IssuePointOrder(t.actor, "setrally", 826,-7041 )
-			tt.setColor( 0,200,70, 0 ).setText("Forest Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setVisibility( false ).setPermanent( true )
+			tt.setColor( 0,200,70, 0 ).setText("Forest Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setPermanent( true ).setVisibility( true )
 		case 3
 			IssuePointOrder(t.actor, "setrally", -2433,-6148 )
-			tt.setColor( 130,0,180, 0 ).setText("Citadel Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setVisibility( false ).setPermanent( true )
+			tt.setColor( 130,0,180, 0 ).setText("Citadel Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setPermanent( true ).setVisibility( true )
 		
 public function clearStartMazes()
 	GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
