@@ -71,7 +71,7 @@ package GameInit
 	function initPartTwo()
 		initBaseObjects()
 		debugPrint("Init - BObj", 2)
-		initMazeUnits(0)
+		initStartmazes()
 		debugPrint("Init - Startmazes", 2)
 		CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 

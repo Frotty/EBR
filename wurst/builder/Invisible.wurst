@@ -36,9 +36,7 @@ function isVisSpell() returns boolean
 	return id == VIS_ID or id == INVIS_ID
 	
 public function invis_init()
-	print("inited1")
 	castTrig = CreateTrigger()
 	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 	castTrig.addCondition(Condition(function isVisSpell))
 	castTrig.addAction(function changeVisibility)
-	print("inited2")

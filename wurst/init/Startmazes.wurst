@@ -14,367 +14,43 @@ import Entity
 import RegionData
 import TempGroups
 import Texttag
+import Startmaze
+import FirstSnow
+import SecondDesert
+import ThirdForest
+import FourthCitadelle
 
-group g = CreateGroup()
-constant real STARTX = -6000
-constant real STARTY = -7000
-boolean array isRegionActive
+public Startmaze array startmazes
+public int currentMaze = 0
+public RevivePoint svRev
 
-public function initBaseObjects()
-	g.clear()
-	GroupEnumUnitsOfType(g, "custom_n000", null )
-	for u in g
-		if u.getHP() > .405
-			new RevivePoint(vec3(u.getX(), u.getY(), 0.), Player(11))
-			u.remove()
-		
-	g.clear()
-
-	GroupEnumUnitsOfType(g, "custom_h00C", null )
-	for u2 in g
-		new Door(vec2(u2.getX(), u2.getY()), Player(11))
-		u2.remove()
-		
-	g.clear()
+public function initStartmazes()
+	startmazes[0] = new FirstSnowMaze(regions[0])
+	startmazes[1] = new SecondDesertMaze(regions[1])
+	startmazes[2] = new ThirdForestMaze(regions[2])
+	startmazes[3] = new FourthCitadelleMaze(regions[3])
 	
-	GroupEnumUnitsOfType(g, "custom_n00S", null )
-	for u3 in g
-		new BigObstacle(vec2(u3.getX(), u3.getY()), Player(11))
-		u3.remove()
-		
-	g.clear()
+	startmazes[0].initMaze()
 	
-	GroupEnumUnitsOfType(g, "custom_n00R", null )
-	for u4 in g
-		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
-		u4.remove()
-		
-	g.clear()
-		
-	GroupEnumUnitsOfType(g, "custom_n018", null )
-	for u4 in g
-		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
-		u4.remove()
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n019", null )
-	for u4 in g
-		new BigObstacle(vec2(u4.getX(), u4.getY()), Player(11))
-		u4.remove()
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n01I", null )
-	for u5 in g
-		new SmallObstacle(vec2(u5.getX(), u5.getY()), Player(11))
-		u5.remove()
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n00X", null )
-	for u6 in g
-		new SmallObstacle(vec2(u6.getX(), u6.getY()), Player(11))
-		u6.remove()
-		
-	g.clear()
-	
-	GroupEnumUnitsOfType(g, "custom_n003", null )
-	for u7 in g
-		new UnitRemover(vec2(u7.getX(), u7.getY()), Player(11))
-		u7.remove()
-		
-	g.clear()
-	
-
-public function initMazeUnits(int maze) //from 0 to 4
-	Teleporter t
-	group g = CreateGroup()
-	debugPrint("maze-0 " + maze.toString(), 4)
-	isRegionActive[maze] = true
-	switch maze
-		case 0
-			debugPrint("maze-0.1", 1)
-			GroupEnumUnitsOfType(g, "custom_h015", null )
-			debugPrint("maze-0.11", 1)
-			for u in g
-				debugPrint("maze-0.12", 1)
-				new EscaperKiller(u, null, COLL_SIZE_BK)
-			debugPrint("maze-0.2", 1)
-			g.clear()
-			GroupEnumUnitsOfType(g, "custom_u008", null )
-			for u6 in g
-				new EscaperKiller(u6, null, COLL_SIZE_BRK)
-			debugPrint("maze-0.3", 1)
-			g.clear()
-			debugPrint("maze-1", 1)
-			IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
-			IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
-			IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
-			debugPrint("maze-2", 1)
-			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
-			debugPrint("maze-2.1 ", 1)
-			gg_unit_n00C_0061.remove()
-			t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", 6275,-5131 )
-			gg_unit_n00C_0057.remove()
-			t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", 6660,-4866 )
-			gg_unit_n00C_0058.remove()
-			
-			EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
-			debugPrint("maze-3", 7)
-		case 1
-	
-			GroupEnumUnitsOfType(g, "custom_h01H", null )
-			for u1 in g
-				new EscaperKiller(u1, null, COLL_SIZE_BK)
-				
-			g.clear()
-			GroupEnumUnitsOfType(g, "custom_n00D", null )
-			for u3 in g
-				new EscaperKiller(u3, null, COLL_SIZE_SK) 
-				
-			g.clear()
-			IssuePointOrder(gg_unit_n00D_0121, "patrol", 3612, -4650 )
-			IssuePointOrder(gg_unit_n00D_0122, "patrol", 3574, -5253 )
-			IssuePointOrder(gg_unit_n00D_0120, "patrol", 3834, -5380 )
-			IssuePointOrder(gg_unit_n00D_0123, "patrol", 2932, -5615 )
-			IssuePointOrder(gg_unit_n00D_0125, "patrol", 3747, -5848 )
-			IssuePointOrder(gg_unit_n00D_0124, "patrol", 4000, -6340 )
-			IssuePointOrder(gg_unit_h01H_0127, "patrol", 3449, -6652 )
-			IssuePointOrder(gg_unit_h01H_0128, "patrol", 2618, -6917 )
-			IssuePointOrder(gg_unit_h01H_0081, "patrol", 1840, -6537 )
-			IssuePointOrder(gg_unit_h01H_0080, "patrol", 1293, -6286 )
-			IssuePointOrder(gg_unit_h01H_0104, "patrol", 1293, -6286 )
-			t = new Teleporter(vec2(gg_unit_n00C_0141.getX(),gg_unit_n00C_0141.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
-			gg_unit_n00C_0141.remove()
-			EnumItemsInRect(gg_rct_Region_018, null, function correctKeys)
-		case 2
-			RegionData data = getRegionData(368, -6647)
-			data.isBROwner = true
-			GroupEnumUnitsOfType(g, "custom_h018", null )
-			for u2 in g
-				new EscaperKiller(u2, null, COLL_SIZE_BK) 
-				
-			g.clear()
-			
-			GroupEnumUnitsOfType(g, "custom_n009", null )
-			for u5 in g
-				new EscaperKiller(u5, null, COLL_SIZE_SK) 
-				
-			g.clear()
-			
-			IssuePointOrder(gg_unit_h018_0149, "patrol", 368, -6647 )
-			IssuePointOrder(gg_unit_h018_0150, "patrol", 128, -6130 )
-			IssuePointOrder(gg_unit_h018_0151, "patrol", -284, -6315 )
-			IssuePointOrder(gg_unit_h018_0148, "patrol", -237, -6525 )
-    
-			IssuePointOrder(gg_unit_n009_0154, "patrol", 786, -6000 )
-			IssuePointOrder(gg_unit_n009_0152, "patrol", 775, -6400 )
-			IssuePointOrder(gg_unit_n009_0153, "patrol", 624, -6648 )
-			IssuePointOrder(gg_unit_n009_0155, "patrol", 752, -5644 )
-			IssuePointOrder(gg_unit_n009_0177, "patrol", -1050, -5609 )
-			IssuePointOrder(gg_unit_n009_0178, "patrol", -1270, -5609 )
-			IssuePointOrder(gg_unit_n009_0143, "patrol", -1921, -4364 )
-			IssuePointOrder(gg_unit_n009_0205, "patrol", -1922, -4482 )
-			IssuePointOrder(gg_unit_n009_0203, "patrol", 390, -3855 )
-			IssuePointOrder(gg_unit_n009_0204, "patrol", 780, -4222 )
-        	
-			UnitCreator u = new UnitCreator(vec2(gg_unit_n006_0165.getX(),gg_unit_n006_0165.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1024,-6785 )
-			u.active = true
-			gg_unit_n006_0165.remove()
-			u = new UnitCreator(vec2(gg_unit_n006_0166.getX(),gg_unit_n006_0166.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1024,-6400 )
-			u.active = true
-			u = new UnitCreator(vec2(gg_unit_n006_0175.getX(),gg_unit_n006_0175.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1666,-6982 )
-			u.active = true
-			gg_unit_n006_0175.remove()
-			u = new UnitCreator(vec2(gg_unit_n006_0168.getX(),gg_unit_n006_0168.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1728,-6147 )
-			u.active = true
-			gg_unit_n006_0168.remove()
-			u = new UnitCreator(vec2(gg_unit_n006_0167.getX(),gg_unit_n006_0167.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1410,-7100 )
-			u.active = true
-			gg_unit_n006_0167.remove()
-			u = new UnitCreator(vec2(gg_unit_n006_0169.getX(),gg_unit_n006_0169.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally",  -1159,-7037 )
-			u.active = true
-			gg_unit_n006_0169.remove()
-			
-			u = new UnitCreator(vec2(gg_unit_n006_0188.getX(),gg_unit_n006_0188.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -896,-3974 )
-			u.active = true
-			gg_unit_n006_0188.remove()
-			u = new UnitCreator(vec2(gg_unit_n006_0189.getX(),gg_unit_n006_0189.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1600,-3777 )
-			u.active = true
-			gg_unit_n006_0189.remove()
-			u = new UnitCreator(vec2(gg_unit_n006_0190.getX(),gg_unit_n006_0190.getY()),Player(11))
-			IssuePointOrder(u.actor, "setrally", -1346,-4225)
-			u.active = true
-			gg_unit_n006_0190.remove()
-			
-			IssueTargetOrder(gg_unit_h019_0159, "attack", gg_unit_u004_0161 )
-			gg_unit_h019_0159.addAbility(LOCUST_ID)
-			IssuePointOrder(gg_unit_u004_0161, "patrol", -771, -5372 )
-			IssueTargetOrder(gg_unit_h019_0158, "attack", gg_unit_u004_0162 )
-			gg_unit_h019_0158.addAbility(LOCUST_ID)
-			IssuePointOrder(gg_unit_u004_0162, "patrol", -128, -5100 )
-			IssueTargetOrder(gg_unit_h019_0157, "attack", gg_unit_u004_0163 )
-			gg_unit_h019_0157.addAbility(LOCUST_ID)
-			IssuePointOrder(gg_unit_u004_0163, "patrol", 512, -4870 )
-			IssueTargetOrder(gg_unit_h019_0160, "attack", gg_unit_u004_0164 )
-			gg_unit_h019_0160.addAbility(LOCUST_ID)
-			IssuePointOrder(gg_unit_u004_0164, "patrol", -758, -4888 )
-			
-			t = new Teleporter(vec2(gg_unit_n00C_0202.getX(),gg_unit_n00C_0202.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", STARTX,STARTY)
-			gg_unit_n00C_0202.remove()
-		 
-			Executer e = new Executer(vec2(gg_unit_n01D_0186.getX(),gg_unit_n01D_0186.getY()),Player(11))
-			e.eventMode = Emode.ONESHOT
-			e.actionMode = Amode.CHANGETERRAIN
-			e.tiletype = CONTROLLABLEICE
-			IssuePointOrder( e.actor, "setrally", -128,-3812 )
-			gg_unit_n01D_0186.remove()
-			e = new Executer(vec2(gg_unit_n01D_0187.getX(),gg_unit_n01D_0187.getY()),Player(11))
-			e.eventMode = Emode.ONESHOT
-			e.actionMode = Amode.CHANGETERRAIN
-			e.tiletype = CONTROLLABLEICE
-			IssuePointOrder( e.actor, "setrally", 0,-3812 )
-			gg_unit_n01D_0187.remove()
-			EnumItemsInRect(gg_rct_Region_000, null, function correctKeys)
-		case 3
-			
-			GroupEnumUnitsOfType(g, "custom_h01I", null )
-			for u in g
-				new EscaperKiller(u, null, COLL_SIZE_BK) 
-				
-			g.clear()
-			
-			GroupEnumUnitsOfType(g, "custom_n00E", null )
-			for u in g
-				new EscaperKiller(u, null, COLL_SIZE_SK) 
-				
-			g.clear()
-		
-			IssuePointOrder(gg_unit_n00E_0263, "patrol", -2948, -6192 )
-			IssuePointOrder(gg_unit_n00E_0264, "patrol", -2645, -6798 )
-			IssuePointOrder(gg_unit_n00E_0265, "patrol", -3129, -6798 )
-			IssuePointOrder(gg_unit_n00E_0268, "patrol", -3552, -6419 )
-			IssuePointOrder(gg_unit_n00E_0269, "patrol", -4317, -5883 )
-			IssuePointOrder(gg_unit_n00E_0267, "patrol", -4045, -6441 )
-			IssuePointOrder(gg_unit_n00E_0270, "patrol", -4719, -6655 )
-			IssuePointOrder(gg_unit_n00E_0210, "patrol", -4544, -6881 )
-			IssuePointOrder(gg_unit_n00E_0211, "patrol", -4553, -7000 )
-			IssuePointOrder(gg_unit_n00E_0219, "patrol", -4754, -7185 )
-			IssuePointOrder(gg_unit_n00E_0218, "patrol", -4720, -7060 )
-			IssuePointOrder(gg_unit_n00E_0214, "patrol", -2710, -5120 )
-			IssuePointOrder(gg_unit_n00E_0213, "patrol", -2728, -5100 )
-			IssuePointOrder(gg_unit_n00E_0221, "patrol", -4576, -4748 )
-			IssuePointOrder(gg_unit_n00E_0222, "patrol", -4320, -5164 )
-        
-			IssuePointOrder(gg_unit_h01I_0266, "patrol", -2533, -7195 )
-			IssuePointOrder(gg_unit_h01I_0262, "patrol", -3502, -6077 )
-			IssuePointOrder(gg_unit_h01I_0280, "patrol", -3953, -5678 )
-			IssuePointOrder(gg_unit_h01I_0225, "patrol", -4648, -3995 )
-			
-			t = new Teleporter(vec2(gg_unit_n00C_0234.getX(),gg_unit_n00C_0234.getY()),Player(11))
-			IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
-			gg_unit_n00C_0234.remove()
-
-			Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
-			gg_unit_h01M_0258.remove()
-			s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
-			debugPrint("Spinner done..." , 3)
-			s.checkObj( gg_unit_n00E_0261.getUserData() castTo Entity )
-			s.speed = 4.5 *DEGTORAD
-        
-			s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), Player(11))
-			gg_unit_h01M_0257.remove()
-			s.checkObj( gg_unit_n00E_0271.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0272.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0273.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0274.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0275.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0276.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0277.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0278.getUserData() castTo Entity )
-			s.speed = 2. *DEGTORAD
-			
-			s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
-			gg_unit_h01M_0259.remove()
-			s.checkObj( gg_unit_n00E_0215.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
-			s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
-			s.speed = 4. *DEGTORAD
-			//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
-			IssuePointOrder( s.setup, "patrol", -3820, -4661 )
-        
-			s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), Player(11))
-			gg_unit_h01M_0212.remove()
-			s.checkObj( gg_unit_h01I_0220.getUserData() castTo Entity )
-			s.speed = 7 *DEGTORAD
-			EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
-		default
-			debugPrint("no such region", 2)
 			
 public function clearEBRRect(int r)
 	var rd = regions[r]
 	debugPrint("R = " + r.toString() + " region unwalkable: " + rd.unwalkableTile.toString(),3)
-	GroupEnumUnitsInRect(g, rd.theRect, null)
-	for u in g
+	GroupEnumUnitsInRect(ENUM_GROUP, rd.theRect, null)
+	for u in ENUM_GROUP
 		let e =u.getUserData() castTo Entity
 		if (e != null )
 			e.terminate()
 		else
 			u.remove()
-	g.clear()
+	ENUM_GROUP.clear()
 	EnumItemsInRect(rd.theRect, null, function deleteKeys)
 	EnumDestructablesInRectAll(rd.theRect, function deleteDes)
 
-function deleteDes()
-	var d = GetEnumDestructable()
-	RemoveDestructable(d)
-	
-function deleteKeys()
-	item itm = GetEnumItem()
-	itm.remove()		
-	
-function correctKeys()
-	item itm = GetEnumItem()
-	if GetItemTypeId(itm) == 'I009'
-		new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
-		itm.remove()
-	
-public function clearStartRegion()
-	for i = 0 to 3
-		if isRegionActive[i]
-			debugPrint("R = " + i.toString() + " region unwalkable: " + regions[i].unwalkableTile.toString(),3)
-			GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
-			for u in ENUM_GROUP
-				if getRegionData(u.getX(),u.getY()) == regions[i]
-					let e =u.getUserData() castTo Entity
-					if (e != null )
-						e.terminate()
-					else
-						u.remove()
-			ENUM_GROUP.clear()
-			EnumItemsInRect(regions[i].theRect, null, function deleteKeys)
-			EnumDestructablesInRectAll(regions[i].theRect, function deleteDes)
-			
-public function killD()
-	RemoveDestructable(GetEnumDestructable())
-	
-	
+
 public function setupNextStartMaze()
 	CreateUnit(Player(11),'n01M', -6528.,-6908., 270.)
-	clearStartRegion()
+
 	
 public function setStartTeleport(int tpid, int locid)
 	Teleporter t = null
@@ -390,39 +66,96 @@ public function setStartTeleport(int tpid, int locid)
 			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),Player(11))
 			gg_unit_n00C_0323.remove()
 			t.isOneshot = true
-	texttag tt = CreateTextTag()
+
 	switch locid
 		case 1
 			IssuePointOrder(t.actor, "setrally", 3456,-4160 )
-			tt.setColor( 230,180,0, 0 ).setText("Desert Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setPermanent( true ).setVisibility( true )
+			createTTEx(t.pos, "Desert Startmaze", 11, colorA( 230,180,0, 255 ))
 		case 2
 			IssuePointOrder(t.actor, "setrally", 826,-7041 )
-			tt.setColor( 0,200,70, 0 ).setText("Forest Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setPermanent( true ).setVisibility( true )
+			createTTEx(t.pos, "Forest Startmaze", 11, colorA( 230,180,0, 255 ))
 		case 3
 			IssuePointOrder(t.actor, "setrally", -2433,-6148 )
-			tt.setColor( 130,0,180, 0 ).setText("Citadel Startmaze",11).setPos( t.pos.x,t.pos.y, 0 ).setPermanent( true ).setVisibility( true )
-		
-public function clearStartMazes()
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
-	for vicu in ENUM_GROUP
-		var data = vicu.getUserData() castTo Entity
-		if data != null
-			data.terminate()
-		else
-			vicu.remove()
-	ENUM_GROUP.clear()
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
-	for vicu in ENUM_GROUP
-		var data = vicu.getUserData() castTo Entity
-		if data != null
-			data.terminate()
-		else if GetUnitTypeId(vicu) != 'n008' and GetUnitTypeId(vicu) != 'e000'
-			vicu.remove()
-	ENUM_GROUP.clear()
-	for i = 0 to 3
-		EnumDestructablesInRect(regions[i].theRect, null, function killD)
+			createTTEx(t.pos, "Citadel Startmaze", 11, colorA( 230,180,0, 255 ))
 		
 
+		
+
+public function initBaseObjects()
+	ENUM_GROUP.clear()
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", null )
+	for u in ENUM_GROUP
+		if u.getHP() > .405
+			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), Player(11))
+			if u == gg_unit_n000_0002
+				r.startMaze = 0
+			else if u == gg_unit_n000_0085
+				r.startMaze = 1
+			else if u == gg_unit_n000_0144
+				r.startMaze = 2
+			else if u == gg_unit_n000_0226
+				r.startMaze = 3
+			else if u == gg_unit_n000_0322
+				r.startMaze = 10
+				svRev = r
+			u.remove()
+		
+	ENUM_GROUP.clear()
+
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", null )
+	for u2 in ENUM_GROUP
+		new Door(vec2(u2.getX(), u2.getY()), Player(11))
+		u2.remove()
+		
+	ENUM_GROUP.clear()
 	
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00S", null )
+	for u3 in ENUM_GROUP
+		new BigObstacle(vec2(u3.getX(), u3.getY()), Player(11))
+		u3.remove()
+		
+	ENUM_GROUP.clear()
+	
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00R", null )
+	for u4 in ENUM_GROUP
+		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		u4.remove()
+		
+	ENUM_GROUP.clear()
+		
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n018", null )
+	for u4 in ENUM_GROUP
+		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		u4.remove()
+		
+	ENUM_GROUP.clear()
+	
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n019", null )
+	for u4 in ENUM_GROUP
+		new BigObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		u4.remove()
+		
+	ENUM_GROUP.clear()
+	
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", null )
+	for u5 in ENUM_GROUP
+		new SmallObstacle(vec2(u5.getX(), u5.getY()), Player(11))
+		u5.remove()
+		
+	ENUM_GROUP.clear()
+	
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", null )
+	for u6 in ENUM_GROUP
+		new SmallObstacle(vec2(u6.getX(), u6.getY()), Player(11))
+		u6.remove()
+		
+	ENUM_GROUP.clear()
+	
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n003", null )
+	for u7 in ENUM_GROUP
+		new UnitRemover(vec2(u7.getX(), u7.getY()), Player(11))
+		u7.remove()
+		
+	ENUM_GROUP.clear()
 	
 	

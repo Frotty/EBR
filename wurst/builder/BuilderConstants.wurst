@@ -46,7 +46,6 @@ public constant int ANKH_ID = 'I00L'
 public int array colorSpells
 
 init
-	print("bc1")
 	colorSpells[0] = 'A05T'
 	preloadAbility(colorSpells[0])
 	colorSpells[1] = 'A05U'
@@ -65,4 +64,3 @@ init
 	preloadAbility(colorSpells[7])
 	colorSpells[8] = 'A060'
 	preloadAbility(colorSpells[8])
-	print("bc2")

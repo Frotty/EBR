@@ -12,12 +12,12 @@ import InstantBuild
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
-boolean isFirst = true
 
 public vec2 currentRevivepoint = vec2(6398, -6791)
 
 public class RevivePoint extends StaticSetupObject
 	boolean reached = false
+	int startMaze = -1
 	
 	construct( vec3 pos, player owner)
 		super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
@@ -29,17 +29,26 @@ public class RevivePoint extends StaticSetupObject
 		Entity e = u.getUserData() castTo Entity
 		thistype obj = source.getUserData() castTo thistype
 		let rdata = getRegionData(obj.pos.x, obj.pos.y)
-		
-		if isFirst and e instanceof Escaper
+		print("START "+obj.startMaze.toString())
+		if obj.startMaze > -1 and e instanceof Escaper
 			SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
-			obj.reached = true
-			currentRevivepoint = obj.pos.toVec2()
-			var rdata1 = rdata
-			for es1 in escapers
-				es1.setPos(obj.pos)
-				es1.currentRegion = rdata
-			isFirst = false
-			return
+			
+			if obj.startMaze == 0
+				obj.reached = true
+				currentRevivepoint = obj.pos.toVec2()
+				return
+			else
+				if obj.startMaze == 10
+					if startmazes[currentMaze] != null
+						startmazes[currentMaze].clearMaze()
+						destroy startmazes[currentMaze]
+				else
+					if startmazes[currentMaze] != null
+						startmazes[currentMaze].clearMaze()
+						destroy startmazes[currentMaze]
+					currentMaze = obj.startMaze
+					startmazes[currentMaze].initMaze()
+					svRev.reached = false
 			
 		
 		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))

@@ -1,0 +1,44 @@
+package SecondDesert
+import Startmaze
+import Startmazes
+import EscaperKiller
+import TempGroups
+import Teleporter
+
+public class SecondDesertMaze extends Startmaze
+
+	construct(RegionData rd)
+		rdata = rd
+	
+	override function initMaze()
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01H", null )
+		for u1 in ENUM_GROUP
+			new EscaperKiller(u1, null, COLL_SIZE_BK)
+			
+		ENUM_GROUP.clear()
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00D", null )
+		for u3 in ENUM_GROUP
+			new EscaperKiller(u3, null, COLL_SIZE_SK) 
+			
+		ENUM_GROUP.clear()
+		IssuePointOrder(gg_unit_n00D_0121, "patrol", 3612, -4650 )
+		IssuePointOrder(gg_unit_n00D_0122, "patrol", 3574, -5253 )
+		IssuePointOrder(gg_unit_n00D_0120, "patrol", 3834, -5380 )
+		IssuePointOrder(gg_unit_n00D_0123, "patrol", 2932, -5615 )
+		IssuePointOrder(gg_unit_n00D_0125, "patrol", 3747, -5848 )
+		IssuePointOrder(gg_unit_n00D_0124, "patrol", 4000, -6340 )
+		IssuePointOrder(gg_unit_h01H_0127, "patrol", 3449, -6652 )
+		IssuePointOrder(gg_unit_h01H_0128, "patrol", 2618, -6917 )
+		IssuePointOrder(gg_unit_h01H_0081, "patrol", 1840, -6537 )
+		IssuePointOrder(gg_unit_h01H_0080, "patrol", 1293, -6286 )
+		IssuePointOrder(gg_unit_h01H_0104, "patrol", 1293, -6286 )
+		var t = new Teleporter(vec2(gg_unit_n00C_0141.getX(),gg_unit_n00C_0141.getY()),Player(11))
+		IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
+		gg_unit_n00C_0141.remove()
+		EnumItemsInRect(gg_rct_Region_018, null, function correctKeys)
+
+	
+	
+	override function getStart() returns vec2
+		return vec2(3450, -4150)
+

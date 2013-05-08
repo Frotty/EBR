@@ -18,8 +18,6 @@ function onCommandChat()
 		case "clear"
 			if GetLocalPlayer() == p
 				ClearTextMessages()
-		case "clearStartMazes"
-			clearStartRegion()
 		case "cam"
 			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
 			if nstr == "lock"

@@ -307,7 +307,6 @@ function correctRegion()
 		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 		
 init
-	print("e1")
 	slideAssist = CreateTrigger()
 	slideAssist.addAction(function Escaper.changeAngle)
 	pickupTrig = CreateTrigger()
@@ -319,4 +318,3 @@ init
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)
-	print("e2")
