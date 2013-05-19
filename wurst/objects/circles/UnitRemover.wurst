@@ -3,6 +3,7 @@ import BaseObject
 import EventHandling
 import SetupObject
 import Remove
+import Pointer
 
 constant int ID = 'n003'
 
@@ -15,7 +16,8 @@ public class UnitRemover extends StaticBaseObject
 	static function removeUnit()
 		var u = GetTriggerUnit()
 		var data = u.getUserData()
-		if data > 0 and u.hasAbility(REMOVE_ID)
+		var sdata = GetTriggeringTrigger().getSource().getUserData() castTo UnitRemover
+		if data > 0 and (data castTo Entity).owner == sdata.owner and u.hasAbility(REMOVE_ID)
 			var edata = data castTo Entity
-			if edata instanceof DynamicSetupObject
+			if edata instanceof DynamicSetupObject or edata instanceof Pointer
 				edata.terminate()

@@ -7,6 +7,7 @@ package Unitcreator
 	import RegionData
 	import EventHandling
 	import Texttag
+	import Pointer
 
 	
 	constant int 	UNITCREATOR_ID   = 'n006'
@@ -61,6 +62,10 @@ package Unitcreator
 				case 'u006'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl.degrees() ), CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl.degrees() ), COLL_SIZE_SRK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
+				case 'h01Q'
+					var p = new Pointer(obj.pos.toVec2(), obj.owner)
+					p.angl = angl.degrees()
+					IssuePointOrder(p.setup, "move" , rX,rY)
 					
 			debugPrint("Created Unit with handleId: " + ek.actor.getHandleId().toString(), 3)
 			

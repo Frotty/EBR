@@ -162,12 +162,16 @@ public function init_Regions()
 
 	regions[0] = new RegionData( gg_rct_Region_024 )
 	regions[0].setType('I00D', false)
+	regions[0].isBROwner = true
 	regions[1] = new RegionData( gg_rct_Region_018 )
 	regions[1].setType('I00G', false)
+	regions[1].isBROwner = true
 	regions[2] = new RegionData( gg_rct_Region_000 )
 	regions[2].setType('I00E', false)
+	regions[2].isBROwner = true
 	regions[3] = new RegionData( gg_rct_Region_001 )
 	regions[3].setType('I00H', false)
+	regions[3].isBROwner = true
 	regions[4] = new RegionData( gg_rct_Region_004 )
 	regions[5] = new RegionData( gg_rct_Region_005 )
 	regions[6] = new RegionData( gg_rct_Region_006 )

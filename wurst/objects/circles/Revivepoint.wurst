@@ -28,33 +28,33 @@ public class RevivePoint extends StaticSetupObject
 		unit u = GetTriggerUnit()
 		Entity e = u.getUserData() castTo Entity
 		thistype obj = source.getUserData() castTo thistype
+		if obj.reached
+			return
 		let rdata = getRegionData(obj.pos.x, obj.pos.y)
-		print("START "+obj.startMaze.toString())
-		if obj.startMaze > -1 and e instanceof Escaper
+		
+		if obj.startMaze > -1 and e instanceof Escaper and isPlayerEscaper(e.owner)
 			SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
-			
 			if obj.startMaze == 0
 				obj.reached = true
 				currentRevivepoint = obj.pos.toVec2()
 				return
 			else
 				if obj.startMaze == 10
-					if startmazes[currentMaze] != null
+					if (startmazes[currentMaze] castTo int) > 0
 						startmazes[currentMaze].clearMaze()
 						destroy startmazes[currentMaze]
+						startmazes[currentMaze] = null
 				else
-					if startmazes[currentMaze] != null
+					if (startmazes[currentMaze] castTo int) > 0
 						startmazes[currentMaze].clearMaze()
 						destroy startmazes[currentMaze]
+						startmazes[currentMaze] = null
 					currentMaze = obj.startMaze
 					startmazes[currentMaze].initMaze()
 					svRev.reached = false
 			
 		
 		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
-			if getRegionData(obj.pos.x, obj.pos.y) == regions[26]
-				timer tim = getTimer()
-				tim.start(0.1, function setupNextStartMaze)
 			PlaySoundBJ(gg_snd_Rescue)
 			DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
 			SetUnitColor( source, PLAYER_COLOR_BLUE )

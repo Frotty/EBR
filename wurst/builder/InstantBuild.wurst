@@ -49,7 +49,7 @@ public class BuildData
 		this.tpos = tpos
 		this.oId = oId
 
-function callback()
+public function callback()
 	var t = GetExpiredTimer()
 	var data = t.getData() castTo BuildData
 	data.b.updatePos()

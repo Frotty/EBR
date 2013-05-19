@@ -42,7 +42,7 @@ public class Projectile extends FxEntity
 	function setXYAngle(angle xyA)
 		this.xyAngle = xyA
 		fx.setXYAngle(xyA)
-		print(xyA.degrees().toString())
+
 		
 	function setZAngle(angle zA)
 		this.xyAngle = zA

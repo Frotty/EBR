@@ -27,7 +27,7 @@ public class BezierMissile extends Projectile
 	function getTarget() returns unit
 		return target
 	///returns the target the missile is homing on
-	function setTarget(unit u)
+	function setTarget2(unit u)
 		target = u
 		targetlastx = u.getX()
 		targetlasty = u.getY()

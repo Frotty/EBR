@@ -27,7 +27,7 @@ public class PlayerData //just the player's (constant) stuff
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 	boolean left = false
 	
-	private int deaths = 0
+	int deaths = 0
 	Escaper escaper
 	Builder builder
 	int XP = 40
@@ -45,7 +45,7 @@ public class PlayerData //just the player's (constant) stuff
 		this.p = p
 		
 		id = GetPlayerId(p)
-		gameId = players.size
+		gameId = players.getSize()
 		name = GetPlayerName(p)
 		mbname = name
 		if mbname == "Frotty" or mbname == "FrottyZ"
@@ -142,7 +142,7 @@ public PlayerData array pData
 function initMB()
 	playerboard = new Board(playercount+1,3)
 	
-	for i = 0 to players.size
+	for i = 0 to players.getSize()
 		playerboard.board.getItem(i,0).setStyle(true,true).setWidth(0.1)
 		playerboard.board.getItem(i,1).setStyle(true,false).setWidth(0.015)
 		playerboard.board.getItem(i,2).setStyle(true,false).setWidth(0.05)

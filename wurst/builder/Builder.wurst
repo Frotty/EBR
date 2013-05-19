@@ -89,12 +89,6 @@ public class Builder extends UnitEntity
 						CreateItem(TOME_ID, ox,oy)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				/*case ANKH_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						CreateItem(ANKH_ID, ox,oy)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				*/
 				case BM_BOSS_ID
 					var rdata = getRegionData(ox,oy)
 					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
@@ -128,6 +122,14 @@ public class Builder extends UnitEntity
 					else
 						pd.gridClickActivated = true
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff08B552ON|r!") 
+				default
+					for i = 0 to 9
+						if MUSIC_IDS[i] == id
+							PlayMusic(MUSIC_PATHS[i])
+							return
+						
+					StopMusic(true)
+							
 					
 			if wasMenu
 				if UnitItemInSlot(builder.actor, 0) == null
@@ -194,7 +196,11 @@ function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
 	
 function isBuilder() returns boolean
-	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
+	let id = GetUnitTypeId(GetTriggerUnit())
+	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
+	
+int array MUSIC_IDS
+string array MUSIC_PATHS
 		
 public function init_Builder()	
 	swapTrigger = CreateTrigger()
@@ -206,8 +212,8 @@ public function init_Builder()
 	itemTrigger.addCondition(Condition(function isBuilder))
 	itemTrigger.addAction(function Builder.claimRegion)
 	orderTrigger = CreateTrigger()
-	orderTrigger.addAction(function Builder.onOrder)
 	orderTrigger.addCondition(Condition(function isBuilder))
+	orderTrigger.addAction(function Builder.onOrder)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 	
@@ -218,4 +224,29 @@ public function init_Builder()
 			UnitAddItemById(pd.builder.actor,'I002')
 			UnitAddItemById(pd.builder.actor,'I003')	
 	
+	MUSIC_IDS[0] = 'A03Q' //Credits
+	MUSIC_PATHS[0] = "Sound\\Music\\mp3Music\\Credits.mp3"
+	MUSIC_IDS[1] = 'A03M' //Human1
+	MUSIC_PATHS[1] = "Sound\\Music\\mp3Music\\Human1.mp3"
+	MUSIC_IDS[2] = 'A02R' //Human2
+	MUSIC_PATHS[2] = "Sound\\Music\\mp3Music\\Human2.mp3"
+	MUSIC_IDS[3] = 'A03L' //HumanX1
+	MUSIC_PATHS[3] = "Sound\\Music\\mp3Music\\HumanX1.mp3"
+	MUSIC_IDS[4] = 'A03N' //Orc3
+	MUSIC_PATHS[4] = "Sound\\Music\\mp3Music\\Orc3.mp3"
+	MUSIC_IDS[5] = 'A03P' //Sad Mystery
+	MUSIC_PATHS[5] = "Sound\\Music\\mp3Music\\SadMystery.mp3"
+	MUSIC_IDS[6] = 'A03O' //Storm Earth
+	MUSIC_PATHS[6] = "Sound\\Music\\mp3Music\\PH1.mp3"
+	MUSIC_IDS[7] = 'A03U' //Tragic
+	MUSIC_PATHS[7] = "Sound\\Music\\mp3Music\\TragicConfrontation.mp3"
+	MUSIC_IDS[8] = 'A03T' //Undead 2
+	MUSIC_PATHS[8] = "Sound\\Music\\mp3Music\\Undead2.mp3"
+	MUSIC_IDS[9] = 'A03S' //Wc2
+	MUSIC_PATHS[9] = "Sound\\Music\\mp3Music\\War2IntroMusic.mp3"
+
+	
+
+	
+
 	

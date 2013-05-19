@@ -28,7 +28,7 @@ constant int SETUP_TYPE = 0
 class TerrainModder
 	unit actor
 	player owner
-	boolean smallbrush = true
+	boolean bigbrush = false
 	int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 	construct( player owner, unit u)
@@ -44,11 +44,11 @@ class TerrainModder
 	static function changeTerrain()
 		var id = GetTriggerUnit()
 		var obj = GetTriggerUnit().getUserData() castTo TerrainModder
-		
 		var rX = GetOrderPointX()
 		var rY = GetOrderPointY()
-		
 		var oW = GetOrderTarget()
+		var size = obj.bigbrush.toInt() + 1
+		
 		if oW != null
 			rX = oW.getX()
 			rY = oW.getY()
@@ -60,42 +60,20 @@ class TerrainModder
 		if rdata.isOwner(GetPlayerId(obj.owner)) or name == "Frotty" or name == "FrottyZ"
 			if GetUnitTypeId(id) == ICECONTROL
 				if obj.modification == 1
-					if obj.smallbrush
-						SetTerrainType( rX, rY, REVICE, -1, 1, 1 )
-					else
-						SetTerrainType( rX, rY, REVICE, -1, 2, 1 )
+					SetTerrainType( rX, rY, REVICE, -1, size, 1 )
 				else
-					if obj.smallbrush
-						SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 1, 1 )
-					else
-						SetTerrainType( rX, rY, CONTROLLABLEICE, -1, 2, 1 )
-						
+					SetTerrainType( rX, rY, CONTROLLABLEICE, -1, size, 1 )
 			else if GetUnitTypeId(id) == ICEUNCONTROL
-				if obj.smallbrush
-					SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 1, 1 )
-				else
-					SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, 2, 1 )
+				SetTerrainType( rX, rY, UNCONTROLLABLEICE, -1, size, 1 )
 			else if GetUnitTypeId(id) == WALKABLE
-				if obj.smallbrush
-					SetTerrainType( rX, rY, rdata.walkableTile, -1, 1, 1 )
-				else
-					SetTerrainType( rX, rY, rdata.walkableTile, -1, 2, 1 )
+				SetTerrainType( rX, rY, rdata.walkableTile, -1, size, 1 )
 			else if GetUnitTypeId(id) == UNWALKABLE
 				if obj.modification == 0
-					if obj.smallbrush
-						SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 1, 1 )
-					else
-						SetTerrainType( rX, rY, rdata.unwalkableTile, -1, 2, 1 )
+					SetTerrainType( rX, rY, rdata.unwalkableTile, -1, size, 1 )
 				else if obj.modification == 1
-					if obj.smallbrush
-						SetTerrainType( rX, rY, LAVA, -1, 1, 1 )
-					else
-						SetTerrainType( rX, rY, LAVA, -1, 2, 1 )
+					SetTerrainType( rX, rY, LAVA, -1, size, 1 )
 				else if obj.modification == 2
-					if obj.smallbrush
-						SetTerrainType( rX, rY, POISON, -1, 1, 1 )
-					else
-						SetTerrainType( rX, rY, POISON, -1, 2, 1 )
+					SetTerrainType( rX, rY, POISON, -1, size, 1 )
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
@@ -131,12 +109,12 @@ class TerrainModder
 			case SMALL_BRUSH_ABILITY
 				UnitRemoveAbility(actor,SMALL_BRUSH_ABILITY)
 				UnitAddAbility(actor,BIG_BRUSH_ABILITY)
-				smallbrush = true
+				bigbrush = false
 				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "SmallBrush")
 			case BIG_BRUSH_ABILITY
 				UnitRemoveAbility(actor,BIG_BRUSH_ABILITY)
 				UnitAddAbility(actor,SMALL_BRUSH_ABILITY)
-				smallbrush = false
+				bigbrush = true
 				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "BigBrush")
 			default
 				printError("Terrainmodder Ability")
@@ -165,7 +143,5 @@ public function init_TerrainModder()
 			new TerrainModder( pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
 			new TerrainModder( pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
 			new TerrainModder( pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
-			
-	var fx = new Fx(0,0,angle(0),"Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl")
-	destroy fx
+
 

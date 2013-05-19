@@ -17,7 +17,7 @@ public abstract class HomingProjectile extends FxEntity
 	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
 		super(pos, radius, owner, xyAngle, fxpath)
 		
-	function setTarget(Entity e)
+	function setTarget2(Entity e)
 		target = e
 		hitRadius = (radius+target.radius)*(radius+target.radius)
 		

@@ -11,6 +11,7 @@ import TextureChanger
 import Bomber
 import EventHandling
 import Pointer
+import Knockbacker
 
 constant int ID = 'H00A'
 
@@ -29,6 +30,26 @@ public class UnitProducer extends StaticBaseObject
 		var rX = obj.getRallyX()
 		var rY = obj.getRallyY() 
 		var data = getRegionData(rX, rY)
+		if id == 'A07A'
+			obj.actor.removeAbility('A05F').removeAbility('A05K')
+			.removeAbility('A05J').removeAbility('A05G')
+			.removeAbility('A05M').removeAbility('A05N')
+			.removeAbility('A05H').removeAbility('A07A')
+			.removeAbility('A05O').removeAbility('A07C')
+			.addAbility('A05N').addAbility('A05P')
+			.addAbility('A05L').addAbility('A05I')
+			.addAbility('A07B')
+			return false
+		else if id == 'A07B'
+			obj.actor.addAbility('A05F').addAbility('A05K')
+			.addAbility('A05J').addAbility('A05G')
+			.addAbility('A05M').addAbility('A05N')
+			.addAbility('A05H').addAbility('A07A')
+			.addAbility('A05O').addAbility('A07C')
+			.removeAbility('A05N').removeAbility('A05P')
+			.removeAbility('A05L').removeAbility('A05I')
+			.removeAbility('A07B')
+			return false
 		if data == null
 			return false
 		if data.isOwner(GetPlayerId(obj.owner))
@@ -45,8 +66,6 @@ public class UnitProducer extends StaticBaseObject
 					new EscaperKiller(CreateUnit(obj.owner, 'h001', rX, rY, 0. ), CreateUnit(obj.owner, 'h001', rX, rY, 0. ), COLL_SIZE_TANK)
 				case 'A05N'
 					new TeleporterTarget( vec2(rX,rY), obj.owner )
-				case 'A05N'
-					new Bomber( vec2(rX,rY), obj.owner )
 				case 'A05H'
 					new EscaperKiller(CreateUnit(obj.owner, 'u00A', rX, rY, 0. ), CreateUnit(obj.owner, 'u00A', rX, rY, 0. ), COLL_SIZE_GLAIVE)
 				case 'A05P'
@@ -57,6 +76,9 @@ public class UnitProducer extends StaticBaseObject
 					new Pointer(vec2(rX,rY), obj.owner)
 				case 'A05O'
 					new Bomber(vec2(rX,rY), obj.owner)
+				case 'A07C'
+					new Knockbacker(vec2(rX,rY), obj.owner)
+				
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 		return false
