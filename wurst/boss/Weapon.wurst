@@ -15,27 +15,37 @@ public constant int ATTACK_MELEE_ID = 'A07G'
 public constant int ATTACK_RANGED_ID = 'A07H'
 tuple Weapons(int itemID, ATTACK_TYPE atype, real range, real aoe, real dmg, string eff)
 public Weapons array weapon
+constant int weaponnumber = 1
 
 public enum ATTACK_TYPE
 	MELEE
 	RANGED
 
 public class Weapon extends ItemObject
-	int wpid = 0
+	int wpid
 	boolean picked = false
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(weapon[0].itemID, pos.x, pos.y), CreateUnit(owner, 'h00K', pos.x, pos.y, 0 ) )
+		wpid = 0
 		setup.registerCastEvent(Condition(function Weapon.onCast))
 		
 	function pickedUp(Escaper holder)
 		picked = true
 		this.holder = holder
+		if weapon[wpid].atype == ATTACK_TYPE.MELEE
+			holder.actor.addAbility(ATTACK_MELEE_ID)
+		else
+			holder.actor.addAbility(ATTACK_RANGED_ID)
 		setup.hide()
 		
 	function dropped()
 		picked = false
+		if weapon[wpid].atype == ATTACK_TYPE.MELEE
+			holder.actor.removeAbility(ATTACK_MELEE_ID)
+		else
+			holder.actor.removeAbility(ATTACK_RANGED_ID)
 		holder = null
 		setup.setXY(pos.toVec2())
 		setup.show()
@@ -44,20 +54,30 @@ public class Weapon extends ItemObject
 
 		
 	override function update()
-		pos = holder.pos
+		if holder != null
+			pos = holder.pos
 		
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var obj = GetSpellAbilityUnit().getUserData() castTo Weapon
 		switch id
 			case NEXT_ID
-				obj.wpid ++
+				if obj.wpid >= weaponnumber
+					obj.wpid = 0
+				else
+					obj.wpid += 1
+				print(obj.wpid.toString())
 				obj.actorItem.remove()
 				obj.actorItem = CreateItem(weapon[obj.wpid].itemID, obj.pos.x, obj.pos.y)
+				obj.actorItem.setUserData(obj castTo int)
 			case PREW_ID
-				obj.wpid --
-				obj.actorItem.remove()
+				if obj.wpid <= 0
+					obj.wpid = weaponnumber
+				else
+					obj.wpid -= 1
+				RemoveItem(obj.actorItem)
 				obj.actorItem = CreateItem(weapon[obj.wpid].itemID, obj.pos.x, obj.pos.y)
+				obj.actorItem.setUserData(obj castTo int)
 		return false
 		
 	function attackm()
@@ -69,9 +89,8 @@ public class Weapon extends ItemObject
 				var b = e castTo Boss
 				holder.actor.damageTarget(b.actor,weapon[wpid].dmg)
 	
-	function attackr(real targetx, real targety)
-		var a = angle(holder.actor.getFacing())
-		new WeaponMissile(pos, vec2(targetx,targety),owner, wpid)
+	function attackr(vec3 start, real targetx, real targety)
+		new WeaponMissile(start, vec2(targetx,targety),owner, wpid)
 		
 	ondestroy
 		dropTrig.disable()
@@ -86,9 +105,9 @@ class WeaponMissile extends Projectile
 	group affected
 	
 	construct(vec3 pos, vec2 target, player owner, int id)
-		super( pos, weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff )
-		setSpeed(128)
-		setRanged(700.)
+		super( vec3(pos.x,pos.y,10.), weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff )
+		setSpeed(18)
+		setRanged(weapon[id].range)
 		this.id = id
 
 
@@ -98,7 +117,7 @@ class WeaponMissile extends Projectile
 		for u in ENUM_GROUP
 			var e = u.getUserData() castTo Entity	
 			if e instanceof Boss
-				UnitDamageTarget(getDummy(), u, weapon[id].dmg, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+				getDummy().damageTarget(u, weapon[id].dmg)
 				destroy(this)
 			else if e instanceof Wall
 				destroy(this)
@@ -106,6 +125,6 @@ class WeaponMissile extends Projectile
 		ENUM_GROUP.clear()
 		
 public function init_Weapon()
-	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 100., 6., "")
-	weapon[1] = Weapons('I00V', ATTACK_TYPE.RANGED, 700., 60., 6., "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl")
+	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 100., 20., "")
+	weapon[1] = Weapons('I00V', ATTACK_TYPE.RANGED, 700., 60., 20., "Abilities\\Weapons\\PriestMissile\\PriestMissile.mdl")
 	

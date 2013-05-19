@@ -99,7 +99,7 @@ public class Builder extends UnitEntity
 								noBoss = false
 						ENUM_GROUP.clear()
 						if noBoss
-							new Boss(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 200.)
+							new Boss(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 10.)
 						else
 							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
 					else

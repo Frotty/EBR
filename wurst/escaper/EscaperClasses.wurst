@@ -14,6 +14,7 @@ public class Holy_Escaper extends Escaper
 		super( pos, owner, typ )
 		
 	override function onCast(int id)
+		super.onCast(id)
 		if id == REINCARNATION_ID
 			if revivetomb != null
 				revivetomb.remove()
@@ -26,6 +27,7 @@ public class Ice_Escaper extends Escaper
 		super(pos, owner, typ)
 		
 	override function onCast(int id)
+		super.onCast(id)
 		if id == SPEEDWAVE_ID
 			if sliding
 				var angl = actor.getFacing()
@@ -57,6 +59,7 @@ public class Strong_Escaper extends Escaper
 				
 				
 	override function onCast(int id)
+		super.onCast(id)
 		if id == STAGNANCYSHIELD_ID
 			invulnerable = true
 			shieldtimer = GetUnitAbilityLevel(actor, id)*1.

@@ -266,6 +266,9 @@ public class Escaper extends UnitEntity
 		if idata instanceof Key
 			var kdata = idata castTo Key
 			kdata.pickedUp(escaper)
+		if idata instanceof Weapon
+			var wdata = idata castTo Weapon
+			wdata.pickedUp(escaper)
 			
 	static function dropItem()
 		var pickedItem = GetManipulatedItem()
@@ -277,6 +280,12 @@ public class Escaper extends UnitEntity
 			dropTrig.disable()
 			RemoveItem(kdata.actorItem)
 			kdata.dropped()
+			dropTrig.enable()
+		if idata instanceof Weapon
+			var wdata = idata castTo Weapon
+			dropTrig.disable()
+			RemoveItem(wdata.actorItem)
+			wdata.dropped()
 			dropTrig.enable()
 			
 	static function neutralDeath()
@@ -302,7 +311,7 @@ public class Escaper extends UnitEntity
 				if data instanceof Weapon
 					var w = data castTo Weapon
 					if weapon[w.wpid].atype == ATTACK_TYPE.RANGED
-						w.attackr(GetSpellTargetX(), GetSpellTargetY())
+						w.attackr(pos,GetSpellTargetX(), GetSpellTargetY())
 			
 	ondestroy
 		lavaEffect.destr()
