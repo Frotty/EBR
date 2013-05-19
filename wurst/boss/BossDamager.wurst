@@ -20,13 +20,18 @@ public class BossDamager extends StaticBaseObject
 		super(pos, CreateUnit(owner, DAMAGER_ID,pos.x, pos.y, 0. ), EVENT_RADIUS, function BossDamager.onInRange)
 		actor.registerCastEvent(Condition(function BossDamager.onCast))
 		
+	function damage(Escaper e)
+		e.actor.damageTarget(actor,damage)
+		
 	static function onInRange()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getUserData() castTo Entity
 		if e instanceof Escaper
 			var es = e castTo Escaper
-		
+			var obj = source.getUserData() castTo BossDamager
+			obj.damage(es)
+	
 	static function onCast() returns boolean
 		var data = GetTriggerUnit().getUserData() castTo Entity
 		if data instanceof BossDamager

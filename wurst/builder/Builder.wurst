@@ -8,6 +8,7 @@ import SetupBox
 import TempGroups
 import Boss
 import BossSpellTarget
+import Weapon
 import InstantBuild
 
 trigger swapTrigger
@@ -112,6 +113,11 @@ public class Builder extends UnitEntity
 				case BM_SPELLTARGET_ID
 					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
 						new SpellTarget(vec2(ox,oy), builder.owner)
+					else
+						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+				case BM_WEAPON_ID
+					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
+						new Weapon(vec2(ox,oy), builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				case GRIDCLICK_ID

@@ -13,6 +13,7 @@ import Revivepoint
 import LinkedList
 import EscaperClasses
 import PlayerData
+import Weapon
 
 public Table escaperTable = new Table()
 
@@ -287,6 +288,20 @@ public class Escaper extends UnitEntity
 		data.onCast(GetSpellAbilityId())
 		
 	function onCast(int id)
+		if id == ATTACK_MELEE_ID
+			for int i = 0 to 5
+				var data = UnitItemInSlot(actor, i).getUserData() castTo ItemObject
+				if data instanceof Weapon
+					var w = data castTo Weapon
+					if weapon[w.wpid].atype == ATTACK_TYPE.MELEE
+						w.attackm()
+		else if id == ATTACK_RANGED_ID
+			for int i = 0 to 5
+				var data = UnitItemInSlot(actor, i).getUserData() castTo ItemObject
+				if data instanceof Weapon
+					var w = data castTo Weapon
+					if weapon[w.wpid].atype == ATTACK_TYPE.RANGED
+						w.attackr(GetSpellTargetX(), GetSpellTargetY())
 			
 	ondestroy
 		lavaEffect.destr()

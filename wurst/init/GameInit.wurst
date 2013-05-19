@@ -16,6 +16,7 @@ package GameInit
 	import Startmazes
 	import EntityManagement
 	import Pointer
+	import Weapon
 	import FileIO
 	import Invisible
 	
@@ -65,7 +66,10 @@ package GameInit
 		debugPrint("Init - Reinc", 2)
 		init_Pointer()
 		debugPrint("Init - Pointer", 2)
+		init_Weapon()
+		debugPrint("Init - Weapon", 2)
 		invis_init()
+		
 		getTimer().start(0.01, function initPartTwo)
 		
 	function initPartTwo()
