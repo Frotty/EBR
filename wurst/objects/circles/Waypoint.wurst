@@ -41,7 +41,7 @@ package Waypoint
 			thistype obj = source.getUserData() castTo thistype
 			var rx = obj.getRallyX()
 			var ry = obj.getRallyY()
-			if e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
+			if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 				var data = e castTo UnitEntity
 				if not obj.wisps and data instanceof TeleporterTarget
 					return

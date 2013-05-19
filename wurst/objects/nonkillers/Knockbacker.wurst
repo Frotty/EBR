@@ -1,0 +1,65 @@
+package Knockbacker
+import Entity
+import Escaper
+import EventHandling
+import Texttag
+import TempGroups
+import PreloadHandler
+import SetupObject
+
+constant int KNOCKER_ID = 'u00G'
+
+
+public class Knockbacker extends DynamicSetupObject
+	real kforce = 20.
+	real dmg = 50.
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 
+				CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 64., function Knockbacker.inRangeEvent)
+
+			
+	static function onCast() returns boolean
+//		var id = GetSpellAbilityId()
+//		var data = GetSpellAbilityUnit().getUserData() castTo Pointer
+//		switch id
+//			case INC_ID
+//				if data.turnspeed < 6.
+//					data.turnspeed += 0.5
+//					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+//				else
+//					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
+//			case DEC_ID
+//				if data.turnspeed > -6.
+//					data.turnspeed -= 0.5
+//					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+//				else
+//					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
+//			case START_ID
+//				data.turning = true
+//				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
+//			case STOP_ID
+//				data.turning = false
+//				data.setup.removeAbility(STOP_ID).addAbility(START_ID)
+					
+		return false
+
+	function inRange(Escaper edata)
+		let ang = pos.angle2d(edata.pos)
+		edata.addVel(vec3(ang.cos()*kforce,ang.sin()*kforce,0))
+		actor.damageTarget(edata.actor, dmg)
+		actor.setAnimation("attack")
+		setup.setAnimation("attack")
+		AddSpecialEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", edata.pos.x, edata.pos.y).destr()
+	static function inRangeEvent()
+		let ud = GetTriggerUnit().getUserData() castTo Entity
+		let sd = GetTriggeringTrigger().getSource().getUserData() castTo Knockbacker
+		if ud instanceof Escaper
+			sd.inRange(ud castTo Escaper)
+		
+		
+				
+	ondestroy
+		actor.unregisterCastEvent()
+
+		

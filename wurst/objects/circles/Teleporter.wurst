@@ -38,13 +38,15 @@ package Teleporter
 			thistype obj = source.getUserData() castTo thistype
 			var rx = obj.getRallyX()
 			var ry = obj.getRallyY()
+			if obj.isOneshot and not isPlayerEscaper(e.owner)
+				return
 			DynamicSetupObject dyn
 			if obj.mode == 0 and e instanceof Escaper
 				u.setPos(rx, ry)
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
 				PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-				if obj.isOneshot and isPlayerEscaper(e.owner)
+				if obj.isOneshot
 					destroy(obj)
 					GroupEnumUnitsInRect(ENUM_GROUP, regions[26].theRect, null)
 					for niki in ENUM_GROUP

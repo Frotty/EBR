@@ -46,7 +46,7 @@ public class SpellTarget extends DynamicSetupObject
 	
 	function castSpell(int spell_id, string spell_string)
 		var dc = new DummyCaster(spell_id, spell_string, DUMMY_PLAYER, true)
-		dc.level = 1
+		dc.setLevel(1)
 		dc.castOnPoint(pos)
 
 public class BossMissile extends Entity
@@ -56,14 +56,14 @@ public class BossMissile extends Entity
 	
 	construct (vec3 pos, string sfx, SpellTarget target)
 		super(pos,target.owner)
-		missile = new Fx(pos, angleBetweenCoords(missile.dummy.getX(), missile.dummy.getY(), target.actor.getX(), target.actor.getY()), sfx)
+		missile = new Fx(pos, angleBetweenCoords(missile.getX(), missile.getY(), target.actor.getX(), target.actor.getY()), sfx)
 		
 	override function update()
-		angle a = angleBetweenCoords(missile.dummy.getX(), missile.dummy.getY(), target.actor.getX(), target.actor.getY())
-		var x = polarProjectionX(missile.dummy.getX(), speed, a)
-		var y = polarProjectionY(missile.dummy.getY(), speed, a)
+		angle a = angleBetweenCoords(missile.getX(), missile.getY(), target.actor.getX(), target.actor.getY())
+		var x = polarProjectionX(missile.getX(), speed, a)
+		var y = polarProjectionY(missile.getY(), speed, a)
 		pos = vec3(x,y, 0.)
-		missile.dummy.setFacing(a)
+		missile.setXYAngle(a)
 		if not pos.toVec2().inBounds()
 			printError("Missile out of Bounds")
 			pos = vec3(0,0,520)
@@ -76,7 +76,7 @@ public class BossMissile extends Entity
 		if ent instanceof Escaper
 			var es = ent castTo Escaper
 			if not es.flying
-				missile.dummy.damageTarget(es.actor, 25)
+				missile.getDummy().damageTarget(es.actor, 25)
 	
 init
 	//preloadAbility(AOE_ID)

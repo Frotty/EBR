@@ -14,6 +14,7 @@ public class Key extends ItemObject
 	COLOR col = COLOR.WHITE
 	boolean picked = false
 	boolean followWalkable = true
+	effect returnSfx = null
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
@@ -72,9 +73,12 @@ public class Key extends ItemObject
 			case DYN_ID
 				data.followWalkable = false
 				data.setup.removeAbility(DYN_ID).addAbility(STATIC_ID)
+				data.returnSfx = AddSpecialEffect("war3mapImported\\XKey.mdl", data.pos.x, data.pos.y)
 			case STATIC_ID
 				data.followWalkable = true
 				data.setup.removeAbility(STATIC_ID).addAbility(DYN_ID)
+				if data.returnSfx != null
+					data.returnSfx.destr()
 		data.recolor()
 		return false
 		
@@ -85,6 +89,8 @@ public class Key extends ItemObject
 		holder = null
 		setup.unregisterCastEvent()
 		setup.remove()
+		if returnSfx != null
+			returnSfx.destr()
 		
 		
 init

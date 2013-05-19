@@ -79,7 +79,7 @@ public class Trap extends StaticBaseObject
 				e.kill()
 			case ABIL.STUN
 				var dc = new DummyCaster(STUN_BUFF, "thunderbolt", DUMMY_PLAYER, true)
-				dc.level = duration.toInt()
+				dc.setLevel(duration.toInt())
 				dc.castOnTarget(e.actor)
 			case ABIL.SHAKE
 				newEventPlayer(e.owner,value)
@@ -96,7 +96,7 @@ public class Trap extends StaticBaseObject
 					debugPrint("DC created1", 3)
 					var dc = new DummyCaster(SPEED_BUFF_NEG, "bloodlust", DUMMY_PLAYER, true)
 					debugPrint("DC created2", 3)
-					dc.level = level
+					dc.setLevel(level)
 					dc.castOnTarget(e.actor)
 				if level > 5
 					debugPrint("DC created1.1", 3)

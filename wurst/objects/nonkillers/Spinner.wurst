@@ -9,6 +9,7 @@ import Remove
 import BomberTarget
 import PreloadHandler
 import BaseObject
+import Pointer
 
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
@@ -74,7 +75,7 @@ public class Spinner extends DynamicSetupObject
 
 	ondestroy
 		setup.unregisterCastEvent()
-		while spinningEntities.size > 0
+		while spinningEntities.getSize() > 0
 			SpinNode n = spinningEntities.get(0)
 			spinningEntities.removeAt(0)
 			destroy n 

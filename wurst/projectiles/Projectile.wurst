@@ -1,0 +1,61 @@
+package Projectile
+import Entity
+import Angle
+
+
+public class Projectile extends FxEntity
+	// Angles
+	private angle xyAngle
+	private angle zAngle
+	
+	private boolean timed = false
+	private boolean ranged = false
+	
+	// Moving Speed
+	private real speed = 0.
+	private real dist = 0.
+	private real maxDist
+	private real time = 0.
+	private real maxTime
+	
+	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
+		super(pos, radius, owner, xyAngle, fxpath)
+		setXYAngle(xyAngle)
+		active = false
+				
+	function setRanged(real maxDistance)
+		this.maxDist = maxDistance
+		ranged = true
+		
+	function setTimed(real lifespan)
+		this.maxTime = lifespan
+		timed = true
+	
+	function setSpeed(real speed)
+		this.speed = speed
+		vel = vec3(xyAngle.cos()*speed, xyAngle.sin()*speed, 0.)
+		active = true
+		
+	function getSpeed() returns real
+		return speed
+		
+	function setXYAngle(angle xyA)
+		this.xyAngle = xyA
+		fx.setXYAngle(xyA)
+		
+	function setZAngle(angle zA)
+		this.xyAngle = zA
+		fx.setZAngle(zA)
+		
+	override function update()
+		pos += vel
+		setPos()
+		if timed
+			time += ANIMATION_PERIOD
+			if time >= maxTime
+				terminate()
+		if ranged
+			dist += speed
+			if dist > maxDist
+				terminate()
+		

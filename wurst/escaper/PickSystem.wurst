@@ -4,6 +4,7 @@ import Escaper
 import EscaperClasses
 import Entity
 import CodeManager
+import Startmazes
 
 unit array pickheros
 int array herotypes
@@ -38,6 +39,7 @@ public function allow()
 	EnableUserControl(true)
 	EnableOcclusion(true)
 	started = true
+	initStartmazes()
 
 function keyleft()
 	if not started

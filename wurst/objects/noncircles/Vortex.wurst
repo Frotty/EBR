@@ -9,7 +9,7 @@ constant int ID = 'n013'
 constant int INC_ID = 'A04J'
 constant int DEC_ID = 'A04K'
 
-constant real GRAV_RADIUS_SQ = 198025 //445
+constant real GRAV_RADIUS_SQ = 172225 //415
 
 public class Vortex extends UnitEntity
 	real gravity = 2.

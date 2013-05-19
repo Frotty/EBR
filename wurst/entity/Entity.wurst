@@ -12,9 +12,9 @@ public abstract class Entity
 	use LinkedListModule
 	
 	/** 3d vector position */
-	protected vec3 pos
+	vec3 pos
 	/** 3d vector velocity */
-	protected vec3 vel
+	vec3 vel
 	
 	/** radius */
 	real radius = 0.
@@ -58,17 +58,11 @@ public abstract class Entity
 		this.radius = radius
 		entityCount++
 		
-	function getPos() returns vec3
-		return pos
-		
 	function setPos( vec3 pos )
 		this.pos = pos
 		
 	function addPos( vec3 pos )
 		this.pos += pos
-		
-	function getVel() returns vec3
-		return vel
 		
 	function setVel( vec3 vel )
 		this.vel = vel
@@ -95,7 +89,7 @@ public abstract class Entity
 	abstract function update()
 	
 abstract public class UnitEntity extends Entity
-	protected unit actor
+	unit actor
 	
 	
 	construct( vec3 pos, unit actor )
@@ -160,7 +154,7 @@ abstract public class FxEntity extends Entity
 		fx.setPos(pos)
 		
 	function getDummy() returns unit
-		return fx.dummy
+		return fx.getDummy()
 		
 	override function setPos(vec3 tpos)
 		pos = tpos

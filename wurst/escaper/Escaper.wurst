@@ -171,6 +171,7 @@ public class Escaper extends UnitEntity
 		trackVelocity = vec3(0,0,0)
 		pos += vortexVelocity
 		vortexVelocity = vec3(0,0,0)
+		vel.trim(2.5)
 		
 	
 	override function update()

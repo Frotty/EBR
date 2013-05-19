@@ -12,9 +12,7 @@ function changeVisibility()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
 	var dta = caster.getUserData() castTo UnitEntity
-	print("casted")
 	if dta instanceof DynamicSetupObject
-		print("casted1")
 		let data = dta castTo DynamicSetupObject
 		if id == VIS_ID
 			data.actor.removeAbility('Agho').addAbility('Aeth')
@@ -23,7 +21,6 @@ function changeVisibility()
 			data.actor.removeAbility('Aeth').addAbility('Agho')
 			data.setup.removeAbility(INVIS_ID).addAbility(VIS_ID)	
 	else 
-		print("casted2")
 		if id == VIS_ID
 			caster.removeAbility('Agho').addAbility('Aeth')
 			caster.removeAbility(VIS_ID).addAbility(INVIS_ID)

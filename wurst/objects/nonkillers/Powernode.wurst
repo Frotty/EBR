@@ -42,10 +42,10 @@ public class Powernode extends DynamicSetupObject
 	override function update()
 		pos.x = setup.getX()
 		pos.y = setup.getY()
-		if links.size > 0
-			debugPrint(links.size.toString(), 1)
+		if links.getSize() > 0
+			debugPrint(links.getSize().toString(), 1)
 			var i = 0
-			while i < links.size
+			while i < links.getSize()
 				Link l = links.get(i)
 				if not l.linkedNode.done 
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
@@ -56,7 +56,7 @@ public class Powernode extends DynamicSetupObject
 				else
 					links.removeAt(i)
 					destroy l
-					if i == links.size
+					if i == links.getSize()
 						break
 					i--
 				i++
@@ -65,8 +65,8 @@ public class Powernode extends DynamicSetupObject
 	
 	ondestroy
 		actor.unregisterCastEvent()
-		debugPrint("nodey " + links.size.toString(),3)
-		while links.size > 0
+		debugPrint("nodey " + links.getSize().toString(),3)
+		while links.getSize() > 0
 			Link l = links.get(0)
 			debugPrint("got link " + (l castTo int).toString(), 1)
 			links.removeAt(0)
@@ -87,7 +87,7 @@ public class Powernode extends DynamicSetupObject
 					var pdata = data castTo Powernode
 					var isNew = true
 					var i = 0
-					while i < node.links.size
+					while i < node.links.getSize()
 						Link l = node.links.get(i)
 						if l.linkedNode == pdata 
 							node.links.removeAt(i)

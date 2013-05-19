@@ -1,0 +1,103 @@
+package BezierMissile
+import Projectile
+
+public class BezierMissile extends Projectile	
+
+	//bezier-contol-points:
+	vec3 p1
+	vec3 p2
+	vec3 p3
+	vec3 p4	
+		
+		
+	//homing stuff
+	//the target which the missile follows (if this is null the missile will not be homing)
+	private unit target = null
+	//the position of the target in the last cycle
+	private real targetlastx
+	private real targetlasty
+	
+	//time-stuff
+	///the duration until the target is reached
+	real duration
+	//the time already passed
+	private real time = 0.
+	
+	
+	function getTarget() returns unit
+		return target
+	///returns the target the missile is homing on
+	function setTarget2(unit u)
+		target = u
+		targetlastx = u.getX()
+		targetlasty = u.getY()
+	
+	
+	
+	override function update()
+		real p
+		real q
+		real x
+		real y
+		real z
+		real dx
+		real dy
+		real dz
+		
+		print("update")
+
+		time += ANIMATION_PERIOD
+		
+		p = time / duration
+		q = 1 - p
+		
+		if target != null and GetUnitState(target, UNIT_STATE_LIFE) > .405
+			dx = GetUnitX(target) - targetlastx
+			dy = GetUnitY(target) - targetlasty
+			
+			p3.x += dx
+			p3.y += dy
+			
+			p4.x += dx
+			p4.y += dy
+			
+			targetlastx = GetUnitX(target)
+			targetlasty = GetUnitY(target)
+
+
+		x = ((p1.x*q + 3*p*p2.x)*q + 3*p*p*p3.x)*q +  p*p*p*p4.x 
+		y = ((p1.y*q + 3*p*p2.y)*q + 3*p*p*p3.y)*q +  p*p*p*p4.y
+		z = ((p1.z*q + 3*p*p2.z)*q + 3*p*p*p3.z)*q +  p*p*p*p4.z
+		
+		dx = x - fx.getX()
+		dy = y - fx.getY()
+		dz = z - fx.getZ()
+		
+		if dx != 0 or dy != 0 
+			setZAngle(angle(Atan(dz / (SquareRoot(dx*dx + dy*dy)))))
+
+		setXYAngle(angle(Atan2(dy, dx)))
+
+		
+
+		if time >= duration
+			terminate()
+			
+		pos = vec3(x,y,z)
+		super.update()
+
+
+	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
+		super(pos, radius, owner, xyAngle, fxpath)
+		p1 = pos
+		
+	function setControlPoints(vec3 t1, vec3 t2, vec3 t3)
+		p2 = t1
+		p3 = t2
+		p4 = t3
+		
+	function setDuration(real dur)
+		duration = dur
+		
+
+		
