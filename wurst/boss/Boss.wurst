@@ -9,6 +9,7 @@ import BossSpellTarget
 import TempGroups
 import RegionData
 import Texttag
+import CustomBar
 
 constant int HP_UP_ID = 'A06U'
 constant int HP_DOWN_ID = 'A06T'
@@ -22,6 +23,8 @@ constant int AOE_SPELL_ID = 'A06V'
 constant int MISSILE_SPELL_ID = 'A06W'
 
 public class Boss extends UnitEntity
+	CustomBar hpBar
+	real maxHp = 200
 	int aoe_id
 	string aoe_string
 	string missile_sfx = "Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl"
@@ -38,6 +41,16 @@ public class Boss extends UnitEntity
 		super( vec3(actor.getX(), actor.getY(), 0), radius , actor) 
 		actor.addAbility(REAL_HP_BIG_ID)
 		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
+		hpBar = new CustomBar(pos, "|", 100, 7.5)
+		hpBar.setForeground(colorA(0,225,0,0))
+		hpBar.setBackground(colorA(100,25,25,0))
+		hpBar.lockToUnit(actor, -90, 0, 256)
+		
+	override function update()
+		super.update()
+		hpBar.setValue(actor.getHP() / maxHp * 100.0)
+		
+		
 	static function onCast()
 		var data = GetTriggerUnit().getUserData() castTo Entity
 		
