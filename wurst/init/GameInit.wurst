@@ -17,6 +17,7 @@ package GameInit
 	import EntityManagement
 	import Pointer
 	import Weapon
+	import BossSpellTarget
 	import FileIO
 	import Invisible
 	
@@ -52,6 +53,8 @@ package GameInit
 		init_Pointer()
 		debugPrint("Init - Pointer", 2)
 		init_Weapon()
+		debugPrint("Init - Weapon", 2)
+		init_BossSpellTarget()
 		debugPrint("Init - Weapon", 2)
 		invis_init()
 		

@@ -102,14 +102,16 @@ public class Weapon extends ItemObject
 	
 class WeaponMissile extends Projectile
 	int id
-	group affected
 	
 	construct(vec3 pos, vec2 target, player owner, int id)
-		super( vec3(pos.x,pos.y,10.), weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff )
+		super( vec3(pos.x,pos.y,40.), weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff )
 		setSpeed(18)
 		setRanged(weapon[id].range)
 		this.id = id
 
+
+	override function onHit(Entity e2)
+		skip
 
 	override function update()
 		super.update()

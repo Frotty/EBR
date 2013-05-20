@@ -3,10 +3,10 @@ import Entity
 import Angle
 
 
-public class Projectile extends FxEntity
+public abstract class Projectile extends FxEntity
 	// Angles
-	private angle xyAngle
-	private angle zAngle
+	protected angle xyAngle
+	protected angle zAngle
 	
 	private boolean timed = false
 	private boolean ranged = false
@@ -42,11 +42,13 @@ public class Projectile extends FxEntity
 	function setXYAngle(angle xyA)
 		this.xyAngle = xyA
 		fx.setXYAngle(xyA)
-
 		
 	function setZAngle(angle zA)
 		this.xyAngle = zA
 		fx.setZAngle(zA)
+		
+	abstract function onHit(Entity e2)
+		
 		
 	override function update()
 		pos += vel
@@ -59,4 +61,7 @@ public class Projectile extends FxEntity
 			dist += speed
 			if dist > maxDist
 				terminate()
-		
+	
+					
+		//if pos.x > 548. or pos.x < -2012 or pos.y > 27 or pos.y < -2600
+			//terminate()
