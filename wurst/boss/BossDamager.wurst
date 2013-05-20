@@ -6,10 +6,12 @@ import RegionData
 import BaseObject
 import EventHandling
 import Texttag
+import TempGroups
+import TerrainBlocker
 
-constant int DAMAGER_ID = 'u123'
-constant int DMG_INC_ID = 'A101'
-constant int DMG_DEC_ID = 'A101'
+constant int DAMAGER_ID = 'n01O'
+constant int DMG_INC_ID = 'A07K'
+constant int DMG_DEC_ID = 'A07J'
 constant real 	EVENT_RADIUS	= 32.
 
 
@@ -17,11 +19,17 @@ public class BossDamager extends StaticBaseObject
 	real damage
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, DAMAGER_ID,pos.x, pos.y, 0. ), EVENT_RADIUS, function BossDamager.onInRange)
+		super(vec2(round(pos.x/128)*128., round(pos.y/128)*128.), CreateUnit(owner, DAMAGER_ID,round(pos.x/128)*128., round(pos.y/128)*128., 0. ), EVENT_RADIUS, function BossDamager.onInRange)
 		actor.registerCastEvent(Condition(function BossDamager.onCast))
 		
 	function damage(Escaper e)
-		e.actor.damageTarget(actor,damage)
+		GroupEnumUnitsInRect(ENUM_GROUP, getRegionData(pos.x,pos.y).theRect, null)
+		for u in ENUM_GROUP
+			var es = u.getUserData() castTo Entity	
+			if es instanceof Boss
+				var boss = es castTo Boss
+				e.actor.damageTarget(boss.setup,damage)
+		ENUM_GROUP.clear()
 		
 	static function onInRange()
 		unit source = GetTriggeringTrigger().getSource()
@@ -39,15 +47,17 @@ public class BossDamager extends StaticBaseObject
 			var id = GetSpellAbilityId()
 			switch id
 				case DMG_INC_ID
-					if dmger.damage >= 10
+					if dmger.damage >= 500
 						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), dmger.owner  )
 					else
-						dmger.damage += 250
-						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
+						dmger.damage += 25
+						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
 				case DMG_DEC_ID
 					if dmger.damage < 0.75
 						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), dmger.owner  )
 					else
-						dmger.damage -= 250
-						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
+						dmger.damage -= 25
+						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
 		return false
+		
+		
