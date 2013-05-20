@@ -50,7 +50,7 @@ public class Escaper extends UnitEntity
 
 	
 	construct( vec3 pos, player owner, int typ )
-		super(pos, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
+		super(pos, 32, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
 		actor.addAbility('Aloc')
 		.hide()
 		.removeAbility('Aloc')

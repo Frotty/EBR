@@ -22,25 +22,26 @@ constant int REAL_DMG_SMALL_ID = 'A001'
 constant int AOE_SPELL_ID = 'A06V'
 constant int MISSILE_SPELL_ID = 'A06W'
 
-public class Boss extends UnitEntity
+
+public class Boss extends DynamicSetupObject
+	int aoe_id = 0
+	int missile_id = 0
 	CustomBar hpBar
 	real maxHp = 200
-	int aoe_id
-	string aoe_string
-	string missile_sfx = "Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl"
-		
+
 	static function onInRangeEvent()
 		var ent = GetTriggerUnit().getUserData() castTo Entity
-			
 		if ent instanceof Escaper
 			var es = ent castTo Escaper
 			if not es.flying
 				es.kill()
-	
-	construct( unit actor, real radius )
-		super( vec3(actor.getX(), actor.getY(), 0), radius , actor) 
+
+	construct( unit actor, unit setup, real radius )
+		super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function Boss.onInRangeEvent )
+		setup.registerCastEvent(Condition(function onCast))
 		actor.addAbility(REAL_HP_BIG_ID)
 		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
+
 		hpBar = new CustomBar(pos, "|", 100, 7.5)
 		hpBar.setForeground(colorA(0,225,0,0))
 		hpBar.setBackground(colorA(100,25,25,0))
@@ -50,8 +51,10 @@ public class Boss extends UnitEntity
 		super.update()
 		hpBar.setValue(actor.getHP() / maxHp * 100.0)
 		
+
 		
-	static function onCast()
+	static function onCast() returns boolean
+
 		var data = GetTriggerUnit().getUserData() castTo Entity
 		
 		if data instanceof Boss
@@ -89,22 +92,16 @@ public class Boss extends UnitEntity
 					else 
 						SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp-1)
 				case AOE_SPELL_ID
-					if getRegionData(ox,oy).isOwner(boss.owner.getId())
-						var g = boss.getSpellTargets(SpellType.AOE)
-						for unit u in g
-							var spt = u.getUserData() castTo SpellTarget
-							spt.castSpell(boss.aoe_id, boss.aoe_string)
-					else
-						DisplayTextToPlayer( boss.owner, 0, 0, "|cffC51019You have no permission to cast boss spells in this region!")
+					var g = boss.getSpellTargets(SpellType.AOE)
+					for unit u in g
+						var spt = u.getUserData() castTo SpellTarget
+						spt.castAOE(boss)
 				case MISSILE_SPELL_ID
-					if getRegionData(ox,oy).isOwner(boss.owner.getId())
-						var g = boss.getSpellTargets(SpellType.MISSILE)
-						for unit u in g
-							var spt = u.getUserData() castTo SpellTarget
-							new BossMissile(boss.pos, boss.missile_sfx, spt)
-					else
-						DisplayTextToPlayer( boss.owner, 0, 0, "|cffC51019You have no permission to cast boss spells in this region!")
-			
+					var g = boss.getSpellTargets(SpellType.MISSILE)
+					for unit u in g
+						var spt = u.getUserData() castTo SpellTarget
+						spt.castMissile(boss)
+		return false
 	
 	function getSpellTargets(SpellType stype) returns group
 		var ox = pos.x

@@ -7,12 +7,20 @@ import DummyCaster
 import Fx
 import MapBounds
 import Escaper
+import Boss
+import TempGroups
+import HomingProjectile
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
-public constant int MISSILE_ID = 'A06W' 
+public constant int MISSILE_ID = 'A06W'
+tuple AOE_SPELL(string sfx, real aoe, real damage) 
+AOE_SPELL array aoe_spell
+tuple MISSILE_SPELL(string sfx, real radius, real damage, real speed) 
+MISSILE_SPELL array missile_spell
 
 public enum SpellType
+	NONE
 	AOE
 	LINE
 	MISSILE
@@ -22,6 +30,7 @@ public class SpellTarget extends DynamicSetupObject
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		stype = SpellType.NONE
 		setup.registerCastEvent(Condition(function onCast))
 		
 	static function onCast() returns boolean
@@ -49,34 +58,43 @@ public class SpellTarget extends DynamicSetupObject
 		dc.setLevel(1)
 		dc.castOnPoint(pos)
 
-public class BossMissile extends Entity
-	Fx missile
-	SpellTarget target
-	real speed = 60
+	function castAOE(Boss root)
+		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y ))
+		print("fancy")
+		GroupEnumUnitsInRange(ENUM_GROUP,pos.x, pos.y, aoe_spell[root.aoe_id].aoe, null)
+		for u in ENUM_GROUP
+			var e = u.getUserData() castTo Entity
+			if e instanceof Escaper
+				var es = e castTo Escaper
+				if not es.flying
+					actor.damageTarget(u,aoe_spell[root.aoe_id].damage)
+		GroupClear(ENUM_GROUP)
 	
-	construct (vec3 pos, string sfx, SpellTarget target)
-		super(pos,target.owner)
-		missile = new Fx(pos, angleBetweenCoords(missile.getX(), missile.getY(), target.actor.getX(), target.actor.getY()), sfx)
+	function castMissile(Boss root)
+		new BossMissile(root.pos,root.owner,this,root.missile_id)
+	
+public class BossMissile extends HomingProjectile
+	int id
+	
+	construct(vec3 pos, player owner,Entity target, int id)
+		super(pos, missile_spell[id].radius, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), missile_spell[id].sfx)
+		this.id = id
+		setTarget(target,HOMING.attract,missile_spell[id].speed)
+		setSpeed(20.)
 		
+	
+	override function onHit(Entity e2)
+	
 	override function update()
-		angle a = angleBetweenCoords(missile.getX(), missile.getY(), target.actor.getX(), target.actor.getY())
-		var x = polarProjectionX(missile.getX(), speed, a)
-		var y = polarProjectionY(missile.getY(), speed, a)
-		pos = vec3(x,y, 0.)
-		missile.setXYAngle(a)
-		if not pos.toVec2().inBounds()
-			printError("Missile out of Bounds")
-			pos = vec3(0,0,520)
-			vel = vec3(0,0,0)
-			
-			
-	function onInRangeEvent()
-		var ent = GetTriggerUnit().getUserData() castTo Entity
-		
-		if ent instanceof Escaper
-			var es = ent castTo Escaper
-			if not es.flying
-				missile.getDummy().damageTarget(es.actor, 25)
+		super.update()
+		for e in escapers
+			print(pos.distToVec(e.pos).toString())
+			if pos.distToVecSquared(e.pos) < radius*radius + 1024
+				terminate()
+				return
 	
-init
+public function init_BossSpellTarget()
+	missile_spell[0] = MISSILE_SPELL("Abilities\\Weapons\\GreenDragonMissile\\GreenDragonMissile.mdl",64,10.,10.)
+//	Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl
+	aoe_spell[0] = AOE_SPELL("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",250.,50.)
 	//preloadAbility(AOE_ID)
