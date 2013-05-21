@@ -14,6 +14,7 @@ import LinkedList
 import EscaperClasses
 import PlayerData
 import Weapon
+import Fx
 
 public Table escaperTable = new Table()
 
@@ -305,6 +306,8 @@ public class Escaper extends UnitEntity
 					var w = data castTo Weapon
 					if weapon[w.wpid].atype == ATTACK_TYPE.MELEE
 						w.attackm()
+						actor.queueAnimation("attack")
+						return
 		else if id == ATTACK_RANGED_ID
 			for int i = 0 to 5
 				var data = UnitItemInSlot(actor, i).getUserData() castTo ItemObject
@@ -312,6 +315,8 @@ public class Escaper extends UnitEntity
 					var w = data castTo Weapon
 					if weapon[w.wpid].atype == ATTACK_TYPE.RANGED
 						w.attackr(pos,GetSpellTargetX(), GetSpellTargetY())
+						actor.queueAnimation("cast")
+						return
 			
 	ondestroy
 		lavaEffect.destr()
