@@ -43,12 +43,12 @@ public class SpellTarget extends DynamicSetupObject
 			switch id
 				case AOE_ID
 					spt.stype = SpellType.AOE
-					spt.actor.setVertexColor(255,255,0,0)
+					spt.actor.setVertexColor(255,255,0,255)
 					spt.actor.removeAbility(AOE_ID)
 					spt.actor.addAbility(MISSILE_ID)
 				case MISSILE_ID
 					spt.stype = SpellType.MISSILE
-					spt.actor.setVertexColor(0,255,255,0)
+					spt.actor.setVertexColor(0,255,255,255)
 					spt.actor.removeAbility(MISSILE_ID)
 					spt.actor.addAbility(AOE_ID)
 		return false
@@ -94,7 +94,7 @@ public class BossMissile extends HomingProjectile
 				return
 	
 public function init_BossSpellTarget()
-	missile_spell[0] = MISSILE_SPELL("Abilities\\Weapons\\GreenDragonMissile\\GreenDragonMissile.mdl",64,10.,10.)
-//	Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl
+	missile_spell[0] = MISSILE_SPELL("Abilities\\Weapons\\GreenDragonMissile\\GreenDragonMissile.mdl",64,10.,14.)
+	missile_spell[1] = MISSILE_SPELL("Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl",86,20,10.)
 	aoe_spell[0] = AOE_SPELL("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",250.,50.)
 	//preloadAbility(AOE_ID)
