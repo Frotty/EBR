@@ -2,6 +2,7 @@ package Boss
 import Entity
 import Terrain
 import SetupObject
+import PlayerData
 import Escaper
 import EventHandling
 import PreloadHandler
@@ -56,6 +57,8 @@ public class Boss extends DynamicSetupObject
 			setPos(rdata.theRect.getCenter().withZ(0))
 			DisplayTextToPlayer(owner, 0,0, "|cffD62921You can't move your boss out of the boss region")
 
+	function onDamage(player atker, real dmg)
+		pData[atker.getId()].escaper.actor.damageTarget(setup,dmg)
 		
 	static function onCast() returns boolean
 
@@ -121,7 +124,4 @@ public class Boss extends DynamicSetupObject
 		ENUM_GROUP.clear()
 		return g
 	
-public int array BOSS_IDS
-	
-init
 	

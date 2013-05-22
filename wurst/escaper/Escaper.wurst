@@ -15,6 +15,9 @@ import EscaperClasses
 import PlayerData
 import Weapon
 import Fx
+import Colors
+import Texttag
+
 
 public Table escaperTable = new Table()
 
@@ -268,8 +271,14 @@ public class Escaper extends UnitEntity
 			var kdata = idata castTo Key
 			kdata.pickedUp(escaper)
 		if idata instanceof Weapon
-			var wdata = idata castTo Weapon
-			wdata.pickedUp(escaper)
+			for int i = 0 to 5
+				var data = UnitItemInSlot(escaper.actor, i).getUserData() castTo ItemObject
+				if data instanceof Weapon and data != idata
+					escaper.actor.removeItem(idata.actorItem)
+					createTTEx(escaper.pos, vec2(0,0.05), "|cffff3333Cant wear two weapons!", 10,  2., colorA(255,255,255,0), escaper.owner  )
+				else
+					var wdata = idata castTo Weapon
+					wdata.pickedUp(escaper)
 			
 	static function dropItem()
 		var pickedItem = GetManipulatedItem()
