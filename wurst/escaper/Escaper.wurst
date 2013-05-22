@@ -272,7 +272,7 @@ public class Escaper extends UnitEntity
 			for int i = 0 to 5
 				var data = UnitItemInSlot(escaper.actor, i).getUserData() castTo ItemObject
 				if data instanceof Weapon and data != idata
-					escaper.actor.dropItem(idata.actorItem)
+					UnitRemoveItem(escaper.actor,idata.actorItem)
 					createTTEx(escaper.pos, vec2(0,0.05), "|cffff3333Cant wear two weapons!", 10,  2., colorA(255,255,255,0), escaper.owner  )
 				else
 					var wdata = idata castTo Weapon
