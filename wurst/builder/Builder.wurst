@@ -93,14 +93,9 @@ public class Builder extends UnitEntity
 				case BM_BOSS_ID
 					var rdata = getRegionData(ox,oy)
 					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
-						GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
 						boolean noBoss = true
-						for unit u in ENUM_GROUP
-							if GetUnitTypeId(u) == BOSS_ID
-								noBoss = false
-						ENUM_GROUP.clear()
 						if noBoss
-							new Boss(CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ),CreateUnit(builder.owner, BOSS_ID, ox, oy, 0. ), 10.)
+							new Boss(builder.owner, ox, oy, boss[rdata.rtype])
 						else
 							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
 					else

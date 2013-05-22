@@ -45,10 +45,10 @@ package Unitcreator
 			EscaperKiller ek = null
 			switch obj.spawnUnitType
 				case 'BIGK'
-					ek = new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, X, Y, angl.degrees() ), CreateUnit(obj.owner, data.bigKillerId, X, Y, angl.degrees() ), COLL_SIZE_BK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, rectbk[data.rtype], X, Y, angl.degrees() ), CreateUnit(obj.owner, rectbk[data.rtype], X, Y, angl.degrees() ), COLL_SIZE_BK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'SMAL'
-					ek = new EscaperKiller(CreateUnit(obj.owner, data.smallKillerId, X, Y, angl.degrees() ), CreateUnit(obj.owner, data.smallKillerId, X, Y, angl.degrees() ), COLL_SIZE_SK)
+					ek = new EscaperKiller(CreateUnit(obj.owner, rectsk[data.rtype], X, Y, angl.degrees() ), CreateUnit(obj.owner, rectsk[data.rtype], X, Y, angl.degrees() ), COLL_SIZE_SK)
 					IssuePointOrder(ek.setup, "move" , rX,rY)
 				case 'u00A'
 					ek = new EscaperKiller(CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl.degrees() ) , CreateUnit(obj.owner, obj.spawnUnitType, X, Y, angl.degrees() ), COLL_SIZE_GLAIVE)

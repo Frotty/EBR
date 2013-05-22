@@ -55,9 +55,9 @@ public class TextureChanger extends DynamicSetupObject
 					if data != null 
 						if data.isOwner(GetPlayerId(owner)) 
 							if tileID == '0000'
-								tileID = data.walkableTile
+								tileID = rectw[data.rtype]
 							else if tileID == '0001'
-								tileID = data.unwalkableTile
+								tileID = rectuw[data.rtype]
 							if GetTerrainType(x, y) != tileID
 								SetTerrainType(x, y, tileID, 0, 1, 1 )
 							
