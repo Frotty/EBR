@@ -6,6 +6,7 @@ import GameConstants
 import TempGroups
 import Escaper
 import Builder
+import PlayerData
 
 constant int SETUP_BOX = 'n00A'
 constant int ICEI_ID = 'A057'
@@ -106,13 +107,13 @@ public class SetupBox
 						data.terminate()
 			case BOSS_MODE_ID
 				box.rdata.isBossRegion = true
+				box.actor.removeAbility(BOSS_MODE_ID)
+				DisplayTextToPlayer( box.owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
 				DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",box.actor.getX(),box.actor.getY() ))
+				let b = pData[box.owner.getId()].builder
+				SelectUnitForPlayerSingle(b.actor, box.owner)
 				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
-				for u in ENUM_GROUP
-					var data = u.getUserData() castTo Entity
-					if data instanceof Builder
-						var bdata = data castTo Builder
-						bdata.setBossMenu(box.rdata)
+				b.setBossMenu(box.rdata)
 		return false
 
 	

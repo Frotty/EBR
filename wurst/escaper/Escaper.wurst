@@ -14,8 +14,10 @@ import LinkedList
 import EscaperClasses
 import PlayerData
 import Weapon
+import Fx
 import Colors
 import Texttag
+
 
 public Table escaperTable = new Table()
 
@@ -139,7 +141,7 @@ public class Escaper extends UnitEntity
 			vel *= 0.96
 			slideVelocity *= 0.8
 			sliding = false
-			if ttype == currentRegion.unwalkableTile or ttype == 'Ibkb' or ttype == RUNES
+			if ttype == rectuw[currentRegion.rtype] or ttype == 'Ibkb' or ttype == RUNES
 				onUnwalkable = true
 				setLava(false)
 				setPoison(false)
@@ -272,7 +274,8 @@ public class Escaper extends UnitEntity
 			for int i = 0 to 5
 				var data = UnitItemInSlot(escaper.actor, i).getUserData() castTo ItemObject
 				if data instanceof Weapon and data != idata
-					UnitRemoveItem(escaper.actor,idata.actorItem)
+
+					escaper.actor.removeItem(idata.actorItem)
 					createTTEx(escaper.pos, vec2(0,0.05), "|cffff3333Cant wear two weapons!", 10,  2., colorA(255,255,255,0), escaper.owner  )
 				else
 					var wdata = idata castTo Weapon
@@ -313,6 +316,8 @@ public class Escaper extends UnitEntity
 					var w = data castTo Weapon
 					if weapon[w.wpid].atype == ATTACK_TYPE.MELEE
 						w.attackm()
+						actor.queueAnimation("attack")
+						return
 		else if id == ATTACK_RANGED_ID
 			for int i = 0 to 5
 				var data = UnitItemInSlot(actor, i).getUserData() castTo ItemObject
@@ -320,6 +325,8 @@ public class Escaper extends UnitEntity
 					var w = data castTo Weapon
 					if weapon[w.wpid].atype == ATTACK_TYPE.RANGED
 						w.attackr(pos,GetSpellTargetX(), GetSpellTargetY())
+						actor.queueAnimation("cast")
+						return
 			
 	ondestroy
 		lavaEffect.destr()

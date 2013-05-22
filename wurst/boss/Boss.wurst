@@ -29,6 +29,7 @@ public class Boss extends DynamicSetupObject
 	int missile_id = 0
 	CustomBar hpBar
 	real maxHp = 200
+	RegionData rdata
 
 	static function onInRangeEvent()
 		var ent = GetTriggerUnit().getUserData() castTo Entity
@@ -37,8 +38,8 @@ public class Boss extends DynamicSetupObject
 			if not es.flying
 				es.kill()
 
-	construct( unit actor, unit setup, real radius )
-		super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function Boss.onInRangeEvent )
+	construct( player owner, real x, real y, int id)
+		super( vec3(x, y, 0), CreateUnit(owner, id, x, y, 0),CreateUnit(owner, id, x, y, 0), 32, function Boss.onInRangeEvent )
 		setup.registerCastEvent(Condition(function onCast))
 		actor.addAbility(REAL_HP_BIG_ID)
 		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
@@ -47,11 +48,14 @@ public class Boss extends DynamicSetupObject
 		hpBar.setForeground(colorA(0,225,0,0))
 		hpBar.setBackground(colorA(100,25,25,0))
 		hpBar.lockToUnit(actor, -90, 0, 256)
+		rdata = getRegionData(pos.x, pos.y)
 		
 	override function update()
 		super.update()
 		hpBar.setValue(actor.getHP() / maxHp * 100.0)
-		
+		if not pos.toVec2().isInRect(rdata.theRect)
+			setPos(rdata.theRect.getCenter().withZ(0))
+			DisplayTextToPlayer(owner, 0,0, "|cffD62921You can't move your boss out of the boss region")
 
 	function onDamage(player atker, real dmg)
 		pData[atker.getId()].escaper.actor.damageTarget(setup,dmg)
@@ -121,5 +125,3 @@ public class Boss extends DynamicSetupObject
 		return g
 	
 	
-init
-	//preloadAbility(HP_UP_ID)

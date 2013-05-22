@@ -55,9 +55,9 @@ public class UnitProducer extends StaticBaseObject
 		if data.isOwner(GetPlayerId(obj.owner))
 			switch id 
 				case 'A05F' // Big Killer
-					new EscaperKiller(CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.bigKillerId, rX, rY, 0. ), COLL_SIZE_BK)
+					new EscaperKiller(CreateUnit(obj.owner, rectbk[data.rtype], rX, rY, 0. ), CreateUnit(obj.owner, rectbk[data.rtype], rX, rY, 0. ), COLL_SIZE_BK)
 				case 'A05K' // Small Killer
-					new EscaperKiller(CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(obj.owner, data.smallKillerId, rX, rY, 0. ), COLL_SIZE_SK)
+					new EscaperKiller(CreateUnit(obj.owner, rectsk[data.rtype], rX, rY, 0. ), CreateUnit(obj.owner, rectsk[data.rtype], rX, rY, 0. ), COLL_SIZE_SK)
 				case 'A05G' // Big Random Killer
 					new EscaperKiller(CreateUnit(obj.owner, 'u008', rX, rY, 0. ), CreateUnit(obj.owner, 'u008', rX, rY, 0. ), COLL_SIZE_BRK)
 				case 'A05J' // Small Random Killer

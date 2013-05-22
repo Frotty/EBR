@@ -37,8 +37,6 @@ public constant int BM_DAMAGER_ID = 'A06R'
 
 public constant int GRIDCLICK_ID = 'A03V'
 
-public constant int BOSS_ID = 'h00G'
-
 public constant int TOME_ID = 'I00A'
 public constant int BOOTS_ID = 'I00M'
 public constant int ANKH_ID = 'I00L'

@@ -236,9 +236,9 @@ package Executer
 			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
-						new EscaperKiller(CreateUnit(owner, data.smallKillerId, rX, rY, 0. ), CreateUnit(owner, data.smallKillerId, rX, rY, 0.), COLL_SIZE_SK)
+						new EscaperKiller(CreateUnit(owner, rectsk[data.rtype], rX, rY, 0. ), CreateUnit(owner, rectsk[data.rtype], rX, rY, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGKILLER
-						new EscaperKiller(CreateUnit(owner, data.bigKillerId,rX, rY, 0. ), CreateUnit(owner, data.bigKillerId, rX, rY, 0.), COLL_SIZE_BK)
+						new EscaperKiller(CreateUnit(owner, rectbk[data.rtype],rX, rY, 0. ), CreateUnit(owner, rectbk[data.rtype], rX, rY, 0.), COLL_SIZE_BK)
 					case ActionUnit.SMALLRANDOMKILLER
 						new EscaperKiller(CreateUnit(owner, 'u006', rX, rY, 0. ), CreateUnit(owner, 'u006', rX, rY, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGRANDOMKILLER
@@ -273,9 +273,9 @@ package Executer
 					debugPrint("called change Terrain - 2", 3)
 					if data.isOwner(GetPlayerId(owner))
 						if tileID == '0000'
-							tileID = data.walkableTile
+							tileID = rectw[data.rtype]
 						else if tileID== '0001'
-							tileID = data.unwalkableTile
+							tileID = rectuw[data.rtype]
 						SetTerrainType(x, y, tileID, -1, 1, 1 )
 		
 		function addActionAbilsNormal()

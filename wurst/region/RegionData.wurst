@@ -9,20 +9,11 @@ import Startmazes
 public class RegionData
 	rect theRect
 
-	int unwalkableTile
-	int walkableTile
-	
 	real slidespeed = 3.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
 	
-	int bigKillerId
-	int smallKillerId
-	
-	int smallObstacleId
-	int bigObstacleId
-	
-	int treeId
+	int rtype = 0
 	
 	boolean visible = false
 	trigger visTrig
@@ -49,20 +40,11 @@ public class RegionData
 		
 	function setType( int itemId, boolean changeTerrain )
 		for i = 0 to 4
-			debugPrint("RegionData check " + itemId.toString() + " == " + ritem[i].toString(), 2 )
 			if itemId == ritem[i]
-				debugPrint("RegionData is " + i.toString(), 1 )
-				unwalkableTile = rectuw[i]
-				walkableTile = rectw[i]
-				bigKillerId = rectbk[i]
-				smallKillerId = rectsk[i]
-				smallObstacleId = sobst[i]
-				bigObstacleId = bobst[i]
-				treeId = trees[i]
-				debugPrint("RegionData set " + i.toString(), 1)
-				if changeTerrain
-					theRect.changeTerrain(unwalkableTile)
+				rtype = i
 				break
+		if changeTerrain
+			theRect.changeTerrain(rectuw[rtype])
 				
 	function allow(int playerid)
 		switch playerid
@@ -139,21 +121,23 @@ public function getRegionData(real x, real y) returns RegionData
 Table regionTable = new Table()
 public RegionData array regions
 // The claim item to buy
-int array ritem 
+public int array ritem 
 // walkable tile
-int array rectw 
+public int array rectw 
 // unwalkable tile
-int array rectuw  
+public int array rectuw  
 // small killer
-int array rectsk 
+public int array rectsk 
 // big killer
-int array rectbk 
+public int array rectbk 
 // treetype
-int array trees 
+public int array trees 
 // small obstacle
-int array sobst 
+public int array sobst 
 // big obstacle
-int array bobst 
+public int array bobst 
+// boss
+public int array boss
 
 public function init_Regions()
 
@@ -202,6 +186,7 @@ function initTerrainTypes()
 	trees[0] = 'KTtw'
 	sobst[0] = 'n018'
 	bobst[0] = 'n019'
+	boss[0] = 'h00G'
 	
 	//SAND
 	ritem[1] = 'I00G'
@@ -212,7 +197,7 @@ function initTerrainTypes()
 	trees[1] = 'BTtw'
 	sobst[1] = 'n01F'
 	bobst[1] = 'n01G'
-	            
+	boss[1] = 'h00M'
 	
 	//CITY
 	ritem[2] = 'I00E'
@@ -223,6 +208,7 @@ function initTerrainTypes()
 	trees[2] = 'LTlt'
 	sobst[2] = 'n01I'
 	bobst[2] = 'n01H'
+	boss[2] = 'h00L'
 	            
 	//ICE
 	ritem[3] = 'I00D'
@@ -233,6 +219,7 @@ function initTerrainTypes()
 	trees[3] = 'WTst'
 	sobst[3] = 'n00R'
 	bobst[3] = 'n00S'
+	boss[3] = 'h00O'
 	
 	//SUNKEN
 	ritem[4] = 'I00N'
@@ -243,5 +230,6 @@ function initTerrainTypes()
 	trees[4] = 'ZTtw'
 	sobst[4] = 'n055'
 	bobst[4] = 'n005'
+	boss[4] = 'h00N'
 	
 

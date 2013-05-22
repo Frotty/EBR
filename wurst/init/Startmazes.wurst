@@ -49,7 +49,6 @@ public function initStartmazes()
 			
 public function clearEBRRect(int r)
 	var rd = regions[r]
-	debugPrint("R = " + r.toString() + " region unwalkable: " + rd.unwalkableTile.toString(),3)
 	GroupEnumUnitsInRect(ENUM_GROUP, rd.theRect, null)
 	for u in ENUM_GROUP
 		let e =u.getUserData() castTo Entity

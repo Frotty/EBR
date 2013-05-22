@@ -16,7 +16,7 @@ package Obstacle
 		construct( vec2 pos, player owner )
 			super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_SMALL, function SmallObstacle.kill )
 			var rdata = getRegionData(pos.x, pos.y)
-			actor = CreateUnit(owner, rdata.smallObstacleId, pos.x, pos.y, GetRandomReal(0,360) )
+			actor = CreateUnit(owner, sobst[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360) )
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			actor.addAbility(LOCUST_ID)
 
@@ -48,7 +48,7 @@ package Obstacle
 		construct( vec2 pos, player owner )
 			super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_BIG, function BigObstacle.kill )
 			var rdata = getRegionData(pos.x, pos.y)
-			actor = CreateUnit(owner, rdata.bigObstacleId, pos.x, pos.y, GetRandomReal(0,360) )
+			actor = CreateUnit(owner, bobst[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360) )
 			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 			actor.addAbility(LOCUST_ID)
 
