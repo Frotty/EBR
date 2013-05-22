@@ -2,6 +2,7 @@ package Boss
 import Entity
 import Terrain
 import SetupObject
+import PlayerData
 import Escaper
 import EventHandling
 import PreloadHandler
@@ -52,6 +53,8 @@ public class Boss extends DynamicSetupObject
 		hpBar.setValue(actor.getHP() / maxHp * 100.0)
 		
 
+	function onDamage(player atker, real dmg)
+		pData[atker.getId()].escaper.actor.damageTarget(setup,dmg)
 		
 	static function onCast() returns boolean
 

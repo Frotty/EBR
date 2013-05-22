@@ -86,7 +86,7 @@ public class Weapon extends ItemObject
 			var e = u.getUserData() castTo Entity
 			if e instanceof Boss
 				var b = e castTo Boss
-				holder.actor.damageTarget(b.actor,weapon[wpid].dmg)
+				b.onDamage(owner, weapon[wpid].dmg)
 	
 	function attackr(vec3 start, real targetx, real targety)
 		new WeaponMissile(start, vec2(targetx,targety),owner, wpid)
@@ -118,7 +118,8 @@ class WeaponMissile extends Projectile
 		for u in ENUM_GROUP
 			var e = u.getUserData() castTo Entity	
 			if e instanceof Boss
-				getDummy().damageTarget(u, weapon[id].dmg)
+				var b = e castTo Boss
+				b.onDamage(owner, weapon[id].dmg)
 				destroy(this)
 			else if e instanceof Wall
 				destroy(this)
