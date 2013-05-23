@@ -12,6 +12,7 @@ import RegionData
 import Texttag
 import CustomBar
 
+constant int BOSS_TOMB_ID = 'n01P'
 constant int HP_UP_ID = 'A06U'
 constant int HP_DOWN_ID = 'A06T'
 constant int REAL_HP_BIG_ID = 'A06X'
@@ -22,6 +23,7 @@ constant int REAL_DMG_BIG_ID = 'A001'
 constant int REAL_DMG_SMALL_ID = 'A001'
 constant int AOE_SPELL_ID = 'A06V'
 constant int MISSILE_SPELL_ID = 'A06W'
+trigger deathTrig
 
 
 public class Boss extends DynamicSetupObject
@@ -41,8 +43,10 @@ public class Boss extends DynamicSetupObject
 	construct( player owner, real x, real y, int id)
 		super( vec3(x, y, 0), CreateUnit(owner, id, x, y, 0),CreateUnit(owner, id, x, y, 0), 32, function Boss.onInRangeEvent )
 		setup.registerCastEvent(Condition(function onCast))
-		actor.addAbility(REAL_HP_BIG_ID)
-		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
+		deathTrig.registerUnitEvent(setup,EVENT_UNIT_DEATH)
+//		deathTrig.registerUnitEvent(actor,EVENT_UNIT_DEATH)
+//		actor.addAbility(REAL_HP_BIG_ID)
+//		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
 
 		hpBar = new CustomBar(pos, "|", 100, 7.5)
 		hpBar.setForeground(colorA(0,225,0,0))
@@ -52,13 +56,14 @@ public class Boss extends DynamicSetupObject
 		
 	override function update()
 		super.update()
-		hpBar.setValue(actor.getHP() / maxHp * 100.0)
+		hpBar.setValue(setup.getHP() / maxHp * 100.0)
 		if not pos.toVec2().isInRect(rdata.theRect)
 			setPos(rdata.theRect.getCenter().withZ(0))
 			DisplayTextToPlayer(owner, 0,0, "|cffD62921You can't move your boss out of the boss region")
 
 	function onDamage(player atker, real dmg)
 		pData[atker.getId()].escaper.actor.damageTarget(setup,dmg)
+		pData[atker.getId()].escaper.actor.damageTarget(actor,dmg)
 		
 	static function onCast() returns boolean
 
@@ -124,4 +129,22 @@ public class Boss extends DynamicSetupObject
 		ENUM_GROUP.clear()
 		return g
 	
+	static function onDeath()
+		var data = GetTriggerUnit().getUserData() castTo Entity
+		if data instanceof Boss
+			var boss = data castTo Boss
+			boss.hpBar.changeVisibility(null)
+			boss.actor.kill()
+			boss.setup.remove()
+			boss.setup = CreateUnit(boss.owner, BOSS_TOMB_ID, boss.pos.x,boss.pos.y,270.)
+			for i = 0 to 11
+				DisplayTextToPlayer( Player(i), 0, 0, "|cff6BC54ACongratulations! You have slain the Boss!!")
+				
+	function revive()
+		actor = CreateUnit(owner, ';;??', pos.x, pos.y, 0)
+		setup.remove()
+		setup = CreateUnit(owner, ';;??', pos.x,pos.y,0.)
 	
+public function init_Boss()
+	deathTrig = CreateTrigger()
+	deathTrig.addAction(function Boss.onDeath)

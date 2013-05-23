@@ -7,6 +7,7 @@ import Boss
 import Entity
 import Projectile
 import Wall
+import Fx
 
 constant int NEXT_ID = 'A07D'
 constant int PREW_ID = 'A07E'
@@ -24,15 +25,18 @@ public enum ATTACK_TYPE
 public class Weapon extends ItemObject
 	int wpid
 	boolean picked = false
+	player originalowner
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(weapon[0].itemID, pos.x, pos.y), CreateUnit(owner, 'h00K', pos.x, pos.y, 0 ) )
 		wpid = 0
+		originalowner = owner
 		setup.registerCastEvent(Condition(function Weapon.onCast))
 		
 	function pickedUp(Escaper holder)
 		picked = true
+		owner = holder.owner
 		this.holder = holder
 		if weapon[wpid].atype == ATTACK_TYPE.MELEE
 			holder.actor.addAbility(ATTACK_MELEE_ID)
@@ -47,6 +51,7 @@ public class Weapon extends ItemObject
 		else
 			holder.actor.removeAbility(ATTACK_RANGED_ID)
 		holder = null
+		owner = originalowner
 		setup.setXY(pos.toVec2())
 		setup.show()
 		actorItem = CreateItem( weapon[wpid].itemID, pos.x, pos.y )
@@ -81,12 +86,17 @@ public class Weapon extends ItemObject
 		
 	function attackm()
 		var a = angle(holder.actor.getFacing())
-		GroupEnumUnitsInRange(ENUM_GROUP, polarProjectionX(holder.pos.x,weapon[wpid].aoe/2,a), polarProjectionY(holder.pos.y,weapon[wpid].aoe/2,a), weapon[wpid].aoe, null)
+		var ox = polarProjectionX(holder.pos.x,weapon[wpid].aoe/2,a)
+		var oy = polarProjectionY(holder.pos.y,weapon[wpid].aoe/2,a)
+		GroupEnumUnitsInRange(ENUM_GROUP, ox, oy, weapon[wpid].aoe, null)
 		for u in ENUM_GROUP
 			var e = u.getUserData() castTo Entity
 			if e instanceof Boss
 				var b = e castTo Boss
 				b.onDamage(owner, weapon[wpid].dmg)
+		var fx = new Fx(ox,oy, angle(holder.actor.getFacing()))
+		fx.setFx(weapon[wpid].eff)
+		destroy(fx)
 	
 	function attackr(vec3 start, real targetx, real targety)
 		new WeaponMissile(start, vec2(targetx,targety),owner, wpid)
@@ -127,6 +137,6 @@ class WeaponMissile extends Projectile
 		ENUM_GROUP.clear()
 		
 public function init_Weapon()
-	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 100., 20., "")
+	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 200., 20., "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl")
 	weapon[1] = Weapons('I00V', ATTACK_TYPE.RANGED, 700., 60., 20., "Abilities\\Weapons\\PriestMissile\\PriestMissile.mdl")
 	

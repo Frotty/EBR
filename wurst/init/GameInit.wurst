@@ -20,6 +20,7 @@ package GameInit
 	import BossSpellTarget
 	import FileIO
 	import Invisible
+	import Boss
 	
 	function initGame()
 
@@ -55,7 +56,9 @@ package GameInit
 		init_Weapon()
 		debugPrint("Init - Weapon", 2)
 		init_BossSpellTarget()
-		debugPrint("Init - Weapon", 2)
+		debugPrint("Init - Bossspelltarget", 2)
+		init_Boss()
+		debugPrint("Init - Boss", 2)
 		invis_init()
 		
 		getTimer().start(0.01, function initPartTwo)
