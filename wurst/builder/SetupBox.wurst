@@ -106,14 +106,19 @@ public class SetupBox
 					if not data instanceof Escaper and not data instanceof Builder and u != box.actor and data != null
 						data.terminate()
 			case BOSS_MODE_ID
-				box.rdata.isBossRegion = true
-				box.actor.removeAbility(BOSS_MODE_ID)
-				DisplayTextToPlayer( box.owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
-				DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",box.actor.getX(),box.actor.getY() ))
-				let b = pData[box.owner.getId()].builder
-				SelectUnitForPlayerSingle(b.actor, box.owner)
-				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
-				b.setBossMenu(box.rdata)
+				print(pData[box.owner.getId()].XP.toString())
+				if pData[box.owner.getId()].XP > 500
+					box.rdata.isBossRegion = true
+					box.actor.removeAbility(BOSS_MODE_ID)
+					DisplayTextToPlayer( box.owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
+					DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",box.actor.getX(),box.actor.getY() ))
+					let b = pData[box.owner.getId()].builder
+					SelectUnitForPlayerSingle(b.actor, box.owner)
+					GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
+					b.setBossMenu(box.rdata)
+				else
+					DisplayTextToPlayer( box.owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
+					
 		return false
 
 	

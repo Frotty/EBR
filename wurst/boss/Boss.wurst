@@ -41,7 +41,7 @@ public class Boss extends DynamicSetupObject
 				es.kill()
 
 	construct( player owner, real x, real y, int id)
-		super( vec3(x, y, 0), CreateUnit(owner, id, x, y, 0),CreateUnit(owner, id, x, y, 0), 32, function Boss.onInRangeEvent )
+		super( vec3(x, y, 0), CreateUnit(owner, id, x, y, 0),CreateUnit(owner, id, x, y, 0), 64, function Boss.onInRangeEvent )
 		setup.registerCastEvent(Condition(function onCast))
 		deathTrig.registerUnitEvent(setup,EVENT_UNIT_DEATH)
 //		deathTrig.registerUnitEvent(actor,EVENT_UNIT_DEATH)

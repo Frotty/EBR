@@ -93,9 +93,9 @@ public class Builder extends UnitEntity
 				case BM_BOSS_ID
 					var rdata = getRegionData(ox,oy)
 					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
-						boolean noBoss = true
-						if noBoss
+						if not rdata.hasBoss
 							new Boss(builder.owner, ox, oy, boss[rdata.rtype])
+							rdata.hasBoss = true
 						else
 							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
 					else

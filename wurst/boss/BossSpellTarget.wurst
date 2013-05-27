@@ -80,7 +80,7 @@ public class BossMissile extends HomingProjectile
 		super(pos, missile_spell[id].radius, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), missile_spell[id].sfx)
 		this.id = id
 		setTarget(target,HOMING.attract,missile_spell[id].speed)
-		setSpeed(20.)
+		setSpeed(14.)
 		
 	
 	override function onHit(Entity e2)

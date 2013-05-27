@@ -24,6 +24,7 @@ public class RegionData
 	boolean isBROwner = false
 	
 	boolean isBossRegion = false
+	boolean hasBoss = false
             
 	construct( rect r )
 		theRect = r
