@@ -16,7 +16,7 @@ public constant int ATTACK_MELEE_ID = 'A07G'
 public constant int ATTACK_RANGED_ID = 'A07H'
 tuple Weapons(int itemID, ATTACK_TYPE atype, real range, real aoe, real dmg, string eff)
 public Weapons array weapon
-constant int weaponnumber = 1
+constant int weaponnumber = 3
 
 public enum ATTACK_TYPE
 	MELEE
@@ -137,6 +137,8 @@ class WeaponMissile extends Projectile
 		ENUM_GROUP.clear()
 		
 public function init_Weapon()
-	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 200., 20., "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl")
+	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 200., 40., "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl")
 	weapon[1] = Weapons('I00V', ATTACK_TYPE.RANGED, 700., 60., 20., "Abilities\\Weapons\\PriestMissile\\PriestMissile.mdl")
+	weapon[2] = Weapons('I00W', ATTACK_TYPE.MELEE, 0., 300., 20., "Abilities\\Spells\\Items\\AIlb\\AIlbSpecialArt.mdl")
+	weapon[3] = Weapons('I00X', ATTACK_TYPE.RANGED, 650., 70., 20., "Abilities\\Weapons\\LichMissile\\LichMissile.mdl")
 	
