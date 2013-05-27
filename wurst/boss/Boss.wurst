@@ -23,6 +23,7 @@ constant int REAL_DMG_BIG_ID = 'A001'
 constant int REAL_DMG_SMALL_ID = 'A001'
 constant int AOE_SPELL_ID = 'A06V'
 constant int MISSILE_SPELL_ID = 'A06W'
+constant int REVIVE_ID = 'A07L'
 trigger deathTrig
 
 
@@ -113,6 +114,8 @@ public class Boss extends DynamicSetupObject
 					for unit u in g
 						var spt = u.getUserData() castTo SpellTarget
 						spt.castMissile(boss)
+				case REVIVE_ID
+					boss.revive()
 		return false
 	
 	function getSpellTargets(SpellType stype) returns group
@@ -133,7 +136,7 @@ public class Boss extends DynamicSetupObject
 		var data = GetTriggerUnit().getUserData() castTo Entity
 		if data instanceof Boss
 			var boss = data castTo Boss
-			boss.hpBar.changeVisibility(null)
+			boss.hpBar.changeVisibility(CreateForce())
 			boss.actor.kill()
 			boss.setup.remove()
 			boss.setup = CreateUnit(boss.owner, BOSS_TOMB_ID, boss.pos.x,boss.pos.y,270.)
@@ -141,9 +144,10 @@ public class Boss extends DynamicSetupObject
 				DisplayTextToPlayer( Player(i), 0, 0, "|cff6BC54ACongratulations! You have slain the Boss!!")
 				
 	function revive()
-		actor = CreateUnit(owner, ';;??', pos.x, pos.y, 0)
+		actor = CreateUnit(owner, boss[rdata.rtype], pos.x, pos.y,0.)
 		setup.remove()
-		setup = CreateUnit(owner, ';;??', pos.x,pos.y,0.)
+		setup = CreateUnit(owner, boss[rdata.rtype], pos.x,pos.y,0.)
+		hpBar.changeVisibility(GetPlayersAll())
 	
 public function init_Boss()
 	deathTrig = CreateTrigger()

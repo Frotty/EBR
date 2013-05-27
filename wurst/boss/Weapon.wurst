@@ -85,7 +85,7 @@ public class Weapon extends ItemObject
 		return false
 		
 	function attackm()
-		var a = angle(holder.actor.getFacing())
+		var a = holder.actor.getFacing().asAngleDegrees()
 		var ox = polarProjectionX(holder.pos.x,weapon[wpid].aoe/2,a)
 		var oy = polarProjectionY(holder.pos.y,weapon[wpid].aoe/2,a)
 		GroupEnumUnitsInRange(ENUM_GROUP, ox, oy, weapon[wpid].aoe, null)
@@ -94,7 +94,7 @@ public class Weapon extends ItemObject
 			if e instanceof Boss
 				var b = e castTo Boss
 				b.onDamage(owner, weapon[wpid].dmg)
-		var fx = new Fx(ox,oy, angle(holder.actor.getFacing()))
+		var fx = new Fx(ox,oy, a)
 		fx.setFx(weapon[wpid].eff)
 		destroy(fx)
 	
