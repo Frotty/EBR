@@ -60,7 +60,7 @@ public class PlayerData //just the player's (constant) stuff
 		players.add(this)
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled //and playercount > 1
+		if localFilesEnabled and playercount > 1
 			if time
 				XP += amount
 				this.createNewPlayerFile()	
