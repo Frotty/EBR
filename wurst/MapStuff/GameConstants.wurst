@@ -83,7 +83,7 @@ package GameConstants
 		expBounds[1] = 250
 		ranks[2] = "|cffFFE6AD3:Novice"
 		expBounds[2] = 400
-		ranks[3] = "|cffFFD64A4:Descent"
+		ranks[3] = "|cffFFD64A4:Rookie"
 		expBounds[3] = 1000
 		ranks[4] = "|cffFFCE195:Superior"
 		expBounds[4] = 2500

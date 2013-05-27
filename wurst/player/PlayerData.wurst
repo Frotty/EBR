@@ -69,7 +69,8 @@ public class PlayerData //just the player's (constant) stuff
 				debugPrint("add current xp:" + XP.toString(), 1)
 				XP += amount
 				debugPrint("add new xp:" + XP.toString(), 1)
-				this.createNewPlayerFile()	
+				this.createNewPlayerFile()
+			updateRank()
 	
 	function setXp(int amount)
 		debugPrint("set current xp:" + XP.toString(), 1)
