@@ -99,5 +99,7 @@ package GameConstants
 		expBounds[9] = 18000
 		ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
 		expBounds[10] = 25000
+		ranks[11] = "wat."
+		expBounds[11] = 100000
 
 endpackage 

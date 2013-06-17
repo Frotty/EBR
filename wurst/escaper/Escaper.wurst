@@ -221,7 +221,7 @@ public class Escaper extends UnitEntity
 		ReviveHero(e.actor, revX, revY, false)
 		e.setVel(vec3(0,0,0))
 		e.slideVelocity = vec3(0,0,0)
-		e.setPos(vec3(revX, revY, 530.))
+		e.setPos(vec3(revX, revY, 25.))
 		CameraClearNoiseForPlayer(e.owner)
 		if e.owner.getId() < 8
 			if (GetLocalPlayer() == e.owner)

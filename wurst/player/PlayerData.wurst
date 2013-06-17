@@ -78,6 +78,7 @@ public class PlayerData //just the player's (constant) stuff
 		debugPrint("set new xp:" + XP.toString(), 1)
 	
 	function updateRank()
+		debugPrint("updating rank", 3)
 		int i = 0
 		if lvlfx != null
 			lvlfx.destr()
