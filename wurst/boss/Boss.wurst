@@ -140,14 +140,15 @@ public class Boss extends DynamicSetupObject
 			boss.actor.kill()
 			boss.setup.remove()
 			boss.setup = CreateUnit(boss.owner, BOSS_TOMB_ID, boss.pos.x,boss.pos.y,270.)
+			boss.setup.registerCastEvent(Condition(function onCast))
 			for i = 0 to 11
 				DisplayTextToPlayer( Player(i), 0, 0, "|cff6BC54ACongratulations! You have slain the Boss!!")
 				
 	function revive()
-		actor = CreateUnit(owner, boss[rdata.rtype], pos.x, pos.y,0.)
-		setup.remove()
-		setup = CreateUnit(owner, boss[rdata.rtype], pos.x,pos.y,0.)
-		hpBar.changeVisibility(GetPlayersAll())
+		PlaySound("Units\\Undead\\Varimathras\\VarimathrasReady1.wav")
+		new Boss(owner, pos.x, pos.y, boss[rdata.rtype])
+		destroy this
+		
 	
 public function init_Boss()
 	deathTrig = CreateTrigger()
