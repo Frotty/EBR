@@ -100,5 +100,9 @@ public function newEventPlayer(player p, real m)
      
      
 //Main loop for camera shaking     
-function loop()
+function onLoop()
 	ForForce(shakingPlayers, function loopPerPlayer)
+	
+init
+	CreateTimer().startPeriodic(LOOP_PERIOD, function onLoop)
+	
