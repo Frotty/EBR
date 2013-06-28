@@ -146,7 +146,7 @@ public class Boss extends DynamicSetupObject
 				
 	function revive()
 		PlaySound("Units\\Undead\\Varimathras\\VarimathrasReady1.wav")
-		new Boss(owner, pos.x, pos.y, boss[rdata.rtype])
+	//	new Boss(owner, pos.x, pos.y, boss[rdata.rtype])
 		destroy this
 		
 	
