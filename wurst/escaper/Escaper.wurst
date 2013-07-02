@@ -232,6 +232,8 @@ public class Escaper extends UnitEntity
 		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 		e.alive = true
 		t.release()
+		e.setPoison(false)
+		e.setLava(false)
 		if pData[e.owner.getId()].camLock
 			SetCameraTargetControllerNoZForPlayer(e.owner, e.actor, 0,0,true)
 		if e instanceof Strong_Escaper

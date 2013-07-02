@@ -5,13 +5,17 @@ public constant int REMOVE_ID = 'A00K'
 trigger castTrig
 
 function removeObject()
+	debugPrint("onRemove1", 3)
 	var id = GetSpellAbilityId()
 	if id == REMOVE_ID
+		debugPrint("onRemove2", 3)
 		var u = GetTriggerUnit()
 		var data = u.getUserData()
 		if data > 0
+			debugPrint("onRemove3", 3)
 			var e = data castTo Entity
 			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , u.getX(), u.getY())
+			debugPrint("onRemove4", 3)
 			e.terminate()
 		else
 			GetSpellAbilityUnit().remove()
