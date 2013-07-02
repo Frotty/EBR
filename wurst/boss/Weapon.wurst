@@ -14,7 +14,7 @@ constant int PREW_ID = 'A07E'
 public constant int BM_WEAPON_ID = 'A07I'
 public constant int ATTACK_MELEE_ID = 'A07G'
 public constant int ATTACK_RANGED_ID = 'A07H'
-tuple Weapons(int itemID, ATTACK_TYPE atype, real range, real aoe, real dmg, string eff)
+tuple Weapons(int itemID,int abilID, ATTACK_TYPE atype, real range, real aoe, real dmg, string eff)
 public Weapons array weapon
 constant int weaponnumber = 3
 
@@ -65,27 +65,16 @@ public class Weapon extends ItemObject
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var obj = GetSpellAbilityUnit().getUserData() castTo Weapon
-		switch id
-			case NEXT_ID
-				if obj.wpid >= weaponnumber
-					obj.wpid = 0
-				else
-					obj.wpid += 1
+		for i= 0 to weaponnumber
+			if weapon[i].abilID == id
+				obj.wpid = i
 				obj.actorItem.remove()
-				obj.actorItem = CreateItem(weapon[obj.wpid].itemID, obj.pos.x, obj.pos.y)
-				obj.actorItem.setUserData(obj castTo int)
-			case PREW_ID
-				if obj.wpid <= 0
-					obj.wpid = weaponnumber
-				else
-					obj.wpid -= 1
-				RemoveItem(obj.actorItem)
 				obj.actorItem = CreateItem(weapon[obj.wpid].itemID, obj.pos.x, obj.pos.y)
 				obj.actorItem.setUserData(obj castTo int)
 		return false
 		
 	function attackm()
-		var a = angle(holder.actor.getFacing())
+		var a = holder.actor.getFacing().asAngleDegrees()
 		var ox = polarProjectionX(holder.pos.x,weapon[wpid].aoe/2,a)
 		var oy = polarProjectionY(holder.pos.y,weapon[wpid].aoe/2,a)
 		GroupEnumUnitsInRange(ENUM_GROUP, ox, oy, weapon[wpid].aoe, null)
@@ -94,7 +83,7 @@ public class Weapon extends ItemObject
 			if e instanceof Boss
 				var b = e castTo Boss
 				b.onDamage(owner, weapon[wpid].dmg)
-		var fx = new Fx(ox,oy, angle(holder.actor.getFacing()))
+		var fx = new Fx(ox,oy, a)
 		fx.setFx(weapon[wpid].eff)
 		destroy(fx)
 	
@@ -137,8 +126,8 @@ class WeaponMissile extends Projectile
 		ENUM_GROUP.clear()
 		
 public function init_Weapon()
-	weapon[0] = Weapons('I00U', ATTACK_TYPE.MELEE, 0., 200., 40., "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl")
-	weapon[1] = Weapons('I00V', ATTACK_TYPE.RANGED, 700., 60., 20., "Abilities\\Weapons\\PriestMissile\\PriestMissile.mdl")
-	weapon[2] = Weapons('I00W', ATTACK_TYPE.MELEE, 0., 300., 20., "Abilities\\Spells\\Items\\AIlb\\AIlbSpecialArt.mdl")
-	weapon[3] = Weapons('I00X', ATTACK_TYPE.RANGED, 650., 70., 20., "Abilities\\Weapons\\LichMissile\\LichMissile.mdl")
+	weapon[0] = Weapons('I00U','A07N', ATTACK_TYPE.MELEE, 0., 200., 40., "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl")
+	weapon[1] = Weapons('I00V','A07D', ATTACK_TYPE.RANGED, 700., 60., 20., "Abilities\\Weapons\\PriestMissile\\PriestMissile.mdl")
+	weapon[2] = Weapons('I00W','A07O', ATTACK_TYPE.MELEE, 0., 300., 20., "Abilities\\Spells\\Items\\AIlb\\AIlbSpecialArt.mdl")
+	weapon[3] = Weapons('I00X','A07E', ATTACK_TYPE.RANGED, 650., 70., 20., "Abilities\\Weapons\\LichMissile\\LichMissile.mdl")
 	
