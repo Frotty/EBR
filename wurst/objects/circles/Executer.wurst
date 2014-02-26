@@ -143,13 +143,7 @@ package Executer
 			
 
 		function findAction()
-			debugPrint("find action called", 3)
-			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
-			
-			var rx = getRallyX()
-			var ry = getRallyY()
-			
+			debugPrint("find action called", 3)	
 			switch actionMode
 				case Amode.NONE
 						DisplayTextToPlayer( owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
@@ -184,13 +178,7 @@ package Executer
 				default
 					printError("ExecuterAction")
 						
-		function negativeAction()
-			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
-			
-			var rx = getRallyX()
-			var ry = getRallyY()
-			
+		function negativeAction()		
 			switch actionMode
 				case Amode.CLOSEDOOR
 					Door closingdoor = getRallyUnit().getUserData() castTo Door
@@ -229,7 +217,6 @@ package Executer
 
 				
 		function createUnit()
-			unit u
 			var rX = getRallyX()
 			var rY = getRallyY()
 			var data = getRegionData(rX, rY)

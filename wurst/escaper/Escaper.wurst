@@ -248,7 +248,6 @@ public class Escaper extends UnitEntity
 		var u = GetTriggerUnit()
 		Escaper e = u.getUserData() castTo Escaper
 		var w = GetOrderTarget()
-		unit tu = GetOrderTargetUnit()
 		real x2 = GetOrderPointX()
 		real y2 = GetOrderPointY()
 		real x3 = GetWidgetX(w)
@@ -291,7 +290,6 @@ public class Escaper extends UnitEntity
 			
 	static function dropItem()
 		var pickedItem = GetManipulatedItem()
-		var escaper = GetTriggerUnit().getUserData() castTo Escaper
 		var idata = pickedItem.getUserData() castTo ItemObject
 		
 		if idata instanceof Key

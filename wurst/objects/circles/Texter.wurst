@@ -26,7 +26,6 @@ package Texter
 			Entity e = u.getUserData() castTo Entity
 			thistype obj = GetTriggeringTrigger().getSource().getUserData() castTo thistype
 			if e instanceof Escaper
-				RegionData data = getRegionData(obj.actor.getX(), obj.actor.getY())
 				obj.text.setVisibility( true )
 				obj.hidden = false
 				

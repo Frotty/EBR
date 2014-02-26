@@ -170,7 +170,6 @@ public class Builder extends UnitEntity
 			widget w = GetOrderTarget()
 			var ord = GetIssuedOrderId()
 			var u = GetTriggerUnit()
-			var owner = u.getOwner()
 			var ox = GetOrderPointX()
 			var oy = GetOrderPointY()
 			if isOrderBuildOrder(ord)

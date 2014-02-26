@@ -47,7 +47,6 @@ public class Trap extends StaticBaseObject
 		thistype obj = source.getUserData() castTo thistype
 		
 		if not obj.active and e instanceof Escaper
-			var es = e castTo Escaper
 			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
