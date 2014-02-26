@@ -49,7 +49,7 @@ package Waypoint
 					IssuePointOrder(u, "move", rx, ry )
 				else
 					IssueImmediateOrder(u, "stop" )
-					getTimer().start(obj.delay, function Waypoint.delayMove).setData(new DelayData(data, vec2(rx,ry))castTo int)
+					getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rx,ry))castTo int)
 					
 		static function delayMove()
 			var t = GetExpiredTimer()

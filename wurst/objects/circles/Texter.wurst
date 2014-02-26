@@ -19,7 +19,7 @@ package Texter
 		construct( vec2 pos, player owner )
 			super( pos, CreateUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep ) 
 			actor.setUserData(this castTo int)
-			text.setColor( col.red,col.green,col.blue, 0 ).setPos( actor.getX(),actor.getY(), 0 ).setVisibility( false ).setPermanent( true )
+			text..setColor( col.red,col.green,col.blue, 0 )..setPos( actor.getX(),actor.getY(), 0 )..setVisibility( false )..setPermanent( true )
 			
 		static function onStep()
 			unit u = GetTriggerUnit()

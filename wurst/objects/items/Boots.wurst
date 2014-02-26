@@ -45,10 +45,10 @@ public class Boots extends ItemObject
 		switch id
 			case DYN_ID
 				data.followWalkable = false
-				data.setup.removeAbility(DYN_ID).addAbility(STATIC_ID)
+				data.setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
 			case STATIC_ID
 				data.followWalkable = true
-				data.setup.removeAbility(STATIC_ID).addAbility(DYN_ID)
+				data.setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
 		return false
 		
 	ondestroy

@@ -83,13 +83,13 @@ package Teleporter
 			
 			switch id
 				case BOTH_ID
-					tdata.actor.removeAbility(BOTH_ID).addAbility(ESC_ID)
+					tdata.actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
 					tdata.mode = 0
 				case ESC_ID
-					tdata.actor.removeAbility(ESC_ID).addAbility(KILL_ID)
+					tdata.actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
 					tdata.mode = 1
 				case KILL_ID
-					tdata.actor.removeAbility(KILL_ID).addAbility(BOTH_ID)
+					tdata.actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
 					tdata.mode = 2
 					
 			return false

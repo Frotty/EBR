@@ -15,18 +15,18 @@ function changeVisibility()
 	if dta instanceof DynamicSetupObject
 		let data = dta castTo DynamicSetupObject
 		if id == VIS_ID
-			data.actor.removeAbility('Agho').addAbility('Aeth')
-			data.setup.removeAbility(VIS_ID).addAbility(INVIS_ID)
+			data.actor..removeAbility('Agho')..addAbility('Aeth')
+			data.setup..removeAbility(VIS_ID)..addAbility(INVIS_ID)
 		else if id == INVIS_ID
-			data.actor.removeAbility('Aeth').addAbility('Agho')
-			data.setup.removeAbility(INVIS_ID).addAbility(VIS_ID)	
+			data.actor..removeAbility('Aeth')..addAbility('Agho')
+			data.setup..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
 	else 
 		if id == VIS_ID
-			caster.removeAbility('Agho').addAbility('Aeth')
-			caster.removeAbility(VIS_ID).addAbility(INVIS_ID)
+			caster..removeAbility('Agho')..addAbility('Aeth')
+			caster..removeAbility(VIS_ID)..addAbility(INVIS_ID)
 		else if id == INVIS_ID
-			caster.removeAbility('Aeth').addAbility('Agho')
-			caster.removeAbility(INVIS_ID).addAbility(VIS_ID)	
+			caster..removeAbility('Aeth')..addAbility('Agho')
+			caster..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
 	
 function isVisSpell() returns boolean
 	let id = GetSpellAbilityId()

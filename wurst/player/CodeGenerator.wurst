@@ -1,4 +1,5 @@
 package CodeGenerator
+import BigNum
 
 constant string colorUpper  = "|cffFF8000"
 constant string colorLower  = "|cff0080C0"

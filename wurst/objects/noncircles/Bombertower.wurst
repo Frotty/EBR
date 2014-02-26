@@ -24,7 +24,7 @@ package Bombertower
 			actor.registerCastEvent(Condition(function Bombertower.onCast))
 			actor.addAbility('Agho')
 			dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
-			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 			dummy.addAbility(LOCUST_ID)
 			SetUnitPathing(dummy, true)
 
@@ -54,10 +54,10 @@ package Bombertower
 			if GetOrderedUnit() == obj.actor
 				if i == ATTACK_GROUND_ORDER
 					IssuePointOrderById(obj.dummy,i, GetOrderPointX(),GetOrderPointY())
-					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
+					getTimer()..start(0.1, function Bombertower.orderSetup)..setData(obj castTo int)
 				else if i == ATTACK_ORDER
 					IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
-					getTimer().start(0.1, function Bombertower.orderSetup).setData(obj castTo int)
+					getTimer()..start(0.1, function Bombertower.orderSetup)..setData(obj castTo int)
 				else if i == STOP_ORDER 
 					if obj.realorder == true
 						IssueImmediateOrderById(obj.dummy, STOP_ORDER)

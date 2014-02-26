@@ -67,10 +67,10 @@ function checkOrder()
 				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
 			if i == ATTACK_GROUND_ORDER
 				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
-				getTimer().start(0.1, function Bomber.orderSetup).setData(obj castTo int)
+				getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
 			else if i == ATTACK_ORDER
 				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
-				getTimer().start(0.1, function Bomber.orderSetup).setData(obj castTo int)
+				getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
 			else if i == STOP_ORDER 
 				if obj.realorder == true
 					IssueImmediateOrderById(obj.actor, STOP_ORDER)

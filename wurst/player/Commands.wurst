@@ -39,7 +39,7 @@ function onCommandChat()
 		case "frev"
 			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Trying forced revive!")
 			if pd.escaper.actor.getHP() < .405
-				getTimer().start(0.1, function Escaper.revive).setData(pd.id)
+				getTimer()..start(0.1, function Escaper.revive)..setData(pd.id)
 		case "info"
 			string s = "|cffFFD621[Info]|r - Current Region:\n"
 			s += "            |cff63DEFFSlidespeed|r: " + pd.escaper.currentRegion.slidespeed.toString() + "\n"

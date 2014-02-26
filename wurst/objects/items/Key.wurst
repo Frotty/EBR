@@ -72,11 +72,11 @@ public class Key extends ItemObject
 				data.col = COLOR.PINK
 			case DYN_ID
 				data.followWalkable = false
-				data.setup.removeAbility(DYN_ID).addAbility(STATIC_ID)
+				data.setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
 				data.returnSfx = AddSpecialEffect("war3mapImported\\XTex.mdx", data.pos.x, data.pos.y)
 			case STATIC_ID
 				data.followWalkable = true
-				data.setup.removeAbility(STATIC_ID).addAbility(DYN_ID)
+				data.setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
 				if data.returnSfx != null
 					data.returnSfx.destr()
 		data.recolor()

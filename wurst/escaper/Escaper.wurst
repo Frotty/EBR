@@ -55,10 +55,10 @@ public class Escaper extends UnitEntity
 	
 	construct( vec3 pos, player owner, int typ )
 		super(pos, 32, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
-		actor.addAbility('Aloc')
-		.hide()
-		.removeAbility('Aloc')
-		.show()
+		actor..addAbility('Aloc')
+		..hide()
+		..removeAbility('Aloc')
+		..show()
 		
 		
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
@@ -100,11 +100,11 @@ public class Escaper extends UnitEntity
 			debugPrint("died", 3)
 			if owner.getId() >= 8
 				debugPrint("is builder", 3)
-				getTimer().setData(this.owner.getId()).start(.1, function Escaper.revive)
+				getTimer()..setData(this.owner.getId())..start(.1, function Escaper.revive)
 				debugPrint("started", 3)
 			else
 				debugPrint("is escaper", 3)
-				getTimer().start(3., function Escaper.revive).setData(this.owner.getId())
+				getTimer()..start(3., function Escaper.revive)..setData(this.owner.getId())
 			actor.removeAbility(ATTACK_MELEE_ID)
 			actor.removeAbility(ATTACK_RANGED_ID)
 			owner.addDeath()

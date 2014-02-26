@@ -37,17 +37,17 @@ package Fountain
 					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_HEAL_ID, data.pos.x, data.pos.y, 270. ))
 					data.actor.addAbility(LOCUST_ID)
 					data.cure = false
-					data.setup.removeAbility(BOTH_ID).addAbility(HEAL_ID)
+					data.setup..removeAbility(BOTH_ID)..addAbility(HEAL_ID)
 				case HEAL_ID
 					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_CURE_ID, data.pos.x, data.pos.y, 270. ))
 					data.actor.addAbility(LOCUST_ID)
 					data.cure = true
-					data.setup.removeAbility(HEAL_ID).addAbility(CURE_ID)
+					data.setup..removeAbility(HEAL_ID)..addAbility(CURE_ID)
 				case CURE_ID
 					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_BOTH_ID, data.pos.x, data.pos.y, 270. ))
 					data.actor.addAbility(LOCUST_ID)
 					data.cure = true
-					data.setup.removeAbility(CURE_ID).addAbility(BOTH_ID)
+					data.setup..removeAbility(CURE_ID)..addAbility(BOTH_ID)
 			return false
 
 		ondestroy

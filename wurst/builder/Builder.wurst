@@ -175,8 +175,8 @@ public class Builder extends UnitEntity
 			var oy = GetOrderPointY()
 			if isOrderBuildOrder(ord)
 				debugPrint((u.getUserData() castTo Builder).pos.toString(), 3)
-				getTimer().start(0.01, function callback)
-				.setData((new BuildData(u.getUserData() castTo Builder,
+				getTimer()..start(0.01, function callback)
+				..setData((new BuildData(u.getUserData() castTo Builder,
 							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
 				
 			else if OrderId2String(ord) == "smart" or OrderId2String(ord) == "move"

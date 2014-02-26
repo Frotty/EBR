@@ -44,10 +44,10 @@ public class Jumper extends StaticBaseObject
 	function onCast(int id)
 		switch id
 			case FORCED_ID
-				actor.removeAbility(FORCED_ID).addAbility(UNFORCED_ID)
+				actor..removeAbility(FORCED_ID)..addAbility(UNFORCED_ID)
 				mode = JumpMode.UNFORCED
 			case UNFORCED_ID
-				actor.removeAbility(UNFORCED_ID).addAbility(FORCED_ID)
+				actor..removeAbility(UNFORCED_ID)..addAbility(FORCED_ID)
 				mode = JumpMode.FORCED
 			case DECREASE_ID
 				if speed >5.

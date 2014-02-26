@@ -59,10 +59,10 @@ public class Pointer extends UnitEntity
 					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
 			case START_ID
 				data.turning = true
-				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
+				data.setup..removeAbility(START_ID)..addAbility(STOP_ID)
 			case STOP_ID
 				data.turning = false
-				data.setup.removeAbility(STOP_ID).addAbility(START_ID)
+				data.setup..removeAbility(STOP_ID)..addAbility(START_ID)
 					
 		return false
 

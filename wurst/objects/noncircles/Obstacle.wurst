@@ -17,7 +17,7 @@ package Obstacle
 			super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_SMALL, function SmallObstacle.kill )
 			var rdata = getRegionData(pos.x, pos.y)
 			actor = CreateUnit(owner, sobst[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360) )
-			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			actor..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 			actor.addAbility(LOCUST_ID)
 
 			setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
@@ -26,9 +26,8 @@ package Obstacle
 			
 		construct( vec2 pos, player owner, real radius )
 			super( vec3(pos.x, pos.y, 0), radius, function SmallObstacle.kill )
-			var rdata = getRegionData(pos.x, pos.y)
 			actor = CreateUnit(owner, 'n00K', pos.x, pos.y, GetRandomReal(0,360) )
-			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			actor..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 			actor.addAbility(LOCUST_ID)
 
 			setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
@@ -36,10 +35,8 @@ package Obstacle
 			inRangeTrig.registerUnitInRangeSource( setup, radius )
 			
 		static function kill()
-			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
 			Entity e = u.getUserData() castTo Entity
-			thistype obj = source.getUserData() castTo thistype
 			if e instanceof Escaper
 				(e castTo Escaper).kill() //or whatever
 
@@ -49,7 +46,7 @@ package Obstacle
 			super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_BIG, function BigObstacle.kill )
 			var rdata = getRegionData(pos.x, pos.y)
 			actor = CreateUnit(owner, bobst[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360) )
-			actor.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			actor..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 			actor.addAbility(LOCUST_ID)
 
 			setup = CreateUnit(owner, BIGOBSTACLE_ID, pos.x, pos.y, 0.)
@@ -57,10 +54,8 @@ package Obstacle
 			inRangeTrig.registerUnitInRangeSource( setup, radius )
 			
 		static function kill()
-			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
 			Entity e = u.getUserData() castTo Entity
-			thistype obj = source.getUserData() castTo thistype
 			if e instanceof Escaper
 				(e castTo Escaper).kill() //or whatever
 

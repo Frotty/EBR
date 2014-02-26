@@ -13,6 +13,7 @@ package Executer
 	import TempGroups
 	import Texttag
 	import Pointer
+	import Region
 	
 	constant int 	EXECUTER_ID   = 'n01D'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
