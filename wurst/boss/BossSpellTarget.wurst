@@ -38,8 +38,6 @@ public class SpellTarget extends DynamicSetupObject
 		if data instanceof SpellTarget
 			var spt = data castTo SpellTarget
 			var id = GetSpellAbilityId()
-			var ox = GetSpellTargetX()
-			var oy = GetSpellTargetY()
 			switch id
 				case AOE_ID
 					spt.stype = SpellType.AOE

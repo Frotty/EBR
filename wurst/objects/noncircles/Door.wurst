@@ -46,7 +46,6 @@ package Door
 			if e instanceof Escaper
 				var es = e castTo Escaper
 				if not es.flying
-					item i = UnitItemInSlot(u, 0)
 					if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) and door.opened == false //WARNING BJ function//
 						var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
 						if not door.opened

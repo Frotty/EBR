@@ -32,7 +32,6 @@ public function PlayerData.loadPlayerFile()
 	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Will now check for saved data."  )
 	string array lines
 	var count = 0
-	let ids = this.id.toString()
 	let nameHash = fhash(this.name).toString()
 	debugPrint(  "start " + this.name, 1 )
 	synchronizeThread()

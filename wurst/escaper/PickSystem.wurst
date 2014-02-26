@@ -141,7 +141,6 @@ function keypick()
 	
 	
 public function init_Choose()
-	trigger t = CreateTrigger()
 	trigger left = CreateTrigger()
 	trigger right = CreateTrigger()
 	trigger pick = CreateTrigger()

@@ -73,8 +73,6 @@ public class Boss extends DynamicSetupObject
 		if data instanceof Boss
 			var boss = data castTo Boss
 			var id = GetSpellAbilityId()
-			var ox = GetSpellTargetX()
-			var oy = GetSpellTargetY()
 			switch id
 				case HP_UP_ID
 					int bighp = GetUnitAbilityLevel(boss.actor, REAL_HP_BIG_ID)
