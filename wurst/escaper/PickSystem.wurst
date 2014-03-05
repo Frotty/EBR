@@ -106,6 +106,7 @@ function keypick()
 		
 	if not pd.picked
 		pd.picked = true
+		printTimedToPlayer("|cffE68C19Welcome to |cff086BC5EBR|cffE68C19!\n    |rIf you're new to the game, type \"-intro\" to get a short tutorial for your role.", 20, pd.p)
 		switch currentView[pd.id]-1
 			case 0
 				pd.escaper = new Holy_Escaper( vec3(SX,SY,20.), p, GetUnitTypeId(pickheros[0]) )
@@ -122,10 +123,12 @@ function keypick()
 			PanCameraToTimedForPlayer(p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
 			SelectUnitForPlayerSingle( pd.builder.actor,p)
 			CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
+			printTimedToPlayer("    You chose the role |cff528CDEBuilder|r!", 20, pd.p)
 		else
 			ResetToGameCameraForPlayer(p,0.5)
 			PanCameraToTimedForPlayer(p,SX,SY,0)
 			SelectUnitForPlayerSingle( pd.escaper.actor,p)
+			printTimedToPlayer("    You chose the role |cff528CDEEscaper|r!", 20, pd.p)
 			
 		if GetLocalPlayer() == p
 			SetTextTagVisibility(herott[currentView[pd.id]-1],false)

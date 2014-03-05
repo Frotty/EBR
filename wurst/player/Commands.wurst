@@ -6,6 +6,7 @@ import PlayerData
 import Startmazes
 import Escaper
 import RegionData
+import Intro
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -65,9 +66,11 @@ function onCommandChat()
 					s += ", "
 				s += "|cff8C5A08Staff|r"
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
+		case "intro"
+			startIntroFor(pd)
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
-				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive)")
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro")
 
 init
 	trigger trg = CreateTrigger()

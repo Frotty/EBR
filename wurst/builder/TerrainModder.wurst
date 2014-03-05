@@ -25,7 +25,7 @@ trigger castTrigger
 
 constant int SETUP_TYPE = 0
 
-class TerrainModder
+public class TerrainModder
 	unit actor
 	player owner
 	boolean bigbrush = false
@@ -139,7 +139,7 @@ public function init_TerrainModder()
 	
 	for pd in players
 		if pd.id > 7
-			new TerrainModder( pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+			pd.tmod = new TerrainModder( pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
 			new TerrainModder( pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
 			new TerrainModder( pd.p, CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
 			new TerrainModder( pd.p, CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )

@@ -9,7 +9,8 @@ import CodeManager
 import FileIO
 import PickSystem
 import Sync
-
+import TerrainModder
+import UnitProducer
 public int playercount = 0
 
 trigger leaveTrig
@@ -40,7 +41,8 @@ public class PlayerData //just the player's (constant) stuff
 	int lastExpGain = 0
 	
 	boolean camLock = false
-
+	TerrainModder tmod 
+	UnitProducer prod
 	construct (player p)
 		this.p = p
 		

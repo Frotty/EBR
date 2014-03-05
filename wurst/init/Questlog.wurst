@@ -6,8 +6,22 @@ init
 	QuestSetTitle(q, "Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
 	QuestSetDescription(q, "Available Commands:\n"
+							+ "-intro (starts a short introduction sequence for your role\n"
 							+ "-clear (clears textmessages)\n"
 							+ "-cam [value] (sets camera distance)\n"
 							+ "-cam lock (locks the camera onto your escaper)\n"
 							+ "-cam unlock (unlocks the camera)\n"
-							+ "-frev (revives your escaper, when he doesn't revive anymore due to a bug)\n" )
+							+ "-frev (revives your escaper, when he doesn't revive anymore due to a bug)\n"
+							+ "-info (shows basic information about the current Area)" )
+	q = CreateQuest()
+	
+	QuestSetTitle(q, "Credits")
+	QuestSetRequired(q, false)
+	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNtemp.blp")
+	QuestSetDescription(q, "In unsorted manner:\n"
+							+ "-kari0003\n"
+							+ "-menag\n"
+							+ "-Crigges\n"
+							+ "-hiveworkshop ppl\n"
+							+ "-old b.net friends whos names I forgot\n"
+							+ "-Geronimo\n" )
