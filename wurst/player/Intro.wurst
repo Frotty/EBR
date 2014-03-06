@@ -56,13 +56,20 @@ function bintro4()
 	let pd = expt.getData() castTo PlayerData
 	CameraSetupApplyForPlayer(true, gg_cam_BuilderTilesCam, pd.p, 5.)
 	printTimedToPlayerClear("Usually the first thing to do is Terraining!\nTerraining means changing the tiles inside your region to a maze structure.\nThere are two basic Terraintypes:\n    • |cff299C42Walkable |r(Escapers |cff42A542can walk|r on here)\n    • |cffCE2119Unwalkable |r(Escapers |cffCE3119die |rwhen they step on here)\n\nAs well as some additional terraintypes like:\n    • |cff2194EFIce|r, |cff08528CReverse Ice|r, |cff941908Lava|r, |cff3AC55APoison", 15, pd.p)
-	expt.start(15, function bintro5)
+	expt.start(15, function bintro5_1)
 	
-function bintro5()
+function bintro5_1()
 	let expt = GetExpiredTimer()
 	let pd = expt.getData() castTo PlayerData
 	pd.p.selectSingle(pd.tmod.actor)
 	CameraSetupApplyForPlayer(true, gg_cam_BlackCam, pd.p, 0.)
+	if GetLocalPlayer() == pd.p
+		ClearTextMessages()
+	expt.start(1., function bintro5_2)
+	
+function bintro5_2()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
 	printTimedToPlayerClear("<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n<==\n\nTo place these |cffFFCC00tiles|r, you have to |cffFFCC00selectSingle |rthe according Hero and |cffFFCC00rightclick the area|r where you want the terrain to be changed!\nselectSingle the |cffFFCC00Terrain-Heroes |rvia their|cffFFCC00 Icons|r on the|cffFFCC00 left side of your screen!", 10, pd.p)
 	expt.start(10, function bintro6)
 	
@@ -86,12 +93,77 @@ function bintro8()
 	let pd = expt.getData() castTo PlayerData
 	CameraSetupApplyForPlayer(true, gg_cam_StdCam, pd.p, 0.)
 	PanCameraToTimed(pd.builder.pos.x, pd.builder.pos.y, 0.)
+	cinematicModeForPlayer(false, pd.p, 0.)
 	printTimedToPlayerClear("The intro ends now.\n\n|cffFFCC00Use |ryour aquired |cffFFCC00knowledge |rto |cffFFCC00build |ra maze for the escapers!\n\nStart by |cffFFCC00buying |ra region of your choice...", 10, pd.p)
 	expt.release()
 	
 function startEscaperIntro()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	printTimedToPlayerClear("You are an |cff087BC5Escaper|r.|nFor you this map functions like an |cffFFCC00always different Escape/Maze Game|r.|n|nAfter you went through some |cffFFCC00pre-made mazes|r to give the builders some |cff7B9CE6time |rto build,|nyou will be running through |cffFFCC00mazes |rthat the other team, the |cff086BBDBuilders|r, built for |cff089442you|r!|n|n|cffFF5A29Everything is done ingame!|n|rIf you |cffFFCC00can't progress|r at a maze or have a |cffFFCC00suggestion|r, |cffFFF708feel free to chat|r with the |cffFFCC00builders |rusing |cffC55A10[ALL]|r chat (Shift + Enter)", 15, pd.p)
+	expt.start(15, function eintro1)
+	
+function eintro1()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	printTimedToPlayerClear("The|cffFFCC00 most basic element|r of escapes are different |cffFFCC00tiles|r,|nthat's why this introduction is gonna tell you the |cffFFCC00different tiles and their effects|r.|n", 7, pd.p)
+	expt.start(7, function eintro2)
+	
+function eintro2()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam00, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cffCE2919UNWALKABLE |rTile.|nIt differs from region to region depending on the type.|n|nYour |cff086BA5Escaper |cffFFCC00dies |ras soon as he steps onto it.", 7, pd.p)
+	expt.start(7, function eintro3)
+	
+function eintro3()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam01, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cff4ACE52WALKABLE |rTile.|nIt differs from region to region depending on the type.|n|nYour |cff086BA5Escaper |rcan |cffFFCC00walk |ron these tiles.", 7, pd.p)
+	expt.start(7, function eintro4)
 	
 
+function eintro4()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam02, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cff21C5FFICE |rTile.|n|nWhen stepping on this tile your |cff1084E6Escaper |rstarts to |cff08ADFFslide|r.|nWhile |cff29ADF7sliding|r, |cffFFCC00rightclicking |rcontrols your |cffFFCC00rotation|r.", 7, pd.p)
+	expt.start(7, function eintro5)
 	
-
+function eintro5()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam03, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cff085284DARK ICE|cff21C5FF |rTile.|n|nWhen steeping on it the |cff0873CEEscaper |rwill |cff52ADF7slide |rlike on normal ice,|nbut you |cffFFCC00lose |rthe ability to |cffFFCC00steer|r.", 7, pd.p)
+	expt.start(7, function eintro6)
 	
+function eintro6()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam04, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cff08A5BDREVERSE ICE|cff21C5FF |rTile.|n|nBasically the same like the |cff0894E6ICE |rtile,|nbut the steering is|cff0894E6 |cff0894B5reversed|r.", 7, pd.p)
+	expt.start(7, function eintro7)
+	
+function eintro7()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam05, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cffF72929LAVA |rTile.|n|nWhile walking on |cffDE3A21lava|r, your |cff0873BDEscaper |cffFFCC00loses Hitpoints|r over time.", 7, pd.p)
+	expt.start(7, function eintro8)
+	
+function eintro8()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_ECam06, pd.p, 0.)
+	printTimedToPlayerClear("This is the |cff5A9429POISON |rTile.|n|nAfter |cffFFCC00stepping |ronto |cff5ABD4Apoison |cffFFCC00once|r, your |cff086BB5Escaper |rgets |cff21AD4Ainfected|r.|nThe |cff3AC552infection |rlasts |cffFFCC00until |ryour |cff085AA5Escaper |rgets |cffFFCC00cured |rat a fountain |cffB5B5B5or|r |cffFFCC00dies|r,|nand does |cffFFCC00damage over time|r.", 7, pd.p)
+	expt.start(7, function eintro9)
+	
+function eintro9()
+	let expt = GetExpiredTimer()
+	let pd = expt.getData() castTo PlayerData
+	CameraSetupApplyForPlayer(true, gg_cam_StdCam, pd.p, 0.)
+	PanCameraToTimed(pd.escaper.pos.x,pd.escaper.pos.y,3.)
+	cinematicModeForPlayer(false, pd.p, 0.)
+	printTimedToPlayerClear("The introduction ends now.|nThere |cffFFCC00are a lot of objects|r in the game like |cff84CE4Adoors, keys, monsters, teleporters, etc.|n|rwhich you will |cffFFCC00encounter |ron along your path to |cffFFCC00victory|r.|n|nYou now |cffFF6331understand |rthe basic game mechanics and can |cffFFCC00discover |rthe rest on your own...", 7, pd.p)
+	expt.release()
