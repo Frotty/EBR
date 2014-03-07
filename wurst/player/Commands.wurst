@@ -29,14 +29,14 @@ function onCommandChat()
 				ResetToGameCameraForPlayer(p, 1.)
 				pd.camLock = false
 			else
-				var value = nstr.toInt() * 1.
-				if value > 2500
-					value = 2500
+				pd.zCam = nstr.toInt() * 1.
+				if pd.zCam > 2500
+					pd.zCam = 2500
 					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Maximum Zoom is 2500")
-				else if value < 500
-					value = 500
+				else if pd.zCam < 500
+					pd.zCam = 500
 					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Minimum Zoom is 500")
-				SetCameraFieldForPlayer(p, CAMERA_FIELD_TARGET_DISTANCE, value , 1.)
+				SetCameraFieldForPlayer(p, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 1.)
 		case "frev"
 			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Trying forced revive!")
 			if pd.escaper.actor.getHP() < .405
@@ -68,6 +68,8 @@ function onCommandChat()
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"
 			startIntroFor(pd)
+		case "exp"
+			pd.addXp(25000, true)
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro")

@@ -66,13 +66,13 @@ public function PlayerData.loadPlayerFile()
 		var scode = new Savecode()
 		if scode.load(this.p, this.slcode, saveTechnique)
 			debugPrint("load success", 1)
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded."  )
+			let xp = scode.decode(XPMAX)
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
+			this.setXp(xp)
 		else
-			
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - Your saved Character was invalid, a new one got created."  )
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You either have an old code-version or this is an EBR-Bug."  )
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To report a bug go to sunayama.de or tinyurl.com/EscapeBuilder."  )
-		this.setXp(scode.decode(XPMAX))
 			
 	else
 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You have no saved Character with this name, a new one was created."  )

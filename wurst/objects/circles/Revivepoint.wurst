@@ -69,12 +69,12 @@ public class RevivePoint extends StaticSetupObject
 						if GetLocalPlayer() == es.owner
 							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 	
-		if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
-			let esc = pData[u.getOwner().getId()]
-			esc.addXp(20, false)
-			if obj.owner.getId() < 11
-				let bld = pData[obj.owner.getId()]
-				bld.addXp(15, false)
+			if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
+				let esc = pData[u.getOwner().getId()]
+				esc.addXp(20, false)
+				if obj.owner.getId() < 11
+					let bld = pData[obj.owner.getId()]
+					bld.addXp(15, false)
 
 	static function filter() returns boolean
 		return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID

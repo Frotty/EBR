@@ -40,6 +40,8 @@ public class PlayerData //just the player's (constant) stuff
 	boolean localFilesEnabled = false
 	int lastExpGain = 0
 	
+	real zCam = 1600.
+	
 	boolean camLock = false
 	TerrainModder tmod 
 	UnitProducer prod
@@ -62,7 +64,7 @@ public class PlayerData //just the player's (constant) stuff
 		players.add(this)
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and playercount > 1
+		if localFilesEnabled and playercount > 0
 			if time
 				XP += amount
 				this.createNewPlayerFile()	

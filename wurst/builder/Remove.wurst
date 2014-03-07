@@ -1,10 +1,10 @@
 package Remove
 import Entity
-
+import PlayerData
 public constant int REMOVE_ID = 'A00K'
 trigger castTrig
 
-function removeObject()
+function removeObject() returns boolean
 	debugPrint("onRemove1", 3)
 	var id = GetSpellAbilityId()
 	if id == REMOVE_ID
@@ -19,8 +19,12 @@ function removeObject()
 			e.terminate()
 		else
 			GetSpellAbilityUnit().remove()
-
+		ResetToGameCamera(0.)
+		var pd = pData[u.getOwner().getId()]
+		SetCameraFieldForPlayer(u.getOwner(), CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 0.)
+	return false
+	
 init
 	castTrig = CreateTrigger()
 	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
-	castTrig.addAction(function removeObject)
+	castTrig.addCondition(Condition(function removeObject))
