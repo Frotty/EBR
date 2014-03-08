@@ -4,6 +4,8 @@ import Escaper
 import BaseObject
 import EventHandling
 import Texttag 
+import TempGroups
+import SoundHelper
 
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
@@ -12,10 +14,16 @@ constant int FORCED_ID = 'A070'
 constant int UNFORCED_ID = 'A071'
 constant int INCREASE_ID = 'A072'
 constant int DECREASE_ID = 'A073'
+constant SPECIAL_ID = 'A07O'
+
+Sound snd = new Sound("Units\\Human\\Priest\\PriestPissed3.wav", 1039, false)
 
 enum JumpMode
 	FORCED
 	UNFORCED
+
+function filter() returns boolean
+	return GetFilterUnit().getTypeId() == JUMPER_ID
 
 public class Jumper extends StaticBaseObject
 	JumpMode mode = JumpMode.FORCED
@@ -24,6 +32,14 @@ public class Jumper extends StaticBaseObject
 	construct(vec2 pos, player owner)
 		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange)
 		actor.registerCastEvent(Condition(function onCastEvent))
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 16, Filter(function filter))
+		ENUM_GROUP.next()
+		let u2 = ENUM_GROUP.next()
+		if u2 != null
+			snd.play()
+			actor.addAbility(SPECIAL_ID)
+			destroy this
+		ENUM_GROUP.clear()
 		
 	static function inRange()
 		var data = GetTriggerUnit().getUserData() castTo Entity
@@ -57,6 +73,8 @@ public class Jumper extends StaticBaseObject
 				if speed < 35.
 					speed += 1.
 					createTTEx(pos, vec2(0,0.05), "Speed: " + speed.toString(), 10,  2., colorA(255,255,255,0), owner  )
+			case SPECIAL_ID
+				print("duh")
 				
 	
 					
