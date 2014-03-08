@@ -51,8 +51,6 @@ package BaseObject
 			real y		= GetOrderPointY()
 			thistype obj  = GetUnitUserData( u ) castTo StaticBaseObject
 
-
-
 			if GetIssuedOrderId() == 0xD000C or GetIssuedOrderId() == 851971//IDs of Rally(to be sure)
 				if u2 == null
 					obj.rallyUnit = null

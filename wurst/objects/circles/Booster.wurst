@@ -5,6 +5,7 @@ package Booster
 	import EscaperKiller
 	import EventHandling
 	import Texttag
+	import SetupObject
 	
 	constant int 	WAYPOINT_ID   = 'n00J'
 		
@@ -27,8 +28,8 @@ package Booster
 			unit u = GetTriggerUnit()
 			Entity e = u.getUserData() castTo Entity
 			thistype obj = source.getUserData() castTo thistype
-			if e instanceof EscaperKiller
-				EscaperKiller ek = e castTo EscaperKiller
+			if e instanceof DynamicSetupObject
+				DynamicSetupObject ek = e castTo DynamicSetupObject
 				SetUnitMoveSpeed(ek.actor, obj.boostspeed)
 				SetUnitMoveSpeed(ek.setup, obj.boostspeed)
 

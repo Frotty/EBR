@@ -9,9 +9,6 @@ public module PhysicsModule
 	/** Affected by gravity */
 	boolean affectedByGravity = true
 	boolean flying = false
-	
-	real terrainZ = 0.
-	
 	// Physical factors
 	
 	// The higher the more slide. Should be < 1.
@@ -23,18 +20,31 @@ public module PhysicsModule
 		
 	// This function is called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
-		terrainZ = getTerrainZ(e.pos.x, e.pos.y)
-		if e.pos.z <= terrainZ + .2
+		if e.pos.z <= globalTerrainZ + .2
 			onGround(e)
 		else
 			inAir(e)
 			
+	function onGroundHit()
+		
+	function onEscapeGround()
+		
+	function onGround()
+		
+	function inAir()
 		
 	// When the Entity is on or near the ground	
 	function onGround(Entity e)
+		if flying
+			flying = false
+			onGroundHit()
 		e.vel *= friction
+		onGround()
 		
 	function inAir(Entity e)
+		if not flying
+			flying = true
+			onEscapeGround()
 		if affectedByGravity
 			e.vel += gravity
-			
+		inAir()

@@ -1,4 +1,4 @@
 package PhysicsConstants
 
 public vec3 gravity = vec3(0,0,-0.8)
-
+public constant globalTerrainZ = 0.

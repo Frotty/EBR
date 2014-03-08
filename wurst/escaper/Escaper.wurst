@@ -2,7 +2,6 @@ package Escaper
 import PhysicsEntity
 import Entity
 import Vectors
-import Physics
 import Terrain
 import TimerUtils
 import RegionData
@@ -18,6 +17,7 @@ import Fx
 import Colors
 import Texttag
 import RevivePointModifier
+import PhysicsConstants
 
 
 public Table escaperTable = new Table()
@@ -33,15 +33,12 @@ real time = 0.
 
 public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
-public class Escaper extends UnitEntity		
+public class Escaper extends UnitEntity	
+	use PhysicsModule
 	boolean sliding = false
-	boolean flying = false
 	boolean onUnwalkable = false
 	boolean poisoned = false
 	boolean onLava = false
-	
-	real terrainZ = 512.
-	
 	effect lavaEffect
 	effect poisonEffect
 	
@@ -115,24 +112,21 @@ public class Escaper extends UnitEntity
 			setLava(false)
 			flying = false
 			debugPrint("done", 3)
-			
-	function inAir()
-		if not flying
-			SetUnitPropWindow(actor,0.)
-			flying = true
-		vel += gravity
+	
+	override function onGroundHit()
+		SetUnitPropWindow(actor, 60.)
+		vel *= 0.20
+		vel.z = 0.
+		
+	override function onEscapeGround()
+		SetUnitPropWindow(actor,0.)
+	
+	override function inAir()
 		slideVelocity *= 0.99
 			
 			
-	function onGround()
-		if flying
-			flying = false
-			SetUnitPropWindow(actor, 60.)
-			vel *= 0.20
-			vel.z = 0.
-		pos.z = terrainZ+.1
-			
-			
+	override function onGround()		
+		pos.z = globalTerrainZ+.1		
 		var ttype = GetTerrainType(pos.x, pos.y)
 		
 		if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
@@ -183,21 +177,14 @@ public class Escaper extends UnitEntity
 		
 	
 	override function update()
-		super.update()
-		terrainZ = getTerrainZ(pos.x, pos.y)
-		if pos.z <= terrainZ + .2
-			onGround()
-		else
-			inAir()
-		
-
+		physicsUpdate(this)
 		pos += vel
 		pos += slideVelocity
 		if sliding
 			actor.setPos(pos.x, pos.y)
 		else
 			actor.setXY(pos.x, pos.y)
-		SetUnitFlyHeight( actor, pos.z - terrainZ, .0 )
+		SetUnitFlyHeight( actor, pos.z - globalTerrainZ, .0 )
 
         
 	static function revive()
