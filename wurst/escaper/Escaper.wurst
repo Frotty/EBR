@@ -17,6 +17,7 @@ import Weapon
 import Fx
 import Colors
 import Texttag
+import RevivePointModifier
 
 
 public Table escaperTable = new Table()
@@ -210,6 +211,9 @@ public class Escaper extends UnitEntity
 		Escaper e = pdata.escaper
 		var revX = currentRevivepoint.x
 		var revY = currentRevivepoint.y
+		if pData[e.owner.getId()].revmod.active //and created!!
+			revX = pData[e.owner.getId()].revmod.pos.x
+			revY = pData[e.owner.getId()].revmod.pos.y
 		if e instanceof Holy_Escaper
 			var he = e castTo Holy_Escaper
 			if he.revivetomb != null
@@ -333,6 +337,15 @@ public class Escaper extends UnitEntity
 						w.attackr(pos,GetSpellTargetX(), GetSpellTargetY())
 						actor.queueAnimation("cast")
 						return
+		else if id == CREATE_REV_MOD_ID
+			if pData[owner.getId()].revmod == null
+				pData[owner.getId()].revmod = new RevivePointModifier(pos.toVec2(), owner)
+			else
+				pData[owner.getId()].revmod.actor.setXY(pos.x,pos.y)
+				pData[owner.getId()].revmod.pos = pos.toVec2()
+		else if id == REMOVE_REV_MOD_ID
+			if pData[owner.getId()].revmod != null
+				destroy pData[owner.getId()].revmod
 			
 	ondestroy
 		lavaEffect.destr()

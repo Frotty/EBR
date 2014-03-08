@@ -11,6 +11,7 @@ import PickSystem
 import Sync
 import TerrainModder
 import UnitProducer
+import RevivePointModifier
 public int playercount = 0
 
 trigger leaveTrig
@@ -31,6 +32,7 @@ public class PlayerData //just the player's (constant) stuff
 	int deaths = 0
 	Escaper escaper
 	Builder builder
+	RevivePointModifier revmod
 	int XP = 40
 	effect lvlfx
 	
