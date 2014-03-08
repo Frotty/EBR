@@ -68,11 +68,17 @@ function onCommandChat()
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"
 			startIntroFor(pd)
+		case "smode"
+			pd.escaper.selectatrevive = not pd.escaper.selectatrevive
+			if pd.escaper.selectatrevive
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned on - selecting on revive.")
+			else
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned off - not selecting on revive.")
 		case "exp"
 			pd.addXp(25000, true)
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
-				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro")
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode")
 
 init
 	trigger trg = CreateTrigger()

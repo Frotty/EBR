@@ -5,6 +5,7 @@ import EscaperClasses
 import Entity
 import CodeManager
 import Startmazes
+import RevivePointModifier
 
 unit array pickheros
 int array herotypes
@@ -119,6 +120,8 @@ function keypick()
 		pd.setMbIcon(currentView[pd.id]-1)
 		if pd.id > 7
 			UnitAddAbility( pd.escaper.actor, BLINK_ID )
+			UnitAddAbility( pd.escaper.actor, CREATE_REV_MOD_ID )
+			pd.escaper.selectatrevive = false
 			ResetToGameCameraForPlayer(p,0.5)
 			PanCameraToTimedForPlayer(p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
 			SelectUnitForPlayerSingle( pd.builder.actor,p)

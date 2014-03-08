@@ -12,7 +12,8 @@ init
 							+ "-cam lock (locks the camera onto your escaper)\n"
 							+ "-cam unlock (unlocks the camera)\n"
 							+ "-frev (revives your escaper, when he doesn't revive anymore due to a bug)\n"
-							+ "-info (shows basic information about the current Area)" )
+							+ "-info (shows basic information about the current Area)" 
+							+ "-smode (Toggles revive selection, also effects camera pan)")
 	q = CreateQuest()
 	
 	QuestSetTitle(q, "Credits")

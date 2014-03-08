@@ -52,6 +52,7 @@ public class Escaper extends UnitEntity
 	RegionData currentRegion
 
 	boolean alive = true
+	boolean selectatrevive = true
 
 	
 	construct( vec3 pos, player owner, int typ )
@@ -211,7 +212,7 @@ public class Escaper extends UnitEntity
 		Escaper e = pdata.escaper
 		var revX = currentRevivepoint.x
 		var revY = currentRevivepoint.y
-		if pData[e.owner.getId()].revmod.active //and created!!
+		if (pData[e.owner.getId()].revmod != null) and pData[e.owner.getId()].revmod.active
 			revX = pData[e.owner.getId()].revmod.pos.x
 			revY = pData[e.owner.getId()].revmod.pos.y
 		if e instanceof Holy_Escaper
@@ -227,7 +228,7 @@ public class Escaper extends UnitEntity
 		e.slideVelocity = vec3(0,0,0)
 		e.setPos(vec3(revX, revY, 25.))
 		CameraClearNoiseForPlayer(e.owner)
-		if e.owner.getId() < 8
+		if e.selectatrevive
 			if (GetLocalPlayer() == e.owner)
 				PanCameraToTimed(revX, revY, 0)
 				ClearSelection()
@@ -338,14 +339,18 @@ public class Escaper extends UnitEntity
 						actor.queueAnimation("cast")
 						return
 		else if id == CREATE_REV_MOD_ID
-			if pData[owner.getId()].revmod == null
-				pData[owner.getId()].revmod = new RevivePointModifier(pos.toVec2(), owner)
-			else
-				pData[owner.getId()].revmod.actor.setXY(pos.x,pos.y)
-				pData[owner.getId()].revmod.pos = pos.toVec2()
+			//if pData[owner.getId()].revmod == null //Commented out, because when you want to create second time, the deleted class not equals null.
+			pData[owner.getId()].revmod = new RevivePointModifier(pos.toVec2(), owner)
+			//else
+			//	pData[owner.getId()].revmod.actor.setXY(pos.x,pos.y)
+			//	pData[owner.getId()].revmod.pos = pos.toVec2()
+			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
+			UnitAddAbility( actor, REMOVE_REV_MOD_ID )
 		else if id == REMOVE_REV_MOD_ID
 			if pData[owner.getId()].revmod != null
 				destroy pData[owner.getId()].revmod
+			UnitRemoveAbility( actor, REMOVE_REV_MOD_ID )
+			UnitAddAbility( actor, CREATE_REV_MOD_ID )
 			
 	ondestroy
 		lavaEffect.destr()
