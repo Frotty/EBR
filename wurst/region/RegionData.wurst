@@ -80,7 +80,7 @@ public class RegionData
 								
 	static function enterRect()
 		var u = GetTriggerUnit()
-		var data = u.getUserData() castTo Entity
+		var data = u.getEntity()
 		var rdata = regionTable.loadInt(GetHandleId(GetTriggeringTrigger().getSourceRect())) castTo RegionData
 
 		if data instanceof Escaper

@@ -100,9 +100,9 @@ public class Spinner extends DynamicSetupObject
 				for gu in ENUM_GROUP
 					if gu != sdata.actor and gu != sdata.setup
 						if gu.getUserData() > 0
-							var ed = gu.getUserData() castTo Entity
+							var ed = gu.getEntity()
 							if ed.owner == sdata.owner
-								sdata.checkObj(gu.getUserData() castTo Entity)
+								sdata.checkObj(gu.getEntity())
 				ENUM_GROUP.clear()
 			case INC_ID
 				if sdata.speed < 10.
@@ -144,8 +144,10 @@ public class Spinner extends DynamicSetupObject
 		return false
 	
 init
+	debugPrint("wc3init Spinner begin", 2)
 	preloadAbility(SPELL_ID)
 	preloadAbility(SPELL2_ID)
 	preloadAbility(INC_ID)
 	preloadAbility(DEC_ID)
+	debugPrint("wc3init Spinner finish", 2)
 		

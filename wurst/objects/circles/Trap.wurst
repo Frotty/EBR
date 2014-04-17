@@ -43,7 +43,7 @@ public class Trap extends StaticBaseObject
 		debugPrint("Trap step", 1)
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
-		Entity e = u.getUserData() castTo Entity
+		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
 		
 		if not obj.active and e instanceof Escaper
@@ -62,7 +62,7 @@ public class Trap extends StaticBaseObject
 				DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), EVENT_RADIUS, null)
 				for unit u in ENUM_GROUP
-					Entity e = u.getUserData() castTo Entity
+					Entity e = u.getEntity()
 					if e instanceof Escaper
 						var escaper = e castTo Escaper
 						doEffect(escaper)

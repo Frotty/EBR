@@ -1,16 +1,16 @@
 package Builder
-import Entity
-import PlayerData
-import BuilderConstants
-import RegionData
-import Key
-import SetupBox
-import TempGroups
-import Boss
-import BossDamager
-import BossSpellTarget
-import Weapon
-import InstantBuild
+import initlater Entity
+import initlater PlayerData
+import initlater BuilderConstants
+import initlater RegionData
+import initlater Key
+import initlater SetupBox
+import initlater TempGroups
+import initlater Boss
+import initlater BossDamager
+import initlater BossSpellTarget
+import initlater Weapon
+import initlater InstantBuild
 
 trigger swapTrigger
 trigger itemTrigger
@@ -48,7 +48,7 @@ public class Builder extends UnitEntity
 		pos = actor.getPos().toVec3()
 	
 	static function swapPages()
-		var data = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggerUnit().getEntity()
 		
 		if data instanceof Builder
 			var builder = data castTo Builder
@@ -161,7 +161,7 @@ public class Builder extends UnitEntity
 				var bdata = GetTriggerUnit().getUserData() castTo Builder
 				bdata.actor.abortOrder()
 				if i.getUserData() > 0
-					var idata = i.getUserData() castTo Entity
+					var idata = i.getEntity()
 					idata.terminate()
 				else 
 					RemoveItem(i)

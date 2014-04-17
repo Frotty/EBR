@@ -36,7 +36,7 @@ package Obstacle
 			
 		static function kill()
 			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			if e instanceof Escaper
 				(e castTo Escaper).kill() //or whatever
 
@@ -55,7 +55,7 @@ package Obstacle
 			
 		static function kill()
 			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			if e instanceof Escaper
 				(e castTo Escaper).kill() //or whatever
 

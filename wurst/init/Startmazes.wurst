@@ -1,24 +1,24 @@
 package Startmazes
-import Revivepoint
-import Door
-import Obstacle
-import Key
-import EscaperKiller
-import Teleporter
-import Executer
+import initlater Revivepoint
+import initlater Door
+import initlater Obstacle
+import initlater Key
+import initlater EscaperKiller
+import initlater Teleporter
+import initlater Executer
 import BuilderConstants
-import Unitcreator
-import UnitRemover
-import Spinner
-import Entity
-import RegionData
-import TempGroups
-import Texttag
-import Startmaze
-import FirstSnow
-import SecondDesert
-import ThirdForest
-import FourthCitadelle
+import initlater Unitcreator
+import initlater UnitRemover
+import initlater Spinner
+import initlater Entity
+import initlater RegionData
+import initlater TempGroups
+import initlater Texttag
+import initlater Startmaze
+import initlater FirstSnow
+import initlater SecondDesert
+import initlater ThirdForest
+import initlater FourthCitadelle
 
 
 public Startmaze array startmazes
@@ -51,7 +51,7 @@ public function clearEBRRect(int r)
 	var rd = regions[r]
 	GroupEnumUnitsInRect(ENUM_GROUP, rd.theRect, null)
 	for u in ENUM_GROUP
-		let e =u.getUserData() castTo Entity
+		let e =u.getEntity()
 		if (e != null )
 			e.terminate()
 		else

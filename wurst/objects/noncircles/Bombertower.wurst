@@ -48,7 +48,7 @@ package Bombertower
 	
 	function checkAttackOrder()
 		var i = GetIssuedOrderId()
-		var e = GetOrderedUnit().getUserData() castTo Entity
+		var e = GetOrderedUnit().getEntity()
 		if e instanceof Bombertower 
 			var obj = e castTo Bombertower
 			if GetOrderedUnit() == obj.actor

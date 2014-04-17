@@ -1,13 +1,13 @@
 package Weapon
-import ItemObject
-import Escaper
-import EventHandling
-import TempGroups
-import Boss
-import Entity
-import Projectile
-import Wall
-import Fx
+import initlater ItemObject
+import initlater Escaper
+import initlater EventHandling
+import initlater TempGroups
+import initlater Boss
+import initlater Entity
+import initlater Projectile
+import initlater Wall
+import initlater Fx
 
 constant int NEXT_ID = 'A07D'
 constant int PREW_ID = 'A07E'
@@ -79,7 +79,7 @@ public class Weapon extends ItemObject
 		var oy = polarProjectionY(holder.pos.y,weapon[wpid].aoe/2,a)
 		GroupEnumUnitsInRange(ENUM_GROUP, ox, oy, weapon[wpid].aoe, null)
 		for u in ENUM_GROUP
-			var e = u.getUserData() castTo Entity
+			var e = u.getEntity()
 			if e instanceof Boss
 				var b = e castTo Boss
 				b.onDamage(owner, weapon[wpid].dmg)
@@ -115,7 +115,7 @@ class WeaponMissile extends Projectile
 		super.update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, weapon[id].aoe, null)
 		for u in ENUM_GROUP
-			var e = u.getUserData() castTo Entity	
+			var e = u.getEntity()
 			if e instanceof Boss
 				var b = e castTo Boss
 				b.onDamage(owner, weapon[id].dmg)

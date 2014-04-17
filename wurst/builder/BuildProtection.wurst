@@ -6,6 +6,8 @@ function removeWrong()
 	GetTriggerUnit().remove()
 
 init
+	debugPrint("wc3init BuildProtect begin", 2)
 	let t = CreateTrigger()
 	t.registerBuilderEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
 	t.addAction(function removeWrong)
+	debugPrint("wc3init BuildProtect finish", 2)

@@ -1,17 +1,15 @@
 package Debug
-	import Entity
-	
-	public int entityCount 			= 0
-	public int unitEntityCount 		= 0
-	
+import initlater Entity
 
-	function showCount()
-		debugPrint("entities: " + entityCount.toString(), 1)
-		debugPrint("unitentities: " + unitEntityCount.toString(), 1)
-		Entity e = Entity.first
-		while e != null
-			debugPrint("id: " + (e castTo int).toString(), 1)
-			e = e.next
-		
-		
-endpackage
+public int entityCount 			= 0
+public int unitEntityCount 		= 0
+
+
+function showCount()
+	debugPrint("entities: " + entityCount.toString(), 1)
+	debugPrint("unitentities: " + unitEntityCount.toString(), 1)
+	Entity e = Entity.first
+	while e != null
+		debugPrint("id: " + (e castTo int).toString(), 1)
+		e = e.next
+

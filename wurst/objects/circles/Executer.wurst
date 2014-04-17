@@ -76,7 +76,7 @@ package Executer
 		static function onEvent()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			thistype obj = source.getUserData() castTo thistype
 			
 			if obj.canTrigger(e)
@@ -105,13 +105,13 @@ package Executer
 		static function onLeaveEvent()
 			debugPrint("on Leave Event fired", 3)
 			region r = GetTriggeringRegion()
-			Entity leaver = GetLeavingUnit().getUserData() castTo Entity
+			Entity leaver = GetLeavingUnit().getEntity()
 			thistype obj = r.loadRegionData() castTo thistype
 			if obj.canTrigger(leaver)
 				GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
 				int c = 0
 				for unit u in ENUM_GROUP
-					Entity e = u.getUserData() castTo Entity
+					Entity e = u.getEntity()
 					if obj.canTrigger(e)
 						c++
 				ENUM_GROUP.clear()
@@ -126,7 +126,7 @@ package Executer
 			debugPrint("on Enter Event fired - 2", 3)
 			region r = GetTriggeringRegion()
 			debugPrint("on Enter Event fired - 3", 3)
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			debugPrint("on Enter Event fired - 4", 3)
 			thistype obj = r.loadRegionData() castTo thistype
 			debugPrint("on Enter Event fired - 5 - id: " + (obj castTo int).toString(), 3)

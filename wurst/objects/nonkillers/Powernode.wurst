@@ -81,7 +81,7 @@ public class Powernode extends DynamicSetupObject
 		switch id
 			case LINK_ID
 				debugPrint("node cast link", 1)
-				var data = target.getUserData() castTo Entity
+				var data = target.getEntity()
 				if data instanceof Powernode
 					debugPrint("node cast link is node", 1)
 					var pdata = data castTo Powernode

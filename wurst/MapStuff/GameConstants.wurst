@@ -29,6 +29,7 @@ package GameConstants
 
 
 	init
+		debugPrint("wc3init GameConstants begin", 2)
 		mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"
 		mbPic[ 1 ] = "ReplaceableTextures\\CommandButtons\\BTNFootman.blp"
 		mbPic[ 2 ] = "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp"
@@ -101,5 +102,6 @@ package GameConstants
 		expBounds[10] = 25000
 		ranks[11] = "wat."
 		expBounds[11] = 100000
+		debugPrint("wc3init GameConstants finish", 2)
 
 endpackage 

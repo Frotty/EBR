@@ -1,16 +1,15 @@
 package Boss
-import Entity
-import Terrain
-import SetupObject
-import PlayerData
-import Escaper
-import EventHandling
-import PreloadHandler
-import BossSpellTarget
-import TempGroups
-import RegionData
-import Texttag
-import CustomBar
+import initlater Entity
+import initlater SetupObject
+import initlater PlayerData
+import initlater Escaper
+import initlater EventHandling
+import initlater PreloadHandler
+import initlater BossSpellTarget
+import initlater TempGroups
+import initlater RegionData
+import initlater Texttag
+import initlater CustomBar
 
 constant int BOSS_TOMB_ID = 'n01P'
 constant int HP_UP_ID = 'A06U'
@@ -35,7 +34,7 @@ public class Boss extends DynamicSetupObject
 	RegionData rdata
 
 	static function onInRangeEvent()
-		var ent = GetTriggerUnit().getUserData() castTo Entity
+		var ent = GetTriggerUnit().getEntity()
 		if ent instanceof Escaper
 			var es = ent castTo Escaper
 			if not es.flying
@@ -68,7 +67,7 @@ public class Boss extends DynamicSetupObject
 		
 	static function onCast() returns boolean
 
-		var data = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggerUnit().getEntity()
 		
 		if data instanceof Boss
 			var boss = data castTo Boss
@@ -131,7 +130,7 @@ public class Boss extends DynamicSetupObject
 		return g
 	
 	static function onDeath()
-		var data = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggerUnit().getEntity()
 		if data instanceof Boss
 			var boss = data castTo Boss
 			boss.hpBar.changeVisibility(CreateForce())

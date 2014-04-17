@@ -102,7 +102,7 @@ public class SetupBox
 			case CLEAR_ID
 				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
 				for u in ENUM_GROUP
-					var data = u.getUserData() castTo Entity
+					var data = u.getEntity()
 					if not data instanceof Escaper and not data instanceof Builder and u != box.actor and data != null
 						data.terminate()
 			case BOSS_MODE_ID

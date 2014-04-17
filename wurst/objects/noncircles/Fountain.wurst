@@ -22,7 +22,7 @@ package Fountain
 		
 		static function cure()
 			Fountain obj = GetTriggeringTrigger().getSource().getUserData() castTo Fountain
-			Entity e = GetTriggerUnit().getUserData() castTo Entity
+			Entity e = GetTriggerUnit().getEntity()
 			if e instanceof Escaper and obj.cure
 				var es = e castTo Escaper
 				if es.poisoned and not es.flying

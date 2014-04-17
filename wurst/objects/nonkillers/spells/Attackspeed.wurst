@@ -9,11 +9,13 @@ constant integer INCREASE = 'A044'
 constant integer DECREASE = 'A043'
 
 init
+	debugPrint("wc3init Attakspeed begin", 2)
 	preloadAbility(ATTACK_SPEED_RATE_POSITIVE_ID)
 	preloadAbility(ATTACK_SPEED_RATE_NEGATIVE_ID)
 	preloadAbility(ATTACK_SPEED_DUMMY_ID)
 	preloadAbility(INCREASE)
 	preloadAbility(DECREASE)
+	debugPrint("wc3init Attakspeed finish", 2)
 	
 
 public function onAttackspeedCast(int spellid, unit actor)

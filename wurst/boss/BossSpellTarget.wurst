@@ -1,15 +1,15 @@
 package BossSpellTarget
-import BaseObject
-import SetupObject
-import EventHandling
-import PreloadHandler
-import DummyCaster
-import Fx
-import MapBounds
-import Escaper
-import Boss
-import TempGroups
-import HomingProjectile
+import initlater BaseObject
+import initlater SetupObject
+import initlater EventHandling
+import initlater PreloadHandler
+import initlater DummyCaster
+import initlater Fx
+import initlater MapBounds
+import initlater Escaper
+import initlater Boss
+import initlater TempGroups
+import initlater HomingProjectile
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
@@ -34,7 +34,7 @@ public class SpellTarget extends DynamicSetupObject
 		setup.registerCastEvent(Condition(function onCast))
 		
 	static function onCast() returns boolean
-		var data = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggerUnit().getEntity()
 		if data instanceof SpellTarget
 			var spt = data castTo SpellTarget
 			var id = GetSpellAbilityId()
@@ -61,7 +61,7 @@ public class SpellTarget extends DynamicSetupObject
 		print("fancy")
 		GroupEnumUnitsInRange(ENUM_GROUP,pos.x, pos.y, aoe_spell[root.aoe_id].aoe, null)
 		for u in ENUM_GROUP
-			var e = u.getUserData() castTo Entity
+			var e = u.getEntity()
 			if e instanceof Escaper
 				var es = e castTo Escaper
 				if not es.flying

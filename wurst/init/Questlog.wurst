@@ -2,6 +2,7 @@ package Questlog
 
 
 init
+	debugPrint("wc3init QuestLog begin", 2)
 	var q = CreateQuest()
 	QuestSetTitle(q, "Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
@@ -26,3 +27,4 @@ init
 							+ "-hiveworkshop ppl\n"
 							+ "-old b.net friends whos names I forgot\n"
 							+ "-Geronimo\n" )
+	debugPrint("wc3init Questlog finish", 2)

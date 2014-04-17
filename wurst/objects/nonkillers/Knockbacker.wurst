@@ -52,7 +52,7 @@ public class Knockbacker extends DynamicSetupObject
 		setup.setAnimation("attack")
 		AddSpecialEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", edata.pos.x, edata.pos.y).destr()
 	static function inRangeEvent()
-		let ud = GetTriggerUnit().getUserData() castTo Entity
+		let ud = GetTriggerUnit().getEntity()
 		let sd = GetTriggeringTrigger().getSource().getUserData() castTo Knockbacker
 		if ud instanceof Escaper
 			sd.inRange(ud castTo Escaper)

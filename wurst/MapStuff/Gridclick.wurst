@@ -27,8 +27,9 @@ package Gridclick
 		return R2I(r-.5)
 	
 	init
+		debugPrint("wc3init Grid begin", 2)
 		trigger t = CreateTrigger()
 		//TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 		TriggerAddAction(t,function checkRightOrder)
-	
+		debugPrint("wc3init Grid finish", 2)
 endpackage

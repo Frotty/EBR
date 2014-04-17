@@ -1,94 +1,92 @@
 package GameInit
-	import PlayerData
-	import Entity
-	import UnitProducer
-	import Escaper
-	import RegionData
-	import PickSystem
-	import Builder
-	import Door
-	import TerrainModder
-	import Executer
-	import Trap
-	import Texter
-	import Bombertower
-	import Bomber
-	import Startmazes
-	import EntityManagement
-	import Pointer
-	import Weapon
-	import BossSpellTarget
-	import FileIO
-	import Invisible
-	import Boss
-	import GlobalShop
+import PlayerData
+import Entity
+import UnitProducer
+import Escaper
+import RegionData
+import PickSystem
+import Builder
+import Door
+import TerrainModder
+import Executer
+import Trap
+import Texter
+import Bombertower
+import Bomber
+import Startmazes
+import EntityManagement
+import Pointer
+import Weapon
+import BossSpellTarget
+import FileIO
+import Invisible
+import Boss
+import GlobalShop
+
+function initGame()
+
+	debugPrint("Starting Init", 2)
+	VolumeGroupReset()
+	EndThematicMusic()
+	debugPrint("Init - Music", 2)
+	init_TerrainModder()
+	debugPrint("Init - TMod", 2)
+	init_UnitProducer()
+	debugPrint("Init - UP", 2)
+	init_Regions()
+	debugPrint("Init - Regions", 2)
 	
-	function initGame()
+	debugPrint("Init - SetTeleports", 2)
+	init_Choose()
+	debugPrint("Init - Choose", 2)
+	init_Builder()
+	debugPrint("Init - Builder", 2)
+	init_Trap()
+	debugPrint("Init - Trap", 2)
+	init_Door()
+	debugPrint("Init - Door", 2)
+	init_Texter()
+	debugPrint("Init - Txter", 2)
+	init_Bombertower()
+	debugPrint("Init - BTower", 2)
+	init_Bomber()
+	debugPrint("Init - Bomber", 2)
+	debugPrint("Init - Reinc", 2)
+	init_Pointer()
+	debugPrint("Init - Pointer", 2)
+	init_Weapon()
+	debugPrint("Init - Weapon", 2)
+	init_BossSpellTarget()
+	debugPrint("Init - Bossspelltarget", 2)
+	init_Boss()
+	debugPrint("Init - Boss", 2)
+	init_GlobalShop()
+	debugPrint("Init - Shop", 2)
+	invis_init()
+	
+	getTimer().start(0.01, function initPartTwo)
+	
+function initPartTwo()
+	initBaseObjects()
+	debugPrint("Init - BObj", 2)
+	debugPrint("Init - Startmazes", 2)
+	CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 
-		debugPrint("Starting Init", 2)
-		VolumeGroupReset()
-		EndThematicMusic()
-		debugPrint("Init - Music", 2)
-		init_TerrainModder()
-		debugPrint("Init - TMod", 2)
-		init_UnitProducer()
-		debugPrint("Init - UP", 2)
-		init_Regions()
-		debugPrint("Init - Regions", 2)
-		
-		debugPrint("Init - SetTeleports", 2)
-		init_Choose()
-		debugPrint("Init - Choose", 2)
-		init_Builder()
-		debugPrint("Init - Builder", 2)
-		init_Trap()
-		debugPrint("Init - Trap", 2)
-		init_Door()
-		debugPrint("Init - Door", 2)
-		init_Texter()
-		debugPrint("Init - Txter", 2)
-		init_Bombertower()
-		debugPrint("Init - BTower", 2)
-		init_Bomber()
-		debugPrint("Init - Bomber", 2)
-		debugPrint("Init - Reinc", 2)
-		init_Pointer()
-		debugPrint("Init - Pointer", 2)
-		init_Weapon()
-		debugPrint("Init - Weapon", 2)
-		init_BossSpellTarget()
-		debugPrint("Init - Bossspelltarget", 2)
-		init_Boss()
-		debugPrint("Init - Boss", 2)
-		init_GlobalShop()
-		debugPrint("Init - Shop", 2)
-		invis_init()
-		
-		getTimer().start(0.01, function initPartTwo)
-		
-	function initPartTwo()
-		initBaseObjects()
-		debugPrint("Init - BObj", 2)
-		debugPrint("Init - Startmazes", 2)
-		CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
+	//initMazeUnits(rand, rand)
+	debugPrint("Init - Startmazes2", 2)		
+	
+	debugPrint("Init - Finished", 2)
+	startChoose()
+	debugPrint("Starting choose...", 2)
+	
+	debugPrint(File.isEnabled().toString(), 12)
+	GetExpiredTimer().release()
 
-		//initMazeUnits(rand, rand)
-		debugPrint("Init - Startmazes2", 2)		
-		
-		debugPrint("Init - Finished", 2)
-		startChoose()
-		debugPrint("Starting choose...", 2)
-		
-		debugPrint(File.isEnabled().toString(), 12)
-		GetExpiredTimer().release()
-
-	init
-		VolumeGroupReset()
-		EndThematicMusic()
-		startEntityLoop()
-		trigger t = CreateTrigger()
-		TriggerRegisterTimerEvent( t, .01, false )
-		TriggerAddAction( t, function initGame )
-
-
-endpackage 
+init
+	debugPrint("wc3init a", 2)
+	VolumeGroupReset()
+	EndThematicMusic()
+	startEntityLoop()
+	trigger t = CreateTrigger()
+	TriggerRegisterTimerEvent( t, .01, false )
+	TriggerAddAction( t, function initGame )

@@ -26,7 +26,7 @@ public class RevivePoint extends StaticSetupObject
 	static function reach()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
-		Entity e = u.getUserData() castTo Entity
+		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
 		if obj.reached
 			return

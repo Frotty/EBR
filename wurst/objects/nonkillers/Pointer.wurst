@@ -67,7 +67,7 @@ public class Pointer extends UnitEntity
 		return false
 
 	static function turnUnit()
-		var edata = GetTriggerUnit().getUserData() castTo Entity
+		var edata = GetTriggerUnit().getEntity()
 		var data = GetTriggeringTrigger().getSource().getUserData() castTo Pointer
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
@@ -110,7 +110,9 @@ public function init_Pointer()
 	TriggerAddAction(t, function Pointer.setfacing)
 	
 init
+	debugPrint("wc3init Pointer begin", 2)
 	preloadAbility(START_ID)
 	preloadAbility(STOP_ID)
 	preloadAbility(INC_ID)
 	preloadAbility(DEC_ID)
+	debugPrint("wc3init Pointer finish", 2)

@@ -1,27 +1,35 @@
 package TerrainBlocker
 import BaseObject
+import public BitSet
 
-public hashtable blockermatrix = InitHashtable()
+public hashtable tileModifierMap = InitHashtable()
 
 constant int BLOCKER_ID = 'h009'
-tuple matrixpos (int x, int y)
+public tuple matrixpos (int x, int y)
+
+public enum TileModifiers
+	NORMAL
+	BLOCK
+	GOO
+	
 
 public class TerrainBlocker extends StaticBaseObject
 	matrixpos m
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, BLOCKER_ID, (round(pos.x/128))*128., (round(pos.y/128))*128., 0. ), 0, CODE_NULL)
-		var x = round(pos.x/128)
-		var y = round(pos.y/128)
-		this.pos.x = x.toReal()
-		this.pos.y = y.toReal()
-		m = matrixpos(x,y)
-		blockermatrix.saveBoolean(x, y, true)
+		super(pos, CreateUnit(owner, BLOCKER_ID, ((pos.x/128).round())*128., ((pos.y/128).round())*128., 0. ), 0, CODE_NULL)
+		m = matrixpos(pos.x.toInt(), pos.y.toInt())
+		let bs = bitset(tileModifierMap.loadInt(m.x, m.y))
+		if bs.contains(TileModifiers.BLOCK castTo int)
+			DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
+						+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?")
+			destroy this
+		else
+			bs.add(TileModifiers.BLOCK castTo int)
+			tileModifierMap.saveInt(m.x, m.y, bs.val)
 
 	ondestroy
-		blockermatrix.saveBoolean(m.x, m.y, false)
+		let bs = bitset(tileModifierMap.loadInt(m.x, m.y))
+		bs.remove(TileModifiers.BLOCK castTo int)
+		tileModifierMap.saveInt(m.x, m.y, bs.val)
 		
-public function round (real r) returns integer
-		if r > 0
-			return R2I(r+.5)
-		return R2I(r-.5)

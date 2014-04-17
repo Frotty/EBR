@@ -57,7 +57,7 @@ package BaseObject
 					obj.rallyPoint = vec3( x, y, getTerrainZ( x, y ) )
 					obj.rallyAngle = angleBetweenCoords( obj.pos.x, obj.pos.y, x, y )
 				else
-					var data = u2.getUserData() castTo Entity
+					var data = u2.getEntity()
 					if data != null and data instanceof DynamicSetupObject
 						obj.rallyUnit = (data castTo DynamicSetupObject).actor
 					else
@@ -121,8 +121,10 @@ package BaseObject
 
 
 	init
+		debugPrint("wc3init BaseObject begin", 2)
 		rallyTrigger = CreateTrigger()
 		rallyTrigger.addAction( function StaticBaseObject.adjustRallypoint )
+		debugPrint("wc3init BaseObject finish", 2)
 
 
 endpackage

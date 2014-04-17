@@ -222,7 +222,9 @@ function playerLeft()
 
 	
 init
+	debugPrint("wc3init PD begin", 2)
 	getTimer().start(0.01, function initPlayers)
+	debugPrint("wc3init PD finish", 2)
 	
 function initPlayers()
 	leaveTrig = CreateTrigger()

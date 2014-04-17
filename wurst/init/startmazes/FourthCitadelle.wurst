@@ -51,35 +51,35 @@ public class FourthCitadelleMaze extends Startmaze
 
 		Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
 		gg_unit_h01M_0258.remove()
-		s.checkObj( gg_unit_n00E_0260.getUserData() castTo Entity )
+		s.checkObj( gg_unit_n00E_0260.getEntity() )
 		debugPrint("Spinner done..." , 3)
-		s.checkObj( gg_unit_n00E_0261.getUserData() castTo Entity )
+		s.checkObj( gg_unit_n00E_0261.getEntity() )
 		s.speed = 4.5 *DEGTORAD
     
 		s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), Player(11))
 		gg_unit_h01M_0257.remove()
-		s.checkObj( gg_unit_n00E_0271.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0272.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0273.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0274.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0275.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0276.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0277.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0278.getUserData() castTo Entity )
+		s.checkObj( gg_unit_n00E_0271.getEntity() )
+		s.checkObj( gg_unit_n00E_0272.getEntity() )
+		s.checkObj( gg_unit_n00E_0273.getEntity() )
+		s.checkObj( gg_unit_n00E_0274.getEntity() )
+		s.checkObj( gg_unit_n00E_0275.getEntity() )
+		s.checkObj( gg_unit_n00E_0276.getEntity() )
+		s.checkObj( gg_unit_n00E_0277.getEntity() )
+		s.checkObj( gg_unit_n00E_0278.getEntity() )
 		s.speed = 2. *DEGTORAD
 		
 		s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
 		gg_unit_h01M_0259.remove()
-		s.checkObj( gg_unit_n00E_0215.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0216.getUserData() castTo Entity )
-		s.checkObj( gg_unit_n00E_0217.getUserData() castTo Entity )
+		s.checkObj( gg_unit_n00E_0215.getEntity() )
+		s.checkObj( gg_unit_n00E_0216.getEntity() )
+		s.checkObj( gg_unit_n00E_0217.getEntity() )
 		s.speed = 4. *DEGTORAD
 		//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
 		IssuePointOrder( s.setup, "patrol", -3820, -4661 )
     
 		s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), Player(11))
 		gg_unit_h01M_0212.remove()
-		s.checkObj( gg_unit_h01I_0220.getUserData() castTo Entity )
+		s.checkObj( gg_unit_h01I_0220.getEntity() )
 		s.speed = 7 *DEGTORAD
 		EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
 

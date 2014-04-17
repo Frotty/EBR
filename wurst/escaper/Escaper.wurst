@@ -1,24 +1,24 @@
 package Escaper
-import PhysicsEntity
-import Entity
-import Vectors
-import Terrain
-import TimerUtils
-import RegionData
-import BuilderConstants
-import ItemObject
-import Key
-import Revivepoint
-import LinkedList
-import EscaperClasses
-import PlayerData
-import Weapon
-import Fx
-import Colors
-import Texttag
-import RevivePointModifier
-import PhysicsConstants
-
+import initlater  PhysicsEntity
+import initlater  Entity
+import initlater  Vectors
+import initlater  Terrain
+import initlater  TimerUtils
+import initlater  RegionData
+import initlater  BuilderConstants
+import initlater  ItemObject
+import initlater  Key
+import initlater  Revivepoint
+import initlater  LinkedList
+import initlater  EscaperClasses
+import initlater  PlayerData
+import initlater  Weapon
+import initlater  Fx
+import initlater  Colors
+import initlater  Texttag
+import initlater  RevivePointModifier
+import initlater  PhysicsConstants
+import initlater  TerrainBlocker
 
 public Table escaperTable = new Table()
 
@@ -115,6 +115,9 @@ public class Escaper extends UnitEntity
 			debugPrint("done", 3)
 	
 	override function onGroundHit()
+		if bitset(tileModifierMap.loadInt(pos.x.round() div 128, pos.y.round() div 128)).contains(TileModifiers.GOO castTo int)
+			vel.z = -vel.z
+			return
 		SetUnitPropWindow(actor, 60.)
 		vel *= 0.20
 		vel.z = 0.
@@ -178,6 +181,8 @@ public class Escaper extends UnitEntity
 		
 	
 	override function update()
+		pos.x = actor.getX()
+		pos.y = actor.getY()
 		physicsUpdate(this)
 		pos += vel
 		pos += slideVelocity
@@ -358,6 +363,7 @@ function correctRegion()
 		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
 		
 init
+	debugPrint("wc3init Escaper begin", 2)
 	slideAssist = CreateTrigger()
 	slideAssist.addAction(function Escaper.changeAngle)
 	pickupTrig = CreateTrigger()
@@ -369,3 +375,4 @@ init
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)
+	debugPrint("wc3init Escaper finish", 2)

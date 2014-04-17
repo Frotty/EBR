@@ -81,7 +81,9 @@ function onCommandChat()
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode")
 
 init
+	debugPrint("wc3init Commands begin", 2)
 	trigger trg = CreateTrigger()
 	for i = 0 to 10
 		trg.registerPlayerChatEvent(Player(i), "-", false)
 	trg.addAction(function onCommandChat)
+	debugPrint("wc3init Commands finish", 2)

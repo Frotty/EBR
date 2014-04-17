@@ -104,5 +104,7 @@ function onLoop()
 	ForForce(shakingPlayers, function loopPerPlayer)
 	
 init
+	debugPrint("wc3init Shake begin", 2)
 	CreateTimer().startPeriodic(LOOP_PERIOD, function onLoop)
+	debugPrint("wc3init Shake finish", 2)
 	

@@ -18,7 +18,7 @@ package EscaperKiller
 			super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function EscaperKiller.onInRangeEvent ) 
 		
 		static function onInRangeEvent()
-			var ent = GetTriggerUnit().getUserData() castTo Entity
+			var ent = GetTriggerUnit().getEntity()
 			
 			if ent instanceof Escaper
 				var es = ent castTo Escaper

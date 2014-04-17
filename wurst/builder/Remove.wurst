@@ -21,12 +21,14 @@ function removeObject() returns boolean
 			GetSpellAbilityUnit().remove()
 		let owner = u.getOwner()
 		var pd = pData[owner.getId()]
-		SetCameraFieldForPlayer(owner, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 0.)
 		if GetLocalPlayer() == owner
 			ResetToGameCamera(0.)
+		SetCameraFieldForPlayer(owner, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 0.)
 	return false
 	
 init
+	debugPrint("wc3init Remove begin", 2)
 	castTrig = CreateTrigger()
 	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 	castTrig.addCondition(Condition(function removeObject))
+	debugPrint("wc3init Remove finish", 2)

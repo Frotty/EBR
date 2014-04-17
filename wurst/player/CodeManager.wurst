@@ -1,9 +1,9 @@
 package CodeManager
-import PlayerData
-import CodeGenerator
-import FileIO
-import Sync
-import Thread
+import initlater  PlayerData
+import initlater  CodeGenerator
+import initlater  FileIO
+import initlater  Sync
+import initlater  Thread
 
 
 constant int XPMAX = 100000

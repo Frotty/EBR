@@ -1,34 +1,34 @@
 package InstantBuild
-import Builder
-import Entity
-import Door
-import RegionData
-import Revivepoint
-import Executer
-import Vortex
-import Powernode
-import Tracks
-import Jumper
-import Teleporter
-import Waypoint
-import Spinner
-import Unitcreator
-import Trap
-import Tree
-import Texter
-import Booster
-import Obstacle
-import Bombertower
-import UnitRemover
-import CongaLineHead
-import TerrainBlocker
-import Fountain
-import Decoration
-import Wall
+import initlater  Builder
+import initlater  Entity
+import initlater  Door
+import initlater  RegionData
+import initlater  Revivepoint
+import initlater  Executer
+import initlater  Vortex
+import initlater  Powernode
+import initlater  Tracks
+import initlater  Jumper
+import initlater  Teleporter
+import initlater  Waypoint
+import initlater  Spinner
+import initlater  Unitcreator
+import initlater  Trap
+import initlater  Tree
+import initlater  Texter
+import initlater  Booster
+import initlater  Obstacle
+import initlater  Bombertower
+import initlater  UnitRemover
+import initlater  CongaLineHead
+import initlater  TerrainBlocker
+import initlater  Fountain
+import initlater  Decoration
+import initlater  Wall
 		
 	
 function condition() returns boolean
-	return (GetTriggerUnit().getUserData() castTo Entity) instanceof Builder
+	return (GetTriggerUnit().getEntity()) instanceof Builder
   
 
 public function isOrderBuildOrder( int o ) returns boolean
@@ -108,13 +108,7 @@ public function callback()
 			case buildorders[29]
 				new CongaLineHead(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[30]
-				var x2 = round(data.tpos.x/128)
-				var y2 = round(data.tpos.y/128)
-				if not blockermatrix.loadBoolean(x2, y2)
-					new TerrainBlocker(vec2(data.tpos.x,data.tpos.y), data.b.owner)
-				else
-					DisplayTextToPlayer( data.b.owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
-						+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?") 
+				new TerrainBlocker(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[31]
 				new SmallObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner, 256)
 			case buildorders[32]
@@ -165,6 +159,7 @@ public function trigger.registerBuilderEvent(playerunitevent ev)
 
 
 init
+	debugPrint("wc3init Instant Build begin", 2)
 	buildorders[0] = 'n00G'
 	buildorders[1] = 'n00B' // Jumper
 	buildorders[2] = 'n000' // Revivepoint
@@ -209,4 +204,4 @@ init
 	buildorders[40] = 'n016' // Obelisk
 	buildorders[41] = 'n015' // Poison eggs
 	buildorders[42] = 'n017' // Remains
-
+	debugPrint("wc3init Instant Build finish", 2)

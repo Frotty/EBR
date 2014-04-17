@@ -94,7 +94,7 @@ public class Key extends ItemObject
 		
 		
 init
-
+	debugPrint("wc3init Key begin", 2)
 	keyIds[0] = 'I009'
 	keyIds[1] = 'I00C'
 	keyIds[2] = 'I004'
@@ -104,6 +104,6 @@ init
 	keyIds[6] = 'I00O'
 	keyIds[7] = 'I00B'
 	keyIds[8] = 'I006'
-	
+	debugPrint("wc3init Key finish", 2)
 	
 	

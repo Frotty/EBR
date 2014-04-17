@@ -41,7 +41,7 @@ package Door
 		static function keyopen() //open with item and color conditions
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			Door door = source.getUserData() castTo Door
 			if e instanceof Escaper
 				var es = e castTo Escaper

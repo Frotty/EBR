@@ -92,7 +92,9 @@ public class Tracks extends UnitEntity
 		
 	
 init
+	debugPrint("wc3init Tracks begin", 2)
 	TRACKS[0] = 'n01R'
 	TRACKS[1] = 'n01L'
 	TRACKS[2] = 'n01N'
+	debugPrint("wc3init Tracks finish", 2)
 	

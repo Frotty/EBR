@@ -59,7 +59,7 @@ public class Bomber extends UnitEntity
 function checkOrder()
 	var i = GetIssuedOrderId()
 	debugPrint("Bomber Order", 1)
-	var e = GetOrderedUnit().getUserData() castTo Entity
+	var e = GetOrderedUnit().getEntity()
 	if e instanceof Bomber
 		var obj = e castTo Bomber
 		if GetOrderedUnit() == obj.setup

@@ -11,7 +11,7 @@ trigger castTrig
 function changeSpeed()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
-	var data = caster.getUserData() castTo Entity
+	var data = caster.getEntity()
 	var vt = vec3( caster.getX(), caster.getY(), 0. )
 	if data instanceof DynamicSetupObject
 		var ddata = data castTo DynamicSetupObject
@@ -37,7 +37,9 @@ function isMoveSpell() returns boolean
 	return id == INC_ID or id == DEC_ID
 
 init
+	debugPrint("wc3init MoveSpeed begin", 2)
 	castTrig = CreateTrigger()
 	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 	castTrig.addCondition(Condition(function isMoveSpell))
 	castTrig.addAction(function changeSpeed)
+	debugPrint("wc3init MoveSpeed finish", 2)

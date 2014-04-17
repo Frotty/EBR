@@ -8,6 +8,7 @@ import BuilderConstants
 import Texttag
 import PreloadHandler
 import BaseObject
+import BitSet
 
 constant int TEXTURECHANGER_ID	= 'n01E'
 
@@ -28,6 +29,7 @@ constant int TERRAIN_DEC_V_ID = 'A01T'
 public class TextureChanger extends DynamicSetupObject
 	int sizeX = 1
 	int sizeY = 1
+	matrixpos mp = matrixpos(0,0)
 	int innerTile = '0000'
 	int outerTile = '0001'
 
@@ -38,28 +40,31 @@ public class TextureChanger extends DynamicSetupObject
 		
 	override function update()
 		super.update()
-		var tX = round(pos.x/128)
-		var tY = round(pos.y/128)
+		var tX = (pos.x/128).round()
+		var tY = (pos.y/128).round()
 		RegionData data
 		int tileID
-		for int i = -(sizeY+1) to sizeY+1
-			for int j = -(sizeX+1) to sizeX+1
-				if not blockermatrix.loadBoolean(tX+j, tY+i)
-					var x = (tX+j)*128.
-					var y = (tY+i)*128.
-					if (j == -(sizeX+1)) or (j == sizeX+1) or (i == -(sizeY+1)) or (i == sizeY+1)
-						tileID = outerTile
-					else
-						tileID = innerTile
-					data = getRegionData(x,y)
-					if data != null 
-						if data.isOwner(GetPlayerId(owner)) 
-							if tileID == '0000'
-								tileID = rectw[data.rtype]
-							else if tileID == '0001'
-								tileID = rectuw[data.rtype]
-							if GetTerrainType(x, y) != tileID
-								SetTerrainType(x, y, tileID, 0, 1, 1 )
+		if tX != mp.x or tY != mp.y
+			mp.x = tX
+			mp.y = tY
+			for int i = -(sizeY+1) to sizeY+1
+				for int j = -(sizeX+1) to sizeX+1
+					if not bitset(tileModifierMap.loadInt(tX+j, tY+i)).contains(TileModifiers.BLOCK castTo int)
+						var x = (tX+j)*128.
+						var y = (tY+i)*128.
+						if (j == -(sizeX+1)) or (j == sizeX+1) or (i == -(sizeY+1)) or (i == sizeY+1)
+							tileID = outerTile
+						else
+							tileID = innerTile
+						data = getRegionData(x,y)
+						if data != null 
+							if data.isOwner(GetPlayerId(owner)) 
+								if tileID == '0000'
+									tileID = rectw[data.rtype]
+								else if tileID == '0001'
+									tileID = rectuw[data.rtype]
+								if GetTerrainType(x, y) != tileID
+									SetTerrainType(x, y, tileID, 0, 1, 1 )
 							
 	ondestroy
 		setup.unregisterCastEvent()
@@ -111,6 +116,7 @@ public class TextureChanger extends DynamicSetupObject
 			return false
 			
 init
+	debugPrint("wc3init TC begin", 2)
 	preloadAbility(TERRAIN_O_WALKABLE_ID)
 	preloadAbility(TERRAIN_O_UNWALKABLE_ID)
 	preloadAbility(TERRAIN_O_ICE_ID)
@@ -123,5 +129,5 @@ init
 	preloadAbility(TERRAIN_INC_V_ID)
 	preloadAbility(TERRAIN_DEC_H_ID)
 	preloadAbility(TERRAIN_DEC_V_ID)
-
+	debugPrint("wc3init TC finish", 2)
 

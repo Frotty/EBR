@@ -6,6 +6,8 @@ import EventHandling
 import Texttag 
 import TempGroups
 import SoundHelper
+import Image
+import TerrainBlocker
 
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
@@ -27,22 +29,25 @@ function filter() returns boolean
 
 public class Jumper extends StaticBaseObject
 	JumpMode mode = JumpMode.FORCED
-	real speed = 20.
+	real speed = 10.
 	
 	construct(vec2 pos, player owner)
 		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange)
 		actor.registerCastEvent(Condition(function onCastEvent))
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 16, Filter(function filter))
-		ENUM_GROUP.next()
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 8, Filter(function filter))
+		let u = ENUM_GROUP.next()
 		let u2 = ENUM_GROUP.next()
-		if u2 != null
+		if u != null and u2 != null
 			snd.play()
 			actor.addAbility(SPECIAL_ID)
-			destroy this
+			if u == actor
+				destroy (u2.getUserData() castTo Jumper)
+			else
+				destroy (u.getUserData() castTo Jumper)
 		ENUM_GROUP.clear()
 		
 	static function inRange()
-		var data = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggerUnit().getEntity()
 		var jdata = GetTriggeringTrigger().getSource().getUserData() castTo Jumper
 		if data instanceof Escaper
 			var edata = data castTo Escaper
@@ -74,9 +79,13 @@ public class Jumper extends StaticBaseObject
 					speed += 1.
 					createTTEx(pos, vec2(0,0.05), "Speed: " + speed.toString(), 10,  2., colorA(255,255,255,0), owner  )
 			case SPECIAL_ID
-				print("duh")
+				let x = (GetSpellTargetX()/128).round()
+				let y = (GetSpellTargetY()/128).round()
+				createImage("textures\\blugoo.blp", vec2(x*128., y*128.), 128, 128).show()
+				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.GOO castTo int).val )
 				
-	
+	ondestroy
+		actor.unregisterCastEvent()
 					
 	static function onCastEvent() returns boolean
 		var obj = GetTriggerUnit().getUserData() castTo Jumper

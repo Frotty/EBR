@@ -7,6 +7,15 @@ import Fx
 import Angle
 import public LinkedList
 
+public function unit.getEntity() returns Entity
+	return this.getUserData() castTo Entity
+	
+public function item.getEntity() returns Entity
+	return this.getUserData() castTo Entity
+	
+public function unit.setEntity(Entity e)
+	this.setUserData(e castTo int)
+
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule

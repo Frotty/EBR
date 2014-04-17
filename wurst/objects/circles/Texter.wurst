@@ -23,7 +23,7 @@ package Texter
 			
 		static function onStep()
 			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			thistype obj = GetTriggeringTrigger().getSource().getUserData() castTo thistype
 			if e instanceof Escaper
 				obj.text.setVisibility( true )

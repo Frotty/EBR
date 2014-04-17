@@ -34,7 +34,7 @@ package Teleporter
 		static function teleport()
 			unit source = GetTriggeringTrigger().getSource()
 			unit u = GetTriggerUnit()
-			Entity e = u.getUserData() castTo Entity
+			Entity e = u.getEntity()
 			thistype obj = source.getUserData() castTo thistype
 			var rx = obj.getRallyX()
 			var ry = obj.getRallyY()

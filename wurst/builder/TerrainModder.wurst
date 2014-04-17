@@ -1,12 +1,12 @@
 package TerrainModder
 //The Terrainers appear as heroes, and which with the builders change tiles.
-import Fx
-import BuilderConstants
-import BaseObject
-import SetupObject
-import RegionData
-import PlayerData
-import EventHandling
+import initlater  Fx
+import initlater  BuilderConstants
+import initlater  BaseObject
+import initlater  SetupObject
+import initlater  RegionData
+import initlater  PlayerData
+import initlater  EventHandling
 
 constant int ICECONTROL = 'H007'
 constant int ICEUNCONTROL = 'H008'

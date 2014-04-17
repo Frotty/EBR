@@ -1,13 +1,13 @@
 package BossDamager
 
-import Boss
-import Escaper
-import RegionData
-import BaseObject
-import EventHandling
-import Texttag
-import TempGroups
-import TerrainBlocker
+import initlater Boss
+import initlater Escaper
+import initlater RegionData
+import initlater BaseObject
+import initlater EventHandling
+import initlater Texttag
+import initlater TempGroups
+import initlater TerrainBlocker
 
 constant int DAMAGER_ID = 'n01O'
 constant int DMG_INC_ID = 'A07K'
@@ -19,13 +19,13 @@ public class BossDamager extends StaticBaseObject
 	real damage
 	
 	construct(vec2 pos, player owner)
-		super(vec2(round(pos.x/64)*64., round(pos.y/64)*64.), CreateUnit(owner, DAMAGER_ID,round(pos.x/64)*64., round(pos.y/64)*64., 0. ), EVENT_RADIUS, function BossDamager.onInRange)
+		super(vec2((pos.x/64).round()*64., (pos.y/64).round()*64.), CreateUnit(owner, DAMAGER_ID,(pos.x/64).round()*64., (pos.y/64).round()*64., 0. ), EVENT_RADIUS, function BossDamager.onInRange)
 		actor.registerCastEvent(Condition(function BossDamager.onCast))
 		
 	function damage(Escaper e)
 		GroupEnumUnitsInRect(ENUM_GROUP, getRegionData(pos.x,pos.y).theRect, null)
 		for u in ENUM_GROUP
-			var es = u.getUserData() castTo Entity	
+			var es = u.getEntity()	
 			if es instanceof Boss
 				var boss = es castTo Boss
 				boss.onDamage(e.owner, damage)
@@ -34,14 +34,14 @@ public class BossDamager extends StaticBaseObject
 	static function onInRange()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
-		Entity e = u.getUserData() castTo Entity
+		Entity e = u.getEntity()
 		if e instanceof Escaper
 			var es = e castTo Escaper
 			var obj = source.getUserData() castTo BossDamager
 			obj.damage(es)
 	
 	static function onCast() returns boolean
-		var data = GetTriggerUnit().getUserData() castTo Entity
+		var data = GetTriggerUnit().getEntity()
 		if data instanceof BossDamager
 			var dmger = data castTo BossDamager
 			var id = GetSpellAbilityId()

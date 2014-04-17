@@ -78,7 +78,7 @@ package SetupObject
 			inRangeTrig.destr()
 			
 		static function onOrderEvent()
-			var entity = GetTriggerUnit().getUserData() castTo Entity
+			var entity = GetTriggerUnit().getEntity()
 			var order = GetIssuedOrderId()
 			var x = GetOrderPointX()
 			var y = GetOrderPointY()
@@ -157,6 +157,7 @@ package SetupObject
 		return offsets[count]
 
 	init
+		debugPrint("wc3init Setup begin", 2)
 		orderTrigger = CreateTrigger()
 		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
 		offsets[0] = 0.049
@@ -219,6 +220,7 @@ package SetupObject
 		offsets[57] = -0.021
 		offsets[58] = -0.020
 		offsets[59] = -0.019
+		debugPrint("wc3init Setup finish", 2)
 		
 
 endpackage
