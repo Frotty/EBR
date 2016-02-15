@@ -29,7 +29,7 @@ public class Pointer extends UnitEntity
 		setup = CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
 		setup.addAbility('Agho')
 		trig = CreateTrigger()
-		trig.registerUnitInRangeSource(setup, 64.)
+		trig.registerUnitInRangeSource(setup, 64., null)
 		trig.addAction(function Pointer.turnUnit)
 		setup.registerCastEvent(Condition(function Pointer.onCast))
 		setup.setUserData(this castTo int)
