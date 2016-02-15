@@ -22,7 +22,7 @@ package Obstacle
 
 			setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
 			setup.setUserData( this castTo int )
-			inRangeTrig.registerUnitInRangeSource( setup, radius )
+			inRangeTrig.registerUnitInRangeSource( setup, radius, null )
 			
 		construct( vec2 pos, player owner, real radius )
 			super( vec3(pos.x, pos.y, 0), radius, function SmallObstacle.kill )
@@ -32,7 +32,7 @@ package Obstacle
 
 			setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
 			setup.setUserData( this castTo int )
-			inRangeTrig.registerUnitInRangeSource( setup, radius )
+			inRangeTrig.registerUnitInRangeSource( setup, radius, null )
 			
 		static function kill()
 			unit u = GetTriggerUnit()
@@ -51,7 +51,7 @@ package Obstacle
 
 			setup = CreateUnit(owner, BIGOBSTACLE_ID, pos.x, pos.y, 0.)
 			setup.setUserData( this castTo int )
-			inRangeTrig.registerUnitInRangeSource( setup, radius )
+			inRangeTrig.registerUnitInRangeSource( setup, radius, null )
 			
 		static function kill()
 			unit u = GetTriggerUnit()
