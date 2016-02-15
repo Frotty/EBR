@@ -154,13 +154,13 @@ abstract public class FxEntity extends Entity
 		
 	override function update()
 		pos += (vel*speedFactor)
-		fx.setPos(pos)
+		fx.setPos(pos.x, pos.y)
 		
 	function setFx(string sfxpath)
 		fx.setFx(sfxpath)
 		
 	function setPos()
-		fx.setPos(pos)
+		fx.setPos(pos.x, pos.y)
 		
 	function getDummy() returns unit
 		return fx.getDummy()
