@@ -16,7 +16,7 @@ public int playercount = 0
 
 trigger leaveTrig
 
-public LinkedList<PlayerData> players = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> playerlist = new LinkedList<PlayerData>()
 
 public class PlayerData //just the player's (constant) stuff
 	
@@ -51,7 +51,7 @@ public class PlayerData //just the player's (constant) stuff
 		this.p = p
 		
 		id = GetPlayerId(p)
-		gameId = players.getSize()
+		gameId = playerlist.getSize()
 		name = GetPlayerName(p)
 		mbname = name
 		if mbname == "Frotty" or mbname == "FrottyZ"
@@ -63,7 +63,7 @@ public class PlayerData //just the player's (constant) stuff
 				break
 		mbname = colorcode[ id ] + mbname
 		debugPrint("MBNAME: " + mbname, 1)
-		players.add(this)
+		playerlist.add(this)
 	
 	function addXp(int amount, boolean time)
 		if localFilesEnabled and playercount > 0
@@ -121,10 +121,10 @@ public class PlayerData //just the player's (constant) stuff
 		playerboard.removeRow(gameId+1)
 		if escaper != null
 			escaper.terminate()
-		players.remove(this)
+		playerlist.remove(this)
 		pData[id] = null
 		if gameId < playercount
-			for p2 in players
+			for p2 in playerlist
 				if p2.gameId > gameId
 					p2.gameId--
 		if id > 7 and builder != null
@@ -150,11 +150,11 @@ public PlayerData array pData
 function initMB()
 	playerboard = new Board(playercount+1,3)
 	
-	for i = 0 to players.getSize()
+	for i = 0 to playerlist.getSize()
 		playerboard.board.getItem(i,0)..setStyle(true,true)..setWidth(0.1)
 		playerboard.board.getItem(i,1)..setStyle(true,false)..setWidth(0.015)
 		playerboard.board.getItem(i,2)..setStyle(true,false)..setWidth(0.05)
-	for pd in players
+	for pd in playerlist
 		pd.setMBRow()
 	CameraSetSmoothingFactor(10.)
 	playerboard.board.getItem(0,0)..setStyle(true,false)..setWidth(0.1)
@@ -166,7 +166,7 @@ function initMB()
 	playerboard.board.display(true)
 	debugPrint("mbinit done", 2)
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
-	for pd in players
+	for pd in playerlist
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
 		DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "              " + colorcode[pd.id] + pd.name + "|r checked. (" + pd.localFilesEnabled.toString() + ")")
 		if not pd.localFilesEnabled
@@ -212,7 +212,7 @@ function setTime()
 		seconds = 0
 		minutes++
 		if minutes % 5 == 0
-			for pd in players
+			for pd in playerlist
 				pd.addXp(10, true)
 			 
 function playerLeft()

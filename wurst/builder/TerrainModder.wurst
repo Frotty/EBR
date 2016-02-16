@@ -137,7 +137,7 @@ public function init_TerrainModder()
 	UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
 	UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'
 	
-	for pd in players
+	for pd in playerlist
 		if pd.id > 7
 			pd.tmod = new TerrainModder( pd.p, CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
 			new TerrainModder( pd.p, CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )

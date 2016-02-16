@@ -217,7 +217,7 @@ public function init_Builder()
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 	
-	for pd in players
+	for pd in playerlist
 		if pd.id > 7
 			pd.builder = new Builder( pd.p )
 			UnitAddItemById(pd.builder.actor,'I001')
