@@ -115,7 +115,7 @@ public class Escaper extends UnitEntity
 			debugPrint("done", 3)
 	
 	override function onGroundHit()
-		if bitset(tileModifierMap.loadInt(pos.x.round() div 128, pos.y.round() div 128)).contains(TileModifiers.GOO castTo int)
+		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.GOO castTo int)
 			vel.z = -vel.z
 			return
 		SetUnitPropWindow(actor, 60.)
