@@ -2,3 +2,4 @@
 *.w3m
 
 wurst.dependencies
+/objectEditingOutput
