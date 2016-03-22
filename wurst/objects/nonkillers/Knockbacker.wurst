@@ -1,13 +1,15 @@
 package Knockbacker
 import Entity
+import Assets
+import ObjectIdGenerator
 import Escaper
 import EventHandling
-import Texttag
-import TempGroups
-import PreloadHandler
 import SetupObject
+import ChannelAbilityPreset
 
-constant int KNOCKER_ID = 'u00G'
+constant KNOCKER_ID = 'u00G'
+constant KNOCK_INC_ID = ABIL_ID_GEN.next()
+constant KNOCK_DEC_ID = ABIL_ID_GEN.next()
 
 
 public class Knockbacker extends DynamicSetupObject
@@ -17,24 +19,26 @@ public class Knockbacker extends DynamicSetupObject
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 
 				CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 64., function Knockbacker.inRangeEvent)
-
+		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
+		print("id:" + KNOCK_INC_ID.toString())
+		setup.registerCastEvent(Condition(function Knockbacker.onCast))
 			
 	static function onCast() returns boolean
-//		var id = GetSpellAbilityId()
-//		var data = GetSpellAbilityUnit().getUserData() castTo Pointer
-//		switch id
-//			case INC_ID
-//				if data.turnspeed < 6.
-//					data.turnspeed += 0.5
-//					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
-//				else
-//					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
-//			case DEC_ID
-//				if data.turnspeed > -6.
-//					data.turnspeed -= 0.5
-//					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
-//				else
-//					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
+		var id = GetSpellAbilityId()
+		var data = GetSpellAbilityUnit().getUserData() castTo Knockbacker
+		switch id
+			case KNOCK_INC_ID
+				if data.kforce < 50
+					data.kforce += 5
+					createTTEx(data.pos, vec2(0,0.05), "Knockback: "+ R2SW(data.kforce,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				else
+					createTTEx(data.pos, vec2(0,0.05), "Maximum Knockback", 10,  2., colorA(255,255,255,0), data.owner  )
+			case KNOCK_DEC_ID
+				if data.kforce > -50.
+					data.kforce -= 5
+					createTTEx(data.pos, vec2(0,0.05), "Knockback: "+ R2SW(data.kforce,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				else
+					createTTEx(data.pos, vec2(0,0.05), "Minimum Knockback", 10,  2., colorA(255,255,255,0), data.owner  )
 //			case START_ID
 //				data.turning = true
 //				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
@@ -62,4 +66,25 @@ public class Knockbacker extends DynamicSetupObject
 	ondestroy
 		actor.unregisterCastEvent()
 
-		
+@objectgen function genKnockbacker()
+	print("id:" + KNOCK_INC_ID.toString())
+	let inc_spell = new ChannelAbilityPreset(KNOCK_INC_ID, 1, true)
+	inc_spell..presetManaCost((int lvl) -> 0)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Increase Knockback")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetHotkey("D")
+	..presetTooltipNormal((int lvl) -> "Increase Knockback")
+	..presetTooltipNormalExtended((int lvl) -> "More strength to the tauren")
+	..presetButtonPosNormal(1, 1)
+	
+	let dec_spell = new ChannelAbilityPreset(KNOCK_DEC_ID, 1, true)
+	dec_spell..presetManaCost((int lvl) -> 0)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Decrease Knockback")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetHotkey("F")
+	..presetTooltipNormal((int lvl) -> "Decrease Knockback")
+	..presetTooltipNormalExtended((int lvl) -> "Less strength to the tauren")
+	..presetButtonPosNormal(2, 1)
+	

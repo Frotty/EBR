@@ -84,9 +84,9 @@ package SetupObject
 			var y = GetOrderPointY()
 			var u = GetOrderTargetUnit()
 			string orderS = OrderId2String(order)
-			if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
-				if entity instanceof DynamicSetupObject
-					var obj = entity castTo DynamicSetupObject
+			if entity instanceof DynamicSetupObject
+				var obj = entity castTo DynamicSetupObject
+				if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
 					if orderS == "smart" and u == null
 						// AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
 						IssuePointOrder(obj.setup, "move", x+getOffset(), y)
@@ -98,8 +98,8 @@ package SetupObject
 							IssuePointOrderById(obj.actor, order, x, y)
 						else
 							IssueImmediateOrderById(obj.actor, order)
-
-
+				else
+					obj.setup.issueImmediateOrder("stop")
 
 		  
 					

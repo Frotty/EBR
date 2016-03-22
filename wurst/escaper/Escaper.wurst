@@ -2,7 +2,6 @@ package Escaper
 import initlater  PhysicsEntity
 import initlater  Entity
 import initlater  Vectors
-import initlater  Terrain
 import initlater  TimerUtils
 import initlater  RegionData
 import initlater  BuilderConstants
@@ -13,7 +12,6 @@ import initlater  LinkedList
 import initlater  EscaperClasses
 import initlater  PlayerData
 import initlater  Weapon
-import initlater  Fx
 import initlater  Colors
 import initlater  Texttag
 import initlater  RevivePointModifier
@@ -126,10 +124,10 @@ public class Escaper extends UnitEntity
 	override function onEscapeGround()
 		SetUnitPropWindow(actor,0.)
 	
-	override function inAir(Entity e)
+	override function inAir()
 		slideVelocity *= 0.99
 			
-	override function onGround(Entity e)		
+	override function onGround()		
 		pos.z = globalTerrainZ+.1		
 		var ttype = GetTerrainType(pos.x, pos.y)
 		

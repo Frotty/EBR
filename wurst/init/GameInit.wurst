@@ -83,6 +83,7 @@ function initPartTwo()
 	GetExpiredTimer().release()
 
 init
+	callGen()
 	debugPrint("wc3init a", 2)
 	VolumeGroupReset()
 	EndThematicMusic()
@@ -90,3 +91,7 @@ init
 	trigger t = CreateTrigger()
 	TriggerRegisterTimerEvent( t, .01, false )
 	TriggerAddAction( t, function initGame )
+	
+@compiletime function callGen()
+	print("shit")
+	callFunctionsWithAnnotation("@objectgen")
