@@ -69,7 +69,7 @@ public class SpellTarget extends DynamicSetupObject
 		GroupClear(ENUM_GROUP)
 	
 	function castMissile(Boss root)
-		new BossMissile(root.pos,root.owner,this,root.missile_id)
+		new BossMissile(root.actor.getPos3(),root.owner,this,root.missile_id)
 	
 public class BossMissile extends HomingProjectile
 	int id

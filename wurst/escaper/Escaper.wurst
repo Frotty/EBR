@@ -35,6 +35,7 @@ public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
 public class Escaper extends UnitEntity	
 	use PhysicsModule
+	
 	boolean sliding = false
 	boolean onUnwalkable = false
 	boolean poisoned = false
@@ -125,11 +126,10 @@ public class Escaper extends UnitEntity
 	override function onEscapeGround()
 		SetUnitPropWindow(actor,0.)
 	
-	override function inAir()
+	override function inAir(Entity e)
 		slideVelocity *= 0.99
 			
-			
-	override function onGround()		
+	override function onGround(Entity e)		
 		pos.z = globalTerrainZ+.1		
 		var ttype = GetTerrainType(pos.x, pos.y)
 		
