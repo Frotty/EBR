@@ -9,7 +9,7 @@ package GameConstants
 	public string array ranks
 	public constant int cplayerCount = 14
 	
-	public constant string MAP_VER = "EBR 0.82"
+	public constant string MAP_VER = "EBR 0.83"
 	
 	
 	public enum COLOR
@@ -78,7 +78,7 @@ package GameConstants
 		colorcode[ 9 ] = "|cff7DBEF1" // lightblue
 		colorcode[ 10 ] = "|cff0F6145" // darkgreen
 
-		ranks[0] = "|cff949CEF|cff949494-Master"
+		ranks[0] = "1:Newbie"
 		expBounds[0] = 100
 		ranks[1] = "|cffBDBDBD2:Beginner"
 		expBounds[1] = 250
@@ -96,16 +96,16 @@ package GameConstants
 		expBounds[7] = 12500
 		ranks[8] = "|cff087BD69:Craver"
 		expBounds[8] = 15500
-		ranks[9] = "|cffD629219|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
+		ranks[9] = "|cffD6292110|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
 		expBounds[9] = 20000
 		ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
 		expBounds[10] = 27500
-		ranks[11] = "|cffC563C5K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r"
+		ranks[11] = "|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r"
 		expBounds[11] = 75000
-		ranks[12] = "|cff08B5FFB|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r"
+		ranks[12] = "|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r"
 		expBounds[12] = 150000
-		ranks[13] = "|cff949CEF|cff949494-Master"
-		expBounds[13] = 175000
+		ranks[13] = "|cff94949414: Amazing-|cff949CEF"
+		expBounds[13] = 200000
 		debugPrint("wc3init GameConstants finish", 2)
 
 endpackage 

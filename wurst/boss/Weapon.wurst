@@ -108,9 +108,6 @@ class WeaponMissile extends Projectile
 		this.id = id
 
 
-	override function onHit(Entity e2)
-		skip
-
 	override function update()
 		super.update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, weapon[id].aoe, null)

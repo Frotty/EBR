@@ -10,6 +10,7 @@ package Teleporter
 	import PlayerData
 	import RegionData
 	import Revivepoint
+	import Pointer
 	
 	constant int 	TELEPORTER_ID   = 'n00C'
 	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -56,7 +57,7 @@ package Teleporter
 							eruza.reached = false
 					ENUM_GROUP.clear()
 			else if obj.mode == 1  
-				if e instanceof EscaperKiller or e instanceof TeleporterTarget
+				if e instanceof EscaperKiller or e instanceof TeleporterTarget or e instanceof Pointer
 					dyn = e castTo DynamicSetupObject
 					dyn.setPos(vec3(rx,ry,0))
 					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )

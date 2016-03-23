@@ -1,40 +1,45 @@
 package Projectile
-import Entity
+import public Entity
 import Angle
 
 
-public abstract class Projectile extends FxEntity
+public class Projectile extends FxEntity
 	// Angles
 	protected angle xyAngle
-	protected angle zAngle
+	private vec3 startpos
 	
 	private boolean timed = false
 	private boolean ranged = false
 	
 	// Moving Speed
-	private real speed = 0.
-	private real dist = 0.
-	private real maxDist
-	private real time = 0.
-	private real maxTime
+	private real speed = 0
+	private real acc = 1.0
+	protected real dist = 0
+	private real maxDist = 0
+	protected real lifespan = 0
+	private real maxTime = 0
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
 		super(pos, radius, owner, xyAngle, fxpath)
+		startpos = pos
 		setXYAngle(xyAngle)
 		active = false
 				
 	function setRanged(real maxDistance)
-		this.maxDist = maxDistance
+		this.maxDist = maxDistance*maxDistance
 		ranged = true
 		
 	function setTimed(real lifespan)
-		this.maxTime = lifespan
+		this.lifespan = lifespan
 		timed = true
 	
 	function setSpeed(real speed)
 		this.speed = speed
 		vel = vec3(xyAngle.cos()*speed, xyAngle.sin()*speed, 0.)
 		active = true
+		
+	function setAcc(real factor)
+		this.acc = factor
 		
 	function getSpeed() returns real
 		return speed
@@ -44,21 +49,18 @@ public abstract class Projectile extends FxEntity
 		fx.setXYAngle(xyA)
 		
 	function setZAngle(angle zA)
-		this.xyAngle = zA
 		fx.setZAngle(zA)
 		
-	abstract function onHit(Entity e)
-		
-		
 	override function update()
+		vel *= acc
 		pos += vel
 		setPos()
 		if timed
-			time += ANIMATION_PERIOD
-			if time >= maxTime
-				terminate()
+			lifespan += ANIMATION_PERIOD
+			if lifespan >= maxTime
+				done = true
+				return
 		if ranged
-			dist += speed
-			if dist > maxDist
-				terminate()
-
+			if startpos.distToVecSquared(pos) > maxDist
+				done = true
+		

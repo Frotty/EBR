@@ -6,7 +6,7 @@ import initlater  Sync
 import initlater  Thread
 
 
-constant int XPMAX = 100000
+constant int XPMAX = 500000
 constant string FOLDER_NAME = "EBR"
 constant string FILE_NAME = "data"
 public constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"

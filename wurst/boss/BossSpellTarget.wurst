@@ -10,6 +10,7 @@ import initlater Escaper
 import initlater Boss
 import initlater TempGroups
 import initlater HomingProjectile
+import Assets
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
@@ -81,18 +82,16 @@ public class BossMissile extends HomingProjectile
 		setSpeed(14.)
 		
 	
-	override function onHit(Entity e2)
-	
 	override function update()
 		super.update()
 		for e in escapers
 			print(pos.distToVec(e.pos).toString())
-			if pos.distToVecSquared(e.pos) < radius*radius + 1024
+			if pos.distToVecSquared(e.pos) < radius*radius
 				terminate()
 				return
 	
 public function init_BossSpellTarget()
-	missile_spell[0] = MISSILE_SPELL("Abilities\\Weapons\\GreenDragonMissile\\GreenDragonMissile.mdl",64,10.,14.)
-	missile_spell[1] = MISSILE_SPELL("Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdl",86,20,10.)
+	missile_spell[0] = MISSILE_SPELL(Other.greendragonmissile,64,10.,14.)
+	missile_spell[1] = MISSILE_SPELL("Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdx",86,20,10.)
 	aoe_spell[0] = AOE_SPELL("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",250.,50.)
 	//preloadAbility(AOE_ID)

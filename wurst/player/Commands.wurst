@@ -75,7 +75,20 @@ function onCommandChat()
 			else
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned off - not selecting on revive.")
 		case "exp"
-			pd.addXp(25000, true)
+			if pd.name == "Frotty"
+				int i = 0
+				unit tr = null
+				for u in GetUnitsSelectedAll(pd.p)
+					i++
+					tr = u
+					if i > 1
+						break
+				if i < 2
+					let id2 = tr.getOwner().getId()
+					let pd2 = pData[id2]
+					pd2.addXp(10000, true)
+				else	
+					pd.addXp(10000, true)
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode")

@@ -33,9 +33,6 @@ public class BezierMissile extends Projectile
 		targetlastx = u.getX()
 		targetlasty = u.getY()
 	
-	override function onHit(Entity e2)
-		super.onHit(e2)
-		skip
 	
 	override function update()
 		real p
