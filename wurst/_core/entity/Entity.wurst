@@ -6,6 +6,7 @@ import Debug
 import Fx
 import Angle
 import public LinkedList
+import public Event
 
 public function unit.getEntity() returns Entity
 	return this.getUserData() castTo Entity

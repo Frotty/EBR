@@ -40,17 +40,16 @@ package Waypoint
 			unit u = GetTriggerUnit()
 			Entity e = u.getEntity()
 			thistype obj = source.getUserData() castTo thistype
-			var rx = obj.getRallyX()
-			var ry = obj.getRallyY()
+			let rallyPos = obj.getRallyPoint()
 			if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 				var data = e castTo UnitEntity
 				if not obj.wisps and data instanceof TeleporterTarget
 					return
 				if obj.delay < INTERVAL
-					IssuePointOrder(u, "move", rx, ry )
+					IssuePointOrder(u, "move", rallyPos.x, rallyPos.y )
 				else
 					IssueImmediateOrder(u, "stop" )
-					getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rx,ry))castTo int)
+					getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
 					
 		static function delayMove()
 			var t = GetExpiredTimer()

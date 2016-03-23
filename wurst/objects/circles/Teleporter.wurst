@@ -1,99 +1,95 @@
 package Teleporter
-	import BaseObject
-	import Terrain
-	import Escaper
-	import EscaperKiller
-	import EventHandling
-	import TeleporterTarget
-	import SetupObject
-	import TempGroups
-	import PlayerData
-	import RegionData
-	import Revivepoint
-	import Pointer
-	
-	constant int 	TELEPORTER_ID   = 'n00C'
-	constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
-	constant int ESC_ID = 'A009'
-	constant int KILL_ID = 'A012'
-	constant int BOTH_ID = 'A014'
-	
-	constant real 	EVENT_RADIUS	= 32.
+import BaseObject
+import Escaper
+import EscaperKiller
+import EventHandling
+import TeleporterTarget
+import SetupObject
+import TempGroups
+import PlayerData
+import RegionData
+import Revivepoint
+import Pointer
+
+constant int 	TELEPORTER_ID   = 'n00C'
+constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+constant int ESC_ID = 'A009'
+constant int KILL_ID = 'A012'
+constant int BOTH_ID = 'A014'
+
+constant real 	EVENT_RADIUS	= 32.
 
 
-	public class Teleporter extends StaticBaseObject
-		boolean isOneshot = false
-		int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
+public class Teleporter extends StaticBaseObject
+	boolean isOneshot = false
+	int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
+	
+	construct( vec2 pos, player owner )
+		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0) ), EVENT_RADIUS, function Teleporter.teleport ) 
+		actor.registerCastEvent(Condition(function Teleporter.onCast))
 		
-		construct( vec2 pos, player owner )
-			super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0) ), EVENT_RADIUS, function Teleporter.teleport ) 
-			actor.registerCastEvent(Condition(function Teleporter.onCast))
-			
-		ondestroy
-			actor.unregisterCastEvent()
-			
-		static function teleport()
-			unit source = GetTriggeringTrigger().getSource()
-			unit u = GetTriggerUnit()
-			Entity e = u.getEntity()
-			thistype obj = source.getUserData() castTo thistype
-			var rx = obj.getRallyX()
-			var ry = obj.getRallyY()
-			if obj.isOneshot and not isPlayerEscaper(e.owner)
-				return
-			DynamicSetupObject dyn
-			if obj.mode == 0 and e instanceof Escaper
-				u.setPos(rx, ry)
+	ondestroy
+		actor.unregisterCastEvent()
+		
+	static function teleport()
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getEntity()
+		thistype obj = source.getUserData() castTo thistype
+		let rallyPos = obj.getRallyPoint()
+		if obj.isOneshot and not isPlayerEscaper(e.owner)
+			return
+		DynamicSetupObject dyn
+		if obj.mode == 0 and e instanceof Escaper
+			u.setPos(rallyPos.x, rallyPos.y)
+			DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+			DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
+			if not pData[GetOwningPlayer(u).getId()].camLock
+				PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
+			if obj.isOneshot
+				destroy(obj)
+				GroupEnumUnitsInRect(ENUM_GROUP, regions[26].theRect, null)
+				for niki in ENUM_GROUP
+					let eruza =niki.getUserData() castTo RevivePoint
+					if eruza != null
+						eruza.reached = false
+				ENUM_GROUP.clear()
+		else if obj.mode == 1  
+			if e instanceof EscaperKiller or e instanceof TeleporterTarget or e instanceof Pointer
+				dyn = e castTo DynamicSetupObject
+				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
+		else if obj.mode == 2  
+			if e instanceof EscaperKiller
+				dyn = e castTo DynamicSetupObject
+				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
+			else if e instanceof Escaper
+				u.setPos(rallyPos.x, rallyPos.y)
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
+				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
 				if not pData[GetOwningPlayer(u).getId()].camLock
-					PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-				if obj.isOneshot
-					destroy(obj)
-					GroupEnumUnitsInRect(ENUM_GROUP, regions[26].theRect, null)
-					for niki in ENUM_GROUP
-						let eruza =niki.getUserData() castTo RevivePoint
-						if eruza != null
-							eruza.reached = false
-					ENUM_GROUP.clear()
-			else if obj.mode == 1  
-				if e instanceof EscaperKiller or e instanceof TeleporterTarget or e instanceof Pointer
-					dyn = e castTo DynamicSetupObject
-					dyn.setPos(vec3(rx,ry,0))
-					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-			else if obj.mode == 2  
-				if e instanceof EscaperKiller
-					dyn = e castTo DynamicSetupObject
-					dyn.setPos(vec3(rx,ry,0))
-					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-				else if e instanceof Escaper
-					u.setPos(rx, ry)
-					DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-					DestroyEffect( AddSpecialEffect( EFFECT_STRING, rx, ry ) )
-					if not pData[GetOwningPlayer(u).getId()].camLock
-						PanCameraToTimedForPlayer( GetOwningPlayer(u), rx, ry, 0.03 )
-	
-		override function update()
-			skip
-			
-		static function onCast() returns boolean
-			var id = GetSpellAbilityId()
-			var tdata = GetTriggerUnit().getUserData() castTo Teleporter
-			
-			switch id
-				case BOTH_ID
-					tdata.actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
-					tdata.mode = 0
-				case ESC_ID
-					tdata.actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
-					tdata.mode = 1
-				case KILL_ID
-					tdata.actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
-					tdata.mode = 2
-					
-			return false
+					PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
 
+	override function update()
+		skip
+		
+	static function onCast() returns boolean
+		var id = GetSpellAbilityId()
+		var tdata = GetTriggerUnit().getUserData() castTo Teleporter
+		
+		switch id
+			case BOTH_ID
+				tdata.actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
+				tdata.mode = 0
+			case ESC_ID
+				tdata.actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
+				tdata.mode = 1
+			case KILL_ID
+				tdata.actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
+				tdata.mode = 2
+				
+		return false
 
-endpackage

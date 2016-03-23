@@ -207,36 +207,34 @@ package Executer
 					printError("ExecuterNotAction")
 		
 		function moveUnit()
-			var rX = getRallyX()
-			var rY = getRallyY()
+			let rallyPos = getRallyPoint()
 			if moveOrderString == "stop"
 				IssueImmediateOrder(unitToMove, moveOrderString)
 			else
-				IssuePointOrder(unitToMove, moveOrderString, rX, rY)
+				IssuePointOrder(unitToMove, moveOrderString, rallyPos.x, rallyPos.y)
 		
 
 				
 		function createUnit()
-			var rX = getRallyX()
-			var rY = getRallyY()
-			var data = getRegionData(rX, rY)
+			let rallyPos = getRallyPoint()
+			var data = getRegionData(rallyPos.x, rallyPos.y)
 			
 			if data.isOwner(GetPlayerId(owner))
 				switch actionUnit
 					case ActionUnit.SMALLKILLER
-						new EscaperKiller(CreateUnit(owner, rectsk[data.rtype], rX, rY, 0. ), CreateUnit(owner, rectsk[data.rtype], rX, rY, 0.), COLL_SIZE_SK)
+						new EscaperKiller(CreateUnit(owner, rectsk[data.rtype], rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, rectsk[data.rtype], rallyPos.x, rallyPos.y, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGKILLER
-						new EscaperKiller(CreateUnit(owner, rectbk[data.rtype],rX, rY, 0. ), CreateUnit(owner, rectbk[data.rtype], rX, rY, 0.), COLL_SIZE_BK)
+						new EscaperKiller(CreateUnit(owner, rectbk[data.rtype],rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, rectbk[data.rtype], rallyPos.x, rallyPos.y, 0.), COLL_SIZE_BK)
 					case ActionUnit.SMALLRANDOMKILLER
-						new EscaperKiller(CreateUnit(owner, 'u006', rX, rY, 0. ), CreateUnit(owner, 'u006', rX, rY, 0.), COLL_SIZE_SK)
+						new EscaperKiller(CreateUnit(owner, 'u006', rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'u006', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_SK)
 					case ActionUnit.BIGRANDOMKILLER
-						new EscaperKiller(CreateUnit(owner, 'u008',rX, rY, 0. ), CreateUnit(owner, 'u008', rX, rY, 0.), COLL_SIZE_BK)
+						new EscaperKiller(CreateUnit(owner, 'u008',rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'u008', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_BK)
 					case ActionUnit.TANK
-						new EscaperKiller(CreateUnit(owner, 'h001', rX, rY, 0. ), CreateUnit(owner, 'h001', rX, rY, 0.), COLL_SIZE_TANK)
+						new EscaperKiller(CreateUnit(owner, 'h001', rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'h001', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_TANK)
 					case ActionUnit.GLAIVE
-						new EscaperKiller(CreateUnit(owner, 'u00A', rX, rY, 0. ), CreateUnit(owner, 'u00A', rX, rY, 0.), COLL_SIZE_GLAIVE)
+						new EscaperKiller(CreateUnit(owner, 'u00A', rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'u00A', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_GLAIVE)
 					case ActionUnit.POINTER
-						new Pointer(vec2(rX,rY), owner)
+						new Pointer(vec2(rallyPos.x,rallyPos.y), owner)
 					default
 						printError("Unitcreator - Wrong Unittype")
 			else
@@ -244,8 +242,7 @@ package Executer
 			
 		function changeTerrain(boolean isAction)
 			debugPrint("called change Terrain", 3)		
-			var rX = getRallyX()
-			var rY = getRallyY()
+			let rallyPos = getRallyPoint()
 			RegionData data
 			int tileID
 			if isAction
@@ -255,8 +252,8 @@ package Executer
 			debugPrint("called change Terrain - 1", 3)
 			for int i = 0 to (verticalTileSize*2)
 				for int j = 0 to (horizontalTileSize*2)
-					var y = rY+ (128*(i-verticalTileSize))
-					var x = rX+ (128*(j-horizontalTileSize))
+					var y = rallyPos.y+ (128*(i-verticalTileSize))
+					var x = rallyPos.x+ (128*(j-horizontalTileSize))
 					data = getRegionData(x,y)
 					debugPrint("called change Terrain - 2", 3)
 					if data.isOwner(GetPlayerId(owner))
@@ -325,15 +322,15 @@ package Executer
 					dummy = CreateDestructable( PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 					SetDestructableAnimation(dummy, "stand alternate")
 		
-		function registerRect(real centerX, real centerY, real offset)
-			//note: with movable circles, itll be necessary to move the rect too.
+		function registerRect(real centerx, real centery, real offset)
+			//note: with movable circles, itll be necessarallyPos.y to move the rect too.
 			debugPrint("rect registered", 3)
 			inRangeTrig.clearConditions()
 			TriggerClearActions(inRangeTrig)
 			DestroyTrigger(inRangeTrig)
 			
 			eventRegion = CreateRegion()
-			eventRect = Rect(centerX-offset, centerY-offset, centerX+offset, centerY+offset)
+			eventRect = Rect(centerx-offset, centery-offset, centerx+offset, centery+offset)
 			RegionAddRect(eventRegion,eventRect)
 			eventRegion.setRegionData(this castTo int)
 			TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)

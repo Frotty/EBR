@@ -106,22 +106,16 @@ public class Trap extends StaticBaseObject
 				debugPrint("finish", 3)
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
-				real rX = getRallyX()
-				real rY = getRallyY()
-				real aX = actor.getX()
-				real aY = actor.getY()
+				let rallyPos = getRallyPoint()
 				angle angl
-				if getRallyUnit() == actor
-					rX = aX
-					rY = aY
-				debugPrint("dist " +distanceBetweenCoords(rX, rY, aX, aY).toString(), 1)
-				if distanceBetweenCoords(rX, rY, aX, aY) < 20
+				debugPrint("dist " +distanceBetweenCoords(rallyPos.x, rallyPos.y, pos.x, pos.y).toString(), 1)
+				if distanceBetweenCoords(rallyPos.x, rallyPos.y, pos.x, pos.y) < 20
 					if pull
-						angl = (angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY()).degrees()-180.).asAngleDegrees()
+						angl = (angleBetweenCoords(pos.x, pos.y,e.actor.getX(), e.actor.getY()).degrees()-180.).asAngleDegrees()
 					else
-						angl = angleBetweenCoords(aX, aY,e.actor.getX(), e.actor.getY())
+						angl = angleBetweenCoords(pos.x, pos.y,e.actor.getX(), e.actor.getY())
 				else	
-					angl = angleBetweenCoords(aX, aY,rX, rY)
+					angl = angleBetweenCoords(pos.x, pos.y,rallyPos.x, rallyPos.y)
 				e.addVel( vec3(value * Cos(angl.radians()),value * Sin(angl.radians()),0.))
 
 			default
