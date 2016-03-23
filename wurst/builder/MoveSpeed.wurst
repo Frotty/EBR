@@ -3,8 +3,8 @@ import Texttag
 import SetupObject
 import Entity
 
-constant int INC_ID = 'A01E'
-constant int DEC_ID = 'A01H'
+constant int INC_SPEED_ID = 'A01E'
+constant int DEC_SPEED_ID = 'A01H'
 
 trigger castTrig
 
@@ -17,14 +17,14 @@ function changeSpeed()
 		var ddata = data castTo DynamicSetupObject
 		var speed = ddata.setup.getMoveSpeed()
 		debugPrint("casted", 1)
-		if id == INC_ID
+		if id == INC_SPEED_ID
 			debugPrint("inc", 1)
 			if speed < 475.
 				debugPrint("fine", 1)
 				ddata.setup.setMoveSpeed(speed+25.)
 				ddata.actor.setMoveSpeed(speed+25.)
 				createTTEx(vt, vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
-		else if id == DEC_ID
+		else if id == DEC_SPEED_ID
 			if speed > 50.5
 				debugPrint("no", 1)
 				ddata.setup.setMoveSpeed(speed-25.)
@@ -34,7 +34,7 @@ function changeSpeed()
 
 function isMoveSpell() returns boolean
 	let id = GetSpellAbilityId()
-	return id == INC_ID or id == DEC_ID
+	return id == INC_SPEED_ID or id == DEC_SPEED_ID
 
 init
 	debugPrint("wc3init MoveSpeed begin", 2)
