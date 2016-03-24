@@ -21,9 +21,6 @@ function removeObject() returns boolean
 			GetSpellAbilityUnit().remove()
 		let owner = u.getOwner()
 		var pd = pData[owner.getId()]
-		if GetLocalPlayer() == owner
-			ResetToGameCamera(0.)
-		SetCameraFieldForPlayer(owner, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 0.)
 	return false
 	
 init

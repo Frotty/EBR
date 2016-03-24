@@ -40,8 +40,7 @@ public class Powernode extends DynamicSetupObject
 		links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y)))
 		
 	override function update()
-		pos.x = setup.getX()
-		pos.y = setup.getY()
+		super.update()
 		if links.getSize() > 0
 			debugPrint(links.getSize().toString(), 1)
 			var i = 0

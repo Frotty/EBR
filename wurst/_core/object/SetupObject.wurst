@@ -3,19 +3,21 @@ package SetupObject
 	import Vectors
 	import Terrain
 	import Trigger
+	
+	public constant int INC_SPEED_ID = 'A01E'
+	public constant int DEC_SPEED_ID = 'A01H'
 	/**
 		Objects which are unclickable for escapers,
 		but clickable for builders.	 
 	
 	*/
-	
 	trigger orderTrigger
 	timer fixPos = CreateTimer()
 	
 	public abstract class DynamicSetupObject extends UnitEntity
 		real radius	
 		unit setup
-		int time = 0
+		real time = 0
 		trigger inRangeTrig // Trigger for inRange detection
 		
 						
@@ -55,11 +57,11 @@ package SetupObject
 		
 		override function update()
 			super.update()
-			time++
-			if time > 1500
+			time-=ANIMATION_PERIOD
+			if time < 0
 				setup.setXY(actor.getX(), actor.getY())
-				debugPrint("pos fixed", 1)
-				time = 0
+				setup.setFacing(actor.getFacingAngle())
+				time = GetRandomReal(30,45)
 		
 		function setX( real x )
 			SetUnitX( actor, x )
@@ -84,13 +86,12 @@ package SetupObject
 			var y = GetOrderPointY()
 			var u = GetOrderTargetUnit()
 			string orderS = OrderId2String(order)
+			print("order: "  + orderS)
 			if entity instanceof DynamicSetupObject
 				var obj = entity castTo DynamicSetupObject
 				if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
 					if orderS == "smart" and u == null
-						// AddSpecialEffect("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", x, y)
 						IssuePointOrder(obj.setup, "move", x+getOffset(), y)
-	
 					else
 						if u != null
 							IssueTargetOrderById(obj.actor, order, u)
@@ -99,7 +100,11 @@ package SetupObject
 						else
 							IssueImmediateOrderById(obj.actor, order)
 				else
-					obj.setup.issueImmediateOrder("stop")
+					if not orderS == "waterelemental" and not orderS == "roar"
+						obj.setup.issueImmediateOrder("stop")
+				obj.setup.setXY(obj.actor.getPos3())
+				obj.setup.setFacing(obj.actor.getFacingAngle())
+				obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
 
 		  
 					
