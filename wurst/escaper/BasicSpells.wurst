@@ -1,0 +1,33 @@
+package BasicSpells
+import PhysicsProjectile
+import ChannelAbilityPreset
+import Assets
+import ObjectIdGenerator
+
+public constant BALL_SPELL_ID = ABIL_ID_GEN.next()
+
+public class BallProjectile extends AirPhysicsProjectile
+
+	construct(unit caster, vec2 target)
+		super(caster.getPos3(128), 32, caster.getOwner(), caster.getPos().angleTo(target), Other.necromancermissile)
+		print("angle: " + caster.getPos().angleTo(target).degrees().toString())
+		setSpeed(10)
+		print("angle: " + caster.getPos().angleTo(target).degrees().toString())
+		
+function onCast()
+	let id = GetSpellAbilityId()
+	if id == BALL_SPELL_ID
+		new BallProjectile(GetSpellAbilityUnit(), getSpellTargetPos())
+		
+public function initSpells()
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		
+@objectgen function genAbils()
+	let def = new ChannelAbilityPreset(BALL_SPELL_ID, 1, true)
+	..setName("Throw a ball")
+	..presetTooltipNormal((int lvl) -> "Throw Ball")
+	..presetTargetTypes(Targettype.PTARGET)
+	..presetCastRange((int lvl) -> 300.)
+	..presetManaCost((int lvl) -> 0)
+	..presetButtonPosNormal(1,1)
+		

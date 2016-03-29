@@ -2,7 +2,6 @@ package Projectile
 import public Entity
 import Angle
 
-
 public class Projectile extends FxEntity
 	// Angles
 	protected angle xyAngle
@@ -35,8 +34,7 @@ public class Projectile extends FxEntity
 	
 	function setSpeed(real speed)
 		this.speed = speed
-		vel = vec3(xyAngle.cos()*speed, xyAngle.sin()*speed, 0.)
-		active = true
+		setVel(vec3(xyAngle.cos()*speed, xyAngle.sin()*speed, 0.))
 		
 	function setAcc(real factor)
 		this.acc = factor

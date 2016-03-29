@@ -138,6 +138,7 @@ abstract public class UnitEntity extends Entity
 
 abstract public class FxEntity extends Entity
 	protected Fx fx
+	boolean silent = false
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string sfxpath )
 		super(pos, radius, owner)
@@ -156,13 +157,13 @@ abstract public class FxEntity extends Entity
 		
 	override function update()
 		pos += (vel*speedFactor)
-		fx.setPos(pos.x, pos.y)
+		setPos()
 		
 	function setFx(string sfxpath)
 		fx.setFx(sfxpath)
 		
 	function setPos()
-		fx.setPos(pos.x, pos.y)
+		fx.setXYZ(pos)
 		
 	function getDummy() returns unit
 		return fx.getDummy()
@@ -172,6 +173,9 @@ abstract public class FxEntity extends Entity
 		fx.setPos(tpos.x,tpos.y)
 		
 	ondestroy
-		destroy fx
+		if silent
+			fx.hiddenDestroy()
+		else
+			destroy fx
 
 	

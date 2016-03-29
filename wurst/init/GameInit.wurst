@@ -23,7 +23,7 @@ import Invisible
 import Boss
 import GlobalShop
 import Remove
-
+import BasicSpells
 function initGame()
 
 	printLog("Starting Init", Loglevel.DEBUG)
@@ -79,7 +79,7 @@ function initPartTwo()
 	printLog("Init - Finished", Loglevel.DEBUG)
 	startChoose()
 	printLog("Starting choose...", Loglevel.DEBUG)
-	
+	initSpells()
 	printLog(File.isEnabled().toString(), Loglevel.INFO)
 	GetExpiredTimer().release()
 

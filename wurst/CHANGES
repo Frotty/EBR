@@ -1,3 +1,8 @@
+[0.83n]
+[*] Update to StdLib v2
+[*] EventHandling switched to EventListener
+[*] Escaper Hotkeys fixed
+
 [0.83m]
 [*] fixed removing object resetting camera
 [*] fixed effect leak on destroy

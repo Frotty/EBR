@@ -30,10 +30,10 @@ public class TerrainModder
 		actor..setPos(hiddenX, hiddenY)..setPropWindow(0.)..setUserData(this castTo int)
 		
 		EventListener orderListener = () -> changeTerrain()
-		EventListener.add(actor, EVENT_UNIT_ISSUED_POINT_ORDER, orderListener)
-		EventListener.add(actor, EVENT_UNIT_ISSUED_TARGET_ORDER, orderListener)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, orderListener)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, orderListener)
 		
-		EventListener.add(actor, EVENT_UNIT_SPELL_EFFECT, () -> switchMode())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> switchMode())
 
 	function changeTerrain()
 		var orderPos = getOrderPos()

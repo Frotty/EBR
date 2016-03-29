@@ -7,8 +7,8 @@ constant int SPEEDWAVE_ID = 'A06P'
 constant int TOMB_DUMMY_ID = 'u00D'
 constant int STAGNANCYSHIELD_ID = 'A008'
 
-public class Holy_Escaper extends Escaper
-	unit revivetomb
+public class HolyEscaper extends Escaper
+	unit revivetomb = null
 
 	construct( vec3 pos, player owner, int typ )
 		super( pos, owner, typ )
@@ -18,10 +18,20 @@ public class Holy_Escaper extends Escaper
 		if id == REINCARNATION_ID
 			if revivetomb != null
 				revivetomb.remove()
-			revivetomb = CreateUnit(owner, TOMB_DUMMY_ID, pos.x, pos.y, 0.)
-		
+			revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
+			
+	override function revive()
+		super.revive()
+		if revivetomb != null
+			setPos(revivetomb.getPos3())
+			if selectatrevive
+				if (GetLocalPlayer() == owner)
+					PanCameraToTimed(pos.x, pos.y, 0)
+			revivetomb.remove()
+			revivetomb = null
+					
 
-public class Ice_Escaper extends Escaper
+public class IceEscaper extends Escaper
 	
 	construct(vec3 pos, player owner, int typ )
 		super(pos, owner, typ)
@@ -36,7 +46,7 @@ public class Ice_Escaper extends Escaper
 				addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
 		
 	
-public class Strong_Escaper extends Escaper
+public class StrongEscaper extends Escaper
 	boolean invulnerable = false
 	effect shieldeffect = null
 	real shieldX = 0.

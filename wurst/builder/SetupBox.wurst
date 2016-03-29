@@ -29,7 +29,7 @@ public class SetupBox
 		rdata = data
 		actor.setUserData(this castTo int)
 		
-		EventListener.add(actor, EVENT_UNIT_SPELL_EFFECT, () -> onCast())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 		
 	function onCast() returns boolean

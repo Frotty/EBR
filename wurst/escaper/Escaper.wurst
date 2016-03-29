@@ -14,6 +14,7 @@ import RevivePointModifier
 import PhysicsConstants
 import ClosureTimers
 import TerrainBlocker
+import BasicSpells
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -52,7 +53,7 @@ public class Escaper extends UnitEntity
 		..hide()
 		..removeAbility('Aloc')
 		..show()
-		
+		..addAbility(BALL_SPELL_ID)
 		
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
