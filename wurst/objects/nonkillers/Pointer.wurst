@@ -1,10 +1,8 @@
 package Pointer
 import Entity
 import Escaper
-import EventHandling
 import Texttag
-import TempGroups
-import PreloadHandler
+import Preloader
 
 constant int POINTER_ID = 'h01Q'
 
@@ -31,8 +29,7 @@ public class Pointer extends UnitEntity
 		trig = CreateTrigger()
 		trig.registerUnitInRangeSource(setup, 64., null)
 		trig.addAction(function Pointer.turnUnit)
-		setup.registerCastEvent(Condition(function Pointer.onCast))
-		setup.setUserData(this castTo int)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
 		pos = vec3(setup.getX(), setup.getY(), 0.)
@@ -41,30 +38,27 @@ public class Pointer extends UnitEntity
 		if turning
 			angl += turnspeed
 			
-	static function onCast() returns boolean
-		var id = GetSpellAbilityId()
-		var data = GetSpellAbilityUnit().getUserData() castTo Pointer
+	function onCast()
+		let id = GetSpellAbilityId()
 		switch id
 			case INC_ID
-				if data.turnspeed < 6.
-					data.turnspeed += 0.5
-					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				if turnspeed < 6.
+					turnspeed += 0.5
+					createTTEx(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
+					createTTEx(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner  )
 			case DEC_ID
-				if data.turnspeed > -6.
-					data.turnspeed -= 0.5
-					createTTEx(data.pos, vec2(0,0.05), "Turnspeed: "+ R2SW(data.turnspeed,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				if turnspeed > -6.
+					turnspeed -= 0.5
+					createTTEx(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
+					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
 			case START_ID
-				data.turning = true
-				data.setup..removeAbility(START_ID)..addAbility(STOP_ID)
+				turning = true
+				setup..removeAbility(START_ID)..addAbility(STOP_ID)
 			case STOP_ID
-				data.turning = false
-				data.setup..removeAbility(STOP_ID)..addAbility(START_ID)
-					
-		return false
+				turning = false
+				setup..removeAbility(STOP_ID)..addAbility(START_ID)
 
 	static function turnUnit()
 		var edata = GetTriggerUnit().getEntity()
@@ -74,7 +68,6 @@ public class Pointer extends UnitEntity
 			es.actor.setFacing(data.angl)
 	
 	static function setfacing()
-		debugPrint("SETTING FACING",4)
 		string chatmsg = GetEventPlayerChatString()
 		real facing = 0
 		if SubString(chatmsg, 0, 4) == "-sa "
@@ -88,7 +81,6 @@ public class Pointer extends UnitEntity
 		
 				
 	ondestroy
-		actor.unregisterCastEvent()
 		actor.remove()
 		setup.remove()
 		trig.destr()
@@ -110,9 +102,7 @@ public function init_Pointer()
 	TriggerAddAction(t, function Pointer.setfacing)
 	
 init
-	debugPrint("wc3init Pointer begin", 2)
 	preloadAbility(START_ID)
 	preloadAbility(STOP_ID)
 	preloadAbility(INC_ID)
 	preloadAbility(DEC_ID)
-	debugPrint("wc3init Pointer finish", 2)

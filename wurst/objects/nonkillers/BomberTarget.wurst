@@ -1,8 +1,4 @@
 package BomberTarget
-import Entity
-import Terrain
-import EventHandling
-import Escaper
 import SetupObject
 import BaseObject
 

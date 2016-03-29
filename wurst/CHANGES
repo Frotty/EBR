@@ -1,7 +1,11 @@
+[0.83m]
+[*] fixed removing object resetting camera
+[*] fixed effect leak on destroy
+[*] improved measures to reduce setup-separation (powernodex fixed)
 
 
 [0.83k]
--fixed terrainblocker removal
--added knockbacker strength now adjustable
--added new ranks
--added teleporter teleports pointers
+[*] fixed terrainblocker removal
+[*] added knockbacker strength now adjustable
+[*] added new ranks
+[*] added teleporter teleports pointers

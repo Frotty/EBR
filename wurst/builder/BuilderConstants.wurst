@@ -1,5 +1,5 @@
 package BuilderConstants
-import PreloadHandler
+import Preloader
 
 public constant real hiddenX = -2147483647
 public constant real hiddenY = 2147483647
@@ -44,7 +44,6 @@ public constant int ANKH_ID = 'I00L'
 public int array colorSpells
 
 init
-	debugPrint("wc3init BuilderConstants begin", 2)
 	colorSpells[0] = 'A05T'
 	preloadAbility(colorSpells[0])
 	colorSpells[1] = 'A05U'
@@ -63,4 +62,3 @@ init
 	preloadAbility(colorSpells[7])
 	colorSpells[8] = 'A060'
 	preloadAbility(colorSpells[8])
-	debugPrint("wc3init BuilderConstants finish", 2)

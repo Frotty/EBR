@@ -3,7 +3,6 @@ import ItemObject
 import GameConstants
 import Escaper
 import BuilderConstants
-import EventHandling
 
 public int array keyIds
 
@@ -19,7 +18,7 @@ public class Key extends ItemObject
 	
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
-		setup.registerCastEvent(Condition(function Key.onCast))
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function recolor()
 		RemoveItem(actorItem)
@@ -38,48 +37,44 @@ public class Key extends ItemObject
 		setup.show()
 		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
 		actorItem.setUserData(this castTo int)
-
-		
 		
 	override function update()
 		if picked and followWalkable
 			if not holder.flying and not holder.sliding and not holder.onUnwalkable
 				pos = holder.pos
 				
-			
 		
-	static function onCast() returns boolean
-		var id = GetSpellAbilityId()
-		var data = GetTriggerUnit().getUserData() castTo Key
+	function onCast() returns boolean
+		let id = GetSpellAbilityId()
 		switch id
 			case colorSpells[0]
-				data.col = COLOR.WHITE
+				col = COLOR.WHITE
 			case colorSpells[1]
-				data.col = COLOR.RED
+				col = COLOR.RED
 			case colorSpells[2]
-				data.col = COLOR.BLUE
+				col = COLOR.BLUE
 			case colorSpells[3]
-				data.col = COLOR.TEAL
+				col = COLOR.TEAL
 			case colorSpells[4]
-				data.col = COLOR.PURPLE
+				col = COLOR.PURPLE
 			case colorSpells[5]
-				data.col = COLOR.YELLOW
+				col = COLOR.YELLOW
 			case colorSpells[6]
-				data.col = COLOR.ORANGE
+				col = COLOR.ORANGE
 			case colorSpells[7]
-				data.col = COLOR.GREEN
+				col = COLOR.GREEN
 			case colorSpells[8]
-				data.col = COLOR.PINK
+				col = COLOR.PINK
 			case DYN_ID
-				data.followWalkable = false
-				data.setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
-				data.returnSfx = AddSpecialEffect("war3mapImported\\XTex.mdx", data.pos.x, data.pos.y)
+				followWalkable = false
+				setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
+				returnSfx = AddSpecialEffect("war3mapImported\\XTex.mdx", pos.x, pos.y)
 			case STATIC_ID
-				data.followWalkable = true
-				data.setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
-				if data.returnSfx != null
-					data.returnSfx.destr()
-		data.recolor()
+				followWalkable = true
+				setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
+				if returnSfx != null
+					returnSfx.destr()
+		recolor()
 		return false
 		
 	ondestroy
@@ -87,14 +82,12 @@ public class Key extends ItemObject
 		actorItem.remove()
 		dropTrig.enable()
 		holder = null
-		setup.unregisterCastEvent()
 		setup.remove()
 		if returnSfx != null
 			returnSfx.destr()
 		
 		
 init
-	debugPrint("wc3init Key begin", 2)
 	keyIds[0] = 'I009'
 	keyIds[1] = 'I00C'
 	keyIds[2] = 'I004'
@@ -104,6 +97,5 @@ init
 	keyIds[6] = 'I00O'
 	keyIds[7] = 'I00B'
 	keyIds[8] = 'I006'
-	debugPrint("wc3init Key finish", 2)
 	
 	

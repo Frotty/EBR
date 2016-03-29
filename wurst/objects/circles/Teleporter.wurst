@@ -2,10 +2,8 @@ package Teleporter
 import BaseObject
 import Escaper
 import EscaperKiller
-import EventHandling
 import TeleporterTarget
 import SetupObject
-import TempGroups
 import PlayerData
 import RegionData
 import Revivepoint
@@ -26,10 +24,7 @@ public class Teleporter extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0) ), EVENT_RADIUS, function Teleporter.teleport ) 
-		actor.registerCastEvent(Condition(function Teleporter.onCast))
-		
-	ondestroy
-		actor.unregisterCastEvent()
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	static function teleport()
 		unit source = GetTriggeringTrigger().getSource()
@@ -76,20 +71,15 @@ public class Teleporter extends StaticBaseObject
 	override function update()
 		skip
 		
-	static function onCast() returns boolean
+	function onCast()
 		var id = GetSpellAbilityId()
-		var tdata = GetTriggerUnit().getUserData() castTo Teleporter
-		
 		switch id
 			case BOTH_ID
-				tdata.actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
-				tdata.mode = 0
+				actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
+				mode = 0
 			case ESC_ID
-				tdata.actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
-				tdata.mode = 1
+				actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
+				mode = 1
 			case KILL_ID
-				tdata.actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
-				tdata.mode = 2
-				
-		return false
-
+				actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
+				mode = 2

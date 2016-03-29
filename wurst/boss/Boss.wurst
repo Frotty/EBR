@@ -3,13 +3,10 @@ import initlater Entity
 import initlater SetupObject
 import initlater PlayerData
 import initlater Escaper
-import initlater EventHandling
-import initlater PreloadHandler
+import initlater Preloader
 import initlater BossSpellTarget
-import initlater TempGroups
 import initlater RegionData
 import initlater Texttag
-import initlater CustomBar
 
 constant int BOSS_TOMB_ID = 'n01P'
 constant int HP_UP_ID = 'A06U'
@@ -29,7 +26,6 @@ trigger deathTrig
 public class Boss extends DynamicSetupObject
 	int aoe_id = 0
 	int missile_id = 0
-	CustomBar hpBar
 	real maxHp = 200
 	RegionData rdata
 
@@ -40,23 +36,19 @@ public class Boss extends DynamicSetupObject
 			if not es.flying
 				es.kill()
 
-	construct( player owner, real x, real y, int id)
-		super( vec3(x, y, 0), CreateUnit(owner, id, x, y, 0),CreateUnit(owner, id, x, y, 0), 64, function Boss.onInRangeEvent )
-		setup.registerCastEvent(Condition(function onCast))
+	construct( player owner, vec2 tpos, int id)
+		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)),createUnit(owner, id, tpos, angle(0)), 64, function Boss.onInRangeEvent )
+//		setup.registerCastEvent(Condition(function onCast))
 		deathTrig.registerUnitEvent(setup,EVENT_UNIT_DEATH)
 //		deathTrig.registerUnitEvent(actor,EVENT_UNIT_DEATH)
 //		actor.addAbility(REAL_HP_BIG_ID)
 //		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
 
-		hpBar = new CustomBar(pos, "|", 100, 7.5)
-		hpBar.setForeground(colorA(0,225,0,0))
-		hpBar.setBackground(colorA(100,25,25,0))
-		hpBar.lockToUnit(actor, -90, 0, 256)
-		rdata = getRegionData(pos.x, pos.y)
+		rdata = getRegionData(pos)
 		
 	override function update()
 		super.update()
-		hpBar.setValue(setup.getHP() / maxHp * 100.0)
+//		hpBar.setValue(setup.getHP() / maxHp * 100.0)
 		if not pos.toVec2().isInRect(rdata.theRect)
 			setPos(rdata.theRect.getCenter().withZ(0))
 			DisplayTextToPlayer(owner, 0,0, "|cffD62921You can't move your boss out of the boss region")
@@ -116,9 +108,7 @@ public class Boss extends DynamicSetupObject
 		return false
 	
 	function getSpellTargets(SpellType stype) returns group
-		var ox = pos.x
-		var oy = pos.y
-		var rdata = getRegionData(ox,oy)
+		var rdata = getRegionData(pos)
 		GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
 		group g = CreateGroup()
 		for unit u in ENUM_GROUP
@@ -133,11 +123,11 @@ public class Boss extends DynamicSetupObject
 		var data = GetTriggerUnit().getEntity()
 		if data instanceof Boss
 			var boss = data castTo Boss
-			boss.hpBar.changeVisibility(CreateForce())
+//			boss.hpBar.changeVisibility(CreateForce())
 			boss.actor.kill()
 			boss.setup.remove()
 			boss.setup = CreateUnit(boss.owner, BOSS_TOMB_ID, boss.pos.x,boss.pos.y,270.)
-			boss.setup.registerCastEvent(Condition(function onCast))
+//			boss.setup.registerCastEvent(Condition(function onCast))
 			for i = 0 to 11
 				DisplayTextToPlayer( Player(i), 0, 0, "|cff6BC54ACongratulations! You have slain the Boss!!")
 				

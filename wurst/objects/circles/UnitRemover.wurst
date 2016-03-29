@@ -1,6 +1,5 @@
 package UnitRemover
 import BaseObject
-import EventHandling
 import SetupObject
 import Remove
 import Pointer

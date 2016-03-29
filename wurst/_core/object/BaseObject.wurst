@@ -1,130 +1,115 @@
 package BaseObject
-	import public Entity
-	import Vectors
-	import Terrain
-	import Trigger
-	import SetupObject
-	import Escaper
+import public Entity
+import public TerrainUtils
+import SetupObject
 
-	trigger rallyTrigger
+trigger rallyTrigger
 
-	/*  ---Creating a new Baseobject---
-		Creating the baseobject will need 3 parameters
-		the unit u: in whichs Userdata the struct is saved
-		the radius: The Range of the InrangeDetection
-		the code c: name of the static method that is being called upon inRangeEvent
-	*/
-	
-	public code CODE_NULL = null
+/*  ---Creating a new Baseobject---
+	Creating the baseobject will need 3 parameters
+	the unit u: in whichs Userdata the struct is saved
+	the radius: The Range of the InrangeDetection
+	the code c: name of the static method that is being called upon inRangeEvent
+*/
 
-	public class StaticBaseObject extends UnitEntity
-		private vec3 rallyPoint
-		private unit rallyUnit
-		private angle rallyAngle
+public code CODE_NULL = null
 
-		trigger inRangeTrig // Trigger for inRange detection
+public class StaticBaseObject extends UnitEntity
+	private vec3 rallyPoint
+	private unit rallyUnit
+	private angle rallyAngle
 
-		construct( vec2 pos, unit u, real radius, code c )
-			super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
-			active = false
+	protected trigger inRangeTrig // Trigger for inRange detection
 
+	construct( vec2 pos, unit u, real radius, code c )
+		super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
+		active = false
 
-			rallyPoint = this.pos
+		rallyPoint = this.pos
 
-			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-				inRangeTrig = CreateTrigger()
-				inRangeTrig.registerUnitInRangeSource( actor, radius )
-				inRangeTrig.addCondition(Condition(function isProper))
-				inRangeTrig.addAction( c )
-			TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER ) 
-			TriggerRegisterUnitEvent( rallyTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+			inRangeTrig = CreateTrigger()
+			inRangeTrig.registerUnitInRangeSource( actor, radius )
+			inRangeTrig.addCondition(Condition(function isProper))
+			inRangeTrig.addAction( c )
+		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_POINT_ORDER) 
+		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 
-			actor.setUserData(this castTo int)
+	static function isProper() returns boolean
+		return GetTriggerUnit().getFlyHeight() < 16
 
-		static function isProper() returns boolean
-			return not (GetTriggerUnit().getUserData() castTo Escaper).flying
+	static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
+		let u			= GetOrderedUnit()
+		let target		= GetOrderTargetUnit()
+		let targetPoint = vec2(GetOrderPointX(), GetOrderPointY())
+		let orderid		= GetIssuedOrderId()
+		
+		let obj  = u.getEntity() castTo StaticBaseObject
 
-		static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
-			unit u		= GetOrderedUnit()
-			unit u2	   = GetOrderTargetUnit()
-			real x		= GetOrderPointX()
-			real y		= GetOrderPointY()
-			thistype obj  = GetUnitUserData( u ) castTo StaticBaseObject
-
-			if GetIssuedOrderId() == 0xD000C or GetIssuedOrderId() == 851971//IDs of Rally(to be sure)
-				if u2 == null
-					obj.rallyUnit = null
-					obj.rallyPoint = vec3( x, y, getTerrainZ( x, y ) )
-					obj.rallyAngle = angleBetweenCoords( obj.pos.x, obj.pos.y, x, y )
-				else
-					var data = u2.getEntity()
-					if data != null and data instanceof DynamicSetupObject
-						obj.rallyUnit = (data castTo DynamicSetupObject).actor
-					else
-						obj.rallyUnit = u2
-
-
-
-		function getRallyPoint() returns vec3
-			if rallyUnit == null
-				return rallyPoint
+		if orderid == 0xD000C or orderid == 851971
+			if target == null
+				obj.rallyUnit = null
+				obj.rallyPoint = targetPoint.toVec3()
+				obj.rallyAngle = obj.pos.angleTo2d(targetPoint)
 			else
-				if rallyUnit.getOwner() != DUMMY_PLAYER
-					real x = GetUnitX( rallyUnit )
-					real y = GetUnitY( rallyUnit )
-					return vec3( x, y, getTerrainZ( x, y ) )
+				let data = target.getEntity()
+				if data != null and data instanceof DynamicSetupObject
+					obj.rallyUnit = (data castTo DynamicSetupObject).actor
 				else
-					return pos
+					obj.rallyUnit = target
 
-		function getRallyUnit() returns unit
-			return rallyUnit
+	function getRallyPoint() returns vec3
+		if rallyUnit == null
+			return rallyPoint
+		else
+			if rallyUnit.getOwner() != DUMMY_PLAYER
+				real x = GetUnitX( rallyUnit )
+				real y = GetUnitY( rallyUnit )
+				return vec3( x, y, getTerrainZ( x, y ) )
+			else
+				return pos
 
-		function setX( real x )
-			SetUnitX( actor, x )
+	function getRallyUnit() returns unit
+		return rallyUnit
 
-		function setY( real y )
-			SetUnitY( actor, y )
+	function setX( real x )
+		SetUnitX( actor, x )
 
-		function setZ( real z )
-			SetUnitFlyHeight( actor, z, 0. )
+	function setY( real y )
+		SetUnitY( actor, y )
 
-		function getRallyX() returns real
-			if rallyUnit == null
+	function setZ( real z )
+		SetUnitFlyHeight( actor, z, 0. )
+
+	function getRallyX() returns real
+		if rallyUnit == null
+			return rallyPoint.x
+		else
+			if GetWidgetLife(rallyUnit) > .405
+				return GetUnitX(rallyUnit)
+			else
+				rallyUnit = null
 				return rallyPoint.x
-			else
-				if GetWidgetLife(rallyUnit) > .405
-					return GetUnitX(rallyUnit)
-				else
-					rallyUnit = null
-					return rallyPoint.x
 
-		function getRallyY() returns real
-			if rallyUnit == null
+	function getRallyY() returns real
+		if rallyUnit == null
+			return rallyPoint.y
+		else
+			if GetWidgetLife(rallyUnit) > .405
+				return GetUnitY(rallyUnit)
+			else
+				rallyUnit = null
 				return rallyPoint.y
-			else
-				if GetWidgetLife(rallyUnit) > .405
-					return GetUnitY(rallyUnit)
-				else
-					rallyUnit = null
-					return rallyPoint.y
 
-		function getRallyAngle() returns real
-			return angleBetweenCoords(pos.x, pos.y, getRallyX(), getRallyY()).degrees()
+	function getRallyAngle() returns real
+		return pos.angleTo2d(getRallyPoint()).degrees()
 
-		override function update()
+	ondestroy
+		actor.clearRegister()
+		actor.remove()
+		inRangeTrig.destr()
 
-		ondestroy
-			actor.clearRegister()
-			actor.remove()
-			inRangeTrig.destr()
+init
+	rallyTrigger = CreateTrigger()
+	rallyTrigger.addAction( function StaticBaseObject.adjustRallypoint )
 
-
-
-	init
-		debugPrint("wc3init BaseObject begin", 2)
-		rallyTrigger = CreateTrigger()
-		rallyTrigger.addAction( function StaticBaseObject.adjustRallypoint )
-		debugPrint("wc3init BaseObject finish", 2)
-
-
-endpackage

@@ -4,32 +4,28 @@
 //It modifies every move&patrol order to the ordered point be a point of the grid.
 // 64 points for GRID is the ideal imo, i dont think builders need an option to set their grid's standard.
 package Gridclick
-	import PlayerData
+import PlayerData
 
-	int PATROL_ID = 851990
-	int MOVE_ID = 851971
-	int GROUND_ATTACK_ID = 851984
-	int GRID = 64	
-	
-	function checkRightOrder()
-		var i = GetIssuedOrderId()
-		if pData[GetPlayerId(GetOwningPlayer(GetOrderedUnit()))].gridClickActivated == true // is this proper??
-			if (i == PATROL_ID or i == MOVE_ID or i == GROUND_ATTACK_ID)
-				var gridx = (round(GetOrderPointX()/ GRID) * GRID).toReal() //similar as placement of the terrainblocker circle??
-				var gridy = (round(GetOrderPointY()/ GRID) * GRID).toReal()
-				if not (gridx == GetOrderPointX() and gridy == GetOrderPointY())
-					IssuePointOrderById(GetOrderedUnit(),i,gridx, gridy)
-					debugPrint("Grid order", 2)
-	
-	public function round (real r) returns integer // this function could be imported from the terrainblocker circle!
-		if r > 0
-			return R2I(r+.5)
-		return R2I(r-.5)
-	
-	init
-		debugPrint("wc3init Grid begin", 2)
-		trigger t = CreateTrigger()
-		//TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
-		TriggerAddAction(t,function checkRightOrder)
-		debugPrint("wc3init Grid finish", 2)
-endpackage
+int PATROL_ID = 851990
+int MOVE_ID = 851971
+int GROUND_ATTACK_ID = 851984
+int GRID = 64	
+
+function checkRightOrder()
+	var i = GetIssuedOrderId()
+	if pData[GetPlayerId(GetOwningPlayer(GetOrderedUnit()))].gridClickActivated == true // is this proper??
+		if (i == PATROL_ID or i == MOVE_ID or i == GROUND_ATTACK_ID)
+			var gridx = (round(GetOrderPointX()/ GRID) * GRID).toReal() //similar as placement of the terrainblocker circle??
+			var gridy = (round(GetOrderPointY()/ GRID) * GRID).toReal()
+			if not (gridx == GetOrderPointX() and gridy == GetOrderPointY())
+				IssuePointOrderById(GetOrderedUnit(),i,gridx, gridy)
+
+public function round (real r) returns integer // this function could be imported from the terrainblocker circle!
+	if r > 0
+		return R2I(r+.5)
+	return R2I(r-.5)
+
+init
+	trigger t = CreateTrigger()
+	//TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
+	TriggerAddAction(t,function checkRightOrder)

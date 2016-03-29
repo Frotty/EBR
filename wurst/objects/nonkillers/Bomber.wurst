@@ -1,7 +1,6 @@
 package Bomber
 import SetupObject
 import Attackspeed
-import EventHandling
 import Texttag
 
 constant int BOMBER_ID = 'h00Y'
@@ -27,22 +26,21 @@ public class Bomber extends UnitEntity
 		UnitAddType(setup, UNIT_TYPE_PEON)
 		UnitAddType(actor, UNIT_TYPE_PEON)
 		setup.addAbility('Agho')
-		setup.registerCastEvent(Condition(function onCast))
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		setup.setUserData(this castTo int)
 		
 	override function update()
 		
-	static function onCast() returns boolean
-		var id = GetSpellAbilityId()
-		var obj = GetTriggerUnit().getUserData() castTo Bomber
-		onAttackspeedCast(id, obj.actor)
+	function onCast() returns boolean
+		let id = GetSpellAbilityId()
+		onAttackspeedCast(id, actor)
 		if id == AUTOATTACK_ID
-			if IsUnitType(obj.actor, UNIT_TYPE_PEON)
-				UnitRemoveType(obj.actor, UNIT_TYPE_PEON)
-				createTTEx(obj.pos, vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), obj.owner  )
+			if IsUnitType(actor, UNIT_TYPE_PEON)
+				UnitRemoveType(actor, UNIT_TYPE_PEON)
+				createTTEx(pos, vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner  )
 			else
-				UnitAddType(obj.actor, UNIT_TYPE_PEON)
-				createTTEx(obj.pos, vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), obj.owner  )
+				UnitAddType(actor, UNIT_TYPE_PEON)
+				createTTEx(pos, vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner  )
 		return false
 		
 	static function orderSetup()
@@ -54,11 +52,9 @@ public class Bomber extends UnitEntity
 	ondestroy 
 		setup.remove()
 		actor.remove()
-		actor.unregisterCastEvent()
 	
 function checkOrder()
 	var i = GetIssuedOrderId()
-	debugPrint("Bomber Order", 1)
 	var e = GetOrderedUnit().getEntity()
 	if e instanceof Bomber
 		var obj = e castTo Bomber

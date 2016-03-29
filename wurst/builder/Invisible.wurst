@@ -1,39 +1,30 @@
 package Invisible
-import BaseObject
 import Entity
 import SetupObject
 
-constant int VIS_ID = 'A04F'
-constant int INVIS_ID = 'A005'
+constant VIS_ID = 'A04F'
+constant INVIS_ID = 'A005'
 
-trigger castTrig
-
-function changeVisibility()
+function onChangeVisibility()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
 	var dta = caster.getUserData() castTo UnitEntity
-	if dta instanceof DynamicSetupObject
-		let data = dta castTo DynamicSetupObject
-		if id == VIS_ID
-			data.actor..removeAbility('Agho')..addAbility('Aeth')
-			data.setup..removeAbility(VIS_ID)..addAbility(INVIS_ID)
-		else if id == INVIS_ID
-			data.actor..removeAbility('Aeth')..addAbility('Agho')
-			data.setup..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
-	else 
-		if id == VIS_ID
-			caster..removeAbility('Agho')..addAbility('Aeth')
-			caster..removeAbility(VIS_ID)..addAbility(INVIS_ID)
-		else if id == INVIS_ID
-			caster..removeAbility('Aeth')..addAbility('Agho')
-			caster..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
-	
-function isVisSpell() returns boolean
-	let id = GetSpellAbilityId()
-	return id == VIS_ID or id == INVIS_ID
+	if id == VIS_ID or id == INVIS_ID
+		if dta instanceof DynamicSetupObject
+			let data = dta castTo DynamicSetupObject
+			if id == VIS_ID
+				data.actor..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
+				data.setup..removeAbility(VIS_ID)..addAbility(INVIS_ID)
+			else if id == INVIS_ID
+				data.actor..removeAbility(GHOST_VIS_ID)..addAbility(GHOST_INVIS_ID)
+				data.setup..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
+		else 
+			if id == VIS_ID
+				caster..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
+				caster..removeAbility(VIS_ID)..addAbility(INVIS_ID)
+			else if id == INVIS_ID
+				caster..removeAbility(GHOST_VIS_ID)..addAbility(GHOST_INVIS_ID)
+				caster..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
 	
 public function invis_init()
-	castTrig = CreateTrigger()
-	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
-	castTrig.addCondition(Condition(function isVisSpell))
-	castTrig.addAction(function changeVisibility)
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChangeVisibility())

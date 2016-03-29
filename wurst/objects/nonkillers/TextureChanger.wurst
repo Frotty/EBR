@@ -1,12 +1,11 @@
 package TextureChanger
 import Entity
-import EventHandling
 import SetupObject
 import RegionData
 import TerrainBlocker
 import BuilderConstants
 import Texttag
-import PreloadHandler
+import Preloader
 import BaseObject
 import BitSet
 
@@ -35,7 +34,7 @@ public class TextureChanger extends DynamicSetupObject
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
-		setup.registerCastEvent(Condition(function TextureChanger.onCast))
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		
 	override function update()
@@ -56,7 +55,7 @@ public class TextureChanger extends DynamicSetupObject
 							tileID = outerTile
 						else
 							tileID = innerTile
-						data = getRegionData(x,y)
+						data = getRegionData(vec2(x,y))
 						if data != null 
 							if data.isOwner(GetPlayerId(owner)) 
 								if tileID == '0000'
@@ -66,57 +65,50 @@ public class TextureChanger extends DynamicSetupObject
 								if GetTerrainType(x, y) != tileID
 									SetTerrainType(x, y, tileID, 0, 1, 1 )
 							
-	ondestroy
-		setup.unregisterCastEvent()
-
 	
-	static function onCast() returns boolean
-			var obj = GetSpellAbilityUnit().getUserData() castTo TextureChanger
-			int i = GetSpellAbilityId()
+	function onCast()
+			let i = GetSpellAbilityId()
 			
 			switch i
 				case TERRAIN_INC_H_ID
-					if obj.sizeX < 3
-						obj.sizeX ++
+					if sizeX < 3
+						sizeX ++
 					else
-						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorA(255,255,255,0), obj.owner )
+						createTTEx(pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorA(255,255,255,0), owner )
 				case TERRAIN_INC_V_ID
-					if obj.sizeY < 3
-						obj.sizeY ++
+					if sizeY < 3
+						sizeY ++
 					else
-						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorA(255,255,255,0), obj.owner )
+						createTTEx(pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorA(255,255,255,0), owner )
 				case TERRAIN_DEC_H_ID
-					if obj.sizeX > 0
-						obj.sizeX --
+					if sizeX > 0
+						sizeX --
 					else
-						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorA(255,255,255,0), obj.owner )
+						createTTEx(pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorA(255,255,255,0), owner )
 				case TERRAIN_DEC_V_ID
-					if obj.sizeY > 0
-						obj.sizeY --
+					if sizeY > 0
+						sizeY --
 					else
-						createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorA(255,255,255,0), obj.owner )
+						createTTEx(pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorA(255,255,255,0), owner )
 				case TERRAIN_I_WALKABLE_ID
-					obj.innerTile = '0000'
+					innerTile = '0000'
 				case TERRAIN_I_UNWALKABLE_ID
-					obj.innerTile = '0001'
+					innerTile = '0001'
 				case TERRAIN_I_ICE_ID
-					obj.innerTile = CONTROLLABLEICE
+					innerTile = CONTROLLABLEICE
 				case TERRAIN_I_UNICE_ID
-					obj.innerTile = UNCONTROLLABLEICE
+					innerTile = UNCONTROLLABLEICE
 				case TERRAIN_O_WALKABLE_ID
-					obj.outerTile = '0000'
+					outerTile = '0000'
 				case TERRAIN_O_UNWALKABLE_ID
-					obj.outerTile = '0001'
+					outerTile = '0001'
 				case TERRAIN_O_ICE_ID
-					obj.outerTile = CONTROLLABLEICE
+					outerTile = CONTROLLABLEICE
 				case TERRAIN_O_UNICE_ID
-					obj.outerTile = UNCONTROLLABLEICE
+					outerTile = UNCONTROLLABLEICE
 					
-			//obj.setup.issuePastOrder(2)
-			return false
 			
 init
-	debugPrint("wc3init TC begin", 2)
 	preloadAbility(TERRAIN_O_WALKABLE_ID)
 	preloadAbility(TERRAIN_O_UNWALKABLE_ID)
 	preloadAbility(TERRAIN_O_ICE_ID)
@@ -129,5 +121,4 @@ init
 	preloadAbility(TERRAIN_INC_V_ID)
 	preloadAbility(TERRAIN_DEC_H_ID)
 	preloadAbility(TERRAIN_DEC_V_ID)
-	debugPrint("wc3init TC finish", 2)
 

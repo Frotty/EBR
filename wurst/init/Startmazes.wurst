@@ -12,7 +12,6 @@ import initlater UnitRemover
 import initlater Spinner
 import initlater Entity
 import initlater RegionData
-import initlater TempGroups
 import initlater Texttag
 import initlater Startmaze
 import initlater FirstSnow

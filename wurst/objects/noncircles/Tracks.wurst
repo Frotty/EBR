@@ -1,7 +1,6 @@
 package Tracks
 import Entity
 import Escaper
-import EventHandling
 import Texttag
 
 int array TRACKS
@@ -26,8 +25,9 @@ public class Tracks extends UnitEntity
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0) )
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
-		setup.registerCastEvent(Condition(function Tracks.onCast))
 		setup.setUserData(this castTo int)
+		
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		
 	override function update()
@@ -44,57 +44,52 @@ public class Tracks extends UnitEntity
 		
 	ondestroy
 		setup.remove()
-		setup.unregisterCastEvent()
 		actor.remove()
 				
-	static function onCast() returns boolean
-		var id = GetSpellAbilityId()
-		var tracks = GetSpellAbilityUnit().getUserData() castTo Tracks
+	function onCast()
+		let id = GetSpellAbilityId()
 		switch id
 			case INC_ID
-				if tracks.speed < 10.
-					tracks.speed+= .5
-					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
+				if speed < 10.
+					speed+= .5
+					createTTEx(pos, vec2(0,0.05), "Speed : " + speed.toString(), 12,  2., colorA(255,255,255,0), owner  )
 			case DEC_ID
-				if tracks.speed > .5
-					tracks.speed-= .5
-					createTTEx(tracks.pos, vec2(0,0.05), "Speed : " + tracks.speed.toString(), 12,  2., colorA(255,255,255,0), tracks.owner  )
+				if speed > .5
+					speed-= .5
+					createTTEx(pos, vec2(0,0.05), "Speed : " + speed.toString(), 12,  2., colorA(255,255,255,0), owner  )
 			case INCLENGTH_ID
-				if tracks.size < 2
-					tracks.size++
-					if tracks.angl == 0 or tracks.angl == 180
-						tracks.height++
+				if size < 2
+					size++
+					if angl == 0 or angl == 180
+						height++
 					else
-						tracks.width++
-					tracks.recreateDummy()
+						width++
+					recreateDummy()
 			case DECLENGTH_ID
-				if tracks.size > 0
-					tracks.size--
-					if tracks.angl == 0 or tracks.angl == 180
-						tracks.height--
+				if size > 0
+					size--
+					if angl == 0 or angl == 180
+						height--
 					else
-						tracks.width--
-					tracks.recreateDummy()
+						width--
+					recreateDummy()
 			case LEFT_ID
-				tracks.angl += 90
-				var temp1 = tracks.height
-				tracks.height = tracks.width
-				tracks.width = temp1
-				tracks.recreateDummy()
+				angl += 90
+				var temp1 = height
+				height = width
+				width = temp1
+				recreateDummy()
 			case RIGHT_ID
-				tracks.angl -= 90
-				var temp2 = tracks.height
-				tracks.height = tracks.width
-				tracks.width = temp2
-				tracks.recreateDummy()
-		tracks.actor.setTimeScale(0.5+tracks.speed/6)
-		return false
+				angl -= 90
+				var temp2 = height
+				height = width
+				width = temp2
+				recreateDummy()
+		actor.setTimeScale(0.5+speed/6)
 		
 	
 init
-	debugPrint("wc3init Tracks begin", 2)
 	TRACKS[0] = 'n01R'
 	TRACKS[1] = 'n01L'
 	TRACKS[2] = 'n01N'
-	debugPrint("wc3init Tracks finish", 2)
 	

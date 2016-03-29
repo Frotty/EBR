@@ -1,19 +1,13 @@
 package Revivepoint
 import SetupObject
-import Terrain
 import PlayerData
-import Escaper
 import GameConstants
 import RegionData
-import TempGroups
 import Builder
 import Startmazes
-import InstantBuild
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
-
-public vec2 currentRevivepoint = vec2(6398, -6791)
 
 public class RevivePoint extends StaticSetupObject
 	boolean reached = false
@@ -30,7 +24,7 @@ public class RevivePoint extends StaticSetupObject
 		thistype obj = source.getUserData() castTo thistype
 		if obj.reached
 			return
-		let rdata = getRegionData(obj.pos.x, obj.pos.y)
+		let rdata = getRegionData(obj.pos)
 		
 		if obj.startMaze > -1 and e instanceof Escaper and isPlayerEscaper(e.owner)
 			SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
@@ -69,7 +63,7 @@ public class RevivePoint extends StaticSetupObject
 						if GetLocalPlayer() == es.owner
 							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 	
-			if distanceBetweenCoords(currentRevivepoint.x, currentRevivepoint.y, obj.pos.x, obj.pos.y) > 512
+			if currentRevivepoint.distanceTo(obj.pos.toVec2()) > 512
 				let esc = pData[u.getOwner().getId()]
 				esc.addXp(20, false)
 				if obj.owner.getId() < 11

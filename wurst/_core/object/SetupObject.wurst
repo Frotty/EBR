@@ -1,231 +1,226 @@
 package SetupObject
-	import public Entity
-	import Vectors
-	import Terrain
-	import Trigger
+import public Entity
+import public TerrainUtils
+import Vectors
+import Trigger
+
+
+public constant int INC_SPEED_ID = 'A01E'
+public constant int DEC_SPEED_ID = 'A01H'
+/**
+	Objects which are unclickable for escapers,
+	but clickable for builders.	 
+
+*/
+trigger orderTrigger
+timer fixPos = CreateTimer()
+
+public abstract class DynamicSetupObject extends UnitEntity
+	real radius	
+	unit setup
+	real time = GetRandomReal(30,45)
+	trigger inRangeTrig // Trigger for inRange detection
 	
-	public constant int INC_SPEED_ID = 'A01E'
-	public constant int DEC_SPEED_ID = 'A01H'
-	/**
-		Objects which are unclickable for escapers,
-		but clickable for builders.	 
-	
-	*/
-	trigger orderTrigger
-	timer fixPos = CreateTimer()
-	
-	public abstract class DynamicSetupObject extends UnitEntity
-		real radius	
-		unit setup
-		real time = 0
-		trigger inRangeTrig // Trigger for inRange detection
-		
-						
-		construct( vec3 pos, unit u, unit setup, real radius, code c )
-			super( pos, u )
-			this.radius = radius
-			actor.addAbility(LOCUST_ID)
-			SetUnitPathing(actor, true)
-			this.setup = setup
-			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
-			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
-			TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
-			setup.setX( actor.getX() )
-			setup.setY( actor.getY() )
-			setup.addAbility('Agho')
-			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-				inRangeTrig = CreateTrigger()
-				inRangeTrig.registerUnitInRangeSource( actor, radius )
-				inRangeTrig.addAction( c )
-			setup.setUserData( this castTo int )
-			
-		override function setPos(vec3 pos)
-			this.pos = pos
-			actor.setPos(pos.x, pos.y)
-			setup.setPos(pos.x, pos.y)
-
-		
-		function setAngle(real angl)
-			actor.setFacing(angl)
-			setup.setFacing(angl)
-			
-		override function setXY(vec3 pos)
-			this.pos = pos
-			actor.setXY(pos.x, pos.y)
-			setup.setXY(pos.x, pos.y)
-
-		
-		override function update()
-			super.update()
-			time-=ANIMATION_PERIOD
-			if time < 0
-				setup.setXY(actor.getX(), actor.getY())
-				setup.setFacing(actor.getFacingAngle())
-				time = GetRandomReal(30,45)
-		
-		function setX( real x )
-			SetUnitX( actor, x )
-
-		function setY( real y )
-			SetUnitY( actor, y )
-			
-		function setZ( real z )
-			SetUnitFlyHeight( actor, z, 0. )
-						  
-		
-		ondestroy
-			actor.clearRegister()
-			actor.remove()
-			setup.remove()
-			inRangeTrig.destr()
-			
-		static function onOrderEvent()
-			var entity = GetTriggerUnit().getEntity()
-			var order = GetIssuedOrderId()
-			var x = GetOrderPointX()
-			var y = GetOrderPointY()
-			var u = GetOrderTargetUnit()
-			string orderS = OrderId2String(order)
-			print("order: "  + orderS)
-			if entity instanceof DynamicSetupObject
-				var obj = entity castTo DynamicSetupObject
-				if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
-					if orderS == "smart" and u == null
-						IssuePointOrder(obj.setup, "move", x+getOffset(), y)
-					else
-						if u != null
-							IssueTargetOrderById(obj.actor, order, u)
-						else if x != 0.	
-							IssuePointOrderById(obj.actor, order, x, y)
-						else
-							IssueImmediateOrderById(obj.actor, order)
-				else
-					if not orderS == "waterelemental" and not orderS == "roar"
-						obj.setup.issueImmediateOrder("stop")
-				obj.setup.setXY(obj.actor.getPos3())
-				obj.setup.setFacing(obj.actor.getFacingAngle())
-				obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
-
-		  
 					
-	public abstract class StaticSetupObject extends UnitEntity
-		unit setup
+	construct( vec3 pos, unit u, unit setup, real radius, code c )
+		super( pos, u )
+		this.radius = radius
+		actor.addAbility(LOCUST_ID)
+		SetUnitPathing(actor, true)
+		this.setup = setup
+		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
+		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
+		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
+		setup.setX( actor.getX() )
+		setup.setY( actor.getY() )
+		setup.addAbility('Agho')
+		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+			inRangeTrig = CreateTrigger()
+			inRangeTrig.registerUnitInRangeSource( actor, radius )
+			inRangeTrig.addAction( c )
+		setup.setUserData( this castTo int )
 		
-		trigger inRangeTrig // Trigger for inRange detection
-		
-		construct( vec3 pos, real radius, code c )
-			super( pos, setup )
-			active = false
-			this.radius = radius
-			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-				inRangeTrig = CreateTrigger()
-				inRangeTrig.addAction( c )
-			setup.addAbility('Agho')
-						
-		construct( vec3 pos, unit u, unit setup, real radius, code c )
-			super( pos, u )
-			active = false
-			actor.addAbility('Aloc')
-			setup.addAbility('Agho')
-			this.setup = setup
-			if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-				inRangeTrig = CreateTrigger()
-				inRangeTrig.registerUnitInRangeSource( setup, radius )
-				inRangeTrig.addAction( c )
-			setup.setUserData( this castTo int )
-		
-		
-		function setX( real x )
-			SetUnitX( actor, x )
+	override function setPos(vec3 pos)
+		this.pos = pos
+		actor.setPos(pos.x, pos.y)
+		setup.setPos(pos.x, pos.y)
 
-		function setY( real y )
-			SetUnitY( actor, y )
-			
-		function setZ( real z )
-			SetUnitFlyHeight( actor, z, 0. )
-			
-		override function update()
-			
+	
+	function setAngle(real angl)
+		actor.setFacing(angl)
+		setup.setFacing(angl)
+		
+	override function setXY(vec3 pos)
+		this.pos = pos
+		actor.setXY(pos)
+		setup.setXY(pos)
 
-		ondestroy
-			actor.clearRegister()
-			actor.remove()
-			setup.remove()
-			inRangeTrig.destr()
-			
-	int count = -1
-	real array offsets
-	function getOffset() returns real
-		count++
-		if count > 50
-			count = -1
-		return offsets[count]
+	
+	override function update()
+		super.update()
+		time-=ANIMATION_PERIOD
+		if time < 0
+			setup.setXY(actor.getPos())
+			setup.setFacing(actor.getFacingAngle())
+			time = GetRandomReal(30,45)
+	
+	function setX( real x )
+		SetUnitX( actor, x )
 
-	init
-		debugPrint("wc3init Setup begin", 2)
-		orderTrigger = CreateTrigger()
-		orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
-		offsets[0] = 0.049
-		offsets[1] = 0.048
-		offsets[2] = 0.047
-		offsets[3] = 0.046
-		offsets[4] = 0.045
-		offsets[5] = 0.044
-		offsets[6] = 0.043
-		offsets[7] = 0.041
-		offsets[8] = 0.040
-		offsets[9] = 0.039
-		offsets[10] = 0.038
-		offsets[11] = 0.037
-		offsets[12] = 0.036
-		offsets[13] = 0.035
-		offsets[14] = 0.034
-		offsets[15] = 0.033
-		offsets[16] = 0.032
-		offsets[17] = 0.031
-		offsets[18] = 0.030
-		offsets[19] = 0.029
-		offsets[20] = 0.028
-		offsets[21] = 0.027
-		offsets[22] = 0.026
-		offsets[23] = 0.025
-		offsets[24] = 0.024
-		offsets[25] = 0.023
-		offsets[26] = 0.022
-		offsets[27] = 0.021
-		offsets[28] = 0.020
-		offsets[29] = 0.019
-		offsets[30] = -0.049
-		offsets[31] = -0.048
-		offsets[32] = -0.047
-		offsets[33] = -0.046
-		offsets[34] = -0.045
-		offsets[35] = -0.044
-		offsets[36] = -0.043
-		offsets[37] = -0.041
-		offsets[38] = -0.040
-		offsets[39] = -0.039
-		offsets[40] = -0.038
-		offsets[41] = -0.037
-		offsets[42] = -0.036
-		offsets[43] = -0.035
-		offsets[44] = -0.034
-		offsets[45] = -0.033
-		offsets[46] = -0.032
-		offsets[47] = -0.031
-		offsets[48] = -0.030
-		offsets[49] = -0.029
-		offsets[50] = -0.028
-		offsets[51] = -0.027
-		offsets[52] = -0.026
-		offsets[53] = -0.025
-		offsets[54] = -0.024
-		offsets[55] = -0.023
-		offsets[56] = -0.022
-		offsets[57] = -0.021
-		offsets[58] = -0.020
-		offsets[59] = -0.019
-		debugPrint("wc3init Setup finish", 2)
+	function setY( real y )
+		SetUnitY( actor, y )
+		
+	function setZ( real z )
+		SetUnitFlyHeight( actor, z, 0. )
+					  
+	
+	ondestroy
+		actor.clearRegister()
+		actor.remove()
+		setup.remove()
+		inRangeTrig.destr()
+		
+	static function onOrderEvent()
+		var entity = GetTriggerUnit().getEntity()
+		var order = GetIssuedOrderId()
+		var x = GetOrderPointX()
+		var y = GetOrderPointY()
+		var u = GetOrderTargetUnit()
+		string orderS = OrderId2String(order)
+		if entity instanceof DynamicSetupObject
+			var obj = entity castTo DynamicSetupObject
+			if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
+				if orderS == "smart" and u == null
+					IssuePointOrder(obj.setup, "move", x+getOffset(), y)
+				else
+					if u != null
+						IssueTargetOrderById(obj.actor, order, u)
+					else if x != 0.	
+						IssuePointOrderById(obj.actor, order, x, y)
+					else
+						IssueImmediateOrderById(obj.actor, order)
+			else
+				if not orderS == "waterelemental" and not orderS == "roar"
+					obj.setup.issueImmediateOrder("stop")
+			obj.setup.setXY(obj.actor.getPos3())
+			obj.setup.setFacing(obj.actor.getFacingAngle())
+			obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
+	  
+				
+public abstract class StaticSetupObject extends UnitEntity
+	unit setup
+	
+	trigger inRangeTrig // Trigger for inRange detection
+	
+	construct( vec3 pos, real radius, code c )
+		super( pos, setup )
+		active = false
+		this.radius = radius
+		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+			inRangeTrig = CreateTrigger()
+			inRangeTrig.addAction( c )
+		setup.addAbility('Agho')
+					
+	construct( vec3 pos, unit u, unit setup, real radius, code c )
+		super( pos, u )
+		active = false
+		actor.addAbility('Aloc')
+		setup.addAbility('Agho')
+		this.setup = setup
+		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+			inRangeTrig = CreateTrigger()
+			inRangeTrig.registerUnitInRangeSource( setup, radius )
+			inRangeTrig.addAction( c )
+		setup.setUserData( this castTo int )
+	
+	
+	function setX( real x )
+		SetUnitX( actor, x )
+
+	function setY( real y )
+		SetUnitY( actor, y )
+		
+	function setZ( real z )
+		SetUnitFlyHeight( actor, z, 0. )
+		
+	override function update()
 		
 
-endpackage
+	ondestroy
+		actor.clearRegister()
+		actor.remove()
+		setup.remove()
+		inRangeTrig.destr()
+		
+int count = -1
+real array offsets
+function getOffset() returns real
+	count++
+	if count > 50
+		count = -1
+	return offsets[count]
+
+init
+	orderTrigger = CreateTrigger()
+	orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
+	offsets[0] = 0.049
+	offsets[1] = 0.048
+	offsets[2] = 0.047
+	offsets[3] = 0.046
+	offsets[4] = 0.045
+	offsets[5] = 0.044
+	offsets[6] = 0.043
+	offsets[7] = 0.041
+	offsets[8] = 0.040
+	offsets[9] = 0.039
+	offsets[10] = 0.038
+	offsets[11] = 0.037
+	offsets[12] = 0.036
+	offsets[13] = 0.035
+	offsets[14] = 0.034
+	offsets[15] = 0.033
+	offsets[16] = 0.032
+	offsets[17] = 0.031
+	offsets[18] = 0.030
+	offsets[19] = 0.029
+	offsets[20] = 0.028
+	offsets[21] = 0.027
+	offsets[22] = 0.026
+	offsets[23] = 0.025
+	offsets[24] = 0.024
+	offsets[25] = 0.023
+	offsets[26] = 0.022
+	offsets[27] = 0.021
+	offsets[28] = 0.020
+	offsets[29] = 0.019
+	offsets[30] = -0.049
+	offsets[31] = -0.048
+	offsets[32] = -0.047
+	offsets[33] = -0.046
+	offsets[34] = -0.045
+	offsets[35] = -0.044
+	offsets[36] = -0.043
+	offsets[37] = -0.041
+	offsets[38] = -0.040
+	offsets[39] = -0.039
+	offsets[40] = -0.038
+	offsets[41] = -0.037
+	offsets[42] = -0.036
+	offsets[43] = -0.035
+	offsets[44] = -0.034
+	offsets[45] = -0.033
+	offsets[46] = -0.032
+	offsets[47] = -0.031
+	offsets[48] = -0.030
+	offsets[49] = -0.029
+	offsets[50] = -0.028
+	offsets[51] = -0.027
+	offsets[52] = -0.026
+	offsets[53] = -0.025
+	offsets[54] = -0.024
+	offsets[55] = -0.023
+	offsets[56] = -0.022
+	offsets[57] = -0.021
+	offsets[58] = -0.020
+	offsets[59] = -0.019
+

@@ -1,8 +1,6 @@
 package Weapon
 import initlater ItemObject
 import initlater Escaper
-import initlater EventHandling
-import initlater TempGroups
 import initlater Boss
 import initlater Entity
 import initlater Projectile
@@ -32,7 +30,7 @@ public class Weapon extends ItemObject
 		super( pos, CreateItem(weapon[0].itemID, pos.x, pos.y), CreateUnit(owner, 'h00K', pos.x, pos.y, 0 ) )
 		wpid = 0
 		originalowner = owner
-		setup.registerCastEvent(Condition(function Weapon.onCast))
+//		setup.registerCastEvent(Condition(function Weapon.onCast))
 		
 	function pickedUp(Escaper holder)
 		picked = true
@@ -75,15 +73,14 @@ public class Weapon extends ItemObject
 		
 	function attackm()
 		var a = holder.actor.getFacing().asAngleDegrees()
-		var ox = polarProjectionX(holder.pos.x,weapon[wpid].aoe/2,a)
-		var oy = polarProjectionY(holder.pos.y,weapon[wpid].aoe/2,a)
-		GroupEnumUnitsInRange(ENUM_GROUP, ox, oy, weapon[wpid].aoe, null)
+		var op = holder.pos.polarProject(weapon[wpid].aoe/2,a,angle(0))
+		GroupEnumUnitsInRange(ENUM_GROUP, op.x,op.y, weapon[wpid].aoe, null)
 		for u in ENUM_GROUP
 			var e = u.getEntity()
 			if e instanceof Boss
 				var b = e castTo Boss
 				b.onDamage(owner, weapon[wpid].dmg)
-		var fx = new Fx(ox,oy, a)
+		var fx = new Fx(op, a)
 		fx.setFx(weapon[wpid].eff)
 		destroy(fx)
 	
@@ -95,7 +92,6 @@ public class Weapon extends ItemObject
 		actorItem.remove()
 		dropTrig.enable()
 		holder = null
-		setup.unregisterCastEvent()
 		setup.remove()
 	
 class WeaponMissile extends Projectile

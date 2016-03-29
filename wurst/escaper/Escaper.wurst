@@ -1,24 +1,19 @@
 package Escaper
-import initlater  PhysicsEntity
-import initlater  Entity
-import initlater  Vectors
-import initlater  TimerUtils
-import initlater  RegionData
-import initlater  BuilderConstants
-import initlater  ItemObject
-import initlater  Key
-import initlater  Revivepoint
-import initlater  LinkedList
-import initlater  EscaperClasses
-import initlater  PlayerData
-import initlater  Weapon
-import initlater  Colors
-import initlater  Texttag
-import initlater  RevivePointModifier
-import initlater  PhysicsConstants
-import initlater  TerrainBlocker
-
-public Table escaperTable = new Table()
+import PhysicsEntity
+import public Entity
+import Vectors
+import TimerUtils
+import RegionData
+import BuilderConstants
+import ItemObject
+import LinkedList
+import Weapon
+import Colors
+import Texttag
+import RevivePointModifier
+import PhysicsConstants
+import ClosureTimers
+import TerrainBlocker
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -33,7 +28,7 @@ public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
 public class Escaper extends UnitEntity	
 	use PhysicsModule
-	
+	RevivePointModifier revmod
 	boolean sliding = false
 	boolean onUnwalkable = false
 	boolean poisoned = false
@@ -65,7 +60,6 @@ public class Escaper extends UnitEntity
 		TriggerRegisterUnitEvent( dropTrig, actor, EVENT_UNIT_DROP_ITEM )
 		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
-		escaperTable.saveInt(GetHandleId(actor), this castTo int)
 		currentRegion = regions[0]
 		escapers.add(this)
 
@@ -88,30 +82,17 @@ public class Escaper extends UnitEntity
 			poisoned = false
 	
 	function kill()
-		var isinvurnerable = false
-		if this instanceof Strong_Escaper
-			var e = this castTo Strong_Escaper
-			if e.invulnerable == true
-				debugPrint("invulnerable",1)
-				isinvurnerable = true
-		if not isinvurnerable
-			debugPrint("died", 3)
-			if owner.getId() >= 8
-				debugPrint("is builder", 3)
-				getTimer()..setData(this.owner.getId())..start(.1, function Escaper.revive)
-				debugPrint("started", 3)
-			else
-				debugPrint("is escaper", 3)
-				getTimer()..start(3., function Escaper.revive)..setData(this.owner.getId())
-			actor.removeAbility(ATTACK_MELEE_ID)
-			actor.removeAbility(ATTACK_RANGED_ID)
-			owner.addDeath()
-			actor.kill()
-			alive = false
-			setPoison(false)
-			setLava(false)
-			flying = false
-			debugPrint("done", 3)
+		if owner.getId() >= 8
+			doAfter(.1, () -> revive())
+		else
+			doAfter(3., () -> revive())
+		actor.removeAbility(ATTACK_MELEE_ID)
+		actor.removeAbility(ATTACK_RANGED_ID)
+		actor.kill()
+		alive = false
+		setPoison(false)
+		setLava(false)
+		flying = false
 	
 	override function onGroundHit()
 		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.GOO castTo int)
@@ -175,7 +156,7 @@ public class Escaper extends UnitEntity
 		trackVelocity = vec3(0,0,0)
 		pos += vortexVelocity
 		vortexVelocity = vec3(0,0,0)
-		vel.trim(2.5)
+//		vel.trim(2.5)
 		
 	
 	override function update()
@@ -185,89 +166,56 @@ public class Escaper extends UnitEntity
 		pos += vel
 		pos += slideVelocity
 		if sliding
-			actor.setPos(pos.x, pos.y)
+			actor.setPos(pos.toVec2())
 		else
-			actor.setXY(pos.x, pos.y)
+			actor.setXY(pos)
 		SetUnitFlyHeight( actor, pos.z - globalTerrainZ, .0 )
 
         
-	static function revive()
-		debugPrint("rev", 3)
-		var t = GetExpiredTimer()
-		debugPrint("rev1", 3)
-		var pdata = pData[t.getData()]
-		if pdata == null
-			t.release()
-			return
-		Escaper e = pdata.escaper
-		var revX = currentRevivepoint.x
-		var revY = currentRevivepoint.y
-		if (pData[e.owner.getId()].revmod != null) and pData[e.owner.getId()].revmod.active
-			revX = pData[e.owner.getId()].revmod.pos.x
-			revY = pData[e.owner.getId()].revmod.pos.y
-		if e instanceof Holy_Escaper
-			var he = e castTo Holy_Escaper
-			if he.revivetomb != null
-				revX = he.revivetomb.getX()
-				revY = he.revivetomb.getY()
-				//if e.owner.getId() < 8
-				he.revivetomb.remove()
-				he.revivetomb = null
-		ReviveHero(e.actor, revX, revY, false)
-		e.setVel(vec3(0,0,0))
-		e.slideVelocity = vec3(0,0,0)
-		e.setPos(vec3(revX, revY, 25.))
-		CameraClearNoiseForPlayer(e.owner)
-		if e.selectatrevive
-			if (GetLocalPlayer() == e.owner)
-				PanCameraToTimed(revX, revY, 0)
+	function revive()
+		let rev = currentRevivepoint
+		ReviveHero(actor, rev.x, rev.y, false)
+		setVel(vec3(0,0,0))
+		slideVelocity = vec3(0,0,0)
+		setPos(rev.toVec3())
+		CameraClearNoiseForPlayer(owner)
+		if selectatrevive
+			if (GetLocalPlayer() == owner)
+				PanCameraToTimed(rev.x, rev.y, 0)
 				ClearSelection()
-				SelectUnit(e.actor, true)
+				SelectUnit(actor, true)
 			
-		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
-		e.alive = true
-		t.release()
-		e.setPoison(false)
-		e.setLava(false)
-		if pData[e.owner.getId()].camLock
-			SetCameraTargetControllerNoZForPlayer(e.owner, e.actor, 0,0,true)
-		if e instanceof Strong_Escaper
-			var se = e castTo Strong_Escaper
-			if se.invulnerable == true
-				DestroyEffect(se.shieldeffect)
-				se.shieldtimer = 0
-				se.actor.removeAbility('Avul')
-				se.invulnerable = false
+		currentRegion = getRegionData(pos)
+		alive = true
+		setPoison(false)
+		setLava(false)
+//		if pData[owner.getId()].camLock
+//			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
         
 	static function changeAngle()
 		var u = GetTriggerUnit()
 		Escaper e = u.getUserData() castTo Escaper
 		var w = GetOrderTarget()
-		real x2 = GetOrderPointX()
-		real y2 = GetOrderPointY()
-		real x3 = GetWidgetX(w)
-		real y3 = GetWidgetY(w)
+		let orderPos = getOrderPos()
+		let widgetPos = w.getPos()
 		var ttype = GetTerrainType(e.pos.x, e.pos.y)
         
 		if ttype == CONTROLLABLEICE
 			if w == null
-				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2))
+				e.actor.setFacing(e.pos.angleTo2d(orderPos))
 			else
-				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3))
+				e.actor.setFacing(e.pos.angleTo2d(widgetPos))
 		else if ttype == REVICE
 			if w == null
-				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x2,y2)-angle(180*DEGTORAD))
+				e.actor.setFacing(e.pos.angleTo2d(orderPos)-(180).asAngleDegrees())
 			else
-				e.actor.setFacing(angleBetweenCoords(e.pos.x,e.pos.y,x3,y3)-angle(180*DEGTORAD))
+				e.actor.setFacing(e.pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
 				
 	static function pickupItem()
 		var pickedItem = GetManipulatedItem()
 		var escaper = GetTriggerUnit().getUserData() castTo Escaper
 		var idata = pickedItem.getUserData() castTo ItemObject
 		
-		if idata instanceof Key
-			var kdata = idata castTo Key
-			kdata.pickedUp(escaper)
 		if idata instanceof Weapon
 			for int i = 0 to 5
 				var data = UnitItemInSlot(escaper.actor, i).getUserData() castTo ItemObject
@@ -282,23 +230,6 @@ public class Escaper extends UnitEntity
 						createTTEx(escaper.pos, vec2(0,0.05), "|cffff3333Cant wear two weapons!", 10,  2., colorA(255,255,255,0), escaper.owner  )
 					else
 						wdata.pickedUp(escaper)
-			
-	static function dropItem()
-		var pickedItem = GetManipulatedItem()
-		var idata = pickedItem.getUserData() castTo ItemObject
-		
-		if idata instanceof Key
-			var kdata = idata castTo Key
-			dropTrig.disable()
-			RemoveItem(kdata.actorItem)
-			kdata.dropped()
-			dropTrig.enable()
-		if idata instanceof Weapon
-			var wdata = idata castTo Weapon
-			dropTrig.disable()
-			RemoveItem(wdata.actorItem)
-			wdata.dropped()
-			dropTrig.enable()
 			
 	static function neutralDeath()
 		var escaper = GetTriggerUnit().getUserData() castTo Escaper
@@ -330,15 +261,15 @@ public class Escaper extends UnitEntity
 						return
 		else if id == CREATE_REV_MOD_ID
 			//if pData[owner.getId()].revmod == null //Commented out, because when you want to create second time, the deleted class not equals null.
-			pData[owner.getId()].revmod = new RevivePointModifier(pos.toVec2(), owner)
+			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			//else
 			//	pData[owner.getId()].revmod.actor.setXY(pos.x,pos.y)
 			//	pData[owner.getId()].revmod.pos = pos.toVec2()
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
 			UnitAddAbility( actor, REMOVE_REV_MOD_ID )
 		else if id == REMOVE_REV_MOD_ID
-			if pData[owner.getId()].revmod != null
-				destroy pData[owner.getId()].revmod
+			if revmod != null
+				destroy revmod
 			UnitRemoveAbility( actor, REMOVE_REV_MOD_ID )
 			UnitAddAbility( actor, CREATE_REV_MOD_ID )
 			
@@ -348,7 +279,7 @@ public class Escaper extends UnitEntity
 		actor.remove()
 		escapers.remove(this)
 		
-
+public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
 		
 trigger slideAssist
 trigger pickupTrig
@@ -358,19 +289,15 @@ trigger spellTrig
 
 function correctRegion()
 	for e in escapers
-		e.currentRegion = getRegionData(e.pos.x, e.pos.y)
+		e.currentRegion = getRegionData(e.pos)
 		
 init
-	debugPrint("wc3init Escaper begin", 2)
 	slideAssist = CreateTrigger()
 	slideAssist.addAction(function Escaper.changeAngle)
 	pickupTrig = CreateTrigger()
 	pickupTrig.addAction( function Escaper.pickupItem )
-	dropTrig = CreateTrigger()
-	dropTrig.addAction( function Escaper.dropItem )
 	neutralDeathTrig = CreateTrigger()
 	neutralDeathTrig.addAction(function Escaper.neutralDeath)
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)
-	debugPrint("wc3init Escaper finish", 2)

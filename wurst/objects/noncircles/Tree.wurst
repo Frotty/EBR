@@ -10,7 +10,7 @@ public class Tree extends UnitEntity
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit( owner, TREE_ID, pos.x, pos.y, 0 ))
-		var rdata = getRegionData( pos.x, pos.y )
+		var rdata = getRegionData(pos)
 		dummy = CreateDestructable( trees[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360), GetRandomReal(0.8,1.2), GetRandomInt(0,2) )
 
 	override function update()

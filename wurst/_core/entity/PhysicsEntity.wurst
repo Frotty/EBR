@@ -1,8 +1,7 @@
 package PhysicsEntity
 import Entity
-import Terrain
+import TerrainUtils
 import PhysicsConstants
-import Debug
 
 //Module for Physical Simulation
 public module PhysicsModule

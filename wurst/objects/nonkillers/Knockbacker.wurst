@@ -3,7 +3,6 @@ import Entity
 import Assets
 import ObjectIdGenerator
 import Escaper
-import EventHandling
 import SetupObject
 import ChannelAbilityPreset
 
@@ -21,30 +20,29 @@ public class Knockbacker extends DynamicSetupObject
 				CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 64., function Knockbacker.inRangeEvent)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
 		print("id:" + KNOCK_INC_ID.toString())
-		setup.registerCastEvent(Condition(function Knockbacker.onCast))
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 			
-	static function onCast() returns boolean
-		var id = GetSpellAbilityId()
-		var data = GetSpellAbilityUnit().getUserData() castTo Knockbacker
+	function onCast() returns boolean
+		let id = GetSpellAbilityId()
 		switch id
 			case KNOCK_INC_ID
-				if data.kforce < 50
-					data.kforce += 5
-					createTTEx(data.pos, vec2(0,0.05), "Knockback: "+ R2SW(data.kforce,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				if kforce < 50
+					kforce += 5
+					createTTEx(pos, vec2(0,0.05), "Knockback: "+ R2SW(kforce,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Maximum Knockback", 10,  2., colorA(255,255,255,0), data.owner  )
+					createTTEx(pos, vec2(0,0.05), "Maximum Knockback", 10,  2., colorA(255,255,255,0), owner  )
 			case KNOCK_DEC_ID
-				if data.kforce > -50.
-					data.kforce -= 5
-					createTTEx(data.pos, vec2(0,0.05), "Knockback: "+ R2SW(data.kforce,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				if kforce > -50.
+					kforce -= 5
+					createTTEx(pos, vec2(0,0.05), "Knockback: "+ R2SW(kforce,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Minimum Knockback", 10,  2., colorA(255,255,255,0), data.owner  )
+					createTTEx(pos, vec2(0,0.05), "Minimum Knockback", 10,  2., colorA(255,255,255,0), owner  )
 //			case START_ID
-//				data.turning = true
-//				data.setup.removeAbility(START_ID).addAbility(STOP_ID)
+//				turning = true
+//				setup.removeAbility(START_ID).addAbility(STOP_ID)
 //			case STOP_ID
-//				data.turning = false
-//				data.setup.removeAbility(STOP_ID).addAbility(START_ID)
+//				turning = false
+//				setup.removeAbility(STOP_ID).addAbility(START_ID)
 					
 		return false
 
@@ -64,7 +62,6 @@ public class Knockbacker extends DynamicSetupObject
 		
 				
 	ondestroy
-		actor.unregisterCastEvent()
 
 @objectgen function genKnockbacker()
 	print("id:" + KNOCK_INC_ID.toString())

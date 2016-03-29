@@ -1,11 +1,9 @@
 package Trap
 import BaseObject
 import Escaper
-import EventHandling
-import DummyCaster
+import InstantDummyCaster
 import Camera
 import GameConstants
-import TempGroups
 import Texttag
 import Camerashakes
 
@@ -35,12 +33,10 @@ public class Trap extends StaticBaseObject
 	construct( vec2 pos, player owner )
 			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
 			active = false
-			actor.registerCastEvent(Condition(function Trap.onCast))
-			actor.setUserData(this castTo int)
-
+			
+			EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 			
 	static function onStep()
-		debugPrint("Trap step", 1)
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
@@ -55,7 +51,6 @@ public class Trap extends StaticBaseObject
 		return false
 	
 	override function update()
-		debugPrint(". . . "+timerreal.toString(), 1)
 		super.update()
 		if active
 			if timerreal <= 0.0
@@ -72,54 +67,33 @@ public class Trap extends StaticBaseObject
 				timerreal -= ANIMATION_PERIOD
 				
 	function doEffect(Escaper e)
-		debugPrint("Trap Effect", 1)
 		switch a
 			case ABIL.KILL
 				e.kill()
 			case ABIL.STUN
-				var dc = new DummyCaster(STUN_BUFF, "thunderbolt", DUMMY_PLAYER, true)
-				dc.setLevel(duration.toInt())
-				dc.castOnTarget(e.actor)
+				InstantDummyCaster.castTarget(DUMMY_PLAYER, STUN_BUFF, duration.toInt(), "thunderbolt", e.actor)
 			case ABIL.SHAKE
 				newEventPlayer(e.owner,value)
 				//setCameraNoiseTimed(e.owner, value, 1000, duration)
 			case ABIL.POISON
 				e.setPoison(true)
-				//if not e.poisoned
-				//	e.poisoned = true
-				//	e.poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, e.actor, "chest")
 			case ABIL.SPEED
-				int level = (value/20).toInt()
-				debugPrint("level = " +level.toString(),3)
-				if level < 5
-					debugPrint("DC created1", 3)
-					var dc = new DummyCaster(SPEED_BUFF_NEG, "bloodlust", DUMMY_PLAYER, true)
-					debugPrint("DC created2", 3)
-					dc.setLevel(level)
-					dc.castOnTarget(e.actor)
-				if level > 5
-					debugPrint("DC created1.1", 3)
-					var dc = new DummyCaster(SPEED_BUFF_POS, "bloodlust", owner, true)
-					debugPrint("DC created2.1", 3)
-					dc.setLevel(level-5)
-					dc.castOnTarget(e.actor)
-				debugPrint("finish", 3)
+				int level = (value/20).toInt() mod 5
+				InstantDummyCaster.castTarget(DUMMY_PLAYER, SPEED_BUFF_NEG, level, "bloodlust", e.actor)
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				let rallyPos = getRallyPoint()
 				angle angl
-				debugPrint("dist " +distanceBetweenCoords(rallyPos.x, rallyPos.y, pos.x, pos.y).toString(), 1)
-				if distanceBetweenCoords(rallyPos.x, rallyPos.y, pos.x, pos.y) < 20
+				if rallyPos.distanceTo2dSq(pos.toVec2()) < 20*20
 					if pull
-						angl = (angleBetweenCoords(pos.x, pos.y,e.actor.getX(), e.actor.getY()).degrees()-180.).asAngleDegrees()
+						angl = pos.angleTo2d(e.pos) - (180).asAngleDegrees()
 					else
-						angl = angleBetweenCoords(pos.x, pos.y,e.actor.getX(), e.actor.getY())
+						angl = pos.angleTo2d(e.pos)
 				else	
-					angl = angleBetweenCoords(pos.x, pos.y,rallyPos.x, rallyPos.y)
-				e.addVel( vec3(value * Cos(angl.radians()),value * Sin(angl.radians()),0.))
-
+					angl = pos.angleTo2d(rallyPos)
+					
+				e.addVel(angl.toVec(value).toVec3())
 			default
-				skip
 		
 		
 	function addConfiger(boolean dur, boolean val)
@@ -141,187 +115,178 @@ public class Trap extends StaticBaseObject
 			UnitAddAbility(actor,INCREASE_VALUE_ABIL)
 			UnitAddAbility(actor,DECREASE_VALUE_ABIL)
 	
-	static function onCast() returns boolean
-		debugPrint("Trap Casting", 1)
-		unit source = GetSpellAbilityUnit()
-		thistype obj = source.getUserData() castTo thistype
-		int spell_id = GetSpellAbilityId()
+	function onCast() returns boolean
+		let spell_id = GetSpellAbilityId()
 		switch spell_id
 			case NEXT_SFX_ABIL
-				debugPrint(obj.sfxid.toString(), 1)
-				if obj.sfxid >= SFX_COUNT
-					obj.sfxid = 0
+				if sfxid >= SFX_COUNT
+					sfxid = 0
 				else
-					obj.sfxid ++
-				if obj.sfxid < SFX_COUNT
-					DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+					sfxid ++
+				if sfxid < SFX_COUNT
+					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				else
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), obj.owner  )
+					createTTEx(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
 			case PREV_SFX_ABIL
-				debugPrint(obj.sfxid.toString(), 1)
-				if obj.sfxid <= 0
-					obj.sfxid = SFX_COUNT
+				if sfxid <= 0
+					sfxid = SFX_COUNT
 				else
-					obj.sfxid --
-				if obj.sfxid < SFX_COUNT
-					DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+					sfxid --
+				if sfxid < SFX_COUNT
+					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				else
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), obj.owner  )
+					createTTEx(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
 			
 			case KILL_ABIL
-				obj.a = ABIL.KILL
-				obj.addConfiger(false, false)
+				a = ABIL.KILL
+				addConfiger(false, false)
 			case STUN_ABIL
-				obj.a = ABIL.STUN
-				obj.duration = 1.
-				obj.addConfiger(true, false)
+				a = ABIL.STUN
+				duration = 1.
+				addConfiger(true, false)
 			case SPEED_ABIL
-				//createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), obj.owner  )
-				obj.a = ABIL.SPEED
-				obj.value = 120.
-				obj.duration = 1.
-				obj.addConfiger(false, true)
+				//createTTEx(pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), owner  )
+				a = ABIL.SPEED
+				value = 120.
+				duration = 1.
+				addConfiger(false, true)
 			case SHAKE_ABIL
-				obj.a = ABIL.SHAKE
-				obj.value = 500
-				obj.duration = 3.
-				obj.addConfiger(true, true)
+				a = ABIL.SHAKE
+				value = 500
+				duration = 3.
+				addConfiger(true, true)
 			case KNOCK_ABIL
-				obj.a = ABIL.KNOCK
-				obj.value = 10.
-				obj.actor.addAbility('ARal')
-				obj.actor.addAbility(PULL_ID)
-				obj.addConfiger(false, true)
+				a = ABIL.KNOCK
+				value = 10.
+				actor.addAbility('ARal')
+				actor.addAbility(PULL_ID)
+				addConfiger(false, true)
 			case POISON_ABIL
-				obj.a = ABIL.POISON
-				debugPrint("POISON",1)
-				obj.addConfiger(false, false)
+				a = ABIL.POISON
+				addConfiger(false, false)
 					
 			case INCREASE_INTERVAL_ABIL
-				if obj.interval >= 10
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), obj.owner  )
+				if interval >= 10
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
 				else
-					obj.interval += 0.25
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
+					interval += 0.25
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 			case DECREASE_INTERVAL_ABIL
-				if obj.interval < 0.75
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), obj.owner  )
+				if interval < 0.75
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
 				else
-					obj.interval -= 0.25
-					createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(obj.interval,1,2), 10,  2., colorA(255,255,255,0), obj.owner  )
+					interval -= 0.25
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 			
 			case INCREASE_VALUE_ABIL
-				switch obj.a
+				switch a
 					case ABIL.KNOCK
-						if obj.value >= 50
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if value >= 50
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.value += 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							value += 5
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
-						if obj.value >= 1500
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if value >= 1500
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.value += 100
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(obj.value,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							value += 100
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
-						if obj.value >= 180
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if value >= 180
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.value += 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(obj.value,1,0)+"%", 10,  2., colorA(255,255,255,0), obj.owner  )
+							value += 20
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(value,1,0)+"%", 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
 			case DECREASE_VALUE_ABIL
-				switch obj.a
+				switch a
 					case ABIL.KNOCK
-						if obj.value <= 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if value <= 5
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.value -= 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Force "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
+							value -= 5
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Force "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
-						if obj.value <= 100
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if value <= 100
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.value -= 100
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Intensity "+ obj.value.toInt().toString(), 10,  2., colorA(255,255,255,0), obj.owner  )
+							value -= 100
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
-						if obj.value <= 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if value <= 20
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.value -= 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ obj.value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), obj.owner  )
+							value -= 20
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
 			
 			case INCREASE_DURATION_ABIL
-				switch obj.a
+				switch a
 					case ABIL.STUN
-						if obj.duration >= 4
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if duration >= 4
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.duration += 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							duration += 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
-						if obj.duration >= 5
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if duration >= 5
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.duration += 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							duration += 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
-						if obj.duration >= 20
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if duration >= 20
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.duration += 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							duration += 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip	
 			case DECREASE_DURATION_ABIL
-				switch obj.a
+				switch a
 					case ABIL.STUN
-						if obj.duration <= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if duration <= 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.duration -= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							duration -= 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
-						if obj.duration <= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if duration <= 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.duration -= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							duration -= 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
-						if obj.duration <= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), obj.owner  )
+						if duration <= 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
-							obj.duration -= 1
-							createTTEx(obj.pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(obj.duration,1,0), 10,  2., colorA(255,255,255,0), obj.owner  )
+							duration -= 1
+							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
 			
 			case START_ABIL
-				obj.active = true
-				UnitRemoveAbility(obj.actor,START_ABIL)
-				UnitAddAbility(obj.actor,STOP_ABIL)
+				active = true
+				UnitRemoveAbility(actor,START_ABIL)
+				UnitAddAbility(actor,STOP_ABIL)
 			case STOP_ABIL
-				obj.active = false
-				obj.timerreal = 0.
-				UnitRemoveAbility(obj.actor,STOP_ABIL)
-				UnitAddAbility(obj.actor,START_ABIL)
+				active = false
+				timerreal = 0.
+				UnitRemoveAbility(actor,STOP_ABIL)
+				UnitAddAbility(actor,START_ABIL)
 			case PULL_ID
-				obj.pull = true
-				obj.actor.removeAbility(PULL_ID)
-				obj.actor.addAbility(PUSH_ID)
+				pull = true
+				actor.removeAbility(PULL_ID)
+				actor.addAbility(PUSH_ID)
 			case PUSH_ID
-				obj.pull = false
-				obj.actor.removeAbility(PUSH_ID)
-				obj.actor.addAbility(PULL_ID)
+				pull = false
+				actor.removeAbility(PUSH_ID)
+				actor.addAbility(PULL_ID)
 		return false
 		
-	ondestroy
-		actor.unregisterCastEvent()
-
 constant int NEXT_SFX_ABIL = 'A06D'
 constant int PREV_SFX_ABIL = 'A06C'
 

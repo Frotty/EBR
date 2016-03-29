@@ -2,7 +2,6 @@ package FirstSnow
 import Startmaze
 import Startmazes
 import EscaperKiller
-import TempGroups
 import Teleporter
 
 public class FirstSnowMaze extends Startmaze
@@ -12,24 +11,24 @@ public class FirstSnowMaze extends Startmaze
 	
 	override function initMaze()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
-		debugPrint("maze-0.11", 1)
+		printLog("maze-0.11", Loglevel.DEBUG)
 		for u in ENUM_GROUP
-			debugPrint("maze-0.12", 1)
+			printLog("maze-0.12", Loglevel.DEBUG)
 			new EscaperKiller(u, null, COLL_SIZE_BK)
-		debugPrint("maze-0.2", 1)
+		printLog("maze-0.2", Loglevel.DEBUG)
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u008", null )
 		for u in ENUM_GROUP
 			new EscaperKiller(u, null, COLL_SIZE_BRK)
-		debugPrint("maze-0.3", 1)
+		printLog("maze-0.3", Loglevel.DEBUG)
 		ENUM_GROUP.clear()
-		debugPrint("maze-1", 1)
+		printLog("maze-1", Loglevel.DEBUG)
 		IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
 		IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 		IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
-		debugPrint("maze-2", 1)
+		printLog("maze-2", Loglevel.DEBUG)
 		var t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
-		debugPrint("maze-2.1 ", 1)
+		printLog("maze-2.1 ", Loglevel.DEBUG)
 		gg_unit_n00C_0061.remove()
 		t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
 		IssuePointOrder(t.actor, "setrally", 6275,-5131 )
@@ -38,7 +37,6 @@ public class FirstSnowMaze extends Startmaze
 		IssuePointOrder(t.actor, "setrally", 6660,-4866 )
 		gg_unit_n00C_0058.remove()
 		EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
-		debugPrint("maze-3", 7)
 	
 	
 	override function getStart() returns vec2

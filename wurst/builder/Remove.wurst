@@ -1,31 +1,22 @@
 package Remove
 import Entity
-import PlayerData
-public constant int REMOVE_ID = 'A00K'
-trigger castTrig
+import Assets
 
-function removeObject() returns boolean
-	debugPrint("onRemove1", 3)
+public constant REMOVE_ID = 'A00K'
+
+function onRemoveObject()
+	print("wTF")
 	var id = GetSpellAbilityId()
 	if id == REMOVE_ID
-		debugPrint("onRemove2", 3)
 		var u = GetTriggerUnit()
 		var data = u.getUserData()
 		if data > 0
-			debugPrint("onRemove3", 3)
 			var e = data castTo Entity
-			AddSpecialEffect("Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl" , u.getX(), u.getY())
-			debugPrint("onRemove4", 3)
+			addEffect(Other.aiamtarget, u.getPos()).destr()
 			e.terminate()
 		else
 			GetSpellAbilityUnit().remove()
-		let owner = u.getOwner()
-		var pd = pData[owner.getId()]
-	return false
 	
-init
-	debugPrint("wc3init Remove begin", 2)
-	castTrig = CreateTrigger()
-	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
-	castTrig.addCondition(Condition(function removeObject))
-	debugPrint("wc3init Remove finish", 2)
+public function init_remove()
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onRemoveObject())
+	print(">>>>>>>>>>>>>>>")

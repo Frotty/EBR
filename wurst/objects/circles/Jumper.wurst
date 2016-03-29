@@ -2,10 +2,8 @@ package Jumper
 import Entity
 import Escaper
 import BaseObject
-import EventHandling
 import Texttag 
-import TempGroups
-import SoundHelper
+import SoundUtils
 import Image
 import TerrainBlocker
 
@@ -18,7 +16,7 @@ constant int INCREASE_ID = 'A072'
 constant int DECREASE_ID = 'A073'
 constant SPECIAL_ID = 'A07O'
 
-Sound snd = new Sound("Units\\Human\\Priest\\PriestPissed3.wav", 1039, false)
+SoundDefinition snd = new SoundDefinition("Units\\Human\\Priest\\PriestPissed3.wav", 1039, false)
 
 enum JumpMode
 	FORCED
@@ -33,7 +31,7 @@ public class Jumper extends StaticBaseObject
 	
 	construct(vec2 pos, player owner)
 		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange)
-		actor.registerCastEvent(Condition(function onCastEvent))
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 8, Filter(function filter))
 		let u = ENUM_GROUP.next()
 		let u2 = ENUM_GROUP.next()
@@ -53,7 +51,7 @@ public class Jumper extends StaticBaseObject
 			var edata = data castTo Escaper
 			switch jdata.mode
 				case JumpMode.FORCED
-					edata.setPos(jdata.pos.addReals(0,0,1.))
+					edata.setPos(jdata.pos.add(0,0,1.))
 					edata.sliding = false
 					edata.slideVelocity = vec3(0,0,0)
 					edata.setTarget(jdata.getRallyPoint(), jdata.speed)
@@ -62,7 +60,10 @@ public class Jumper extends StaticBaseObject
 					edata.addVel(vec3(0,0, jdata.speed))
 					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
 					
-	function onCast(int id)
+
+				
+	function onCast()
+		let id = GetSpellAbilityId()
 		switch id
 			case FORCED_ID
 				actor..removeAbility(FORCED_ID)..addAbility(UNFORCED_ID)
@@ -83,15 +84,4 @@ public class Jumper extends StaticBaseObject
 				let y = (GetSpellTargetY()/128).round()
 				createImage("textures\\blugoo.blp", vec2(x*128., y*128.), 128, 128).show()
 				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.GOO castTo int).val )
-				
-	ondestroy
-		actor.unregisterCastEvent()
-					
-	static function onCastEvent() returns boolean
-		var obj = GetTriggerUnit().getUserData() castTo Jumper
-		obj.onCast(GetSpellAbilityId())
-		return false
 		
-		
-		
-			

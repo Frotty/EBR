@@ -27,12 +27,11 @@ public abstract class HomingProjectile extends Projectile
 		radii = radius*radius + e.radius*e.radius
 				
 	override function update()
-		let dist = pos.distToVecSquared(target.pos)
-		let anglexy = angleBetweenCoords(pos.x, pos.y, target.pos.x, target.pos.y)
+		let dist = pos.distanceToSq(target.pos)
+		let anglexy = pos.angleTo2d(target.pos)
 		if dist < radii
 			terminate()
 			return
-			
 			
 		switch htype
 			case HOMING.none
@@ -80,7 +79,7 @@ public abstract class HomingProjectile extends Projectile
 				vel = vec3( getSpeed() * xyAngle.cos(), getSpeed() * xyAngle.sin(), 0. )
 				
 			case HOMING.forced
-				vec3 tmp = vec3(polarProjectionX(pos.x, getSpeed(), anglexy), polarProjectionY(pos.y, getSpeed(), anglexy), 0.)
+				vec3 tmp = pos.polarProject(getSpeed(), anglexy, angle(0))
 				
 				tmp -= pos
 				

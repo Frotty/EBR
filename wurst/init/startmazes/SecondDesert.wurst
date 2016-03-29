@@ -2,7 +2,6 @@ package SecondDesert
 import Startmaze
 import Startmazes
 import EscaperKiller
-import TempGroups
 import Teleporter
 
 public class SecondDesertMaze extends Startmaze

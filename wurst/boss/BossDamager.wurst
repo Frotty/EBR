@@ -4,9 +4,7 @@ import initlater Boss
 import initlater Escaper
 import initlater RegionData
 import initlater BaseObject
-import initlater EventHandling
 import initlater Texttag
-import initlater TempGroups
 import initlater TerrainBlocker
 
 constant int DAMAGER_ID = 'n01O'
@@ -20,10 +18,10 @@ public class BossDamager extends StaticBaseObject
 	
 	construct(vec2 pos, player owner)
 		super(vec2((pos.x/64).round()*64., (pos.y/64).round()*64.), CreateUnit(owner, DAMAGER_ID,(pos.x/64).round()*64., (pos.y/64).round()*64., 0. ), EVENT_RADIUS, function BossDamager.onInRange)
-		actor.registerCastEvent(Condition(function BossDamager.onCast))
+//		actor.registerCastEvent(Condition(function BossDamager.onCast))
 		
 	function damage(Escaper e)
-		GroupEnumUnitsInRect(ENUM_GROUP, getRegionData(pos.x,pos.y).theRect, null)
+		GroupEnumUnitsInRect(ENUM_GROUP, getRegionData(pos).theRect, null)
 		for u in ENUM_GROUP
 			var es = u.getEntity()	
 			if es instanceof Boss

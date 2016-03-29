@@ -61,6 +61,6 @@ public class Projectile extends FxEntity
 				done = true
 				return
 		if ranged
-			if startpos.distToVecSquared(pos) > maxDist
+			if startpos.distanceToSq(pos) > maxDist
 				done = true
 		

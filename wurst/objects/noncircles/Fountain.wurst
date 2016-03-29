@@ -1,56 +1,47 @@
 package Fountain
-	import SetupObject
-	import Terrain
-	import Escaper
-	import EventHandling
-	
-	constant int 	FOUNTAIN_BOTH_ID   = 'h00H'
-	constant int 	FOUNTAIN_HEAL_ID   = 'h00I'
-	constant int 	FOUNTAIN_CURE_ID   = 'h00J'
-	
-	constant BOTH_ID = 'A077'
-	constant HEAL_ID = 'A078'
-	constant CURE_ID = 'A079'
-	constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+import SetupObject
+import Escaper
 
-	public class Fountain extends StaticSetupObject
-		boolean cure = true
-		construct( vec2 pos, player owner )
-			super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), 200., function Fountain.cure )
-			setup.registerCastEvent(Condition(function Fountain.onCastEvent))
-		
-		
-		static function cure()
-			Fountain obj = GetTriggeringTrigger().getSource().getUserData() castTo Fountain
-			Entity e = GetTriggerUnit().getEntity()
-			if e instanceof Escaper and obj.cure
-				var es = e castTo Escaper
-				if es.poisoned and not es.flying
-					DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y ))
-					es.setPoison(false)
-					
-		static function onCastEvent() returns boolean
-			let id = GetSpellAbilityId()
-			let data = GetSpellAbilityUnit().getUserData() castTo Fountain
-			switch id
-				case BOTH_ID
-					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_HEAL_ID, data.pos.x, data.pos.y, 270. ))
-					data.actor.addAbility(LOCUST_ID)
-					data.cure = false
-					data.setup..removeAbility(BOTH_ID)..addAbility(HEAL_ID)
-				case HEAL_ID
-					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_CURE_ID, data.pos.x, data.pos.y, 270. ))
-					data.actor.addAbility(LOCUST_ID)
-					data.cure = true
-					data.setup..removeAbility(HEAL_ID)..addAbility(CURE_ID)
-				case CURE_ID
-					data.setNewActor(CreateUnit(data.owner, FOUNTAIN_BOTH_ID, data.pos.x, data.pos.y, 270. ))
-					data.actor.addAbility(LOCUST_ID)
-					data.cure = true
-					data.setup..removeAbility(CURE_ID)..addAbility(BOTH_ID)
-			return false
+constant 	FOUNTAIN_BOTH_ID   = 'h00H'
+constant 	FOUNTAIN_HEAL_ID   = 'h00I'
+constant  	FOUNTAIN_CURE_ID   = 'h00J'
 
-		ondestroy
-			setup.unregisterCastEvent()
-		
-endpackage
+constant BOTH_ID = 'A077'
+constant HEAL_ID = 'A078'
+constant CURE_ID = 'A079'
+constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+
+public class Fountain extends StaticSetupObject
+	boolean cure = true
+	construct( vec2 pos, player owner )
+		super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), 200., function Fountain.cure )
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+	
+	static function cure()
+		Fountain obj = GetTriggeringTrigger().getSource().getUserData() castTo Fountain
+		Entity e = GetTriggerUnit().getEntity()
+		if e instanceof Escaper and obj.cure
+			var es = e castTo Escaper
+			if es.poisoned and not es.flying
+				DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y ))
+				es.setPoison(false)
+				
+	function onCast()
+		let id = GetSpellAbilityId()
+		switch id
+			case BOTH_ID
+				setNewActor(CreateUnit(owner, FOUNTAIN_HEAL_ID, pos.x, pos.y, 270. ))
+				actor.addAbility(LOCUST_ID)
+				cure = false
+				setup..removeAbility(BOTH_ID)..addAbility(HEAL_ID)
+			case HEAL_ID
+				setNewActor(CreateUnit(owner, FOUNTAIN_CURE_ID, pos.x, pos.y, 270. ))
+				actor.addAbility(LOCUST_ID)
+				cure = true
+				setup..removeAbility(HEAL_ID)..addAbility(CURE_ID)
+			case CURE_ID
+				setNewActor(CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ))
+				actor.addAbility(LOCUST_ID)
+				cure = true
+				setup..removeAbility(CURE_ID)..addAbility(BOTH_ID)
+

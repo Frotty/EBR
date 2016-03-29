@@ -1,90 +1,81 @@
 package Waypoint
-	import BaseObject
-	import Terrain
-	import Escaper
-	import SetupObject
-	import EventHandling
-	import Texttag
-	import TeleporterTarget
-	import Builder
+import BaseObject
+import Escaper
+import SetupObject
+import Texttag
+import TeleporterTarget
+import Builder
+
+constant int 	WAYPOINT_ID   = 'n004'
+constant int INC_ID = 'A054'
+constant int DEC_ID = 'A055'
+constant int WISP_ID = 'A027'
+constant INTERVAL = .25
 	
-	constant int 	WAYPOINT_ID   = 'n004'
-	constant int INC_ID = 'A054'
-	constant int DEC_ID = 'A055'
-	constant int WISP_ID = 'A027'
-	constant INTERVAL = .25
-		
-	constant real 	EVENT_RADIUS	= 32.
+constant real 	EVENT_RADIUS	= 32.
 
-	class DelayData
-		UnitEntity entity
-		vec2 pos
-		
-		construct(UnitEntity k, vec2 t)
-			entity = k
-			pos = t
+class DelayData
+	UnitEntity entity
+	vec2 pos
+	
+	construct(UnitEntity k, vec2 t)
+		entity = k
+		pos = t
 
-	public class Waypoint extends StaticBaseObject
-		real delay = 0.
-		boolean wisps = true
+public class Waypoint extends StaticBaseObject
+	real delay = 0.
+	boolean wisps = true
+	
+	construct( vec2 pos, player owner )
+		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove )
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
-		construct( vec2 pos, player owner )
-			super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove ) 
-			actor.registerCastEvent(Condition(function Waypoint.onCast))
-			
-		ondestroy
-			actor.unregisterCastEvent()
-		
-		static function orderMove()
-			unit source = GetTriggeringTrigger().getSource()
-			unit u = GetTriggerUnit()
-			Entity e = u.getEntity()
-			thistype obj = source.getUserData() castTo thistype
-			let rallyPos = obj.getRallyPoint()
-			if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
-				var data = e castTo UnitEntity
-				if not obj.wisps and data instanceof TeleporterTarget
-					return
-				if obj.delay < INTERVAL
-					IssuePointOrder(u, "move", rallyPos.x, rallyPos.y )
-				else
-					IssueImmediateOrder(u, "stop" )
-					getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
-					
-		static function delayMove()
-			var t = GetExpiredTimer()
-			DelayData data = t.getData() castTo DelayData
-			if data.entity instanceof DynamicSetupObject
-				var ed = data.entity castTo DynamicSetupObject
-				IssuePointOrder(ed.setup, "move", data.pos.x, data.pos.y )
+	static function orderMove()
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getEntity()
+		thistype obj = source.getUserData() castTo thistype
+		let rallyPos = obj.getRallyPoint()
+		if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
+			var data = e castTo UnitEntity
+			if not obj.wisps and data instanceof TeleporterTarget
+				return
+			if obj.delay < INTERVAL
+				IssuePointOrder(u, "move", rallyPos.x, rallyPos.y )
 			else
-				IssuePointOrder(data.entity.actor, "move", data.pos.x, data.pos.y )
-			destroy data
-			t.release()
+				IssueImmediateOrder(u, "stop" )
+				getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
+				
+	static function delayMove()
+		var t = GetExpiredTimer()
+		DelayData data = t.getData() castTo DelayData
+		if data.entity instanceof DynamicSetupObject
+			var ed = data.entity castTo DynamicSetupObject
+			IssuePointOrder(ed.setup, "move", data.pos.x, data.pos.y )
+		else
+			IssuePointOrder(data.entity.actor, "move", data.pos.x, data.pos.y )
+		destroy data
+		t.release()
 
-		static function onCast() returns boolean
-			var id = GetSpellAbilityId()
-			var data = GetTriggerUnit().getUserData() castTo Waypoint
-			switch id
-				case INC_ID
-					if data.delay < 5.
-						data.delay += INTERVAL
-						createTTEx(data.pos, vec2(0,0.05), "Delay " + data.delay.toString(), 10,  2., colorA(255,255,255,0), data.owner  )
-					else
-						createTTEx(data.pos, vec2(0,0.05), "Maximum Delay", 10,  2., colorA(255,255,255,0), data.owner  )
-				case DEC_ID
-					if data.delay >= INTERVAL
-						data.delay -= INTERVAL
-						createTTEx(data.pos, vec2(0,0.05), "Delay " + data.delay.toString(), 10,  2., colorA(255,255,255,0), data.owner  )
-					else
-						createTTEx(data.pos, vec2(0,0.05), "Minimum Delay", 10,  2., colorA(255,255,255,0), data.owner  )
-				case WISP_ID
-					if data.wisps
-						data.wisps = false
-						createTTEx(data.pos, vec2(0,0.05), "Wisps |cffAD0821inactive", 10,  2., colorA(255,255,255,0), data.owner  )
-					else
-						data.wisps = true
-						createTTEx(data.pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., colorA(255,255,255,0), data.owner  )
-			return false
-
-endpackage
+	function onCast()
+		let id = GetSpellAbilityId()
+		switch id
+			case INC_ID
+				if delay < 5.
+					delay += INTERVAL
+					createTTEx(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., colorA(255,255,255,0), owner  )
+				else
+					createTTEx(pos, vec2(0,0.05), "Maximum Delay", 10,  2., colorA(255,255,255,0), owner  )
+			case DEC_ID
+				if delay >= INTERVAL
+					delay -= INTERVAL
+					createTTEx(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., colorA(255,255,255,0), owner  )
+				else
+					createTTEx(pos, vec2(0,0.05), "Minimum Delay", 10,  2., colorA(255,255,255,0), owner  )
+			case WISP_ID
+				if wisps
+					wisps = false
+					createTTEx(pos, vec2(0,0.05), "Wisps |cffAD0821inactive", 10,  2., colorA(255,255,255,0), owner  )
+				else
+					wisps = true
+					createTTEx(pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., colorA(255,255,255,0), owner  )

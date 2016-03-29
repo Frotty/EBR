@@ -1,33 +1,69 @@
 package Event
+import public EventHelper
 import LinkedList
 import RegisterEvents
 import HashMap
 import OnUnitEnterLeave
+import Table
 
+Table triggerData = new Table()
+
+public function trigger.registerUnitInRangeSource( unit whichUnit, real range, boolexpr filter ) returns event
+	int h = GetHandleId(this)
+	int u = GetHandleId(whichUnit)
+	triggerData.saveUnit(h,whichUnit)
+	triggerData.saveTrigger(u,this)
+	return TriggerRegisterUnitInRange(this, whichUnit, range, filter)
+
+public function trigger.registerUnitInRangeSource( unit whichUnit, real range ) returns event
+	return this.registerUnitInRangeSource(whichUnit, range, null)
+
+public function trigger.getSource() returns unit
+	return triggerData.loadUnit(GetHandleId(this))
+
+public function unit.clearRegister()
+	int h = GetHandleId(this)
+	trigger t = triggerData.loadTrigger(h)
+	integer th = GetHandleId(t)
+	DestroyTrigger(t)
+	triggerData.removeHandle(h)
+	triggerData.removeHandle(th)
+	
 public abstract class EventListener
 	static HashMap<int, LinkedList<EventListener>> listenerMap = new HashMap<int, LinkedList<EventListener>>()
 	static HashMap<unit, int> unitListenerMap = new HashMap<unit, int>()
 	
 	static function add(eventid eventId, EventListener listener)
-		int id = eventId.toIntId()
+		let id = eventId.toIntId()
 		if not listenerMap.has(id)
 			listenerMap.put(id, new LinkedList<EventListener>())
 			
 		listenerMap.get(id).add(listener)
 		
 	static function add(unit u, eventid eventId, EventListener listener)
-		int id = eventId.toIntId()
+		let id = eventId.toIntId()
+		LinkedList<EventListener> list = null
 		if not unitListenerMap.has(u)
-			let list = new LinkedList<EventListener>()
-			let startId = eventTypeCounter + (list castTo int) * eventTypeCounter
+			list = new LinkedList<EventListener>()
+			let startId = 1 + eventTypeCounter + (list castTo int) * eventTypeCounter
 			unitListenerMap.put(u, startId)
+			printLog("Id begin: " +(startId).toString(), Loglevel.INFO)
 			
 		let listenerId = unitListenerMap.get(u) + id
 		if not listenerMap.has(listenerId)
-			listenerMap.put(listenerId, new LinkedList<EventListener>())
-			
+			if list == null
+				list = new LinkedList<EventListener>()
+			listenerMap.put(listenerId, list)
+		
+		printLog("Listener id: " +(listenerId).toString(), Loglevel.INFO)
 		listenerMap.get(listenerId).add(listener)
-	
+		
+	static function addSpellEffect(unit u, int abilId, EventListener listener)
+		add(u, EVENT_UNIT_SPELL_EFFECT, () -> begin
+			if GetSpellAbilityId() == abilId
+				listener.onEvent()
+		end)
+		
 	static function generalEventCallback()
 		let id = GetTriggerEventId().toIntId()
 		let trigUnit = GetTriggerUnit()
@@ -35,27 +71,32 @@ public abstract class EventListener
 			for listener in listenerMap.get(id)
 				listener.onEvent()
 		if unitListenerMap.has(trigUnit)
-			for listener in listenerMap.get(unitListenerMap.get(trigUnit) + id)
-				listener.onEvent()
+			let list = listenerMap.get(unitListenerMap.get(trigUnit) + id)
+			if list != null
+				for listener in list
+					listener.onEvent()		
 			
 	abstract function onEvent()
 			
 	
-trigger dmgTrig = CreateTrigger()
-trigger deathTrig = CreateTrigger()
+trigger unitTrig = CreateTrigger()
 
 public function eventid.toIntId() returns int
-	return eventidToIndex[this.getHandleId()]
+	var id = eventidToIndex[this.getHandleId()]
+	if id == 0
+		id = registerEventId(this)
+	return id
 			
 int array eventidToIndex
 int eventTypeCounter = 1
 
-function registerEventId(eventid evnt)
+function registerEventId(eventid evnt) returns int
 	eventidToIndex[evnt.getHandleId()] = eventTypeCounter
 	eventTypeCounter++
+	return eventTypeCounter
 	
 function registerEventsForUnit(unit u)
-	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
+	unitTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
 
 function unregisterEventsForUnit(unit u)
 	if EventListener.unitListenerMap.has(u)
@@ -66,24 +107,13 @@ function unregisterEventsForUnit(unit u)
 			destroy list
 
 init
-	// Register Eventtypes
-	registerEventId(EVENT_UNIT_DAMAGED)
-	registerEventId(EVENT_PLAYER_UNIT_DEATH)
-	registerEventId(EVENT_PLAYER_UNIT_CONSTRUCT_START)
-	registerEventId(EVENT_PLAYER_UNIT_USE_ITEM)
-	registerEventId(EVENT_PLAYER_UNIT_UPGRADE_FINISH)
-	registerEventId(EVENT_PLAYER_UNIT_SPELL_EFFECT)
-	registerEventId(EVENT_PLAYER_UNIT_SPELL_CAST)
-	registerEventId(EVENT_PLAYER_UNIT_PICKUP_ITEM)
-	registerEventId(EVENT_UNIT_ISSUED_POINT_ORDER)
-	registerEventId(EVENT_UNIT_ISSUED_TARGET_ORDER)
 	// Register Events when unit enters map
 	onEnter(() -> registerEventsForUnit(getEnterLeaveUnit()))
 	// Delete 
 	onLeave(() -> unregisterEventsForUnit(getEnterLeaveUnit()))
 	
 	// Register Actions
-	dmgTrig.addAction(function EventListener.generalEventCallback)		
+	unitTrig.addAction(function EventListener.generalEventCallback)		
 	
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_START, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.generalEventCallback)
@@ -92,3 +122,6 @@ init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, function EventListener.generalEventCallback)
+	

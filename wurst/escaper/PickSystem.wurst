@@ -78,7 +78,6 @@ function keyright()
 	PlayerData pd = pData[p.getId()]
 		
 	if not pd.picked
-		debugPrint("currentView " + id.toString(), 2 )
 		if id >= herocount
 			currentView[pi] = 1
 			id = 1
@@ -166,8 +165,6 @@ public function init_Choose()
 		TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
 		TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)
 		TriggerRegisterPlayerEvent(pick, pd.p, EVENT_PLAYER_ARROW_DOWN_DOWN)
-		debugPrint( GetPlayerName(pd.p) + " registered", 2 )
-
 
 	TriggerAddAction( left, function keyleft )
 	TriggerAddAction( right, function keyright )

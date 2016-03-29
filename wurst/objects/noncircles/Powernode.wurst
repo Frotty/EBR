@@ -2,7 +2,6 @@ package Powernode
 import LinkedList
 import Entity
 import Escaper
-import EventHandling
 import SetupObject
 import BaseObject
 
@@ -29,8 +28,7 @@ public class Powernode extends DynamicSetupObject
 
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), 0., CODE_NULL )
-		setup.registerCastEvent(Condition(function onCast))
-
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function unlink( Link l )
 		links.remove(l)
@@ -42,14 +40,13 @@ public class Powernode extends DynamicSetupObject
 	override function update()
 		super.update()
 		if links.getSize() > 0
-			debugPrint(links.getSize().toString(), 1)
 			var i = 0
 			while i < links.getSize()
 				Link l = links.get(i)
 				if not l.linkedNode.done 
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
 					for Escaper e in escapers
-						if e.alive and not e.flying and e.pos.toVec2().distToSegmentSquared(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
+						if e.alive and not e.flying and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
 							e.kill()
 							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ) 
 				else
@@ -63,26 +60,20 @@ public class Powernode extends DynamicSetupObject
 	
 	
 	ondestroy
-		actor.unregisterCastEvent()
-		debugPrint("nodey " + links.getSize().toString(),3)
 		while links.getSize() > 0
 			Link l = links.get(0)
-			debugPrint("got link " + (l castTo int).toString(), 1)
 			links.removeAt(0)
 			destroy l
 		destroy links	
 	
-	static function onCast() returns boolean
+	function onCast()
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		debugPrint("node cast " + (node castTo int).toString(), 1)
 		switch id
 			case LINK_ID
-				debugPrint("node cast link", 1)
 				var data = target.getEntity()
 				if data instanceof Powernode
-					debugPrint("node cast link is node", 1)
 					var pdata = data castTo Powernode
 					var isNew = true
 					var i = 0
@@ -98,8 +89,3 @@ public class Powernode extends DynamicSetupObject
 					if isNew
 						node.link(data castTo Powernode)
 						
-		//node.setup.issuePastOrder(2)
-
-		return false
-
-		

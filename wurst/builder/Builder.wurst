@@ -5,7 +5,6 @@ import initlater BuilderConstants
 import initlater RegionData
 import initlater Key
 import initlater SetupBox
-import initlater TempGroups
 import initlater Boss
 import initlater BossDamager
 import initlater BossSpellTarget
@@ -28,7 +27,7 @@ public class Builder extends UnitEntity
 		var u = GetTriggerUnit()
 		var id = GetItemTypeId(GetManipulatedItem())
 		var builder = u.getUserData() castTo Builder
-		var rdata = getRegionData(builder.pos.x, builder.pos.y)
+		var rdata = getRegionData(builder.pos)
 		if rdata.isTerrainItem(id)
 			rdata.setType(id, true)
 			rdata.allow(builder.owner.getId())
@@ -53,8 +52,7 @@ public class Builder extends UnitEntity
 		if data instanceof Builder
 			var builder = data castTo Builder
 			var id = GetSpellAbilityId()
-			var ox = GetSpellTargetX()
-			var oy = GetSpellTargetY()
+			let tpos = getSpellTargetPos()
 			boolean wasMenu = false
 			switch id
 				case MENU_1
@@ -76,43 +74,43 @@ public class Builder extends UnitEntity
 					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
 					wasMenu = true
 				case KEY_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						new Key(vec2(ox,oy), builder.owner)
+					if getRegionData(tpos).isOwner(builder.owner.getId())
+						new Key(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case BOOTS_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						CreateItem(BOOTS_ID, ox,oy)
+					if getRegionData(tpos).isOwner(builder.owner.getId())
+						createItem(BOOTS_ID, tpos)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case TOME_SPELL_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId())
-						CreateItem(TOME_ID, ox,oy)
+					if getRegionData(tpos).isOwner(builder.owner.getId())
+						createItem(TOME_ID, tpos)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case BM_BOSS_ID
-					var rdata = getRegionData(ox,oy)
+					var rdata = getRegionData(tpos)
 					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
 						if not rdata.hasBoss
-							new Boss(builder.owner, ox, oy, boss[rdata.rtype])
+							new Boss(builder.owner, tpos, boss[rdata.rtype])
 							rdata.hasBoss = true
 						else
 							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				case BM_SPELLTARGET_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new SpellTarget(vec2(ox,oy), builder.owner)
+					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
+						new SpellTarget(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				case BM_DAMAGER_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new BossDamager(vec2(ox,oy), builder.owner)
+					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
+						new BossDamager(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				case BM_WEAPON_ID
-					if getRegionData(ox,oy).isOwner(builder.owner.getId()) and getRegionData(ox,oy).isBossRegion
-						new Weapon(vec2(ox,oy), builder.owner)
+					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
+						new Weapon(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 				case GRIDCLICK_ID
@@ -156,7 +154,6 @@ public class Builder extends UnitEntity
 	static function onOrder()
 		var i = GetOrderTargetItem()
 		if i != null
-			debugPrint("itemRemovalOrder",3)
 			if GetTriggerUnit().getUserData() > 0
 				var bdata = GetTriggerUnit().getUserData() castTo Builder
 				bdata.actor.abortOrder()
@@ -173,20 +170,17 @@ public class Builder extends UnitEntity
 			var ox = GetOrderPointX()
 			var oy = GetOrderPointY()
 			if isOrderBuildOrder(ord)
-				debugPrint((u.getUserData() castTo Builder).pos.toString(), 3)
 				getTimer()..start(0.01, function callback)
 				..setData((new BuildData(u.getUserData() castTo Builder,
 							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
 				
 			else if OrderId2String(ord) == "smart" or OrderId2String(ord) == "move"
 				if w == null
-					debugPrint("fuck eh " + ox.toString() + " " + oy.toString() + " " + ord.toString(), 3)
 					if ( ox > 0. or ox < 0. )
 						
 						SetUnitX(u,ox)
 						SetUnitY(u,oy)
 				else
-					debugPrint("fuck", 3)
 					SetUnitX(u,GetWidgetX(w))
 					SetUnitY(u,GetWidgetY(w))
 		

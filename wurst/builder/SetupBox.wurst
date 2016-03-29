@@ -1,9 +1,7 @@
 package SetupBox
 import Entity
 import RegionData
-import EventHandling
 import GameConstants
-import TempGroups
 import Escaper
 import Builder
 import PlayerData
@@ -24,99 +22,98 @@ constant real MAX_DOT_DMG = 10.
 
 public class SetupBox
 	unit actor
-	player owner
 	RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
 		actor = CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 )
-		this.owner = owner
-		actor.registerCastEvent(Condition(function SetupBox.onCast))
 		rdata = data
 		actor.setUserData(this castTo int)
 		
+		EventListener.add(actor, EVENT_UNIT_SPELL_EFFECT, () -> onCast())
 		
-	static function onCast() returns boolean
+		
+	function onCast() returns boolean
 		var id = GetSpellAbilityId()
-		var box = GetSpellAbilityUnit().getUserData() castTo SetupBox
+		let owner = actor.getOwner()
 		switch id
 			case ICEI_ID
-				if box.rdata.slidespeed >= MAX_SLIDESPEED
-					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed is on Maximum" )
+				if rdata.slidespeed >= MAX_SLIDESPEED
+					DisplayTextToPlayer( owner, 0, 0, "Slidespeed is on Maximum" )
 				else
-					box.rdata.slidespeed += .25
-					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed: " + box.rdata.slidespeed.toString() )
+					rdata.slidespeed += .25
+					DisplayTextToPlayer( owner, 0, 0, "Slidespeed: " + rdata.slidespeed.toString() )
 			case ICED_ID
-				if box.rdata.slidespeed <= -MAX_SLIDESPEED
-					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed is on Minimum" )
+				if rdata.slidespeed <= -MAX_SLIDESPEED
+					DisplayTextToPlayer( owner, 0, 0, "Slidespeed is on Minimum" )
 				else
-					box.rdata.slidespeed -= .25
-					DisplayTextToPlayer( box.owner, 0, 0, "Slidespeed: " + box.rdata.slidespeed.toString() )
+					rdata.slidespeed -= .25
+					DisplayTextToPlayer( owner, 0, 0, "Slidespeed: " + rdata.slidespeed.toString() )
 			case PI_ID
-				if box.rdata.poisonDmg >= MAX_DOT_DMG
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Maximum" )
+				if rdata.poisonDmg >= MAX_DOT_DMG
+					DisplayTextToPlayer( owner, 0, 0, "Poisondamage is on Maximum" )
 				else
-					box.rdata.poisonDmg += .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
+					rdata.poisonDmg += .1
+					DisplayTextToPlayer( owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString() )
 			case PD_ID
-				if box.rdata.poisonDmg <= .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage is on Minimum" )
+				if rdata.poisonDmg <= .1
+					DisplayTextToPlayer( owner, 0, 0, "Poisondamage is on Minimum" )
 				else
-					box.rdata.poisonDmg -= .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Poisondamage: " + box.rdata.poisonDmg.toString() )
+					rdata.poisonDmg -= .1
+					DisplayTextToPlayer( owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString() )
 			case LI_ID
-				if box.rdata.lavaDmg >= MAX_DOT_DMG
-					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg is on Maximum" )
+				if rdata.lavaDmg >= MAX_DOT_DMG
+					DisplayTextToPlayer( owner, 0, 0, "Lavadmg is on Maximum" )
 				else
-					box.rdata.lavaDmg += .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg: " + box.rdata.lavaDmg.toString() )
+					rdata.lavaDmg += .1
+					DisplayTextToPlayer( owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString() )
 			case LD_ID
-				if box.rdata.lavaDmg <= .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg is on Minimum" )
+				if rdata.lavaDmg <= .1
+					DisplayTextToPlayer( owner, 0, 0, "Lavadmg is on Minimum" )
 				else
-					box.rdata.lavaDmg -= .1
-					DisplayTextToPlayer( box.owner, 0, 0, "Lavadmg: " + box.rdata.lavaDmg.toString() )
+					rdata.lavaDmg -= .1
+					DisplayTextToPlayer( owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString() )
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()
 				var id2 = p.getId()
-				if id > 7 and not p == box.owner
+				if id > 7 and not p == owner
 					AddSpecialEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getX(), u.getY()).destr()
-					if box.rdata.isOwner(id2)
-						box.rdata.disallow(id2)
-						DisplayTextToPlayer( box.owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
-						DisplayTextToPlayer( p, 0, 0, colorcode[box.owner.getId()] + box.owner.getName() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region." )
+					if rdata.isOwner(id2)
+						rdata.disallow(id2)
+						DisplayTextToPlayer( owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
+						DisplayTextToPlayer( p, 0, 0, colorcode[owner.getId()] + owner.getName() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region." )
 						if GetLocalPlayer() == p
-							PingMinimapEx((GetRectMinX(box.rdata.theRect)+GetRectMaxX(box.rdata.theRect))/2, (GetRectMinY(box.rdata.theRect)+GetRectMaxY(box.rdata.theRect))/2, 3, 156, 8, 8, false)
+							PingMinimapEx((GetRectMinX(rdata.theRect)+GetRectMaxX(rdata.theRect))/2, (GetRectMinY(rdata.theRect)+GetRectMaxY(rdata.theRect))/2, 3, 156, 8, 8, false)
 					else
-						box.rdata.allow(id2)
-						DisplayTextToPlayer( box.owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
-						DisplayTextToPlayer( p, 0, 0, colorcode[box.owner.getId()] + box.owner.getName() + " |cff08B552allowed|r |cffffcc00 you to build in his region." )
+						rdata.allow(id2)
+						DisplayTextToPlayer( owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
+						DisplayTextToPlayer( p, 0, 0, colorcode[owner.getId()] + owner.getName() + " |cff08B552allowed|r |cffffcc00 you to build in his region." )
 						if GetLocalPlayer() == p
-							PingMinimapEx((GetRectMaxX(box.rdata.theRect)+GetRectMinX(box.rdata.theRect))/2, (GetRectMaxY(box.rdata.theRect)+GetRectMinY(box.rdata.theRect))/2, 3, 8, 181, 82, false)
-				else if p == box.owner
-					DisplayTextToPlayer( box.owner, 0, 0, "|cffC51019You Can't disallow yourself in your region!" )
+							PingMinimapEx((GetRectMaxX(rdata.theRect)+GetRectMinX(rdata.theRect))/2, (GetRectMaxY(rdata.theRect)+GetRectMinY(rdata.theRect))/2, 3, 8, 181, 82, false)
+				else if p == owner
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You Can't disallow yourself in your region!" )
 				else
-					DisplayTextToPlayer( box.owner, 0, 0, "|cffC51019You Can't allow an escaper in your region!" )
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You Can't allow an escaper in your region!" )
 					
 						
 			case CLEAR_ID
-				GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
+				GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
 				for u in ENUM_GROUP
 					var data = u.getEntity()
-					if not data instanceof Escaper and not data instanceof Builder and u != box.actor and data != null
+					if not data instanceof Escaper and not data instanceof Builder and u != actor and data != null
 						data.terminate()
 			case BOSS_MODE_ID
-				if pData[box.owner.getId()].XP > 00 //500
-					box.rdata.isBossRegion = true
-					box.actor.removeAbility(BOSS_MODE_ID)
-					DisplayTextToPlayer( box.owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
-					DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",box.actor.getX(),box.actor.getY() ))
-					let b = pData[box.owner.getId()].builder
-					SelectUnitForPlayerSingle(b.actor, box.owner)
-					GroupEnumUnitsInRect(ENUM_GROUP, box.rdata.theRect, null)
-					b.setBossMenu(box.rdata)
+				if pData[owner.getId()].XP > 00 //500
+					rdata.isBossRegion = true
+					actor.removeAbility(BOSS_MODE_ID)
+					DisplayTextToPlayer( owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
+					DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",actor.getX(),actor.getY() ))
+					let b = pData[owner.getId()].builder
+					SelectUnitForPlayerSingle(b.actor, owner)
+					GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
+					b.setBossMenu(rdata)
 				else
-					DisplayTextToPlayer( box.owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
+					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 					
 		return false
 

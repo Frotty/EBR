@@ -1,14 +1,12 @@
 package BossSpellTarget
 import initlater BaseObject
 import initlater SetupObject
-import initlater EventHandling
-import initlater PreloadHandler
-import initlater DummyCaster
+import initlater Preloader
+import initlater InstantDummyCaster
 import initlater Fx
 import initlater MapBounds
 import initlater Escaper
 import initlater Boss
-import initlater TempGroups
 import initlater HomingProjectile
 import Assets
 
@@ -32,7 +30,7 @@ public class SpellTarget extends DynamicSetupObject
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0, CODE_NULL)
 		stype = SpellType.NONE
-		setup.registerCastEvent(Condition(function onCast))
+//		setup.registerCastEvent(Condition(function onCast))
 		
 	static function onCast() returns boolean
 		var data = GetTriggerUnit().getEntity()
@@ -53,9 +51,7 @@ public class SpellTarget extends DynamicSetupObject
 		return false
 	
 	function castSpell(int spell_id, string spell_string)
-		var dc = new DummyCaster(spell_id, spell_string, DUMMY_PLAYER, true)
-		dc.setLevel(1)
-		dc.castOnPoint(pos)
+		InstantDummyCaster.castPoint(DUMMY_PLAYER, spell_id, 1, spell_string, pos.toVec2())
 
 	function castAOE(Boss root)
 		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y ))
@@ -85,8 +81,7 @@ public class BossMissile extends HomingProjectile
 	override function update()
 		super.update()
 		for e in escapers
-			print(pos.distToVec(e.pos).toString())
-			if pos.distToVecSquared(e.pos) < radius*radius
+			if pos.distanceToSq(e.pos) < radius*radius
 				terminate()
 				return
 	

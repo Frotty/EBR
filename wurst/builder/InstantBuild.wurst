@@ -1,31 +1,29 @@
 package InstantBuild
-import initlater  Builder
-import initlater  Entity
-import initlater  Door
-import initlater  RegionData
-import initlater  Revivepoint
-import initlater  Executer
-import initlater  Vortex
-import initlater  Powernode
-import initlater  Tracks
-import initlater  Jumper
-import initlater  Teleporter
-import initlater  Waypoint
-import initlater  Spinner
-import initlater  Unitcreator
-import initlater  Trap
-import initlater  Tree
-import initlater  Texter
-import initlater  Booster
-import initlater  Obstacle
-import initlater  Bombertower
-import initlater  UnitRemover
-import initlater  CongaLineHead
-import initlater  TerrainBlocker
-import initlater  Fountain
-import initlater  Decoration
-import initlater  Wall
-		
+import Builder
+import Entity
+import Door
+import RegionData
+import Revivepoint
+import Executer
+import Vortex
+import Powernode
+import Tracks
+import Jumper
+import Teleporter
+import Waypoint
+import Spinner
+import Unitcreator
+import Trap
+import Tree
+import Texter
+import Booster
+import Obstacle
+import Bombertower
+import UnitRemover
+import CongaLineHead
+import TerrainBlocker
+import Fountain
+import Decoration
 	
 function condition() returns boolean
 	return (GetTriggerUnit().getEntity()) instanceof Builder
@@ -53,10 +51,8 @@ public function callback()
 	var t = GetExpiredTimer()
 	var data = t.getData() castTo BuildData
 	data.b.updatePos()
-	debugPrint(data.b.pos.toString(), 3)
 	data.b.setPos(data.b.pos)
-	debugPrint(data.b.pos.toString(), 3)
-	var rdata = getRegionData(data.tpos.x, data.tpos.y)
+	var rdata = getRegionData(data.tpos)
 	if rdata != null and rdata.isOwner(data.b.owner.getId()) or data.b.owner.getName() == "Frotty" or data.b.owner.getName() == "FrottyZ"
 		switch data.oId
 			case buildorders[1]
@@ -141,16 +137,6 @@ public function callback()
 	destroy data
 
 
-public function unit.abortOrder() returns boolean
-	if IsUnitPaused(this)
-		return false
-	else
-		PauseUnit(this, true)
-		IssueImmediateOrder(this, "stop")
-		PauseUnit(this, false)
-	return true
-
-
 int array buildorders
 
 public function trigger.registerBuilderEvent(playerunitevent ev)
@@ -159,7 +145,6 @@ public function trigger.registerBuilderEvent(playerunitevent ev)
 
 
 init
-	debugPrint("wc3init Instant Build begin", 2)
 	buildorders[0] = 'n00G'
 	buildorders[1] = 'n00B' // Jumper
 	buildorders[2] = 'n000' // Revivepoint
@@ -204,4 +189,3 @@ init
 	buildorders[40] = 'n016' // Obelisk
 	buildorders[41] = 'n015' // Poison eggs
 	buildorders[42] = 'n017' // Remains
-	debugPrint("wc3init Instant Build finish", 2)

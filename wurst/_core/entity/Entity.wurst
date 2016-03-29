@@ -1,12 +1,20 @@
 package Entity
 import LinkedListModule
-import Terrain
+import TerrainUtils
 import PhysicsConstants
-import Debug
 import Fx
-import Angle
+import public HashMap
 import public LinkedList
 import public Event
+
+public function unit.abortOrder() returns boolean
+	if IsUnitPaused(this)
+		return false
+	else
+		PauseUnit(this, true)
+		IssueImmediateOrder(this, "stop")
+		PauseUnit(this, false)
+	return true
 
 public function unit.getEntity() returns Entity
 	return this.getUserData() castTo Entity
@@ -46,27 +54,23 @@ public abstract class Entity
 		this.pos = pos
 		this.vel = vec3(0,0,0)
 		this.owner = owner		
-		entityCount++
 
 	construct( vec3 pos, real radius, player owner )
 		this.pos = pos
 		this.vel = vec3(0,0,0)
 		this.owner = owner
 		this.radius = radius
-		entityCount++
 		
 	construct( vec3 pos, vec3 vel, player owner )
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
-		entityCount++
 		
 	construct( vec3 pos, vec3 vel, real radius, player owner )
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
 		this.radius = radius
-		entityCount++
 		
 	function setPos( vec3 pos )
 		this.pos = pos
@@ -82,8 +86,8 @@ public abstract class Entity
 		this.vel += vel
 		
 	function setTarget( vec3 tpos, real speed )
-		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
-		let tangle = angleBetweenCoords(pos.x, pos.y, tpos.x, tpos.y)
+		var t = pos.distanceTo2d(tpos) / speed
+		let tangle = pos.angleTo2d(tpos)
 		let e = getTerrainZ(tpos.x,tpos.y)
 		
 		if t < 1.
@@ -101,18 +105,15 @@ public abstract class Entity
 abstract public class UnitEntity extends Entity
 	unit actor
 	
-	
 	construct( vec3 pos, unit actor )
 		super(pos, actor.getOwner())
 		this.actor = actor
-		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		unitEntityCount++
+		actor..setEntity(this)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 		
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
 		this.actor = actor
-		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		unitEntityCount++
+		actor..setEntity(this)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 		
 	override function update()
 		updatePos()
@@ -132,7 +133,7 @@ abstract public class UnitEntity extends Entity
 		
 	function setXY(vec3 tpos)
 		pos = tpos
-		actor.setXY(tpos.x,tpos.y)
+		actor.setXY(tpos)
 		
 
 abstract public class FxEntity extends Entity
@@ -172,9 +173,5 @@ abstract public class FxEntity extends Entity
 		
 	ondestroy
 		destroy fx
-
-
-
-
 
 	

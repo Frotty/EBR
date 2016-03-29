@@ -1,9 +1,10 @@
 package RegionData
 import Entity
-import Escaper
 import Builder
 import Rect
 import Startmazes
+
+HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 
 // The "Area" RegionData a builder has to claim in order to build
 public class RegionData
@@ -31,7 +32,7 @@ public class RegionData
 		visTrig = CreateTrigger()
 		visTrig.registerRectEnterEventSource(r)
 		visTrig.addAction(function RegionData.enterRect)
-		regionTable.saveInt(GetHandleId(r), this castTo int)
+		regionMap.put(r, this)
 		
 	function isTerrainItem(int id) returns boolean
 		for i = 0 to 5
@@ -81,14 +82,14 @@ public class RegionData
 	static function enterRect()
 		var u = GetTriggerUnit()
 		var data = u.getEntity()
-		var rdata = regionTable.loadInt(GetHandleId(GetTriggeringTrigger().getSourceRect())) castTo RegionData
+		var rdata = regionMap.get(GetTriggeringTrigger().getSourceRect())
 
-		if data instanceof Escaper
-			var edata = data castTo Escaper
-			if not rdata.visible and data.owner.getId() <= 7
-				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
-				rdata.visible = true
-			edata.currentRegion = rdata
+//		if data instanceof Escaper
+//			var edata = data castTo Escaper
+//			if not rdata.visible and data.owner.getId() <= 7
+//				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
+//				rdata.visible = true
+//			edata.currentRegion = rdata
 
 		if data instanceof Builder
 			var bdata = data castTo Builder
@@ -109,17 +110,19 @@ function rect.changeTerrain( integer ttype )
 		x = xmin
 		y = y + 128
 
-        
+  
+public function getRegionData(vec3 pos) returns RegionData
+	return getRegionData(pos.toVec2())     
 
-public function getRegionData(real x, real y) returns RegionData
+public function getRegionData(vec2 pos) returns RegionData
 	for i = 0 to 20
-		if RectContainsCoords(regions[i].theRect, x, y)
+		if regions[i].theRect.contains(pos)
 			return regions[i]
 			
 	return null
 
 
-Table regionTable = new Table()
+
 public RegionData array regions
 // The claim item to buy
 public int array ritem 

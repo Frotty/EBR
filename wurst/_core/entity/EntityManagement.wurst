@@ -6,7 +6,6 @@ function updateEntities() returns boolean
 	while e != null
 		if e.done
 			destroy e
-			debugPrint("destroyed Entity", 0)
 		else if e.active
 			e.update()
 		e = e.next

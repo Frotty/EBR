@@ -1,111 +1,106 @@
 package GameConstants
-	import Colors
 	
-	public string array mbPic
-	public string array names
-	public string array tags
-	public string array colorcode
-	public integer array expBounds
-	public string array ranks
-	public constant int cplayerCount = 14
-	
-	public constant string MAP_VER = "EBR 0.83"
-	
-	
-	public enum COLOR
-		WHITE
-		RED
-		BLUE
-		TEAL	
-		PURPLE
-		YELLOW
-		ORANGE
-		GREEN		
-		PINK
-		GREY
-		LIGHTBLUE
-		DARKGREEN
-		BROWN
+public string array mbPic
+public string array names
+public string array tags
+public string array colorcode
+public integer array expBounds
+public string array ranks
+public constant int cplayerCount = 14
+
+public constant string MAP_VER = "EBR 0.83"
+
+public enum COLOR
+	WHITE
+	RED
+	BLUE
+	TEAL	
+	PURPLE
+	YELLOW
+	ORANGE
+	GREEN		
+	PINK
+	GREY
+	LIGHTBLUE
+	DARKGREEN
+	BROWN
 
 
-	init
-		debugPrint("wc3init GameConstants begin", 2)
-		mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"
-		mbPic[ 1 ] = "ReplaceableTextures\\CommandButtons\\BTNFootman.blp"
-		mbPic[ 2 ] = "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp"
-		mbPic[ 3 ] = "ReplaceableTextures\\CommandButtons\\BTNIceTrollBeserker.blp"
+init
+	mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"
+	mbPic[ 1 ] = "ReplaceableTextures\\CommandButtons\\BTNFootman.blp"
+	mbPic[ 2 ] = "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp"
+	mbPic[ 3 ] = "ReplaceableTextures\\CommandButtons\\BTNIceTrollBeserker.blp"
 
-		names   [0] = "Frotty"
-		tags    [0] = "|cffEF6B21[God]"
-		names   [1] = "FrottyZ"
-		tags    [1] = "|cffEF6B21[God]"
-		names   [2] = "Feuerblume"
-		tags    [2] = "|cff9C94E6[Tester]"
-		names   [3] = "jkkopp"
-		tags    [3] = "|cff9C94E6[Tester]"
-		names   [4] = "fortress_na-f"
-		tags    [4] = "|cff9C94E6[Tester]"
-		names   [5] = "Kornblume"
-		tags    [5] = "|cff9C94E6[Tester]"
-		names   [6] = "Gamestargamer"
-		tags    [6] = "|cff9C94E6[Tester]"
-		names   [7] = "gamestargamer"
-		tags    [7] = "|cff9C94E6[Tester]"
-		names   [8] = "mooniii"
-		tags    [8] = "|cff9C94E6[Tester]"
-		names   [9] = "Carlor01"
-		tags    [9] = "|cff9C94E6[Tester]"
-		names   [10] = "Mo0ni[behh]"
-		tags    [10] = "|cff9C94E6[Tester]"
-		names   [11] = "metactylic"
-		tags    [11] = "|cffB5DE42[Art]"
-		names   [12] = "nore.abfl"
-		tags    [12] = "|cff9C94E6[Tester]"
-		names   [13] = "kleinerhauck"
-		tags    [13] = "|cff9C94E6[Tester]"
-		names	[14] = "kari0003"
-		tags	[14] = "|cffFFE87C[Adept]"
+	names   [0] = "Frotty"
+	tags    [0] = "|cffEF6B21[God]"
+	names   [1] = "FrottyZ"
+	tags    [1] = "|cffEF6B21[God]"
+	names   [2] = "Feuerblume"
+	tags    [2] = "|cff9C94E6[Tester]"
+	names   [3] = "jkkopp"
+	tags    [3] = "|cff9C94E6[Tester]"
+	names   [4] = "fortress_na-f"
+	tags    [4] = "|cff9C94E6[Tester]"
+	names   [5] = "Kornblume"
+	tags    [5] = "|cff9C94E6[Tester]"
+	names   [6] = "Gamestargamer"
+	tags    [6] = "|cff9C94E6[Tester]"
+	names   [7] = "gamestargamer"
+	tags    [7] = "|cff9C94E6[Tester]"
+	names   [8] = "mooniii"
+	tags    [8] = "|cff9C94E6[Tester]"
+	names   [9] = "Carlor01"
+	tags    [9] = "|cff9C94E6[Tester]"
+	names   [10] = "Mo0ni[behh]"
+	tags    [10] = "|cff9C94E6[Tester]"
+	names   [11] = "metactylic"
+	tags    [11] = "|cffB5DE42[Art]"
+	names   [12] = "nore.abfl"
+	tags    [12] = "|cff9C94E6[Tester]"
+	names   [13] = "kleinerhauck"
+	tags    [13] = "|cff9C94E6[Tester]"
+	names	[14] = "kari0003"
+	tags	[14] = "|cffFFE87C[Adept]"
 
-		colorcode[ 0 ] = "|cffFF0202" // red
-		colorcode[ 1 ] = "|cff0041FF" // blue
-		colorcode[ 2 ] = "|cff1BE6B8" // teal
-		colorcode[ 3 ] = "|cff530080" // lila
-		colorcode[ 4 ] = "|cffFFFC00" // yellow
-		colorcode[ 5 ] = "|cffFE890D" // orange
-		colorcode[ 6 ] = "|cff1FBF00" // green
-		colorcode[ 7 ] = "|cffE55AAF" // pink
-		colorcode[ 8 ] = "|cff949596" // gray
-		colorcode[ 9 ] = "|cff7DBEF1" // lightblue
-		colorcode[ 10 ] = "|cff0F6145" // darkgreen
+	colorcode[ 0 ] = "|cffFF0202" // red
+	colorcode[ 1 ] = "|cff0041FF" // blue
+	colorcode[ 2 ] = "|cff1BE6B8" // teal
+	colorcode[ 3 ] = "|cff530080" // lila
+	colorcode[ 4 ] = "|cffFFFC00" // yellow
+	colorcode[ 5 ] = "|cffFE890D" // orange
+	colorcode[ 6 ] = "|cff1FBF00" // green
+	colorcode[ 7 ] = "|cffE55AAF" // pink
+	colorcode[ 8 ] = "|cff949596" // gray
+	colorcode[ 9 ] = "|cff7DBEF1" // lightblue
+	colorcode[ 10 ] = "|cff0F6145" // darkgreen
 
-		ranks[0] = "1:Newbie"
-		expBounds[0] = 100
-		ranks[1] = "|cffBDBDBD2:Beginner"
-		expBounds[1] = 250
-		ranks[2] = "|cffFFE6AD3:Novice"
-		expBounds[2] = 400
-		ranks[3] = "|cffFFD64A4:Rookie"
-		expBounds[3] = 1500
-		ranks[4] = "|cffFFCE195:Superior"
-		expBounds[4] = 2750
-		ranks[5] = "|cffFFA53A6:Major"
-		expBounds[5] = 5000
-		ranks[6] = "7:Pro"
-		expBounds[6] = 9500
-		ranks[7] = "|cff5A8CDE8:Expert"
-		expBounds[7] = 12500
-		ranks[8] = "|cff087BD69:Craver"
-		expBounds[8] = 15500
-		ranks[9] = "|cffD6292110|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
-		expBounds[9] = 20000
-		ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
-		expBounds[10] = 27500
-		ranks[11] = "|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r"
-		expBounds[11] = 75000
-		ranks[12] = "|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r"
-		expBounds[12] = 150000
-		ranks[13] = "|cff94949414: Amazing-|cff949CEF"
-		expBounds[13] = 200000
-		debugPrint("wc3init GameConstants finish", 2)
+	ranks[0] = "1:Newbie"
+	expBounds[0] = 100
+	ranks[1] = "|cffBDBDBD2:Beginner"
+	expBounds[1] = 250
+	ranks[2] = "|cffFFE6AD3:Novice"
+	expBounds[2] = 400
+	ranks[3] = "|cffFFD64A4:Rookie"
+	expBounds[3] = 1500
+	ranks[4] = "|cffFFCE195:Superior"
+	expBounds[4] = 2750
+	ranks[5] = "|cffFFA53A6:Major"
+	expBounds[5] = 5000
+	ranks[6] = "7:Pro"
+	expBounds[6] = 9500
+	ranks[7] = "|cff5A8CDE8:Expert"
+	expBounds[7] = 12500
+	ranks[8] = "|cff087BD69:Craver"
+	expBounds[8] = 15500
+	ranks[9] = "|cffD6292110|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
+	expBounds[9] = 20000
+	ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
+	expBounds[10] = 27500
+	ranks[11] = "|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r"
+	expBounds[11] = 75000
+	ranks[12] = "|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r"
+	expBounds[12] = 150000
+	ranks[13] = "|cff94949414: Amazing-|cff949CEF"
+	expBounds[13] = 200000
 
-endpackage 

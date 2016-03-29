@@ -1,8 +1,6 @@
 package Vortex
 import Entity
-import OnCast
 import Escaper
-import EventHandling
 import Texttag
 
 constant int ID = 'n013'
@@ -16,12 +14,11 @@ public class Vortex extends UnitEntity
 	
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0) )
-		actor.registerCastEvent(Condition(function Vortex.onCast))
-	
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
 		for e in escapers
-			if pos.toVec2().distToVecSquared( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
+			if pos.toVec2().distanceToSq( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
 				var angl = e.pos.toVec2().angleTo(pos.toVec2())
 				e.vortexVelocity += vec3( Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0 )
 		
@@ -41,6 +38,5 @@ public class Vortex extends UnitEntity
 
 
 	ondestroy
-		actor.unregisterCastEvent()
 		actor.remove()
 				

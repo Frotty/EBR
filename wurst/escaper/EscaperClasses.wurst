@@ -48,7 +48,6 @@ public class Strong_Escaper extends Escaper
 		
 	override function update()
 		super.update()
-		debugPrint("strong upt", 0)
 		if invulnerable
 			shieldtimer -= ANIMATION_PERIOD
 			if shieldX != pos.x or shieldY != pos.y or shieldtimer <= 0

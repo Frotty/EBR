@@ -1,6 +1,5 @@
 package Startmaze
 import public RegionData
-import public TempGroups
 import public Entity
 import public Teleporter
 import public Revivepoint

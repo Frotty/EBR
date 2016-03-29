@@ -9,7 +9,6 @@ import initlater  TeleporterTarget
 import initlater  BomberTarget
 import initlater  TextureChanger
 import initlater  Bomber
-import initlater  EventHandling
 import initlater  Pointer
 import initlater  Knockbacker
 
@@ -21,14 +20,14 @@ public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
 		super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL)
-		actor.registerCastEvent(Condition(function UnitProducer.onCast))
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
-	static function onCast() returns boolean
+	function onCast() returns boolean
 		var id = GetSpellAbilityId()
 		var obj = GetSpellAbilityUnit().getUserData() castTo UnitProducer
 		
 		let rallyPos = obj.getRallyPoint()
-		var data = getRegionData(rallyPos.x, rallyPos.y)
+		var data = getRegionData(rallyPos)
 		if id == 'A07A'
 			obj.actor..removeAbility('A05F')..removeAbility('A05K')
 			..removeAbility('A05J')..removeAbility('A05G')
@@ -81,11 +80,6 @@ public class UnitProducer extends StaticBaseObject
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 		return false
-		
-	ondestroy
-		actor.unregisterCastEvent()
-			
-		
 		
 public function init_UnitProducer()
 	for pd in playerlist

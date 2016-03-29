@@ -3,18 +3,14 @@ import Texttag
 import SetupObject
 import Entity
 
-trigger castTrig
-
-function changeSpeed()
+function onChanceSpeed()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
 	var data = caster.getEntity()
-	if data instanceof DynamicSetupObject
+	if (id == INC_SPEED_ID or id == DEC_SPEED_ID) and data instanceof DynamicSetupObject
 		var ddata = data castTo DynamicSetupObject
 		var speed = ddata.setup.getMoveSpeed()
-		debugPrint("casted", 1)
 		if id == INC_SPEED_ID
-			debugPrint("inc", 1)
 			if speed < 475.
 				ddata.setup.setMoveSpeed(speed+25.)
 				ddata.actor.setMoveSpeed(speed+25.)
@@ -24,16 +20,6 @@ function changeSpeed()
 				ddata.setup.setMoveSpeed(speed-25.)
 				ddata.actor.setMoveSpeed(speed-25.)
 				createTTEx(data.pos, vec2(0,0.05), (speed-25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
-	//caster.issuePastOrder(2)
-
-function isMoveSpell() returns boolean
-	let id = GetSpellAbilityId()
-	return id == INC_SPEED_ID or id == DEC_SPEED_ID
 
 init
-	debugPrint("wc3init MoveSpeed begin", 2)
-	castTrig = CreateTrigger()
-	castTrig.registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
-	castTrig.addCondition(Condition(function isMoveSpell))
-	castTrig.addAction(function changeSpeed)
-	debugPrint("wc3init MoveSpeed finish", 2)
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChanceSpeed())

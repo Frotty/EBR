@@ -1,7 +1,8 @@
 package PlayerData
 import MultiboardClass
 import GameConstants
-import Escaper
+import public Escaper
+import BuilderConstants
 import Builder
 import LinkedList
 import RegionData
@@ -57,12 +58,10 @@ public class PlayerData //just the player's (constant) stuff
 		if mbname == "Frotty" or mbname == "FrottyZ"
 			AddSpecialEffectTarget( "Righteousness.MDX", escaper.actor, "chest" )
 		for int i = 0 to cplayerCount
-			debugPrint(i.toString(),3)
 			if mbname == names[i]
 				mbname = tags[i] + "|r" + colorcode[ id ] + mbname
 				break
 		mbname = colorcode[ id ] + mbname
-		debugPrint("MBNAME: " + mbname, 1)
 		playerlist.add(this)
 	
 	function addXp(int amount, boolean time)
@@ -72,19 +71,18 @@ public class PlayerData //just the player's (constant) stuff
 				this.createNewPlayerFile()	
 			else if lastExpGain < minutes
 				lastExpGain = minutes
-				debugPrint("add current xp:" + XP.toString(), 1)
+				printLog("add current xp:" + XP.toString(), Loglevel.DEBUG)
 				XP += amount
-				debugPrint("add new xp:" + XP.toString(), 1)
+				printLog("add new xp:" + XP.toString(), Loglevel.DEBUG)
 				this.createNewPlayerFile()
 			updateRank()
 	
 	function setXp(int amount)
-		debugPrint("set current xp:" + XP.toString(), 1)
+		printLog("set current xp:" + XP.toString(), Loglevel.DEBUG)
 		XP = amount
-		debugPrint("set new xp:" + XP.toString(), 1)
+		printLog("set new xp:" + XP.toString(), Loglevel.DEBUG)
 	
 	function updateRank()
-		debugPrint("updating rank", 3)
 		int i = 0
 		if lvlfx != null
 			lvlfx.destr()
@@ -164,7 +162,6 @@ function initMB()
 	playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
-	debugPrint("mbinit done", 2)
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
 	for pd in playerlist
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
@@ -175,7 +172,6 @@ function initMB()
 			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Do this after the game, with wc3 closed. No EXP will be saved."  )
 	allow()
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            " + "|cffFF8429» |cff7BBD42All Players have been checked! You can now select an escaper.")
-	debugPrint("players loaded", 4)
 	DestroyTrigger(GetTriggeringTrigger())
 	
 	
@@ -185,7 +181,6 @@ public function player.addDeath()
 	if pd.deaths % 25 == 0
 		pd.addXp(5, true)
 	playerboard.board.getItem(pd.gameId+1, 1).setValue(pd.deaths.toString())
-	debugPrint("Adding death: "+(pd.gameId+1).toString()+" ; "+pd.deaths.toString(),1)
 	
 function setTime()
 	seconds++
@@ -222,16 +217,13 @@ function playerLeft()
 
 	
 init
-	debugPrint("wc3init PD begin", 2)
 	getTimer().start(0.01, function initPlayers)
-	debugPrint("wc3init PD finish", 2)
 	
 function initPlayers()
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	int r = 0
 	for i = 0 to 11
-		debugPrint(i.toString(), 1)
 		if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
 			pData[i] = new PlayerData(Player(i))
 			leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
@@ -240,7 +232,12 @@ function initPlayers()
 	CreateTrigger()..registerTimerEvent(0.1, false)..addAction(function initMB)
 	TimerStart(CreateTimer(), 1., true, function setTime)
 	GetExpiredTimer().release()
-
+	for pd in playerlist
+		if pd.id > 7
+			pd.tmod = new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+			new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+			new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+			new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
    
 public int minutes = 0
 public int seconds = 0
