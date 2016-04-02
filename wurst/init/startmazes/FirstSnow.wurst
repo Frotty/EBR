@@ -3,6 +3,8 @@ import Startmaze
 import Startmazes
 import EscaperKiller
 import Teleporter
+import Waypoint
+import ClosureTimers
 
 public class FirstSnowMaze extends Startmaze
 
@@ -11,24 +13,61 @@ public class FirstSnowMaze extends Startmaze
 	
 	override function initMaze()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
-		printLog("maze-0.11", Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "maze-0.11")
 		for u in ENUM_GROUP
-			printLog("maze-0.12", Loglevel.DEBUG)
-			new EscaperKiller(u, null, COLL_SIZE_BK)
-		printLog("maze-0.2", Loglevel.DEBUG)
+			printLog(Loglevel.DEBUG, "maze-0.12")
+			new EscaperKiller(u, COLL_SIZE_BK)
+		printLog(Loglevel.DEBUG, "maze-0.2")
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u008", null )
 		for u in ENUM_GROUP
 			new EscaperKiller(u, null, COLL_SIZE_BRK)
-		printLog("maze-0.3", Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "maze-0.3")
 		ENUM_GROUP.clear()
-		printLog("maze-1", Loglevel.DEBUG)
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", null )
+		for u in ENUM_GROUP
+			new EscaperKiller(u, COLL_SIZE_SK)
+		ENUM_GROUP.clear()
+		printLog(Loglevel.DEBUG, "maze-1")
+		
 		IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
 		IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
 		IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
-		printLog("maze-2", Loglevel.DEBUG)
+		var wp = new Waypoint(gg_unit_n004_0337.getPos(), gg_unit_n004_0337.getOwner())
+		let fwp = wp
+		gg_unit_n004_0337.remove()
+		wp.setRallyPoint(gg_unit_n004_0334.getPos())
+		wp = new Waypoint(gg_unit_n004_0334.getPos(), gg_unit_n004_0334.getOwner())
+		gg_unit_n004_0334.remove()
+		wp.setRallyPoint(gg_unit_n004_0335.getPos())
+		wp = new Waypoint(gg_unit_n004_0335.getPos(), gg_unit_n004_0335.getOwner())
+		gg_unit_n004_0335.remove()
+		wp.setRallyPoint(gg_unit_n004_0336.getPos())
+		wp = new Waypoint(gg_unit_n004_0336.getPos(), gg_unit_n004_0336.getOwner())
+		gg_unit_n004_0336.remove()
+		wp.setRallyPoint(fwp.pos.toVec2())
+		if not IssuePointOrder((gg_unit_n007_0013.getEntity() castTo EscaperKiller).setup , "move", fwp.pos.x,  fwp.pos.y)
+			printLog(Loglevel.ERROR, "WTF2")
+		printLog(Loglevel.DEBUG, "maze-2")
+		var wp2 = new Waypoint(gg_unit_n004_0330.getPos(), gg_unit_n004_0330.getOwner())
+		let f2wp = wp2
+		gg_unit_n004_0330.remove()
+		wp2.setRallyPoint(gg_unit_n004_0333.getPos())
+		wp2 = new Waypoint(gg_unit_n004_0333.getPos(), gg_unit_n004_0333.getOwner())
+		gg_unit_n004_0333.remove()
+		wp2.setRallyPoint(gg_unit_n004_0332.getPos())
+		wp2 = new Waypoint(gg_unit_n004_0332.getPos(), gg_unit_n004_0332.getOwner())
+		gg_unit_n004_0332.remove()
+		wp2.setRallyPoint(gg_unit_n004_0331.getPos())
+		wp2 = new Waypoint(gg_unit_n004_0331.getPos(), gg_unit_n004_0331.getOwner())
+		gg_unit_n004_0331.remove()
+		wp2.setRallyPoint(f2wp.pos.toVec2())
+		doAfter(.5, () -> begin
+			IssuePointOrder((gg_unit_n007_0015.getEntity() castTo EscaperKiller).setup , "move", f2wp.pos.x,  f2wp.pos.y)
+		end)
+		
 		var t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
-		printLog("maze-2.1 ", Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "maze-2.1 ")
 		gg_unit_n00C_0061.remove()
 		t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
 		IssuePointOrder(t.actor, "setrally", 6275,-5131 )

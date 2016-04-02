@@ -3,7 +3,10 @@ import public EventHelper
 import LinkedList
 import RegisterEvents
 import HashMap
+import ErrorHandling
 import OnUnitEnterLeave
+
+constant MAX_EVENTS = 50
 
 public abstract class EventListener
 	static HashMap<int, LinkedList<EventListener>> listenerMap = new HashMap<int, LinkedList<EventListener>>()
@@ -21,9 +24,8 @@ public abstract class EventListener
 		LinkedList<EventListener> list = null
 		if not unitListenerMap.has(u)
 			list = new LinkedList<EventListener>()
-			let startId = 1 + eventTypeCounter + (list castTo int) * eventTypeCounter
+			let startId = 1 + MAX_EVENTS + (list castTo int) * MAX_EVENTS
 			unitListenerMap.put(u, startId)
-			printLog("Id begin: " +(startId).toString(), Loglevel.INFO)
 			
 		let listenerId = unitListenerMap.get(u) + id
 		if not listenerMap.has(listenerId)
@@ -31,7 +33,6 @@ public abstract class EventListener
 				list = new LinkedList<EventListener>()
 			listenerMap.put(listenerId, list)
 		
-		printLog("Listener id: " +(listenerId).toString(), Loglevel.INFO)
 		listenerMap.get(listenerId).add(listener)
 		
 	static function addSpellEffect(unit u, int abilId, EventListener listener)
@@ -64,11 +65,13 @@ public function eventid.toIntId() returns int
 	return id
 			
 int array eventidToIndex
-int eventTypeCounter = 1
+int eventTypeCounter = 0
 
 function registerEventId(eventid evnt) returns int
-	eventidToIndex[evnt.getHandleId()] = eventTypeCounter
 	eventTypeCounter++
+	eventidToIndex[evnt.getHandleId()] = eventTypeCounter
+	if eventTypeCounter > MAX_EVENTS
+		error("too many event types, increase MAX_EVENTS constant")
 	return eventTypeCounter
 	
 function registerEventsForUnit(unit u)
@@ -103,4 +106,5 @@ init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function EventListener.generalEventCallback)
 	

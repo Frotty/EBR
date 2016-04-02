@@ -1,6 +1,7 @@
 package TerrainModder
 //The Terrainers appear as heroes, and which with the builders change tiles.
 import BuilderConstants
+import ChannelAbilityPreset
 import RegionData
 import Event
 import TerrainUtils
@@ -14,21 +15,29 @@ constant int ICE_ABILITY = 'A063'
 constant int REVICE_ABILITY = 'A00C'
 int array UNWALKABLE_MOD_ABILITY_ID
 
-constant int SMALL_BRUSH_ABILITY = 'A061'
-constant int BIG_BRUSH_ABILITY = 'A062'
+public int BRUSH_1_IDLE_ABILITY
+public int BRUSH_1_ACTIVE_ABILITY
+public int BRUSH_3_IDLE_ABILITY
+public int BRUSH_3_ACTIVE_ABILITY
+public int BRUSH_5_IDLE_ABILITY
+public int BRUSH_5_ACTIVE_ABILITY
+public int BRUSH_CIRCLE_ID
+public int BRUSH_RECT_ID
 
 trigger castTrigger
 
 
 public class TerrainModder
 	unit actor
-	boolean bigbrush = false
+	int brushsize = 0
+	TShape brushshape = TShape.RECT
 	int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 	construct(unit u)
 		actor = u
 		actor..setPos(hiddenX, hiddenY)..setPropWindow(0.)..setUserData(this castTo int)
-		
+		..addAbility(BRUSH_1_ACTIVE_ABILITY)..addAbility(BRUSH_3_IDLE_ABILITY)..addAbility(BRUSH_5_IDLE_ABILITY)
+		..addAbility(BRUSH_RECT_ID)
 		EventListener orderListener = () -> changeTerrain()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, orderListener)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, orderListener)
@@ -38,7 +47,6 @@ public class TerrainModder
 	function changeTerrain()
 		var orderPos = getOrderPos()
 		var oW = GetOrderTarget()
-		var size = bigbrush.toInt() + 1
 		
 		if oW != null
 			orderPos = oW.getPos()
@@ -52,20 +60,20 @@ public class TerrainModder
 		if rdata.isOwner(GetPlayerId(owner)) or name == "Frotty" or name == "FrottyZ"
 			if id == ICECONTROL
 				if modification == 1
-					orderPos.setTerrainType(REVICE, -1, size, 1)
+					orderPos.changeTerrain(REVICE, brushsize, brushshape, owner)
 				else
-					orderPos.setTerrainType(CONTROLLABLEICE, -1, size, 1 )
+					orderPos.changeTerrain(CONTROLLABLEICE, brushsize, brushshape, owner)
 			else if id == ICEUNCONTROL
-				orderPos.setTerrainType(UNCONTROLLABLEICE, -1, size, 1 )
+				orderPos.changeTerrain(UNCONTROLLABLEICE, brushsize, brushshape, owner)
 			else if id == WALKABLE
-				orderPos.setTerrainType(rectw[rdata.rtype], -1, size, 1 )
+				orderPos.changeTerrain(rectw[rdata.rtype], brushsize, brushshape, owner)
 			else if id == UNWALKABLE
 				if modification == 0
-					orderPos.setTerrainType(rectuw[rdata.rtype], -1, size, 1 )
+					orderPos.changeTerrain(rectuw[rdata.rtype], brushsize, brushshape, owner)
 				else if modification == 1
-					orderPos.setTerrainType(LAVA, -1, size, 1 )
+					orderPos.changeTerrain(LAVA, brushsize, brushshape, owner)
 				else if modification == 2
-					orderPos.setTerrainType(POISON, -1, size, 1 )
+					orderPos.changeTerrain(POISON, brushsize, brushshape, owner)
 		else
 			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
@@ -98,22 +106,157 @@ public class TerrainModder
 				UnitAddAbility(actor,ICE_ABILITY)
 				modification = 1
 				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
-				
-			case SMALL_BRUSH_ABILITY
-				UnitRemoveAbility(actor,SMALL_BRUSH_ABILITY)
-				UnitAddAbility(actor,BIG_BRUSH_ABILITY)
-				bigbrush = false
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "SmallBrush")
-			case BIG_BRUSH_ABILITY
-				UnitRemoveAbility(actor,BIG_BRUSH_ABILITY)
-				UnitAddAbility(actor,SMALL_BRUSH_ABILITY)
-				bigbrush = true
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "BigBrush")
+			case BRUSH_1_IDLE_ABILITY
+				removeAllActive()
+				actor..removeAbility(BRUSH_1_IDLE_ABILITY)
+				..addAbility(BRUSH_1_ACTIVE_ABILITY)
+				brushsize = 0
+			case BRUSH_3_IDLE_ABILITY
+				removeAllActive()
+				actor..removeAbility(BRUSH_3_IDLE_ABILITY)
+				..addAbility(BRUSH_3_ACTIVE_ABILITY)
+				brushsize = 1
+			case BRUSH_5_IDLE_ABILITY
+				removeAllActive()
+				actor..removeAbility(BRUSH_5_IDLE_ABILITY)
+				..addAbility(BRUSH_5_ACTIVE_ABILITY)
+				brushsize = 2
+			case BRUSH_RECT_ID
+				brushshape = TShape.CIRCLE
+				actor..removeAbility(BRUSH_RECT_ID)
+				..addAbility(BRUSH_CIRCLE_ID)
+			case BRUSH_CIRCLE_ID
+				brushshape = TShape.RECT
+				actor..removeAbility(BRUSH_CIRCLE_ID)
+				..addAbility(BRUSH_RECT_ID)
 			default
+			
+	function removeAllActive()
+		if actor.removeAbility(BRUSH_1_ACTIVE_ABILITY)
+			actor.addAbility(BRUSH_1_IDLE_ABILITY)
+		if actor.removeAbility(BRUSH_3_ACTIVE_ABILITY)
+			actor.addAbility(BRUSH_3_IDLE_ABILITY)
+		if actor.removeAbility(BRUSH_5_ACTIVE_ABILITY)
+			actor.addAbility(BRUSH_5_IDLE_ABILITY)
+			
+enum TShape
+	RECT
+	CIRCLE
+
+public function vec2.changeTerrain(int ttype, int size, TShape shape, player caster)
+	switch shape
+		case RECT
+			this.changeRect(ttype, size, caster)
+		case CIRCLE
+			this.changeCircle(ttype, size, caster)
+			
+			
+public function vec2.changeRect(int ttype, int size, player caster)
+	let half = (size*2) div 2
+	for i = -half to half
+		for j = -half to half
+			this.setTerrain(ttype, vec2(i * 128., j * 128.), caster)
 				
+public function vec2.changeCircle(int ttype, int size, player caster)
+	let half = (size*2) div 2
+	for i = -half to half
+		for j = -half to half
+			if i == 0 or j == 0
+				this.setTerrain(ttype, vec2(i * 128., j * 128.), caster)
+	if size > 1
+		this.changeRect(ttype, 1, caster)
+			
+public function vec2.setTerrain(int ttype, vec2 off, player caster)
+	var offset = this + off
+	offset.x = (offset.x / 128).round() * 128.
+	offset.y = (offset.y / 128).round() * 128.
+	if getRegionData(offset).isOwner(caster.getId())
+		offset.setTerrainType(ttype, -1, 1, 0)
 
 public function init_TerrainModder()
 	UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
 	UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
 	UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'
+	
+@objectgen public function genBrushAbils()
+	BRUSH_1_IDLE_ABILITY = ABIL_ID_GEN.next()
+	BRUSH_1_ACTIVE_ABILITY = ABIL_ID_GEN.next()
+	BRUSH_3_IDLE_ABILITY = ABIL_ID_GEN.next()
+	BRUSH_3_ACTIVE_ABILITY = ABIL_ID_GEN.next()
+	BRUSH_5_IDLE_ABILITY = ABIL_ID_GEN.next()
+	BRUSH_5_ACTIVE_ABILITY = ABIL_ID_GEN.next()
+	BRUSH_CIRCLE_ID = ABIL_ID_GEN.next()
+	BRUSH_RECT_ID = ABIL_ID_GEN.next()
+	
+	new ChannelAbilityPreset(BRUSH_1_IDLE_ABILITY, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("1x1 Brush Idle")
+	..presetIcon("BTN1x1inactive")
+	..presetHotkey("Y")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C291|rx|cffFF8C291 |rBrush Size [|cffFFCC00Y|r]")
+	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to select")
+	..presetButtonPosNormal(0, 2)
+	
+	new ChannelAbilityPreset(BRUSH_1_ACTIVE_ABILITY, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("1x1 Brush Active")
+	..presetIcon("BTN1x1active")
+	..presetHotkey("Y")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C291|rx|cffFF8C291 |rBrush Size |cffFFCC00Selected!")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(0, 2)
+	
+	new ChannelAbilityPreset(BRUSH_3_IDLE_ABILITY, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("3x3 Brush Idle")
+	..presetIcon("BTN3x3inactive")
+	..presetHotkey("X")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C293|rx|cffFF8C293 |rBrush Size [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to select")
+	..presetButtonPosNormal(1, 2)
+	
+	new ChannelAbilityPreset(BRUSH_3_ACTIVE_ABILITY, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("3x3 Brush Active")
+	..presetIcon("BTN3x3active.blp")
+	..presetHotkey("X")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C293|rx|cffFF8C293 |rBrush Size |cffFFCC00Selected!")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(1, 2)
+	
+	new ChannelAbilityPreset(BRUSH_5_IDLE_ABILITY, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("5x5 Brush Idle")
+	..presetIcon("BTN5x5inactive.blp")
+	..presetHotkey("C")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C295|rx|cffFF8C295 |rBrush Size [|cffFFCC00C|r]")
+	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to select")
+	..presetButtonPosNormal(2, 2)
+	
+	new ChannelAbilityPreset(BRUSH_5_ACTIVE_ABILITY, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("3x3 Brush Active")
+	..presetIcon("BTN5x5active.blp")
+	..presetHotkey("C")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C295|rx|cffFF8C295 |rBrush Size |cffFFCC00Selected!")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(2, 2)
+	
+	new ChannelAbilityPreset(BRUSH_RECT_ID, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("Rectengular Brush Shape")
+	..presetIcon("BTNrectangle")
+	..presetHotkey("A")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C29Rectangular |cffF7F7F7brush |cffFFCC00selected")
+	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to change to circular brush")
+	..presetButtonPosNormal(0, 1)
+	
+	new ChannelAbilityPreset(BRUSH_CIRCLE_ID, 1, true)
+	..makeUnitSpell(0,0)
+	..setName("Circular Brush Shape")
+	..presetIcon("BTNcircle")
+	..presetHotkey("A")
+	..presetTooltipNormal((int lvl) -> "|cffFF8C29Circular |cffF7F7F7brush |cffFFCC00selected")
+	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to change to rectangular brush")
+	..presetButtonPosNormal(0, 1)
 	

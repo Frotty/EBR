@@ -181,7 +181,7 @@ public class Trap extends StaticBaseObject
 			case INCREASE_VALUE_ABIL
 				switch a
 					case ABIL.KNOCK
-						if value >= 50
+						if value >= 100
 							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value += 5

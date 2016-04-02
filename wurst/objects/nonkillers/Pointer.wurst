@@ -3,6 +3,7 @@ import Entity
 import Escaper
 import Texttag
 import Preloader
+import SetupObject
 
 constant int POINTER_ID = 'h01Q'
 
@@ -12,31 +13,27 @@ constant int START_ID = 'A031'
 constant int STOP_ID = 'A032'
 
 
-public class Pointer extends UnitEntity
+public class Pointer extends DynamicSetupObject
 	real turnspeed = 2.
 	real angl = 0.
 	boolean turning
 	
-	unit setup
-	
-	trigger trig
-	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.))
-		actor.addAbility(LOCUST_ID)
-		setup = CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.)
-		setup.addAbility('Agho')
-		trig = CreateTrigger()
-		trig.registerUnitInRangeSource(setup, 64., null)
-		trig.addAction(function Pointer.turnUnit)
+		super(pos.toVec3(), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.), 64., function Pointer.turnUnit)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
 		pos = vec3(setup.getX(), setup.getY(), 0.)
-		actor.setPos(pos.x, pos.y)
-		actor.setFacing(angl)
+		
 		if turning
 			angl += turnspeed
+			angl = angl % 360
+		actor.setPos(pos.x, pos.y)
+		actor.setFacing(angl)
+		
+	override function setPos(vec3 pos)
+		super.setPos(pos)
+		setup.setPos(pos.toVec2())
 			
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -78,12 +75,6 @@ public class Pointer extends UnitEntity
 			Pointer obj = u.getUserData() castTo Pointer
 			obj.angl = facing
 			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
-		
-				
-	ondestroy
-		actor.remove()
-		setup.remove()
-		trig.destr()
 		
 function getSelectedPointers(player p) returns group
 	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(POINTER_ID), null)

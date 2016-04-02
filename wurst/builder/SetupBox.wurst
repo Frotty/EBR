@@ -3,8 +3,6 @@ import Entity
 import RegionData
 import GameConstants
 import Escaper
-import Builder
-import PlayerData
 
 constant int SETUP_BOX = 'n00A'
 constant int ICEI_ID = 'A057'
@@ -100,20 +98,20 @@ public class SetupBox
 				GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
 				for u in ENUM_GROUP
 					var data = u.getEntity()
-					if not data instanceof Escaper and not data instanceof Builder and u != actor and data != null
+					if not data instanceof Escaper and u != actor and data != null
 						data.terminate()
 			case BOSS_MODE_ID
-				if pData[owner.getId()].XP > 00 //500
-					rdata.isBossRegion = true
-					actor.removeAbility(BOSS_MODE_ID)
-					DisplayTextToPlayer( owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
-					DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",actor.getX(),actor.getY() ))
-					let b = pData[owner.getId()].builder
-					SelectUnitForPlayerSingle(b.actor, owner)
-					GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
-					b.setBossMenu(rdata)
-				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
+//				if pData[owner.getId()].XP > 00 //500
+//					rdata.isBossRegion = true
+//					actor.removeAbility(BOSS_MODE_ID)
+//					DisplayTextToPlayer( owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
+//					DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",actor.getX(),actor.getY() ))
+//					let b = pData[owner.getId()].builder
+//					SelectUnitForPlayerSingle(b.actor, owner)
+//					GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
+//					b.setBossMenu(rdata)
+//				else
+//					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 					
 		return false
 

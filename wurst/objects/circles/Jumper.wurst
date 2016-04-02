@@ -6,7 +6,6 @@ import Texttag
 import SoundUtils
 import Image
 import TerrainBlocker
-
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
 
@@ -26,6 +25,8 @@ function filter() returns boolean
 	return GetFilterUnit().getTypeId() == JUMPER_ID
 
 public class Jumper extends StaticBaseObject
+	private image array[5] goos
+	private int goocounter = 0
 	JumpMode mode = JumpMode.FORCED
 	real speed = 10.
 	
@@ -37,11 +38,11 @@ public class Jumper extends StaticBaseObject
 		let u2 = ENUM_GROUP.next()
 		if u != null and u2 != null
 			snd.play()
-			actor.addAbility(SPECIAL_ID)
 			if u == actor
-				destroy (u2.getUserData() castTo Jumper)
+				u2.addAbility(SPECIAL_ID)
 			else
-				destroy (u.getUserData() castTo Jumper)
+				u.addAbility(SPECIAL_ID)
+			terminate()
 		ENUM_GROUP.clear()
 		
 	static function inRange()
@@ -57,10 +58,11 @@ public class Jumper extends StaticBaseObject
 					edata.setTarget(jdata.getRallyPoint(), jdata.speed)
 					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
 				case JumpMode.UNFORCED
-					edata.addVel(vec3(0,0, jdata.speed))
+					edata.addVel(vec3(0,0, jdata.speed) + edata.slideVelocity)
+					edata.sliding = false
+					edata.slideVelocity = vec3(0,0,0)
 					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
 					
-
 				
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -80,8 +82,17 @@ public class Jumper extends StaticBaseObject
 					speed += 1.
 					createTTEx(pos, vec2(0,0.05), "Speed: " + speed.toString(), 10,  2., colorA(255,255,255,0), owner  )
 			case SPECIAL_ID
-				let x = (GetSpellTargetX()/128).round()
-				let y = (GetSpellTargetY()/128).round()
-				createImage("textures\\blugoo.blp", vec2(x*128., y*128.), 128, 128).show()
-				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.GOO castTo int).val )
+				if goocounter < 5
+					let x = (GetSpellTargetX()/128).round()
+					let y = (GetSpellTargetY()/128).round()
+					let goo = createImage("textures\\blugoo.blp", vec2(x*128., y*128.), 128, 128)
+					..show()
+					goos[goocounter] = goo
+					goocounter++
+					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.GOO castTo int).val )
+				
+	ondestroy
+		for i = 0 to 4
+			if goos[i] != null
+				goos[i].remove()
 		

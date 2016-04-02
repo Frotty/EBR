@@ -5,6 +5,7 @@ import GameConstants
 import RegionData
 import Builder
 import Startmazes
+import EscaperClasses
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
@@ -62,6 +63,9 @@ public class RevivePoint extends StaticSetupObject
 					if not pData[es.owner.getId()].camLock
 						if GetLocalPlayer() == es.owner
 							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
+					if es instanceof HolyEscaper
+						if (es castTo HolyEscaper).revivetomb != null
+							(es castTo HolyEscaper).revivetomb.remove()
 	
 			if currentRevivepoint.distanceTo(obj.pos.toVec2()) > 512
 				let esc = pData[u.getOwner().getId()]

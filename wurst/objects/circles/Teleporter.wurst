@@ -49,8 +49,8 @@ public class Teleporter extends StaticBaseObject
 					if eruza != null
 						eruza.reached = false
 				ENUM_GROUP.clear()
-		else if obj.mode == 1  
-			if e instanceof EscaperKiller or e instanceof TeleporterTarget or e instanceof Pointer
+		else if obj.mode == 1 
+			if e instanceof EscaperKiller
 				dyn = e castTo DynamicSetupObject
 				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )

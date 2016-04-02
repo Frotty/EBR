@@ -1,15 +1,12 @@
 package Builder
-import initlater Entity
-import initlater PlayerData
-import initlater BuilderConstants
-import initlater RegionData
-import initlater Key
-import initlater SetupBox
-import initlater Boss
-import initlater BossDamager
-import initlater BossSpellTarget
-import initlater Weapon
+import Entity
+import TimerUtils
+import BuilderConstants
+import RegionData
+import Key
+import SetupBox
 import initlater InstantBuild
+import Tome
 
 trigger swapTrigger
 trigger itemTrigger
@@ -85,42 +82,42 @@ public class Builder extends UnitEntity
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case TOME_SPELL_ID
 					if getRegionData(tpos).isOwner(builder.owner.getId())
-						createItem(TOME_ID, tpos)
+						new Tome(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case BM_BOSS_ID
-					var rdata = getRegionData(tpos)
-					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
-						if not rdata.hasBoss
-							new Boss(builder.owner, tpos, boss[rdata.rtype])
-							rdata.hasBoss = true
-						else
-							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				case BM_SPELLTARGET_ID
-					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
-						new SpellTarget(tpos, builder.owner)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				case BM_DAMAGER_ID
-					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
-						new BossDamager(tpos, builder.owner)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				case BM_WEAPON_ID
-					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
-						new Weapon(tpos, builder.owner)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-				case GRIDCLICK_ID
-					PlayerData pd = pData[builder.owner.getId()]
-					if pd.gridClickActivated
-						pd.gridClickActivated = false
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff9C0808OFF|r!") 
-					else
-						pd.gridClickActivated = true
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff08B552ON|r!") 
+//				case BM_BOSS_ID
+//					var rdata = getRegionData(tpos)
+//					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
+//						if not rdata.hasBoss
+//							new Boss(builder.owner, tpos, boss[rdata.rtype])
+//							rdata.hasBoss = true
+//						else
+//							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
+//					else
+//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+//				case BM_SPELLTARGET_ID
+//					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
+//						new SpellTarget(tpos, builder.owner)
+//					else
+//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+//				case BM_DAMAGER_ID
+//					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
+//						new BossDamager(tpos, builder.owner)
+//					else
+//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+//				case BM_WEAPON_ID
+//					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
+//						new Weapon(tpos, builder.owner)
+//					else
+//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+//				case GRIDCLICK_ID
+//					PlayerData pd = pData[builder.owner.getId()]
+//					if pd.gridClickActivated
+//						pd.gridClickActivated = false
+//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff9C0808OFF|r!") 
+//					else
+//						pd.gridClickActivated = true
+//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff08B552ON|r!") 
 				default
 					for i = 0 to 9
 						if MUSIC_IDS[i] == id
@@ -210,13 +207,6 @@ public function init_Builder()
 	orderTrigger.addAction(function Builder.onOrder)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
-	
-	for pd in playerlist
-		if pd.id > 7
-			pd.builder = new Builder( pd.p )
-			UnitAddItemById(pd.builder.actor,'I001')
-			UnitAddItemById(pd.builder.actor,'I002')
-			UnitAddItemById(pd.builder.actor,'I003')	
 	
 	MUSIC_IDS[0] = 'A03Q' //Credits
 	MUSIC_PATHS[0] = "Sound\\Music\\mp3Music\\Credits.mp3"

@@ -36,7 +36,7 @@ public class StaticBaseObject extends UnitEntity
 		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 
 	static function isProper() returns boolean
-		return GetTriggerUnit().getFlyHeight() < 16
+		return GetTriggerUnit().getFlyHeight() < 22
 
 	static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
 		let u			= GetOrderedUnit()
@@ -57,6 +57,10 @@ public class StaticBaseObject extends UnitEntity
 					obj.rallyUnit = (data castTo DynamicSetupObject).actor
 				else
 					obj.rallyUnit = target
+					
+	function setRallyPoint(vec2 pos)
+		rallyPoint = pos.toVec3()
+		rallyUnit = null
 
 	function getRallyPoint() returns vec3
 		if rallyUnit == null

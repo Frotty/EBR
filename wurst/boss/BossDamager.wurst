@@ -1,11 +1,11 @@
 package BossDamager
 
-import initlater Boss
-import initlater Escaper
-import initlater RegionData
-import initlater BaseObject
-import initlater Texttag
-import initlater TerrainBlocker
+import Boss
+import Escaper
+import RegionData
+import BaseObject
+import Texttag
+import TerrainBlocker
 
 constant int DAMAGER_ID = 'n01O'
 constant int DMG_INC_ID = 'A07K'

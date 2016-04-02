@@ -11,6 +11,7 @@ import Texttag
 import Pointer
 import TerrainUtils
 import Region
+import Unitcreator
 
 constant int 	EXECUTER_ID   = 'n01D'
 constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
@@ -35,6 +36,7 @@ public enum Amode
 	CREATEUNIT
 	MOVEUNIT
 	CHANGETERRAIN
+	TOGGLEUNITPRODUCER
 
 	
 enum ActionUnit
@@ -159,6 +161,8 @@ public class Executer extends StaticBaseObject
 				moveUnit()
 			case Amode.CREATEUNIT
 				createUnit()
+			case Amode.TOGGLEUNITPRODUCER
+				toggleUnitProducer()
 			default
 				error("ExecuterAction")
 					
@@ -197,7 +201,15 @@ public class Executer extends StaticBaseObject
 		else
 			IssuePointOrder(unitToMove, moveOrderString, rallyPos.x, rallyPos.y)
 	
-
+	function toggleUnitProducer()
+		let ru = getRallyUnit()
+		if ru != null
+			let data = ru.getEntity()
+			if data instanceof UnitCreator
+				let uc = data castTo UnitCreator
+				uc.active = not uc.active
+				return
+		printLog(owner, Loglevel.WARNING, "Executer: No UnitCreator selected")
 			
 	function createUnit()
 		let rallyPos = getRallyPoint()
@@ -250,6 +262,7 @@ public class Executer extends StaticBaseObject
 		UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitAddAbility(actor,SPAWN_UNIT_ID)
+		UnitAddAbility(actor,START_UC_ID)
 		
 	function addActionAbilsReversable()
 		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -270,6 +283,7 @@ public class Executer extends StaticBaseObject
 		UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitRemoveAbility(actor,SPAWN_UNIT_ID)
+		UnitRemoveAbility(actor,START_UC_ID)
 		
 	function addTerrainAdjuster()
 		UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
@@ -290,7 +304,7 @@ public class Executer extends StaticBaseObject
 		if eventMode == Emode.PRESSUREPLATE
 			if invis
 				RemoveDestructable(dummy)
-				printLog("meh meh destructable removed", Loglevel.DEBUG)
+				printLog(Loglevel.DEBUG, "meh meh destructable removed")
 			else
 				dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 				SetDestructableAnimation(dummy, "death")
@@ -340,7 +354,7 @@ public class Executer extends StaticBaseObject
 		return false
 
 	function onCast() returns boolean
-		printLog("Executer casts", Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "Executer casts")
 		
 		let id = GetSpellAbilityId()
 		switch id
@@ -429,6 +443,9 @@ public class Executer extends StaticBaseObject
 				actionUnit = ActionUnit.TANK
 				removeActionAbils()
 				UnitAddAbility(actor,TRAIN_BOOK_ABIL)
+			case START_UC_ID
+				actionMode = Amode.TOGGLEUNITPRODUCER
+				removeActionAbils()
 			case TRAIN_BK_ABIL
 					actionUnit = ActionUnit.BIGKILLER
 			case TRAIN_SK_ABIL
@@ -455,7 +472,7 @@ public class Executer extends StaticBaseObject
 			case MOVE_UNIT_STOP_ABIL
 				moveOrderString = "stop"
 			case MOVE_UNIT_SELECT_ABIL
-				printLog(GetUnitTypeId(GetSpellTargetUnit()).toString(), Loglevel.DEBUG)
+				printLog(Loglevel.DEBUG, GetUnitTypeId(GetSpellTargetUnit()).toString())
 				unitToMove = GetSpellTargetUnit()
 			
 			case TERRAIN_INCREASE_H_ABIL
@@ -517,6 +534,7 @@ constant int INVIS_ID = 'A005'
 constant int TRAIN_BOOK_ABIL = 'A042'
 
 constant int SPAWN_UNIT_ID = 'A06S'
+constant int START_UC_ID = 'A07P'
 constant int TRAIN_BK_ABIL = 'A045'
 constant int TRAIN_SK_ABIL = 'A046'
 constant int TRAIN_BRK_ABIL = 'A048'

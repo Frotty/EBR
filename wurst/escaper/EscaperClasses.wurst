@@ -66,6 +66,10 @@ public class StrongEscaper extends Escaper
 				invulnerable = false
 				DestroyEffect(shieldeffect)
 				
+	override function kill()
+		if not invulnerable
+			super.kill()
+				
 				
 	override function onCast(int id)
 		super.onCast(id)

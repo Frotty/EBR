@@ -1,16 +1,15 @@
 package UnitProducer
-import initlater  BaseObject
-import initlater  SetupObject
-import initlater  RegionData
-import initlater  EscaperKiller
+import BaseObject
+import RegionData
+import EscaperKiller
 import initlater  PlayerData
-import initlater  BuilderConstants
-import initlater  TeleporterTarget
-import initlater  BomberTarget
-import initlater  TextureChanger
-import initlater  Bomber
-import initlater  Pointer
-import initlater  Knockbacker
+import BuilderConstants
+import TeleporterTarget
+import BomberTarget
+import TextureChanger
+import Bomber
+import Pointer
+import Knockbacker
 
 constant int ID = 'H00A'
 

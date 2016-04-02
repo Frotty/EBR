@@ -71,16 +71,16 @@ public class PlayerData //just the player's (constant) stuff
 				this.createNewPlayerFile()	
 			else if lastExpGain < minutes
 				lastExpGain = minutes
-				printLog("add current xp:" + XP.toString(), Loglevel.DEBUG)
+				printLog(Loglevel.DEBUG, "add current xp:" + XP.toString())
 				XP += amount
-				printLog("add new xp:" + XP.toString(), Loglevel.DEBUG)
+				printLog(Loglevel.DEBUG, "add new xp:" + XP.toString())
 				this.createNewPlayerFile()
 			updateRank()
 	
 	function setXp(int amount)
-		printLog("set current xp:" + XP.toString(), Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "set current xp:" + XP.toString())
 		XP = amount
-		printLog("set new xp:" + XP.toString(), Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "set new xp:" + XP.toString())
 	
 	function updateRank()
 		int i = 0
@@ -234,10 +234,16 @@ function initPlayers()
 	GetExpiredTimer().release()
 	for pd in playerlist
 		if pd.id > 7
-			pd.tmod = new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+			new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
 			new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
 			new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
 			new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+	for pd in playerlist
+		if pd.id > 7
+			pd.builder = new Builder( pd.p )
+			UnitAddItemById(pd.builder.actor,'I001')
+			UnitAddItemById(pd.builder.actor,'I002')
+			UnitAddItemById(pd.builder.actor,'I003')
    
 public int minutes = 0
 public int seconds = 0

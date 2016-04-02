@@ -1,0 +1,13 @@
+ 	
+** File Information **
+File Flags:         80000200 (MPQ_FILE_EXISTS | MPQ_FILE_COMPRESS)
+File Size:          000000C6
+Cmpr Size:          0000005D
+Data Sector Count:  00000001
+File Sector Size:   00001000
+
+** Sector Offset Table **
+00000000  00000008 0000005D 
+
+** File Sectors **
+00000008  02 78 DA 2B 4F 2C 32 CE 4D 2C D0 2B 37 4E E5 2A 87 B3 33 11 EC 92 74 04 3B B9 04 49 BC 18 CE 2E CE 48 81 B1 7D 81 DC A4 9C 02 B8 54 6E 2E 82 5D 5E 90 0B 67 A7 E4 E7 C3 D8 A1 79 99 25 C5 C8 02 

@@ -13,12 +13,14 @@ public class Boots extends ItemObject
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
 		
-	function pickedUp(Escaper holder)
+	override function onUse(Escaper user)
+		
+	override function onPickup(Escaper holder)
 		picked = true
 		this.holder = holder
 		setup.hide()
 		
-	function dropped()
+	override function onDrop(Escaper e)
 		picked = false
 		holder = null
 		setup.setXY(pos.toVec2())
@@ -29,9 +31,7 @@ public class Boots extends ItemObject
 	override function update()
 		
 	ondestroy
-		dropTrig.disable()
 		actorItem.remove()
-		dropTrig.enable()
 		holder = null
 		setup.remove()
 	

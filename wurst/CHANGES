@@ -1,13 +1,25 @@
+[0.84a]
+[*] added Executer-Action "Start UnitCreator"
+[*] added UnitCreator Knockbacker unittype
+[*] added Circular brush for terrian modifiers
+[*] added 3rd brush size 5x5 and new selection mechanic
+[*] fixed Tracks no longer affect flying escapers
+[*] fixed Glaive and Pointer not being teleported and removed properly
+[*] fixed Terrain brushes changing terrain over border
+[*] fixed Map not being playable on ENT, MMH and other old hostbots
+[*] fixed Image leak
+
 [0.83n]
-[*] Update to StdLib v2
-[*] EventHandling switched to EventListener
-[*] Escaper Hotkeys fixed
+[*] improved now using StdLib v2
+[*] improved EventHandling
+[*] fixed Escaper Hotkeys
+[*] fixed Jumper Hotkeys
+[*] fixed clearing tome leaks
 
 [0.83m]
+[*] improved measures to reduce setup-separation (powernodes fixed)
 [*] fixed removing object resetting camera
 [*] fixed effect leak on destroy
-[*] improved measures to reduce setup-separation (powernodex fixed)
-
 
 [0.83k]
 [*] fixed terrainblocker removal

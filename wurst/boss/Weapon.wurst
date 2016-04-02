@@ -1,11 +1,11 @@
 package Weapon
-import initlater ItemObject
-import initlater Escaper
-import initlater Boss
-import initlater Entity
-import initlater Projectile
-import initlater Wall
-import initlater Fx
+import ItemObject
+import Escaper
+import Boss
+import Entity
+import Projectile
+import Wall
+import Fx
 
 constant int NEXT_ID = 'A07D'
 constant int PREW_ID = 'A07E'
@@ -32,6 +32,8 @@ public class Weapon extends ItemObject
 		originalowner = owner
 //		setup.registerCastEvent(Condition(function Weapon.onCast))
 		
+	override function onPickup(Escaper e)
+	
 	function pickedUp(Escaper holder)
 		picked = true
 		owner = holder.owner
@@ -42,7 +44,7 @@ public class Weapon extends ItemObject
 			holder.actor.addAbility(ATTACK_RANGED_ID)
 		setup.hide()
 		
-	function dropped()
+	override function onDrop(Escaper e)
 		picked = false
 		if weapon[wpid].atype == ATTACK_TYPE.MELEE
 			holder.actor.removeAbility(ATTACK_MELEE_ID)
@@ -54,7 +56,8 @@ public class Weapon extends ItemObject
 		setup.show()
 		actorItem = CreateItem( weapon[wpid].itemID, pos.x, pos.y )
 		actorItem.setUserData(this castTo int)
-
+	
+	override function onUse(Escaper e)
 		
 	override function update()
 		if holder != null
@@ -88,9 +91,7 @@ public class Weapon extends ItemObject
 		new WeaponMissile(start, vec2(targetx,targety),owner, wpid)
 		
 	ondestroy
-		dropTrig.disable()
 		actorItem.remove()
-		dropTrig.enable()
 		holder = null
 		setup.remove()
 	

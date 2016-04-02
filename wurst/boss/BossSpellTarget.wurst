@@ -1,13 +1,9 @@
 package BossSpellTarget
-import initlater BaseObject
-import initlater SetupObject
-import initlater Preloader
-import initlater InstantDummyCaster
-import initlater Fx
-import initlater MapBounds
-import initlater Escaper
-import initlater Boss
-import initlater HomingProjectile
+import BaseObject
+import SetupObject
+import InstantDummyCaster
+import Escaper
+import HomingProjectile
 import Assets
 
 public constant int SPELLTARGET_ID = 'u00F'
@@ -53,20 +49,19 @@ public class SpellTarget extends DynamicSetupObject
 	function castSpell(int spell_id, string spell_string)
 		InstantDummyCaster.castPoint(DUMMY_PLAYER, spell_id, 1, spell_string, pos.toVec2())
 
-	function castAOE(Boss root)
-		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y ))
-		print("fancy")
-		GroupEnumUnitsInRange(ENUM_GROUP,pos.x, pos.y, aoe_spell[root.aoe_id].aoe, null)
-		for u in ENUM_GROUP
-			var e = u.getEntity()
-			if e instanceof Escaper
-				var es = e castTo Escaper
-				if not es.flying
-					actor.damageTarget(u,aoe_spell[root.aoe_id].damage)
-		GroupClear(ENUM_GROUP)
-	
-	function castMissile(Boss root)
-		new BossMissile(root.actor.getPos3(),root.owner,this,root.missile_id)
+//	function castAOE(Boss root)
+//		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y ))
+//		GroupEnumUnitsInRange(ENUM_GROUP,pos.x, pos.y, aoe_spell[root.aoe_id].aoe, null)
+//		for u in ENUM_GROUP
+//			var e = u.getEntity()
+//			if e instanceof Escaper
+//				var es = e castTo Escaper
+//				if not es.flying
+//					actor.damageTarget(u,aoe_spell[root.aoe_id].damage)
+//		GroupClear(ENUM_GROUP)
+//	
+//	function castMissile(Boss root)
+//		new BossMissile(root.actor.getPos3(),root.owner,this,root.missile_id)
 	
 public class BossMissile extends HomingProjectile
 	int id

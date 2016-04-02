@@ -2,17 +2,11 @@ package Startmazes
 import initlater Revivepoint
 import initlater Door
 import initlater Obstacle
-import initlater Key
-import initlater EscaperKiller
 import initlater Teleporter
-import initlater Executer
-import BuilderConstants
-import initlater Unitcreator
 import initlater UnitRemover
-import initlater Spinner
-import initlater Entity
+import Entity
 import initlater RegionData
-import initlater Texttag
+import Texttag
 import initlater Startmaze
 import initlater FirstSnow
 import initlater SecondDesert

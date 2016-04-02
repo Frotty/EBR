@@ -4,10 +4,10 @@ import EscaperKiller
 import RegionData
 import Texttag
 import Pointer
-
+import Knockbacker
+import ObjectIds
 
 constant int 	UNITCREATOR_ID   = 'n006'
-
 
 public class UnitCreator extends StaticBaseObject
 	real interval = 5.
@@ -60,10 +60,13 @@ public class UnitCreator extends StaticBaseObject
 				var p = new Pointer(obj.pos.toVec2(), obj.owner)
 				p.angl = angl.degrees()
 				IssuePointOrder(p.setup, "move" , rallyPos.x,rallyPos.y)
+			case KNOCKER_ID
+				var p = new Knockbacker(obj.pos.toVec2(), obj.owner)
+				p.actor.setFacing(angl.degrees())
+				IssuePointOrder(p.setup, "move" , rallyPos.x,rallyPos.y)
 		
 	function onCast()
 		let id = GetSpellAbilityId()
-		
 		switch id 
 			case INCREASE_INTERVAL_ABIL
 				if interval >= 10
@@ -101,7 +104,8 @@ public class UnitCreator extends StaticBaseObject
 				spawnUnitType = 'h001'
 			case 'A04B' // Chicken
 				spawnUnitType = 'u006'
-		
+			case 'A07R'
+				spawnUnitType = KNOCKER_ID
 	
 int INCREASE_INTERVAL_ABIL = 'A01P'
 int DECREASE_INTERVAL_ABIL = 'A01R'

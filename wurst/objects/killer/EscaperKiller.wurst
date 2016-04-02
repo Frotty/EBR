@@ -15,6 +15,9 @@ public class EscaperKiller extends DynamicSetupObject
 
 	construct( unit actor, unit setup, real radius )
 		super( vec3(actor.getX(), actor.getY(), 0), actor, setup, radius, function EscaperKiller.onInRangeEvent ) 
+	
+	construct( unit actor, real radius )
+		super( actor.getPos3Zero(), actor, createUnit(actor.getOwner(), actor.getTypeId(), actor.getPos(), actor.getFacingAngle()), radius, function EscaperKiller.onInRangeEvent) 
 		
 	static function onInRangeEvent()
 		var ent = GetTriggerUnit().getEntity()

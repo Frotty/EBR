@@ -87,6 +87,10 @@ function onCommandChat()
 					pd2.addXp(10000, true)
 				else	
 					pd.addXp(10000, true)
+		case "d"
+			var debuglvl = str.substring(str.indexOf(" ") + 1, str.length()).toInt() castTo Loglevel
+			DEBUG_LEVEL = debuglvl
+			printTimedToPlayer("set debuglvl to: " + (DEBUG_LEVEL castTo int).toString(), 15, p)
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode")

@@ -32,7 +32,7 @@ public class Tracks extends UnitEntity
 		
 	override function update()
 		for escaper in escapers
-			if ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
+			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
 				escaper.trackVelocity += vec3(Cos((angl+90) * DEGTORAD) * speed, Sin((angl+90) * DEGTORAD) * speed, 0. )

@@ -132,7 +132,7 @@ public class Door extends StaticSetupObject
 				SetUnitAnimation( actor, "Death Alternate" )
 				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
 			else
-				printLog("yäs " + GetPlayerId(owner).toString(), Loglevel.DEBUG)
+				printLog(Loglevel.DEBUG, "yes " + GetPlayerId(owner).toString())
 				actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
 				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
 		colorize()
@@ -141,8 +141,7 @@ public class Door extends StaticSetupObject
 		pathing.remove()
 
 	function onCast() returns boolean
-		printLog("casted", Loglevel.DEBUG)
-		printLog(pos.toString(), Loglevel.DEBUG)
+		printLog(Loglevel.DEBUG, "casted")
 		int id = GetSpellAbilityId()
 		switch id 
 			case DOOROPEN_ABILITY_ID

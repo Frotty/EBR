@@ -67,45 +67,47 @@ public class TextureChanger extends DynamicSetupObject
 							
 	
 	function onCast()
-			let i = GetSpellAbilityId()
-			
-			switch i
-				case TERRAIN_INC_H_ID
-					if sizeX < 3
-						sizeX ++
-					else
-						createTTEx(pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorA(255,255,255,0), owner )
-				case TERRAIN_INC_V_ID
-					if sizeY < 3
-						sizeY ++
-					else
-						createTTEx(pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorA(255,255,255,0), owner )
-				case TERRAIN_DEC_H_ID
-					if sizeX > 0
-						sizeX --
-					else
-						createTTEx(pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorA(255,255,255,0), owner )
-				case TERRAIN_DEC_V_ID
-					if sizeY > 0
-						sizeY --
-					else
-						createTTEx(pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorA(255,255,255,0), owner )
-				case TERRAIN_I_WALKABLE_ID
-					innerTile = '0000'
-				case TERRAIN_I_UNWALKABLE_ID
-					innerTile = '0001'
-				case TERRAIN_I_ICE_ID
-					innerTile = CONTROLLABLEICE
-				case TERRAIN_I_UNICE_ID
-					innerTile = UNCONTROLLABLEICE
-				case TERRAIN_O_WALKABLE_ID
-					outerTile = '0000'
-				case TERRAIN_O_UNWALKABLE_ID
-					outerTile = '0001'
-				case TERRAIN_O_ICE_ID
-					outerTile = CONTROLLABLEICE
-				case TERRAIN_O_UNICE_ID
-					outerTile = UNCONTROLLABLEICE
+		let i = GetSpellAbilityId()
+		
+		switch i
+			case TERRAIN_INC_H_ID
+				if sizeX < 3
+					sizeX ++
+				else
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorA(255,255,255,0), owner )
+			case TERRAIN_INC_V_ID
+				if sizeY < 3
+					sizeY ++
+				else
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorA(255,255,255,0), owner )
+			case TERRAIN_DEC_H_ID
+				if sizeX > 0
+					sizeX --
+				else
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorA(255,255,255,0), owner )
+			case TERRAIN_DEC_V_ID
+				if sizeY > 0
+					sizeY --
+				else
+					createTTEx(pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorA(255,255,255,0), owner )
+			case TERRAIN_I_WALKABLE_ID
+				innerTile = '0000'
+			case TERRAIN_I_UNWALKABLE_ID
+				innerTile = '0001'
+			case TERRAIN_I_ICE_ID
+				innerTile = CONTROLLABLEICE
+			case TERRAIN_I_UNICE_ID
+				innerTile = UNCONTROLLABLEICE
+			case TERRAIN_O_WALKABLE_ID
+				outerTile = '0000'
+			case TERRAIN_O_UNWALKABLE_ID
+				outerTile = '0001'
+			case TERRAIN_O_ICE_ID
+				outerTile = CONTROLLABLEICE
+			case TERRAIN_O_UNICE_ID
+				outerTile = UNCONTROLLABLEICE
+		mp.x = -1
+		update()
 					
 			
 init

@@ -1,0 +1,6 @@
+package Serializable
+
+public interface Serializable
+	function serialize() returns string
+	
+	function deserialize(string object) returns Serializable

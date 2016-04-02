@@ -1,12 +1,11 @@
 package Boss
-import initlater Entity
-import initlater SetupObject
-import initlater PlayerData
-import initlater Escaper
-import initlater Preloader
-import initlater BossSpellTarget
-import initlater RegionData
-import initlater Texttag
+import Entity
+import SetupObject
+import PlayerData
+import Escaper
+import BossSpellTarget
+import RegionData
+import Texttag
 
 constant int BOSS_TOMB_ID = 'n01P'
 constant int HP_UP_ID = 'A06U'
@@ -97,12 +96,12 @@ public class Boss extends DynamicSetupObject
 					var g = boss.getSpellTargets(SpellType.AOE)
 					for unit u in g
 						var spt = u.getUserData() castTo SpellTarget
-						spt.castAOE(boss)
+//						spt.castAOE(boss)
 				case MISSILE_SPELL_ID
 					var g = boss.getSpellTargets(SpellType.MISSILE)
 					for unit u in g
 						var spt = u.getUserData() castTo SpellTarget
-						spt.castMissile(boss)
+//						spt.castMissile(boss)
 				case REVIVE_ID
 					boss.revive()
 		return false

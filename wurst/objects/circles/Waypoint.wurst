@@ -29,6 +29,7 @@ public class Waypoint extends StaticBaseObject
 	construct( vec2 pos, player owner )
 		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		printLog(Loglevel.DEBUG, "On create waypoint")
 		
 	static function orderMove()
 		unit source = GetTriggeringTrigger().getSource()

@@ -1,11 +1,14 @@
 package Entity
 import LinkedListModule
+import public Serializable
 import TerrainUtils
 import PhysicsConstants
 import Fx
+import public TimerUtils
 import public HashMap
 import public LinkedList
 import public Event
+import public Basics
 
 public function unit.abortOrder() returns boolean
 	if IsUnitPaused(this)
@@ -26,7 +29,7 @@ public function unit.setEntity(Entity e)
 	this.setUserData(e castTo int)
 
 /** Base Entity Class  */
-public abstract class Entity
+public abstract class Entity implements Serializable
 	use LinkedListModule
 	
 	/** 3d vector position */
@@ -84,6 +87,7 @@ public abstract class Entity
 	
 	function addVel( vec3 vel )
 		this.vel += vel
+		active = true
 		
 	function setTarget( vec3 tpos, real speed )
 		var t = pos.distanceTo2d(tpos) / speed
@@ -101,6 +105,12 @@ public abstract class Entity
 		
 	/** This function is called every ANIMATION_PERIOD tick if the Entity is active */
 	abstract function update()
+	
+	override function serialize() returns string
+		return pos.toString()
+		
+	override function deserialize(string scode) returns Serializable
+		return null
 	
 abstract public class UnitEntity extends Entity
 	unit actor

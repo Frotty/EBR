@@ -8,7 +8,7 @@ public integer array expBounds
 public string array ranks
 public constant int cplayerCount = 14
 
-public constant string MAP_VER = "EBR 0.83"
+public constant string MAP_VER = "EBR 0.84"
 
 public enum COLOR
 	WHITE

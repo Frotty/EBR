@@ -24,7 +24,8 @@ import CongaLineHead
 import TerrainBlocker
 import Fountain
 import Decoration
-	
+import Pedestal
+
 function condition() returns boolean
 	return (GetTriggerUnit().getEntity()) instanceof Builder
   
@@ -129,6 +130,8 @@ public function callback()
 				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[42]
 				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+			case buildorders[43]
+				new MemoryAccessPedestal(data.tpos, data.b.owner)
 				
 		data.b.actor.abortOrder()
 	else
@@ -189,3 +192,4 @@ init
 	buildorders[40] = 'n016' // Obelisk
 	buildorders[41] = 'n015' // Poison eggs
 	buildorders[42] = 'n017' // Remains
+	buildorders[43] = PED_ID // Remains
