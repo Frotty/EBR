@@ -34,9 +34,9 @@ public class Escaper extends UnitEntity
 	effect lavaEffect
 	effect poisonEffect
 	
-	vec3 slideVelocity = vec3(0,0,0)
-	vec3 trackVelocity = vec3(0,0,0)
-	vec3 vortexVelocity = vec3(0,0,0)
+	vec2 slideVelocity = vec2(0,0)
+	vec2 trackVelocity = vec2(0,0)
+	vec2 vortexVelocity = vec2(0,0)
 	
 	RegionData currentRegion
 
@@ -107,37 +107,37 @@ public class Escaper extends UnitEntity
 		
 		if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 			let angl = actor.getFacing()
-			slideVelocity = vec3(Cos(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, Sin(angl*DEGTORAD) * currentRegion.slidespeed * SLIDE_ADD, 0 )
+			slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
 			sliding = true
 			vel *= 0.99
 		else
 			vel *= 0.96
 			slideVelocity *= 0.8
 			sliding = false
-			if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
-				onUnwalkable = true
-				setLava(false)
-				setPoison(false)
-				if alive
-					kill()
-			else 
-				onUnwalkable = false
-				if ttype == 1147958883 and not onLava
-					setLava(true)
-					if onLava
-						var hp = actor.getHP()
-						if hp > .405
-							actor.setHP(hp-currentRegion.lavaDmg)
-						else if alive
-							kill()
-				else if ttype == POISON
+			if not ttype == currentRegion.getTypeSet().walkableId
+				if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
+					onUnwalkable = true
 					setLava(false)
-					if not poisoned
-						setPoison(true)
-				else
-					setLava(false)
+					setPoison(false)
+					if alive
+						kill()
+				else 
+					onUnwalkable = false
+					if ttype == 1147958883 and not onLava
+						setLava(true)
+					else if ttype == POISON
+						setLava(false)
+						if not poisoned
+							setPoison(true)
+					else
+						setLava(false)
 				
-		
+		if onLava
+			var hp = actor.getHP()
+			if hp > .405
+				actor.setHP(hp-currentRegion.lavaDmg)
+			else if alive
+				kill()
 		if poisoned
 			var hp2 = actor.getHP()
 			if hp2 > .405
@@ -146,11 +146,9 @@ public class Escaper extends UnitEntity
 				kill()
 		
 		pos += trackVelocity
-		trackVelocity = vec3(0,0,0)
+		trackVelocity = vec2(0,0)
 		pos += vortexVelocity
-		vortexVelocity = vec3(0,0,0)
-//		vel.trim(2.5)
-		
+		vortexVelocity = vec2(0,0)
 	
 	override function update()
 		pos.x = actor.getX()
@@ -173,7 +171,7 @@ public class Escaper extends UnitEntity
 		else
 			ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
 		setVel(vec3(0,0,0))
-		slideVelocity = vec3(0,0,0)
+		slideVelocity = vec2(0,0)
 		CameraClearNoiseForPlayer(owner)
 		if selectatrevive
 			if (GetLocalPlayer() == owner)

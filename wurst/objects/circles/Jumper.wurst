@@ -53,15 +53,12 @@ public class Jumper extends StaticBaseObject
 			switch jdata.mode
 				case JumpMode.FORCED
 					edata.setPos(jdata.pos.add(0,0,1.))
-					edata.sliding = false
-					edata.slideVelocity = vec3(0,0,0)
 					edata.setTarget(jdata.getRallyPoint(), jdata.speed)
-					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
 				case JumpMode.UNFORCED
 					edata.addVel(vec3(0,0, jdata.speed) + edata.slideVelocity)
-					edata.sliding = false
-					edata.slideVelocity = vec3(0,0,0)
-					AddSpecialEffect(EFFECT_STRING, data.pos.x, data.pos.y).destr()
+			addEffect(EFFECT_STRING, data.pos).destr()
+			edata.sliding = false
+			edata.slideVelocity = vec2(0,0)
 					
 				
 	function onCast()
