@@ -32,6 +32,7 @@ public class Waypoint extends StaticBaseObject
 		printLog(Loglevel.DEBUG, "On create waypoint")
 		
 	static function orderMove()
+		printLog(Loglevel.DEBUG, "near waypoint")
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
@@ -50,8 +51,8 @@ public class Waypoint extends StaticBaseObject
 	static function delayMove()
 		var t = GetExpiredTimer()
 		DelayData data = t.getData() castTo DelayData
-		if data.entity instanceof DynamicSetupObject
-			var ed = data.entity castTo DynamicSetupObject
+		if data.entity instanceof SetupObject
+			var ed = data.entity castTo SetupObject
 			IssuePointOrder(ed.setup, "move", data.pos.x, data.pos.y )
 		else
 			IssuePointOrder(data.entity.actor, "move", data.pos.x, data.pos.y )

@@ -1,61 +1,19 @@
 package Obstacle
-import SetupObject
-import Escaper
+import EscaperKillers
 import RegionData
-//import Regions
 
-constant int 	BIGOBSTACLE_ID  	= 'n002'
-constant int 	SMALLOBSTACLE_ID	= 'n002'
-	
 constant real 	EVENT_RADIUS_SMALL	= 32.
 constant real 	EVENT_RADIUS_BIG	= 64.
 
-public class SmallObstacle extends StaticSetupObject
+public class SmallObstacle extends EscaperSensorSetup
+	
+	construct(vec2 pos, player owner )
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
+		
+
+public class BigObstacle extends EscaperSensorSetup
 	
 	construct( vec2 pos, player owner )
-		super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_SMALL, function SmallObstacle.kill )
-		var rdata = getRegionData(pos)
-		actor = CreateUnit(owner, sobst[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360) )
-		actor..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		actor.addAbility(LOCUST_ID)
-
-		setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
-		setup.setUserData( this castTo int )
-		inRangeTrig.registerUnitInRangeSource( setup, radius, null )
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG, EVENT_RADIUS_BIG)
 		
-	construct( vec2 pos, player owner, real radius )
-		super( vec3(pos.x, pos.y, 0), radius, function SmallObstacle.kill )
-		actor = CreateUnit(owner, 'n00K', pos.x, pos.y, GetRandomReal(0,360) )
-		actor..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		actor.addAbility(LOCUST_ID)
-
-		setup = CreateUnit(owner, SMALLOBSTACLE_ID, pos.x, pos.y, 0.)
-		setup.setUserData( this castTo int )
-		inRangeTrig.registerUnitInRangeSource( setup, radius, null )
-		
-	static function kill()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		if e instanceof Escaper and e.pos.z < 128
-			(e castTo Escaper).kill() //or whatever
-
-public class BigObstacle extends StaticSetupObject
-	
-	construct( vec2 pos, player owner )
-		super( vec3(pos.x, pos.y, 0), EVENT_RADIUS_BIG, function BigObstacle.kill )
-		var rdata = getRegionData(pos)
-		actor = CreateUnit(owner, bobst[rdata.rtype], pos.x, pos.y, GetRandomReal(0,360) )
-		actor..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		actor.addAbility(LOCUST_ID)
-
-		setup = CreateUnit(owner, BIGOBSTACLE_ID, pos.x, pos.y, 0.)
-		setup.setUserData( this castTo int )
-		inRangeTrig.registerUnitInRangeSource( setup, radius, null )
-		
-	static function kill()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		if e instanceof Escaper and e.pos.z < 128
-			(e castTo Escaper).kill() //or whatever
-
 

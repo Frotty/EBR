@@ -25,16 +25,18 @@ public class Builder extends UnitEntity
 		var id = GetItemTypeId(GetManipulatedItem())
 		var builder = u.getUserData() castTo Builder
 		var rdata = getRegionData(builder.pos)
-		if rdata.isTerrainItem(id)
-			rdata.setType(id, true)
-			rdata.allow(builder.owner.getId())
-			RemoveItem( GetManipulatedItem())
+		let rtype = getRegionTypeFromItem(id)
+		if rtype != RegionType.UNKNOWN
+			rdata.setType(rtype, true)
+			rdata.setOwner(builder.owner)
+			GetManipulatedItem().remove()
 			
 			GroupEnumUnitsInRange(ENUM_GROUP,builder.pos.x, builder.pos.y, 512., Filter(function filter))
 			for shop in ENUM_GROUP
-				AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getX(), shop.getY()).destr()
-				shop.remove()				
+				addEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", shop.getPos()).destr()
+				shop.remove()		
 			GroupClear(ENUM_GROUP)
+			
 			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
 			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
 			if GetLocalPlayer() == builder.owner
@@ -71,17 +73,17 @@ public class Builder extends UnitEntity
 					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
 					wasMenu = true
 				case KEY_SPELL_ID
-					if getRegionData(tpos).isOwner(builder.owner.getId())
+					if getRegionData(tpos).canBuild(builder.owner)
 						new Key(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case BOOTS_SPELL_ID
-					if getRegionData(tpos).isOwner(builder.owner.getId())
+					if getRegionData(tpos).canBuild(builder.owner)
 						createItem(BOOTS_ID, tpos)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case TOME_SPELL_ID
-					if getRegionData(tpos).isOwner(builder.owner.getId())
+					if getRegionData(tpos).canBuild(builder.owner)
 						new Tome(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
@@ -137,16 +139,6 @@ public class Builder extends UnitEntity
 				SelectUnitForPlayerSingle( builder.actor, builder.owner )
 	
 	function setBossMenu(RegionData rdata)
-		if rdata.isOwner(owner.getId())
-			if rdata.isBossRegion and not hasBossMenu
-				actor.addAbility(MENU_BOSS)
-				hasBossMenu = true
-			if not rdata.isBossRegion and hasBossMenu
-				actor.removeAbility(MENU_BOSS)
-				hasBossMenu = false
-		else
-			actor.removeAbility(MENU_BOSS)
-			hasBossMenu = false
 
 	static function onOrder()
 		var i = GetOrderTargetItem()

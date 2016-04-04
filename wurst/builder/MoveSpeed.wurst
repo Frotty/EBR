@@ -7,8 +7,8 @@ function onChanceSpeed()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
 	var data = caster.getEntity()
-	if (id == INC_SPEED_ID or id == DEC_SPEED_ID) and data instanceof DynamicSetupObject
-		var ddata = data castTo DynamicSetupObject
+	if (id == INC_SPEED_ID or id == DEC_SPEED_ID) and data instanceof SetupObject
+		var ddata = data castTo SetupObject
 		var speed = ddata.setup.getMoveSpeed()
 		if id == INC_SPEED_ID
 			if speed < 475.

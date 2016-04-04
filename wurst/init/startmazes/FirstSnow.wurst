@@ -1,7 +1,6 @@
 package FirstSnow
 import Startmaze
 import Startmazes
-import EscaperKiller
 import Teleporter
 import Waypoint
 import ClosureTimers
@@ -10,23 +9,24 @@ public class FirstSnowMaze extends Startmaze
 
 	construct(RegionData rd)
 		rdata = rd
+		rdata.setType(RegionType.SNOW, false)
 	
 	override function initMaze()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
 		printLog(Loglevel.DEBUG, "maze-0.11")
 		for u in ENUM_GROUP
 			printLog(Loglevel.DEBUG, "maze-0.12")
-			new EscaperKiller(u, COLL_SIZE_BK)
+			new BigKiller(u)
 		printLog(Loglevel.DEBUG, "maze-0.2")
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u008", null )
 		for u in ENUM_GROUP
-			new EscaperKiller(u, null, COLL_SIZE_BRK)
+			new BigRandomKiller(u)
 		printLog(Loglevel.DEBUG, "maze-0.3")
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", null )
 		for u in ENUM_GROUP
-			new EscaperKiller(u, COLL_SIZE_SK)
+			new SmallKiller(u)
 		ENUM_GROUP.clear()
 		printLog(Loglevel.DEBUG, "maze-1")
 		
@@ -46,8 +46,9 @@ public class FirstSnowMaze extends Startmaze
 		wp = new Waypoint(gg_unit_n004_0336.getPos(), gg_unit_n004_0336.getOwner())
 		gg_unit_n004_0336.remove()
 		wp.setRallyPoint(fwp.pos.toVec2())
-		if not IssuePointOrder((gg_unit_n007_0013.getEntity() castTo EscaperKiller).setup , "move", fwp.pos.x,  fwp.pos.y)
-			printLog(Loglevel.ERROR, "WTF2")
+		doAfter(1.5, () -> begin
+			(gg_unit_n007_0013.getEntity() castTo EscaperSensorSetup).setup.issuePointOrder("move", fwp.pos.toVec2())
+		end)
 		printLog(Loglevel.DEBUG, "maze-2")
 		var wp2 = new Waypoint(gg_unit_n004_0330.getPos(), gg_unit_n004_0330.getOwner())
 		let f2wp = wp2
@@ -62,8 +63,8 @@ public class FirstSnowMaze extends Startmaze
 		wp2 = new Waypoint(gg_unit_n004_0331.getPos(), gg_unit_n004_0331.getOwner())
 		gg_unit_n004_0331.remove()
 		wp2.setRallyPoint(f2wp.pos.toVec2())
-		doAfter(.5, () -> begin
-			IssuePointOrder((gg_unit_n007_0015.getEntity() castTo EscaperKiller).setup , "move", f2wp.pos.x,  f2wp.pos.y)
+		doAfter(1.25, () -> begin
+			(gg_unit_n007_0015.getEntity() castTo EscaperSensorSetup).setup.issuePointOrder("move", f2wp.pos.toVec2())
 		end)
 		
 		var t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))

@@ -10,6 +10,30 @@ import public LinkedList
 import public Event
 import public Basics
 
+public interface SensorListener
+	function onSensor(UnitEntity source, UnitEntity target)
+	
+public module Sensor
+	private trigger inRangeTrig = null
+	private static HashMap<trigger, SensorListener> sensorLiteners = new HashMap<trigger, SensorListener>()
+
+	function addSensorListener(UnitEntity e, SensorListener listener)
+		inRangeTrig = CreateTrigger()
+		inRangeTrig.registerUnitInRangeSource(e.actor, e.radius, null)
+		sensorLiteners.put(inRangeTrig, listener)
+		inRangeTrig.addAction( () -> begin
+			let trig = GetTriggeringTrigger()
+			let target = GetTriggerUnit().getEntity() castTo UnitEntity
+			sensorLiteners.get(trig).onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
+		end)
+		
+	ondestroy
+		destroy sensorLiteners.get(inRangeTrig)
+		sensorLiteners.remove(inRangeTrig)
+		if inRangeTrig != null
+			inRangeTrig.destr()
+
+
 public function unit.abortOrder() returns boolean
 	if IsUnitPaused(this)
 		return false
@@ -134,7 +158,7 @@ abstract public class UnitEntity extends Entity
 	function setNewActor(unit u)
 		actor.remove()
 		actor = u
-		actor.setUserData(this castTo int)
+		actor.setEntity(this)
 		
 	override function setPos(vec3 tpos)
 		pos = tpos

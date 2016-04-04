@@ -22,7 +22,7 @@ constant int REVIVE_ID = 'A07L'
 trigger deathTrig
 
 
-public class Boss extends DynamicSetupObject
+public class Boss extends SetupObject
 	int aoe_id = 0
 	int missile_id = 0
 	real maxHp = 200
@@ -36,7 +36,7 @@ public class Boss extends DynamicSetupObject
 				es.kill()
 
 	construct( player owner, vec2 tpos, int id)
-		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)),createUnit(owner, id, tpos, angle(0)), 64, function Boss.onInRangeEvent )
+		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)),createUnit(owner, id, tpos, angle(0)), 64 )
 //		setup.registerCastEvent(Condition(function onCast))
 		deathTrig.registerUnitEvent(setup,EVENT_UNIT_DEATH)
 //		deathTrig.registerUnitEvent(actor,EVENT_UNIT_DEATH)

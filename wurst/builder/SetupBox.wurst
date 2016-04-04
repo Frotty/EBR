@@ -3,6 +3,7 @@ import Entity
 import RegionData
 import GameConstants
 import Escaper
+import initlater Builder
 
 constant int SETUP_BOX = 'n00A'
 constant int ICEI_ID = 'A057'
@@ -18,19 +19,16 @@ constant int BOSS_MODE_ID = 'A03E'
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
 
-public class SetupBox
-	unit actor
-	RegionData rdata
+public class SetupBox extends UnitEntity
+	private RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
-		actor = CreateUnit( owner, SETUP_BOX, pos.x, pos.y, 0 )
+		super(pos.toVec3(), createUnit( owner, SETUP_BOX, pos, angle(0) ))
 		rdata = data
-		actor.setUserData(this castTo int)
 		
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
-		
-	function onCast() returns boolean
+	function onCast()
 		var id = GetSpellAbilityId()
 		let owner = actor.getOwner()
 		switch id
@@ -73,32 +71,28 @@ public class SetupBox
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()
-				var id2 = p.getId()
-				if id > 7 and not p == owner
-					AddSpecialEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getX(), u.getY()).destr()
-					if rdata.isOwner(id2)
-						rdata.disallow(id2)
-						DisplayTextToPlayer( owner, 0, 0, "|cff9C0808Disallowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
-						DisplayTextToPlayer( p, 0, 0, colorcode[owner.getId()] + owner.getName() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region." )
+				if isBuilder(p)
+					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
+					if rdata.canBuild(p)
+						rdata.disallow(p)
+						printTimedToPlayer("|cff9C0808Disallowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 15, owner)
+						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region.", 15, owner)
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMinX(rdata.theRect)+GetRectMaxX(rdata.theRect))/2, (GetRectMinY(rdata.theRect)+GetRectMaxY(rdata.theRect))/2, 3, 156, 8, 8, false)
 					else
-						rdata.allow(id2)
-						DisplayTextToPlayer( owner, 0, 0, "|cff08B552Allowed|r " + colorcode[id2] + p.getName() + "|r|cffffcc00 to build in your region." )
-						DisplayTextToPlayer( p, 0, 0, colorcode[owner.getId()] + owner.getName() + " |cff08B552allowed|r |cffffcc00 you to build in his region." )
+						rdata.allow(p)
+						printTimedToPlayer("|cff08B552Allowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 15, owner)
+						printTimedToPlayer(owner.getNameColored() + " |cff08B552allowed|r |cffffcc00 you to build in his region.", 15, owner)
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMaxX(rdata.theRect)+GetRectMinX(rdata.theRect))/2, (GetRectMaxY(rdata.theRect)+GetRectMinY(rdata.theRect))/2, 3, 8, 181, 82, false)
-				else if p == owner
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You Can't disallow yourself in your region!" )
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You Can't allow an escaper in your region!" )
-					
+					printTimedToPlayer("|cffC51019Why would you do this!", 15, owner)
 						
 			case CLEAR_ID
 				GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
 				for u in ENUM_GROUP
 					var data = u.getEntity()
-					if not data instanceof Escaper and u != actor and data != null
+					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
 						data.terminate()
 			case BOSS_MODE_ID
 //				if pData[owner.getId()].XP > 00 //500
@@ -113,7 +107,5 @@ public class SetupBox
 //				else
 //					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 					
-		return false
-
 	
 	

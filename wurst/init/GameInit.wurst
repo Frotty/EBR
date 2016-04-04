@@ -1,5 +1,6 @@
 package GameInit
 import PlayerData
+import SetupObject
 import Entity
 import UnitProducer
 import Escaper
@@ -26,7 +27,8 @@ import GlobalShop
 import Remove
 import BasicSpells
 function initGame()
-
+	init_Regions()
+	initSetupObj()
 	printLog(Loglevel.DEBUG, "Starting Init")
 	VolumeGroupReset()
 	EndThematicMusic()
@@ -35,7 +37,6 @@ function initGame()
 	printLog(Loglevel.DEBUG, "Init - TMod")
 	init_UnitProducer()
 	printLog(Loglevel.DEBUG, "Init - UP")
-	init_Regions()
 	printLog(Loglevel.DEBUG, "Init - Regions")
 	
 	printLog(Loglevel.DEBUG, "Init - SetTeleports")
@@ -74,15 +75,13 @@ function initPartTwo()
 	printLog(Loglevel.DEBUG, "Init - Startmazes")
 	CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 
-	//initMazeUnits(rand, rand)
-	printLog(Loglevel.DEBUG, "Init - Startmazes2")		
-	
 	printLog(Loglevel.DEBUG, "Init - Finished")
 	startChoose()
 	printLog(Loglevel.DEBUG, "Starting choose...")
 	initSpells()
 	initItem()
 	printLog(Loglevel.DEBUG, File.isEnabled().toString())
+	initStartmazes()
 	GetExpiredTimer().release()
 	
 

@@ -23,11 +23,11 @@ class Link
 		DestroyLightning(sfx)
 
 
-public class Powernode extends DynamicSetupObject
+public class Powernode extends SetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
 
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), CreateUnit( owner, NODE_ID, pos.x, pos.y, 0 ), 0., CODE_NULL )
+		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function unlink( Link l )

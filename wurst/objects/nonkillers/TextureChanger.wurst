@@ -25,7 +25,7 @@ constant int TERRAIN_DEC_H_ID = 'A01U'
 constant int TERRAIN_DEC_V_ID = 'A01T'
 
 
-public class TextureChanger extends DynamicSetupObject
+public class TextureChanger extends SetupObject
 	int sizeX = 1
 	int sizeY = 1
 	matrixpos mp = matrixpos(0,0)
@@ -33,7 +33,7 @@ public class TextureChanger extends DynamicSetupObject
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), CreateUnit(owner, TEXTURECHANGER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		super(pos.toVec3(), createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), 0)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		
@@ -57,11 +57,12 @@ public class TextureChanger extends DynamicSetupObject
 							tileID = innerTile
 						data = getRegionData(vec2(x,y))
 						if data != null 
-							if data.isOwner(GetPlayerId(owner)) 
+							if data.canBuild(owner) 
+								let tset = data.getTypeSet()
 								if tileID == '0000'
-									tileID = rectw[data.rtype]
+									tileID = tset.walkableId
 								else if tileID == '0001'
-									tileID = rectuw[data.rtype]
+									tileID = tset.unwalkableId
 								if GetTerrainType(x, y) != tileID
 									SetTerrainType(x, y, tileID, 0, 1, 1 )
 							

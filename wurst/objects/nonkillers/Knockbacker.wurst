@@ -1,9 +1,8 @@
 package Knockbacker
-import Entity
 import Assets
 import ObjectIdGenerator
 import Escaper
-import SetupObject
+import EscaperKillers
 import ChannelAbilityPreset
 
 public constant KNOCKER_ID = 'u00G'
@@ -11,15 +10,15 @@ public int KNOCK_INC_ID
 public int KNOCK_DEC_ID
 
 
-public class Knockbacker extends DynamicSetupObject
+public class Knockbacker extends EscaperSensorSetup
 	real kforce = 20.
 	real dmg = 50.
 	
-	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 
-				CreateUnit(owner, KNOCKER_ID, pos.x, pos.y, 0.), 64., function Knockbacker.inRangeEvent)
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, KNOCKER_ID, facing, 64., 160.)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		active = true
 			
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()
@@ -36,32 +35,20 @@ public class Knockbacker extends DynamicSetupObject
 					createTTEx(pos, vec2(0,0.05), "Knockback: "+ R2SW(kforce,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
 					createTTEx(pos, vec2(0,0.05), "Minimum Knockback", 10,  2., colorA(255,255,255,0), owner  )
-//			case START_ID
-//				turning = true
-//				setup.removeAbility(START_ID).addAbility(STOP_ID)
-//			case STOP_ID
-//				turning = false
-//				setup.removeAbility(STOP_ID).addAbility(START_ID)
 					
 		return false
+		
+	override function onSensor(UnitEntity source, UnitEntity target)
+		if target instanceof Escaper
+			if target.pos.z <= sensorHeight
+				let escaper = target castTo Escaper
+				let ang = pos.angleTo2d(escaper.pos)
+				escaper.addVel(vec3(ang.cos()*kforce,ang.sin()*kforce,0))
+				actor.damageTarget(escaper.actor, dmg)
+				actor.setAnimation("attack")
+				setup.setAnimation("attack")
+				addEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", escaper.pos).destr()	
 
-	function inRange(Escaper edata)
-		if edata.pos.z < 160.
-			let ang = pos.angleTo2d(edata.pos)
-			edata.addVel(vec3(ang.cos()*kforce,ang.sin()*kforce,0))
-			actor.damageTarget(edata.actor, dmg)
-			actor.setAnimation("attack")
-			setup.setAnimation("attack")
-			AddSpecialEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", edata.pos.x, edata.pos.y).destr()
-	static function inRangeEvent()
-		let ud = GetTriggerUnit().getEntity()
-		let sd = GetTriggeringTrigger().getSource().getUserData() castTo Knockbacker
-		if ud instanceof Escaper
-			sd.inRange(ud castTo Escaper)
-		
-		
-				
-	ondestroy
 
 @objectgen function genKnockbacker()
 	KNOCK_INC_ID = ABIL_ID_GEN.next()

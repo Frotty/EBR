@@ -1,7 +1,7 @@
 package Teleporter
 import BaseObject
 import Escaper
-import EscaperKiller
+import EscaperKillers
 import TeleporterTarget
 import SetupObject
 import PlayerData
@@ -34,7 +34,7 @@ public class Teleporter extends StaticBaseObject
 		let rallyPos = obj.getRallyPoint()
 		if obj.isOneshot and not isPlayerEscaper(e.owner)
 			return
-		DynamicSetupObject dyn
+		SetupObject dyn
 		if obj.mode == 0 and e instanceof Escaper
 			u.setPos(rallyPos.x, rallyPos.y)
 			DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
@@ -50,14 +50,14 @@ public class Teleporter extends StaticBaseObject
 						eruza.reached = false
 				ENUM_GROUP.clear()
 		else if obj.mode == 1 
-			if e instanceof EscaperKiller
-				dyn = e castTo DynamicSetupObject
+			if e instanceof EscaperSensorSetup
+				dyn = e castTo SetupObject
 				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
 		else if obj.mode == 2  
-			if e instanceof EscaperKiller
-				dyn = e castTo DynamicSetupObject
+			if e instanceof EscaperSensorSetup
+				dyn = e castTo SetupObject
 				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )

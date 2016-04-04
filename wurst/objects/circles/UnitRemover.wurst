@@ -18,5 +18,5 @@ public class UnitRemover extends StaticBaseObject
 		var sdata = GetTriggeringTrigger().getSource().getUserData() castTo UnitRemover
 		if data > 0 and (data castTo Entity).owner == sdata.owner and u.hasAbility(REMOVE_ID)
 			var edata = data castTo Entity
-			if edata instanceof DynamicSetupObject
+			if edata instanceof SetupObject
 				edata.terminate()

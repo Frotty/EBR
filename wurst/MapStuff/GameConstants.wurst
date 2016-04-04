@@ -10,6 +10,9 @@ public constant int cplayerCount = 14
 
 public constant string MAP_VER = "EBR 0.84"
 
+public function isBuilder(player p) returns boolean
+	return p.getId() > 7
+	
 public enum COLOR
 	WHITE
 	RED

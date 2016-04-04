@@ -10,8 +10,8 @@ function onChangeVisibility()
 	var caster = GetSpellAbilityUnit()
 	var dta = caster.getUserData() castTo UnitEntity
 	if id == VIS_ID or id == INVIS_ID
-		if dta instanceof DynamicSetupObject
-			let data = dta castTo DynamicSetupObject
+		if dta instanceof SetupObject
+			let data = dta castTo SetupObject
 			if id == VIS_ID
 				data.actor..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
 				data.setup..removeAbility(VIS_ID)..addAbility(INVIS_ID)

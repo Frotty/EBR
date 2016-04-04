@@ -78,8 +78,12 @@ public class Trap extends StaticBaseObject
 			case ABIL.POISON
 				e.setPoison(true)
 			case ABIL.SPEED
-				int level = (value/20).toInt() mod 5
-				InstantDummyCaster.castTarget(DUMMY_PLAYER, SPEED_BUFF_NEG, level, "bloodlust", e.actor)
+				int level = (value/20).toInt() mod 10
+				printLog(Loglevel.TRACE, "Level: " + level.toString())
+				if level > 5
+					InstantDummyCaster.castTarget(DUMMY_PLAYER, SPEED_BUFF_POS, level-5, "bloodlust", e.actor)
+				else if level < 5
+					InstantDummyCaster.castTarget(DUMMY_PLAYER, SPEED_BUFF_NEG, level, "bloodlust", e.actor)
 			case ABIL.KNOCK
 				IssueImmediateOrder(e.actor, "stop")
 				let rallyPos = getRallyPoint()

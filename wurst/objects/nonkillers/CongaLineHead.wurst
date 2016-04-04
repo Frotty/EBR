@@ -12,14 +12,14 @@ constant int ADD_ID = 'A02Y'
 constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
 
-public class CongaLineHead extends DynamicSetupObject
-	LinkedList<DynamicSetupObject> segments
+public class CongaLineHead extends SetupObject
+	LinkedList<SetupObject> segments
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), CreateUnit(owner, UNIT_ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		super(pos.toVec3(), createUnit(owner, UNIT_ID, pos, angle(0)), createUnit(owner, UNIT_ID, pos, angle(0)), 0. )
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		segments = new LinkedList<DynamicSetupObject>()
+		segments = new LinkedList<SetupObject>()
 		
 	override function update()
 		super.update()
@@ -35,7 +35,7 @@ public class CongaLineHead extends DynamicSetupObject
 			i++
 
 		
-	function addSegment(DynamicSetupObject e)
+	function addSegment(SetupObject e)
 		boolean isNew = true
 		for de in segments
 			if de == e
@@ -55,8 +55,8 @@ public class CongaLineHead extends DynamicSetupObject
 		switch id
 			case ADD_ID
 				var ed = t.getUserData() castTo UnitEntity
-				if ed.owner == data.owner and ed instanceof DynamicSetupObject
-					data.addSegment(ed castTo DynamicSetupObject)
+				if ed.owner == data.owner and ed instanceof SetupObject
+					data.addSegment(ed castTo SetupObject)
 			case INC_ID
 				if data.segLength < 500.
 					data.segLength += 25
@@ -74,15 +74,15 @@ public class CongaLineHead extends DynamicSetupObject
 		return false
 		
 	ondestroy
-		for DynamicSetupObject dso in segments
+		for SetupObject dso in segments
 			dso.setup.addAbility(REMOVE_ID)
 		destroy segments
 
 		
 function UnitEntity.setNewPosA( vec2 tpos, real angl)
-	if this instanceof DynamicSetupObject
-		(this castTo DynamicSetupObject).setXY(tpos.toVec3())
-		(this castTo DynamicSetupObject).setAngle(angl)
+	if this instanceof SetupObject
+		(this castTo SetupObject).setXY(tpos.toVec3())
+		(this castTo SetupObject).setAngle(angl)
 	else if this instanceof Spinner
 		(this castTo Spinner).setXY(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angl)

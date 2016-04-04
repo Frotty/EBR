@@ -57,23 +57,23 @@ public class TerrainModder
 		let owner = actor.getOwner()
 		let name = owner.getName()
 		let id = GetUnitTypeId(actor)
-		if rdata.isOwner(GetPlayerId(owner)) or name == "Frotty" or name == "FrottyZ"
+		if rdata.canBuild(owner) or name == "Frotty" or name == "FrottyZ"
 			if id == ICECONTROL
 				if modification == 1
-					orderPos.changeTerrain(REVICE, brushsize, brushshape, owner)
+					orderPos.changeTerrain(REVICE, brushsize, brushsize, brushshape, owner)
 				else
-					orderPos.changeTerrain(CONTROLLABLEICE, brushsize, brushshape, owner)
+					orderPos.changeTerrain(CONTROLLABLEICE, brushsize, brushsize, brushshape, owner)
 			else if id == ICEUNCONTROL
-				orderPos.changeTerrain(UNCONTROLLABLEICE, brushsize, brushshape, owner)
+				orderPos.changeTerrain(UNCONTROLLABLEICE, brushsize, brushsize, brushshape, owner)
 			else if id == WALKABLE
-				orderPos.changeTerrain(rectw[rdata.rtype], brushsize, brushshape, owner)
+				orderPos.changeTerrain(rdata.getTypeSet().walkableId, brushsize, brushsize, brushshape, owner)
 			else if id == UNWALKABLE
 				if modification == 0
-					orderPos.changeTerrain(rectuw[rdata.rtype], brushsize, brushshape, owner)
+					orderPos.changeTerrain(rdata.getTypeSet().unwalkableId, brushsize, brushsize, brushshape, owner)
 				else if modification == 1
-					orderPos.changeTerrain(LAVA, brushsize, brushshape, owner)
+					orderPos.changeTerrain(LAVA, brushsize, brushsize, brushshape, owner)
 				else if modification == 2
-					orderPos.changeTerrain(POISON, brushsize, brushshape, owner)
+					orderPos.changeTerrain(POISON, brushsize, brushsize, brushshape, owner)
 		else
 			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
@@ -143,34 +143,36 @@ enum TShape
 	RECT
 	CIRCLE
 
-public function vec2.changeTerrain(int ttype, int size, TShape shape, player caster)
+public function vec2.changeTerrain(int ttype, int hsize, int vsize, TShape shape, player caster)
 	switch shape
 		case RECT
-			this.changeRect(ttype, size, caster)
+			this.changeRect(ttype, hsize, vsize, caster)
 		case CIRCLE
-			this.changeCircle(ttype, size, caster)
+			this.changeCircle(ttype, hsize, vsize, caster)
 			
 			
-public function vec2.changeRect(int ttype, int size, player caster)
-	let half = (size*2) div 2
-	for i = -half to half
-		for j = -half to half
+public function vec2.changeRect(int ttype, int hsize, int vsize, player caster)
+	let hhalf = (hsize*2) div 2
+	let vhalf = (vsize*2) div 2
+	for i = -hhalf to hhalf
+		for j = -vhalf to vhalf
 			this.setTerrain(ttype, vec2(i * 128., j * 128.), caster)
 				
-public function vec2.changeCircle(int ttype, int size, player caster)
-	let half = (size*2) div 2
-	for i = -half to half
-		for j = -half to half
+public function vec2.changeCircle(int ttype, int hsize, int vsize, player caster)
+	let hhalf = (hsize*2) div 2
+	let vhalf = (vsize*2) div 2
+	for i = -hhalf to hhalf
+		for j = -vhalf to vhalf
 			if i == 0 or j == 0
 				this.setTerrain(ttype, vec2(i * 128., j * 128.), caster)
-	if size > 1
-		this.changeRect(ttype, 1, caster)
+	if vsize > 1 and hsize > 1
+		this.changeRect(ttype, 1, 1, caster)
 			
 public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	var offset = this + off
 	offset.x = (offset.x / 128).round() * 128.
 	offset.y = (offset.y / 128).round() * 128.
-	if getRegionData(offset).isOwner(caster.getId())
+	if getRegionData(offset).canBuild(caster)
 		offset.setTerrainType(ttype, -1, 1, 0)
 
 public function init_TerrainModder()

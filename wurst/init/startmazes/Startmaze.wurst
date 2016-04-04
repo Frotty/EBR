@@ -1,8 +1,8 @@
 package Startmaze
 import public RegionData
-import public Entity
 import public Teleporter
 import public Revivepoint
+import public EscaperKillers
 import Key
 
 public constant real STARTX = -6000

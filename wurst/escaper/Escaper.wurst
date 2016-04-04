@@ -114,7 +114,7 @@ public class Escaper extends UnitEntity
 			vel *= 0.96
 			slideVelocity *= 0.8
 			sliding = false
-			if ttype == rectuw[currentRegion.rtype] or ttype == 'Ibkb' or ttype == RUNES
+			if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 				onUnwalkable = true
 				setLava(false)
 				setPoison(false)
@@ -166,6 +166,7 @@ public class Escaper extends UnitEntity
 
         
 	function revive()
+		sliding = false
 		let rev = currentRevivepoint
 		if revmod == null
 			ReviveHero(actor, rev.x, rev.y, false)

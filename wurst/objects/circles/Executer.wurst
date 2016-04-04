@@ -1,15 +1,16 @@
 package Executer
 import Colors
+import TerrainModder
 import BaseObject
 import ErrorHandling
 import Escaper
-import EscaperKiller
+import EscaperKillers
 import RegionData
 import Door
 import BuilderConstants
 import Texttag
 import Pointer
-import TerrainUtils
+import Knockbacker
 import Region
 import Unitcreator
 
@@ -48,6 +49,7 @@ enum ActionUnit
 	SMALLRANDOMKILLER
 	BIGRANDOMKILLER
 	POINTER
+	KNOCKER
 
 public class Executer extends StaticBaseObject
 	boolean canKillerTrigger = false
@@ -212,25 +214,27 @@ public class Executer extends StaticBaseObject
 		printLog(owner, Loglevel.WARNING, "Executer: No UnitCreator selected")
 			
 	function createUnit()
-		let rallyPos = getRallyPoint()
+		let rallyPos = getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)
-		
-		if data.isOwner(GetPlayerId(owner))
+		let tset = data.getTypeSet()
+		if data.canBuild(owner)
 			switch actionUnit
 				case ActionUnit.SMALLKILLER
-					new EscaperKiller(CreateUnit(owner, rectsk[data.rtype], rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, rectsk[data.rtype], rallyPos.x, rallyPos.y, 0.), COLL_SIZE_SK)
+					new SmallKiller(rallyPos,owner, getRallyAngle())
 				case ActionUnit.BIGKILLER
-					new EscaperKiller(CreateUnit(owner, rectbk[data.rtype],rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, rectbk[data.rtype], rallyPos.x, rallyPos.y, 0.), COLL_SIZE_BK)
+					new BigKiller(rallyPos,owner, getRallyAngle())
 				case ActionUnit.SMALLRANDOMKILLER
-					new EscaperKiller(CreateUnit(owner, 'u006', rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'u006', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_SK)
+					new SmallRandomKiller(rallyPos,owner, getRallyAngle())
 				case ActionUnit.BIGRANDOMKILLER
-					new EscaperKiller(CreateUnit(owner, 'u008',rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'u008', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_BK)
+					new BigRandomKiller(rallyPos,owner, getRallyAngle())
 				case ActionUnit.TANK
-					new EscaperKiller(CreateUnit(owner, 'h001', rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'h001', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_TANK)
+					new TankKiller(rallyPos,owner, getRallyAngle())
 				case ActionUnit.GLAIVE
-					new EscaperKiller(CreateUnit(owner, 'u00A', rallyPos.x, rallyPos.y, 0. ), CreateUnit(owner, 'u00A', rallyPos.x, rallyPos.y, 0.), COLL_SIZE_GLAIVE)
+					new GlaiveKiller(rallyPos,owner, getRallyAngle())
 				case ActionUnit.POINTER
-					new Pointer(vec2(rallyPos.x,rallyPos.y), owner)
+					new Pointer(vec2(rallyPos.x,rallyPos.y), owner, getRallyAngle())
+				case ActionUnit.KNOCKER
+					new Knockbacker(vec2(rallyPos.x,rallyPos.y), owner, getRallyAngle())
 				default
 					error("Unitcreator - Wrong Unittype")
 		else
@@ -238,22 +242,17 @@ public class Executer extends StaticBaseObject
 		
 	function changeTerrain(boolean isAction)
 		let rallyPos = getRallyPoint()
-		RegionData data
 		int tileID
+		let data = getRegionData(rallyPos)
 		if isAction
 			tileID = tiletype
 		else
 			tileID = nottiletype
-		for int i = 0 to (verticalTileSize*2)
-			for int j = 0 to (horizontalTileSize*2)
-				let offsetPos = rallyPos + vec2(128.*(i-verticalTileSize),128.*(j-horizontalTileSize))
-				data = getRegionData(offsetPos)
-				if data.isOwner(GetPlayerId(owner))
-					if tileID == '0000'
-						tileID = rectw[data.rtype]
-					else if tileID== '0001'
-						tileID = rectuw[data.rtype]
-					offsetPos.toVec2().setTerrainType(tileID, -1, 1, 1 )
+		if tileID == '0000'
+			tileID = data.getTypeSet().walkableId
+		else if tileID== '0001'
+			tileID = data.getTypeSet().unwalkableId
+		rallyPos.toVec2().changeRect(tileID, horizontalTileSize, verticalTileSize, owner)
 	
 	function addActionAbilsNormal()
 		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -349,7 +348,7 @@ public class Executer extends StaticBaseObject
 	function canTrigger(Entity e) returns boolean
 		if (canEscaperTrigger and e instanceof Escaper)
 			return true
-		if (canKillerTrigger and e instanceof EscaperKiller)
+		if (canKillerTrigger and e instanceof EscaperSensorSetup)
 			return true
 		return false
 
@@ -460,6 +459,8 @@ public class Executer extends StaticBaseObject
 				actionUnit = ActionUnit.GLAIVE
 			case TRAIN_POINTER_ABIL
 				actionUnit = ActionUnit.POINTER
+			case TRAIN_KNOCK_ABIL
+				actionUnit = ActionUnit.KNOCKER
 				
 			case MOVE_UNIT_DIRECT_ABIL
 				moveOrderString = "move"
@@ -542,6 +543,7 @@ constant int TRAIN_SRK_ABIL = 'A04B'
 constant int TRAIN_TANK_ABIL = 'A04C'
 constant int TRAIN_GLAIVE_ABIL = 'A04W'
 constant int TRAIN_POINTER_ABIL = 'A04D'
+constant int TRAIN_KNOCK_ABIL = 'A07R'
 
 trigger executerUnitLeave = CreateTrigger()
 trigger executerUnitEnter = CreateTrigger()

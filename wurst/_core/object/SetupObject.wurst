@@ -15,29 +15,26 @@ public constant int DEC_SPEED_ID = 'A01H'
 trigger orderTrigger
 timer fixPos = CreateTimer()
 
-public abstract class DynamicSetupObject extends UnitEntity
-	real radius	
-	unit setup
-	real time = GetRandomReal(30,45)
-	trigger inRangeTrig // Trigger for inRange detection
+public abstract class SetupObject extends UnitEntity
+	private real time = GetRandomReal(30,45)
 	
+	unit setup
 					
-	construct( vec3 pos, unit u, unit setup, real radius, code c )
+	construct( vec3 pos, unit u, unit setup, real radius )
 		super( pos, u )
+		this.setup = setup
+		printLog(Loglevel.TRACE, "Setup init: "  + setup.getName())
+		active = false
 		this.radius = radius
 		actor..addAbility(LOCUST_ID)
 		..setPathing(true)
-		this.setup = setup
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
 		setup..setXY(actor.getPos())
 		..addAbility('Agho')
 		..setEntity(this)
-		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-			inRangeTrig = CreateTrigger()
-			inRangeTrig.registerUnitInRangeSource( actor, radius )
-			inRangeTrig.addAction( c )
+		printLog(Loglevel.TRACE, "Setup inited " + orderTrigger.getHandleId().toString())
 		
 		
 	override function setPos(vec3 pos)
@@ -59,25 +56,14 @@ public abstract class DynamicSetupObject extends UnitEntity
 		super.update()
 		time-=ANIMATION_PERIOD
 		if time < 0
-			setup.setXY(actor.getPos())
+			setup.setXY(pos)
 			setup.setFacing(actor.getFacingAngle())
 			time = GetRandomReal(30,45)
-	
-	function setX( real x )
-		SetUnitX( actor, x )
-
-	function setY( real y )
-		SetUnitY( actor, y )
-		
-	function setZ( real z )
-		SetUnitFlyHeight( actor, z, 0. )
-					  
 	
 	ondestroy
 		actor.clearRegister()
 		actor.remove()
 		setup.remove()
-		inRangeTrig.destr()
 		
 	static function onOrderEvent()
 		var entity = GetTriggerUnit().getEntity()
@@ -86,24 +72,23 @@ public abstract class DynamicSetupObject extends UnitEntity
 		var y = GetOrderPointY()
 		var u = GetOrderTargetUnit()
 		string orderS = OrderId2String(order)
-		if entity instanceof DynamicSetupObject
-			var obj = entity castTo DynamicSetupObject
-			if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
-				if orderS == "smart" and u == null
-					IssuePointOrder(obj.setup, "move", x+getOffset(), y)
-				else
-					if u != null
-						IssueTargetOrderById(obj.actor, order, u)
-					else if x != 0.	
-						IssuePointOrderById(obj.actor, order, x, y)
-					else
-						IssueImmediateOrderById(obj.actor, order)
+		var obj = entity castTo SetupObject
+		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
+			if orderS == "smart" and u == null
+				IssuePointOrder(obj.setup, "move", x+getOffset(), y)
 			else
-				if not orderS == "waterelemental" and not orderS == "roar"
-					obj.setup.issueImmediateOrder("stop")
-			obj.setup.setXY(obj.actor.getPos3())
-			obj.setup.setFacing(obj.actor.getFacingAngle())
-			obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
+				if u != null
+					IssueTargetOrderById(obj.actor, order, u)
+				else if x != 0.	
+					IssuePointOrderById(obj.actor, order, x, y)
+				else
+					IssueImmediateOrderById(obj.actor, order)
+		else
+			if not orderS == "waterelemental" and not orderS == "roar"
+				obj.setup.issueImmediateOrder("stop")
+		obj.setup.setXY(obj.actor.getPos3())
+		obj.setup.setFacing(obj.actor.getFacingAngle())
+		obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
 	  
 				
 public abstract class StaticSetupObject extends UnitEntity
@@ -132,18 +117,7 @@ public abstract class StaticSetupObject extends UnitEntity
 			inRangeTrig.addAction( c )
 		setup.setUserData( this castTo int )
 	
-	
-	function setX( real x )
-		SetUnitX( actor, x )
-
-	function setY( real y )
-		SetUnitY( actor, y )
-		
-	function setZ( real z )
-		SetUnitFlyHeight( actor, z, 0. )
-		
 	override function update()
-		
 
 	ondestroy
 		actor.clearRegister()
@@ -159,9 +133,9 @@ function getOffset() returns real
 		count = -1
 	return offsets[count]
 
-init
+public function initSetupObj()
 	orderTrigger = CreateTrigger()
-	orderTrigger.addAction(function DynamicSetupObject.onOrderEvent )
+	orderTrigger.addAction(function SetupObject.onOrderEvent )
 	offsets[0] = 0.049
 	offsets[1] = 0.048
 	offsets[2] = 0.047

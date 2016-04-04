@@ -20,11 +20,11 @@ public enum SpellType
 	LINE
 	MISSILE
 
-public class SpellTarget extends DynamicSetupObject
+public class SpellTarget extends SetupObject
 	SpellType stype
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0)
 		stype = SpellType.NONE
 //		setup.registerCastEvent(Condition(function onCast))
 		

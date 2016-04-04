@@ -1,7 +1,6 @@
 package FourthCitadelle
 import Startmaze
 import Startmazes
-import EscaperKiller
 import Teleporter
 import Spinner
 
@@ -9,17 +8,18 @@ public class FourthCitadelleMaze extends Startmaze
 
 	construct(RegionData rd)
 		rdata = rd
-	
+		rdata.setType(RegionType.CITADEL, false)
+		
 	override function initMaze()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01I", null )
 		for u in ENUM_GROUP
-			new EscaperKiller(u, null, COLL_SIZE_BK) 
+			new BigKiller(u) 
 			
 		ENUM_GROUP.clear()
 		
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00E", null )
 		for u in ENUM_GROUP
-			new EscaperKiller(u, null, COLL_SIZE_SK) 
+			new SmallKiller(u) 
 			
 		ENUM_GROUP.clear()
 	

@@ -54,7 +54,7 @@ public function callback()
 	data.b.updatePos()
 	data.b.setPos(data.b.pos)
 	var rdata = getRegionData(data.tpos)
-	if rdata != null and rdata.isOwner(data.b.owner.getId()) or data.b.owner.getName() == "Frotty" or data.b.owner.getName() == "FrottyZ"
+	if rdata != null and rdata.canBuild(data.b.owner) or data.b.owner.getName() == "Frotty" or data.b.owner.getName() == "FrottyZ"
 		switch data.oId
 			case buildorders[1]
 				new Jumper(vec2(data.tpos.x,data.tpos.y), data.b.owner)
@@ -107,7 +107,7 @@ public function callback()
 			case buildorders[30]
 				new TerrainBlocker(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[31]
-				new SmallObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner, 256)
+				new BigObstacle(data.tpos, data.b.owner)
 			case buildorders[32]
 				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[33]

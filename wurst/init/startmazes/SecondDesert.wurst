@@ -1,23 +1,23 @@
 package SecondDesert
 import Startmaze
 import Startmazes
-import EscaperKiller
 import Teleporter
 
 public class SecondDesertMaze extends Startmaze
 
 	construct(RegionData rd)
 		rdata = rd
+		rdata.setType(RegionType.SAND, false)
 	
 	override function initMaze()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01H", null )
 		for u1 in ENUM_GROUP
-			new EscaperKiller(u1, null, COLL_SIZE_BK)
+			new BigKiller(u1)
 			
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00D", null )
 		for u3 in ENUM_GROUP
-			new EscaperKiller(u3, null, COLL_SIZE_SK) 
+			new SmallKiller(u3) 
 			
 		ENUM_GROUP.clear()
 		IssuePointOrder(gg_unit_n00D_0121, "patrol", 3612, -4650 )

@@ -52,7 +52,7 @@ public class RevivePoint extends StaticSetupObject
 		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
 			PlaySoundBJ(gg_snd_Rescue)
 			DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
-			SetUnitColor( source, PLAYER_COLOR_BLUE )
+			SetUnitColor( obj.actor, u.getOwner().getColor() )
 			obj.reached = true
 			currentRevivepoint = obj.pos.toVec2()
 			for Escaper es in escapers
@@ -66,6 +66,7 @@ public class RevivePoint extends StaticSetupObject
 					if es instanceof HolyEscaper
 						if (es castTo HolyEscaper).revivetomb != null
 							(es castTo HolyEscaper).revivetomb.remove()
+							(es castTo HolyEscaper).revivetomb = null
 	
 			if currentRevivepoint.distanceTo(obj.pos.toVec2()) > 512
 				let esc = pData[u.getOwner().getId()]

@@ -53,8 +53,8 @@ public class StaticBaseObject extends UnitEntity
 				obj.rallyAngle = obj.pos.angleTo2d(targetPoint)
 			else
 				let data = target.getEntity()
-				if data != null and data instanceof DynamicSetupObject
-					obj.rallyUnit = (data castTo DynamicSetupObject).actor
+				if data != null and data instanceof SetupObject
+					obj.rallyUnit = (data castTo SetupObject).actor
 				else
 					obj.rallyUnit = target
 					
@@ -76,37 +76,10 @@ public class StaticBaseObject extends UnitEntity
 	function getRallyUnit() returns unit
 		return rallyUnit
 
-	function setX( real x )
-		SetUnitX( actor, x )
-
-	function setY( real y )
-		SetUnitY( actor, y )
-
-	function setZ( real z )
-		SetUnitFlyHeight( actor, z, 0. )
-
-	function getRallyX() returns real
-		if rallyUnit == null
-			return rallyPoint.x
-		else
-			if GetWidgetLife(rallyUnit) > .405
-				return GetUnitX(rallyUnit)
-			else
-				rallyUnit = null
-				return rallyPoint.x
-
-	function getRallyY() returns real
-		if rallyUnit == null
-			return rallyPoint.y
-		else
-			if GetWidgetLife(rallyUnit) > .405
-				return GetUnitY(rallyUnit)
-			else
-				rallyUnit = null
-				return rallyPoint.y
-
-	function getRallyAngle() returns real
-		return pos.angleTo2d(getRallyPoint()).degrees()
+	function getRallyAngle() returns angle
+		if rallyUnit != null
+			rallyAngle = pos.angleTo2d(rallyUnit.getPos())
+		return rallyAngle
 
 	ondestroy
 		actor.clearRegister()

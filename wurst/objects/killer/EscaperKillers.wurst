@@ -1,0 +1,102 @@
+package EscaperKillers
+import public EscaperSensor
+import RegionData
+
+
+public constant real COLL_SIZE_SK = 72
+public constant real COLL_SIZE_BK = 96
+public constant real COLL_SIZE_SRK = 70
+public constant real COLL_SIZE_BRK = 90
+public constant real COLL_SIZE_TANK = 80
+public constant real COLL_SIZE_GLAIVE = 54
+
+public constant SMALL_RANDOM_KILLER_ID = 'u006'
+public constant BIG_RANDOM_KILLER_ID = 'u008'
+public constant TANK_KILLER_ID = 'h001'
+public constant GLAIVE_KILLER_ID = 'u00A'
+
+
+public class SmallKiller extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, facing, COLL_SIZE_SK, COLL_SIZE_SK + 32)
+		active = true
+
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, COLL_SIZE_SK, COLL_SIZE_SK + 32)
+		active = true
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_SK, COLL_SIZE_SK + 32)
+		active = true
+		
+public class SmallRandomKiller extends EscaperSensorSetup
+	
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, facing, COLL_SIZE_SRK, COLL_SIZE_SRK)
+		active = true
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, COLL_SIZE_SRK, COLL_SIZE_SRK)
+		active = true
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_SRK, COLL_SIZE_SRK)
+		active = true
+	
+public class BigKiller extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigKillerId, facing, COLL_SIZE_BK, COLL_SIZE_BK)
+		active = true
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigKillerId, COLL_SIZE_BK, COLL_SIZE_BK)
+		active = true
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_BK, COLL_SIZE_BK)
+		active = true
+		
+public class BigRandomKiller extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, facing, COLL_SIZE_BRK, COLL_SIZE_BRK)
+		active = true
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, COLL_SIZE_BRK, COLL_SIZE_BRK)
+		active = true
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_BRK, COLL_SIZE_BRK)
+		active = true
+		
+public class TankKiller extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, TANK_KILLER_ID, facing, COLL_SIZE_TANK, COLL_SIZE_TANK)
+		active = true
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, TANK_KILLER_ID, COLL_SIZE_TANK, COLL_SIZE_TANK)
+		active = true
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_TANK, COLL_SIZE_TANK)
+		active = true
+		
+public class GlaiveKiller extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, GLAIVE_KILLER_ID, facing, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
+		active = true
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, GLAIVE_KILLER_ID, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
+		active = true
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
+		active = true
+		

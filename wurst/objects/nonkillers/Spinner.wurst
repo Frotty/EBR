@@ -20,11 +20,11 @@ constant int SINC_ID          = 'A06M'
 constant int SDEC_ID          = 'A06N'	
 
 class SpinNode
-	DynamicSetupObject obj
+	SetupObject obj
 	real angl
 	real dist
 	
-	construct(DynamicSetupObject ent, real ang, real dist)
+	construct(SetupObject ent, real ang, real dist)
 		obj = ent
 		angl = ang
 		this.dist = dist
@@ -32,14 +32,14 @@ class SpinNode
 	ondestroy
 		obj.setup.addAbility(REMOVE_ID)
 
-public class Spinner extends DynamicSetupObject
+public class Spinner extends SetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
 	real speed = 2. *DEGTORAD
 	real cosFactor = 1.
 	real sinFactor = 1.
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), CreateUnit(owner, SPINNER_ID, pos.x, pos.y, 0), 0, CODE_NULL)
+		super(pos.toVec3(), createUnit(owner, SPINNER_ID, pos, angle(0)), createUnit(owner, SPINNER_ID, pos, angle(0)), 0)
 		actor.addAbility(LOCUST_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -51,8 +51,8 @@ public class Spinner extends DynamicSetupObject
 			node.angl += speed
 			
 	function checkObj(Entity e)
-		if e instanceof DynamicSetupObject
-			var dobj = e castTo DynamicSetupObject
+		if e instanceof SetupObject
+			var dobj = e castTo SetupObject
 			boolean isNew = true
 			int i = 0
 			for node in spinningEntities

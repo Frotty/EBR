@@ -45,24 +45,6 @@ function onCommandChat()
 			s += "            |cff08AD4APoison Damage|r: " + pd.escaper.currentRegion.poisonDmg.toString() + "\n"
 			s += "            |cffA52108Lava Damage|r: " + pd.escaper.currentRegion.lavaDmg.toString() + "\n"
 			s += "            |cffFF9C29Owners|r: " 
-			boolean comma = false
-			if pd.escaper.currentRegion.isGreyOwner
-				s += pData[8].mbname
-				comma = true
-			if pd.escaper.currentRegion.isLBOwner
-				if comma
-					s += ", "
-				s += pData[9].mbname
-				comma = true
-			if pd.escaper.currentRegion.isDGOwner
-				if comma
-					s += ", "
-				s += pData[10].mbname
-				comma = true
-			if pd.escaper.currentRegion.isBROwner
-				if comma
-					s += ", "
-				s += "|cff8C5A08Staff|r"
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"
 			startIntroFor(pd)

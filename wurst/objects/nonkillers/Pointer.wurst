@@ -1,25 +1,26 @@
 package Pointer
-import Entity
+import EscaperSensor
 import Escaper
 import Texttag
 import Preloader
 import SetupObject
 
 constant int POINTER_ID = 'h01Q'
-
+constant POINTER_RADIUS = 64.
 constant int INC_ID = 'A01F'
 constant int DEC_ID = 'A01G'
 constant int START_ID = 'A031'
 constant int STOP_ID = 'A032'
 
 
-public class Pointer extends DynamicSetupObject
+public class Pointer extends EscaperSensorSetup
 	real turnspeed = 2.
 	real angl = 0.
 	boolean turning
 	
-	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.), CreateUnit(owner, POINTER_ID, pos.x, pos.y, 0.), 64., function Pointer.turnUnit)
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, POINTER_ID, facing, POINTER_RADIUS, 16.)
+		active = true
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()

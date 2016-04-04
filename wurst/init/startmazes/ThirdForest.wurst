@@ -1,7 +1,6 @@
 package ThirdForest
 import Startmaze
 import Startmazes
-import EscaperKiller
 import Teleporter
 import Unitcreator
 import Executer
@@ -10,19 +9,20 @@ public class ThirdForestMaze extends Startmaze
 
 	construct(RegionData rd)
 		rdata = rd
+		rdata.setType(RegionType.CITY, false)
 	
 	override function initMaze()
 		RegionData data = getRegionData(vec2(368, -6647))
-		data.isBROwner = true
+		data.setOwner(players[11])
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h018", null )
 		for u2 in ENUM_GROUP
-			new EscaperKiller(u2, null, COLL_SIZE_BK) 
+			new BigKiller(u2) 
 			
 		ENUM_GROUP.clear()
 		
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n009", null )
 		for u5 in ENUM_GROUP
-			new EscaperKiller(u5, null, COLL_SIZE_SK) 
+			new SmallKiller(u5) 
 			
 		ENUM_GROUP.clear()
 		

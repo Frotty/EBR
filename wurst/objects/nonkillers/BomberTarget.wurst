@@ -5,8 +5,8 @@ import BaseObject
 constant int ID = 'u004'
 
 
-public class BomberTarget extends DynamicSetupObject
+public class BomberTarget extends SetupObject
 		
 	construct(vec2 pos, player owner)
-		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0.), CreateUnit(owner, ID, pos.x, pos.y, 0.), 0., CODE_NULL )
+		super( pos.toVec3(), createUnit(owner, ID, pos, angle(0)), createUnit(owner, ID, pos, angle(0)), 0. )
 

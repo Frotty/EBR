@@ -20,8 +20,8 @@ public class Booster extends StaticBaseObject
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
-		if e instanceof DynamicSetupObject
-			DynamicSetupObject ek = e castTo DynamicSetupObject
+		if e instanceof SetupObject
+			SetupObject ek = e castTo SetupObject
 			SetUnitMoveSpeed(ek.actor, obj.boostspeed)
 			SetUnitMoveSpeed(ek.setup, obj.boostspeed)
 

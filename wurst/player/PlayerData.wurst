@@ -128,10 +128,11 @@ public class PlayerData //just the player's (constant) stuff
 		if id > 7 and builder != null
 			builder.terminate()
 			for int i=0 to 20
-				if regions[i].isOwner(this.id)
-					regions[i].isGreyOwner = true
-					regions[i].isLBOwner = true
-					regions[i].isDGOwner = true
+				// TODO
+//				if regions[i].isOwner(this.id)
+//					regions[i].isGreyOwner = true
+//					regions[i].isLBOwner = true
+//					regions[i].isDGOwner = true
 			for int i2 =8 to 11
 				if not id == i2
 					SetPlayerAlliance(Player(i2), p, ALLIANCE_SHARED_ADVANCED_CONTROL, true)

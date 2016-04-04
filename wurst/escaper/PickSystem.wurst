@@ -40,7 +40,6 @@ public function allow()
 	EnableUserControl(true)
 	EnableOcclusion(true)
 	started = true
-	initStartmazes()
 
 function keyleft()
 	if not started
