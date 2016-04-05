@@ -6,18 +6,26 @@ import SetupObject
 import BaseObject
 
 constant int LINK_ID = 'A051'
+constant int LINK_BOUNCE_ID = 'A07Q'
 constant string EFFECT_STRING = "DRAM"
+constant string EFFECT_BOUNCE_STRING = "DRAL"
 constant string KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant int NODE_ID = 'h0nn'
 constant real ACTIVATION_DIST = 22.
 
+enum LinkType
+	KILL
+	BOUNCE
+
 class Link
+	LinkType ltype
 	Powernode linkedNode
 	lightning sfx
 	
-	construct( Powernode node, lightning sfx )
+	construct( Powernode node, lightning sfx, LinkType ltype )
 		linkedNode = node
 		this.sfx = sfx
+		this.ltype = ltype
 		
 	ondestroy
 		DestroyLightning(sfx)
@@ -28,14 +36,18 @@ public class Powernode extends SetupObject
 
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
+		setup.addAbility(LINK_BOUNCE_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function unlink( Link l )
 		links.remove(l)
 		destroy l
 		
-	function link( Powernode p )
-		links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y)))
+	function link( Powernode p, LinkType ltype )
+		if ltype == LinkType.KILL
+			links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+		else
+			links.add(new Link(p, AddLightning(EFFECT_BOUNCE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
 		
 	override function update()
 		super.update()
@@ -47,8 +59,11 @@ public class Powernode extends SetupObject
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
 					for Escaper e in escapers
 						if e.alive and not e.flying and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
-							e.kill()
-							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ) 
+							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
+							if l.ltype == LinkType.KILL
+								e.kill()
+							else
+								calBounce(l.linkedNode.pos,e)
 				else
 					links.removeAt(i)
 					destroy l
@@ -57,7 +72,25 @@ public class Powernode extends SetupObject
 					i--
 				i++
 				
-	
+	function calBounce(vec3 lpos, Escaper e)
+		let dx = lpos.x - pos.x
+		let dy = lpos.y - pos.y
+		let normal = vec2(-dy,dx).norm()
+		printLog(Loglevel.DEBUG, "bounce normal: " + normal.toString())
+		var b = getBounceVec(e.getRealVel(), normal)
+		if b.lengthSquared() < 75
+			b = getBounceVec(normal.toVec3(), normal) * 3
+		e.setPos(e.pos+b)
+		e.setVel(b)
+		printLog(Loglevel.DEBUG, "bounce vec: " + b.toString())
+		
+		
+	function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
+		vec3 nor3 = nor2.toVec3()
+		vec3 pv3 = vel3.project(nor3)
+		vec2 pv2 = pv3.toVec2()
+		pv2 *= (-4.75)
+		return vel3 + pv2
 	
 	ondestroy
 		while links.getSize() > 0
@@ -70,8 +103,7 @@ public class Powernode extends SetupObject
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		switch id
-			case LINK_ID
+		if id == LINK_ID or id == LINK_BOUNCE_ID
 				var data = target.getEntity()
 				if data instanceof Powernode
 					var pdata = data castTo Powernode
@@ -87,5 +119,7 @@ public class Powernode extends SetupObject
 							
 						i++
 					if isNew
-						node.link(data castTo Powernode)
-						
+						if id == LINK_ID
+							node.link(data castTo Powernode, LinkType.KILL)
+						else
+							node.link(data castTo Powernode, LinkType.BOUNCE)						

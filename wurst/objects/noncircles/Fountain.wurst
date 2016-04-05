@@ -15,6 +15,7 @@ public class Fountain extends StaticSetupObject
 	boolean cure = true
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), 200., function Fountain.cure )
+		active = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 	
 	static function cure()

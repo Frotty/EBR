@@ -26,7 +26,6 @@ public class Tracks extends UnitEntity
 		super( pos.toVec3(), CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0) )
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.setUserData(this castTo int)
-		
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		

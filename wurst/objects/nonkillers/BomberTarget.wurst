@@ -9,4 +9,4 @@ public class BomberTarget extends SetupObject
 		
 	construct(vec2 pos, player owner)
 		super( pos.toVec3(), createUnit(owner, ID, pos, angle(0)), createUnit(owner, ID, pos, angle(0)), 0. )
-
+		

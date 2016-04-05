@@ -24,7 +24,7 @@ public abstract class SetupObject extends UnitEntity
 		super( pos, u )
 		this.setup = setup
 		printLog(Loglevel.TRACE, "Setup init: "  + setup.getName())
-		active = false
+		active = true
 		this.radius = radius
 		actor..addAbility(LOCUST_ID)
 		..setPathing(true)
@@ -36,6 +36,10 @@ public abstract class SetupObject extends UnitEntity
 		..setEntity(this)
 		printLog(Loglevel.TRACE, "Setup inited " + orderTrigger.getHandleId().toString())
 		
+		
+	override function updatePos()
+		pos = vec3(actor.getX(), actor.getY(), pos.z)
+		setup.setXY(pos)
 		
 	override function setPos(vec3 pos)
 		this.pos = pos
@@ -113,8 +117,8 @@ public abstract class StaticSetupObject extends UnitEntity
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 			inRangeTrig = CreateTrigger()
-			inRangeTrig.registerUnitInRangeSource( setup, radius )
-			inRangeTrig.addAction( c )
+			inRangeTrig.registerUnitInRangeSource(setup, radius)
+			inRangeTrig.addAction(c)
 		setup.setUserData( this castTo int )
 	
 	override function update()

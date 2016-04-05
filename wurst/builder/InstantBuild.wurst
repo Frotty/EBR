@@ -107,7 +107,7 @@ public function callback()
 			case buildorders[30]
 				new TerrainBlocker(vec2(data.tpos.x,data.tpos.y), data.b.owner)
 			case buildorders[31]
-				new BigObstacle(data.tpos, data.b.owner)
+				new VolcanoObstacle(data.tpos, data.b.owner)
 			case buildorders[32]
 				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
 			case buildorders[33]

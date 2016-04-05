@@ -37,20 +37,26 @@ public class Door extends StaticSetupObject
 
 	
 	static function keyopen() //open with item and color conditions
+		printLog(Loglevel.DEBUG, "open-1")
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		Door door = source.getUserData() castTo Door
+		printLog(Loglevel.DEBUG, "open-2")
 		if e instanceof Escaper
 			var es = e castTo Escaper
 			if not es.flying
+				printLog(Loglevel.DEBUG, "open-3")
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) and door.opened == false //WARNING BJ function//
+					printLog(Loglevel.DEBUG, "open-3.5")
 					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
 					if not door.opened
+						printLog(Loglevel.DEBUG, "open-4")
 						kdata.terminate()
 						door.openDoor()
 						let pd = pData[e.owner.getId()]
 						pd.addXp(10, false)
+		printLog(Loglevel.DEBUG, "open-5")
 				
 	function changeColor( int id )
 		switch id
@@ -109,6 +115,8 @@ public class Door extends StaticSetupObject
 			pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
 		else
 			pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
+			
+		inRangeTrig.destr()
 	
 	function turn()
 		if vertical

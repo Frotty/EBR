@@ -18,8 +18,8 @@ public class Knockbacker extends EscaperSensorSetup
 		super(pos.toVec3(), owner, KNOCKER_ID, facing, 64., 160.)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		active = true
-			
+		active = false
+					
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()
 		switch id
@@ -39,6 +39,7 @@ public class Knockbacker extends EscaperSensorSetup
 		return false
 		
 	override function onSensor(UnitEntity source, UnitEntity target)
+		updatePos()
 		if target instanceof Escaper
 			if target.pos.z <= sensorHeight
 				let escaper = target castTo Escaper

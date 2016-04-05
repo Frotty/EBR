@@ -32,7 +32,7 @@ public class Waypoint extends StaticBaseObject
 		printLog(Loglevel.DEBUG, "On create waypoint")
 		
 	static function orderMove()
-		printLog(Loglevel.DEBUG, "near waypoint")
+		printLog(Loglevel.TRACE, "near waypoint")
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()

@@ -79,9 +79,9 @@ function registerEventsForUnit(unit u)
 
 function unregisterEventsForUnit(unit u)
 	if EventListener.unitListenerMap.has(u)
+		let id = EventListener.unitListenerMap.get(u)
 		for int i = 0 to eventTypeCounter-1
-			let id = EventListener.unitListenerMap.get(u)
-			let list = EventListener.listenerMap.get(id)
+			let list = EventListener.listenerMap.get(id+i)
 			if list != null
 				for listener in list
 					destroy listener

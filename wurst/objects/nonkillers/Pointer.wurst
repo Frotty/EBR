@@ -20,7 +20,6 @@ public class Pointer extends EscaperSensorSetup
 	
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, POINTER_ID, facing, POINTER_RADIUS, 16.)
-		active = true
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
