@@ -83,7 +83,16 @@ function initPartTwo()
 	printLog(Loglevel.DEBUG, File.isEnabled().toString())
 	initStartmazes()
 	GetExpiredTimer().release()
-	
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_CONSTRUCT_START handleid: " + EVENT_PLAYER_UNIT_CONSTRUCT_START.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_USE_ITEM handleid: " + EVENT_PLAYER_UNIT_USE_ITEM.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_UPGRADE_FINISH handleid: " + EVENT_PLAYER_UNIT_UPGRADE_FINISH.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_SPELL_EFFECT handleid: " + EVENT_PLAYER_UNIT_SPELL_EFFECT.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_PICKUP_ITEM handleid: " + EVENT_PLAYER_UNIT_PICKUP_ITEM.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_SPELL_CAST handleid: " + EVENT_PLAYER_UNIT_SPELL_CAST.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_DEATH handleid: " + EVENT_PLAYER_UNIT_DEATH.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER handleid: " + EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER handleid: " + EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER.getHandleId().toString())
+	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_DROP_ITEM handleid: " + EVENT_PLAYER_UNIT_DROP_ITEM.getHandleId().toString())
 
 init
 	callGen()
@@ -94,6 +103,7 @@ init
 	trigger t = CreateTrigger()
 	TriggerRegisterTimerEvent( t, .01, false )
 	TriggerAddAction( t, function initGame )
+	
 	
 @compiletime function callGen()
 	callFunctionsWithAnnotation("@objectgen")

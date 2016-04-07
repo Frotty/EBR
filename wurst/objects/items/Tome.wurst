@@ -29,10 +29,5 @@ public class Tome extends ItemObject
 			if not holder.flying and not holder.sliding and not holder.onUnwalkable
 				pos = holder.pos
 			
-	ondestroy
-		actorItem.remove()
-		holder = null
-		setup.remove()
-	
 	
 	

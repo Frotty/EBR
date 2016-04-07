@@ -50,7 +50,7 @@ public class Escaper extends UnitEntity
 		..hide()
 		..removeAbility('Aloc')
 		..show()
-		
+		..addAbility('A01E')
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)

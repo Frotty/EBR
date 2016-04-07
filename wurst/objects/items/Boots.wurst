@@ -29,11 +29,5 @@ public class Boots extends ItemObject
 		actorItem.setUserData(this castTo int)
 		
 	override function update()
-		
-	ondestroy
-		actorItem.remove()
-		holder = null
-		setup.remove()
-	
 	
 	

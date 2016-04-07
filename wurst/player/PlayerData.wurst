@@ -162,7 +162,7 @@ function initMB()
 	playerboard.board.getItem(0,1)..setStyle(false,true)..setWidth(0.02)
 	playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 	playerboard.setNewItem(0,2,"Rank",null)
-	playerboard.board.display(true)
+//	playerboard.board.display(true)
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
 	for pd in playerlist
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)

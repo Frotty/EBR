@@ -65,7 +65,6 @@ public abstract class SetupObject extends UnitEntity
 			time = GetRandomReal(30,45)
 	
 	ondestroy
-		actor.clearRegister()
 		actor.remove()
 		setup.remove()
 		
@@ -116,9 +115,9 @@ public abstract class StaticSetupObject extends UnitEntity
 		setup.addAbility('Agho')
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-			inRangeTrig = CreateTrigger()
-			inRangeTrig.registerUnitInRangeSource(setup, radius)
-			inRangeTrig.addAction(c)
+//			inRangeTrig = CreateTrigger()
+//			inRangeTrig.registerUnitInRangeSource(setup, radius)
+//			inRangeTrig.addAction(c)
 		setup.setUserData( this castTo int )
 	
 	override function update()

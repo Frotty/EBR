@@ -5,12 +5,14 @@ import RegisterEvents
 import HashMap
 import ErrorHandling
 import OnUnitEnterLeave
+import ObjectIds
 
 constant MAX_EVENTS = 50
 
 public abstract class EventListener
 	static HashMap<int, LinkedList<EventListener>> listenerMap = new HashMap<int, LinkedList<EventListener>>()
 	static HashMap<unit, int> unitListenerMap = new HashMap<unit, int>()
+	static EventListener last = null
 	
 	static function add(eventid eventId, EventListener listener)
 		let id = eventId.toIntId()
@@ -19,39 +21,50 @@ public abstract class EventListener
 			
 		listenerMap.get(id).add(listener)
 		
+		
 	static function add(unit u, eventid eventId, EventListener listener)
 		let id = eventId.toIntId()
 		LinkedList<EventListener> list = null
+		printLog(Loglevel.DEBUG, "Add EventListener for unit.. eventId: " + id.toString())
 		if not unitListenerMap.has(u)
+			printLog(Loglevel.DEBUG, "Unit does not have any listeners yet")
 			list = new LinkedList<EventListener>()
 			let startId = 1 + MAX_EVENTS + (list castTo int) * MAX_EVENTS
+			printLog(Loglevel.DEBUG, "Unit startid: " + startId.toString())
 			unitListenerMap.put(u, startId)
 			
 		let listenerId = unitListenerMap.get(u) + id
+		printLog(Loglevel.DEBUG, "Listener id: " + listenerId.toString())
 		if not listenerMap.has(listenerId)
+			printLog(Loglevel.DEBUG, "Unit has no listeners for eventId: " + id.toString())
 			if list == null
 				list = new LinkedList<EventListener>()
 			listenerMap.put(listenerId, list)
 		
+		printLog(Loglevel.DEBUG, "Added Listener to list")
 		listenerMap.get(listenerId).add(listener)
-		
-	static function addSpellEffect(unit u, int abilId, EventListener listener)
-		add(u, EVENT_UNIT_SPELL_EFFECT, () -> begin
-			if GetSpellAbilityId() == abilId
-				listener.onEvent()
-		end)
 		
 	static function generalEventCallback()
 		let id = GetTriggerEventId().toIntId()
+		printLog(Loglevel.TRACE, "onEvent: id: " + GetTriggerEventId().getHandleId().toString() + ". intid: " + id.toString())
 		let trigUnit = GetTriggerUnit()
-		if listenerMap.has(id)
-			for listener in listenerMap.get(id)
+		let glist = listenerMap.get(id)
+		if glist != null
+			for listener in glist
 				listener.onEvent()
-		if unitListenerMap.has(trigUnit)
+		printLog(Loglevel.TRACE, "onEvent-1")
+		if trigUnit != null and unitListenerMap.has(trigUnit)
+			printLog(Loglevel.DEBUG, "Is unit Event and unit has listeners")
 			let list = listenerMap.get(unitListenerMap.get(trigUnit) + id)
+			printLog(Loglevel.DEBUG, "List id: " + (unitListenerMap.get(trigUnit) + id).toString())
 			if list != null
 				for listener in list
-					listener.onEvent()		
+					printLog(Loglevel.DEBUG, "On event")
+					listener.onEvent()
+		if GetTriggerEventId() == EVENT_PLAYER_UNIT_SPELL_EFFECT
+			printLog(Loglevel.DEBUG, "Caster: " + trigUnit.getName())
+			printLog(Loglevel.DEBUG, "Abil: " + int2fourchar(GetSpellAbilityId()))
+		printLog(Loglevel.TRACE, "onEvent-2")
 			
 	abstract function onEvent()
 			
@@ -70,6 +83,7 @@ int eventTypeCounter = 0
 function registerEventId(eventid evnt) returns int
 	eventTypeCounter++
 	eventidToIndex[evnt.getHandleId()] = eventTypeCounter
+	printLog(Loglevel.DEBUG, "reg handleid: " + evnt.getHandleId().toString() + " -> eventId: " + eventTypeCounter.toString())
 	if eventTypeCounter > MAX_EVENTS
 		error("too many event types, increase MAX_EVENTS constant")
 	return eventTypeCounter
@@ -80,13 +94,17 @@ function registerEventsForUnit(unit u)
 function unregisterEventsForUnit(unit u)
 	if EventListener.unitListenerMap.has(u)
 		let id = EventListener.unitListenerMap.get(u)
-		for int i = 0 to eventTypeCounter-1
+		printLog(Loglevel.INFO, "unregister unit has listeners. startid: " + id.toString())
+		for int i = 1 to eventTypeCounter
 			let list = EventListener.listenerMap.get(id+i)
 			if list != null
+				printLog(Loglevel.INFO, "unregister listenerlistid: " + (id+i).toString() + " listsize: " + list.getSize().toString())
 				for listener in list
 					destroy listener
+					printLog(Loglevel.INFO, "eventlistener destroyed")
 				destroy list
-				EventListener.listenerMap.remove(id)
+				EventListener.listenerMap.remove(id+i)
+		EventListener.unitListenerMap.remove(u)
 
 init
 	// Register Events when unit enters map
@@ -107,4 +125,3 @@ init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function EventListener.generalEventCallback)
-	
