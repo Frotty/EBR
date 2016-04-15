@@ -22,10 +22,10 @@ function onCommandChat()
 			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
 			if nstr == "lock"
 				SetCameraTargetControllerNoZForPlayer(p, pd.escaper.actor, 0,0,true)
-				pd.camLock = true
+				pd.escaper.camlock = true
 			else if nstr == "unlock"
 				ResetToGameCameraForPlayer(p, 1.)
-				pd.camLock = false
+				pd.escaper.camlock = false
 			else
 				pd.zCam = nstr.toInt() * 1.
 				if pd.zCam > 2500

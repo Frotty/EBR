@@ -39,7 +39,7 @@ public class Teleporter extends StaticBaseObject
 			u.setPos(rallyPos.x, rallyPos.y)
 			DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 			DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
-			if not pData[GetOwningPlayer(u).getId()].camLock
+			if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 				PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
 			if obj.isOneshot
 				destroy(obj)
@@ -65,7 +65,7 @@ public class Teleporter extends StaticBaseObject
 				u.setPos(rallyPos.x, rallyPos.y)
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
 				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
-				if not pData[GetOwningPlayer(u).getId()].camLock
+				if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 					PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
 
 	override function update()

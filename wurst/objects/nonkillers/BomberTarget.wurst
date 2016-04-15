@@ -1,6 +1,5 @@
 package BomberTarget
 import SetupObject
-import BaseObject
 
 constant int ID = 'u004'
 

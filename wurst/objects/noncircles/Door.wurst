@@ -30,32 +30,26 @@ public class Door extends StaticSetupObject
 	
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
-							CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, CODE_NULL )
-//		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
-//		pathing.setUserData(this castTo int)
-//		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+							CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
+		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
+		pathing.setUserData(this castTo int)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	
 	static function keyopen() //open with item and color conditions
-//		printLog(Loglevel.DEBUG, "open-1")
-//		unit source = GetTriggeringTrigger().getSource()
-//		unit u = GetTriggerUnit()
-//		Entity e = u.getEntity()
-//		Door door = source.getUserData() castTo Door
-//		printLog(Loglevel.DEBUG, "open-2")
-//		if not door.opened and e instanceof Escaper
-//			var es = e castTo Escaper
-//			if not es.flying
-//				printLog(Loglevel.DEBUG, "open-3")
-//				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) //WARNING BJ function//
-//					printLog(Loglevel.DEBUG, "open-3.5")
-//					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
-//					printLog(Loglevel.DEBUG, "open-4")
-//					kdata.terminate()
-//					door.openDoor()
-//					let pd = pData[e.owner.getId()]
-//					pd.addXp(10, false)
-//		printLog(Loglevel.DEBUG, "open-5")
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getEntity()
+		Door door = source.getUserData() castTo Door
+		if not door.opened and e instanceof Escaper
+			var es = e castTo Escaper
+			if not es.flying
+				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) //WARNING BJ function//
+					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
+					kdata.terminate()
+					door.openDoor()
+					let pd = pData[e.owner.getId()]
+					pd.addXp(10, false)
 				
 	function changeColor( int id )
 		switch id
@@ -81,7 +75,7 @@ public class Door extends StaticSetupObject
 		colorize()
 				
 	function colorize()
-		color c = color(0,0,0)
+		color c
 		if col == COLOR.YELLOW
 			c = playercolors[col castTo int +1]
 		else if col == COLOR.ORANGE
@@ -145,17 +139,16 @@ public class Door extends StaticSetupObject
 	ondestroy
 		pathing.remove()
 
-//	function onCast() returns boolean
-//		printLog(Loglevel.DEBUG, "casted")
-//		int id = GetSpellAbilityId()
-//		switch id 
-//			case DOOROPEN_ABILITY_ID
-//				toggleOpen()
-//			case DOORTURN_ABILITY_ID
-//				turn()
-//			default 
-//				changeColor(id)
-//		return false
+	function onCast() returns boolean
+		int id = GetSpellAbilityId()
+		switch id 
+			case DOOROPEN_ABILITY_ID
+				toggleOpen()
+			case DOORTURN_ABILITY_ID
+				turn()
+			default 
+				changeColor(id)
+		return false
 
 	
 

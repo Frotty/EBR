@@ -4,18 +4,25 @@ import Entity
 import Escaper
 import SetupObject
 import BaseObject
+import ConfigValue
+import ChannelAbilityPreset
 
 constant int LINK_ID = 'A051'
 constant int LINK_BOUNCE_ID = 'A07Q'
+constant int LINK_DIODE_ID = 'A061'
 constant string EFFECT_STRING = "DRAM"
 constant string EFFECT_BOUNCE_STRING = "DRAL"
+constant string EFFECT_DIODE_STRING = "LONE"
 constant string KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant int NODE_ID = 'h0nn'
 constant real ACTIVATION_DIST = 22.
+public int INCREASE_BOUNCE_ID
+public int DECREASE_BOUNCE_ID
 
 enum LinkType
 	KILL
 	BOUNCE
+	BOUNCE_DIODE
 
 class Link
 	LinkType ltype
@@ -33,10 +40,12 @@ class Link
 
 public class Powernode extends SetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
+	private ConfigValue bounciness = new ConfigValue(0.75, 0.05, "Bounciness")
 
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
-		setup.addAbility(LINK_BOUNCE_ID)
+		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
+		..addAbility(INCREASE_BOUNCE_ID).addAbility(DECREASE_BOUNCE_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function unlink( Link l )
@@ -44,10 +53,13 @@ public class Powernode extends SetupObject
 		destroy l
 		
 	function link( Powernode p, LinkType ltype )
-		if ltype == LinkType.KILL
-			links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
-		else
-			links.add(new Link(p, AddLightning(EFFECT_BOUNCE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+		switch ltype
+			case LinkType.KILL
+				links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+			case LinkType.BOUNCE
+				links.add(new Link(p, AddLightning(EFFECT_BOUNCE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+			case LinkType.BOUNCE_DIODE
+				links.add(new Link(p, AddLightning(EFFECT_DIODE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))	
 		
 	override function update()
 		super.update()
@@ -59,11 +71,14 @@ public class Powernode extends SetupObject
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
 					for Escaper e in escapers
 						if e.alive and not e.flying and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
-							AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
-							if l.ltype == LinkType.KILL
-								e.kill()
-							else
-								calBounce(l.linkedNode.pos,e)
+							switch l.ltype
+								case LinkType.KILL
+									AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
+									e.kill()
+								case LinkType.BOUNCE
+									calBounce(l.linkedNode.pos,e, (2.00 + bounciness.get()))
+								case LinkType.BOUNCE_DIODE
+									calBounceD(l.linkedNode.pos,e, (1.00 + bounciness.get()))		
 				else
 					links.removeAt(i)
 					destroy l
@@ -72,24 +87,35 @@ public class Powernode extends SetupObject
 					i--
 				i++
 				
-	function calBounce(vec3 lpos, Escaper e)
-		let dx = lpos.x - pos.x
-		let dy = lpos.y - pos.y
-		let normal = vec2(-dy,dx).norm()
-		printLog(Loglevel.DEBUG, "bounce normal: " + normal.toString())
-		var b = getBounceVec(e.getRealVel(), normal)
+	function getNormal(vec2 la, vec2 lb, vec2 pos) returns vec3
+		let dx = lb.x - la.x
+		let dy = lb.y - la.y
+		if ((lb.x - la.x)*(pos.y - la.y) - (lb.y - la.y)*(pos.x - la.x)) > 0
+			return vec2(-dy,dx).norm().withZ(0)
+		return vec2(dy,-dx).norm().withZ(0)
+				
+	function calBounce(vec3 lpos, Escaper e, real bounceFactor)
+		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
+		var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
 		if b.lengthSquared() < 75
-			b = getBounceVec(normal.toVec3(), normal) * 3
-		e.setPos(e.pos+b)
+			b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
+		e.setXY(e.pos+b)
 		e.setVel(b)
-		printLog(Loglevel.DEBUG, "bounce vec: " + b.toString())
+		
+	function calBounceD(vec3 lpos, Escaper e, real bounceFactor)
+		let dx = lpos.x - e.pos.x
+		let dy = lpos.y - e.pos.y
+		let normal = vec2(-dy,dx).norm().toVec3()
+		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 2
+		e.setXY(e.pos+b)
+		e.setVel(b)
 		
 		
-	function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
+	function getBounceVec(vec3 vel3, vec2 nor2, real bounceFactor) returns vec3
 		vec3 nor3 = nor2.toVec3()
 		vec3 pv3 = vel3.project(nor3)
 		vec2 pv2 = pv3.toVec2()
-		pv2 *= (-4.75)
+		pv2 *= (-bounceFactor)
 		return vel3 + pv2
 	
 	ondestroy
@@ -103,23 +129,56 @@ public class Powernode extends SetupObject
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		if id == LINK_ID or id == LINK_BOUNCE_ID
-				var data = target.getEntity()
-				if data instanceof Powernode
-					var pdata = data castTo Powernode
-					var isNew = true
-					var i = 0
-					while i < node.links.getSize()
-						Link l = node.links.get(i)
-						if l.linkedNode == pdata 
-							node.links.removeAt(i)
-							destroy l
-							isNew = false
-							break
-							
-						i++
-					if isNew
-						if id == LINK_ID
-							node.link(data castTo Powernode, LinkType.KILL)
-						else
-							node.link(data castTo Powernode, LinkType.BOUNCE)						
+		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	
+			var data = target.getEntity()
+			if data instanceof Powernode
+				var pdata = data castTo Powernode
+				var isNew = true
+				var i = 0
+				while i < node.links.getSize()
+					Link l = node.links.get(i)
+					if l.linkedNode == pdata 
+						node.links.removeAt(i)
+						destroy l
+						isNew = false
+						break
+						
+					i++
+				if isNew
+					if id == LINK_ID
+						node.link(data castTo Powernode, LinkType.KILL)
+					else if id == LINK_BOUNCE_ID
+						node.link(data castTo Powernode, LinkType.BOUNCE)
+					else if id == LINK_DIODE_ID	
+						node.link(data castTo Powernode, LinkType.BOUNCE_DIODE)
+		else if id == INCREASE_BOUNCE_ID
+			node.bounciness.increment(node.pos, 4)
+		else if id == DECREASE_BOUNCE_ID
+			node.bounciness.decrement(node.pos, 0)
+
+@objectgen function genKnockbacker()
+	INCREASE_BOUNCE_ID = ABIL_ID_GEN.next()
+	DECREASE_BOUNCE_ID = ABIL_ID_GEN.next()
+	if not compiletime
+		return
+	let inc_spell = new ChannelAbilityPreset(INCREASE_BOUNCE_ID, 1, true)
+	inc_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Increase Bounciness")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetHotkey("C")
+	..presetTooltipNormal((int lvl) -> "Increase Bounciness [|cffFFCC00C|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(2, 2)
+	
+	let dec_spell = new ChannelAbilityPreset(DECREASE_BOUNCE_ID, 1, true)
+	dec_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Decrease Bounciness")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetHotkey("R")
+	..presetTooltipNormal((int lvl) -> "Decrease Bounciness [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(3, 0)

@@ -55,9 +55,9 @@ public class Jumper extends StaticBaseObject
 					edata.setPos(jdata.pos.add(0,0,1.))
 					edata.setTarget(jdata.getRallyPoint(), jdata.speed)
 				case JumpMode.UNFORCED
-					edata.addVel(vec3(0,0, jdata.speed) + edata.slideVelocity)
+					edata.setVel(vec3(0,0, jdata.speed) + edata.slideVelocity)
+					edata.sliding = false
 			addEffect(EFFECT_STRING, data.pos).destr()
-			edata.sliding = false
 			edata.slideVelocity = vec2(0,0)
 					
 				

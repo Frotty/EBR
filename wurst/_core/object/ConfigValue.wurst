@@ -11,16 +11,19 @@ public class ConfigValue
 		this.increment = increment
 		this.valueName = name
 		
+	function get() returns real
+		return value
+		
 	function increment(vec3 pos, real max)
 		if value < max
 			value += increment
-			createTTEx(pos, vec2(0,10), valueName + ": " + value.toString(2), 9., 2., colorA(255,255,255,255))
+			createTTEx(pos, vec2(0,0.1), valueName + ": " + value.toString(2), 9., 2., colorA(255,255,255,255))
 		else
-			createTTEx(pos, vec2(0,10), valueName + " at maximum!", 9., 2., colorA(255,255,255,255))
+			createTTEx(pos, vec2(0,0.1), valueName + " at maximum!", 9., 2., colorA(255,255,255,255))
 		
 	function decrement(vec3 pos, real min)
 		if value > min
 			value -= increment
-			createTTEx(pos, vec2(0,10), valueName + ": " + value.toString(2), 9., 2., colorA(255,255,255,255))
+			createTTEx(pos, vec2(0,0.1), valueName + ": " + value.toString(2), 9., 2., colorA(255,255,255,255))
 		else
-			createTTEx(pos, vec2(0,10), valueName + " at minimum!", 9., 2., colorA(255,255,255,255))
+			createTTEx(pos, vec2(0,0.1), valueName + " at minimum!", 9., 2., colorA(255,255,255,255))

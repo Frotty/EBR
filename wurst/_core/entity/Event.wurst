@@ -25,46 +25,31 @@ public abstract class EventListener
 	static function add(unit u, eventid eventId, EventListener listener)
 		let id = eventId.toIntId()
 		LinkedList<EventListener> list = null
-		printLog(Loglevel.DEBUG, "Add EventListener for unit.. eventId: " + id.toString())
 		if not unitListenerMap.has(u)
-			printLog(Loglevel.DEBUG, "Unit does not have any listeners yet")
 			list = new LinkedList<EventListener>()
 			let startId = 1 + MAX_EVENTS + (list castTo int) * MAX_EVENTS
-			printLog(Loglevel.DEBUG, "Unit startid: " + startId.toString())
 			unitListenerMap.put(u, startId)
 			
 		let listenerId = unitListenerMap.get(u) + id
-		printLog(Loglevel.DEBUG, "Listener id: " + listenerId.toString())
 		if not listenerMap.has(listenerId)
-			printLog(Loglevel.DEBUG, "Unit has no listeners for eventId: " + id.toString())
 			if list == null
 				list = new LinkedList<EventListener>()
 			listenerMap.put(listenerId, list)
 		
-		printLog(Loglevel.DEBUG, "Added Listener to list")
 		listenerMap.get(listenerId).add(listener)
 		
 	static function generalEventCallback()
 		let id = GetTriggerEventId().toIntId()
-		printLog(Loglevel.TRACE, "onEvent: id: " + GetTriggerEventId().getHandleId().toString() + ". intid: " + id.toString())
 		let trigUnit = GetTriggerUnit()
 		let glist = listenerMap.get(id)
 		if glist != null
 			for listener in glist
 				listener.onEvent()
-		printLog(Loglevel.TRACE, "onEvent-1")
 		if trigUnit != null and unitListenerMap.has(trigUnit)
-			printLog(Loglevel.DEBUG, "Is unit Event and unit has listeners")
 			let list = listenerMap.get(unitListenerMap.get(trigUnit) + id)
-			printLog(Loglevel.DEBUG, "List id: " + (unitListenerMap.get(trigUnit) + id).toString())
 			if list != null
 				for listener in list
-					printLog(Loglevel.DEBUG, "On event")
 					listener.onEvent()
-		if GetTriggerEventId() == EVENT_PLAYER_UNIT_SPELL_EFFECT
-			printLog(Loglevel.DEBUG, "Caster: " + trigUnit.getName())
-			printLog(Loglevel.DEBUG, "Abil: " + int2fourchar(GetSpellAbilityId()))
-		printLog(Loglevel.TRACE, "onEvent-2")
 			
 	abstract function onEvent()
 			
@@ -94,14 +79,12 @@ function registerEventsForUnit(unit u)
 function unregisterEventsForUnit(unit u)
 	if EventListener.unitListenerMap.has(u)
 		let id = EventListener.unitListenerMap.get(u)
-		printLog(Loglevel.INFO, "unregister unit has listeners. startid: " + id.toString())
+		printLog(Loglevel.DEBUG, "unregister unit has listeners. startid: " + id.toString())
 		for int i = 1 to eventTypeCounter
 			let list = EventListener.listenerMap.get(id+i)
 			if list != null
-				printLog(Loglevel.INFO, "unregister listenerlistid: " + (id+i).toString() + " listsize: " + list.getSize().toString())
 				for listener in list
 					destroy listener
-					printLog(Loglevel.INFO, "eventlistener destroyed")
 				destroy list
 				EventListener.listenerMap.remove(id+i)
 		EventListener.unitListenerMap.remove(u)

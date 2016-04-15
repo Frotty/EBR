@@ -171,7 +171,7 @@ abstract public class UnitEntity extends Entity
 	function setXY(vec3 tpos)
 		pos = tpos
 		actor.setXY(tpos)
-		
+		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
 
 abstract public class FxEntity extends Entity
 	protected Fx fx

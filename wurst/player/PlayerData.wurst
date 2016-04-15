@@ -30,7 +30,6 @@ public class PlayerData //just the player's (constant) stuff
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 	boolean left = false
 	
-	int deaths = 0
 	Escaper escaper
 	Builder builder
 	RevivePointModifier revmod
@@ -45,7 +44,6 @@ public class PlayerData //just the player's (constant) stuff
 	
 	real zCam = 1600.
 	
-	boolean camLock = false
 	TerrainModder tmod 
 	UnitProducer prod
 	construct (player p)
@@ -58,7 +56,7 @@ public class PlayerData //just the player's (constant) stuff
 		if mbname == "Frotty" or mbname == "FrottyZ"
 			AddSpecialEffectTarget( "Righteousness.MDX", escaper.actor, "chest" )
 		for int i = 0 to cplayerCount
-			if mbname == names[i]
+			if mbname.toLowerCase() == names[i].toLowerCase()
 				mbname = tags[i] + "|r" + colorcode[ id ] + mbname
 				break
 		mbname = colorcode[ id ] + mbname
@@ -106,7 +104,7 @@ public class PlayerData //just the player's (constant) stuff
 			
 	function setMBRow()
 		playerboard.setNewItem(gameId+1,0,mbname,icon)
-		playerboard.setNewItem(gameId+1,1,deaths.toString() , null)
+		playerboard.setNewItem(gameId+1,1,escaper.deaths.toString() , null)
 		playerboard.setNewItem(gameId+1,2,rank, null)  
 	
 	function setMbIcon(int typ)
@@ -162,7 +160,7 @@ function initMB()
 	playerboard.board.getItem(0,1)..setStyle(false,true)..setWidth(0.02)
 	playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 	playerboard.setNewItem(0,2,"Rank",null)
-//	playerboard.board.display(true)
+	playerboard.board.display(true)
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
 	for pd in playerlist
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
@@ -175,13 +173,6 @@ function initMB()
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            " + "|cffFF8429» |cff7BBD42All Players have been checked! You can now select an escaper.")
 	DestroyTrigger(GetTriggeringTrigger())
 	
-	
-public function player.addDeath()
-	var pd = pData[this.getId()]
-	pd.deaths ++
-	if pd.deaths % 25 == 0
-		pd.addXp(5, true)
-	playerboard.board.getItem(pd.gameId+1, 1).setValue(pd.deaths.toString())
 	
 function setTime()
 	seconds++

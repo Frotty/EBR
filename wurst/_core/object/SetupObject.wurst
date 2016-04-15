@@ -23,7 +23,6 @@ public abstract class SetupObject extends UnitEntity
 	construct( vec3 pos, unit u, unit setup, real radius )
 		super( pos, u )
 		this.setup = setup
-		printLog(Loglevel.TRACE, "Setup init: "  + setup.getName())
 		active = true
 		this.radius = radius
 		actor..addAbility(LOCUST_ID)
@@ -34,7 +33,6 @@ public abstract class SetupObject extends UnitEntity
 		setup..setXY(actor.getPos())
 		..addAbility('Agho')
 		..setEntity(this)
-		printLog(Loglevel.TRACE, "Setup inited " + orderTrigger.getHandleId().toString())
 		
 		
 	override function updatePos()
@@ -78,7 +76,7 @@ public abstract class SetupObject extends UnitEntity
 		var obj = entity castTo SetupObject
 		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
 			if orderS == "smart" and u == null
-				IssuePointOrder(obj.setup, "move", x+getOffset(), y)
+				IssuePointOrder(obj.actor, "move", x+getOffset(), y)
 			else
 				if u != null
 					IssueTargetOrderById(obj.actor, order, u)
@@ -87,8 +85,8 @@ public abstract class SetupObject extends UnitEntity
 				else
 					IssueImmediateOrderById(obj.actor, order)
 		else
-			if not orderS == "waterelemental" and not orderS == "roar"
-				obj.setup.issueImmediateOrder("stop")
+			if not orderS == "waterelemental" and not orderS == "roar" and not order == 851974
+				obj.actor.issueImmediateOrder("stop")
 		obj.setup.setXY(obj.actor.getPos3())
 		obj.setup.setFacing(obj.actor.getFacingAngle())
 		obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
@@ -115,9 +113,9 @@ public abstract class StaticSetupObject extends UnitEntity
 		setup.addAbility('Agho')
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
-//			inRangeTrig = CreateTrigger()
-//			inRangeTrig.registerUnitInRangeSource(setup, radius)
-//			inRangeTrig.addAction(c)
+			inRangeTrig = CreateTrigger()
+			inRangeTrig.registerUnitInRangeSource(setup, radius)
+			inRangeTrig.addAction(c)
 		setup.setUserData( this castTo int )
 	
 	override function update()

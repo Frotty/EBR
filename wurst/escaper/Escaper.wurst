@@ -31,6 +31,8 @@ public class Escaper extends UnitEntity
 	boolean onUnwalkable = false
 	boolean poisoned = false
 	boolean onLava = false
+	boolean camlock = false
+	int deaths = 0
 	effect lavaEffect
 	effect poisonEffect
 	
@@ -50,7 +52,6 @@ public class Escaper extends UnitEntity
 		..hide()
 		..removeAbility('Aloc')
 		..show()
-		..addAbility('A01E')
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
@@ -87,6 +88,7 @@ public class Escaper extends UnitEntity
 			setPoison(false)
 			setLava(false)
 			flying = false
+			deaths++
 		
 	
 	override function onGroundHit()
@@ -107,35 +109,39 @@ public class Escaper extends UnitEntity
 		pos.z = globalTerrainZ+.1		
 		var ttype = GetTerrainType(pos.x, pos.y)
 		
-		if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
-			let angl = actor.getFacingAngle()
-			slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
-			sliding = true
-			vel *= 0.99
-		else
-			vel *= 0.96
-			slideVelocity *= 0.8
-			sliding = false
+		if currentRegion != null 
 			if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 				onUnwalkable = true
 				setLava(false)
 				setPoison(false)
 				if alive
 					kill()
-			else 
+			else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
+				let angl = actor.getFacingAngle()
+				slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
+				sliding = true
+				vel *= 0.99
+				setLava(false)
+			else
+				vel *= 0.96
+				slideVelocity *= 0.8
+				sliding = false
 				onUnwalkable = false
 				if ttype == 1147958883 and not onLava
 					setLava(true)
-					if onLava
-						var hp = actor.getHP()
-						if hp > .405
-							actor.setHP(hp-currentRegion.lavaDmg)
-						else if alive
-							kill()
 				else if ttype == POISON
 					setLava(false)
 					if not poisoned
 						setPoison(true)
+				else
+					setLava(false)
+						
+		if onLava
+			var hp = actor.getHP()
+			if hp > .405
+				actor.setHP(hp-currentRegion.lavaDmg)
+			else if alive
+				kill()
 		if poisoned
 			var hp2 = actor.getHP()
 			if hp2 > .405
@@ -164,7 +170,7 @@ public class Escaper extends UnitEntity
 		return vel + slideVelocity + trackVelocity + vortexVelocity
         
 	function revive()
-		printLog(Loglevel.DEBUG, "revive-1")
+		printLog(Loglevel.DEBUG, "revive start")
 		sliding = false
 		let rev = currentRevivepoint
 		if revmod == null
@@ -179,14 +185,12 @@ public class Escaper extends UnitEntity
 				PanCameraToTimed(rev.x, rev.y, 0)
 				ClearSelection()
 				SelectUnit(actor, true)
-		printLog(Loglevel.DEBUG, "revive-2")
 		currentRegion = getRegionData(pos)
 		alive = true
 		setPoison(false)
 		setLava(false)
-		printLog(Loglevel.DEBUG, "revive-3")
-//		if pData[owner.getId()].camLock
-//			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
+		if camlock
+			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
         
 	static function changeAngle()
 		var u = GetTriggerUnit()

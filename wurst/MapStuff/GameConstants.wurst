@@ -6,7 +6,7 @@ public string array tags
 public string array colorcode
 public integer array expBounds
 public string array ranks
-public constant int cplayerCount = 14
+public constant int cplayerCount = 16
 
 public constant string MAP_VER = "EBR 0.84"
 
@@ -65,6 +65,12 @@ init
 	tags    [13] = "|cff9C94E6[Tester]"
 	names	[14] = "kari0003"
 	tags	[14] = "|cffFFE87C[Adept]"
+	names	[15] = "Kagu"
+	tags	[15] = "|cff9C94E6[Tester]"
+	names	[16] = "pockpoong"
+	tags	[16] = "|cff9C94E6[Tester]"
+	names	[16] = "waterknight"
+	tags	[16] = "|cffDE3121[Critter]"
 
 	colorcode[ 0 ] = "|cffFF0202" // red
 	colorcode[ 1 ] = "|cff0041FF" // blue

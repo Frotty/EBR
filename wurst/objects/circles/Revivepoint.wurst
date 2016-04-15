@@ -60,7 +60,7 @@ public class RevivePoint extends StaticSetupObject
 					es.setPos(obj.pos)
 					es.actor.abortOrder()
 					es.currentRegion = rdata
-					if not pData[es.owner.getId()].camLock
+					if not es.camlock
 						if GetLocalPlayer() == es.owner
 							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
 					if es instanceof HolyEscaper

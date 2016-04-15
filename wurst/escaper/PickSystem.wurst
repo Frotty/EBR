@@ -109,8 +109,6 @@ function keypick()
 		switch currentView[pd.id]-1
 			case 0
 				pd.escaper = new HolyEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[0]) )
-				new HolyEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[0]) )
-				new HolyEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[0]) )
 			case 1
 				pd.escaper = new StrongEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[1]) )
 			case 2
