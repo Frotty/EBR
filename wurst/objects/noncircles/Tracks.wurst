@@ -49,7 +49,7 @@ public class Tracks extends UnitEntity
 		let id = GetSpellAbilityId()
 		switch id
 			case INC_ID
-				if speed < 10.
+				if speed < 20.
 					speed+= .5
 					createTTEx(pos, vec2(0,0.05), "Speed : " + speed.toString(), 12,  2., colorA(255,255,255,0), owner  )
 			case DEC_ID

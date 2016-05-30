@@ -178,6 +178,8 @@ public class Escaper extends UnitEntity
 		else
 			ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
 		setVel(vec3(0,0,0))
+		setPos(vec3(rev.x, rev.y, 32.))
+		actor.setPropWindow(60.)
 		slideVelocity = vec2(0,0)
 		CameraClearNoiseForPlayer(owner)
 		if selectatrevive

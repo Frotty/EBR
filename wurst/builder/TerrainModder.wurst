@@ -172,7 +172,8 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	var offset = this + off
 	offset.x = (offset.x / 128).round() * 128.
 	offset.y = (offset.y / 128).round() * 128.
-	if getRegionData(offset).canBuild(caster)
+	let rdata = getRegionData(offset)
+	if rdata != null and rdata.canBuild(caster)
 		offset.setTerrainType(ttype, -1, 1, 0)
 
 public function init_TerrainModder()

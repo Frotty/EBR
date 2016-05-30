@@ -76,13 +76,13 @@ public class SetupBox extends UnitEntity
 					if rdata.canBuild(p)
 						rdata.disallow(p)
 						printTimedToPlayer("|cff9C0808Disallowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 15, owner)
-						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region.", 15, owner)
+						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region.", 15, p)
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMinX(rdata.theRect)+GetRectMaxX(rdata.theRect))/2, (GetRectMinY(rdata.theRect)+GetRectMaxY(rdata.theRect))/2, 3, 156, 8, 8, false)
 					else
 						rdata.allow(p)
 						printTimedToPlayer("|cff08B552Allowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 15, owner)
-						printTimedToPlayer(owner.getNameColored() + " |cff08B552allowed|r |cffffcc00 you to build in his region.", 15, owner)
+						printTimedToPlayer(owner.getNameColored() + " |cff08B552allowed|r |cffffcc00 you to build in his region.", 15, p)
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMaxX(rdata.theRect)+GetRectMinX(rdata.theRect))/2, (GetRectMaxY(rdata.theRect)+GetRectMinY(rdata.theRect))/2, 3, 8, 181, 82, false)
 				else

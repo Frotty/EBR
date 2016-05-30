@@ -40,7 +40,7 @@ class Link
 
 public class Powernode extends SetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
-	private ConfigValue bounciness = new ConfigValue(0.75, 0.05, "Bounciness")
+	private ConfigValue bounciness = new ConfigValue(0.80, 0.20, "Bounciness")
 
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)

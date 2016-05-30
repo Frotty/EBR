@@ -67,14 +67,11 @@ public class FirstSnowMaze extends Startmaze
 			(gg_unit_n007_0015.getEntity() castTo EscaperSensorSetup).setup.issuePointOrder("move", f2wp.pos.toVec2())
 		end)
 		
-		var t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
-		printLog(Loglevel.DEBUG, "maze-2.1 ")
-		gg_unit_n00C_0061.remove()
-		t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
-		IssuePointOrder(t.actor, "setrally", 6275,-5131 )
+		var t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
+		t.setRallyPoint(vec2(6275,-5131))
 		gg_unit_n00C_0057.remove()
 		t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
-		IssuePointOrder(t.actor, "setrally", 6660,-4866 )
+		t.setRallyPoint(vec2(6660,-4866))
 		gg_unit_n00C_0058.remove()
 		EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
 	
