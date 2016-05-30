@@ -18,7 +18,7 @@ constant real SLIDE_ADD = 3.3
 
 constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
-
+constant JUMP_SPELL = 'A062'
 
 real time = 0.
 
@@ -56,7 +56,7 @@ public class Escaper extends UnitEntity
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
-		currentRegion = regions[0]
+		updateRegionData()
 		escapers.add(this)
 
 	
@@ -191,12 +191,19 @@ public class Escaper extends UnitEntity
 				PanCameraToTimed(rev.x, rev.y, 0)
 				ClearSelection()
 				SelectUnit(actor, true)
-		currentRegion = getRegionData(pos)
+		updateRegionData()
 		alive = true
 		setPoison(false)
 		setLava(false)
 		if camlock
 			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
+			
+	function updateRegionData()
+		currentRegion = getRegionData(pos)
+		if currentRegion.jumpAvailable
+			actor.addAbility(JUMP_SPELL)
+		else 
+			actor.removeAbility(JUMP_SPELL)
         
 	static function changeAngle()
 		var u = GetTriggerUnit()
@@ -245,7 +252,11 @@ public class Escaper extends UnitEntity
 //						w.attackr(pos,GetSpellTargetX(), GetSpellTargetY())
 //						actor.queueAnimation("cast")
 //						return
-		if id == CREATE_REV_MOD_ID
+		if id == JUMP_SPELL
+			addPos(vec3(0,0,1))
+			let angl = pos.angleTo2d(getSpellTargetPos())
+			addVel(vec3(10* angl.cos(), 10 * angl.sin(), 10))
+		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
 			UnitAddAbility( actor, REMOVE_REV_MOD_ID )
@@ -269,7 +280,7 @@ trigger spellTrig
 
 function correctRegion()
 	for e in escapers
-		e.currentRegion = getRegionData(e.pos)
+		e.updateRegionData()
 		
 init
 	slideAssist = CreateTrigger()

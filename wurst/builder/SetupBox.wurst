@@ -15,6 +15,7 @@ constant int LD_ID = 'A05A'
 constant int ALLOW_ID = 'A01X'
 constant int CLEAR_ID = 'A020'
 constant int BOSS_MODE_ID = 'A03E'
+constant int JUMP_ID = 'A07S'
 
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 10.
@@ -27,6 +28,9 @@ public class SetupBox extends UnitEntity
 		rdata = data
 		
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
+		
+	function addBossSwitch()
+		actor.addAbility(BOSS_MODE_ID)
 		
 	function onCast()
 		var id = GetSpellAbilityId()
@@ -94,8 +98,11 @@ public class SetupBox extends UnitEntity
 					var data = u.getEntity()
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
 						data.terminate()
-			case BOSS_MODE_ID
-//				if pData[owner.getId()].XP > 00 //500
+			case JUMP_ID
+				actor.removeAbility(JUMP_ID)
+				printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
+				getRegionData(pos).jumpAvailable = true
+//				if PlayerData[owner.getId()].XP > 00 //500
 //					rdata.isBossRegion = true
 //					actor.removeAbility(BOSS_MODE_ID)
 //					DisplayTextToPlayer( owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
@@ -107,5 +114,4 @@ public class SetupBox extends UnitEntity
 //				else
 //					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 					
-	
 	

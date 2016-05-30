@@ -75,7 +75,7 @@ public class StrongEscaper extends Escaper
 		super.onCast(id)
 		if id == STAGNANCYSHIELD_ID
 			invulnerable = true
-			shieldtimer = GetUnitAbilityLevel(actor, id)*1.
+			shieldtimer = 1 + GetUnitAbilityLevel(actor, id)*1.
 			actor.addAbility('Avul')
 			actor.setPos(pos.toVec2())
 			shieldX = pos.x

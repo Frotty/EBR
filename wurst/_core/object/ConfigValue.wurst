@@ -11,6 +11,9 @@ public class ConfigValue
 		this.increment = increment
 		this.valueName = name
 		
+	function setVal(real val)
+		value = val
+		
 	function get() returns real
 		return value
 		

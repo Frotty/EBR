@@ -153,6 +153,8 @@ public class Powernode extends SetupObject
 						node.link(data castTo Powernode, LinkType.BOUNCE_DIODE)
 		else if id == INCREASE_BOUNCE_ID
 			node.bounciness.increment(node.pos, 4)
+			for link in links
+				link.linkedNode.bounciness.setVal(node.bounciness.get())
 		else if id == DECREASE_BOUNCE_ID
 			node.bounciness.decrement(node.pos, 0)
 

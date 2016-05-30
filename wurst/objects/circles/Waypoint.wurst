@@ -42,19 +42,23 @@ public class Waypoint extends StaticBaseObject
 			if not obj.wisps and data instanceof TeleporterTarget
 				return
 			if obj.delay < INTERVAL
-				IssuePointOrder(u, "move", rallyPos.x, rallyPos.y )
+				if data instanceof SetupObject
+					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
+					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
+				else
+					data.actor.issuePointOrder("move", rallyPos.toVec2())
 			else
-				IssueImmediateOrder(u, "stop" )
+				u.issueImmediateOrder("stop")
 				getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
 				
 	static function delayMove()
 		var t = GetExpiredTimer()
 		DelayData data = t.getData() castTo DelayData
 		if data.entity instanceof SetupObject
-			var ed = data.entity castTo SetupObject
-			IssuePointOrder(ed.setup, "move", data.pos.x, data.pos.y )
+			(data.entity castTo SetupObject).setup.issuePointOrder("move", data.pos)
+			(data.entity castTo SetupObject).actor.issuePointOrder("move", data.pos)
 		else
-			IssuePointOrder(data.entity.actor, "move", data.pos.x, data.pos.y )
+			data.entity.actor.issuePointOrder("move", data.pos)
 		destroy data
 		t.release()
 
