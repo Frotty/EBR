@@ -89,6 +89,7 @@ public class Escaper extends UnitEntity
 			setLava(false)
 			flying = false
 			deaths++
+			
 		
 	
 	override function onGroundHit()
@@ -101,6 +102,7 @@ public class Escaper extends UnitEntity
 		
 	override function onEscapeGround()
 		SetUnitPropWindow(actor,0.)
+		sliding = false
 	
 	override function inAir()
 		slideVelocity *= 0.99
@@ -109,7 +111,7 @@ public class Escaper extends UnitEntity
 		pos.z = globalTerrainZ+.1		
 		var ttype = GetTerrainType(pos.x, pos.y)
 		
-		if currentRegion != null 
+		if currentRegion != null
 			if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 				onUnwalkable = true
 				setLava(false)
@@ -161,8 +163,10 @@ public class Escaper extends UnitEntity
 		pos += vel
 		pos += slideVelocity
 		if sliding
+			printLog(Loglevel.DEBUG, "slide")
 			actor.setPos(pos.toVec2())
 		else
+			printLog(Loglevel.DEBUG, "fly")
 			actor.setXY(pos)
 		SetUnitFlyHeight( actor, pos.z - globalTerrainZ, .0 )
 		

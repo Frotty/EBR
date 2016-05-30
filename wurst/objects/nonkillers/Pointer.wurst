@@ -57,9 +57,9 @@ public class Pointer extends EscaperSensorSetup
 				turning = false
 				setup..removeAbility(STOP_ID)..addAbility(START_ID)
 
-	static function turnUnit()
-		var edata = GetTriggerUnit().getEntity()
-		var data = GetTriggeringTrigger().getSource().getUserData() castTo Pointer
+	override function onSensor(UnitEntity source, UnitEntity target)
+		var edata = target
+		var data = source castTo Pointer
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
 			es.actor.setFacing(data.angl)

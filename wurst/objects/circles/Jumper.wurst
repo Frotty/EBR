@@ -52,11 +52,10 @@ public class Jumper extends StaticBaseObject
 			var edata = data castTo Escaper
 			switch jdata.mode
 				case JumpMode.FORCED
-					edata.setPos(jdata.pos.add(0,0,1.))
 					edata.setTarget(jdata.getRallyPoint(), jdata.speed)
 				case JumpMode.UNFORCED
 					edata.setVel(vec3(0,0, jdata.speed) + edata.slideVelocity)
-					edata.sliding = false
+			edata.setPos(edata.pos.add(0,0,1.))
 			addEffect(EFFECT_STRING, data.pos).destr()
 			edata.slideVelocity = vec2(0,0)
 					
@@ -65,10 +64,10 @@ public class Jumper extends StaticBaseObject
 		let id = GetSpellAbilityId()
 		switch id
 			case FORCED_ID
-				actor..removeAbility(FORCED_ID)..addAbility(UNFORCED_ID)
+				actor..removeAbility(FORCED_ID)..addAbility(UNFORCED_ID)..setVertexColor(color(75,95,205))
 				mode = JumpMode.UNFORCED
 			case UNFORCED_ID
-				actor..removeAbility(UNFORCED_ID)..addAbility(FORCED_ID)
+				actor..removeAbility(UNFORCED_ID)..addAbility(FORCED_ID)..setVertexColor(color(50,50,255))
 				mode = JumpMode.FORCED
 			case DECREASE_ID
 				if speed >5.

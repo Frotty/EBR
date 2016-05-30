@@ -27,11 +27,11 @@ public class Vortex extends UnitEntity
 		var vdata = GetTriggerUnit().getUserData() castTo Vortex
 		switch id
 			case INC_ID
-				if vdata.gravity < 15.
+				if vdata.gravity < 25.
 					vdata.gravity += .5
 					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 			case DEC_ID
-				if vdata.gravity > -15.
+				if vdata.gravity > -25.
 					vdata.gravity -= .5
 					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 		return false

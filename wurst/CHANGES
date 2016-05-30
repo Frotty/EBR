@@ -1,3 +1,14 @@
+[0.84q]
+[*] fixed region sharing
+[*] fixed pointer
+[*] increased track max speed
+[*] increased trap max knockback
+[*] increased vortex max gravity
+[*] changed jumper so that picking up keys midair is now always possible
+[*] changed jumper's color depending on mode
+[*] changed annoying cactus in desert maz
+[*] updated minimap
+
 [0.84d]
 [*] fixed issues introduced in 0.84
 [*] changed revivepoints now change the color to the claimer's one

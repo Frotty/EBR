@@ -193,14 +193,14 @@ function setTime()
 	
 	playerboard.board.setTitle( MAP_VER + " [ " + mins + " : " + secs +" ]")
 	
-	
-	
 	if seconds >= 60
 		seconds = 0
 		minutes++
 		if minutes % 5 == 0
 			for pd in playerlist
 				pd.addXp(10, true)
+	for pd in playerlist
+		pd.setMBRow()
 			 
 function playerLeft()
 	var p = GetTriggerPlayer()
