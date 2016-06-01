@@ -1,15 +1,11 @@
 package GameInit
-import PlayerData
 import SetupObject
-import Entity
 import UnitProducer
-import Escaper
 import RegionData
 import PickSystem
 import Builder
 import Door
 import TerrainModder
-import Executer
 import Trap
 import Texter
 import Bombertower
@@ -26,6 +22,19 @@ import Boss
 import GlobalShop
 import Remove
 import BasicSpells
+import ClosureTimers
+
+init
+	callGen()
+	VolumeGroupReset()
+	EndThematicMusic()
+	startEntityLoop()
+	doAfter(.1, () -> initGame())
+	
+	
+@compiletime function callGen()
+	callFunctionsWithAnnotation("@objectgen")
+	
 function initGame()
 	init_Regions()
 	initSetupObj()
@@ -94,16 +103,3 @@ function initPartTwo()
 	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER handleid: " + EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER.getHandleId().toString())
 	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_DROP_ITEM handleid: " + EVENT_PLAYER_UNIT_DROP_ITEM.getHandleId().toString())
 
-init
-	callGen()
-	printLog(Loglevel.DEBUG, "wc3init a")
-	VolumeGroupReset()
-	EndThematicMusic()
-	startEntityLoop()
-	trigger t = CreateTrigger()
-	TriggerRegisterTimerEvent( t, .01, false )
-	TriggerAddAction( t, function initGame )
-	
-	
-@compiletime function callGen()
-	callFunctionsWithAnnotation("@objectgen")

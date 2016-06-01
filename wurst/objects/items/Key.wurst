@@ -29,9 +29,17 @@ public class Key extends ItemObject
 	override function onUse(Escaper user)
 		
 	override function onPickup(Escaper holder)
-		picked = true
-		this.holder = holder
-		setup.hide()
+		if isBuilder(holder.owner) and this.owner != holder.owner
+			picked = false
+			holder.actor.removeItem(actorItem)
+			actorItem.setPos(pos.toVec2())
+			setup.setXY(pos.toVec2())
+			setup.show()
+			this.holder = null
+		else
+			picked = true
+			this.holder = holder
+			setup.hide()
 		
 		
 	override function onDrop(Escaper e)

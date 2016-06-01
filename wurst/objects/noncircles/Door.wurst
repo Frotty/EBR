@@ -46,10 +46,11 @@ public class Door extends StaticSetupObject
 			if not es.flying
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) //WARNING BJ function//
 					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
-					kdata.terminate()
-					door.openDoor()
-					let pd = pData[e.owner.getId()]
-					pd.addXp(10, false)
+					if kdata != null
+						kdata.terminate()
+						door.openDoor()
+						let pd = pData[e.owner.getId()]
+						pd.addXp(10, false)
 				
 	function changeColor( int id )
 		switch id

@@ -1,0 +1,74 @@
+package JukeBox
+import ClosureTimers
+import LinkedList
+
+
+
+class Music
+	int spellid
+	string path
+	real duration
+	
+	construct(int id, string path)
+		this.spellid = id
+		this.path = path
+		this.duration = GetSoundFileDuration(path) / 1000.
+		
+		
+LinkedList<Music> musics = new LinkedList<Music>()
+
+public class JukeBox
+	LinkedList<int> requests = new LinkedList<int>()
+	LinkedList<int> recycleQueue = new LinkedList<int>()
+	LinkedList<int> randomQueue = new LinkedList<int>()
+	
+	Music currentMusic
+	
+	construct()
+		for i = 0 to musics.getSize()
+			if (i * GetRandomInt(1,7)) mod 2 == 0
+				randomQueue.addtoStart(i)
+			else
+				randomQueue.add(i)
+				
+	function playNextMusic()
+		print("Playing next music")
+		StopMusic(false)
+		if requests.getSize() > 0
+			currentMusic = musics.get(requests.pop())
+		else if randomQueue.getSize() > 0
+			let id = randomQueue.pop()
+			currentMusic = musics.get(id)
+			recycleQueue.add(id)
+		else
+			for i in recycleQueue
+				if (i * GetRandomInt(1,7)) % 2 == 0
+					randomQueue.addtoStart(i)
+				else
+					randomQueue.add(i)
+			playNextMusic()
+			return
+			
+		PlayMusic(currentMusic.path)
+		doAfter(currentMusic.duration, () -> playNextMusic())
+	
+	function checkSpell(int id)
+		int idx = 0
+		for music in musics
+			if music.spellid == id
+				printTimedToPlayer("You have added music to the jukebox", 10, GetTriggerUnit().getOwner())
+				requests.add(idx)
+				return
+			idx++
+
+init
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\Human1.mp3"))
+	musics.add(new Music('A02R', "Sound\\Music\\mp3Music\\Human2.mp3"))
+	musics.add(new Music('A03L', "Sound\\Music\\mp3Music\\HumanX1.mp3"))
+	musics.add(new Music('A03U', "Sound\\Music\\mp3Music\\TragicConfrontation.mp3"))
+	musics.add(new Music('A03N', "Sound\\Music\\mp3Music\\Orc3.mp3"))
+	musics.add(new Music('A03P', "Sound\\Music\\mp3Music\\SadMystery.mp3"))
+	musics.add(new Music('A03T', "Sound\\Music\\mp3Music\\Undead2.mp3"))
+	musics.add(new Music('A03O', "Sound\\Music\\mp3Music\\PH1.mp3"))
+	musics.add(new Music('A03S', "Sound\\Music\\mp3Music\\War2IntroMusic.mp3"))
+	musics.add(new Music('A03Q', "Sound\\Music\\mp3Music\\Credits.mp3"))

@@ -79,7 +79,6 @@ public class FourthCitadelleMaze extends Startmaze
 		gg_unit_h01M_0212.remove()
 		s.checkObj( gg_unit_h01I_0220.getEntity() )
 		s.speed = 7 *DEGTORAD
-		EnumItemsInRect(gg_rct_Region_001, null, function correctKeys)
 
 	override function getStart() returns vec2
 		return vec2(-2450, -6150)

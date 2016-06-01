@@ -13,14 +13,17 @@ import Sync
 import TerrainModder
 import UnitProducer
 import RevivePointModifier
+import PlayerMemoryData
+import SetupBox
+
 public int playercount = 0
+public int builderCount = 0
 
 trigger leaveTrig
 
 public LinkedList<PlayerData> playerlist = new LinkedList<PlayerData>()
 
 public class PlayerData //just the player's (constant) stuff
-	
 	int id
 	int gameId
 	player p
@@ -28,8 +31,6 @@ public class PlayerData //just the player's (constant) stuff
 	string mbname //Basically the output name
 	string rank = "Newbie"
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
-	boolean left = false
-	
 	Escaper escaper
 	Builder builder
 	RevivePointModifier revmod
@@ -38,7 +39,6 @@ public class PlayerData //just the player's (constant) stuff
 	
 	boolean gridClickActivated = false
 	boolean picked = false
-	string slcode = ""
 	boolean localFilesEnabled = false
 	int lastExpGain = 0
 	
@@ -46,6 +46,9 @@ public class PlayerData //just the player's (constant) stuff
 	
 	TerrainModder tmod 
 	UnitProducer prod
+	
+	PMData pmData
+	
 	construct (player p)
 		this.p = p
 		
@@ -61,6 +64,8 @@ public class PlayerData //just the player's (constant) stuff
 				break
 		mbname = colorcode[ id ] + mbname
 		playerlist.add(this)
+		if id > 7
+			builderCount++
 	
 	function addXp(int amount, boolean time)
 		if localFilesEnabled and playercount > 0
@@ -123,17 +128,13 @@ public class PlayerData //just the player's (constant) stuff
 			for p2 in playerlist
 				if p2.gameId > gameId
 					p2.gameId--
-		if id > 7 and builder != null
-			builder.terminate()
+		if id > 7 
+			if builder != null
+				builder.terminate()
 			for int i=0 to 20
-				// TODO
-//				if regions[i].isOwner(this.id)
-//					regions[i].isGreyOwner = true
-//					regions[i].isLBOwner = true
-//					regions[i].isDGOwner = true
-			for int i2 =8 to 11
-				if not id == i2
-					SetPlayerAlliance(Player(i2), p, ALLIANCE_SHARED_ADVANCED_CONTROL, true)
+				if regions[i].getPermission(this.p) == Permission.OWNER
+					for j = 8 to 10
+						regions[i].allow(players[j])
 		playercount--
 		
 public function isPlayerEscaper(player p) returns boolean 
@@ -236,6 +237,7 @@ function initPlayers()
 			UnitAddItemById(pd.builder.actor,'I001')
 			UnitAddItemById(pd.builder.actor,'I002')
 			UnitAddItemById(pd.builder.actor,'I003')
+			pd.builder.regionCount = (17. / builderCount).round()
    
 public int minutes = 0
 public int seconds = 0

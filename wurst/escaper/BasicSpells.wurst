@@ -11,6 +11,9 @@ public class BallProjectile extends AirPhysicsProjectile
 	construct(unit caster, vec2 target)
 		super(caster.getPos3(128), 32, caster.getOwner(), caster.getPos().angleTo(target), Other.necromancermissile)
 		setSpeed(10)
+		fx.setColor(colorA(GetRandomInt(125, 255),GetRandomInt(125, 255),GetRandomInt(125, 255), GetRandomInt(125, 255)))
+		setTimed(GetRandomReal(2.5, 3.5))
+		setMass(100)
 		
 function onCast()
 	let id = GetSpellAbilityId()

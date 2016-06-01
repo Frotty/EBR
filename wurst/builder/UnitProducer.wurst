@@ -10,6 +10,7 @@ import TextureChanger
 import Bomber
 import Pointer
 import Knockbacker
+import VoidWalker
 
 constant int ID = 'H00A'
 
@@ -74,6 +75,8 @@ public class UnitProducer extends StaticBaseObject
 					new Bomber(vec2(rallyPos.x,rallyPos.y), obj.owner)
 				case 'A07C'
 					new Knockbacker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
+				case 'A07U'
+					new VoidWalker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")

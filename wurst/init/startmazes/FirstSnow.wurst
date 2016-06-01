@@ -73,8 +73,6 @@ public class FirstSnowMaze extends Startmaze
 		t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
 		t.setRallyPoint(vec2(6660,-4866))
 		gg_unit_n00C_0058.remove()
-		EnumItemsInRect(gg_rct_Region_024, null, function correctKeys)
-	
 	
 	override function getStart() returns vec2
 		return vec2(6400, -6760)

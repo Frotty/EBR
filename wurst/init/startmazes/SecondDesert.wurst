@@ -34,7 +34,6 @@ public class SecondDesertMaze extends Startmaze
 		var t = new Teleporter(vec2(gg_unit_n00C_0141.getX(),gg_unit_n00C_0141.getY()),Player(11))
 		IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
 		gg_unit_n00C_0141.remove()
-		EnumItemsInRect(gg_rct_Region_018, null, function correctKeys)
 
 	
 	

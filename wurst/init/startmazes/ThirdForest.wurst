@@ -108,7 +108,6 @@ public class ThirdForestMaze extends Startmaze
 		e.tiletype = CONTROLLABLEICE
 		IssuePointOrder( e.actor, "setrally", 0,-3812 )
 		gg_unit_n01D_0187.remove()
-		EnumItemsInRect(gg_rct_Region_000, null, function correctKeys)
 	
 
 	override function getStart() returns vec2

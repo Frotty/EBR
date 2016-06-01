@@ -79,14 +79,14 @@ public class SetupBox extends UnitEntity
 					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
 					if rdata.canBuild(p)
 						rdata.disallow(p)
-						printTimedToPlayer("|cff9C0808Disallowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 15, owner)
-						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r |cffffcc00 you to build in his region.", 15, p)
+						printTimedToPlayer("|cff9C0808Disallowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 25, owner)
+						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r|cffffcc00 you to build in his region.", 25, p)
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMinX(rdata.theRect)+GetRectMaxX(rdata.theRect))/2, (GetRectMinY(rdata.theRect)+GetRectMaxY(rdata.theRect))/2, 3, 156, 8, 8, false)
 					else
 						rdata.allow(p)
-						printTimedToPlayer("|cff08B552Allowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 15, owner)
-						printTimedToPlayer(owner.getNameColored() + " |cff08B552allowed|r |cffffcc00 you to build in his region.", 15, p)
+						printTimedToPlayer("|cff08B552Allowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 25, owner)
+						printTimedToPlayer(owner.getNameColored() + " |cff08B552allowed|r|cffffcc00 you to build in his region.", 25, p)
 						if GetLocalPlayer() == p
 							PingMinimapEx((GetRectMaxX(rdata.theRect)+GetRectMinX(rdata.theRect))/2, (GetRectMaxY(rdata.theRect)+GetRectMinY(rdata.theRect))/2, 3, 8, 181, 82, false)
 				else
@@ -99,9 +99,13 @@ public class SetupBox extends UnitEntity
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
 						data.terminate()
 			case JUMP_ID
-				actor.removeAbility(JUMP_ID)
-				printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
-				getRegionData(pos).jumpAvailable = true
+				let rdata = getRegionData(pos)
+				if rdata.jumpAvailable
+					printTimedToPlayer("|cff448C29Escapers can't jump in this region!", 25, owner)
+				else
+					printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
+				rdata.jumpAvailable = not rdata.jumpAvailable
+			case BOSS_MODE_ID
 //				if PlayerData[owner.getId()].XP > 00 //500
 //					rdata.isBossRegion = true
 //					actor.removeAbility(BOSS_MODE_ID)

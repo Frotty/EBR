@@ -1,26 +1,27 @@
 package Teleporter
 import BaseObject
 import Escaper
-import EscaperKillers
-import TeleporterTarget
 import SetupObject
 import PlayerData
 import RegionData
-import Revivepoint
-import Pointer
+import EscaperSensor
 
-constant int 	TELEPORTER_ID   = 'n00C'
-constant string EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
-constant int ESC_ID = 'A009'
-constant int KILL_ID = 'A012'
-constant int BOTH_ID = 'A014'
+constant TELEPORTER_ID   = 'n00C'
+constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+constant ESC_ID = 'A009'
+constant KILL_ID = 'A012'
+constant BOTH_ID = 'A014'
 
-constant real 	EVENT_RADIUS	= 32.
+constant EVENT_RADIUS	= 32.
 
+enum TeleportMode
+	ESCAPER
+	KILLER
+	BOTH
 
 public class Teleporter extends StaticBaseObject
-	boolean isOneshot = false
-	int mode = 0 // 0 escaper, 1 killer, 2 killers and escapers
+	boolean teleportWisps = false
+	TeleportMode mode = TeleportMode.ESCAPER
 	
 	construct( vec2 pos, player owner )
 		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0) ), EVENT_RADIUS, function Teleporter.teleport ) 
@@ -32,41 +33,35 @@ public class Teleporter extends StaticBaseObject
 		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
 		let rallyPos = obj.getRallyPoint()
-		if obj.isOneshot and not isPlayerEscaper(e.owner)
-			return
+		let rdata = getRegionData(rallyPos)
 		SetupObject dyn
-		if obj.mode == 0 and e instanceof Escaper
-			u.setPos(rallyPos.x, rallyPos.y)
-			DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-			DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
-			if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-				PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
-			if obj.isOneshot
-				destroy(obj)
-				GroupEnumUnitsInRect(ENUM_GROUP, regions[26].theRect, null)
-				for niki in ENUM_GROUP
-					let eruza =niki.getUserData() castTo RevivePoint
-					if eruza != null
-						eruza.reached = false
-				ENUM_GROUP.clear()
-		else if obj.mode == 1 
-			if e instanceof EscaperSensorSetup
-				dyn = e castTo SetupObject
-				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
-		else if obj.mode == 2  
-			if e instanceof EscaperSensorSetup
-				dyn = e castTo SetupObject
-				dyn.setPos(vec3(rallyPos.x,rallyPos.y,0))
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
-			else if e instanceof Escaper
-				u.setPos(rallyPos.x, rallyPos.y)
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, obj.pos.x, obj.pos.y ) )
-				DestroyEffect( AddSpecialEffect( EFFECT_STRING, rallyPos.x, rallyPos.y ) )
-				if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-					PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
+		switch obj.mode
+			case TeleportMode.ESCAPER
+				if e instanceof Escaper
+					e.setPos(rallyPos)
+					addEffect(EFFECT_STRING, obj.pos).destr()
+					addEffect(EFFECT_STRING, rallyPos).destr()
+					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
+						PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
+			case TeleportMode.KILLER
+				if e instanceof EscaperSensorSetup and rdata.canBuild(obj.owner)
+					dyn = e castTo SetupObject
+					dyn.setPos(rallyPos)
+					addEffect(EFFECT_STRING, obj.pos).destr()
+					addEffect(EFFECT_STRING, rallyPos).destr()
+			case TeleportMode.BOTH
+				if e instanceof EscaperSensorSetup and rdata.canBuild(obj.owner)
+					dyn = e castTo SetupObject
+					dyn.setPos(rallyPos)
+					addEffect(EFFECT_STRING, obj.pos).destr()
+					addEffect(EFFECT_STRING, rallyPos).destr()
+				else if e instanceof Escaper
+					u.setPos(rallyPos.x, rallyPos.y)
+					addEffect(EFFECT_STRING, obj.pos).destr()
+					addEffect(EFFECT_STRING, rallyPos).destr()
+					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
+						PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
+			
 
 	override function update()
 		skip
@@ -76,10 +71,10 @@ public class Teleporter extends StaticBaseObject
 		switch id
 			case BOTH_ID
 				actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
-				mode = 0
+				mode = TeleportMode.BOTH
 			case ESC_ID
 				actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
-				mode = 1
+				mode = TeleportMode.ESCAPER
 			case KILL_ID
 				actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
-				mode = 2
+				mode = TeleportMode.KILLER

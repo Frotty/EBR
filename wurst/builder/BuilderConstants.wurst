@@ -28,6 +28,7 @@ public constant int MENU_BOSS = 'A03D'
 
 public constant int KEY_SPELL_ID = 'A03Z'
 public constant int TOME_SPELL_ID = 'A040'
+public constant int GOLD_SPELL_ID = 'A040'
 public constant int BOOTS_SPELL_ID = 'A03Y'
 public constant int ANKH_SPELL_ID = 'A041'
 

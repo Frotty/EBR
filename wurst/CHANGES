@@ -1,4 +1,14 @@
+[0.84t]
+[*] added void walker enemy
+
+[0.84s]
+[*] enhanced builder abuse prevention
+[*] changed music playing to jukebox requests
+[*] fixed lagg when the jukebox changes music
+[*] fixed other builders can control regions from left builders
+
 [0.84r]
+[*] added jump abilitty that can be activated per region
 [*] fixed killers getting stuck at waypoints
 [*] fixed powernode bounciness
 

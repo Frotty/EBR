@@ -1,0 +1,61 @@
+package VoidWalker
+import EscaperSensor
+
+constant UNIT_ID = 'u00I'
+constant KILL_RADIUS = 64.
+
+enum WalkerMode
+	VIS
+	INVIS
+	FADEIN
+	FADEOUT
+
+public class VoidWalker extends EscaperSensorSetup
+	private colorA color = COLOR_WHITE
+	private real visibleDur = 4
+	private real fadeDur = 2
+	private real invisDur = 3
+	private WalkerMode mode = WalkerMode.VIS
+	private real dur = visibleDur
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, UNIT_ID, facing, KILL_RADIUS, KILL_RADIUS)
+		active = true
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, UNIT_ID, KILL_RADIUS, KILL_RADIUS)
+		active = true
+	
+	construct(unit existing)
+		super(existing, KILL_RADIUS, KILL_RADIUS)
+		active = true
+		
+	override function update()
+		super.update()
+		setup.setVertexColor(colorA(55,55,55,55))
+		switch mode
+			case WalkerMode.VIS
+				dur-= ANIMATION_PERIOD
+				if dur <= 0
+					mode = WalkerMode.FADEOUT
+					dur = fadeDur
+			case WalkerMode.INVIS
+				dur -= ANIMATION_PERIOD
+				if dur <= 0
+					mode = WalkerMode.FADEIN
+					dur = fadeDur
+			case WalkerMode.FADEOUT
+				dur -= ANIMATION_PERIOD
+				color = color.mix(COLOR_BLACK, (fadeDur-dur)/3.)
+				if dur <= 0
+					color = COLOR_BLACK
+					mode = WalkerMode.INVIS
+					dur = invisDur
+			case WalkerMode.FADEIN
+				dur -= ANIMATION_PERIOD
+				color = color.mix(COLOR_WHITE, (fadeDur-dur)/3.)
+				if dur <= 0
+					color = COLOR_WHITE
+					mode = WalkerMode.VIS
+					dur = visibleDur
+		actor.setVertexColor(color)

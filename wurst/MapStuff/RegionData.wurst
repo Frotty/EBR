@@ -1,6 +1,7 @@
 package RegionData
 import Entity
 import Rect
+import initlater Builder
 import Startmazes
 import initlater Escaper
 
@@ -52,7 +53,7 @@ public class RegionData
 	private trigger visTrig
 	private HashMap<player, Permission> permissions = new HashMap<player, Permission>()
 	
-	private RegionType rtype = RegionType.UNKNOWN
+	RegionType rtype = RegionType.UNKNOWN
 	
 	rect theRect
 
@@ -106,6 +107,10 @@ public class RegionData
 				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
 				rdata.visible = true
 			edata.updateRegionData()
+		else if data instanceof UnitEntity
+			if not rdata.canBuild(data.owner) and not data instanceof Builder
+				printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
+				data.terminate()
 								
 	
 				

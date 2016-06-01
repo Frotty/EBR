@@ -166,7 +166,7 @@ public class Executer extends StaticBaseObject
 			case Amode.TOGGLEUNITPRODUCER
 				toggleUnitProducer()
 			default
-				error("ExecuterAction")
+				printTimedToPlayer("Executer has no action set", 15, owner)
 					
 	function negativeAction()		
 		switch actionMode
@@ -194,7 +194,7 @@ public class Executer extends StaticBaseObject
 			case Amode.CHANGETERRAIN
 				changeTerrain(false)
 			default
-				error("ExecuterNotAction")
+				printTimedToPlayer("Executer has no action set", 15, owner)
 	
 	function moveUnit()
 		let rallyPos = getRallyPoint()

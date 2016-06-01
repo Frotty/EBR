@@ -1,5 +1,6 @@
 package Escaper
 import PhysicsEntity
+import Assets
 import public Entity
 import Vectors
 import TimerUtils
@@ -163,10 +164,8 @@ public class Escaper extends UnitEntity
 		pos += vel
 		pos += slideVelocity
 		if sliding
-			printLog(Loglevel.DEBUG, "slide")
 			actor.setPos(pos.toVec2())
 		else
-			printLog(Loglevel.DEBUG, "fly")
 			actor.setXY(pos)
 		SetUnitFlyHeight( actor, pos.z - globalTerrainZ, .0 )
 		
@@ -253,9 +252,14 @@ public class Escaper extends UnitEntity
 //						actor.queueAnimation("cast")
 //						return
 		if id == JUMP_SPELL
-			addPos(vec3(0,0,1))
-			let angl = pos.angleTo2d(getSpellTargetPos())
-			addVel(vec3(10* angl.cos(), 10 * angl.sin(), 10))
+			if not flying
+				addPos(vec3(0,0,1))
+				let angl = pos.angleTo2d(getSpellTargetPos())
+				addEffect(Other.aneucaster, pos).destr()
+				if sliding
+					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
+				else
+					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )

@@ -12,7 +12,7 @@ import initlater FirstSnow
 import initlater SecondDesert
 import initlater ThirdForest
 import initlater FourthCitadelle
-
+import MapBounds
 
 public Startmaze array startmazes
 public int currentMaze = 0
@@ -38,6 +38,8 @@ public function initStartmazes()
 	startmazes[3] = new FourthCitadelleMaze(regions[3])
 	
 	startmazes[0].initMaze()
+	EnumItemsInRect(playableMapRect, null, function correctKeys)
+	
 	
 			
 public function clearEBRRect(int r)
@@ -64,11 +66,9 @@ public function setStartTeleport(int tpid, int locid)
 		case 1
 			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),Player(11))
 			gg_unit_n00C_0324.remove()
-			t.isOneshot = true
 		case 2
 			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),Player(11))
 			gg_unit_n00C_0323.remove()
-			t.isOneshot = true
 
 	switch locid
 		case 1
@@ -80,8 +80,6 @@ public function setStartTeleport(int tpid, int locid)
 		case 3
 			IssuePointOrder(t.actor, "setrally", -2433,-6148 )
 			createTTEx(t.pos, "Citadel Startmaze", 11, colorA( 230,180,0, 255 ))
-		
-
 		
 
 public function initBaseObjects()

@@ -191,6 +191,9 @@ public function init_TerrainModder()
 	BRUSH_CIRCLE_ID = ABIL_ID_GEN.next()
 	BRUSH_RECT_ID = ABIL_ID_GEN.next()
 	
+	if not compiletime
+		return
+		
 	new ChannelAbilityPreset(BRUSH_1_IDLE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("1x1 Brush Idle")

@@ -4,6 +4,7 @@ import CodeGenerator
 import FileIO
 import Sync
 import Thread
+import PlayerMemoryData
 
 constant int XPMAX = 500000
 constant string FOLDER_NAME = "EBR"
@@ -16,13 +17,17 @@ public function PlayerData.createNewPlayerFile()
 	var scode = new Savecode()
 	scode.encode(this.XP, XPMAX)
 	printLog(Loglevel.DEBUG, "saving: " + this.XP.toString() + " XP")
-	let lcode = fhash(this.name).toString() + scode.save(this.p, saveTechnique)
+	let lcode = scode.save(this.p, saveTechnique)
+	if this.pmData == null
+		this.pmData = new PMData()
+		this.pmData.namehash = fhash(this.name).toString()
+	this.pmData.expcode = lcode
 	printLog(Loglevel.DEBUG, "saving: " + lcode)
 	synchronizeThread()
 	if GetLocalPlayer() == this.p
 		if File.isEnabled()
 			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
-			f.write(lcode)
+			f.write(this.pmData.serialize())
 			f.close()
 	synchronizeThread()
 	printLog(Loglevel.DEBUG, "saved new")
@@ -32,7 +37,6 @@ public function PlayerData.loadPlayerFile()
 	string array lines
 	var count = 0
 	let nameHash = fhash(this.name).toString()
-	printLog(Loglevel.DEBUG, "start " + this.name)
 	synchronizeThread()
 	if GetLocalPlayer() == this.p
 		var f = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
@@ -43,27 +47,40 @@ public function PlayerData.loadPlayerFile()
 		f.close()		
 	synchronizeThread()
 	
-	printLog(Loglevel.DEBUG, "load playerfile 5")
 	let sCount = count.sync(this.p)
-	printLog(Loglevel.DEBUG, "load playerfile 6")
 	string array sLines
-	printLog(Loglevel.DEBUG, sCount.toString())
+	printLog(Loglevel.INFO, sCount.toString())
 	if sCount > 0
 		for i = 0 to sCount-1
 			sLines[i] = lines[i].sync(this.p)
-			printLog(Loglevel.DEBUG, sLines[i])
+			printLog(Loglevel.INFO, sLines[i])
 	printLog(Loglevel.DEBUG, "syncing for " + this.id.toString() + " done")
 	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your Data was loaded."  )
 	int idx = - 1
+	PMData data = null
 	for i = 0 to sCount-1
 		if sLines[i].startsWith(nameHash)
-			printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found."  )
+			printLog(Loglevel.INFO, "character Found in Line " + i.toString())
+			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
 			idx = i
-	if idx > -1
-		this.slcode = sLines[idx].substring(nameHash.length(), sLines[idx].length())
+			data = new PMData()
+			data.namehash = nameHash
+			break
+		else if sLines[i].startsWith("name")
+			data = new PMData()
+			data.deserialize(sLines[i])
+			if data.namehash == nameHash
+				printLog(Loglevel.INFO, "character Found in Line " + i.toString())
+				DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
+				idx = i
+				break
+			
+	if idx > -1 and data != null
+		this.pmData = data
+		if data.expcode == null
+			data.expcode = sLines[idx].substring(nameHash.length(), sLines[idx].length())
 		var scode = new Savecode()
-		if scode.load(this.p, this.slcode, saveTechnique)
+		if scode.load(this.p, data.expcode, saveTechnique)
 			printLog(Loglevel.DEBUG, "load success")
 			let xp = scode.decode(XPMAX)
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )

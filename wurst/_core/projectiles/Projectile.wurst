@@ -16,7 +16,6 @@ public class Projectile extends FxEntity
 	protected real dist = 0
 	private real maxDist = 0
 	protected real lifespan = 0
-	private real maxTime = 0
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
 		super(pos, radius, owner, xyAngle, fxpath)
@@ -54,8 +53,8 @@ public class Projectile extends FxEntity
 		pos += vel
 		setPos()
 		if timed
-			lifespan += ANIMATION_PERIOD
-			if lifespan >= maxTime
+			lifespan -= ANIMATION_PERIOD
+			if lifespan <= 0
 				done = true
 				return
 		if ranged

@@ -29,7 +29,7 @@ function onCommandChat()
 				pd.escaper.camlock = false
 			else
 				pd.zCam = nstr.toInt() * 1.
-				if pd.zCam > 2500
+				if pd.zCam > 3000
 					pd.zCam = 2500
 					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Maximum Zoom is 2500")
 				else if pd.zCam < 500

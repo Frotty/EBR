@@ -28,7 +28,6 @@ import Pedestal
 
 function condition() returns boolean
 	return (GetTriggerUnit().getEntity()) instanceof Builder
-  
 
 public function isOrderBuildOrder( int o ) returns boolean
 	int i = 0

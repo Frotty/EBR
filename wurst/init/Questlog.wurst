@@ -19,10 +19,13 @@ init
 	QuestSetTitle(q, "Credits")
 	QuestSetRequired(q, false)
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNtemp.blp")
-	QuestSetDescription(q, "In unsorted manner:\n"
+	QuestSetDescription(q, "Special thanks in unsorted manner:\n"
 							+ "-kari0003\n"
 							+ "-menag\n"
 							+ "-Crigges\n"
+							+ "-WaterKnight\n"
 							+ "-hiveworkshop ppl\n"
 							+ "-old b.net friends whos names I forgot ;( good ol' times\n"
-							+ "-Geronimo\n" )
+							+ "-Geronimo\n"
+							+ "-The koreans (pockpoong, kagu, sayack)\n"
+							+ "-The pubs who continue joining to this day\n" )
