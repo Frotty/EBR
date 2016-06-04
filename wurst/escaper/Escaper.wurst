@@ -175,15 +175,15 @@ public class Escaper extends UnitEntity
 	function revive()
 		printLog(Loglevel.DEBUG, "revive start")
 		sliding = false
+		setVel(vec3(0,0,0))
 		let rev = currentRevivepoint
 		if revmod == null
 			ReviveHero(actor, rev.x, rev.y, false)
+			setPos(vec3(rev.x, rev.y, 32.))
 		else
 			ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
-		setVel(vec3(0,0,0))
-		setPos(vec3(rev.x, rev.y, 32.))
+			setPos(vec3(revmod.pos.x, revmod.pos.y, 32.))
 		actor.setPropWindow(60.)
-		slideVelocity = vec2(0,0)
 		CameraClearNoiseForPlayer(owner)
 		if selectatrevive
 			if (GetLocalPlayer() == owner)
@@ -233,24 +233,6 @@ public class Escaper extends UnitEntity
 		data.onCast(GetSpellAbilityId())
 		
 	function onCast(int id)
-//		if id == ATTACK_MELEE_ID
-//			for int i = 0 to 5
-//				var data = UnitItemInSlot(actor, i).getUserData() castTo ItemObject
-//				if data instanceof Weapon
-//					var w = data castTo Weapon
-//					if weapon[w.wpid].atype == ATTACK_TYPE.MELEE
-//						w.attackm()
-//						actor.queueAnimation("attack")
-//						return
-//		else if id == ATTACK_RANGED_ID
-//			for int i = 0 to 5
-//				var data = UnitItemInSlot(actor, i).getUserData() castTo ItemObject
-//				if data instanceof Weapon
-//					var w = data castTo Weapon
-//					if weapon[w.wpid].atype == ATTACK_TYPE.RANGED
-//						w.attackr(pos,GetSpellTargetX(), GetSpellTargetY())
-//						actor.queueAnimation("cast")
-//						return
 		if id == JUMP_SPELL
 			if not flying
 				addPos(vec3(0,0,1))

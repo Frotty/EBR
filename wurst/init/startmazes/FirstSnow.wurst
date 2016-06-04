@@ -21,7 +21,8 @@ public class FirstSnowMaze extends Startmaze
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u008", null )
 		for u in ENUM_GROUP
-			new BigRandomKiller(u)
+			new BigRandomKiller(u).update()
+		
 		printLog(Loglevel.DEBUG, "maze-0.3")
 		ENUM_GROUP.clear()
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", null )

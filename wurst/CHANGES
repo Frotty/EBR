@@ -1,5 +1,7 @@
 [0.84t]
-[*] added void walker enemy
+[*] added dimension shifter enemy
+[*] fixed pointer from unitcreator not being pointed correctly
+[*] fixed revive modifier
 
 [0.84s]
 [*] enhanced builder abuse prevention
@@ -11,7 +13,6 @@
 [*] added jump abilitty that can be activated per region
 [*] fixed killers getting stuck at waypoints
 [*] fixed powernode bounciness
-
 
 [0.84q]
 [*] fixed region sharing

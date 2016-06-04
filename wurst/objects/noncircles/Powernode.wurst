@@ -106,7 +106,7 @@ public class Powernode extends SetupObject
 		let dx = lpos.x - e.pos.x
 		let dy = lpos.y - e.pos.y
 		let normal = vec2(-dy,dx).norm().toVec3()
-		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 2
+		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
 		e.setXY(e.pos+b)
 		e.setVel(b)
 		
@@ -158,7 +158,7 @@ public class Powernode extends SetupObject
 		else if id == DECREASE_BOUNCE_ID
 			node.bounciness.decrement(node.pos, 0)
 
-@objectgen function genKnockbacker()
+@objectgen function genSpells()
 	INCREASE_BOUNCE_ID = ABIL_ID_GEN.next()
 	DECREASE_BOUNCE_ID = ABIL_ID_GEN.next()
 	if not compiletime

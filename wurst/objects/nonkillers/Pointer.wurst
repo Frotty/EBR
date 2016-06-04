@@ -15,19 +15,20 @@ constant int STOP_ID = 'A032'
 
 public class Pointer extends EscaperSensorSetup
 	real turnspeed = 2.
-	real angl = 0.
+	angle angl
 	boolean turning
 	
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, POINTER_ID, facing, POINTER_RADIUS, 16.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		angl = facing
 		
 	override function update()
 		pos = vec3(setup.getX(), setup.getY(), 0.)
 		
 		if turning
-			angl += turnspeed
-			angl = angl % 360
+			angl += turnspeed.asAngleDegrees()
+			angl = (angl.degrees() % 360).asAngleDegrees()
 		actor.setPos(pos.x, pos.y)
 		actor.setFacing(angl)
 		
@@ -73,7 +74,7 @@ public class Pointer extends EscaperSensorSetup
 			facing = S2R(SubString(chatmsg, 10, StringLength(chatmsg)))
 		for unit u in getSelectedPointers(GetTriggerPlayer())
 			Pointer obj = u.getUserData() castTo Pointer
-			obj.angl = facing
+			obj.angl = facing.asAngleDegrees()
 			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
 		
 function getSelectedPointers(player p) returns group

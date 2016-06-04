@@ -49,18 +49,18 @@ public function PlayerData.loadPlayerFile()
 	
 	let sCount = count.sync(this.p)
 	string array sLines
-	printLog(Loglevel.INFO, sCount.toString())
+	printLog(Loglevel.DEBUG, sCount.toString())
 	if sCount > 0
 		for i = 0 to sCount-1
 			sLines[i] = lines[i].sync(this.p)
-			printLog(Loglevel.INFO, sLines[i])
+			printLog(Loglevel.DEBUG, sLines[i])
 	printLog(Loglevel.DEBUG, "syncing for " + this.id.toString() + " done")
 	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your Data was loaded."  )
 	int idx = - 1
 	PMData data = null
 	for i = 0 to sCount-1
 		if sLines[i].startsWith(nameHash)
-			printLog(Loglevel.INFO, "character Found in Line " + i.toString())
+			printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
 			idx = i
 			data = new PMData()
@@ -70,7 +70,7 @@ public function PlayerData.loadPlayerFile()
 			data = new PMData()
 			data.deserialize(sLines[i])
 			if data.namehash == nameHash
-				printLog(Loglevel.INFO, "character Found in Line " + i.toString())
+				printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
 				DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
 				idx = i
 				break

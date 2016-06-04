@@ -21,7 +21,7 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -3700, 7600, 0) )
+		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -6500, -7000, 0) )
 	
 	override function update()
 		pos = actor.getPos().toVec3()

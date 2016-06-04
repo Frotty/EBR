@@ -1,8 +1,14 @@
 package VoidWalker
 import EscaperSensor
-
+import ConfigValue
+import ChannelAbilityPreset
 constant UNIT_ID = 'u00I'
 constant KILL_RADIUS = 64.
+
+int UP_VIS_ID
+int DOWN_VIS_ID
+int UP_INVIS_ID
+int DOWN_INVIS_ID
 
 enum WalkerMode
 	VIS
@@ -12,27 +18,34 @@ enum WalkerMode
 
 public class VoidWalker extends EscaperSensorSetup
 	private colorA color = COLOR_WHITE
-	private real visibleDur = 4
-	private real fadeDur = 2
-	private real invisDur = 3
+	private ConfigValue visibleDur = new ConfigValue(3, 0.5, "Visible Duration")
+	private real fadeDur = 1
+	private ConfigValue invisDur = new ConfigValue(3, 0.5, "Invisible Duration")
 	private WalkerMode mode = WalkerMode.VIS
-	private real dur = visibleDur
+	private real dur = visibleDur.get()
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, UNIT_ID, facing, KILL_RADIUS, KILL_RADIUS)
-		active = true
+		setup()
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, UNIT_ID, KILL_RADIUS, KILL_RADIUS)
-		active = true
+		setup()
 	
 	construct(unit existing)
 		super(existing, KILL_RADIUS, KILL_RADIUS)
+		setup()
+		
+	function setup()
 		active = true
+		setup..setVertexColor(colorA(55,55,55,55))..setScale(0.5)
+		..addAbility(UP_VIS_ID)..addAbility(DOWN_VIS_ID)
+		..addAbility(UP_INVIS_ID)..addAbility(DOWN_INVIS_ID)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
 		super.update()
-		setup.setVertexColor(colorA(55,55,55,55))
+		
 		switch mode
 			case WalkerMode.VIS
 				dur-= ANIMATION_PERIOD
@@ -50,12 +63,77 @@ public class VoidWalker extends EscaperSensorSetup
 				if dur <= 0
 					color = COLOR_BLACK
 					mode = WalkerMode.INVIS
-					dur = invisDur
+					dur = invisDur.get()
 			case WalkerMode.FADEIN
 				dur -= ANIMATION_PERIOD
 				color = color.mix(COLOR_WHITE, (fadeDur-dur)/3.)
 				if dur <= 0
 					color = COLOR_WHITE
 					mode = WalkerMode.VIS
-					dur = visibleDur
+					dur = visibleDur.get()
 		actor.setVertexColor(color)
+		
+	function onCast()
+		updatePos()
+		let id = GetSpellAbilityId()
+		switch id
+			case UP_VIS_ID
+				visibleDur.increment(pos, 10)
+			case DOWN_VIS_ID
+				visibleDur.decrement(pos, 0)
+			case UP_INVIS_ID
+				invisDur.increment(pos, 10)
+			case DOWN_INVIS_ID
+				invisDur.decrement(pos, 0)
+		
+@objectgen function genSpells()
+	UP_VIS_ID = ABIL_ID_GEN.next()
+	DOWN_VIS_ID = ABIL_ID_GEN.next()
+	UP_INVIS_ID = ABIL_ID_GEN.next()
+	DOWN_INVIS_ID = ABIL_ID_GEN.next()
+	
+	if not compiletime
+		return
+	let inc_spell = new ChannelAbilityPreset(UP_VIS_ID, 1, true)
+	inc_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Increase Visible Duration")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetHotkey("D")
+	..presetTooltipNormal((int lvl) -> "Increase Visible Duration [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(2, 1)
+	
+	let dec_spell = new ChannelAbilityPreset(DOWN_VIS_ID, 1, true)
+	dec_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Decrease Visible Duration")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetHotkey("C")
+	..presetTooltipNormal((int lvl) -> "Decrease Visible Duration [|cffFFCC00C|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(2, 2)
+	
+	let inc_spell2 = new ChannelAbilityPreset(UP_INVIS_ID, 1, true)
+	inc_spell2..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Increase Invisible Duration")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetHotkey("R")
+	..presetTooltipNormal((int lvl) -> "Increase Invisible Duration [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(3, 0)
+	
+	let dec_spell2 = new ChannelAbilityPreset(DOWN_INVIS_ID, 1, true)
+	dec_spell2..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Decrease Invisible Duration")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetHotkey("F")
+	..presetTooltipNormal((int lvl) -> "Decrease Invisible Duration [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(3, 1)

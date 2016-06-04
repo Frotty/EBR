@@ -29,8 +29,6 @@ public class PMData
 			expcode = read(source.indexOf("expcode"))
 			read(7)
 			
-		print("read: namehash: " + namehash + " exp: " + expcode)
-		
 	function read(int length) returns string
 		let s = source.substring(0, length)
 		source = source.substring(length, source.length())

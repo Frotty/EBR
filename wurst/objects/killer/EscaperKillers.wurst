@@ -1,7 +1,7 @@
 package EscaperKillers
 import public EscaperSensor
 import RegionData
-
+import ErrorHandling
 
 public constant real COLL_SIZE_SK = 72
 public constant real COLL_SIZE_BK = 96
@@ -63,7 +63,7 @@ public class BigRandomKiller extends EscaperSensorSetup
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, facing, COLL_SIZE_BRK, COLL_SIZE_BRK)
 		active = true
-	
+		
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, COLL_SIZE_BRK, COLL_SIZE_BRK)
 		active = true

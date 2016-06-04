@@ -23,6 +23,8 @@ import GlobalShop
 import Remove
 import BasicSpells
 import ClosureTimers
+import Teleporter 
+import Ball
 
 init
 	callGen()
@@ -77,29 +79,20 @@ function initGame()
 	invis_init()
 	init_remove()
 	getTimer().start(0.01, function initPartTwo)
-	
 function initPartTwo()
 	initBaseObjects()
 	printLog(Loglevel.DEBUG, "Init - BObj")
+	let t = new Teleporter(vec2(4300,-3800),players[11])
+	t.setRallyPoint(vec2(-6000,-7200))
 	printLog(Loglevel.DEBUG, "Init - Startmazes")
 	CreateFogModifierRect(Player(11), FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
+	new BallItem(vec2(-5500,-6900), players[11])
 
 	printLog(Loglevel.DEBUG, "Init - Finished")
 	startChoose()
 	printLog(Loglevel.DEBUG, "Starting choose...")
 	initSpells()
 	initItem()
-	printLog(Loglevel.DEBUG, File.isEnabled().toString())
 	initStartmazes()
 	GetExpiredTimer().release()
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_CONSTRUCT_START handleid: " + EVENT_PLAYER_UNIT_CONSTRUCT_START.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_USE_ITEM handleid: " + EVENT_PLAYER_UNIT_USE_ITEM.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_UPGRADE_FINISH handleid: " + EVENT_PLAYER_UNIT_UPGRADE_FINISH.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_SPELL_EFFECT handleid: " + EVENT_PLAYER_UNIT_SPELL_EFFECT.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_PICKUP_ITEM handleid: " + EVENT_PLAYER_UNIT_PICKUP_ITEM.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_SPELL_CAST handleid: " + EVENT_PLAYER_UNIT_SPELL_CAST.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_DEATH handleid: " + EVENT_PLAYER_UNIT_DEATH.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER handleid: " + EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER handleid: " + EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER.getHandleId().toString())
-	printLog(Loglevel.DEBUG, "EVENT_PLAYER_UNIT_DROP_ITEM handleid: " + EVENT_PLAYER_UNIT_DROP_ITEM.getHandleId().toString())
 

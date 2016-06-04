@@ -32,7 +32,7 @@ public class JukeBox
 				randomQueue.add(i)
 				
 	function playNextMusic()
-		print("Playing next music")
+		printTimed("Playing next music", 5)
 		StopMusic(false)
 		if requests.getSize() > 0
 			currentMusic = musics.get(requests.pop())

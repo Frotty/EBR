@@ -11,7 +11,11 @@ public class AirPhysicsProjectile extends Projectile
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
 		super(pos, radius, owner, xyAngle, fxpath)
 		setXYAngle(xyAngle)
-		
+	
+
+	function setRestitution(real rest)
+		this.restitution = rest
+			
 	function setMass(real mass)
 		this.mass = mass
 		
