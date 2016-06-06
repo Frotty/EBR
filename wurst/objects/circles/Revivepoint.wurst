@@ -48,7 +48,6 @@ public class RevivePoint extends StaticSetupObject
 					startmazes[currentMaze].initMaze()
 					svRev.reached = false
 			
-		printLog(Loglevel.DEBUG, "reach-2")
 		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
 			PlaySoundBJ(gg_snd_Rescue)
 			DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")

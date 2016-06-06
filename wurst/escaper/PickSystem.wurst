@@ -193,5 +193,3 @@ public function init_Choose()
 	SetTextTagVisibility(herott[herocount],true)
 	SetTextTagPos(herott[herocount],x2,y2,70)
 
-		
-		

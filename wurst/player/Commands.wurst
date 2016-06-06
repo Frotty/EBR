@@ -31,7 +31,7 @@ function onCommandChat()
 				pd.zCam = nstr.toInt() * 1.
 				if pd.zCam > 3000
 					pd.zCam = 2500
-					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Maximum Zoom is 2500")
+					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Maximum Zoom is 3000")
 				else if pd.zCam < 500
 					pd.zCam = 500
 					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Minimum Zoom is 500")

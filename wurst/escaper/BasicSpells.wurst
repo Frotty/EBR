@@ -34,6 +34,7 @@ function onCast()
 	if id == BALL_SPELL_ID
 		let caster = GetSpellAbilityUnit()
 		let tpos = getSpellTargetPos()
+		caster.removeAbility(BALL_SPELL_ID)
 		item itm = null
 		for i = 0 to 5
 			let itm2 = UnitItemInSlot(caster, i)

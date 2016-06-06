@@ -28,7 +28,7 @@ public function initStartmazes()
 		setStartTeleport(0,1)
 		setStartTeleport(1,3)
 		setStartTeleport(2,2)
-	else if rand < 7
+	else if rand <= 7
 		setStartTeleport(0,2)
 		setStartTeleport(1,3)
 		setStartTeleport(2,1)

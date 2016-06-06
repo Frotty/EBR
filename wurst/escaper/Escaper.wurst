@@ -91,6 +91,12 @@ public class Escaper extends UnitEntity
 			flying = false
 			deaths++
 			
+	function stop()
+		sliding = false
+		slideVelocity = vec2(0,0)
+		vel = vec3(0,0,0)
+		trackVelocity = vec2(0,0)
+		vortexVelocity = vec2(0,0)
 		
 	
 	override function onGroundHit()
@@ -175,7 +181,7 @@ public class Escaper extends UnitEntity
 	function revive()
 		printLog(Loglevel.DEBUG, "revive start")
 		sliding = false
-		setVel(vec3(0,0,0))
+		stop()
 		let rev = currentRevivepoint
 		if revmod == null
 			ReviveHero(actor, rev.x, rev.y, false)

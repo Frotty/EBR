@@ -71,10 +71,10 @@ public class Teleporter extends StaticBaseObject
 		switch id
 			case BOTH_ID
 				actor..removeAbility(BOTH_ID)..addAbility(ESC_ID)
-				mode = TeleportMode.BOTH
+				mode = TeleportMode.ESCAPER
 			case ESC_ID
 				actor..removeAbility(ESC_ID)..addAbility(KILL_ID)
-				mode = TeleportMode.ESCAPER
+				mode = TeleportMode.KILLER
 			case KILL_ID
 				actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
-				mode = TeleportMode.KILLER
+				mode = TeleportMode.BOTH

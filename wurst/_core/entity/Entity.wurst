@@ -25,8 +25,10 @@ public module Sensor
 		sensorLiteners.put(inRangeTrig, listener)
 		inRangeTrig.addAction( () -> begin
 			let trig = GetTriggeringTrigger()
-			let target = GetTriggerUnit().getEntity() castTo UnitEntity
-			sensorLiteners.get(trig).onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
+			if GetTriggerUnit().getUserData() > 0
+				let target = GetTriggerUnit().getEntity() castTo UnitEntity
+				if target != null and not target.done
+					sensorLiteners.get(trig).onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
 		end)
 		
 	ondestroy

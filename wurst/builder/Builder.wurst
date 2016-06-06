@@ -4,7 +4,6 @@ import TimerUtils
 import BuilderConstants
 import RegionData
 import Key
-import SetupBox
 import initlater InstantBuild
 import Tome
 import JukeBox
@@ -33,6 +32,9 @@ public class Builder extends UnitEntity
 			var builder = data castTo Builder
 			var id = GetSpellAbilityId()
 			let tpos = getSpellTargetPos()
+			let rdata = getRegionData(tpos)
+			if rdata == null
+				return
 			boolean wasMenu = false
 			switch id
 				case MENU_1
@@ -54,17 +56,17 @@ public class Builder extends UnitEntity
 					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
 					wasMenu = true
 				case KEY_SPELL_ID
-					if getRegionData(tpos).canBuild(builder.owner)
+					if rdata.canBuild(builder.owner)
 						new Key(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case BOOTS_SPELL_ID
-					if getRegionData(tpos).canBuild(builder.owner)
+					if rdata.canBuild(builder.owner)
 						createItem(BOOTS_ID, tpos)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 				case TOME_SPELL_ID
-					if getRegionData(tpos).canBuild(builder.owner)
+					if rdata.canBuild(builder.owner)
 						new Tome(tpos, builder.owner)
 					else
 						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
@@ -122,7 +124,7 @@ public class Builder extends UnitEntity
 				var bdata = GetTriggerUnit().getUserData() castTo Builder
 				var rdata = getRegionData(i.getPos())
 				bdata.actor.abortOrder()
-				if i.getUserData() > 0
+				if rdata != null and i.getUserData() > 0
 					if rdata.canBuild(bdata.owner)
 						var idata = i.getEntity()
 						idata.terminate()
@@ -180,38 +182,10 @@ public function init_Builder()
 	t.registerBuilderEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
 	t.addAction(function removeWrong)
 	
-	let t2 = CreateTrigger()
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
-	jukeBox.playNextMusic()
 
 function removeWrong()
 	GetTriggerUnit().remove()
 
-function claimRegion()
-	var seller = GetTriggerUnit()
-	var buyer = GetBuyingUnit()
-	let itm = GetSoldItem()
-	var id = GetItemTypeId(itm)
-	var builder = buyer.getUserData() castTo Builder
-	builder.updatePos()
-	var rdata = getRegionData(seller.getPos())
-	let rtype = getRegionTypeFromItem(id)
-	if rdata.rtype == RegionType.UNKNOWN and rtype != RegionType.UNKNOWN
-		itm.remove()
-		if builder.regionCount > 0
-			builder.regionCount--
-			rdata.setType(rtype, true)
-			rdata.setOwner(builder.owner)
-			GetManipulatedItem().remove()
-			addEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", seller.getPos()).destr()
-			seller.remove()		
-			
-			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
-			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
-			if GetLocalPlayer() == builder.owner
-				SelectUnit(builder.actor, true)
-		else
-			printTimedToPlayer("|cff3187CBYou have used up all your regions. Leave some for the other builders", 15, builder.owner)
 
 	
 

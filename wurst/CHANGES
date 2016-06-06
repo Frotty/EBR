@@ -1,7 +1,10 @@
-[0.84t]
+[0.84x]
 [*] added dimension shifter enemy
+[*] added new tracks to jukebox
 [*] fixed pointer from unitcreator not being pointed correctly
 [*] fixed revive modifier
+[*] fixed jukebox desync
+[*] fixed jukebox requests
 
 [0.84s]
 [*] enhanced builder abuse prevention

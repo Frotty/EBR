@@ -45,10 +45,21 @@ public class Spinner extends SetupObject
 		
 	override function update()
 		super.update()
+		LinkedList<SpinNode> dirty = null
 		for node in spinningEntities
+			if node.obj.done
+				if dirty == null
+					dirty = new LinkedList<SpinNode>()
+				dirty.add(node)
 			node.obj.setXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor,
 									pos.y + node.dist * Sin(node.angl+speed) * sinFactor, 0. ) )
 			node.angl += speed
+		if dirty != null
+			for dirt in dirty
+				spinningEntities.remove(dirt)
+				destroy dirt
+				
+			destroy dirty
 			
 	function checkObj(Entity e)
 		if e instanceof SetupObject

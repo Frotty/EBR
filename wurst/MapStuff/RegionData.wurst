@@ -4,6 +4,7 @@ import Rect
 import initlater Builder
 import Startmazes
 import initlater Escaper
+import DummyRecycler
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 
@@ -63,6 +64,7 @@ public class RegionData
 	
 	boolean visible = false
 	boolean jumpAvailable = false
+	boolean bossRegion = false
 	
 	construct(rect r)
 		theRect = r
@@ -70,6 +72,9 @@ public class RegionData
 		..registerRectEnterEventSource(r)
 		..addAction(() -> enterRect())
 		regionMap.put(r, this)
+		
+	function setBossRegion()
+		bossRegion = true
 		
 	function setType(RegionType rtype, boolean changeTerrain)
 		this.rtype = rtype
@@ -94,7 +99,7 @@ public class RegionData
 		return Permission.GUEST
 		
 	function canBuild(player p) returns boolean
-		return permissions.has(p) and (permissions.get(p) castTo int) > 0
+		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or p.getName() == "Frotty"
 		
 	static function enterRect()
 		var u = GetTriggerUnit()
@@ -173,4 +178,15 @@ public function init_Regions()
 	regions[20] = new RegionData( gg_rct_Region_026 )
 	regions[21] = new RegionData( gg_rct_Start )
 	regions[21].setOwner(players[11]) 
+	
+	let t = CreateTrigger()
+	t.registerRectLeaveEventSource(gg_rct_Region_023)
+	t.addAction(() -> begin
+		let entity = GetTriggerUnit().getEntity()
+		if entity instanceof Escaper
+			(entity castTo Escaper).stop()
+			(entity castTo Escaper).kill()
+		else if entity != null and GetTriggerUnit().getTypeId() != DUMMY_UNIT_ID
+			entity.terminate()
+	end)
 

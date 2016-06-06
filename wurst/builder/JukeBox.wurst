@@ -8,17 +8,27 @@ class Music
 	int spellid
 	string path
 	real duration
+	string name
 	
 	construct(int id, string path)
 		this.spellid = id
 		this.path = path
 		this.duration = GetSoundFileDuration(path) / 1000.
+		this.name = path.substring(path.lastIndexOf("\\") + 1, path.lastIndexOf("."))
+		
+class JukeRequest
+	player juker
+	int id
+	
+	construct(player p, int id)
+		this.juker = p
+		this.id = id
 		
 		
 LinkedList<Music> musics = new LinkedList<Music>()
 
 public class JukeBox
-	LinkedList<int> requests = new LinkedList<int>()
+	LinkedList<JukeRequest> requests = new LinkedList<JukeRequest>()
 	LinkedList<int> recycleQueue = new LinkedList<int>()
 	LinkedList<int> randomQueue = new LinkedList<int>()
 	
@@ -32,42 +42,70 @@ public class JukeBox
 				randomQueue.add(i)
 				
 	function playNextMusic()
-		printTimed("Playing next music", 5)
 		StopMusic(false)
 		if requests.getSize() > 0
-			currentMusic = musics.get(requests.pop())
+			let req = requests.pop()
+			currentMusic = musics.get(req.id)
+			printTimed("Playing |cff84DE52" + currentMusic.name + "|r as requested by " + req.juker.getNameColored(), 10)
 		else if randomQueue.getSize() > 0
 			let id = randomQueue.pop()
 			currentMusic = musics.get(id)
 			recycleQueue.add(id)
 		else
-			for i in recycleQueue
+			while recycleQueue.getSize() > 0
+				let i = recycleQueue.getSize()
+				let id = recycleQueue.pop()
 				if (i * GetRandomInt(1,7)) % 2 == 0
-					randomQueue.addtoStart(i)
+					randomQueue.addtoStart(id)
 				else
-					randomQueue.add(i)
-			playNextMusic()
-			return
+					randomQueue.add(id)
+			let nid = randomQueue.pop()
+			currentMusic = musics.get(nid)
+			recycleQueue.add(nid)	
 			
-		PlayMusic(currentMusic.path)
-		doAfter(currentMusic.duration, () -> playNextMusic())
+		if currentMusic != null
+			PlayMusic(currentMusic.path)
+			doAfter(currentMusic.duration, () -> playNextMusic())
+		else
+			doAfter(60, () -> playNextMusic())
 	
 	function checkSpell(int id)
 		int idx = 0
 		for music in musics
 			if music.spellid == id
-				printTimedToPlayer("You have added music to the jukebox", 10, GetTriggerUnit().getOwner())
-				requests.add(idx)
+				let p =	GetTriggerUnit().getOwner()
+				for req in requests
+					if req.juker == p
+						printTimedToPlayer("You already have a track in the jukebox!", 10, p)
+						return
+						
+				printTimed("The Track |cff84DE52" + music.name + "|r has been queued by " + p.getNameColored(), 10)
+				requests.add(new JukeRequest(p, idx))
 				return
 			idx++
 
 init
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\ArthasTheme.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\BloodElfTheme.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\Comradeship.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\DarkAgents.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\Doom.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\Human1.mp3"))
 	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\Human1.mp3"))
 	musics.add(new Music('A02R', "Sound\\Music\\mp3Music\\Human2.mp3"))
 	musics.add(new Music('A03L', "Sound\\Music\\mp3Music\\HumanX1.mp3"))
-	musics.add(new Music('A03U', "Sound\\Music\\mp3Music\\TragicConfrontation.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\IllidansTheme.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\LichKingTheme.mp3"))
+	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\NagaTheme.mp3"))
+	musics.add(new Music('A03N', "Sound\\Music\\mp3Music\\Orc1.mp3"))
+	musics.add(new Music('A03N', "Sound\\Music\\mp3Music\\Orc2.mp3"))
 	musics.add(new Music('A03N', "Sound\\Music\\mp3Music\\Orc3.mp3"))
+	musics.add(new Music('A03N', "Sound\\Music\\mp3Music\\OrcX1.mp3"))
+	musics.add(new Music('A03N', "Sound\\Music\\mp3Music\\PursuitTheme.mp3"))
 	musics.add(new Music('A03P', "Sound\\Music\\mp3Music\\SadMystery.mp3"))
+	musics.add(new Music('A03U', "Sound\\Music\\mp3Music\\Tension.mp3"))
+	musics.add(new Music('A03U', "Sound\\Music\\mp3Music\\TragicConfrontation.mp3"))
+	musics.add(new Music('A03T', "Sound\\Music\\mp3Music\\Undead1.mp3"))
 	musics.add(new Music('A03T', "Sound\\Music\\mp3Music\\Undead2.mp3"))
 	musics.add(new Music('A03O', "Sound\\Music\\mp3Music\\PH1.mp3"))
 	musics.add(new Music('A03S', "Sound\\Music\\mp3Music\\War2IntroMusic.mp3"))

@@ -14,13 +14,14 @@ import TerrainModder
 import UnitProducer
 import RevivePointModifier
 import PlayerMemoryData
-import SetupBox
 
 public int playercount = 0
 public int builderCount = 0
 
 trigger leaveTrig
 
+public Board playerboard
+public PlayerData array pData
 public LinkedList<PlayerData> playerlist = new LinkedList<PlayerData>()
 
 public class PlayerData //just the player's (constant) stuff
@@ -51,8 +52,8 @@ public class PlayerData //just the player's (constant) stuff
 	
 	construct (player p)
 		this.p = p
-		
 		id = GetPlayerId(p)
+		pData[id] = this
 		gameId = playerlist.getSize()
 		name = GetPlayerName(p)
 		mbname = name
@@ -142,8 +143,6 @@ public function isPlayerEscaper(player p) returns boolean
 		return true
 	return false
 	
-public Board playerboard
-public PlayerData array pData
 
 function initMB()
 	playerboard = new Board(playercount+1,3)
