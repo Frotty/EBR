@@ -5,8 +5,6 @@ import Vectors
 import Trigger
 
 
-public constant int INC_SPEED_ID = 'A01E'
-public constant int DEC_SPEED_ID = 'A01H'
 /**
 	Objects which are unclickable for escapers,
 	but clickable for builders.	 

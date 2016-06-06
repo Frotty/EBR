@@ -23,6 +23,7 @@ public class StaticBaseObject extends UnitEntity
 
 	construct( vec2 pos, unit u, real radius, code c )
 		super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
+		actor.addAbility(GHOST_VIS_ID)
 		active = false
 
 		rallyPoint = this.pos
@@ -48,8 +49,7 @@ public class StaticBaseObject extends UnitEntity
 
 		if orderid == 0xD000C or orderid == 851971
 			if target == null
-				obj.rallyUnit = null
-				obj.rallyPoint = targetPoint.toVec3()
+				obj.setRallyPoint(targetPoint)
 				obj.rallyAngle = obj.pos.angleTo2d(targetPoint)
 			else
 				let data = target.getEntity()

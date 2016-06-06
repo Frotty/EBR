@@ -78,13 +78,13 @@ public class VoidWalker extends EscaperSensorSetup
 		let id = GetSpellAbilityId()
 		switch id
 			case UP_VIS_ID
-				visibleDur.increment(pos, 10)
+				visibleDur.increment(this, 10)
 			case DOWN_VIS_ID
-				visibleDur.decrement(pos, 0)
+				visibleDur.decrement(this, 0)
 			case UP_INVIS_ID
-				invisDur.increment(pos, 10)
+				invisDur.increment(this, 10)
 			case DOWN_INVIS_ID
-				invisDur.decrement(pos, 0)
+				invisDur.decrement(this, 0)
 		
 @objectgen function genSpells()
 	UP_VIS_ID = ABIL_ID_GEN.next()

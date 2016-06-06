@@ -40,7 +40,7 @@ class Link
 
 public class Powernode extends SetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
-	private ConfigValue bounciness = new ConfigValue(0.80, 0.20, "Bounciness")
+	private ConfigValue bounciness = new ConfigValue(0.75, 0.25, "Bounciness")
 
 	construct( vec2 pos, player owner )
 		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
@@ -152,11 +152,11 @@ public class Powernode extends SetupObject
 					else if id == LINK_DIODE_ID	
 						node.link(data castTo Powernode, LinkType.BOUNCE_DIODE)
 		else if id == INCREASE_BOUNCE_ID
-			node.bounciness.increment(node.pos, 4)
+			node.bounciness.increment(node, 8)
 			for link in links
 				link.linkedNode.bounciness.setVal(node.bounciness.get())
 		else if id == DECREASE_BOUNCE_ID
-			node.bounciness.decrement(node.pos, 0)
+			node.bounciness.decrement(node, 0)
 
 @objectgen function genSpells()
 	INCREASE_BOUNCE_ID = ABIL_ID_GEN.next()

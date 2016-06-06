@@ -6,6 +6,8 @@ import Texttag
 import SoundUtils
 import Image
 import TerrainBlocker
+import RegionData
+
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
 
@@ -48,7 +50,7 @@ public class Jumper extends StaticBaseObject
 	static function inRange()
 		var data = GetTriggerUnit().getEntity()
 		var jdata = GetTriggeringTrigger().getSource().getUserData() castTo Jumper
-		if data instanceof Escaper
+		if data instanceof Escaper and getRegionData(jdata.getRallyPoint()).canBuild(jdata.owner)
 			var edata = data castTo Escaper
 			switch jdata.mode
 				case JumpMode.FORCED

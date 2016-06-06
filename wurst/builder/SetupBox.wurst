@@ -7,20 +7,23 @@ import PlayerData
 import initlater Builder
 import RegisterEvents
 
-constant int SETUP_BOX = 'n00A'
-constant int ICEI_ID = 'A057'
-constant int ICED_ID = 'A006'
-constant int PI_ID = 'A011'
-constant int PD_ID = 'A059'
-constant int LI_ID = 'A058'
-constant int LD_ID = 'A05A'
-constant int ALLOW_ID = 'A01X'
-constant int CLEAR_ID = 'A020'
-constant int BOSS_MODE_ID = 'A03E'
-constant int JUMP_ID = 'A07S'
+constant SETUP_BOX = 'n00A'
+constant ICEI_ID = 'A057'
+constant ICED_ID = 'A006'
+constant PI_ID = 'A011'
+constant PD_ID = 'A059'
+constant LI_ID = 'A058'
+constant LD_ID = 'A05A'
+constant ALLOW_ID = 'A01X'
+constant CLEAR_ID = 'A020'
+constant BOSS_MODE_ID = 'A03E'
+constant JUMP_ID = 'A07S'
+constant FIRST_PAGE = 'A07B'
+constant SECOND_PAGE = 'A07A'
 
 constant real MAX_SLIDESPEED = 15.
-constant real MAX_DOT_DMG = 10.
+constant real MAX_DOT_DMG = 20.
+
 
 public class SetupBox extends UnitEntity
 	private RegionData rdata
@@ -28,7 +31,7 @@ public class SetupBox extends UnitEntity
 	construct( vec2 pos, player owner, RegionData data )
 		super(pos.toVec3(), createUnit( owner, SETUP_BOX, pos, angle(0) ))
 		rdata = data
-		
+		actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 	function addBossSwitch()
@@ -54,25 +57,25 @@ public class SetupBox extends UnitEntity
 				if rdata.poisonDmg >= MAX_DOT_DMG
 					DisplayTextToPlayer( owner, 0, 0, "Poisondamage is on Maximum" )
 				else
-					rdata.poisonDmg += .1
+					rdata.poisonDmg += .25
 					DisplayTextToPlayer( owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString() )
 			case PD_ID
-				if rdata.poisonDmg <= .1
+				if rdata.poisonDmg <= .25
 					DisplayTextToPlayer( owner, 0, 0, "Poisondamage is on Minimum" )
 				else
-					rdata.poisonDmg -= .1
+					rdata.poisonDmg -= .25
 					DisplayTextToPlayer( owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString() )
 			case LI_ID
 				if rdata.lavaDmg >= MAX_DOT_DMG
 					DisplayTextToPlayer( owner, 0, 0, "Lavadmg is on Maximum" )
 				else
-					rdata.lavaDmg += .1
+					rdata.lavaDmg += .25
 					DisplayTextToPlayer( owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString() )
 			case LD_ID
-				if rdata.lavaDmg <= .1
+				if rdata.lavaDmg <= .25
 					DisplayTextToPlayer( owner, 0, 0, "Lavadmg is on Minimum" )
 				else
-					rdata.lavaDmg -= .1
+					rdata.lavaDmg -= .25
 					DisplayTextToPlayer( owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString() )
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
@@ -119,7 +122,14 @@ public class SetupBox extends UnitEntity
 					builder.setBossMenu(rdata)
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
-					
+			case SECOND_PAGE
+				actor..removeAbility(ALLOW_ID)..removeAbility(JUMP_ID)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
+				actor..addAbility(ICEI_ID)..addAbility(ICED_ID)..addAbility(PI_ID)..addAbility(PD_ID)
+				..addAbility(LI_ID)..addAbility(LD_ID)..addAbility(FIRST_PAGE)
+			case FIRST_PAGE
+				actor..removeAbility(ICEI_ID)..removeAbility(ICED_ID)..removeAbility(PI_ID)..removeAbility(PD_ID)
+				..removeAbility(LI_ID)..removeAbility(LD_ID)..removeAbility(FIRST_PAGE)
+				actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
 init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
 	

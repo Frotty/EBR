@@ -7,9 +7,9 @@ constant INVIS_ID = 'A005'
 
 function onChangeVisibility()
 	var id = GetSpellAbilityId()
-	var caster = GetSpellAbilityUnit()
-	var dta = caster.getUserData() castTo UnitEntity
 	if id == VIS_ID or id == INVIS_ID
+		var caster = GetSpellAbilityUnit()
+		var dta = caster.getUserData() castTo UnitEntity
 		if dta instanceof SetupObject
 			let data = dta castTo SetupObject
 			if id == VIS_ID
@@ -18,13 +18,16 @@ function onChangeVisibility()
 			else if id == INVIS_ID
 				data.actor..removeAbility(GHOST_VIS_ID)..addAbility(GHOST_INVIS_ID)
 				data.setup..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
-		else 
+		else
 			if id == VIS_ID
 				caster..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
 				caster..removeAbility(VIS_ID)..addAbility(INVIS_ID)
 			else if id == INVIS_ID
-				caster..removeAbility(GHOST_VIS_ID)..addAbility(GHOST_INVIS_ID)
-				caster..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
+				if caster.hasAbility(GHOST_VIS_ID)
+					caster.removeAbility(GHOST_VIS_ID)
+				let b2 = caster.addAbility(GHOST_INVIS_ID)
+				let b3 = caster.removeAbility(INVIS_ID)
+				let b4 = caster.addAbility(VIS_ID)
 	
 public function invis_init()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChangeVisibility())
