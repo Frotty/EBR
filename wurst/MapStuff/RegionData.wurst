@@ -61,6 +61,7 @@ public class RegionData
 	real slidespeed = 3.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
+	vec3 gravity = vec3(0,0,-0.8)
 	
 	boolean visible = false
 	boolean jumpAvailable = false

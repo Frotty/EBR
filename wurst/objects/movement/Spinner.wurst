@@ -4,10 +4,8 @@ import LinkedList
 import SetupObject
 import Texttag
 import Remove
-import BomberTarget
 import Preloader
-import BaseObject
-import Pointer
+import Obstacle
 
 constant int SPINNER_ID      = 'h01M'
 constant int SPELL_ID        = 'A01B'
@@ -62,7 +60,7 @@ public class Spinner extends SetupObject
 			destroy dirty
 			
 	function checkObj(Entity e)
-		if e instanceof SetupObject
+		if e instanceof SetupObject and not e instanceof Obstacle
 			var dobj = e castTo SetupObject
 			boolean isNew = true
 			int i = 0

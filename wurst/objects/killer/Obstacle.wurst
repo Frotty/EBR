@@ -1,0 +1,36 @@
+package Obstacle
+import EscaperKillers
+import RegionData
+import Remove
+
+constant EVENT_RADIUS_SMALL	= 32.
+constant EVENT_RADIUS_BIG	= 64.
+constant EVENT_RADIUS_V	= 256.
+constant VOLCANO_ID = 'n00K'
+
+public class Obstacle extends EscaperSensorSetup
+	construct(vec2 pos, player owner, int id, real radius )
+			super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, radius)
+			active = false
+			setup.addAbility(REMOVE_ID)
+
+public class SmallObstacle extends Obstacle
+	
+	construct(vec2 pos, player owner )
+		super(pos, owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL)
+		active = false
+		setup.addAbility(REMOVE_ID)
+
+public class BigObstacle extends Obstacle
+	
+	construct( vec2 pos, player owner )
+		super(pos, owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG)
+		active = false
+		setup.addAbility(REMOVE_ID)
+
+public class VolcanoObstacle extends Obstacle
+	
+	construct( vec2 pos, player owner )
+		super(pos, owner, VOLCANO_ID, EVENT_RADIUS_V)
+		active = false
+		setup.addAbility(REMOVE_ID)

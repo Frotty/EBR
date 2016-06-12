@@ -20,7 +20,8 @@ constant BOSS_MODE_ID = 'A03E'
 constant JUMP_ID = 'A07S'
 constant FIRST_PAGE = 'A07B'
 constant SECOND_PAGE = 'A07A'
-
+constant INC_GRAVITY = 'A07X'
+constant DEC_GRAVITY = 'A07W'
 constant real MAX_SLIDESPEED = 15.
 constant real MAX_DOT_DMG = 20.
 
@@ -32,6 +33,7 @@ public class SetupBox extends UnitEntity
 		super(pos.toVec3(), createUnit( owner, SETUP_BOX, pos, angle(0) ))
 		rdata = data
 		actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
+		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 	function addBossSwitch()
@@ -114,7 +116,7 @@ public class SetupBox extends UnitEntity
 				if pData[owner.getId()].XP > 100 //500
 					actor.removeAbility(BOSS_MODE_ID)
 					rdata.setBossRegion()
-					DisplayTextToPlayer( owner, 0, 0, "|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r" )
+					printTimedToPlayer("|cff63BD4AYou converted your area to a |cff086BBDB|r|cff0C5CB0o|r|cff104DA3s|r|cff143E96s|r|cff182F89r|r|cff1C207Ce|r|cff590E4Fg|r|cff750D41i|r|cff910C33o|r|cffAD0B25n|r", 15, owner)
 					addEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",actor.getPos()).destr()
 					let builder = pData[owner.getId()].builder
 					SelectUnitForPlayerSingle(builder.actor, owner)
@@ -124,12 +126,22 @@ public class SetupBox extends UnitEntity
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 			case SECOND_PAGE
 				actor..removeAbility(ALLOW_ID)..removeAbility(JUMP_ID)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
+				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)
 				actor..addAbility(ICEI_ID)..addAbility(ICED_ID)..addAbility(PI_ID)..addAbility(PD_ID)
 				..addAbility(LI_ID)..addAbility(LD_ID)..addAbility(FIRST_PAGE)
 			case FIRST_PAGE
 				actor..removeAbility(ICEI_ID)..removeAbility(ICED_ID)..removeAbility(PI_ID)..removeAbility(PD_ID)
 				..removeAbility(LI_ID)..removeAbility(LD_ID)..removeAbility(FIRST_PAGE)
 				actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
+				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)
+			case INC_GRAVITY
+				if(rdata.gravity.z > -10)
+					rdata.gravity -= vec3(0,0,0.1)
+					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
+			case DEC_GRAVITY
+				if(rdata.gravity.z < -.1)
+					rdata.gravity += vec3(0,0,0.1)
+					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
 init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
 	

@@ -13,12 +13,15 @@ import Knockbacker
 import VoidWalker
 
 constant int ID = 'H00A'
-
+constant FIRST_PAGE = 'A07B'
+constant SECOND_PAGE = 'A07A'
+constant AIR_KILLER = 'A07Y'
 
 public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
 		super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL)
+		actor.addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function onCast() returns boolean
@@ -27,22 +30,24 @@ public class UnitProducer extends StaticBaseObject
 		
 		let rallyPos = obj.getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)
-		if id == 'A07A'
+		if id == SECOND_PAGE
 			obj.actor..removeAbility('A05F')..removeAbility('A05K')
 			..removeAbility('A05J')..removeAbility('A05G')
 			..removeAbility('A05M')..removeAbility('A05N')
 			..removeAbility('A05H')..removeAbility('A07A')
 			..removeAbility('A05O')..removeAbility('A07C')
+			..removeAbility('A07U')..removeAbility(AIR_KILLER)
 			..addAbility('A05N')..addAbility('A05P')
 			..addAbility('A05L')..addAbility('A05I')
 			..addAbility('A07B')
 			return false
-		else if id == 'A07B'
+		else if id == FIRST_PAGE
 			obj.actor..addAbility('A05F')..addAbility('A05K')
 			..addAbility('A05J')..addAbility('A05G')
 			..addAbility('A05M')..addAbility('A05N')
 			..addAbility('A05H')..addAbility('A07A')
 			..addAbility('A05O')..addAbility('A07C')
+			..addAbility('A07U')..addAbility(AIR_KILLER)
 			..removeAbility('A05N')..removeAbility('A05P')
 			..removeAbility('A05L')..removeAbility('A05I')
 			..removeAbility('A07B')
@@ -77,13 +82,15 @@ public class UnitProducer extends StaticBaseObject
 					new Knockbacker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case 'A07U'
 					new VoidWalker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
+				case AIR_KILLER
+					new AirKiller(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 		return false
 		
 public function init_UnitProducer()
-	for pd in playerlist
+	for pd in allPlayers
 		if pd.id > 7
 			new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
 

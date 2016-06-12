@@ -18,14 +18,14 @@ public class ConfigValue
 	function get() returns real
 		return value
 		
-	function increment(Entity caster, real max)
+	function increment(UnitEntity caster, real max)
 		if value < max
 			value += increment
 			createTTEx(caster.pos, vec2(0,0.1), valueName + ": " + value.toString(2), 9., 1.5, colorA(255,255,255,255), caster.owner)
 		else
 			createTTEx(caster.pos, vec2(0,0.1), valueName + " at maximum!", 9., 1.5, colorA(255,255,255,255), caster.owner)
 		
-	function decrement(Entity caster, real min)
+	function decrement(UnitEntity caster, real min)
 		if value > min
 			value -= increment
 			createTTEx(caster.pos, vec2(0,0.1), valueName + ": " + value.toString(2), 9., 1.5, colorA(255,255,255,255), caster.owner)

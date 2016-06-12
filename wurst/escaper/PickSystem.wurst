@@ -24,7 +24,7 @@ boolean started= false
 
 public function startChoose()
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
-	for pd in playerlist
+	for pd in allPlayers
 		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
@@ -159,7 +159,7 @@ public function init_Choose()
 	heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can turn invisible."
 	heroinfos[3] = "|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice."
 
-	for pd in playerlist
+	for pd in allPlayers
 		currentView[pd.id] = 1
 		TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
 		TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)

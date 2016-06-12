@@ -69,10 +69,10 @@ init
 	tags	[15] = "|cff9C94E6[Tester]"
 	names	[16] = "pockpoong"
 	tags	[16] = "|cff9C94E6[Tester]"
-	names	[16] = "waterknight"
-	tags	[16] = "|cffDE3121[Critter]"
-	names	[17] = "sayack"
-	tags	[17] = "|cff9C94E6[Tester]"
+	names	[17] = "waterknight"
+	tags	[17] = "|cffDE3121[Critter]"
+	names	[18] = "sayack"
+	tags	[18] = "|cff9C94E6[Tester]"
 
 	colorcode[ 0 ] = "|cffFF0202" // red
 	colorcode[ 1 ] = "|cff0041FF" // blue

@@ -3,6 +3,7 @@ import LinkedListModule
 import public Serializable
 import TerrainUtils
 import PhysicsConstants
+import initlater RegionData
 import Fx
 import public TimerUtils
 import public HashMap
@@ -60,6 +61,7 @@ public function unit.setEntity(Entity e)
 /** Base Entity Class  */
 public abstract class Entity implements Serializable
 	use LinkedListModule
+	RegionData currentRegion
 	
 	/** 3d vector position */
 	vec3 pos
@@ -83,26 +85,23 @@ public abstract class Entity implements Serializable
 
 
 	construct( vec3 pos, player owner )
-		this.pos = pos
-		this.vel = vec3(0,0,0)
-		this.owner = owner		
+		setup(pos, vec3(0,0,0), 0, owner)
 
 	construct( vec3 pos, real radius, player owner )
-		this.pos = pos
-		this.vel = vec3(0,0,0)
-		this.owner = owner
-		this.radius = radius
+		setup(pos, vec3(0,0,0), radius, owner)
 		
 	construct( vec3 pos, vec3 vel, player owner )
-		this.pos = pos
-		this.vel = vel
-		this.owner = owner
+		setup(pos, vel, 0, owner)
 		
 	construct( vec3 pos, vec3 vel, real radius, player owner )
+		setup(pos, vel, radius, owner)
+
+	function setup(vec3 pos, vec3 vel, real radius, player owner)
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
 		this.radius = radius
+		this.currentRegion = getRegionData(pos)
 		
 	function setPos( vec3 pos )
 		this.pos = pos
@@ -126,9 +125,9 @@ public abstract class Entity implements Serializable
 		if t < 1.
 			t = 1./speed
 		
-		let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
-		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
-		
+		let startZVelocity = ((-currentRegion.gravity.z * t) / 2 - pos.z/t + e/t)
+		this.setVel(vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity))
+
 	function terminate()
 		done = true
 		
@@ -169,6 +168,8 @@ abstract public class UnitEntity extends Entity
 		pos = tpos
 		actor.setPos(tpos.x,tpos.y)
 		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
+		
+	
 		
 	function setXY(vec3 tpos)
 		pos = tpos
@@ -216,5 +217,3 @@ abstract public class FxEntity extends Entity
 			fx.hiddenDestroy()
 		else
 			destroy fx
-
-	

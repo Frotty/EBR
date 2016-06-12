@@ -22,7 +22,7 @@ public class BallProjectile extends AirPhysicsProjectile
 	override function update()
 		super.update()
 		let lensq = vel.lengthSquared()
-		fx.getDummy().setTimeScale((100. / lensq))
+		fx.getDummy().setTimeScale((1. / lensq))
 		if lensq < 1
 			ballitem.onIdle(pos.toVec2())
 			silent = true

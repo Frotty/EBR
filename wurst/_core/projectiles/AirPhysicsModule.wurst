@@ -1,6 +1,7 @@
 package AirPhysicsModule
 import public Entity
 import TerrainUtils
+import RegionData
 import PhysicsConstants
 import Interpolation
 
@@ -53,7 +54,7 @@ public module AirPhysicsModule
 		let coef = bezier_3(0.930,0.985,1,mass/MAX_MASS)
 		let gcoef = bezier_3(0.1,0.875,1,mass/MAX_MASS)
 		if affectedByGravity
-			e.vel += gravity * gcoef
+			e.vel += e.currentRegion.gravity * gcoef
 		e.vel.x *= coef
 		e.vel.y *= coef
 		

@@ -36,12 +36,10 @@ public class Escaper extends UnitEntity
 	int deaths = 0
 	effect lavaEffect
 	effect poisonEffect
-	
 	vec2 slideVelocity = vec2(0,0)
 	vec2 trackVelocity = vec2(0,0)
 	vec2 vortexVelocity = vec2(0,0)
-	
-	RegionData currentRegion
+	real slider = 0
 
 	boolean alive = true
 	boolean selectatrevive = true
@@ -81,6 +79,7 @@ public class Escaper extends UnitEntity
 	function kill()
 		if alive
 			if owner.getId() >= 8
+				
 				doAfter(.1, () -> revive())
 			else
 				doAfter(3., () -> revive())
@@ -89,10 +88,13 @@ public class Escaper extends UnitEntity
 			setPoison(false)
 			setLava(false)
 			flying = false
+			sliding = false
+			slider = 0
 			deaths++
 			
 	function stop()
 		sliding = false
+		slider = 0
 		slideVelocity = vec2(0,0)
 		vel = vec3(0,0,0)
 		trackVelocity = vec2(0,0)
@@ -100,7 +102,7 @@ public class Escaper extends UnitEntity
 		
 	
 	override function onGroundHit()
-		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.GOO castTo int) and vel.z.abs() > 5
+		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.BLUGOO castTo int) and vel.z.abs() > 5
 			vel.z = -vel.z
 			return
 		SetUnitPropWindow(actor, 60.)
@@ -110,6 +112,7 @@ public class Escaper extends UnitEntity
 	override function onEscapeGround()
 		SetUnitPropWindow(actor,0.)
 		sliding = false
+		slider = 0
 	
 	override function inAir()
 		slideVelocity *= 0.99
@@ -127,14 +130,20 @@ public class Escaper extends UnitEntity
 					kill()
 			else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 				let angl = actor.getFacingAngle()
-				slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
+				if slider < SLIDE_ADD
+					slider += 0.25
+				slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * slider, angl.sin() * currentRegion.slidespeed * slider)
 				sliding = true
 				vel *= 0.99
 				setLava(false)
 			else
-				vel *= 0.96
-				slideVelocity *= 0.8
+				if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.ORANGEGOO castTo int)
+					vel += actor.getFacingAngle().direction() * 2.
+				else
+					vel *= 0.96
+					slideVelocity *= 0.8
 				sliding = false
+				slider = 0
 				onUnwalkable = false
 				if ttype == 1147958883 and not onLava
 					setLava(true)
@@ -144,6 +153,7 @@ public class Escaper extends UnitEntity
 						setPoison(true)
 				else
 					setLava(false)
+					
 						
 		if onLava
 			var hp = actor.getHP()
@@ -263,7 +273,7 @@ public class Escaper extends UnitEntity
 		poisonEffect.destr()
 		actor.remove()
 		escapers.remove(this)
-		
+				
 public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
 		
 trigger slideAssist

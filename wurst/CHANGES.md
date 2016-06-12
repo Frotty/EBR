@@ -1,6 +1,14 @@
+[0.85a]
+[*]	added air killer
+[*] added gravity selectable per region
+[*] added slide start smoothing
+[*] fixed spinner spinning obstacles
+[*] changed dimension shifter default values
+[*] increased escaper turn speed slightly
+[*] added s3cr37s?! Â°JÂ° 
+
 [0.84z]
 [*] fixed invisibility
-[*] ?! °J° 
 
 [0.84x]
 [*] added dimension shifter enemy

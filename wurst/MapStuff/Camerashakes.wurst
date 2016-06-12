@@ -57,10 +57,9 @@ function loopPerPlayer()
 		if (GetLocalPlayer() == p)         
 			CameraSetSourceNoise(0, 0)        
 			CameraSetTargetNoise(0, 0)    
-	     	    
+		
 		ForceRemovePlayer(shakingPlayers, p)        
-	
-		p = null
+
 	//Loop through players for location event     
 function newEventLocPerPlayer()
 	player p = GetEnumPlayer()

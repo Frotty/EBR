@@ -15,14 +15,13 @@ import UnitProducer
 import RevivePointModifier
 import PlayerMemoryData
 
-public int playercount = 0
-public int builderCount = 0
-
 trigger leaveTrig
 
 public Board playerboard
 public PlayerData array pData
-public LinkedList<PlayerData> playerlist = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
 public class PlayerData //just the player's (constant) stuff
 	int id
@@ -54,7 +53,7 @@ public class PlayerData //just the player's (constant) stuff
 		this.p = p
 		id = GetPlayerId(p)
 		pData[id] = this
-		gameId = playerlist.getSize()
+		gameId = allPlayers.getSize()
 		name = GetPlayerName(p)
 		mbname = name
 		if mbname == "Frotty" or mbname == "FrottyZ"
@@ -64,12 +63,14 @@ public class PlayerData //just the player's (constant) stuff
 				mbname = tags[i] + "|r" + colorcode[ id ] + mbname
 				break
 		mbname = colorcode[ id ] + mbname
-		playerlist.add(this)
+		allPlayers.add(this)
 		if id > 7
-			builderCount++
+			builderPlayers.add(this)
+		else
+			escaperPlayers.add(this)
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and playercount > 0
+		if localFilesEnabled and allPlayers.getSize() > 0
 			if time
 				XP += amount
 				this.createNewPlayerFile()	
@@ -123,10 +124,10 @@ public class PlayerData //just the player's (constant) stuff
 		playerboard.removeRow(gameId+1)
 		if escaper != null
 			escaper.terminate()
-		playerlist.remove(this)
+		allPlayers.remove(this)
 		pData[id] = null
-		if gameId < playercount
-			for p2 in playerlist
+		if gameId < allPlayers.getSize()
+			for p2 in allPlayers
 				if p2.gameId > gameId
 					p2.gameId--
 		if id > 7 
@@ -136,7 +137,9 @@ public class PlayerData //just the player's (constant) stuff
 				if regions[i].getPermission(this.p) == Permission.OWNER
 					for j = 8 to 10
 						regions[i].allow(players[j])
-		playercount--
+			builderPlayers.remove(this)
+		else
+			escaperPlayers.remove(this)
 		
 public function isPlayerEscaper(player p) returns boolean 
 	if GetPlayerId(p) < 8
@@ -145,13 +148,13 @@ public function isPlayerEscaper(player p) returns boolean
 	
 
 function initMB()
-	playerboard = new Board(playercount+1,3)
+	playerboard = new Board(allPlayers.getSize()+1,3)
 	
-	for i = 0 to playerlist.getSize()
+	for i = 0 to allPlayers.getSize()
 		playerboard.board.getItem(i,0)..setStyle(true,true)..setWidth(0.1)
 		playerboard.board.getItem(i,1)..setStyle(true,false)..setWidth(0.015)
 		playerboard.board.getItem(i,2)..setStyle(true,false)..setWidth(0.05)
-	for pd in playerlist
+	for pd in allPlayers
 		pd.setMBRow()
 	CameraSetSmoothingFactor(10.)
 	playerboard.board.getItem(0,0)..setStyle(true,false)..setWidth(0.1)
@@ -162,7 +165,7 @@ function initMB()
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
 	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
-	for pd in playerlist
+	for pd in allPlayers
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
 		DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "              " + colorcode[pd.id] + pd.name + "|r checked. (" + pd.localFilesEnabled.toString() + ")")
 		if not pd.localFilesEnabled
@@ -197,9 +200,9 @@ function setTime()
 		seconds = 0
 		minutes++
 		if minutes % 5 == 0
-			for pd in playerlist
+			for pd in allPlayers
 				pd.addXp(10, true)
-	for pd in playerlist
+	for pd in allPlayers
 		pd.setMBRow()
 			 
 function playerLeft()
@@ -220,23 +223,19 @@ function initPlayers()
 			pData[i] = new PlayerData(Player(i))
 			leaveTrig.registerPlayerEvent(Player(i), EVENT_PLAYER_LEAVE)
 			r++
-	playercount = r
 	CreateTrigger()..registerTimerEvent(0.1, false)..addAction(function initMB)
 	TimerStart(CreateTimer(), 1., true, function setTime)
 	GetExpiredTimer().release()
-	for pd in playerlist
-		if pd.id > 7
-			new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-			new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-			new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-			new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
-	for pd in playerlist
-		if pd.id > 7
-			pd.builder = new Builder( pd.p )
-			UnitAddItemById(pd.builder.actor,'I001')
-			UnitAddItemById(pd.builder.actor,'I002')
-			UnitAddItemById(pd.builder.actor,'I003')
-			pd.builder.regionCount = (17. / builderCount).round()
+	for pd in builderPlayers
+		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+		pd.builder = new Builder( pd.p )
+		UnitAddItemById(pd.builder.actor,'I001')
+		UnitAddItemById(pd.builder.actor,'I002')
+		UnitAddItemById(pd.builder.actor,'I003')
+		pd.builder.regionCount = (17. / builderPlayers.getSize()).round()
    
 public int minutes = 0
 public int seconds = 0

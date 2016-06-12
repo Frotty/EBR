@@ -7,6 +7,7 @@ import SoundUtils
 import Image
 import TerrainBlocker
 import RegionData
+import ClosureForGroups
 
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
@@ -35,17 +36,12 @@ public class Jumper extends StaticBaseObject
 	construct(vec2 pos, player owner)
 		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 8, Filter(function filter))
-		let u = ENUM_GROUP.next()
-		let u2 = ENUM_GROUP.next()
-		if u != null and u2 != null
-			snd.play()
-			if u == actor
-				u2.addAbility(SPECIAL_ID)
-			else
+		forUnitsInRange(pos, 8, (unit u) -> begin
+			if u != actor and u.getTypeId() == JUMPER_ID
+				snd.play()
 				u.addAbility(SPECIAL_ID)
-			terminate()
-		ENUM_GROUP.clear()
+				this.terminate()
+		end)
 		
 	static function inRange()
 		var data = GetTriggerUnit().getEntity()
@@ -87,7 +83,7 @@ public class Jumper extends StaticBaseObject
 					..show()
 					goos[goocounter] = goo
 					goocounter++
-					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.GOO castTo int).val )
+					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.BLUGOO castTo int).val )
 				
 	ondestroy
 		for i = 0 to 4

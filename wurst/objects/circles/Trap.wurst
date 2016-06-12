@@ -6,10 +6,12 @@ import Camera
 import GameConstants
 import Texttag
 import Camerashakes
+import TerrainBlocker
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
 constant real EVENT_RADIUS = 64.
+constant SPECIAL_ID = 'A07V'
 
 string array SFX_STRINGS
 enum ABIL
@@ -29,7 +31,9 @@ public class Trap extends StaticBaseObject
 	real duration //Shake,  Speed, Stun
 	real value // Shake, Knockback, Speed
 	boolean pull = false
-	
+	int uptimes = 0
+	int goocounter = 0
+	private image array[5] goos
 	construct( vec2 pos, player owner )
 			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep)
 			active = false
@@ -50,6 +54,11 @@ public class Trap extends StaticBaseObject
 	function canTrigger(Entity e) returns boolean
 		return false
 	
+	ondestroy 
+		for i = 0 to 4
+			if goos[i] != null
+				goos[i].remove()
+				
 	override function update()
 		super.update()
 		if active
@@ -198,10 +207,15 @@ public class Trap extends StaticBaseObject
 							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
 						if value >= 180
+							uptimes++
 							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value += 20
 							createTTEx(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(value,1,0)+"%", 10,  2., colorA(255,255,255,0), owner  )
+						if uptimes > 10
+							uptimes = -99999999
+							printTimedToPlayer("|cff08C5E6Relax|r, it's already |cffCE2919max|r... |cffFF7B29But maybe this will help you!", 20, owner)
+							actor.addAbility(SPECIAL_ID)
 					default
 						skip
 			case DECREASE_VALUE_ABIL
@@ -289,6 +303,15 @@ public class Trap extends StaticBaseObject
 				pull = false
 				actor.removeAbility(PUSH_ID)
 				actor.addAbility(PULL_ID)
+			case SPECIAL_ID
+				if goocounter < 5
+					let x = (GetSpellTargetX()/128).round()
+					let y = (GetSpellTargetY()/128).round()
+					let goo = createImage("textures\\orangegoo.blp", vec2(x*128., y*128.), 128, 128)
+					..show()
+					goos[goocounter] = goo
+					goocounter++
+					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.ORANGEGOO castTo int).val )
 		return false
 		
 constant int NEXT_SFX_ABIL = 'A06D'

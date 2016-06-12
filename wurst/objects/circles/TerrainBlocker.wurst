@@ -10,8 +10,8 @@ public tuple matrixpos (int x, int y)
 public enum TileModifiers
 	NORMAL
 	BLOCK
-	GOO
-	
+	BLUGOO
+	ORANGEGOO
 
 public class TerrainBlocker extends StaticBaseObject
 	matrixpos m
