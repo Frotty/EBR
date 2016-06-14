@@ -72,7 +72,7 @@ public class Spinner extends SetupObject
 					spinningEntities.removeAt(i)
 					break
 				i++
-			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == Player(11))
+			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == STAFF_PLAYER)
 				dobj.setup.removeAbility(REMOVE_ID)
 				dobj.updatePos()
 				spinningEntities.add(new SpinNode(dobj, pos.angleTo2d(dobj.pos).radians(), pos.distanceTo(dobj.pos) ))

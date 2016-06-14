@@ -44,17 +44,17 @@ public class FourthCitadelleMaze extends Startmaze
 		IssuePointOrder(gg_unit_h01I_0280, "patrol", -3953, -5678 )
 		IssuePointOrder(gg_unit_h01I_0225, "patrol", -4648, -3995 )
 		
-		var t = new Teleporter(vec2(gg_unit_n00C_0234.getX(),gg_unit_n00C_0234.getY()),Player(11))
+		var t = new Teleporter(vec2(gg_unit_n00C_0234.getX(),gg_unit_n00C_0234.getY()),STAFF_PLAYER)
 		IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
 		gg_unit_n00C_0234.remove()
 
-		Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), Player(11))
+		Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), STAFF_PLAYER)
 		gg_unit_h01M_0258.remove()
 		s.checkObj( gg_unit_n00E_0260.getEntity() )
 		s.checkObj( gg_unit_n00E_0261.getEntity() )
 		s.speed = 4.5 *DEGTORAD
     
-		s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), Player(11))
+		s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), STAFF_PLAYER)
 		gg_unit_h01M_0257.remove()
 		s.checkObj( gg_unit_n00E_0271.getEntity() )
 		s.checkObj( gg_unit_n00E_0272.getEntity() )
@@ -66,16 +66,16 @@ public class FourthCitadelleMaze extends Startmaze
 		s.checkObj( gg_unit_n00E_0278.getEntity() )
 		s.speed = 2. *DEGTORAD
 		
-		s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), Player(11))
+		s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), STAFF_PLAYER)
 		gg_unit_h01M_0259.remove()
 		s.checkObj( gg_unit_n00E_0215.getEntity() )
 		s.checkObj( gg_unit_n00E_0216.getEntity() )
 		s.checkObj( gg_unit_n00E_0217.getEntity() )
 		s.speed = 4. *DEGTORAD
-		//SetUnitOwner( gg_unit_h01M_0259, Player(11), true )
+		//SetUnitOwner( gg_unit_h01M_0259, STAFF_PLAYER, true )
 		IssuePointOrder( s.setup, "patrol", -3820, -4661 )
     
-		s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), Player(11))
+		s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), STAFF_PLAYER)
 		gg_unit_h01M_0212.remove()
 		s.checkObj( gg_unit_h01I_0220.getEntity() )
 		s.speed = 7 *DEGTORAD

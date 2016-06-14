@@ -27,7 +27,7 @@ public class RevivePoint extends StaticSetupObject
 			return
 		let rdata = getRegionData(obj.pos)
 		printLog(Loglevel.DEBUG, "reach-1")
-		if obj.startMaze > -1 and e instanceof Escaper and isPlayerEscaper(e.owner)
+		if obj.startMaze > -1 and e instanceof Escaper and isEscaper(e.owner)
 			SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
 			if obj.startMaze == 0
 				obj.reached = true
@@ -48,14 +48,14 @@ public class RevivePoint extends StaticSetupObject
 					startmazes[currentMaze].initMaze()
 					svRev.reached = false
 			
-		if not obj.reached and e instanceof Escaper and isPlayerEscaper(GetOwningPlayer(u))
+		if not obj.reached and e instanceof Escaper and isEscaper(GetOwningPlayer(u))
 			PlaySoundBJ(gg_snd_Rescue)
-			DisplayTextToForce( GetPlayersAll(), colorcode[GetOwningPlayer(u).getId()] + GetOwningPlayer(u).getName() + "|r advanced to the next |cff086BB5Checkpoint")
-			SetUnitColor( obj.actor, u.getOwner().getColor() )
+			printTimed(u.getOwner().getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
+			obj.actor.setColor(u.getOwner().getColor())
 			obj.reached = true
 			currentRevivepoint = obj.pos.toVec2()
 			for Escaper es in escapers
-				if es.owner.getId() < 8 and es.alive
+				if isEscaper(es.owner) and es.alive
 					es.setPos(obj.pos)
 					es.actor.abortOrder()
 					es.currentRegion = rdata

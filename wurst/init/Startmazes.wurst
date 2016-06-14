@@ -13,6 +13,7 @@ import initlater SecondDesert
 import initlater ThirdForest
 import initlater FourthCitadelle
 import MapBounds
+import GameConstants
 
 public Startmaze array startmazes
 public int currentMaze = 0
@@ -61,13 +62,13 @@ public function setStartTeleport(int tpid, int locid)
 	Teleporter t = null
 	switch tpid
 		case 0
-			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),Player(11))
+			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),STAFF_PLAYER)
 			gg_unit_n00C_0061.remove()
 		case 1
-			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),Player(11))
+			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),STAFF_PLAYER)
 			gg_unit_n00C_0324.remove()
 		case 2
-			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),Player(11))
+			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),STAFF_PLAYER)
 			gg_unit_n00C_0323.remove()
 
 	switch locid
@@ -83,11 +84,15 @@ public function setStartTeleport(int tpid, int locid)
 		
 
 public function initBaseObjects()
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
+	for vicu in ENUM_GROUP
+		vicu.setOwner(STAFF_PLAYER, true)
+	ENUM_GROUP.clear()
 	ENUM_GROUP.clear()
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", null )
 	for u in ENUM_GROUP
 		if u.getHP() > .405
-			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), Player(11))
+			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), STAFF_PLAYER)
 			if u == gg_unit_n000_0002
 				r.startMaze = 0
 			else if u == gg_unit_n000_0085
@@ -105,56 +110,56 @@ public function initBaseObjects()
 
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", null )
 	for u2 in ENUM_GROUP
-		new Door(vec2(u2.getX(), u2.getY()), Player(11))
+		new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
 		u2.remove()
 		
 	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00S", null )
 	for u3 in ENUM_GROUP
-		new BigObstacle(vec2(u3.getX(), u3.getY()), Player(11))
+		new BigObstacle(vec2(u3.getX(), u3.getY()), STAFF_PLAYER)
 		u3.remove()
 		
 	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00R", null )
 	for u4 in ENUM_GROUP
-		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
 	ENUM_GROUP.clear()
 		
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n018", null )
 	for u4 in ENUM_GROUP
-		new SmallObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
 	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n019", null )
 	for u4 in ENUM_GROUP
-		new BigObstacle(vec2(u4.getX(), u4.getY()), Player(11))
+		new BigObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
 	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", null )
 	for u5 in ENUM_GROUP
-		new SmallObstacle(vec2(u5.getX(), u5.getY()), Player(11))
+		new SmallObstacle(vec2(u5.getX(), u5.getY()), STAFF_PLAYER)
 		u5.remove()
 		
 	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", null )
 	for u6 in ENUM_GROUP
-		new SmallObstacle(vec2(u6.getX(), u6.getY()), Player(11))
+		new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)
 		u6.remove()
 		
 	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n003", null )
 	for u7 in ENUM_GROUP
-		new UnitRemover(vec2(u7.getX(), u7.getY()), Player(11))
+		new UnitRemover(vec2(u7.getX(), u7.getY()), STAFF_PLAYER)
 		u7.remove()
 		
 	ENUM_GROUP.clear()

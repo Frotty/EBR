@@ -7,7 +7,7 @@ import TerrainModder
 public function startIntroFor(PlayerData pd)
 	cinematicModeForPlayer(true, pd.p, 0.)
 	printTimedToPlayerClear("starting intro...", 5, pd.p)
-	if pd.id > 7
+	if isBuilder(pd.p)
 		CameraSetupApplyForPlayer(true, gg_cam_IntroBuilderCam, pd.p, 3.)
 		getTimer()..start(3, function startBuilderIntro)
 					..setData(pd castTo int)
@@ -48,14 +48,14 @@ function bintro2()
 function bintro3()
 	let expt = GetExpiredTimer()
 	let pd = expt.getData() castTo PlayerData
-	printTimedToPlayerClear("Once you bought a |cffFFCC00region |ryou can now |cffFFCC00build inside|r it.\n\nTo keep things organized, building is split into |cffFFCC003 parts|r:\n    • |cff4AC552Terraining\n|r    • |cffFFAD6BUnit Producing\n|r    • |cff0884DEObject Building", 10, pd.p)
+	printTimedToPlayerClear("Once you bought a |cffFFCC00region |ryou can now |cffFFCC00build inside|r it.\n\nTo keep things organized, building is split into |cffFFCC003 parts|r:\n    ï¿½ |cff4AC552Terraining\n|r    ï¿½ |cffFFAD6BUnit Producing\n|r    ï¿½ |cff0884DEObject Building", 10, pd.p)
 	expt.start(10, function bintro4)
 	
 function bintro4()
 	let expt = GetExpiredTimer()
 	let pd = expt.getData() castTo PlayerData
 	CameraSetupApplyForPlayer(true, gg_cam_BuilderTilesCam, pd.p, 5.)
-	printTimedToPlayerClear("Usually the first thing to do is Terraining!\nTerraining means changing the tiles inside your region to a maze structure.\nThere are two basic Terraintypes:\n    • |cff299C42Walkable |r(Escapers |cff42A542can walk|r on here)\n    • |cffCE2119Unwalkable |r(Escapers |cffCE3119die |rwhen they step on here)\n\nAs well as some additional terraintypes like:\n    • |cff2194EFIce|r, |cff08528CReverse Ice|r, |cff941908Lava|r, |cff3AC55APoison", 15, pd.p)
+	printTimedToPlayerClear("Usually the first thing to do is Terraining!\nTerraining means changing the tiles inside your region to a maze structure.\nThere are two basic Terraintypes:\n    ï¿½ |cff299C42Walkable |r(Escapers |cff42A542can walk|r on here)\n    ï¿½ |cffCE2119Unwalkable |r(Escapers |cffCE3119die |rwhen they step on here)\n\nAs well as some additional terraintypes like:\n    ï¿½ |cff2194EFIce|r, |cff08528CReverse Ice|r, |cff941908Lava|r, |cff3AC55APoison", 15, pd.p)
 	expt.start(15, function bintro5_1)
 	
 function bintro5_1()
@@ -77,7 +77,7 @@ function bintro6()
 	let expt = GetExpiredTimer()
 	let pd = expt.getData() castTo PlayerData
 	pd.p.selectSingle(pd.prod.actor)
-	printTimedToPlayerClear("Next to the |cff29943Afour Terrain-Heroes|r you also have a |cffF75A29UnitProducer-Hero|r.\n\nThe |cffDE6321Unit-Producer |rallows yout to |cffFFCC00spawn |rvarious units into your region.\nIn order to produce a unit, you have to:\n    • |cffFFCC00selectSingle |rthe Producer\n    • |cffFFCC00Rightclick |rin your region to set a Rally-Point\n    • |cffFFCC00Cast |rthe spell for the unit you want to spawn", 15, pd.p)
+	printTimedToPlayerClear("Next to the |cff29943Afour Terrain-Heroes|r you also have a |cffF75A29UnitProducer-Hero|r.\n\nThe |cffDE6321Unit-Producer |rallows yout to |cffFFCC00spawn |rvarious units into your region.\nIn order to produce a unit, you have to:\n    ï¿½ |cffFFCC00selectSingle |rthe Producer\n    ï¿½ |cffFFCC00Rightclick |rin your region to set a Rally-Point\n    ï¿½ |cffFFCC00Cast |rthe spell for the unit you want to spawn", 15, pd.p)
 	expt.start(15, function bintro7)
 	
 function bintro7()

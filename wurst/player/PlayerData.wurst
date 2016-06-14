@@ -58,11 +58,13 @@ public class PlayerData //just the player's (constant) stuff
 		mbname = name
 		if mbname == "Frotty" or mbname == "FrottyZ"
 			AddSpecialEffectTarget( "Righteousness.MDX", escaper.actor, "chest" )
-		for int i = 0 to cplayerCount
-			if mbname.toLowerCase() == names[i].toLowerCase()
-				mbname = tags[i] + "|r" + colorcode[ id ] + mbname
+		for int i = 0 to 999
+			if names[i] == null
 				break
-		mbname = colorcode[ id ] + mbname
+			if mbname.toLowerCase() == names[i].toLowerCase()
+				mbname = tags[i] + "|r" + p.getNameColored()
+				break
+		mbname = p.getNameColored()
 		allPlayers.add(this)
 		if id > 7
 			builderPlayers.add(this)
@@ -119,7 +121,7 @@ public class PlayerData //just the player's (constant) stuff
 		playerboard.updateIcon(gameId+1, 0, mbPic[typ])
 		
 	ondestroy
-		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., colorcode[p.getId()] + p.getName() + "|r |cffFFCC33has left the game!") 
+		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
 		PlaySoundBJ( gg_snd_QuestFailed )
 		playerboard.removeRow(gameId+1)
 		if escaper != null
@@ -130,7 +132,7 @@ public class PlayerData //just the player's (constant) stuff
 			for p2 in allPlayers
 				if p2.gameId > gameId
 					p2.gameId--
-		if id > 7 
+		if isBuilder(p)
 			if builder != null
 				builder.terminate()
 			for int i=0 to 20
@@ -141,12 +143,6 @@ public class PlayerData //just the player's (constant) stuff
 		else
 			escaperPlayers.remove(this)
 		
-public function isPlayerEscaper(player p) returns boolean 
-	if GetPlayerId(p) < 8
-		return true
-	return false
-	
-
 function initMB()
 	playerboard = new Board(allPlayers.getSize()+1,3)
 	
@@ -164,16 +160,16 @@ function initMB()
 	playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
-	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429» |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
+	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429ï¿½ |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
 	for pd in allPlayers
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
-		DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "              " + colorcode[pd.id] + pd.name + "|r checked. (" + pd.localFilesEnabled.toString() + ")")
+		DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "              " + pd.mbname + "|r checked. (" + pd.localFilesEnabled.toString() + ")")
 		if not pd.localFilesEnabled
 			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - You don't have local files enabled!"  )
 			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To enable local files, please run [Your Wc3 Directory]\\!! AllowLocalFiles\\AllowLocalFiles.bat" )
 			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Do this after the game, with wc3 closed. No EXP will be saved."  )
 	allow()
-	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            " + "|cffFF8429» |cff7BBD42All Players have been checked! You can now select an escaper.")
+	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            " + "|cffFF8429ï¿½ |cff7BBD42All Players have been checked! You can now select an escaper.")
 	DestroyTrigger(GetTriggeringTrigger())
 	
 	

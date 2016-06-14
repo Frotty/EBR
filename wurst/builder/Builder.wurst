@@ -157,7 +157,7 @@ public class Builder extends UnitEntity
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
 	
-function isBuilder() returns boolean
+function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
@@ -165,14 +165,14 @@ function isBuilder() returns boolean
 public function init_Builder()	
 	swapTrigger = CreateTrigger()
 	swapTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
-	swapTrigger.addCondition(Condition(function isBuilder))
+	swapTrigger.addCondition(Condition(function isBuilderUnit))
 	swapTrigger.addAction(function Builder.swapPages)
 	itemTrigger = CreateTrigger()
 //	itemTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
 //	itemTrigger.addCondition(Condition(function isBuilder))
 //	itemTrigger.addAction(function Builder.pickupItem)
 	orderTrigger = CreateTrigger()
-	orderTrigger.addCondition(Condition(function isBuilder))
+	orderTrigger.addCondition(Condition(function isBuilderUnit))
 	orderTrigger.addAction(function Builder.onOrder)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
 	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)

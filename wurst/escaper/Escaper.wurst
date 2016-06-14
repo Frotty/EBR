@@ -8,11 +8,9 @@ import RegionData
 import BuilderConstants
 import LinkedList
 import RevivePointModifier
-import PhysicsConstants
 import ClosureTimers
 import TerrainBlocker
 import TerrainUtils
-import BasicSpells
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -78,8 +76,7 @@ public class Escaper extends UnitEntity
 	
 	function kill()
 		if alive
-			if owner.getId() >= 8
-				
+			if isBuilder(owner)
 				doAfter(.1, () -> revive())
 			else
 				doAfter(3., () -> revive())
@@ -118,7 +115,7 @@ public class Escaper extends UnitEntity
 		slideVelocity *= 0.99
 			
 	override function onGround()		
-		pos.z = globalTerrainZ+.1		
+		pos.z = .05		
 		var ttype = GetTerrainType(pos.x, pos.y)
 		
 		if currentRegion != null
@@ -183,11 +180,12 @@ public class Escaper extends UnitEntity
 			actor.setPos(pos.toVec2())
 		else
 			actor.setXY(pos)
-		SetUnitFlyHeight( actor, pos.z - globalTerrainZ, .0 )
+		SetUnitFlyHeight( actor, pos.z, .0 )
 		
 	function getRealVel() returns vec3
 		return vel + slideVelocity + trackVelocity + vortexVelocity
-        
+
+
 	function revive()
 		printLog(Loglevel.DEBUG, "revive start")
 		sliding = false

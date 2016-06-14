@@ -3,6 +3,7 @@ import public RegionData
 import public Teleporter
 import public Revivepoint
 import public EscaperKillers
+import public GameConstants
 import Key
 
 public constant real STARTX = -6000
@@ -14,22 +15,13 @@ public abstract class Startmaze
 	abstract function initMaze()
 	
 	function clearMaze()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, Player(11), null)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, null)
 		for vicu in ENUM_GROUP
 			if vicu.getPos().isInRect(rdata.theRect)
 				var data = vicu.getEntity()
 				if data != null
 					data.terminate()
 				else
-					vicu.remove()
-		ENUM_GROUP.clear()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
-		for vicu in ENUM_GROUP
-			if vicu.getPos().isInRect(rdata.theRect)
-				var data = vicu.getEntity()
-				if data != null
-					data.terminate()
-				else if GetUnitTypeId(vicu) != 'n008' and GetUnitTypeId(vicu) != 'e000'
 					vicu.remove()
 		ENUM_GROUP.clear()
 
@@ -54,6 +46,6 @@ public function deleteKeys()
 public function correctKeys()
 	item itm = GetEnumItem()
 	if GetItemTypeId(itm) == 'I009'
-		new Key(vec2(GetItemX(itm), GetItemY(itm)), Player(11))
+		new Key(vec2(GetItemX(itm), GetItemY(itm)), STAFF_PLAYER)
 		itm.remove()
 		

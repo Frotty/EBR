@@ -90,7 +90,6 @@ public class UnitProducer extends StaticBaseObject
 		return false
 		
 public function init_UnitProducer()
-	for pd in allPlayers
-		if pd.id > 7
-			new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
+	for pd in builderPlayers
+		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
 

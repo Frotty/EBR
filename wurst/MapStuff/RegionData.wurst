@@ -109,7 +109,7 @@ public class RegionData
 
 		if data instanceof Escaper
 			var edata = data castTo Escaper
-			if not rdata.visible and data.owner.getId() <= 7
+			if not rdata.visible and isEscaper(data.owner)
 				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
 				rdata.visible = true
 			edata.updateRegionData()
@@ -150,16 +150,16 @@ public RegionData array regions
 public function init_Regions()
 	regions[0] = new RegionData( gg_rct_Region_024 )
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
-	regions[0].setOwner(players[11])
+	regions[0].setOwner(STAFF_PLAYER)
 	regions[1] = new RegionData( gg_rct_Region_018 )
 	regions[1].setType(getRegionTypeFromItem('I00G'), false)
-	regions[1].setOwner(players[11])
+	regions[1].setOwner(STAFF_PLAYER)
 	regions[2] = new RegionData( gg_rct_Region_000 )
 	regions[2].setType(getRegionTypeFromItem('I00E'), false)
-	regions[2].setOwner(players[11])
+	regions[2].setOwner(STAFF_PLAYER)
 	regions[3] = new RegionData( gg_rct_Region_001 )
 	regions[3].setType(getRegionTypeFromItem('I00H'), false)
-	regions[3].setOwner(players[11])
+	regions[3].setOwner(STAFF_PLAYER)
 	regions[4] = new RegionData( gg_rct_Region_004 )
 	regions[5] = new RegionData( gg_rct_Region_005 )
 	regions[6] = new RegionData( gg_rct_Region_006 )
@@ -178,7 +178,7 @@ public function init_Regions()
 	regions[19] = new RegionData( gg_rct_Region_003 )
 	regions[20] = new RegionData( gg_rct_Region_026 )
 	regions[21] = new RegionData( gg_rct_Start )
-	regions[21].setOwner(players[11]) 
+	regions[21].setOwner(STAFF_PLAYER) 
 	
 	let t = CreateTrigger()
 	t.registerRectLeaveEventSource(gg_rct_Region_023)

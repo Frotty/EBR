@@ -2,7 +2,6 @@ package PhysicsEntity
 import Entity
 import TerrainUtils
 import RegionData
-import PhysicsConstants
 
 //Module for Physical Simulation
 public module PhysicsModule
@@ -10,17 +9,14 @@ public module PhysicsModule
 	boolean affectedByGravity = true
 	boolean flying = false
 	// Physical factors
-	
 	// The higher the more slide. Should be < 1.
 	real friction = 0.9
 	// Defines the bounciness
 	real restitution = 0.5
-
-		
 		
 	// This function is called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
-		if e.pos.z <= globalTerrainZ + .2
+		if e.pos.z <= .2
 			onGround(e)
 		else
 			inAir(e)

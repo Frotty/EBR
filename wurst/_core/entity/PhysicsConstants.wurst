@@ -1,3 +1,0 @@
-package PhysicsConstants
-
-public constant globalTerrainZ = 0.

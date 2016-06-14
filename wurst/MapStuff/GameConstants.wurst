@@ -1,17 +1,20 @@
 package GameConstants
-	
+import initlater PlayerData
 public string array mbPic
 public string array names
 public string array tags
-public string array colorcode
 public integer array expBounds
 public string array ranks
-public constant int cplayerCount = 16
 
 public constant string MAP_VER = "EBR 0.84"
 
+public constant STAFF_PLAYER = players[14]
+
 public function isBuilder(player p) returns boolean
-	return p.getId() > 7
+	return builderPlayers.contains(pData[p.getId()])
+
+public function isEscaper(player p) returns boolean
+	return escaperPlayers.contains(pData[p.getId()])
 	
 public enum COLOR
 	WHITE
@@ -73,18 +76,6 @@ init
 	tags	[17] = "|cffDE3121[Critter]"
 	names	[18] = "sayack"
 	tags	[18] = "|cff9C94E6[Tester]"
-
-	colorcode[ 0 ] = "|cffFF0202" // red
-	colorcode[ 1 ] = "|cff0041FF" // blue
-	colorcode[ 2 ] = "|cff1BE6B8" // teal
-	colorcode[ 3 ] = "|cff530080" // lila
-	colorcode[ 4 ] = "|cffFFFC00" // yellow
-	colorcode[ 5 ] = "|cffFE890D" // orange
-	colorcode[ 6 ] = "|cff1FBF00" // green
-	colorcode[ 7 ] = "|cffE55AAF" // pink
-	colorcode[ 8 ] = "|cff949596" // gray
-	colorcode[ 9 ] = "|cff7DBEF1" // lightblue
-	colorcode[ 10 ] = "|cff0F6145" // darkgreen
 
 	ranks[0] = "1:Newbie"
 	expBounds[0] = 100

@@ -2,7 +2,6 @@ package AirPhysicsModule
 import public Entity
 import TerrainUtils
 import RegionData
-import PhysicsConstants
 import Interpolation
 
 public constant MAX_MASS = 250

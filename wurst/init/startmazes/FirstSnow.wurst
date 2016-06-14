@@ -68,10 +68,10 @@ public class FirstSnowMaze extends Startmaze
 			(gg_unit_n007_0015.getEntity() castTo EscaperSensorSetup).setup.issuePointOrder("move", f2wp.pos.toVec2())
 		end)
 		
-		var t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),Player(11))
+		var t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),STAFF_PLAYER)
 		t.setRallyPoint(vec2(6275,-5131))
 		gg_unit_n00C_0057.remove()
-		t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),Player(11))
+		t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),STAFF_PLAYER)
 		t.setRallyPoint(vec2(6660,-4866))
 		gg_unit_n00C_0058.remove()
 	

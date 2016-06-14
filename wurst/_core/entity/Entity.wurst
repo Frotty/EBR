@@ -1,15 +1,15 @@
 package Entity
-import LinkedListModule
+import public LinkedListModule
 import public Serializable
-import TerrainUtils
-import PhysicsConstants
-import initlater RegionData
-import Fx
+import public TerrainUtils
+import public Fx
 import public TimerUtils
 import public HashMap
 import public LinkedList
 import public Event
 import public Basics
+import public GameConstants
+import public initlater RegionData
 
 public interface SensorListener
 	function onSensor(UnitEntity source, UnitEntity target)
@@ -83,7 +83,6 @@ public abstract class Entity implements Serializable
 	/** for removing */
 	boolean done 		= false
 
-
 	construct( vec3 pos, player owner )
 		setup(pos, vec3(0,0,0), 0, owner)
 
@@ -103,11 +102,14 @@ public abstract class Entity implements Serializable
 		this.radius = radius
 		this.currentRegion = getRegionData(pos)
 		
-	function setPos( vec3 pos )
+	function setPos(vec3 pos)
 		this.pos = pos
 		
-	function addPos( vec3 pos )
+	function addPos(vec3 pos)
 		this.pos += pos
+
+	function getPos() returns vec3
+		return pos
 		
 	function setVel( vec3 vel )
 		this.vel = vel
@@ -116,6 +118,9 @@ public abstract class Entity implements Serializable
 	function addVel( vec3 vel )
 		this.vel += vel
 		active = true
+
+	function getVel() returns vec3
+		return vel
 		
 	function setTarget( vec3 tpos, real speed )
 		var t = pos.distanceTo2d(tpos) / speed
