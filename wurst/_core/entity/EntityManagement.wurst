@@ -13,5 +13,4 @@ function updateEntities() returns boolean
 
 public function startEntityLoop() returns boolean
 	CreateTrigger()..registerTimerEvent(ANIMATION_PERIOD, true)..addCondition(Condition(function updateEntities))
-	print("ANIM: " + ANIMATION_PERIOD.toString())
 	return true
