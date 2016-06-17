@@ -3,76 +3,61 @@ import SetupObject
 import PlayerData
 import GameConstants
 import RegionData
-import Builder
 import Startmazes
-import EscaperClasses
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
 
 public class RevivePoint extends StaticSetupObject
 	boolean reached = false
-	int startMaze = -1
-	
+	int startmaze = -1
+
 	construct( vec3 pos, player owner)
-		super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.reach ) 
+		super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.onReach ) 
 
-
-	static function reach()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
-		if obj.reached
-			return
-		let rdata = getRegionData(obj.pos)
-		printLog(Loglevel.DEBUG, "reach-1")
-		if obj.startMaze > -1 and e instanceof Escaper and isEscaper(e.owner)
-			SetUnitColor( obj.actor, PLAYER_COLOR_BLUE )
-			if obj.startMaze == 0
-				obj.reached = true
-				currentRevivepoint = obj.pos.toVec2()
-				return
-			else
-				if obj.startMaze == 10
-					if (startmazes[currentMaze] castTo int) > 0
-						startmazes[currentMaze].clearMaze()
-						destroy startmazes[currentMaze]
-						startmazes[currentMaze] = null
-				else
-					if (startmazes[currentMaze] castTo int) > 0
-						startmazes[currentMaze].clearMaze()
-						destroy startmazes[currentMaze]
-						startmazes[currentMaze] = null
-					currentMaze = obj.startMaze
-					startmazes[currentMaze].initMaze()
-					svRev.reached = false
-			
-		if not obj.reached and e instanceof Escaper and isEscaper(GetOwningPlayer(u))
+	function reach(Escaper reacher)
+		if not reached
+			reached = true
+			actor.setColor(reacher.owner.getColor())
+			currentRevivepoint = pos.toVec2()
 			PlaySoundBJ(gg_snd_Rescue)
-			printTimed(u.getOwner().getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
-			obj.actor.setColor(u.getOwner().getColor())
-			obj.reached = true
-			currentRevivepoint = obj.pos.toVec2()
-			for Escaper es in escapers
-				if isEscaper(es.owner) and es.alive
-					es.setPos(obj.pos)
-					es.actor.abortOrder()
-					es.currentRegion = rdata
-					if not es.camlock
-						if GetLocalPlayer() == es.owner
-							PanCameraToTimed(obj.pos.x, obj.pos.y, 0)
-					if es instanceof HolyEscaper
-						if (es castTo HolyEscaper).revivetomb != null
-							(es castTo HolyEscaper).revivetomb.remove()
-							(es castTo HolyEscaper).revivetomb = null
-	
-			if currentRevivepoint.distanceTo(obj.pos.toVec2()) > 512
-				let esc = pData[u.getOwner().getId()]
-				esc.addXp(20, false)
-				if obj.owner.getId() < 11
-					let bld = pData[obj.owner.getId()]
-					bld.addXp(15, false)
+			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
+			if currentRegion.getPermission(STAFF_PLAYER) == Permission.OWNER
+				// Is Startmaze
+				if startmaze > -1
+					if (startmazes[currentMaze] castTo int) > 0
+						startmazes[currentMaze].clearMaze()
+						destroy startmazes[currentMaze]
+						startmazes[currentMaze] = null
+					currentMaze = startmaze
+					startmazes[currentMaze].initMaze()
+					reached = false
+			
+			let getExp = currentRevivepoint.distanceTo(pos.toVec2()) > 512
+			for pd in escaperPlayers
+				if pd.escaper.alive
+					pd.escaper.setPos(pos)
+					pd.escaper.stop()
+					pd.escaper.actor.abortOrder()
+					if not pd.escaper.camlock
+						if GetLocalPlayer() == pd.p
+							PanCameraToTimed(pos.x, pos.y, 0)
+
+				if getExp
+					pd.addXp(20, false)
+
+			if getExp
+				pData[owner.getId()].addXp(15, false)		
+
+
+
+	static function onReach()
+		let source = GetTriggeringTrigger().getSource()
+		let target = GetTriggerUnit()
+		if(isEscaper(target.getOwner()) and target.getEntity() instanceof Escaper)
+			(source.getEntity() castTo RevivePoint).reach(target.getEntity() castTo Escaper)
+				
+			
 		printLog(Loglevel.DEBUG, "reach-3")
 
 	static function filter() returns boolean

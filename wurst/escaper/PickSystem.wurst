@@ -24,6 +24,7 @@ boolean started= false
 
 public function startChoose()
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
+	print("size: " + allPlayers.getSize().toString())
 	for pd in allPlayers
 		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )

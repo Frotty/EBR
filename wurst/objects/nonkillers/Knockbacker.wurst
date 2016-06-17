@@ -1,5 +1,5 @@
 package Knockbacker
-import Assets
+import ConfigValue
 import ObjectIdGenerator
 import Escaper
 import EscaperKillers
@@ -8,15 +8,17 @@ import ChannelAbilityPreset
 public constant KNOCKER_ID = 'u00G'
 public int KNOCK_INC_ID
 public int KNOCK_DEC_ID
-
+public int DMG_INC_ID
+public int DMG_DEC_ID
 
 public class Knockbacker extends EscaperSensorSetup
-	real kforce = 20.
-	real dmg = 50.
+	ConfigValue kforce = new ConfigValue(20, 2.5, "Knockback")
+	ConfigValue damage = new ConfigValue(50, 25, "Damage")
 	
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, KNOCKER_ID, facing, 64., 160.)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
+		..addAbility(DMG_INC_ID)..addAbility(DMG_DEC_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		active = false
 					
@@ -24,18 +26,13 @@ public class Knockbacker extends EscaperSensorSetup
 		let id = GetSpellAbilityId()
 		switch id
 			case KNOCK_INC_ID
-				if kforce < 50
-					kforce += 5
-					createTTEx(pos, vec2(0,0.05), "Knockback: "+ R2SW(kforce,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Maximum Knockback", 10,  2., colorA(255,255,255,0), owner  )
+				kforce.increment(this, 75)
 			case KNOCK_DEC_ID
-				if kforce > -50.
-					kforce -= 5
-					createTTEx(pos, vec2(0,0.05), "Knockback: "+ R2SW(kforce,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Minimum Knockback", 10,  2., colorA(255,255,255,0), owner  )
-					
+				kforce.decrement(this, 5)
+			case DMG_INC_ID
+				damage.increment(this, 500)
+			case DMG_DEC_ID
+				damage.decrement(this, 0)	
 		return false
 		
 	override function onSensor(UnitEntity source, UnitEntity target)
@@ -44,8 +41,8 @@ public class Knockbacker extends EscaperSensorSetup
 			if target.pos.z <= sensorHeight
 				let escaper = target castTo Escaper
 				let ang = pos.angleTo2d(escaper.pos)
-				escaper.addVel(vec3(ang.cos()*kforce,ang.sin()*kforce,0))
-				actor.damageTarget(escaper.actor, dmg)
+				escaper.addVel(vec3(ang.cos()*kforce.get(),ang.sin()*kforce.get(),0))
+				actor.damageTarget(escaper.actor, damage.get())
 				actor.setAnimation("attack")
 				setup.setAnimation("attack")
 				addEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", escaper.pos).destr()	
@@ -54,6 +51,8 @@ public class Knockbacker extends EscaperSensorSetup
 @objectgen function genKnockbacker()
 	KNOCK_INC_ID = ABIL_ID_GEN.next()
 	KNOCK_DEC_ID = ABIL_ID_GEN.next()
+	DMG_INC_ID = ABIL_ID_GEN.next()
+	DMG_DEC_ID = ABIL_ID_GEN.next()
 	if not compiletime
 		return
 	let inc_spell = new ChannelAbilityPreset(KNOCK_INC_ID, 1, true)
@@ -62,8 +61,8 @@ public class Knockbacker extends EscaperSensorSetup
 	..presetCooldown((int lvl) -> 0)
 	..setName("Increase Knockback")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
-	..presetHotkey("D")
-	..presetTooltipNormal((int lvl) -> "Increase Knockback [|cffFFCC00D|r]")
+	..presetHotkey("A")
+	..presetTooltipNormal((int lvl) -> "Increase Knockback [|cffFFCC00A|r]")
 	..presetTooltipNormalExtended((int lvl) -> "More strength to the tauren")
 	..presetButtonPosNormal(1, 1)
 	
@@ -73,8 +72,30 @@ public class Knockbacker extends EscaperSensorSetup
 	..presetCooldown((int lvl) -> 0)
 	..setName("Decrease Knockback")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
-	..presetHotkey("F")
-	..presetTooltipNormal((int lvl) -> "Decrease Knockback [|cffFFCC00F|r]")
+	..presetHotkey("D")
+	..presetTooltipNormal((int lvl) -> "Decrease Knockback [|cffFFCC00D|r]")
 	..presetTooltipNormalExtended((int lvl) -> "Less strength to the tauren")
 	..presetButtonPosNormal(2, 1)
+
+	let inc_spelld = new ChannelAbilityPreset(DMG_INC_ID, 1, true)
+	inc_spelld..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Increase Damage")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetHotkey("R")
+	..presetTooltipNormal((int lvl) -> "Increase Damage [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Increases damage output")
+	..presetButtonPosNormal(3, 0)
+	
+	let dec_spelld = new ChannelAbilityPreset(DMG_DEC_ID, 1, true)
+	dec_spelld..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Decrease Knockback")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetHotkey("F")
+	..presetTooltipNormal((int lvl) -> "Decrease Damage [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Less strength to the tauren")
+	..presetButtonPosNormal(3, 1)
 	

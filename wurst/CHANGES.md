@@ -2,9 +2,12 @@
 [*]	added air killer
 [*] added gravity selectable per region
 [*] added slide start smoothing
-[*] fixed spinner spinning obstacles
-[*] changed dimension shifter default values
+[*] added random timer for unitcreator
+[*] added effect for unconfigured objects
+[*] increased playercount to the maximum of 12
 [*] increased escaper turn speed slightly
+[*] changed dimension shifter default values
+[*] fixed spinner spinning obstacles
 [*] added s3cr37s?! °J° 
 
 [0.84z]

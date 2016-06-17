@@ -127,6 +127,9 @@ public class Trap extends StaticBaseObject
 		if val
 			UnitAddAbility(actor,INCREASE_VALUE_ABIL)
 			UnitAddAbility(actor,DECREASE_VALUE_ABIL)
+		if noRally != null
+			noRally.destr()
+			noRally = null
 	
 	function onCast() returns boolean
 		let spell_id = GetSpellAbilityId()

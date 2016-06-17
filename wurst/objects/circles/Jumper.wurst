@@ -64,6 +64,9 @@ public class Jumper extends StaticBaseObject
 			case FORCED_ID
 				actor..removeAbility(FORCED_ID)..addAbility(UNFORCED_ID)..setVertexColor(color(75,95,205))
 				mode = JumpMode.UNFORCED
+				if noRally != null
+					noRally.destr()
+					noRally = null
 			case UNFORCED_ID
 				actor..removeAbility(UNFORCED_ID)..addAbility(FORCED_ID)..setVertexColor(color(50,50,255))
 				mode = JumpMode.FORCED
