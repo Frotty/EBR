@@ -94,6 +94,9 @@ public class StaticBaseObject extends UnitEntity
 		actor.clearRegister()
 		actor.remove()
 		inRangeTrig.destr()
+		if noRally != null
+			noRally.destr()
+			noRally = null
 
 init
 	rallyTrigger = CreateTrigger()

@@ -10,6 +10,7 @@ import public Event
 import public Basics
 import public GameConstants
 import public initlater RegionData
+import initlater Escaper
 
 public interface SensorListener
 	function onSensor(UnitEntity source, UnitEntity target)
@@ -102,8 +103,8 @@ public abstract class Entity implements Serializable
 		this.radius = radius
 		this.currentRegion = getRegionData(pos)
 		
-	function setPos(vec3 pos)
-		this.pos = pos
+	function setPos(vec3 tpos)
+		this.pos = tpos
 		
 	function addPos(vec3 pos)
 		this.pos += pos
@@ -171,10 +172,8 @@ abstract public class UnitEntity extends Entity
 		
 	override function setPos(vec3 tpos)
 		pos = tpos
-		actor.setPos(tpos.x,tpos.y)
+		SetUnitPosition(actor, tpos.x,tpos.y)
 		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
-		
-	
 		
 	function setXY(vec3 tpos)
 		pos = tpos
@@ -202,12 +201,12 @@ abstract public class FxEntity extends Entity
 		
 	override function update()
 		pos += (vel*speedFactor)
-		setPos()
+		fixPos()
 		
 	function setFx(string sfxpath)
 		fx.setFx(sfxpath)
 		
-	function setPos()
+	function fixPos()
 		fx.setXYZ(pos)
 		
 	function getDummy() returns unit

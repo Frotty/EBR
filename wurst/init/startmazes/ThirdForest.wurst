@@ -12,6 +12,7 @@ public class ThirdForestMaze extends Startmaze
 		rdata.setType(RegionType.CITY, false)
 	
 	override function initMaze()
+		inited = true
 		RegionData data = getRegionData(vec2(368, -6647))
 		data.setOwner(STAFF_PLAYER)
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h018", null )

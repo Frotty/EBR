@@ -22,7 +22,7 @@ public class RevivePoint extends StaticSetupObject
 			currentRevivepoint = pos.toVec2()
 			PlaySoundBJ(gg_snd_Rescue)
 			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
-			if currentRegion.getPermission(STAFF_PLAYER) == Permission.OWNER
+			if currentRegion != null and currentRegion.getPermission(STAFF_PLAYER) == Permission.OWNER
 				// Is Startmaze
 				if startmaze > -1
 					if (startmazes[currentMaze] castTo int) > 0
@@ -30,8 +30,9 @@ public class RevivePoint extends StaticSetupObject
 						destroy startmazes[currentMaze]
 						startmazes[currentMaze] = null
 					currentMaze = startmaze
-					startmazes[currentMaze].initMaze()
-					reached = false
+					if ((startmazes[currentMaze] castTo int) > 0 and not startmazes[currentMaze].isInit())
+						startmazes[currentMaze].initMaze()
+						svRev.reached = false
 			
 			let getExp = currentRevivepoint.distanceTo(pos.toVec2()) > 512
 			for pd in escaperPlayers

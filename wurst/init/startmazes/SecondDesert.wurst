@@ -10,6 +10,7 @@ public class SecondDesertMaze extends Startmaze
 		rdata.setType(RegionType.SAND, false)
 	
 	override function initMaze()
+		inited = true
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01H", null )
 		for u1 in ENUM_GROUP
 			new BigKiller(u1)

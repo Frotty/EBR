@@ -16,7 +16,7 @@ import MapBounds
 import GameConstants
 
 public Startmaze array startmazes
-public int currentMaze = 0
+public int currentMaze = -1
 public RevivePoint svRev
 
 public function initStartmazes()
@@ -38,7 +38,6 @@ public function initStartmazes()
 	startmazes[2] = new ThirdForestMaze(regions[2])
 	startmazes[3] = new FourthCitadelleMaze(regions[3])
 	
-	startmazes[0].initMaze()
 	EnumItemsInRect(playableMapRect, null, function correctKeys)
 	
 	
@@ -94,15 +93,15 @@ public function initBaseObjects()
 		if u.getHP() > .405
 			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), STAFF_PLAYER)
 			if u == gg_unit_n000_0002
-				r.startMaze = 0
+				r.startmaze = 0
 			else if u == gg_unit_n000_0085
-				r.startMaze = 1
+				r.startmaze = 1
 			else if u == gg_unit_n000_0144
-				r.startMaze = 2
+				r.startmaze = 2
 			else if u == gg_unit_n000_0226
-				r.startMaze = 3
+				r.startmaze = 3
 			else if u == gg_unit_n000_0322
-				r.startMaze = 10
+				r.startmaze = 4
 				svRev = r
 			u.remove()
 		

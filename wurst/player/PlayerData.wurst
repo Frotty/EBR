@@ -228,6 +228,22 @@ public function initPlayers()
 		UnitAddItemById(pd.builder.actor,'I002')
 		UnitAddItemById(pd.builder.actor,'I003')
 		pd.builder.regionCount = (17. / builderPlayers.getSize()).round()
+
+	if allPlayers.getSize() == 1 and builderPlayers.getSize() == 0
+		let pd = allPlayers.get(0)
+		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+		pd.builder = new Builder( pd.p )
+		UnitAddItemById(pd.builder.actor,'I001')
+		UnitAddItemById(pd.builder.actor,'I002')
+		UnitAddItemById(pd.builder.actor,'I003')
+		pd.builder.regionCount = 17
+		pd.escaper.actor.addAbility('A001')
+		builderPlayers.add(pd)
+		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
+		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 20)
    
 public int minutes = 0
 public int seconds = 0

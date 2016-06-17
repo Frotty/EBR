@@ -140,7 +140,7 @@ public function getRegionData(vec3 pos) returns RegionData
 	return getRegionData(pos.toVec2())     
 
 public function getRegionData(vec2 pos) returns RegionData
-	for i = 0 to 20
+	for i = 0 to 21
 		if regions[i].theRect.contains(pos)
 			return regions[i]
 	return RegionData.EMPTY_REGION

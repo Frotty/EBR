@@ -6,12 +6,13 @@ import Waypoint
 import ClosureTimers
 
 public class FirstSnowMaze extends Startmaze
-
+	
 	construct(RegionData rd)
 		rdata = rd
 		rdata.setType(RegionType.SNOW, false)
 	
 	override function initMaze()
+		inited = true
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
 		printLog(Loglevel.DEBUG, "maze-0.11")
 		for u in ENUM_GROUP

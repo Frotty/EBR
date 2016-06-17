@@ -7,7 +7,6 @@ import Key
 import initlater InstantBuild
 import Tome
 import JukeBox
-import RegisterEvents
 
 trigger swapTrigger
 trigger itemTrigger
@@ -21,7 +20,9 @@ public class Builder extends UnitEntity
 
 	construct( player p )
 		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -6500, -7000, 0) )
-	
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrder())
+
 	override function update()
 		pos = actor.getPos().toVec3()
 	
@@ -117,7 +118,8 @@ public class Builder extends UnitEntity
 	
 	function setBossMenu(RegionData rdata)
 
-	static function onOrder()
+	function onOrder()
+		print("order")
 		var i = GetOrderTargetItem()
 		if i != null
 			if GetTriggerUnit().getUserData() > 0
@@ -168,14 +170,6 @@ public function init_Builder()
 	swapTrigger.addCondition(Condition(function isBuilderUnit))
 	swapTrigger.addAction(function Builder.swapPages)
 	itemTrigger = CreateTrigger()
-//	itemTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM)
-//	itemTrigger.addCondition(Condition(function isBuilder))
-//	itemTrigger.addAction(function Builder.pickupItem)
-	orderTrigger = CreateTrigger()
-	orderTrigger.addCondition(Condition(function isBuilderUnit))
-	orderTrigger.addAction(function Builder.onOrder)
-	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
-	orderTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
 	gg_unit_n008_0326.pause()
 	
 	let t = CreateTrigger()
@@ -185,8 +179,5 @@ public function init_Builder()
 
 function removeWrong()
 	GetTriggerUnit().remove()
-
-
-	
 
 	

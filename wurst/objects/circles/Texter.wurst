@@ -52,7 +52,10 @@ public class Texter extends StaticBaseObject
 			thistype obj = u.getUserData() castTo thistype
 			obj.text.setText(ttext, 10)
 			if obj.hidden
-				createTTEx(obj.pos, vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
+				if obj.noRally != null
+					obj.noRally.destr()
+					obj.noRally = null
+				createTTEx(obj.pos - vec2(ttext.length() / 2. * 4,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function setColor()
 		string chatmsg = GetEventPlayerChatString()

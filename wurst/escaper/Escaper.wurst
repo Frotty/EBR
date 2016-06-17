@@ -26,8 +26,8 @@ public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 public class Escaper extends UnitEntity	
 	use PhysicsModule
 	RevivePointModifier revmod
-	boolean sliding = false
 	boolean onUnwalkable = false
+	boolean sliding = false
 	boolean poisoned = false
 	boolean onLava = false
 	boolean camlock = false
@@ -37,7 +37,6 @@ public class Escaper extends UnitEntity
 	vec2 slideVelocity = vec2(0,0)
 	vec2 trackVelocity = vec2(0,0)
 	vec2 vortexVelocity = vec2(0,0)
-	real slider = 0
 
 	boolean alive = true
 	boolean selectatrevive = true
@@ -49,13 +48,13 @@ public class Escaper extends UnitEntity
 		..hide()
 		..removeAbility('Aloc')
 		..show()
-		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		SetUnitPropWindow(actor, 60.)
+		// TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
+		// TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		updateRegionData()
 		escapers.add(this)
-
 	
 
 	function setLava(boolean add)
@@ -86,12 +85,10 @@ public class Escaper extends UnitEntity
 			setLava(false)
 			flying = false
 			sliding = false
-			slider = 0
 			deaths++
 			
 	function stop()
 		sliding = false
-		slider = 0
 		slideVelocity = vec2(0,0)
 		vel = vec3(0,0,0)
 		trackVelocity = vec2(0,0)
@@ -102,55 +99,40 @@ public class Escaper extends UnitEntity
 		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.BLUGOO castTo int) and vel.z.abs() > 5
 			vel.z = -vel.z
 			return
-		SetUnitPropWindow(actor, 60.)
+		actor.setPropWindow(60.)
+		pos.z = .1
 		vel *= 0.20
 		vel.z = 0.
 		
 	override function onEscapeGround()
-		SetUnitPropWindow(actor,0.)
+		actor.setPropWindow(0)
 		sliding = false
-		slider = 0
 	
 	override function inAir()
 		slideVelocity *= 0.99
 			
-	override function onGround()		
-		pos.z = .05		
+	override function onGround()
 		var ttype = GetTerrainType(pos.x, pos.y)
-		
-		if currentRegion != null
-			if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
-				onUnwalkable = true
-				setLava(false)
-				setPoison(false)
-				if alive
-					kill()
-			else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
-				let angl = actor.getFacingAngle()
-				if slider < SLIDE_ADD
-					slider += 0.25
-				slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * slider, angl.sin() * currentRegion.slidespeed * slider)
-				sliding = true
-				vel *= 0.99
-				setLava(false)
-			else
-				if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.ORANGEGOO castTo int)
-					vel += actor.getFacingAngle().direction() * 2.
-				else
-					vel *= 0.96
-					slideVelocity *= 0.8
-				sliding = false
-				slider = 0
-				onUnwalkable = false
-				if ttype == 1147958883 and not onLava
-					setLava(true)
-				else if ttype == POISON
-					setLava(false)
-					if not poisoned
-						setPoison(true)
-				else
-					setLava(false)
-					
+		onUnwalkable = true
+		if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
+			onUnwalkable = true
+			if alive
+				kill()
+		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
+			let angl = actor.getFacingAngle()
+			slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
+			sliding = true
+			setLava(false)
+		else
+			vel *= 0.96
+			slideVelocity *= 0.8
+			sliding = false
+			setLava(false)
+			if ttype == 1147958883 and not onLava
+				setLava(true)
+			else if ttype == POISON
+				if not poisoned
+					setPoison(true)
 						
 		if onLava
 			var hp = actor.getHP()
@@ -171,20 +153,19 @@ public class Escaper extends UnitEntity
 		vortexVelocity = vec2(0,0)
 	
 	override function update()
-		pos.x = actor.getX()
-		pos.y = actor.getY()
-		physicsUpdate(this)
-		pos += vel
-		pos += slideVelocity
-		if sliding
-			actor.setPos(pos.toVec2())
-		else
-			actor.setXY(pos)
-		SetUnitFlyHeight( actor, pos.z, .0 )
+		if currentRegion != null
+			pos.x = actor.getX()
+			pos.y = actor.getY()
+			physicsUpdate(this)
+			pos += vel
+			pos += slideVelocity
+			if sliding
+				setPos(pos)
+			else
+				setXY(pos)
 		
 	function getRealVel() returns vec3
 		return vel + slideVelocity + trackVelocity + vortexVelocity
-
 
 	function revive()
 		printLog(Loglevel.DEBUG, "revive start")
@@ -227,11 +208,13 @@ public class Escaper extends UnitEntity
 		var ttype = GetTerrainType(e.pos.x, e.pos.y)
         
 		if ttype == CONTROLLABLEICE
+			print("assisted")
 			if w == null
 				e.actor.setFacing(e.pos.angleTo2d(orderPos))
 			else
 				e.actor.setFacing(e.pos.angleTo2d(widgetPos))
 		else if ttype == REVICE
+			print("assisted")
 			if w == null
 				e.actor.setFacing(e.pos.angleTo2d(orderPos)-(180).asAngleDegrees())
 			else

@@ -1,6 +1,6 @@
 package EntityManagement
 import public Entity
-
+import Escaper
 function updateEntities() returns boolean
 	Entity e = Entity.first
 	while e != null
@@ -13,4 +13,5 @@ function updateEntities() returns boolean
 
 public function startEntityLoop() returns boolean
 	CreateTrigger()..registerTimerEvent(ANIMATION_PERIOD, true)..addCondition(Condition(function updateEntities))
+	print("ANIM: " + ANIMATION_PERIOD.toString())
 	return true

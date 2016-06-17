@@ -142,7 +142,7 @@ public function callback()
 int array buildorders
 
 public function trigger.registerBuilderEvent(playerunitevent ev)
-	for i = 8 to 10
+	for i = 8 to 11
 		this.registerPlayerUnitEvent( Player(i), ev, null)
 
 

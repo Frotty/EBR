@@ -10,10 +10,13 @@ public constant real STARTX = -6000
 public constant real STARTY = -7000
 
 public abstract class Startmaze
+	boolean inited = false
 	RegionData rdata
 
 	abstract function initMaze()
-	
+	function isInit() returns boolean
+		return inited
+
 	function clearMaze()
 		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, null)
 		for vicu in ENUM_GROUP

@@ -11,6 +11,7 @@ public class FourthCitadelleMaze extends Startmaze
 		rdata.setType(RegionType.CITADEL, false)
 		
 	override function initMaze()
+		inited = true
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01I", null )
 		for u in ENUM_GROUP
 			new BigKiller(u) 
