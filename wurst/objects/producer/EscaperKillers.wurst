@@ -10,8 +10,8 @@ public constant COLL_SIZE_SRK = 70.
 public constant COLL_SIZE_BRK = 90.
 public constant COLL_SIZE_TANK = 80.
 public constant COLL_SIZE_GLAIVE = 54.
-public constant COLL_SIZE_AIR = 88.
-public constant AIR_HEIGHT = 256.
+public constant COLL_SIZE_AIR = 60.
+public constant AIR_HEIGHT = 200.
 
 public constant SMALL_RANDOM_KILLER_ID = 'u006'
 public constant BIG_RANDOM_KILLER_ID = 'u008'
@@ -119,8 +119,8 @@ public class AirKiller extends EscaperSensorSetup
 
 	override function onSensor(UnitEntity source, UnitEntity target)
 		if target instanceof Escaper
-			let zdelta =AIR_HEIGHT-target.pos.z
-			if zdelta + (COLL_SIZE_AIR/2) <= sensorHeight and zdelta > 0
+			let zdelta = AIR_HEIGHT - target.pos.z
+			if zdelta - COLL_SIZE_AIR <= sensorHeight and zdelta > 0
 				let escaper = target castTo Escaper
 				escaper.kill()
 		

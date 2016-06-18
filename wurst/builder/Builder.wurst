@@ -22,55 +22,56 @@ public class Builder extends UnitEntity
 		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -6500, -7000, 0) )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrder())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	override function update()
 		pos = actor.getPos().toVec3()
 	
-	static function swapPages()
-		var data = GetTriggerUnit().getEntity()
-		
-		if data instanceof Builder
-			var builder = data castTo Builder
-			var id = GetSpellAbilityId()
-			let tpos = getSpellTargetPos()
-			let rdata = getRegionData(tpos)
-			if rdata == null
-				return
-			boolean wasMenu = false
-			switch id
-				case MENU_1
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
-					wasMenu = true
-				case MENU_2
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit())))
-					wasMenu = true
-				case MENU_3
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
-					wasMenu = true
-				case MENU_4
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit()) ) )
-					wasMenu = true
-				case MENU_5
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
-					wasMenu = true
-				case MENU_6
-					builder.setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, data.pos.x, data.pos.y, GetUnitFacing(GetTriggerUnit() )) )
-					wasMenu = true
-				case KEY_SPELL_ID
-					if rdata.canBuild(builder.owner)
-						new Key(tpos, builder.owner)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case BOOTS_SPELL_ID
-					if rdata.canBuild(builder.owner)
-						createItem(BOOTS_ID, tpos)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-				case TOME_SPELL_ID
-					if rdata.canBuild(builder.owner)
-						new Tome(tpos, builder.owner)
-					else
-						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+	override function setNewActor(unit u)
+		super.setNewActor(u)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrder())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		if UnitItemInSlot(actor, 0) == null
+			UnitAddItemById(actor,'I001')
+			UnitAddItemById(actor,'I002')
+			UnitAddItemById(actor,'I003')				
+			SelectUnitForPlayerSingle( actor, owner )
+
+	function onCast()
+		var id = GetSpellAbilityId()
+		let tpos = getSpellTargetPos()
+		let rdata = getRegionData(tpos)
+		if rdata == null
+			return
+		switch id
+			case MENU_1
+				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, pos.x, pos.y, GetUnitFacing(GetTriggerUnit() )) )
+			case MENU_2
+				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, pos.x, pos.y, GetUnitFacing(GetTriggerUnit())))
+			case MENU_3
+				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, pos.x, pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+			case MENU_4
+				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, pos.x, pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+			case MENU_5
+				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, pos.x, pos.y, GetUnitFacing(GetTriggerUnit() )) )
+			case MENU_6
+				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, pos.x, pos.y, GetUnitFacing(GetTriggerUnit() )) )
+			case KEY_SPELL_ID
+				if rdata.canBuild(owner)
+					new Key(tpos, owner)
+				else
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			case BOOTS_SPELL_ID
+				if rdata.canBuild(owner)
+					createItem(BOOTS_ID, tpos)
+				else
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			case TOME_SPELL_ID
+				if rdata.canBuild(owner)
+					new Tome(tpos, owner)
+				else
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 //				case BM_BOSS_ID
 //					var rdata = getRegionData(tpos)
 //					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
@@ -104,22 +105,12 @@ public class Builder extends UnitEntity
 //					else
 //						pd.gridClickActivated = true
 //						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff08B552ON|r!") 
-				default
-					jukeBox.checkSpell(id)
-						
-			if wasMenu
-				if UnitItemInSlot(builder.actor, 0) == null
-					UnitAddItemById(builder.actor,'I001')
-					UnitAddItemById(builder.actor,'I002')
-					UnitAddItemById(builder.actor,'I003')
-				if builder.hasBossMenu
-					builder.actor.addAbility(MENU_BOSS)					
-				SelectUnitForPlayerSingle( builder.actor, builder.owner )
+			default
+				jukeBox.checkSpell(id)
 	
 	function setBossMenu(RegionData rdata)
 
 	function onOrder()
-		print("order")
 		var i = GetOrderTargetItem()
 		if i != null
 			if GetTriggerUnit().getUserData() > 0
@@ -154,8 +145,6 @@ public class Builder extends UnitEntity
 					SetUnitX(u,GetWidgetX(w))
 					SetUnitY(u,GetWidgetY(w))
 		
-
-		
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
 	
@@ -165,10 +154,6 @@ function isBuilderUnit() returns boolean
 	
 		
 public function init_Builder()	
-	swapTrigger = CreateTrigger()
-	swapTrigger.registerBuilderEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
-	swapTrigger.addCondition(Condition(function isBuilderUnit))
-	swapTrigger.addAction(function Builder.swapPages)
 	itemTrigger = CreateTrigger()
 	gg_unit_n008_0326.pause()
 	

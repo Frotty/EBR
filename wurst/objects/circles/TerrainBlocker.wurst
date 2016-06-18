@@ -32,7 +32,9 @@ public class TerrainBlocker extends StaticBaseObject
 				tileModifierMap.saveInt(m.x, m.y, bs.val)
 		else
 			tileModifierMap.saveInt(m.x, m.y, bitset(0).add(TileModifiers.BLOCK castTo int).val)
-
+		
+		clearQuestionmark()
+		
 	ondestroy
 		if not silent
 			var bs = bitset(tileModifierMap.loadInt(m.x, m.y))

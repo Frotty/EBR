@@ -208,13 +208,11 @@ public class Escaper extends UnitEntity
 		var ttype = GetTerrainType(e.pos.x, e.pos.y)
         
 		if ttype == CONTROLLABLEICE
-			print("assisted")
 			if w == null
 				e.actor.setFacing(e.pos.angleTo2d(orderPos))
 			else
 				e.actor.setFacing(e.pos.angleTo2d(widgetPos))
 		else if ttype == REVICE
-			print("assisted")
 			if w == null
 				e.actor.setFacing(e.pos.angleTo2d(orderPos)-(180).asAngleDegrees())
 			else

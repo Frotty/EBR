@@ -72,19 +72,11 @@ public class Door extends StaticSetupObject
 				col = COLOR.GREEN
 			case colorSpells[8]
 				col = COLOR.PINK
+		if col == COLOR.WHITE
+			actor.setVertexColor(COLOR_WHITE)
+		else	
+			actor.setVertexColor(playercolors[col castTo int - 1])
 				
-		colorize()
-				
-	function colorize()
-		color c
-		if col == COLOR.YELLOW
-			c = playercolors[col castTo int +1]
-		else if col == COLOR.ORANGE
-			c = playercolors[col castTo int -1]
-		else
-			c = playercolors[col castTo int]
-		SetUnitVertexColor(actor,c.red,c.green,c.blue,255)
-	
 	function toggleOpen()
 		if opened
 			closeDoor()
@@ -135,7 +127,10 @@ public class Door extends StaticSetupObject
 				printLog(Loglevel.DEBUG, "yes " + GetPlayerId(owner).toString())
 				actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
 				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
-		colorize()
+		if col == COLOR.WHITE
+			actor.setVertexColor(COLOR_WHITE)
+		else	
+			actor.setVertexColor(playercolors[col castTo int - 1])
 		
 	ondestroy
 		pathing.remove()

@@ -10,7 +10,6 @@ import public Event
 import public Basics
 import public GameConstants
 import public initlater RegionData
-import initlater Escaper
 
 public interface SensorListener
 	function onSensor(UnitEntity source, UnitEntity target)
@@ -179,6 +178,10 @@ abstract public class UnitEntity extends Entity
 		pos = tpos
 		actor.setXY(tpos)
 		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
+
+	override function getPos() returns vec3
+		updatePos()
+		return pos
 
 abstract public class FxEntity extends Entity
 	protected Fx fx

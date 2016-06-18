@@ -26,19 +26,19 @@ public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
 public class PlayerData //just the player's (constant) stuff
 	int id
-	int gameId
 	player p
 	string name
-	string mbname //Basically the output name
-	string rank = "Newbie"
+	string mbname
+	string rank
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+
 	Escaper escaper
 	Builder builder
 	RevivePointModifier revmod
+
 	int XP = 40
 	effect lvlfx
 	
-	boolean gridClickActivated = false
 	boolean picked = false
 	boolean localFilesEnabled = false
 	int lastExpGain = 0
@@ -54,7 +54,6 @@ public class PlayerData //just the player's (constant) stuff
 		this.p = p
 		id = GetPlayerId(p)
 		pData[id] = this
-		gameId = allPlayers.getSize()
 		name = GetPlayerName(p)
 		mbname = name
 		if mbname == "Frotty" or mbname == "FrottyZ"
@@ -110,16 +109,6 @@ public class PlayerData //just the player's (constant) stuff
 			rank  = "|cffADD642*Creator*"
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
 
-		setMBRow()
-			
-	function setMBRow()
-		playerboard.setNewItem(gameId+1,0,mbname,icon)
-		playerboard.setNewItem(gameId+1,1,escaper.deaths.toString() , null)
-		playerboard.setNewItem(gameId+1,2,rank, null)  
-	
-	function setMbIcon(int typ)
-		icon = mbPic[typ]
-		playerboard.updateIcon(gameId+1, 0, mbPic[typ])
 		
 	ondestroy
 		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
@@ -129,10 +118,6 @@ public class PlayerData //just the player's (constant) stuff
 			escaper.terminate()
 		allPlayers.remove(this)
 		pData[id] = null
-		if gameId < allPlayers.getSize()
-			for p2 in allPlayers
-				if p2.gameId > gameId
-					p2.gameId--
 		if isBuilder(p)
 			if builder != null
 				builder.terminate()
@@ -144,15 +129,17 @@ public class PlayerData //just the player's (constant) stuff
 		else
 			escaperPlayers.remove(this)
 		
-function initMB()
+function rebuildBoard()
 	playerboard = new Board(allPlayers.getSize()+1,3)
 	
-	for i = 0 to allPlayers.getSize()
+	int i = 0
+	for pd in allPlayers
 		playerboard.board.getItem(i,0)..setStyle(true,true)..setWidth(0.1)
 		playerboard.board.getItem(i,1)..setStyle(true,false)..setWidth(0.015)
 		playerboard.board.getItem(i,2)..setStyle(true,false)..setWidth(0.05)
-	for pd in allPlayers
-		pd.setMBRow()
+		playerboard.setNewItem(i,0,pd.mbname,pd.icon)
+		i++
+
 	CameraSetSmoothingFactor(10.)
 	playerboard.board.getItem(0,0)..setStyle(true,false)..setWidth(0.1)
 	playerboard.board.getItem(0,2).setWidth(0.05)
@@ -161,17 +148,9 @@ function initMB()
 	playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
-	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            |cffFF8429� |cffFFCE8CPlease wait for all Players to be checked|cffFF945A.|cffDE4A21.|cff7B1908.")
-	for pd in allPlayers
-		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
-		DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "              " + pd.mbname + "|r checked. (" + pd.localFilesEnabled.toString() + ")")
-		if not pd.localFilesEnabled
-			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - You don't have local files enabled!"  )
-			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To enable local files, please run [Your Wc3 Directory]\\!! AllowLocalFiles\\AllowLocalFiles.bat" )
-			DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Do this after the game, with wc3 closed. No EXP will be saved."  )
+
 	allow()
-	DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 15, "            " + "|cffFF8429� |cff7BBD42All Players have been checked! You can now select an escaper.")
-	DestroyTrigger(GetTriggeringTrigger())
+	GetTriggeringTrigger().destr()
 	
 	
 function setTime()

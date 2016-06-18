@@ -20,7 +20,6 @@ public class Knockbacker extends EscaperSensorSetup
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
 		..addAbility(DMG_INC_ID)..addAbility(DMG_DEC_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		active = false
 					
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()

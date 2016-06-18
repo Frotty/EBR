@@ -10,7 +10,7 @@ public class UnitRemover extends StaticBaseObject
 
 	construct( vec2 pos, player owner)
 		super( pos, CreateUnit(owner, ID, pos.x, pos.y, 0), 64., function UnitRemover.removeUnit )
-
+		clearQuestionmark()
 
 	static function removeUnit()
 		var u = GetTriggerUnit()

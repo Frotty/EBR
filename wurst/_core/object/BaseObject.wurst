@@ -39,6 +39,11 @@ public class StaticBaseObject extends UnitEntity
 		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_POINT_ORDER) 
 		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
 
+	function clearQuestionmark()
+		if noRally != null
+			noRally.destr()
+			noRally = null
+
 	static function isProper() returns boolean
 		return GetTriggerUnit().getFlyHeight() < 22
 
@@ -60,6 +65,7 @@ public class StaticBaseObject extends UnitEntity
 					obj.rallyUnit = (data castTo SetupObject).actor
 				else
 					obj.rallyUnit = target
+				obj.rallyPoint = obj.rallyUnit.getPos().toVec3()
 			if obj.noRally != null
 				obj.noRally.destr()
 				obj.noRally = null
@@ -67,12 +73,10 @@ public class StaticBaseObject extends UnitEntity
 	function setRallyPoint(vec2 pos)
 		rallyPoint = pos.toVec3()
 		rallyUnit = null
-		if noRally != null
-			noRally.destr()
-			noRally = null
+		clearQuestionmark()
 
 	function getRallyPoint() returns vec3
-		if rallyUnit == null
+		if rallyUnit == null or not rallyUnit.isAliveTrick()
 			return rallyPoint
 		else
 			if rallyUnit.getOwner() != DUMMY_PLAYER
@@ -94,9 +98,7 @@ public class StaticBaseObject extends UnitEntity
 		actor.clearRegister()
 		actor.remove()
 		inRangeTrig.destr()
-		if noRally != null
-			noRally.destr()
-			noRally = null
+		clearQuestionmark()
 
 init
 	rallyTrigger = CreateTrigger()

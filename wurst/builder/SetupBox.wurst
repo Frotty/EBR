@@ -82,7 +82,7 @@ public class SetupBox extends UnitEntity
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()
-				if isBuilder(p)
+				if isBuilder(p) and p != owner
 					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
 					if rdata.canBuild(p)
 						rdata.disallow(p)
