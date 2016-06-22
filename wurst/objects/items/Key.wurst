@@ -56,7 +56,7 @@ public class Key extends ItemObject
 	override function update()
 		if picked and followWalkable
 			if not holder.flying and not holder.sliding and not holder.onUnwalkable
-				pos = holder.pos
+				pos = holder.getPos()
 				
 		
 	function onCast() returns boolean

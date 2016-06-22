@@ -77,6 +77,10 @@ public class RegionData
 	function setBossRegion()
 		bossRegion = true
 		
+	function resetTiles()
+		if rtype != RegionType.UNKNOWN
+			theRect.changeTerrain(rtype.getTypeSet().unwalkableId)
+
 	function setType(RegionType rtype, boolean changeTerrain)
 		this.rtype = rtype
 		if rtype != RegionType.UNKNOWN and changeTerrain

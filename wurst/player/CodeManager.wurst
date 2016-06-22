@@ -13,8 +13,9 @@ public constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant int saveTechnique = 331
 
 
-public function check(PlayerData pd)
-	pd.localFilesEnabled = File.isEnabled().sync(pd.p)
+public function checkLocalFiles(PlayerData pd)
+	if not pd.localFilesEnabled
+		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
 
 public function PlayerData.createNewPlayerFile()
 	var scode = new Savecode()
@@ -98,10 +99,4 @@ public function PlayerData.loadPlayerFile()
 		this.createNewPlayerFile()
 
 	this.updateRank()
-	
-
-		
-		
-		
-		
 	

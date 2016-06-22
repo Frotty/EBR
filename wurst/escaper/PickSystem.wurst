@@ -115,7 +115,7 @@ function keypick()
 				pd.escaper = new Escaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[2]) )
 			case 3
 				pd.escaper = new IceEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[3]) )
-		pd.setMbIcon(currentView[pd.id]-1)
+		pd.icon = mbPic[currentView[pd.id]-1]
 		if isBuilder(pd.p)
 			UnitAddAbility( pd.escaper.actor, BLINK_ID )
 			UnitAddAbility( pd.escaper.actor, CREATE_REV_MOD_ID )

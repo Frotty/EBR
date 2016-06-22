@@ -5,7 +5,6 @@ import RegisterEvents
 import HashMap
 import ErrorHandling
 import OnUnitEnterLeave
-import ObjectIds
 
 constant MAX_EVENTS = 50
 

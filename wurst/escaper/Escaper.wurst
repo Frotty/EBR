@@ -113,7 +113,7 @@ public class Escaper extends UnitEntity
 			
 	override function onGround()
 		var ttype = GetTerrainType(pos.x, pos.y)
-		onUnwalkable = true
+		onUnwalkable = false
 		if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 			onUnwalkable = true
 			if alive
@@ -124,6 +124,8 @@ public class Escaper extends UnitEntity
 			sliding = true
 			setLava(false)
 		else
+			if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.ORANGEGOO castTo int)
+				vel += actor.getFacingAngle().toVec(2)
 			vel *= 0.96
 			slideVelocity *= 0.8
 			sliding = false

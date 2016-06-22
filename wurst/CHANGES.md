@@ -1,3 +1,6 @@
+[0.85g]
+[*] bug fixes and performance improvements
+
 [0.85a]
 [*]	added air killer
 [*] added gravity selectable per region

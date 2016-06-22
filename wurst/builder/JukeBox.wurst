@@ -31,7 +31,7 @@ public class JukeBox
 	LinkedList<JukeRequest> requests = new LinkedList<JukeRequest>()
 	LinkedList<int> recycleQueue = new LinkedList<int>()
 	LinkedList<int> randomQueue = new LinkedList<int>()
-	
+	boolean lastWasRequest = false
 	Music currentMusic
 	
 	construct()
@@ -43,13 +43,16 @@ public class JukeBox
 				
 	function playNextMusic()
 		StopMusic(false)
+		lastWasRequest = false
 		if requests.getSize() > 0
+			lastWasRequest = true
 			let req = requests.pop()
 			currentMusic = musics.get(req.id)
-			printTimed("Playing |cff84DE52" + currentMusic.name + "|r as requested by " + req.juker.getNameColored(), 10)
+			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r as requested by " + req.juker.getNameColored(), 10)
 		else if randomQueue.getSize() > 0
 			let id = randomQueue.pop()
 			currentMusic = musics.get(id)
+			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r", 10)
 			recycleQueue.add(id)
 		else
 			while recycleQueue.getSize() > 0
@@ -67,6 +70,7 @@ public class JukeBox
 			PlayMusic(currentMusic.path)
 			doAfter(currentMusic.duration, () -> playNextMusic())
 		else
+			StopMusic(false)
 			doAfter(60, () -> playNextMusic())
 	
 	function checkSpell(int id)
@@ -81,6 +85,8 @@ public class JukeBox
 						
 				printTimed("The Track |cff84DE52" + music.name + "|r has been queued by " + p.getNameColored(), 10)
 				requests.add(new JukeRequest(p, idx))
+				if requests.getSize() == 1 and not lastWasRequest
+					doAfter(0.5, () -> playNextMusic())
 				return
 			idx++
 

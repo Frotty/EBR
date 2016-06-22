@@ -17,14 +17,12 @@ import ItemObject
 import Pointer
 import Weapon
 import BossSpellTarget
-import FileIO
 import Invisible
 import Boss
 import GlobalShop
 import Remove
 import BasicSpells
 import ClosureTimers
-import Teleporter 
 import Ball
 
 init
