@@ -1,49 +1,37 @@
 package Booster
 import BaseObject
-import Texttag
 import SetupObject
 
-constant int 	WAYPOINT_ID   = 'n00J'
-	
-constant real 	EVENT_RADIUS	= 32.
-
+constant BOOSTER_ID = 'n00J'
+constant EVENT_RADIUS = 32.
+constant INCREASE_SPEED_ABIL = 'A04O'
+constant DECREASE_SPEED_ABIL = 'A04Q'
 
 public class Booster extends StaticBaseObject
-	real boostspeed = 200
+	ConfigValue boostspeed = new ConfigValue(200, 20, "Boostspeed")
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Booster.orderMove ) 
+		super( pos, CreateUnit(owner, BOOSTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Booster.orderMove ) 
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		clearQuestionmark()
 		
 	static function orderMove()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
+		let source = GetTriggeringTrigger().getSource()
+		let u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
 		if e instanceof SetupObject
 			SetupObject ek = e castTo SetupObject
-			SetUnitMoveSpeed(ek.actor, obj.boostspeed)
-			SetUnitMoveSpeed(ek.setup, obj.boostspeed)
+			ek.actor.setMoveSpeed(obj.boostspeed.get())
+			ek.setup.setMoveSpeed(obj.boostspeed.get())
 
 	function onCast()
 		let id = GetSpellAbilityId()
-		
 		switch id 
 			case INCREASE_SPEED_ABIL
-				if boostspeed >= 520
-					createTTEx(pos, vec2(0,0.05), "Max", 10,  2., colorA(255,55,55,0), owner  )
-				else
-					boostspeed += 10
-					createTTEx(pos, vec2(0,0.05), R2S(boostspeed), 10,  2., colorA(255,255-((boostspeed-10)/2).toInt(),255-(boostspeed/4).toInt(),0), owner  )
+				boostspeed.increment(this, 520)
 			case DECREASE_SPEED_ABIL
-				if boostspeed < 30
-					createTTEx(pos, vec2(0,0.05), "Min", 10,  2., colorA(255,55,55,0), owner  )
-				else
-					boostspeed -= 10
-					createTTEx(pos, vec2(0,0.05), R2S(boostspeed), 10,  2., colorA(255,255-((boostspeed-10)/2).toInt(),255-(boostspeed/4).toInt(),0), owner  )
+				boostspeed.decrement(this, 20)
 
 
-int INCREASE_SPEED_ABIL = 'A04O'
-int DECREASE_SPEED_ABIL = 'A04Q'
 

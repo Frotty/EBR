@@ -2,6 +2,7 @@ package Tracks
 import Entity
 import Escaper
 import Texttag
+import ConfigValue
 
 int array TRACKS
 
@@ -16,7 +17,7 @@ constant int DECLENGTH_ID		= 'A050'
 public class Tracks extends UnitEntity
 	unit setup
 	
-	real speed = 2
+	ConfigValue trackSpeed = new ConfigValue(2, 0.25, "Trackspeed")
 	int size = 0
 	int height = 0
 	int width  = 0
@@ -34,7 +35,7 @@ public class Tracks extends UnitEntity
 			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
-				escaper.trackVelocity += vec3(Cos((angl+90) * DEGTORAD) * speed, Sin((angl+90) * DEGTORAD) * speed, 0. )
+				escaper.trackVelocity += vec3(Cos((angl+90) * DEGTORAD) * trackSpeed.get(), Sin((angl+90) * DEGTORAD) * trackSpeed.get(), 0. )
 		
 				
 	function recreateDummy()
@@ -49,13 +50,9 @@ public class Tracks extends UnitEntity
 		let id = GetSpellAbilityId()
 		switch id
 			case INC_ID
-				if speed < 20.
-					speed+= .5
-					createTTEx(pos, vec2(0,0.05), "Speed : " + speed.toString(), 12,  2., colorA(255,255,255,0), owner  )
+				trackSpeed.increment(this, 20)
 			case DEC_ID
-				if speed > .5
-					speed-= .5
-					createTTEx(pos, vec2(0,0.05), "Speed : " + speed.toString(), 12,  2., colorA(255,255,255,0), owner  )
+				trackSpeed.decrement(this, 1)
 			case INCLENGTH_ID
 				if size < 2
 					size++
@@ -84,7 +81,7 @@ public class Tracks extends UnitEntity
 				height = width
 				width = temp2
 				recreateDummy()
-		actor.setTimeScale(0.5+speed/6)
+		actor.setTimeScale(0.5+trackSpeed.get()/6)
 		
 	
 init

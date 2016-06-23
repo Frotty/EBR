@@ -22,8 +22,8 @@ constant FIRST_PAGE = 'A07B'
 constant SECOND_PAGE = 'A07A'
 constant INC_GRAVITY = 'A07X'
 constant DEC_GRAVITY = 'A07W'
-constant real MAX_SLIDESPEED = 15.
-constant real MAX_DOT_DMG = 20.
+constant MAX_SLIDESPEED = 15.
+constant MAX_DOT_DMG = 20.
 
 
 public class SetupBox extends UnitEntity
@@ -105,6 +105,8 @@ public class SetupBox extends UnitEntity
 					var data = u.getEntity()
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
 						data.terminate()
+
+				rdata.resetTiles()
 			case JUMP_ID
 				let rdata = getRegionData(pos)
 				if rdata.jumpAvailable

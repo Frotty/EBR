@@ -2,9 +2,9 @@ package Spinner
 import Entity
 import LinkedList
 import SetupObject
-import Texttag
 import Remove
 import Preloader
+import ConfigValue
 import Obstacle
 
 constant int SPINNER_ID      = 'h01M'
@@ -32,9 +32,9 @@ class SpinNode
 
 public class Spinner extends SetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
-	real speed = 2. *DEGTORAD
-	real cosFactor = 1.
-	real sinFactor = 1.
+	ConfigValue spinSpeed = new ConfigValue(2 * DEGTORAD, 0.25 * DEGTORAD, "Spinspeed")
+	ConfigValue cosFactor = new ConfigValue(1, 0.1, "Cos-Factor")
+	ConfigValue sinFactor = new ConfigValue(1, 0.1, "Sin-Factor")
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), createUnit(owner, SPINNER_ID, pos, angle(0)), createUnit(owner, SPINNER_ID, pos, angle(0)), 0)
@@ -43,14 +43,14 @@ public class Spinner extends SetupObject
 		
 	override function update()
 		super.update()
+		let speed = spinSpeed.get()
 		LinkedList<SpinNode> dirty = null
 		for node in spinningEntities
 			if node.obj.done
 				if dirty == null
 					dirty = new LinkedList<SpinNode>()
 				dirty.add(node)
-			node.obj.setXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor,
-									pos.y + node.dist * Sin(node.angl+speed) * sinFactor, 0. ) )
+			node.obj.setXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0. ) )
 			node.angl += speed
 		if dirty != null
 			for dirt in dirty
@@ -86,7 +86,7 @@ public class Spinner extends SetupObject
 				
 	
 
-	function onCast() returns boolean
+	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
 			case SPELL_ID
@@ -106,43 +106,17 @@ public class Spinner extends SetupObject
 								checkObj(gu.getEntity())
 				ENUM_GROUP.clear()
 			case INC_ID
-				if speed < 10.
-					speed += (.5*DEGTORAD)
-					createTTEx(pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(speed*RADTODEG,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner  )
+				spinSpeed.increment(this, 10 * DEGTORAD)
 			case DEC_ID
-				if speed > -10.
-					speed -= (.5*DEGTORAD)
-					createTTEx(pos, vec2(0,0.05), "Spin-Speed: "+ R2SW(speed*RADTODEG,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
+				spinSpeed.decrement(this, -10 * DEGTORAD)
 			case CINC_ID
-				if cosFactor < .95
-					cosFactor += .1
-					createTTEx(pos, vec2(0,0.05), "Cos-Factor: "+ R2SW(cosFactor,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Maximum Factor", 10,  2., colorA(255,255,255,0), owner  )
+				cosFactor.increment(this, 1)
 			case CDEC_ID
-				if cosFactor > 0.05
-					cosFactor -= (.1)
-					createTTEx(pos, vec2(0,0.05), "Cos-Factor: "+ R2SW(cosFactor,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Minimum Factor", 10,  2., colorA(255,255,255,0), owner  )
+				cosFactor.decrement(this, 0)
 			case SINC_ID
-				if sinFactor < .95
-					sinFactor += .1
-					createTTEx(pos, vec2(0,0.05), "Sin-Factor: "+ R2SW(sinFactor,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Maximum Factor", 10,  2., colorA(255,255,255,0), owner  )
+				sinFactor.increment(this, 1)
 			case SDEC_ID
-				if sinFactor > 0.05
-					sinFactor -= (.1)
-					createTTEx(pos, vec2(0,0.05), "Sin-Factor: "+ R2SW(sinFactor,1,2), 10,  2., colorA(255,255,255,0), owner  )
-				else
-					createTTEx(pos, vec2(0,0.05), "Minimum Factor", 10,  2., colorA(255,255,255,0), owner  )
-		//setup.issuePastOrder(2)
-		return false
+				sinFactor.decrement(this, 0)
 	
 init
 	preloadAbility(SPELL_ID)
