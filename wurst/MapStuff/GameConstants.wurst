@@ -1,6 +1,5 @@
 package GameConstants
 import initlater PlayerData
-import Colors
 public string array mbPic
 public string array names
 public string array tags

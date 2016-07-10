@@ -2,8 +2,6 @@ package JukeBox
 import ClosureTimers
 import LinkedList
 
-
-
 class Music
 	int spellid
 	string path
@@ -52,6 +50,9 @@ public class JukeBox
 		else if randomQueue.getSize() > 0
 			let id = randomQueue.pop()
 			currentMusic = musics.get(id)
+			if currentMusic == null
+				playNextMusic()
+				return
 			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r", 10)
 			recycleQueue.add(id)
 		else
@@ -68,7 +69,7 @@ public class JukeBox
 			
 		if currentMusic != null
 			PlayMusic(currentMusic.path)
-			doAfter(currentMusic.duration, () -> playNextMusic())
+			doAfter(currentMusic.duration + 5, () -> playNextMusic())
 		else
 			StopMusic(false)
 			doAfter(60, () -> playNextMusic())

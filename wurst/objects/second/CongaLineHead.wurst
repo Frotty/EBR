@@ -4,7 +4,6 @@ import LinkedList
 import Spinner
 import Texttag
 import Remove
-import BaseObject
 
 constant int UNIT_ID = 'h000'
 

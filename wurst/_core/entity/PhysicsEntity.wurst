@@ -1,6 +1,5 @@
 package PhysicsEntity
 import Entity
-import TerrainUtils
 import RegionData
 
 //Module for Physical Simulation

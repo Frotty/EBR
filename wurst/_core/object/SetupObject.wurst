@@ -33,10 +33,6 @@ public abstract class SetupObject extends UnitEntity
 		..addAbility('Agho')
 		..setEntity(this)
 		
-	override function updatePos()
-		pos = vec3(actor.getX(), actor.getY(), pos.z)
-		setup.setXY(pos)
-		
 	override function setPos(vec3 pos)
 		this.pos = pos
 		actor.setPos(pos.x, pos.y)

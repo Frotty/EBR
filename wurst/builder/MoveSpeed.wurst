@@ -3,8 +3,9 @@ import Texttag
 import SetupObject
 import Entity
 
-constant int INC_SPEED_ID = 'A01E'
-constant int DEC_SPEED_ID = 'A01H'
+constant INC_SPEED_ID = 'A01E'
+constant DEC_SPEED_ID = 'A01H'
+
 function onChanceSpeed()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()

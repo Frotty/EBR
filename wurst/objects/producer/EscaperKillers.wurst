@@ -23,99 +23,78 @@ public class SmallKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, facing, COLL_SIZE_SK, COLL_SIZE_SK + 16)
-		active = true
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, COLL_SIZE_SK, COLL_SIZE_SK + 16)
-		active = true
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_SK, COLL_SIZE_SK + 16)
-		active = true
 		
 public class SmallRandomKiller extends EscaperSensorSetup
 	
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, facing, COLL_SIZE_SRK, COLL_SIZE_SRK)
-		active = true
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, COLL_SIZE_SRK, COLL_SIZE_SRK)
-		active = true
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_SRK, COLL_SIZE_SRK)
-		active = true
 	
 public class BigKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigKillerId, facing, COLL_SIZE_BK, COLL_SIZE_BK * 0.75)
-		active = true
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigKillerId, COLL_SIZE_BK, COLL_SIZE_BK * 0.75)
-		active = true
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_BK, COLL_SIZE_BK)
-		active = true
 		
 public class BigRandomKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, facing, COLL_SIZE_BRK, COLL_SIZE_BRK)
-		active = true
 		
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, COLL_SIZE_BRK, COLL_SIZE_BRK)
-		active = true
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_BRK, COLL_SIZE_BRK)
-		active = true
 		
 public class TankKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, TANK_KILLER_ID, facing, COLL_SIZE_TANK, COLL_SIZE_TANK)
-		active = true
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, TANK_KILLER_ID, COLL_SIZE_TANK, COLL_SIZE_TANK)
-		active = true
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_TANK, COLL_SIZE_TANK)
-		active = true
 		
 public class GlaiveKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, GLAIVE_KILLER_ID, facing, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
-		active = true
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, GLAIVE_KILLER_ID, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
-		active = true
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
-		active = true
 
 public class AirKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.withZ(256), owner, AIR_KILLER_ID, facing, COLL_SIZE_AIR, COLL_SIZE_AIR)
-		active = true
 	
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, AIR_KILLER_ID, COLL_SIZE_AIR, COLL_SIZE_AIR)
-		active = true
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_AIR, COLL_SIZE_AIR)
-		active = true
 
 	override function onSensor(UnitEntity source, UnitEntity target)
 		if target instanceof Escaper

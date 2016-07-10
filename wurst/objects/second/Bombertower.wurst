@@ -1,7 +1,5 @@
 package Bombertower
 import BaseObject
-import Escaper
-import EscaperKillers
 import Attackspeed
 
 constant int 	BOMBERTOWER_ID   = 'h019'
@@ -20,10 +18,11 @@ public class Bombertower extends StaticBaseObject
 		TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		actor.addAbility(GHOST_VIS_ID)
+		actor..addAbility(GHOST_VIS_ID)..addAbility(LOCUST_ID)
 		dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
 		dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		..addAbility(LOCUST_ID)..addAbility(GHOST_INVIS_ID)
+		..addAbility(GHOST_INVIS_ID)
+		clearQuestionmark()
 		SetUnitPathing(dummy, true)
 
 		

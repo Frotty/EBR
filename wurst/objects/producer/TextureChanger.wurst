@@ -6,7 +6,6 @@ import TerrainBlocker
 import BuilderConstants
 import Texttag
 import Preloader
-import BaseObject
 import BitSet
 
 constant int TEXTURECHANGER_ID	= 'n01E'

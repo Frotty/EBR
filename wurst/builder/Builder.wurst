@@ -7,6 +7,7 @@ import Key
 import initlater InstantBuild
 import Tome
 import JukeBox
+import initlater Boss
 
 trigger swapTrigger
 trigger itemTrigger
@@ -72,43 +73,35 @@ public class Builder extends UnitEntity
 					new Tome(tpos, owner)
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
-//				case BM_BOSS_ID
-//					var rdata = getRegionData(tpos)
-//					if rdata.isOwner(builder.owner.getId()) and rdata.isBossRegion
-//						if not rdata.hasBoss
-//							new Boss(builder.owner, tpos, boss[rdata.rtype])
-//							rdata.hasBoss = true
-//						else
-//							DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You can only have one boss each region!") 
-//					else
-//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-//				case BM_SPELLTARGET_ID
-//					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
-//						new SpellTarget(tpos, builder.owner)
-//					else
-//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-//				case BM_DAMAGER_ID
-//					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
-//						new BossDamager(tpos, builder.owner)
-//					else
-//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-//				case BM_WEAPON_ID
-//					if getRegionData(tpos).isOwner(builder.owner.getId()) and getRegionData(tpos).isBossRegion
-//						new Weapon(tpos, builder.owner)
-//					else
-//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-//				case GRIDCLICK_ID
-//					PlayerData pd = pData[builder.owner.getId()]
-//					if pd.gridClickActivated
-//						pd.gridClickActivated = false
-//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff9C0808OFF|r!") 
-//					else
-//						pd.gridClickActivated = true
-//						DisplayTextToPlayer( builder.owner, 0, 0, "|cffffcc00Gridclick turned |cff08B552ON|r!") 
+			case BM_BOSS_ID
+				if rdata.canBuild(owner) and rdata.bossRegion
+					if not rdata.hasBoss
+						new Boss(owner, tpos, rdata.rtype.getTypeSet().bossId)
+						rdata.hasBoss = true
+					else
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019You can only have one boss each region!") 
+				else
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+			// case BM_SPELLTARGET_ID
+			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
+			// 		new SpellTarget(tpos, owner)
+			// 	else
+			// 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+			// case BM_DAMAGER_ID
+			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
+			// 		new BossDamager(tpos, owner)
+			// 	else
+			// 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+			// case BM_WEAPON_ID
+			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
+			// 		new Weapon(tpos, owner)
+			// 	else
+			// 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 			default
 				jukeBox.checkSpell(id)
 	
-	function setBossMenu(RegionData rdata)
+	function setBossMenu()
+		actor.addAbility(BM_BOSS_ID)
 
 	function onOrder()
 		var i = GetOrderTargetItem()

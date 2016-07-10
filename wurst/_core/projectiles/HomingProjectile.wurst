@@ -41,40 +41,6 @@ public abstract class HomingProjectile extends Projectile
 			case HOMING.circle
 				skip			
 			case HOMING.angular
-				var df1 = (anglexy - xyAngle).radians()
-				var df2 = (PI2 + anglexy.radians()) - xyAngle.radians()
-				var ns = homingSpeed
-		
-				if df1 <= 0
-					if df2 <= 0 
-						if df2 >= df1 
-							df1 = df2
-					else
-						if -df1 >= df2
-							df1 = df2
-				else
-					if df2 <= 0 
-						if -df2 <= df1
-							df1 = df2
-					else
-						if df2 <= df1 
-							df1 = df2
-				if df1 <= 0 
-					if -df1 >= ns 
-						ns = -ns
-					else
-						ns = df1
-				else
-					if df1 <= ns 
-						ns = df1
-				var d = xyAngle.radians()
-				d += ns
-				if d >= PI2
-					d -= PI2
-				else if d < 0
-					d += PI2
-		
-				
 
 				vel = vec3( getSpeed() * xyAngle.cos(), getSpeed() * xyAngle.sin(), 0. )
 				

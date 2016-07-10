@@ -71,7 +71,6 @@ function newEventLocPerPlayer()
 		// Get enum player's camera location    
 		x = GetCameraTargetPositionX()    
 		y = GetCameraTargetPositionY()
-		        
 		dist = (x - eventX)*(x - eventX) + (y - eventY)*(y - eventY)
 		if (dist <= eventRange*eventRange)  
 			// Check if it is in range of point    
@@ -80,8 +79,6 @@ function newEventLocPerPlayer()
 			if not (IsPlayerInForce(p, shakingPlayers))         
 				ForceAddPlayer(shakingPlayers, p) 
 				//add player to shaking group    
-		p = null     
-	     
 	//Register new location shake event     
 public function newEventLoc( real x, real y, real m, real r)
 	eventX = x
@@ -89,15 +86,12 @@ public function newEventLoc( real x, real y, real m, real r)
 	eventShake = m
 	eventRange = r
 	ForForce( bj_FORCE_ALL_PLAYERS, function newEventLocPerPlayer )     
-     
 //Register new player shake event     
 public function newEventPlayer(player p, real m)
 	integer i = GetPlayerId(p)
 	playerCurrentShake[i] = (playerCurrentShake[i] + m)
 	if not (IsPlayerInForce(p, shakingPlayers))     
 	ForceAddPlayer(shakingPlayers, p)
-     
-     
 //Main loop for camera shaking     
 function onLoop()
 	ForForce(shakingPlayers, function loopPerPlayer)

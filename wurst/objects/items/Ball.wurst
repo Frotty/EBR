@@ -1,8 +1,6 @@
 package Ball
 import ItemObject
-import GameConstants
 import Escaper
-import BuilderConstants
 import BasicSpells
 import ClosureTimers
 

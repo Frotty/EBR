@@ -2,7 +2,6 @@ package UnitRemover
 import BaseObject
 import SetupObject
 import Remove
-import Pointer
 
 constant int ID = 'n003'
 

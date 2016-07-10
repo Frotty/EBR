@@ -2,8 +2,6 @@ package Trap
 import BaseObject
 import Escaper
 import InstantDummyCaster
-import Camera
-import GameConstants
 import Texttag
 import Camerashakes
 import TerrainBlocker

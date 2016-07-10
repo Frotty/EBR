@@ -2,7 +2,6 @@ package RegionData
 import Entity
 import Rect
 import initlater Builder
-import Startmazes
 import initlater Escaper
 import DummyRecycler
 
@@ -19,18 +18,18 @@ public enum RegionType
 public function RegionType.getTypeSet() returns regionTypeSet
 	switch this
 		case UNKNOWN
-			return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0)
+			return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0)
 		case CITADEL
-			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', 'n018', 'n019')
+			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', 'n018', 'n019', 'h00G')
 		case SAND
-			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', 'n01F', 'n01G')
+			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', 'n01F', 'n01G', 'h00M')
 		case CITY
-			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H')
+			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H', 'h00L')
 		case SNOW
-			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S')
+			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'H00O')
 		case SUNKEN
-			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005')
-	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0)
+			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005', 'h00N')
+	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0)
 	
 public function getRegionTypeFromItem(int itemId) returns RegionType
 	for i = 1 to 5
@@ -41,7 +40,7 @@ public function getRegionTypeFromItem(int itemId) returns RegionType
 
 public tuple regionTypeSet(int regionItemId, int walkableId, int unwalkableId,
 						   int smallKillerId, int bigKillerId, int treeId,
-						   int smallObstacleId, int bigObstacleId)
+						   int smallObstacleId, int bigObstacleId, int bossId)
 
 public enum Permission
 	GUEST
@@ -66,6 +65,7 @@ public class RegionData
 	boolean visible = false
 	boolean jumpAvailable = false
 	boolean bossRegion = false
+	boolean hasBoss = false
 	
 	construct(rect r)
 		theRect = r

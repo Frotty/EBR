@@ -4,7 +4,6 @@ import Escaper
 import EscaperClasses
 import Entity
 import CodeManager
-import Startmazes
 import RevivePointModifier
 
 unit array pickheros

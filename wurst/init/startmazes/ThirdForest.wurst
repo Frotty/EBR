@@ -1,6 +1,5 @@
 package ThirdForest
 import Startmaze
-import Startmazes
 import Teleporter
 import Unitcreator
 import Executer
@@ -42,7 +41,6 @@ public class ThirdForestMaze extends Startmaze
 		IssuePointOrder(gg_unit_n009_0205, "patrol", -1922, -4482 )
 		IssuePointOrder(gg_unit_n009_0203, "patrol", 390, -3855 )
 		IssuePointOrder(gg_unit_n009_0204, "patrol", 780, -4222 )
-    	
 		UnitCreator u = new UnitCreator(vec2(gg_unit_n006_0165.getX(),gg_unit_n006_0165.getY()),STAFF_PLAYER)
 		IssuePointOrder(u.actor, "setrally", -1024,-6785 )
 		u.active = true

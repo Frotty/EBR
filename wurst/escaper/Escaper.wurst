@@ -200,7 +200,7 @@ public class Escaper extends UnitEntity
 			actor.addAbility(JUMP_SPELL)
 		else 
 			actor.removeAbility(JUMP_SPELL)
-        
+
 	static function changeAngle()
 		var u = GetTriggerUnit()
 		Escaper e = u.getUserData() castTo Escaper
@@ -208,7 +208,6 @@ public class Escaper extends UnitEntity
 		let orderPos = getOrderPos()
 		let widgetPos = w.getPos()
 		var ttype = GetTerrainType(e.pos.x, e.pos.y)
-        
 		if ttype == CONTROLLABLEICE
 			if w == null
 				e.actor.setFacing(e.pos.angleTo2d(orderPos))

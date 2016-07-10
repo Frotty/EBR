@@ -1,6 +1,6 @@
 package EntityManagement
 import public Entity
-import Escaper
+
 function updateEntities() returns boolean
 	Entity e = Entity.first
 	while e != null

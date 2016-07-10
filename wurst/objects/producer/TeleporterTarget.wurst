@@ -1,6 +1,5 @@
 package TeleporterTarget
 import SetupObject
-import BaseObject
 constant int ID = 'u00B'
 
 

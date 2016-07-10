@@ -1,7 +1,6 @@
 package Tracks
 import Entity
 import Escaper
-import Texttag
 import ConfigValue
 
 int array TRACKS
@@ -18,7 +17,7 @@ public class Tracks extends UnitEntity
 	unit setup
 	
 	ConfigValue trackSpeed = new ConfigValue(2, 0.25, "Trackspeed")
-	int size = 0
+	int tsize = 0
 	int height = 0
 	int width  = 0
 	int angl = 0
@@ -40,7 +39,7 @@ public class Tracks extends UnitEntity
 				
 	function recreateDummy()
 		actor.remove()
-		actor = CreateUnit(owner, TRACKS[size], pos.x, pos.y, angl.toReal())
+		actor = CreateUnit(owner, TRACKS[tsize], pos.x, pos.y, angl.toReal())
 		
 	ondestroy
 		setup.remove()
@@ -54,16 +53,16 @@ public class Tracks extends UnitEntity
 			case DEC_ID
 				trackSpeed.decrement(this, 1)
 			case INCLENGTH_ID
-				if size < 2
-					size++
+				if tsize < 2
+					tsize++
 					if angl == 0 or angl == 180
 						height++
 					else
 						width++
 					recreateDummy()
 			case DECLENGTH_ID
-				if size > 0
-					size--
+				if tsize > 0
+					tsize--
 					if angl == 0 or angl == 180
 						height--
 					else

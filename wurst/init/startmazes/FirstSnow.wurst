@@ -1,6 +1,5 @@
 package FirstSnow
 import Startmaze
-import Startmazes
 import Teleporter
 import Waypoint
 import ClosureTimers

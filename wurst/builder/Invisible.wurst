@@ -25,9 +25,9 @@ function onChangeVisibility()
 			else if id == INVIS_ID
 				if caster.hasAbility(GHOST_VIS_ID)
 					caster.removeAbility(GHOST_VIS_ID)
-				let b2 = caster.addAbility(GHOST_INVIS_ID)
-				let b3 = caster.removeAbility(INVIS_ID)
-				let b4 = caster.addAbility(VIS_ID)
+				caster..addAbility(GHOST_INVIS_ID)
+				..removeAbility(INVIS_ID)
+				..addAbility(VIS_ID)
 	
 public function invis_init()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChangeVisibility())
