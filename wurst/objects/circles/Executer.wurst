@@ -56,8 +56,8 @@ public class Executer extends StaticBaseObject
 	boolean canEscaperTrigger = true
 	rect eventRect // only for pressureplate
 	region eventRegion
-	Emode eventMode
-	Amode actionMode
+	Emode eventMode = Emode.NONE
+	Amode actionMode = Amode.NONE
 	boolean ON = false// only for lever and pressureplate
 	//effect oneffect // when lever and pressurplate is active
 	int tiletype //Terrain Change tile type

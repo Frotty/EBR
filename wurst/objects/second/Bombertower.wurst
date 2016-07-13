@@ -1,6 +1,7 @@
 package Bombertower
 import BaseObject
 import Attackspeed
+import ClosureTimers
 
 constant int 	BOMBERTOWER_ID   = 'h019'
 constant int	ATTACK_ORDER = 851983
@@ -10,32 +11,23 @@ trigger orderTrigger
 
 public class Bombertower extends StaticBaseObject
 	unit dummy
-	boolean realorder = true
-	
+	boolean skipOrder = false
+
 	construct( vec2 pos, player owner )
 		super( pos, CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., CODE_NULL )
-		TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_POINT_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, actor, EVENT_UNIT_ISSUED_TARGET_ORDER)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		actor..addAbility(GHOST_VIS_ID)..addAbility(LOCUST_ID)
 		dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
-		dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-		..addAbility(GHOST_INVIS_ID)
-		clearQuestionmark()
+		dummy..addAbility(GHOST_INVIS_ID)..setEntity(this)..setScale(0.5)
+		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_ORDER)
+		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_POINT_ORDER)
+		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_TARGET_ORDER)
+		EventListener.add(dummy, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		SetUnitPathing(dummy, true)
 
 		
-	function onCast() returns boolean
+	function onCast()
 		let id = GetSpellAbilityId()
-		onAttackspeedCast(id, dummy)
-		return false
-		
-	static function orderSetup()
-		var obj = GetExpiredTimer().getData() castTo Bombertower
-		obj.realorder = false
-		IssueImmediateOrderById(obj.actor, STOP_ORDER)
-		GetExpiredTimer().release()
+		onAttackspeedCast(id, actor)
 		
 	ondestroy
 		dummy.remove()
@@ -45,18 +37,23 @@ function checkAttackOrder()
 	var e = GetOrderedUnit().getEntity()
 	if e instanceof Bombertower 
 		var obj = e castTo Bombertower
-		if GetOrderedUnit() == obj.actor
+		if obj.skipOrder
+			obj.skipOrder = false
+			return
+		if GetOrderedUnit() == obj.dummy
+			obj.clearQuestionmark()
 			if i == ATTACK_GROUND_ORDER
-				IssuePointOrderById(obj.dummy,i, GetOrderPointX(),GetOrderPointY())
-				getTimer()..start(0.1, function Bombertower.orderSetup)..setData(obj castTo int)
+				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
+				obj.skipOrder = true
+				nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
 			else if i == ATTACK_ORDER
-				IssueTargetOrderById(obj.dummy,i, GetOrderTargetUnit())
-				getTimer()..start(0.1, function Bombertower.orderSetup)..setData(obj castTo int)
+				obj.skipOrder = true
+				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
+				nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
 			else if i == STOP_ORDER 
-				if obj.realorder == true
-					IssueImmediateOrderById(obj.dummy, STOP_ORDER)
-				else 
-					obj.realorder = true
+				IssueImmediateOrderById(obj.actor, STOP_ORDER)
+			
+			
 				
 
 public function init_Bombertower()

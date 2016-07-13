@@ -1,3 +1,7 @@
+[0.85i]
+[*] can now order power nodes and conga heads
+[*] adjusted cannon tower
+
 [0.85g]
 [*] bug fixes and performance improvements
 
