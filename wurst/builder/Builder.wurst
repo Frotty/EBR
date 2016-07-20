@@ -82,16 +82,12 @@ public class Builder extends UnitEntity
 			case BM_SPELLTARGET_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
 					new SpellTarget(tpos, owner)
-			// case BM_DAMAGER_ID
-			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
-			// 		new BossDamager(tpos, owner)
-			// 	else
-			// 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+			case BM_DAMAGER_ID
+				if rdata.canBuild(owner) and rdata.bossRegion
+					// new BossDamager(tpos, owner)
 			// case BM_WEAPON_ID
 			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
 			// 		new Weapon(tpos, owner)
-			// 	else
-			// 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
 			default
 				jukeBox.checkSpell(id)
 	

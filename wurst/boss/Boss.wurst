@@ -23,12 +23,7 @@ public class Boss extends SetupObject
 
 	construct( player owner, vec2 tpos, int id)
 		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> begin
-			printTimed("Congratulations you have slain the Boss", 25)
-			setup.addAbility(REVIVE_ID)
-			actor = null
-		end)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		hpBar = new CustomBar(pos, "|", 120, 8)
 		hpBar.setForeground(colorA(200,255,125,255))
 
@@ -43,6 +38,7 @@ public class Boss extends SetupObject
 		
 	function onCast()
 		let id = GetSpellAbilityId()
+		actor.queueAnimation("spell")
 		switch id
 			case HP_UP_ID
 				int bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
@@ -73,11 +69,15 @@ public class Boss extends SetupObject
 				else 
 					SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp-1)
 			case AOE_SPELL_ID
-				for target in getSpellTargets(SpellType.AOE)
-					// target.castAOE(boss)
+				let tgts = getSpellTargets(SpellType.AOE)
+				for target in tgts
+					// target.castSpell(boss)
+				destroy tgts
 			case MISSILE_SPELL_ID
-				for target in getSpellTargets(SpellType.MISSILE)
-					// target.castMissile(boss)
+				let tgts = getSpellTargets(SpellType.MISSILE)
+				for target in tgts
+					new BossMissile(getPos(),owner,target)
+				destroy tgts
 			case REVIVE_ID
 				revive()
 	

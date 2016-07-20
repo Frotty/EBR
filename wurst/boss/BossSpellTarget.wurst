@@ -19,7 +19,7 @@ public enum SpellType
 public HashMap<int,LinkedList<SpellTarget>> targets = new HashMap<int,LinkedList<SpellTarget>>()
 
 public class SpellTarget extends SetupObject
-	SpellType stype
+	SpellType stype = SpellType.NONE
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0)
@@ -60,18 +60,14 @@ public class SpellTarget extends SetupObject
 //					actor.damageTarget(u,aoe_spell[root.aoe_id].damage)
 //		GroupClear(ENUM_GROUP)
 //	
-//	function castMissile(Boss root)
-//		new BossMissile(root.actor.getPos3(),root.owner,this,root.missile_id)
 
 constant MISSILE_RADIUS = 64.
 constant MISSILE_SPEED = 12.
 
 public class BossMissile extends HomingProjectile
-	int id
 	
-	construct(vec3 pos, player owner,Entity target, int id)
+	construct(vec3 pos, player owner,Entity target)
 		super(pos, MISSILE_RADIUS, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), Other.greendragonmissile)
-		this.id = id
 		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)
 		
