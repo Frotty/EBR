@@ -4,6 +4,8 @@ import InstantDummyCaster
 import Escaper
 import HomingProjectile
 import Assets
+import ClosureForGroups
+import ClosureTimers
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
@@ -22,7 +24,7 @@ public class SpellTarget extends SetupObject
 	SpellType stype = SpellType.NONE
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0)
+		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 32)
 		stype = SpellType.NONE
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		if not targets.has(owner.getId())
@@ -43,8 +45,12 @@ public class SpellTarget extends SetupObject
 				..removeAbility(MISSILE_ID)
 				..addAbility(AOE_ID)
 	
-	function castSpell(int spell_id, string spell_string)
-		InstantDummyCaster.castPoint(DUMMY_PLAYER, spell_id, 1, spell_string, pos.toVec2())
+	function castAoe()
+		addEffect("war3mapImported\\DarknessMeteor.mdx", pos).destr()
+		let tpos = getPos().toVec2()
+		doAfter(1., () -> begin
+			forUnitsInRange(tpos, 128, (unit u) -> actor.damageTarget(u, 100))
+		end)
 
 	ondestroy
 		targets.get(owner.getId()).remove(this)
@@ -70,6 +76,7 @@ public class BossMissile extends HomingProjectile
 		super(pos, MISSILE_RADIUS, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), Other.greendragonmissile)
 		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)
+		setTimed(10)
 		
 	
 	override function update()

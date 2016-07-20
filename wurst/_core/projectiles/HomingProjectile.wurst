@@ -23,12 +23,12 @@ public abstract class HomingProjectile extends Projectile
 	function setTarget(Entity e, HOMING htype, real homingspeed)
 		target = e
 		this.htype = htype
-		homingSpeed = homingspeed
+		this.homingSpeed = homingspeed
 		radii = radius*radius + e.radius*e.radius
 				
 	override function update()
-		let dist = pos.distanceToSq(target.pos)
-		let anglexy = pos.angleTo2d(target.pos)
+		let dist = pos.distanceToSq(target.getPos())
+		let anglexy = pos.angleTo2d(target.getPos())
 		if dist < radii
 			terminate()
 			return
@@ -45,16 +45,12 @@ public abstract class HomingProjectile extends Projectile
 				vel = vec3( getSpeed() * xyAngle.cos(), getSpeed() * xyAngle.sin(), 0. )
 				
 			case HOMING.forced
-				vec3 tmp = pos.polarProject(getSpeed(), anglexy, angle(0))
+				var tmp = pos.moveTowards(target.pos, homingSpeed + homingSpeed * dist/100000)
 				
 				tmp -= pos
-				
+				vel *= 0.95
 				vel += tmp
+				homingSpeed *= 1.01
 				
-				pos += vel
-				
-				fx.setPos(pos.x, pos.y)
-				
-				vel -= (vel*homingSpeed)
 		setXYAngle(anglexy)
 		super.update()

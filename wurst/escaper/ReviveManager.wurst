@@ -1,0 +1,26 @@
+package ReviveManager
+import Escaper
+
+tuple RevivePod(Escaper escaper, real time)
+
+RevivePod array pods
+
+public function manageRevive(Escaper e)
+	let id = e.owner.getId()
+	if pods[id].time <= 0
+		pods[id] = RevivePod(e, 3.0)
+		if isBuilder(e.owner) 
+			pods[id].time = TIMER_PERIOD
+
+function update()
+	for i = 0 to 11
+		if pods[i].escaper != null
+			pods[i].time -= TIMER_PERIOD
+			if pods[i].time <= 0
+				pods[i].escaper.revive()
+				pods[i] = RevivePod(null, 0)
+
+constant TIMER_PERIOD = 0.1
+
+init
+	CreateTimer().startPeriodic(TIMER_PERIOD, () -> update())

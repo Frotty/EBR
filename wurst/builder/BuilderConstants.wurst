@@ -34,6 +34,7 @@ public constant int ANKH_SPELL_ID = 'A041'
 public constant int BM_BOSS_ID = 'A03F'
 public constant int BM_SPELLTARGET_ID = 'A06Q'
 public constant int BM_DAMAGER_ID = 'A06R'
+public constant int BM_WEAPON_ID = 'A07I'
 
 public constant int GRIDCLICK_ID = 'A03V'
 

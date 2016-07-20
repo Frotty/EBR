@@ -5,6 +5,7 @@ import Key
 import initlater InstantBuild
 import Tome
 import JukeBox
+import initlater Weapon
 import initlater Boss
 
 trigger swapTrigger
@@ -36,6 +37,8 @@ public class Builder extends UnitEntity
 			UnitAddItemById(actor,'I002')
 			UnitAddItemById(actor,'I003')				
 			SelectUnitForPlayerSingle( actor, owner )
+		if hasBossMenu
+			setBossMenu()
 
 	function onCast()
 		var id = GetSpellAbilityId()
@@ -85,13 +88,14 @@ public class Builder extends UnitEntity
 			case BM_DAMAGER_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
 					// new BossDamager(tpos, owner)
-			// case BM_WEAPON_ID
-			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
-			// 		new Weapon(tpos, owner)
+			case BM_WEAPON_ID
+				if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
+					new WeaponObject(tpos, owner)
 			default
 				jukeBox.checkSpell(id)
 	
 	function setBossMenu()
+		hasBossMenu = true
 		actor.addAbility(MENU_BOSS)
 
 	function onOrder()
