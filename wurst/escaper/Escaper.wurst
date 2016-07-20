@@ -2,15 +2,10 @@ package Escaper
 import PhysicsEntity
 import Assets
 import public Entity
-import Vectors
-import TimerUtils
-import RegionData
 import BuilderConstants
-import LinkedList
 import RevivePointModifier
 import ClosureTimers
 import TerrainBlocker
-import TerrainUtils
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -40,6 +35,7 @@ public class Escaper extends UnitEntity
 
 	boolean alive = true
 	boolean selectatrevive = true
+	boolean left = false
 
 	
 	construct( vec3 pos, player owner, int typ )
@@ -127,7 +123,6 @@ public class Escaper extends UnitEntity
 			if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.ORANGEGOO castTo int)
 				vel += actor.getFacingAngle().toVec(2)
 			vel *= 0.96
-			slideVelocity *= 0.8
 			sliding = false
 			setLava(false)
 			if ttype == 1147958883 and not onLava
@@ -135,7 +130,8 @@ public class Escaper extends UnitEntity
 			else if ttype == POISON
 				if not poisoned
 					setPoison(true)
-						
+		if not sliding
+			slideVelocity *= 0.8		
 		if onLava
 			var hp = actor.getHP()
 			if hp > .405
@@ -170,7 +166,6 @@ public class Escaper extends UnitEntity
 		return vel + slideVelocity + trackVelocity + vortexVelocity
 
 	function revive()
-		printLog(Loglevel.DEBUG, "revive start")
 		sliding = false
 		stop()
 		let rev = currentRevivepoint
@@ -181,25 +176,33 @@ public class Escaper extends UnitEntity
 			ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
 			setPos(vec3(revmod.pos.x, revmod.pos.y, 32.))
 		actor.setPropWindow(60.)
+		updateRegionData()
+		alive = true
+		setPoison(false)
+		setLava(false)
+		if left
+			terminate()
+			return
+
 		CameraClearNoiseForPlayer(owner)
 		if selectatrevive
 			if (GetLocalPlayer() == owner)
 				PanCameraToTimed(rev.x, rev.y, 0)
 				ClearSelection()
 				SelectUnit(actor, true)
-		updateRegionData()
-		alive = true
-		setPoison(false)
-		setLava(false)
 		if camlock
 			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
 			
 	function updateRegionData()
-		currentRegion = getRegionData(pos)
-		if currentRegion.jumpAvailable
-			actor.addAbility(JUMP_SPELL)
-		else 
-			actor.removeAbility(JUMP_SPELL)
+		let newReg = getRegionData(pos)
+		if newReg != null and newReg != currentRegion
+			currentRegion.removeEscaper(this)
+			currentRegion = newReg
+			newReg.addEscaper(this)
+			if currentRegion.jumpAvailable
+				actor.addAbility(JUMP_SPELL)
+			else 
+				actor.removeAbility(JUMP_SPELL)
 
 	static function changeAngle()
 		var u = GetTriggerUnit()

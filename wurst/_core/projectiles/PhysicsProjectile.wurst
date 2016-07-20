@@ -1,9 +1,6 @@
 package PhysicsProjectile
-import Entity
-import Angle
 import public  Projectile
 import public AirPhysicsModule
-import Maths
 
 public class AirPhysicsProjectile extends Projectile
 	use AirPhysicsModule

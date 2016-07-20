@@ -1,14 +1,8 @@
 package Unitcreator
 import BaseObject
 import EscaperKillers
-import RegionData
-import Texttag
 import Pointer
 import Knockbacker
-import ObjectIds
-import Assets
-import ObjectIdGenerator
-import Escaper
 import ChannelAbilityPreset
 
 constant int 	UNITCREATOR_ID   = 'n006'

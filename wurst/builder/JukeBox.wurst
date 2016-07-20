@@ -27,19 +27,23 @@ LinkedList<Music> musics = new LinkedList<Music>()
 
 public class JukeBox
 	LinkedList<JukeRequest> requests = new LinkedList<JukeRequest>()
-	LinkedList<int> recycleQueue = new LinkedList<int>()
 	LinkedList<int> randomQueue = new LinkedList<int>()
 	boolean lastWasRequest = false
 	Music currentMusic
+	CallbackSingle cb = null
 	
 	construct()
-		for i = 0 to musics.getSize()
-			if (i * GetRandomInt(1,7)) mod 2 == 0
-				randomQueue.addtoStart(i)
-			else
-				randomQueue.add(i)
+		for n = 0 to 3
+			for i = 0 to musics.getSize()
+				if (i * GetRandomInt(1,7)) mod 2 == 0
+					randomQueue.addtoStart(i)
+				else
+					randomQueue.add(i)
 				
 	function playNextMusic()
+		if cb != null
+			destroy cb
+			cb = null
 		StopMusic(false)
 		lastWasRequest = false
 		if requests.getSize() > 0
@@ -54,25 +58,17 @@ public class JukeBox
 				playNextMusic()
 				return
 			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r", 10)
-			recycleQueue.add(id)
+			randomQueue.addtoStart(id)
 		else
-			while recycleQueue.getSize() > 0
-				let i = recycleQueue.getSize()
-				let id = recycleQueue.pop()
-				if (i * GetRandomInt(1,7)) % 2 == 0
-					randomQueue.addtoStart(id)
-				else
-					randomQueue.add(id)
-			let nid = randomQueue.pop()
-			currentMusic = musics.get(nid)
-			recycleQueue.add(nid)	
 			
 		if currentMusic != null
 			PlayMusic(currentMusic.path)
-			doAfter(currentMusic.duration + 5, () -> playNextMusic())
+			cb = () -> playNextMusic()
+			doAfter(currentMusic.duration + 0.25, cb)
 		else
 			StopMusic(false)
-			doAfter(60, () -> playNextMusic())
+			cb = () -> playNextMusic()
+			doAfter(60, cb)
 	
 	function checkSpell(int id)
 		int idx = 0

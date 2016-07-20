@@ -1,6 +1,5 @@
 package VoidWalker
 import EscaperSensor
-import ConfigValue
 import ChannelAbilityPreset
 constant UNIT_ID = 'u00I'
 constant KILL_RADIUS = 64.

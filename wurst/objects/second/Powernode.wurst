@@ -1,9 +1,6 @@
 package Powernode
-import LinkedList
-import Entity
 import Escaper
 import SetupObject
-import ConfigValue
 import ChannelAbilityPreset
 
 constant int LINK_ID = 'A051'
@@ -68,7 +65,7 @@ public class Powernode extends SetupObject
 				Link l = links.get(i)
 				if not l.linkedNode.done 
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
-					for Escaper e in escapers
+					for Escaper e in currentRegion.getEscapers()
 						if e.alive and e.pos.z < 24 and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
 							switch l.ltype
 								case LinkType.KILL

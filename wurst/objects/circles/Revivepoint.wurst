@@ -1,8 +1,6 @@
 package Revivepoint
 import SetupObject
 import PlayerData
-import GameConstants
-import RegionData
 import Startmazes
 
 constant real EVENT_RADIUS = 90.

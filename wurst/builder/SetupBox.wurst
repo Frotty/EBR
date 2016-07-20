@@ -1,8 +1,4 @@
 package SetupBox
-import Entity
-import RegionData
-import GameConstants
-import Escaper
 import PlayerData
 import initlater Builder
 import RegisterEvents
@@ -125,7 +121,7 @@ public class SetupBox extends UnitEntity
 					let builder = pData[owner.getId()].builder
 					SelectUnitForPlayerSingle(builder.actor, owner)
 					GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
-					// builder.setBossMenu(rdata)
+					builder.setBossMenu()
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 			case SECOND_PAGE

@@ -1,19 +1,13 @@
 package Startmazes
-import initlater Revivepoint
 import initlater Door
 import initlater Obstacle
-import initlater Teleporter
 import initlater UnitRemover
-import Entity
-import initlater RegionData
-import Texttag
 import initlater Startmaze
 import initlater FirstSnow
 import initlater SecondDesert
 import initlater ThirdForest
 import initlater FourthCitadelle
 import MapBounds
-import GameConstants
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -109,8 +103,9 @@ public function initBaseObjects()
 
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", null )
 	for u2 in ENUM_GROUP
-		new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
-		u2.remove()
+		if u2 != gg_unit_h00C_0023 and u2 != gg_unit_h00C_0011
+			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
+			u2.remove()
 		
 	ENUM_GROUP.clear()
 	

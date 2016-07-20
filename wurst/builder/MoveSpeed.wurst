@@ -1,7 +1,5 @@
 package MoveSpeed
-import Texttag
 import SetupObject
-import Entity
 
 constant INC_SPEED_ID = 'A01E'
 constant DEC_SPEED_ID = 'A01H'

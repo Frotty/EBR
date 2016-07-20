@@ -1,8 +1,6 @@
 package GameInit
-import GameConstants
 import SetupObject
 import UnitProducer
-import RegionData
 import PickSystem
 import Builder
 import Door
@@ -16,14 +14,11 @@ import EntityManagement
 import ItemObject
 import Pointer
 import Weapon
-import BossSpellTarget
 import Invisible
-import Boss
 import GlobalShop
 import Remove
 import BasicSpells
 import ClosureTimers
-import Ball
 
 init
 	callGen()
@@ -69,10 +64,6 @@ function initGame()
 	printLog(Loglevel.DEBUG, "Init - Pointer")
 	init_Weapon()
 	printLog(Loglevel.DEBUG, "Init - Weapon")
-	init_BossSpellTarget()
-	printLog(Loglevel.DEBUG, "Init - Bossspelltarget")
-	init_Boss()
-	printLog(Loglevel.DEBUG, "Init - Boss")
 	init_GlobalShop()
 	printLog(Loglevel.DEBUG, "Init - Shop")
 	invis_init()

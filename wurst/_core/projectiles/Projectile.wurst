@@ -1,6 +1,5 @@
 package Projectile
 import public Entity
-import Angle
 
 public class Projectile extends FxEntity
 	// Angles

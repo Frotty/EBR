@@ -51,4 +51,14 @@ public function correctKeys()
 	if GetItemTypeId(itm) == 'I009'
 		new Key(vec2(GetItemX(itm), GetItemY(itm)), STAFF_PLAYER)
 		itm.remove()
+	else if GetItemTypeId(itm) == 'I00J'
+		let k = new Key(vec2(GetItemX(itm), GetItemY(itm)), STAFF_PLAYER)
+		k.col = COLOR.PURPLE
+		k.recolor()
+		itm.remove()
+	else if GetItemTypeId(itm) == 'I008'
+		let k = new Key(vec2(GetItemX(itm), GetItemY(itm)), STAFF_PLAYER)
+		k.col = COLOR.TEAL
+		k.recolor()
+		itm.remove()
 		

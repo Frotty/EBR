@@ -1,14 +1,13 @@
 package Bomber
 import SetupObject
 import Attackspeed
-import Texttag
 
 constant int BOMBER_ID = 'h00Y'
 constant int AUTOATTACK_ID = 'A03B'
-constant int	ATTACK_ORDER = 851983
-constant int	ATTACK_GROUND_ORDER = 851984
-constant int	STOP_ORDER = 851972
-constant int	MOVE_ORDER = 851971
+constant int ATTACK_ORDER = 851983
+constant int ATTACK_GROUND_ORDER = 851984
+constant int STOP_ORDER = 851972
+constant int MOVE_ORDER = 851971
 trigger orderTrigger
 
 public class Bomber extends UnitEntity

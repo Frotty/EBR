@@ -1,6 +1,4 @@
 package GlobalShop
-import Escaper
-import RegionData
 //import Regions
 
 constant int 	SHOP_ID	= 'n01M'

@@ -1,5 +1,4 @@
 package ItemObject
-import Entity
 import Escaper
 
 public abstract class ItemObject extends Entity

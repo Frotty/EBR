@@ -1,8 +1,6 @@
 package PickSystem
 import initlater  PlayerData
-import Escaper
 import EscaperClasses
-import Entity
 import CodeManager
 import RevivePointModifier
 

@@ -1,5 +1,4 @@
 package ConfigValue
-import Texttag
 import Entity
 
 public class ConfigValue
@@ -21,13 +20,13 @@ public class ConfigValue
 	function increment(UnitEntity caster, real max)
 		if value < max
 			value += increment
-			createTTEx(caster.getPos(), vec2(0,0.1), valueName + ": " + value.toString(2), 9., 1.5, colorA(255,255,255,255), caster.owner)
+			createTTEx(caster.getPos(), vec2(0,0.1), valueName + ": " + value.toString(3), 9., 1.5, colorA(255,255,255,255), caster.owner)
 		else
 			createTTEx(caster.getPos(), vec2(0,0.1), valueName + " at maximum!", 9., 1.5, colorA(255,255,255,255), caster.owner)
 		
 	function decrement(UnitEntity caster, real min)
 		if value > min
 			value -= increment
-			createTTEx(caster.getPos(), vec2(0,0.1), valueName + ": " + value.toString(2), 9., 1.5, colorA(255,255,255,255), caster.owner)
+			createTTEx(caster.getPos(), vec2(0,0.1), valueName + ": " + value.toString(3), 9., 1.5, colorA(255,255,255,255), caster.owner)
 		else
 			createTTEx(caster.getPos(), vec2(0,0.1), valueName + " at minimum!", 9., 1.5, colorA(255,255,255,255), caster.owner)

@@ -1,9 +1,5 @@
 package Door
-import BaseObject
-import Escaper
 import SetupObject
-import GameConstants
-import Colors
 import BuilderConstants
 import Key
 import PlayerData
@@ -27,9 +23,14 @@ public class Door extends StaticSetupObject
 	
 	boolean vertical = false
 	boolean opened = false
+
+	construct(unit existing)
+		super(existing.getPos3(), createUnit(existing.getOwner(), DOORDUMMY_ID, existing.getPos(), (270).asAngleDegrees()), existing, EVENT_RADIUS, function Door.keyopen )
+		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
+		pathing.setUserData(this castTo int)
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner,DOORDUMMY_ID, pos.x, pos.y, 270) , 
+		super( pos.toVec3(), createUnit(owner,DOORDUMMY_ID, pos, (270).asAngleDegrees()), 
 							CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
 		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
 		pathing.setUserData(this castTo int)

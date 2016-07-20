@@ -1,6 +1,5 @@
 package FourthCitadelle
 import Startmaze
-import Teleporter
 import Spinner
 
 public class FourthCitadelleMaze extends Startmaze

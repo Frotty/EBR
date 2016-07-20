@@ -1,11 +1,8 @@
 package PlayerData
 import MultiboardClass
-import GameConstants
 import public Escaper
 import BuilderConstants
 import Builder
-import LinkedList
-import RegionData
 import CodeManager
 import PickSystem
 import TerrainModder
@@ -117,7 +114,10 @@ public class PlayerData
 		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
 		PlaySoundBJ( gg_snd_QuestFailed )
 		if escaper != null
-			escaper.terminate()
+			if escaper.alive
+				escaper.terminate()
+			else
+				escaper.left = true
 		allPlayers.remove(this)
 		pData[id] = null
 		if isBuilder(p)

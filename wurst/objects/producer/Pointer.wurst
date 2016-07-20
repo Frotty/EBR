@@ -1,9 +1,7 @@
 package Pointer
 import EscaperSensor
 import Escaper
-import Texttag
 import Preloader
-import SetupObject
 
 constant int POINTER_ID = 'h01Q'
 constant POINTER_RADIUS = 64.

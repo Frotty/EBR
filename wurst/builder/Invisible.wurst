@@ -1,5 +1,4 @@
 package Invisible
-import Entity
 import SetupObject
 
 constant VIS_ID = 'A04F'

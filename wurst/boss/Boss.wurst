@@ -1,141 +1,95 @@
 package Boss
-import Entity
 import SetupObject
 import PlayerData
-import Escaper
-import BossSpellTarget
-import RegionData
-import Texttag
+import public BossSpellTarget
+import CustomBar
 
-constant int BOSS_TOMB_ID = 'n01P'
-constant int HP_UP_ID = 'A06U'
-constant int HP_DOWN_ID = 'A06T'
-constant int REAL_HP_BIG_ID = 'A06X'
-constant int REAL_HP_SMALL_ID = 'A06Y'
-constant int DMG_UP_ID = 'A001'
-constant int DMG_DOWN_ID = 'A001'
-constant int REAL_DMG_BIG_ID = 'A001'
-constant int REAL_DMG_SMALL_ID = 'A001'
-constant int AOE_SPELL_ID = 'A06V'
-constant int MISSILE_SPELL_ID = 'A06W'
-constant int REVIVE_ID = 'A07L'
-trigger deathTrig
-
+constant BOSS_TOMB_ID = 'n01P'
+constant HP_UP_ID = 'A06U'
+constant HP_DOWN_ID = 'A06T'
+constant REAL_HP_BIG_ID = 'A06X'
+constant REAL_HP_SMALL_ID = 'A06Y'
+constant DMG_UP_ID = 'A001'
+constant DMG_DOWN_ID = 'A001'
+constant REAL_DMG_BIG_ID = 'A001'
+constant REAL_DMG_SMALL_ID = 'A001'
+constant AOE_SPELL_ID = 'A06V'
+constant MISSILE_SPELL_ID = 'A06W'
+constant REVIVE_ID = 'A07L'
 
 public class Boss extends SetupObject
-	int aoe_id = 0
-	int missile_id = 0
 	real maxHp = 200
-	RegionData rdata
-
-	static function onInRangeEvent()
-		var ent = GetTriggerUnit().getEntity()
-		if ent instanceof Escaper
-			var es = ent castTo Escaper
-			if not es.flying
-				es.kill()
+	CustomBar hpBar
 
 	construct( player owner, vec2 tpos, int id)
-		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)),createUnit(owner, id, tpos, angle(0)), 64 )
-//		setup.registerCastEvent(Condition(function onCast))
-		deathTrig.registerUnitEvent(setup,EVENT_UNIT_DEATH)
-//		deathTrig.registerUnitEvent(actor,EVENT_UNIT_DEATH)
-//		actor.addAbility(REAL_HP_BIG_ID)
-//		SetUnitAbilityLevel(actor,REAL_HP_BIG_ID,2)
+		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> begin
+			printTimed("Congratulations you have slain the Boss", 25)
+			setup.addAbility(REVIVE_ID)
+			actor = null
+		end)
+		hpBar = new CustomBar(pos, "|", 120, 8)
+		hpBar.setForeground(colorA(200,255,125,255))
 
-		rdata = getRegionData(pos)
-		
 	override function update()
 		super.update()
-//		hpBar.setValue(setup.getHP() / maxHp * 100.0)
-		if not pos.toVec2().isInRect(rdata.theRect)
-			setPos(rdata.theRect.getCenter().withZ(0))
-			DisplayTextToPlayer(owner, 0,0, "|cffD62921You can't move your boss out of the boss region")
+		hpBar.setPosXY(pos.x-100, pos.y + 100)
+		hpBar.setValue(setup.getHP() / maxHp * 100.0)
 
 	function onDamage(player atker, real dmg)
 		pData[atker.getId()].escaper.actor.damageTarget(setup,dmg)
 		pData[atker.getId()].escaper.actor.damageTarget(actor,dmg)
 		
-	static function onCast() returns boolean
-
-		var data = GetTriggerUnit().getEntity()
-		
-		if data instanceof Boss
-			var boss = data castTo Boss
-			var id = GetSpellAbilityId()
-			switch id
-				case HP_UP_ID
-					int bighp = GetUnitAbilityLevel(boss.actor, REAL_HP_BIG_ID)
-					int smallhp = GetUnitAbilityLevel(boss.actor, REAL_HP_SMALL_ID)
-					if smallhp == 4
-						if bighp < 4
-							if bighp == 0
-								boss.actor.addAbility(REAL_HP_BIG_ID)
-							else
-								SetUnitAbilityLevel(boss.actor,REAL_HP_BIG_ID, bighp+1)
-							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, 0)
+	function onCast()
+		let id = GetSpellAbilityId()
+		switch id
+			case HP_UP_ID
+				int bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
+				int smallhp = GetUnitAbilityLevel(actor, REAL_HP_SMALL_ID)
+				if smallhp == 4
+					if bighp < 4
+						if bighp == 0
+							actor.addAbility(REAL_HP_BIG_ID)
 						else
-							createTTEx(boss.pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), boss.owner  )
-					else 
-						if smallhp == 0
-							boss.actor.addAbility(REAL_HP_SMALL_ID)
-						else
-							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp+1)
-				case HP_DOWN_ID
-					int bighp = GetUnitAbilityLevel(boss.actor, REAL_HP_BIG_ID)
-					int smallhp = GetUnitAbilityLevel(boss.actor, REAL_HP_SMALL_ID)
+							SetUnitAbilityLevel(actor,REAL_HP_BIG_ID, bighp+1)
+						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 0)
+					else
+						createTTEx(pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), owner)
+				else 
 					if smallhp == 0
-						if bighp > 0
-							SetUnitAbilityLevel(boss.actor,REAL_HP_BIG_ID, bighp-1)
-							SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, 4)
-						else
-							createTTEx(boss.pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), boss.owner  )
-					else 
-						SetUnitAbilityLevel(boss.actor,REAL_HP_SMALL_ID, smallhp-1)
-				case AOE_SPELL_ID
-					var g = boss.getSpellTargets(SpellType.AOE)
-					for unit u in g
-						var spt = u.getUserData() castTo SpellTarget
-//						spt.castAOE(boss)
-				case MISSILE_SPELL_ID
-					var g = boss.getSpellTargets(SpellType.MISSILE)
-					for unit u in g
-						var spt = u.getUserData() castTo SpellTarget
-//						spt.castMissile(boss)
-				case REVIVE_ID
-					boss.revive()
-		return false
+						actor.addAbility(REAL_HP_SMALL_ID)
+					else
+						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp+1)
+			case HP_DOWN_ID
+				int bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
+				int smallhp = GetUnitAbilityLevel(actor, REAL_HP_SMALL_ID)
+				if smallhp == 0
+					if bighp > 0
+						SetUnitAbilityLevel(actor,REAL_HP_BIG_ID, bighp-1)
+						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 4)
+					else
+						createTTEx(pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), owner  )
+				else 
+					SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp-1)
+			case AOE_SPELL_ID
+				for target in getSpellTargets(SpellType.AOE)
+					// target.castAOE(boss)
+			case MISSILE_SPELL_ID
+				for target in getSpellTargets(SpellType.MISSILE)
+					// target.castMissile(boss)
+			case REVIVE_ID
+				revive()
 	
-	function getSpellTargets(SpellType stype) returns group
-		var rdata = getRegionData(pos)
-		GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
-		group g = CreateGroup()
-		for unit u in ENUM_GROUP
-			if GetUnitTypeId(u) == SPELLTARGET_ID and GetOwningPlayer(u) == owner and u.getUserData() > 0
-				var spt = u.getUserData() castTo SpellTarget
-				if spt.stype == stype
-					GroupAddUnit(g, u)
-		ENUM_GROUP.clear()
-		return g
+	function getSpellTargets(SpellType stype) returns LinkedList<SpellTarget>
+		let tgs = targets.get(owner.getId())
+		let newTgs = new LinkedList<SpellTarget>()
+		for target in tgs
+			if target.stype == stype
+				newTgs.add(target)
+		return newTgs
 	
-	static function onDeath()
-		var data = GetTriggerUnit().getEntity()
-		if data instanceof Boss
-			var boss = data castTo Boss
-//			boss.hpBar.changeVisibility(CreateForce())
-			boss.actor.kill()
-			boss.setup.remove()
-			boss.setup = CreateUnit(boss.owner, BOSS_TOMB_ID, boss.pos.x,boss.pos.y,270.)
-//			boss.setup.registerCastEvent(Condition(function onCast))
-			for i = 0 to 11
-				DisplayTextToPlayer( Player(i), 0, 0, "|cff6BC54ACongratulations! You have slain the Boss!!")
 				
 	function revive()
 		PlaySound("Units\\Undead\\Varimathras\\VarimathrasReady1.wav")
-	//	new Boss(owner, pos.x, pos.y, boss[rdata.rtype])
 		destroy this
-		
-	
-public function init_Boss()
-	deathTrig = CreateTrigger()
-	deathTrig.addAction(function Boss.onDeath)

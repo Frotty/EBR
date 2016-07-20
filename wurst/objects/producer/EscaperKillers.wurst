@@ -1,7 +1,5 @@
 package EscaperKillers
 import public EscaperSensor
-import RegionData
-import ErrorHandling
 import Escaper
 
 public constant COLL_SIZE_SK = 72.

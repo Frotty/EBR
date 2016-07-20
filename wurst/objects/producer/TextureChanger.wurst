@@ -1,12 +1,8 @@
 package TextureChanger
-import Entity
 import SetupObject
-import RegionData
 import TerrainBlocker
 import BuilderConstants
-import Texttag
 import Preloader
-import BitSet
 
 constant int TEXTURECHANGER_ID	= 'n01E'
 

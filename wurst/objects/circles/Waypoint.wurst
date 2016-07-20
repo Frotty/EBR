@@ -2,7 +2,6 @@ package Waypoint
 import BaseObject
 import Escaper
 import SetupObject
-import Texttag
 import TeleporterTarget
 import Builder
 

@@ -1,6 +1,5 @@
 package Tree
 import Entity
-import RegionData
 
 constant int TREEDUMMY_ID 	= 'n010'
 constant int TREE_ID 		= 'n00H'

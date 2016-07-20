@@ -1,6 +1,5 @@
 package PhysicsEntity
 import Entity
-import RegionData
 
 //Module for Physical Simulation
 public module PhysicsModule

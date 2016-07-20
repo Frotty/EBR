@@ -1,10 +1,7 @@
 package Spinner
-import Entity
-import LinkedList
 import SetupObject
 import Remove
 import Preloader
-import ConfigValue
 import Obstacle
 
 constant int SPINNER_ID      = 'h01M'

@@ -1,8 +1,6 @@
 package FirstSnow
 import Startmaze
-import Teleporter
-import Waypoint
-import ClosureTimers
+import Door
 
 public class FirstSnowMaze extends Startmaze
 	
@@ -13,67 +11,27 @@ public class FirstSnowMaze extends Startmaze
 	override function initMaze()
 		inited = true
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
-		printLog(Loglevel.DEBUG, "maze-0.11")
 		for u in ENUM_GROUP
-			printLog(Loglevel.DEBUG, "maze-0.12")
 			new BigKiller(u)
-		printLog(Loglevel.DEBUG, "maze-0.2")
 		ENUM_GROUP.clear()
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u008", null )
-		for u in ENUM_GROUP
-			new BigRandomKiller(u).update()
-		
-		printLog(Loglevel.DEBUG, "maze-0.3")
-		ENUM_GROUP.clear()
+
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", null )
 		for u in ENUM_GROUP
 			new SmallKiller(u)
 		ENUM_GROUP.clear()
-		printLog(Loglevel.DEBUG, "maze-1")
 		
-		IssuePointOrder(gg_unit_h015_0019 , "patrol", 4960, -4737 )
-		IssuePointOrder(gg_unit_h015_0020 , "patrol", 4587, -5137 )
-		IssuePointOrder(gg_unit_h015_0018 , "patrol", 4600, -5252 )
-		var wp = new Waypoint(gg_unit_n004_0337.getPos(), gg_unit_n004_0337.getOwner())
-		let fwp = wp
-		gg_unit_n004_0337.remove()
-		wp.setRallyPoint(gg_unit_n004_0334.getPos())
-		wp = new Waypoint(gg_unit_n004_0334.getPos(), gg_unit_n004_0334.getOwner())
-		gg_unit_n004_0334.remove()
-		wp.setRallyPoint(gg_unit_n004_0335.getPos())
-		wp = new Waypoint(gg_unit_n004_0335.getPos(), gg_unit_n004_0335.getOwner())
-		gg_unit_n004_0335.remove()
-		wp.setRallyPoint(gg_unit_n004_0336.getPos())
-		wp = new Waypoint(gg_unit_n004_0336.getPos(), gg_unit_n004_0336.getOwner())
-		gg_unit_n004_0336.remove()
-		wp.setRallyPoint(fwp.pos.toVec2())
-		doAfter(1.5, () -> begin
-			(gg_unit_n007_0013.getEntity() castTo EscaperSensorSetup).setup.issuePointOrder("move", fwp.pos.toVec2())
-		end)
-		printLog(Loglevel.DEBUG, "maze-2")
-		var wp2 = new Waypoint(gg_unit_n004_0330.getPos(), gg_unit_n004_0330.getOwner())
-		let f2wp = wp2
-		gg_unit_n004_0330.remove()
-		wp2.setRallyPoint(gg_unit_n004_0333.getPos())
-		wp2 = new Waypoint(gg_unit_n004_0333.getPos(), gg_unit_n004_0333.getOwner())
-		gg_unit_n004_0333.remove()
-		wp2.setRallyPoint(gg_unit_n004_0332.getPos())
-		wp2 = new Waypoint(gg_unit_n004_0332.getPos(), gg_unit_n004_0332.getOwner())
-		gg_unit_n004_0332.remove()
-		wp2.setRallyPoint(gg_unit_n004_0331.getPos())
-		wp2 = new Waypoint(gg_unit_n004_0331.getPos(), gg_unit_n004_0331.getOwner())
-		gg_unit_n004_0331.remove()
-		wp2.setRallyPoint(f2wp.pos.toVec2())
-		doAfter(1.25, () -> begin
-			(gg_unit_n007_0015.getEntity() castTo EscaperSensorSetup).setup.issuePointOrder("move", f2wp.pos.toVec2())
-		end)
+		gg_unit_h015_0020.issuePointOrder("patrol", vec2(6800, -5237))
+		gg_unit_h015_0018.issuePointOrder("patrol", vec2(5325, -6000))
+
+		gg_unit_n007_0013.issuePointOrder("patrol", vec2(4700, -6400))
+		gg_unit_n007_0014.issuePointOrder("patrol", vec2(4700, -6550))
+		gg_unit_n007_0012.issuePointOrder("patrol", vec2(6500, -4400))
 		
-		var t = new Teleporter(vec2(gg_unit_n00C_0057.getX(),gg_unit_n00C_0057.getY()),STAFF_PLAYER)
-		t.setRallyPoint(vec2(6275,-5131))
-		gg_unit_n00C_0057.remove()
-		t = new Teleporter(vec2(gg_unit_n00C_0058.getX(),gg_unit_n00C_0058.getY()),STAFF_PLAYER)
-		t.setRallyPoint(vec2(6660,-4866))
-		gg_unit_n00C_0058.remove()
+		let tealDoor = new Door(gg_unit_h00C_0023)
+		tealDoor..changeColor('A05W')
+
+		let purpleDoor = new Door(gg_unit_h00C_0011)
+		purpleDoor..changeColor('A05S')..turn()
 	
 	override function getStart() returns vec2
 		return vec2(6400, -6760)

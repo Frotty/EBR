@@ -1,8 +1,7 @@
 package RegionData
-import Entity
-import Rect
 import initlater Builder
 import initlater Escaper
+import initlater Boss
 import DummyRecycler
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
@@ -26,7 +25,7 @@ public function RegionType.getTypeSet() returns regionTypeSet
 		case CITY
 			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H', 'h00L')
 		case SNOW
-			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'H00O')
+			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'h00O')
 		case SUNKEN
 			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005', 'h00N')
 	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -51,6 +50,7 @@ public enum Permission
 public class RegionData
 	static RegionData EMPTY_REGION
 	private trigger visTrig
+	private LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	private HashMap<player, Permission> permissions = new HashMap<player, Permission>()
 	
 	RegionType rtype = RegionType.UNKNOWN
@@ -65,7 +65,7 @@ public class RegionData
 	boolean visible = false
 	boolean jumpAvailable = false
 	boolean bossRegion = false
-	boolean hasBoss = false
+	Boss boss = null
 	
 	construct(rect r)
 		theRect = r
@@ -73,6 +73,15 @@ public class RegionData
 		..registerRectEnterEventSource(r)
 		..addAction(() -> enterRect())
 		regionMap.put(r, this)
+
+	function getEscapers() returns LinkedList<Escaper>
+		return escapers
+
+	function addEscaper(Escaper e) 
+		escapers.add(e)
+	
+	function removeEscaper(Escaper e)
+		escapers.remove(e)
 		
 	function setBossRegion()
 		bossRegion = true

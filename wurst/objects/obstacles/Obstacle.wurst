@@ -1,6 +1,5 @@
 package Obstacle
 import EscaperKillers
-import RegionData
 import Remove
 
 constant EVENT_RADIUS_SMALL	= 32.

@@ -1,5 +1,4 @@
 package Attackspeed
-import Texttag
 import Preloader
 
 public constant integer ATTACK_SPEED_RATE_POSITIVE_ID = 'A02W'

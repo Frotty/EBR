@@ -1,12 +1,8 @@
 package Jumper
-import Entity
 import Escaper
 import BaseObject
-import Texttag 
 import SoundUtils
-import Image
 import TerrainBlocker
-import RegionData
 import ClosureForGroups
 
 constant int JUMPER_ID = 'n00B'

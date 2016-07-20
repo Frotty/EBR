@@ -17,24 +17,25 @@ public interface SensorListener
 public module Sensor
 	private trigger inRangeTrig = null
 	private unit actor = null
-	private static HashMap<trigger, SensorListener> sensorLiteners = new HashMap<trigger, SensorListener>()
+	private static HashMap<trigger, SensorListener> sensorListeners = new HashMap<trigger, SensorListener>()
 	
 	function addSensorListener(UnitEntity e, SensorListener listener)
 		inRangeTrig = CreateTrigger()
 		inRangeTrig.registerUnitInRangeSource(e.actor, e.radius, null)
 		this.actor = e.actor
-		sensorLiteners.put(inRangeTrig, listener)
+		sensorListeners.put(inRangeTrig, listener)
 		inRangeTrig.addAction( () -> begin
 			let trig = GetTriggeringTrigger()
-			if GetTriggerUnit().getUserData() > 0
-				let target = GetTriggerUnit().getEntity() castTo UnitEntity
+			let u = GetTriggerUnit()
+			if u.getUserData() > 0
+				let target = u.getEntity() castTo UnitEntity
 				if target != null and not target.done
-					sensorLiteners.get(trig).onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
+					sensorListeners.get(trig).onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
 		end)
 		
 	ondestroy
-		destroy sensorLiteners.get(inRangeTrig)
-		sensorLiteners.remove(inRangeTrig)
+		destroy sensorListeners.get(inRangeTrig)
+		sensorListeners.remove(inRangeTrig)
 		if inRangeTrig != null
 			actor.clearRegister()
 			inRangeTrig.destr()
@@ -60,8 +61,8 @@ public function unit.setEntity(Entity e)
 
 /** Base Entity Class  */
 public abstract class Entity implements Serializable
-	use LinkedListModule
 	RegionData currentRegion
+	use LinkedListModule
 	
 	/** 3d vector position */
 	vec3 pos

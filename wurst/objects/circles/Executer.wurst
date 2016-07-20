@@ -1,17 +1,13 @@
 package Executer
-import Colors
 import TerrainModder
 import BaseObject
 import ErrorHandling
 import Escaper
 import EscaperKillers
-import RegionData
 import Door
 import BuilderConstants
-import Texttag
 import Pointer
 import Knockbacker
-import Region
 import Unitcreator
 
 constant int 	EXECUTER_ID   = 'n01D'

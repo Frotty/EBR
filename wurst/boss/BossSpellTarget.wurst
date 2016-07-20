@@ -1,5 +1,4 @@
 package BossSpellTarget
-import BaseObject
 import SetupObject
 import InstantDummyCaster
 import Escaper
@@ -9,10 +8,6 @@ import Assets
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
 public constant int MISSILE_ID = 'A06W'
-tuple AOE_SPELL(string sfx, real aoe, real damage) 
-AOE_SPELL array aoe_spell
-tuple MISSILE_SPELL(string sfx, real radius, real damage, real speed) 
-MISSILE_SPELL array missile_spell
 
 public enum SpellType
 	NONE
@@ -20,34 +15,39 @@ public enum SpellType
 	LINE
 	MISSILE
 
+
+public HashMap<int,LinkedList<SpellTarget>> targets = new HashMap<int,LinkedList<SpellTarget>>()
+
 public class SpellTarget extends SetupObject
 	SpellType stype
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 0)
 		stype = SpellType.NONE
-//		setup.registerCastEvent(Condition(function onCast))
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		if not targets.has(owner.getId())
+			targets.put(owner.getId(), new LinkedList<SpellTarget>())
+		targets.get(owner.getId()).add(this)
 		
-	static function onCast() returns boolean
-		var data = GetTriggerUnit().getEntity()
-		if data instanceof SpellTarget
-			var spt = data castTo SpellTarget
-			var id = GetSpellAbilityId()
-			switch id
-				case AOE_ID
-					spt.stype = SpellType.AOE
-					spt.actor.setVertexColor(255,255,0,255)
-					spt.actor.removeAbility(AOE_ID)
-					spt.actor.addAbility(MISSILE_ID)
-				case MISSILE_ID
-					spt.stype = SpellType.MISSILE
-					spt.actor.setVertexColor(0,255,255,255)
-					spt.actor.removeAbility(MISSILE_ID)
-					spt.actor.addAbility(AOE_ID)
-		return false
+	function onCast()
+		let id = GetSpellAbilityId()
+		switch id
+			case AOE_ID
+				stype = SpellType.AOE
+				actor..setVertexColor(255,255,0,255)
+				..removeAbility(AOE_ID)
+				..addAbility(MISSILE_ID)
+			case MISSILE_ID
+				stype = SpellType.MISSILE
+				actor..setVertexColor(0,255,255,255)
+				..removeAbility(MISSILE_ID)
+				..addAbility(AOE_ID)
 	
 	function castSpell(int spell_id, string spell_string)
 		InstantDummyCaster.castPoint(DUMMY_PLAYER, spell_id, 1, spell_string, pos.toVec2())
+
+	ondestroy
+		targets.get(owner.getId()).remove(this)
 
 //	function castAOE(Boss root)
 //		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y ))
@@ -62,14 +62,17 @@ public class SpellTarget extends SetupObject
 //	
 //	function castMissile(Boss root)
 //		new BossMissile(root.actor.getPos3(),root.owner,this,root.missile_id)
-	
+
+constant MISSILE_RADIUS = 64.
+constant MISSILE_SPEED = 12.
+
 public class BossMissile extends HomingProjectile
 	int id
 	
 	construct(vec3 pos, player owner,Entity target, int id)
-		super(pos, missile_spell[id].radius, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), missile_spell[id].sfx)
+		super(pos, MISSILE_RADIUS, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), Other.greendragonmissile)
 		this.id = id
-		setTarget(target,HOMING.attract,missile_spell[id].speed)
+		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)
 		
 	
@@ -79,9 +82,3 @@ public class BossMissile extends HomingProjectile
 			if pos.distanceToSq(e.pos) < radius*radius
 				terminate()
 				return
-	
-public function init_BossSpellTarget()
-	missile_spell[0] = MISSILE_SPELL(Other.greendragonmissile,64,10.,14.)
-	missile_spell[1] = MISSILE_SPELL("Abilities\\Spells\\Orc\\Shockwave\\ShockwaveMissile.mdx",86,20,10.)
-	aoe_spell[0] = AOE_SPELL("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",250.,50.)
-	//preloadAbility(AOE_ID)

@@ -1,6 +1,5 @@
 package BezierMissile
 import Projectile
-import Entity
 
 public class BezierMissile extends Projectile	
 

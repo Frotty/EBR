@@ -2,10 +2,8 @@ package Weapon
 import ItemObject
 import Escaper
 import Boss
-import Entity
 import Projectile
 import Wall
-import Fx
 
 constant int NEXT_ID = 'A07D'
 constant int PREW_ID = 'A07E'

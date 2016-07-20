@@ -1,6 +1,5 @@
 package UnitProducer
 import BaseObject
-import RegionData
 import EscaperKillers
 import initlater  PlayerData
 import BuilderConstants

@@ -1,6 +1,4 @@
 package Knockbacker
-import ConfigValue
-import ObjectIdGenerator
 import Escaper
 import EscaperKillers
 import ChannelAbilityPreset
@@ -59,7 +57,7 @@ public class Knockbacker extends EscaperSensorSetup
 	..setHeroAbility(false)
 	..presetCooldown((int lvl) -> 0)
 	..setName("Increase Knockback")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNknockbackincrease.blp")
 	..presetHotkey("A")
 	..presetTooltipNormal((int lvl) -> "Increase Knockback [|cffFFCC00A|r]")
 	..presetTooltipNormalExtended((int lvl) -> "More strength to the tauren")
@@ -70,7 +68,7 @@ public class Knockbacker extends EscaperSensorSetup
 	..setHeroAbility(false)
 	..presetCooldown((int lvl) -> 0)
 	..setName("Decrease Knockback")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNknockbackdecrease.blp")
 	..presetHotkey("D")
 	..presetTooltipNormal((int lvl) -> "Decrease Knockback [|cffFFCC00D|r]")
 	..presetTooltipNormalExtended((int lvl) -> "Less strength to the tauren")

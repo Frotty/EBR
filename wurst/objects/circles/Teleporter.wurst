@@ -1,9 +1,6 @@
 package Teleporter
 import BaseObject
-import Escaper
-import SetupObject
 import PlayerData
-import RegionData
 import EscaperSensor
 
 constant TELEPORTER_ID   = 'n00C'

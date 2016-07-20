@@ -2,7 +2,6 @@ package Trap
 import BaseObject
 import Escaper
 import InstantDummyCaster
-import Texttag
 import Camerashakes
 import TerrainBlocker
 

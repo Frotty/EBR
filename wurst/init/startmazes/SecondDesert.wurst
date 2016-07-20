@@ -1,6 +1,5 @@
 package SecondDesert
 import Startmaze
-import Teleporter
 
 public class SecondDesertMaze extends Startmaze
 

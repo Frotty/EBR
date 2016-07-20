@@ -2,8 +2,6 @@ package SetupObject
 import public Entity
 import public TerrainUtils
 import public ConfigValue
-import Vectors
-import Trigger
 
 
 /**

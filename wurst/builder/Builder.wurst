@@ -1,8 +1,6 @@
 package Builder
 import Entity
-import TimerUtils
 import BuilderConstants
-import RegionData
 import Key
 import initlater InstantBuild
 import Tome
@@ -75,18 +73,15 @@ public class Builder extends UnitEntity
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 			case BM_BOSS_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
-					if not rdata.hasBoss
-						new Boss(owner, tpos, rdata.rtype.getTypeSet().bossId)
-						rdata.hasBoss = true
+					if rdata.boss == null
+						rdata.boss = new Boss(owner, tpos, rdata.getTypeSet().bossId)
 					else
 						DisplayTextToPlayer( owner, 0, 0, "|cffC51019You can only have one boss each region!") 
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
-			// case BM_SPELLTARGET_ID
-			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
-			// 		new SpellTarget(tpos, owner)
-			// 	else
-			// 		DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+			case BM_SPELLTARGET_ID
+				if rdata.canBuild(owner) and rdata.bossRegion
+					new SpellTarget(tpos, owner)
 			// case BM_DAMAGER_ID
 			// 	if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
 			// 		new BossDamager(tpos, owner)
@@ -101,7 +96,7 @@ public class Builder extends UnitEntity
 				jukeBox.checkSpell(id)
 	
 	function setBossMenu()
-		actor.addAbility(BM_BOSS_ID)
+		actor.addAbility(MENU_BOSS)
 
 	function onOrder()
 		var i = GetOrderTargetItem()
