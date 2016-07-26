@@ -48,6 +48,7 @@ public class Jumper extends StaticBaseObject
 			switch jdata.mode
 				case JumpMode.FORCED
 					edata.stop()
+					edata.pos.z = 1
 					edata.setTarget(jdata.getRallyPoint(), jdata.jumpForce.get())
 				case JumpMode.UNFORCED
 					edata.addVel(vec3(0,0, jdata.jumpForce.get()))

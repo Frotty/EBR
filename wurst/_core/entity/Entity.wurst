@@ -9,17 +9,20 @@ import public LinkedList
 import public Event
 import public Basics
 import public GameConstants
+import ErrorHandling
 import public initlater RegionData
 
-public interface SensorListener
-	function onSensor(UnitEntity source, UnitEntity target)
+public abstract class SensorListener
+	abstract function onSensor(UnitEntity source, UnitEntity target)
 	
 public module Sensor
 	private trigger inRangeTrig = null
 	private unit actor = null
 	private static HashMap<trigger, SensorListener> sensorListeners = new HashMap<trigger, SensorListener>()
-	
+
 	function addSensorListener(UnitEntity e, SensorListener listener)
+		if listener == null
+			error("Trying to add null listener")
 		inRangeTrig = CreateTrigger()
 		inRangeTrig.registerUnitInRangeSource(e.actor, e.radius, null)
 		this.actor = e.actor
@@ -30,15 +33,16 @@ public module Sensor
 			if u.getUserData() > 0
 				let target = u.getEntity() castTo UnitEntity
 				if target != null and not target.done
-					sensorListeners.get(trig).onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
+					let slistener = sensorListeners.get(trig)
+					if slistener != null
+						slistener.onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
 		end)
 		
 	ondestroy
-		destroy sensorListeners.get(inRangeTrig)
-		sensorListeners.remove(inRangeTrig)
 		if inRangeTrig != null
+			destroy sensorListeners.get(inRangeTrig)
+			sensorListeners.remove(inRangeTrig)
 			actor.clearRegister()
-			inRangeTrig.destr()
 
 
 public function unit.abortOrder() returns boolean
@@ -206,7 +210,7 @@ abstract public class FxEntity extends Entity
 	override function update()
 		pos += (vel*speedFactor)
 		fixPos()
-		
+
 	function setFx(string sfxpath)
 		fx.setFx(sfxpath)
 		

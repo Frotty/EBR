@@ -1,6 +1,5 @@
 package BossSpellTarget
 import SetupObject
-import InstantDummyCaster
 import Escaper
 import HomingProjectile
 import Assets
@@ -49,7 +48,12 @@ public class SpellTarget extends SetupObject
 		addEffect("war3mapImported\\DarknessMeteor.mdx", pos).destr()
 		let tpos = getPos().toVec2()
 		doAfter(1., () -> begin
-			forUnitsInRange(tpos, 128, (unit u) -> actor.damageTarget(u, 100))
+			forUnitsInRange(tpos, 200, (unit u) -> begin
+				if u.getEntity() instanceof Escaper
+					actor.damageTarget(u, 100)
+					let escaper = u.getEntity() castTo Escaper
+					escaper.addVel((escaper.pos-tpos)*0.5 )
+			end)
 		end)
 
 	ondestroy
@@ -71,9 +75,11 @@ constant MISSILE_RADIUS = 64.
 constant MISSILE_SPEED = 12.
 
 public class BossMissile extends HomingProjectile
-	
-	construct(vec3 pos, player owner,Entity target)
-		super(pos, MISSILE_RADIUS, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), Other.greendragonmissile)
+	unit caster = null
+
+	construct(unit caster, Entity target)
+		super(caster.getPos3with(92), MISSILE_RADIUS, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), Other.greendragonmissile)
+		this.caster = caster
 		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)
 		setTimed(10)
@@ -83,5 +89,6 @@ public class BossMissile extends HomingProjectile
 		super.update()
 		for e in escapers
 			if pos.distanceToSq(e.pos) < radius*radius
+				caster.damageTarget(e.actor, 100)
 				terminate()
 				return

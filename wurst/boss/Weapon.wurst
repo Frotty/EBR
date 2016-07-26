@@ -2,46 +2,52 @@ package Weapon
 import ItemObject
 import Escaper
 import ClosureTimers
+import public WeaponTypes
 
-constant int NEXT_ID = 'A07D'
-constant int PREW_ID = 'A07E'
-constant weaponcount = 4
-
-public interface WeaponListener
-	function onAttack(Escaper attacker)
-
-tuple Weapon(int itemId, int abilId, WeaponListener listener)
-
-Weapon array weapons
+constant WEAPON_DUMMY = 'h00K'
+public constant ATTACK_MELEE = 'A07G'
+public constant ATTACK_RANGED = 'A07H'
 
 public class WeaponObject extends ItemObject
 	Escaper holder = null
 	int weaponId = 0
 
 	construct(vec2 pos, player owner)
-		super(pos, createItem(weapons[weaponId].itemId, pos), createUnit(owner, 'h00K', pos, angle(0)))
+		super(pos, createItem(weapontypes[weaponId].itemId, pos), createUnit(owner, WEAPON_DUMMY, pos, angle(0)))
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function onPickup(Escaper e)
-	
-	function pickedUp(Escaper escaper)
-		holder = escaper
-		holder.actor.addAbility(weapons[weaponId].abilId)
-		setup.hide()
+		if e.weapon == null
+			e.weapon = this
+			e.weaponAttach = e.actor.addEffect(weapontypes[weaponId].attachment, "hand")
+			holder = e
+			setup.hide()
+			if weapontypes[weaponId].melee
+				holder.actor.addAbility(ATTACK_MELEE)
+			else
+				holder.actor.addAbility(ATTACK_RANGED)
+		else
+			fixItem()
 		
 	override function onDrop(Escaper e)
-		holder.actor.removeAbility(weapons[weaponId].abilId)
+		holder.actor..removeAbility(ATTACK_MELEE)..removeAbility(ATTACK_RANGED)
+		holder.weapon = null
+		e.weaponAttach.destr()
+		e.weaponAttach = null
 		holder = null
 		setup..setXY(pos.toVec2())..show()
+		fixItem()
+
+	function fixItem()
 		nullTimer(() -> begin
 			actorItem.remove()
-			actorItem = CreateItem(weapons[weaponId].itemId, pos.x, pos.y )
+			actorItem = CreateItem(weapontypes[weaponId].itemId, pos.x, pos.y )
 			actorItem.setUserData(this castTo int)
 		end)
 		
 	
 	override function onUse(Escaper e)
-		weapons[weaponId].listener.onAttack(e)
+		weapontypes[weaponId].listener.onAttack(e)
 		
 	override function update()
 		if holder != null
@@ -50,10 +56,10 @@ public class WeaponObject extends ItemObject
 	function onCast()
 		let id = GetSpellAbilityId()
 		for i = 0 to weaponcount - 1
-			if weapons[i].abilId == id
+			if weapontypes[i].abilId == id
 				weaponId = i
 				actorItem.remove()
-				actorItem = createItem(weapons[weaponId].itemId, pos.toVec2())
+				actorItem = createItem(weapontypes[weaponId].itemId, pos.toVec2())
 				actorItem.setUserData(this castTo int)
 		
 	
@@ -81,9 +87,4 @@ public class WeaponObject extends ItemObject
 		
 	// 	ENUM_GROUP.clear()
 		
-public function init_Weapon()
-	weapons[0] = Weapon('I00U','A07N', (Escaper e) -> print(""))
-	weapons[1] = Weapon('I00V','A07D', (Escaper e) -> print("Abilities\\Weapons\\PriestMissile\\PriestMissile.mdl") )
-	weapons[2] = Weapon('I00W','A07O', (Escaper e) -> "Abilities\\Spells\\Items\\AIlb\\AIlbSpecialArt.mdl")
-	weapons[3] = Weapon('I00X','A07E', (Escaper e) -> "Abilities\\Weapons\\LichMissile\\LichMissile.mdl")
 	

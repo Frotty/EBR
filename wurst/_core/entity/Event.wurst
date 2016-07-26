@@ -104,6 +104,7 @@ init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function EventListener.generalEventCallback)

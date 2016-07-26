@@ -1,11 +1,12 @@
 package EscaperClasses
 
 import Escaper
-
-constant int REINCARNATION_ID = 'A02X'
-constant int SPEEDWAVE_ID = 'A06P'
-constant int TOMB_DUMMY_ID = 'u00D'
-constant int STAGNANCYSHIELD_ID = 'A008'
+import Assets
+constant REINCARNATION_ID = 'A02X'
+constant SPEEDWAVE_ID = 'A06P'
+constant TOMB_DUMMY_ID = 'u00D'
+constant STAGNANCYSHIELD_ID = 'A008'
+constant SLOWWAVE_ID = 'A07Z'
 
 public class HolyEscaper extends Escaper
 	unit revivetomb = null
@@ -16,9 +17,13 @@ public class HolyEscaper extends Escaper
 	override function onCast(int id)
 		super.onCast(id)
 		if id == REINCARNATION_ID
-			if revivetomb != null
-				revivetomb.remove()
-			revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
+			if not poisoned and not sliding
+				if revivetomb != null
+					revivetomb.remove()
+				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
+			else
+				actor..removeAbility(REINCARNATION_ID)..addAbility(REINCARNATION_ID)
+				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			
 	override function revive()
 		super.revive()
@@ -44,13 +49,17 @@ public class IceEscaper extends Escaper
 				var value = 10 + GetUnitAbilityLevel(actor,SPEEDWAVE_ID)*2.5
 				DestroyEffect( AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", pos.x, pos.y))
 				addVel( vec3(value * Cos(angl * DEGTORAD),value * Sin(angl * DEGTORAD),0.))
+		else if id == SLOWWAVE_ID
+			let lvl = actor.getAbilityLevel(id) / 4.
+			if sliding
+				speedFactor = 0.9 + lvl
+				addEffect(Other.impaletargetdust, pos).destr()
 		
 	
 public class StrongEscaper extends Escaper
 	boolean invulnerable = false
 	effect shieldeffect = null
-	real shieldX = 0.
-	real shieldY = 0.
+	vec2 shieldPos = vec2(0,0)
 	real shieldtimer = 0.
 	
 	construct(vec3 pos, player owner, int typ )
@@ -60,15 +69,19 @@ public class StrongEscaper extends Escaper
 		super.update()
 		if invulnerable
 			shieldtimer -= ANIMATION_PERIOD
-			if shieldX != pos.x or shieldY != pos.y or shieldtimer <= 0
+			if pos.distanceTo2dSq(shieldPos) > 24*24 or shieldtimer <= 0
+				if shieldtimer > 0
+					createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				shieldtimer = 0
 				actor.removeAbility('Avul')
 				invulnerable = false
-				DestroyEffect(shieldeffect)
+				shieldeffect.destr()
 				
 	override function kill()
 		if not invulnerable
 			super.kill()
+		else
+			addEffect(Other.spellshieldcaster, pos).destr()
 				
 				
 	override function onCast(int id)
@@ -78,9 +91,8 @@ public class StrongEscaper extends Escaper
 			shieldtimer = 1 + GetUnitAbilityLevel(actor, id)*1.
 			actor.addAbility('Avul')
 			actor.setPos(pos.toVec2())
-			shieldX = pos.x
-			shieldY = pos.y
-			shieldeffect = AddSpecialEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", shieldX, shieldY)
+			shieldPos = pos.toVec2()
+			shieldeffect = addEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", shieldPos)
 
 	
 

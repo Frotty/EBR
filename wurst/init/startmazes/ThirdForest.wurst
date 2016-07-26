@@ -1,8 +1,5 @@
 package ThirdForest
 import Startmaze
-import Unitcreator
-import Executer
-import BuilderConstants
 public class ThirdForestMaze extends Startmaze
 
 	construct(RegionData rd)
@@ -24,90 +21,11 @@ public class ThirdForestMaze extends Startmaze
 			new SmallKiller(u5) 
 			
 		ENUM_GROUP.clear()
-		
-		IssuePointOrder(gg_unit_h018_0149, "patrol", 368, -6647 )
-		IssuePointOrder(gg_unit_h018_0150, "patrol", 128, -6130 )
-		IssuePointOrder(gg_unit_h018_0151, "patrol", -284, -6315 )
-		IssuePointOrder(gg_unit_h018_0148, "patrol", -237, -6525 )
 
-		IssuePointOrder(gg_unit_n009_0154, "patrol", 786, -6000 )
-		IssuePointOrder(gg_unit_n009_0152, "patrol", 775, -6400 )
-		IssuePointOrder(gg_unit_n009_0153, "patrol", 624, -6648 )
-		IssuePointOrder(gg_unit_n009_0155, "patrol", 752, -5644 )
-		IssuePointOrder(gg_unit_n009_0177, "patrol", -1050, -5609 )
-		IssuePointOrder(gg_unit_n009_0178, "patrol", -1270, -5609 )
-		IssuePointOrder(gg_unit_n009_0143, "patrol", -1921, -4364 )
-		IssuePointOrder(gg_unit_n009_0205, "patrol", -1922, -4482 )
-		IssuePointOrder(gg_unit_n009_0203, "patrol", 390, -3855 )
-		IssuePointOrder(gg_unit_n009_0204, "patrol", 780, -4222 )
-		UnitCreator u = new UnitCreator(vec2(gg_unit_n006_0165.getX(),gg_unit_n006_0165.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1024,-6785 )
-		u.active = true
-		gg_unit_n006_0165.remove()
-		u = new UnitCreator(vec2(gg_unit_n006_0166.getX(),gg_unit_n006_0166.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1024,-6400 )
-		u.active = true
-		u = new UnitCreator(vec2(gg_unit_n006_0175.getX(),gg_unit_n006_0175.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1666,-6982 )
-		u.active = true
-		gg_unit_n006_0175.remove()
-		u = new UnitCreator(vec2(gg_unit_n006_0168.getX(),gg_unit_n006_0168.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1728,-6147 )
-		u.active = true
-		gg_unit_n006_0168.remove()
-		u = new UnitCreator(vec2(gg_unit_n006_0167.getX(),gg_unit_n006_0167.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1410,-7100 )
-		u.active = true
-		gg_unit_n006_0167.remove()
-		u = new UnitCreator(vec2(gg_unit_n006_0169.getX(),gg_unit_n006_0169.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally",  -1159,-7037 )
-		u.active = true
-		gg_unit_n006_0169.remove()
+		let t = new Teleporter(gg_unit_n00C_0024.getPos(), gg_unit_n00C_0024.getOwner())
+		gg_unit_n00C_0024.remove()
+		t.setRallyPoint(vec2(-6000,-6900))
 		
-		u = new UnitCreator(vec2(gg_unit_n006_0188.getX(),gg_unit_n006_0188.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -896,-3974 )
-		u.active = true
-		gg_unit_n006_0188.remove()
-		u = new UnitCreator(vec2(gg_unit_n006_0189.getX(),gg_unit_n006_0189.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1600,-3777 )
-		u.active = true
-		gg_unit_n006_0189.remove()
-		u = new UnitCreator(vec2(gg_unit_n006_0190.getX(),gg_unit_n006_0190.getY()),STAFF_PLAYER)
-		IssuePointOrder(u.actor, "setrally", -1346,-4225)
-		u.active = true
-		gg_unit_n006_0190.remove()
-		
-		IssueTargetOrder(gg_unit_h019_0159, "attack", gg_unit_u004_0161 )
-		gg_unit_h019_0159.addAbility(LOCUST_ID)
-		IssuePointOrder(gg_unit_u004_0161, "patrol", -771, -5372 )
-		IssueTargetOrder(gg_unit_h019_0158, "attack", gg_unit_u004_0162 )
-		gg_unit_h019_0158.addAbility(LOCUST_ID)
-		IssuePointOrder(gg_unit_u004_0162, "patrol", -128, -5100 )
-		IssueTargetOrder(gg_unit_h019_0157, "attack", gg_unit_u004_0163 )
-		gg_unit_h019_0157.addAbility(LOCUST_ID)
-		IssuePointOrder(gg_unit_u004_0163, "patrol", 512, -4870 )
-		IssueTargetOrder(gg_unit_h019_0160, "attack", gg_unit_u004_0164 )
-		gg_unit_h019_0160.addAbility(LOCUST_ID)
-		IssuePointOrder(gg_unit_u004_0164, "patrol", -758, -4888 )
-		
-		var t = new Teleporter(vec2(gg_unit_n00C_0202.getX(),gg_unit_n00C_0202.getY()),STAFF_PLAYER)
-		IssuePointOrder(t.actor, "setrally", STARTX,STARTY)
-		gg_unit_n00C_0202.remove()
-	 
-		Executer e = new Executer(vec2(gg_unit_n01D_0186.getX(),gg_unit_n01D_0186.getY()),STAFF_PLAYER)
-		e.eventMode = Emode.ONESHOT
-		e.actionMode = Amode.CHANGETERRAIN
-		e.tiletype = CONTROLLABLEICE
-		IssuePointOrder( e.actor, "setrally", -128,-3812 )
-		gg_unit_n01D_0186.remove()
-		e = new Executer(vec2(gg_unit_n01D_0187.getX(),gg_unit_n01D_0187.getY()),STAFF_PLAYER)
-		e.eventMode = Emode.ONESHOT
-		e.actionMode = Amode.CHANGETERRAIN
-		e.tiletype = CONTROLLABLEICE
-		IssuePointOrder( e.actor, "setrally", 0,-3812 )
-		gg_unit_n01D_0187.remove()
-	
-
 	override function getStart() returns vec2
 		return vec2(830, -7050)
 

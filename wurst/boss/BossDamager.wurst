@@ -23,7 +23,7 @@ public class BossDamager extends StaticBaseObject
 			var es = u.getEntity()	
 			if es instanceof Boss
 				var boss = es castTo Boss
-				boss.onDamage(e.owner, damage)
+				boss.onDamage(e, damage)
 		ENUM_GROUP.clear()
 		
 	static function onInRange()

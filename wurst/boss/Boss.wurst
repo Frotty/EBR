@@ -18,7 +18,8 @@ constant MISSILE_SPELL_ID = 'A06W'
 constant REVIVE_ID = 'A07L'
 
 public class Boss extends SetupObject
-	real maxHp = 200
+	real maxHp = 400.
+	real currentHP = 400
 	CustomBar hpBar
 
 	construct( player owner, vec2 tpos, int id)
@@ -30,11 +31,10 @@ public class Boss extends SetupObject
 	override function update()
 		super.update()
 		hpBar.setPosXY(pos.x-100, pos.y + 100)
-		hpBar.setValue(setup.getHP() / maxHp * 100.0)
+		hpBar.setValue(currentHP / maxHp * 100.0)
 
-	function onDamage(player atker, real dmg)
-		pData[atker.getId()].escaper.actor.damageTarget(setup,dmg)
-		pData[atker.getId()].escaper.actor.damageTarget(actor,dmg)
+	function onDamage(Escaper escaper, real dmg)
+		currentHP -= dmg
 		
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -76,7 +76,7 @@ public class Boss extends SetupObject
 			case MISSILE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.MISSILE)
 				for target in tgts
-					new BossMissile(getPos().add(0,0,92),owner,target)
+					new BossMissile(actor,target)
 				destroy tgts
 			case REVIVE_ID
 				revive()

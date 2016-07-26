@@ -30,7 +30,7 @@ public class JukeBox
 	LinkedList<int> randomQueue = new LinkedList<int>()
 	boolean lastWasRequest = false
 	Music currentMusic
-	CallbackSingle cb = null
+	boolean ignoreOne = false
 	
 	construct()
 		for n = 0 to 3
@@ -41,12 +41,13 @@ public class JukeBox
 					randomQueue.add(i)
 				
 	function playNextMusic()
-		if cb != null
-			destroy cb
-			cb = null
+		if ignoreOne
+			ignoreOne = false
+			return
 		StopMusic(false)
-		lastWasRequest = false
 		if requests.getSize() > 0
+			if not lastWasRequest
+				ignoreOne = true
 			lastWasRequest = true
 			let req = requests.pop()
 			currentMusic = musics.get(req.id)
@@ -59,16 +60,13 @@ public class JukeBox
 				return
 			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r", 10)
 			randomQueue.addtoStart(id)
-		else
-			
+			lastWasRequest = false	
 		if currentMusic != null
 			PlayMusic(currentMusic.path)
-			cb = () -> playNextMusic()
-			doAfter(currentMusic.duration + 0.25, cb)
+			doAfter(currentMusic.duration + 0.25, () -> playNextMusic())
 		else
 			StopMusic(false)
-			cb = () -> playNextMusic()
-			doAfter(60, cb)
+			doAfter(60, () -> playNextMusic())
 	
 	function checkSpell(int id)
 		int idx = 0

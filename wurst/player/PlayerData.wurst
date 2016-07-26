@@ -3,7 +3,6 @@ import MultiboardClass
 import public Escaper
 import BuilderConstants
 import Builder
-import CodeManager
 import PickSystem
 import TerrainModder
 import UnitProducer
@@ -75,13 +74,11 @@ public class PlayerData
 		if localFilesEnabled and allPlayers.getSize() > 0
 			if time
 				XP += amount
-				this.createNewPlayerFile()	
 			else if lastExpGain < minutes
 				lastExpGain = minutes
 				printLog(Loglevel.DEBUG, "add current xp:" + XP.toString())
 				XP += amount
 				printLog(Loglevel.DEBUG, "add new xp:" + XP.toString())
-				this.createNewPlayerFile()
 			updateRank()
 	
 	function setXp(int amount)

@@ -4,8 +4,8 @@ import Assets
 import public Entity
 import BuilderConstants
 import RevivePointModifier
-import ClosureTimers
 import TerrainBlocker
+import initlater Weapon
 import initlater ReviveManager
 
 constant real COLL_RADIUS = 32.
@@ -30,9 +30,11 @@ public class Escaper extends UnitEntity
 	int deaths = 0
 	effect lavaEffect
 	effect poisonEffect
+	vec2 walkVel = vec2(0,0)
 	vec2 slideVelocity = vec2(0,0)
-	vec2 trackVelocity = vec2(0,0)
-	vec2 vortexVelocity = vec2(0,0)
+	vec2 otherVel = vec2(0,0)
+	WeaponObject weapon = null
+	effect weaponAttach = null
 
 	boolean alive = true
 	boolean selectatrevive = true
@@ -85,8 +87,7 @@ public class Escaper extends UnitEntity
 		sliding = false
 		slideVelocity = vec2(0,0)
 		vel = vec3(0,0,0)
-		trackVelocity = vec2(0,0)
-		vortexVelocity = vec2(0,0)
+		otherVel = vec2(0,0)
 		
 	
 	override function onGroundHit()
@@ -121,7 +122,8 @@ public class Escaper extends UnitEntity
 			setLava(false)
 		else
 			if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.ORANGEGOO castTo int)
-				vel += actor.getFacingAngle().toVec(2)
+				vel += walkVel
+				vel *= 1.025
 			vel *= 0.96
 			sliding = false
 			setLava(false)
@@ -147,15 +149,14 @@ public class Escaper extends UnitEntity
 			else if alive
 				kill()
 		
-		pos += trackVelocity
-		trackVelocity = vec2(0,0)
-		pos += vortexVelocity
-		vortexVelocity = vec2(0,0)
+		pos += otherVel
+		otherVel = vec2(0,0)
 	
 	override function update()
 		if currentRegion != null
-			pos.x = actor.getX()
-			pos.y = actor.getY()
+			let newPos = actor.getPos()
+			walkVel = newPos-pos.toVec2()
+			pos = newPos.withZ(pos.z)
 			physicsUpdate(this)
 			pos += vel
 			pos += slideVelocity * (1-speedFactor)
@@ -165,7 +166,7 @@ public class Escaper extends UnitEntity
 				setXY(pos)
 		
 	function getRealVel() returns vec3
-		return vel + slideVelocity + trackVelocity + vortexVelocity
+		return vel + slideVelocity + otherVel + walkVel
 
 	function revive()
 		sliding = false
@@ -234,6 +235,7 @@ public class Escaper extends UnitEntity
 		data.onCast(GetSpellAbilityId())
 		
 	function onCast(int id)
+		actor.setAnimation("spell")
 		if id == JUMP_SPELL
 			if not flying
 				addPos(vec3(0,0,1))
@@ -243,6 +245,7 @@ public class Escaper extends UnitEntity
 					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
 				else
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
+				actor.setAnimation("spell")
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
@@ -250,8 +253,12 @@ public class Escaper extends UnitEntity
 		else if id == REMOVE_REV_MOD_ID
 			if revmod != null
 				destroy revmod
+				revmod = null
 			UnitRemoveAbility( actor, REMOVE_REV_MOD_ID )
 			UnitAddAbility( actor, CREATE_REV_MOD_ID )
+		else if id == ATTACK_MELEE or id == ATTACK_RANGED
+			weapon.onUse(this)
+			actor.setAnimation("attack")
 			
 	ondestroy
 		lavaEffect.destr()

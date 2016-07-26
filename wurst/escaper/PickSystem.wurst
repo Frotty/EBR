@@ -1,7 +1,6 @@
 package PickSystem
 import initlater  PlayerData
 import EscaperClasses
-import CodeManager
 import RevivePointModifier
 
 unit array pickheros
@@ -133,8 +132,6 @@ function keypick()
 			SetUnitVertexColor( pickheros[currentView[pd.id]-1], 0, 0, 0, 0 )
 			SetTextTagVisibility(herott[herocount],false)
 			
-		if pd.localFilesEnabled
-			pd.loadPlayerFile()
 
 	else
 		return

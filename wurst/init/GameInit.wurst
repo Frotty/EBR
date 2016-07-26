@@ -13,7 +13,6 @@ import Startmazes
 import EntityManagement
 import ItemObject
 import Pointer
-import Weapon
 import Invisible
 import GlobalShop
 import Remove
@@ -62,8 +61,6 @@ function initGame()
 	printLog(Loglevel.DEBUG, "Init - Reinc")
 	init_Pointer()
 	printLog(Loglevel.DEBUG, "Init - Pointer")
-	init_Weapon()
-	printLog(Loglevel.DEBUG, "Init - Weapon")
 	init_GlobalShop()
 	printLog(Loglevel.DEBUG, "Init - Shop")
 	invis_init()

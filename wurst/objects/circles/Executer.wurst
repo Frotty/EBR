@@ -212,7 +212,6 @@ public class Executer extends StaticBaseObject
 	function createUnit()
 		let rallyPos = getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)
-		let tset = data.getTypeSet()
 		if data.canBuild(owner)
 			switch actionUnit
 				case ActionUnit.SMALLKILLER

@@ -33,7 +33,7 @@ public class Tracks extends UnitEntity
 			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
-				escaper.trackVelocity += vec3(Cos((angl+90) * DEGTORAD) * trackSpeed.get(), Sin((angl+90) * DEGTORAD) * trackSpeed.get(), 0. )
+				escaper.otherVel += vec3(Cos((angl+90) * DEGTORAD) * trackSpeed.get(), Sin((angl+90) * DEGTORAD) * trackSpeed.get(), 0. )
 		
 				
 	function recreateDummy()

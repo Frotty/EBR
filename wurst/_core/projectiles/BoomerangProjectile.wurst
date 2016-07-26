@@ -1,0 +1,14 @@
+package BoomerangProjectile
+import Projectile
+import Escaper
+import Assets
+
+public class Boomerang extends Projectile
+
+	construct(Escaper caster, vec2 target)
+		super(caster.pos, 32, caster.owner, caster.actor.getFacingAngle(), Other.sentinelmissile)
+		let direction = pos.angleTo2d(target).toVec(1).toVec3()
+		let distance = pos.distanceTo2d(target)
+		let perp_dir = vec3(-direction.y, direction.x, 0)
+		let par_acc = (-(1500 * 1500) / (2 * distance))
+		let perp_acc = 2 * par_acc * 300 / 1500

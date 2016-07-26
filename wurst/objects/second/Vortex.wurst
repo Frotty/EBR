@@ -18,7 +18,7 @@ public class Vortex extends UnitEntity
 		for e in currentRegion.getEscapers()
 			if pos.toVec2().distanceToSq( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
 				var angl = e.pos.toVec2().angleTo(pos.toVec2())
-				e.vortexVelocity += vec3( Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0 )
+				e.otherVel += vec3( Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0 )
 		
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
