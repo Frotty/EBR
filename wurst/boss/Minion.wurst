@@ -1,0 +1,15 @@
+package Minion
+import public EscaperSensor
+
+public constant COLL_SIZE_MINION = 68.
+
+public class Minion extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
