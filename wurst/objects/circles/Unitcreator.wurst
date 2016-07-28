@@ -41,7 +41,7 @@ public class UnitCreator extends StaticBaseObject
 				
 	static function create(UnitCreator obj)
 		let rallyPos = obj.getRallyPoint().toVec2()
-		let pos = obj.pos.toVec2()// + vec2(-0.01,0)
+		let pos = obj.pos.toVec2() + vec2(-0.01,0)
 		EscaperSensorSetup ek = null
 		switch obj.spawnUnitType
 			case 'BIGK'

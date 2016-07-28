@@ -16,6 +16,7 @@ function onCommandChat()
 		case "rename"
 			if str.indexOf(" ") < str.length()
 				var nstr = str.substring(str.indexOf(" ") + 1, str.length())
+				p.setName(nstr)
 		case "clear"
 			if GetLocalPlayer() == p
 				ClearTextMessages()

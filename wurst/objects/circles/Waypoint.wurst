@@ -36,7 +36,7 @@ public class Waypoint extends StaticBaseObject
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
-		let rallyPos = obj.getRallyPoint()
+		let rallyPos = obj.getRallyPoint() + vec2(-0.01,0)
 		if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 			var data = e castTo UnitEntity
 			if not obj.wisps and data instanceof TeleporterTarget
