@@ -106,11 +106,15 @@ public class SetupBox extends UnitEntity
 				rdata.resetTiles()
 			case JUMP_ID
 				let rdata = getRegionData(pos)
-				if rdata.jumpAvailable
-					printTimedToPlayer("|cff448C29Escapers can't jump in this region!", 25, owner)
-				else
-					printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
 				rdata.jumpAvailable = not rdata.jumpAvailable
+				if rdata.jumpAvailable
+					printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
+					for escaper in rdata.getEscapers()
+						escaper.actor.addAbility(JUMP_SPELL)
+				else
+					printTimedToPlayer("|cff448C29Escapers can't jump in this region!", 25, owner)
+					for escaper in rdata.getEscapers()
+						escaper.actor.removeAbility(JUMP_SPELL)
 			case BOSS_MODE_ID
 				if pData[owner.getId()].XP >= 0 //500
 					BOSS_SOUND.play()

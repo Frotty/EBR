@@ -19,26 +19,24 @@ public class Tracks extends UnitEntity
 	int tsize = 0
 	int height = 0
 	int width  = 0
-	int angl = 0
+	vec2 dir = UP
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner, TRACKS[0], pos.x, pos.y, 0) )
+		super( pos.toVec3(), createUnit(owner, TRACKS[0], pos, angle(0)) )
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.setUserData(this castTo int)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
-		
 	override function update()
-		for escaper in escapers
+		for escaper in currentRegion.getEscapers()
 			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
-				escaper.otherVel += vec3(Cos((angl+90) * DEGTORAD) * trackSpeed.get(), Sin((angl+90) * DEGTORAD) * trackSpeed.get(), 0. )
+				escaper.otherVel += dir * trackSpeed.get()
 		
 				
 	function recreateDummy()
 		actor.remove()
-		actor = CreateUnit(owner, TRACKS[tsize], pos.x, pos.y, angl.toReal())
+		actor = createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees())
 		
 	ondestroy
 		setup.remove()
@@ -51,37 +49,47 @@ public class Tracks extends UnitEntity
 				trackSpeed.increment(this, 20)
 			case DEC_ID
 				trackSpeed.decrement(this, 1)
+				
 			case INCLENGTH_ID
 				if tsize < 2
 					tsize++
-					if angl == 0 or angl == 180
-						height++
-					else
-						width++
-					recreateDummy()
+					updateTrack()
 			case DECLENGTH_ID
 				if tsize > 0
 					tsize--
-					if angl == 0 or angl == 180
-						height--
-					else
-						width--
-					recreateDummy()
+					updateTrack()
 			case LEFT_ID
-				angl += 90
-				var temp1 = height
-				height = width
-				width = temp1
-				recreateDummy()
+				if dir == UP
+					dir = LEFT
+				else if dir == LEFT
+					dir = DOWN
+				else if dir == DOWN
+					dir = RIGHT
+				else
+					dir = UP
+				updateTrack()
 			case RIGHT_ID
-				angl -= 90
-				var temp2 = height
-				height = width
-				width = temp2
-				recreateDummy()
+				if dir == UP
+					dir = RIGHT
+				else if dir == RIGHT
+					dir = DOWN
+				else if dir == DOWN
+					dir = LEFT
+				else
+					dir = UP
+				updateTrack()
 		actor.setTimeScale(0.5+trackSpeed.get()/6)
 		
-	
+	function updateTrack()
+		if dir == UP or dir == DOWN
+			width = 0
+			height = tsize
+		else
+			height = 0
+			width = tsize
+		recreateDummy()
+		
+
 init
 	TRACKS[0] = 'n01R'
 	TRACKS[1] = 'n01L'

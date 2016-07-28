@@ -14,7 +14,7 @@ public class Bombertower extends StaticBaseObject
 	boolean skipOrder = false
 
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., CODE_NULL )
+		super( pos, CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. ), 0., CODE_NULL, CODE_NULL )
 		actor..addAbility(GHOST_VIS_ID)..addAbility(LOCUST_ID)
 		dummy = CreateUnit(owner, BOMBERTOWER_ID, pos.x, pos.y, 0. )
 		dummy..addAbility(GHOST_INVIS_ID)..setEntity(this)..setScale(0.5)

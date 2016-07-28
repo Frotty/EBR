@@ -2,6 +2,7 @@ package RegionData
 import initlater Builder
 import initlater Escaper
 import initlater Boss
+import PlayerData
 import DummyRecycler
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
@@ -113,7 +114,7 @@ public class RegionData
 		return Permission.GUEST
 		
 	function canBuild(player p) returns boolean
-		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or p.getName() == "Frotty"
+		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or pData[p.getId()].admin
 		
 	static function enterRect()
 		var u = GetTriggerUnit()

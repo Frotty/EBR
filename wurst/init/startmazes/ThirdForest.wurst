@@ -5,6 +5,7 @@ public class ThirdForestMaze extends Startmaze
 	construct(RegionData rd)
 		rdata = rd
 		rdata.setType(RegionType.CITY, false)
+		rdata.jumpAvailable = true
 	
 	override function initMaze()
 		inited = true
@@ -22,8 +23,8 @@ public class ThirdForestMaze extends Startmaze
 			
 		ENUM_GROUP.clear()
 
-		let t = new Teleporter(gg_unit_n00C_0024.getPos(), gg_unit_n00C_0024.getOwner())
-		gg_unit_n00C_0024.remove()
+		let t = new Teleporter(gg_unit_n00C_0044.getPos(), gg_unit_n00C_0044.getOwner())
+		gg_unit_n00C_0044.remove()
 		t.setRallyPoint(vec2(-6000,-6900))
 		
 	override function getStart() returns vec2

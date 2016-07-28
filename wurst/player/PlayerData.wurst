@@ -4,7 +4,7 @@ import public Escaper
 import BuilderConstants
 import Builder
 import PickSystem
-import TerrainModder
+import initlater TerrainModder
 import UnitProducer
 import RevivePointModifier
 import PlayerMemoryData
@@ -25,6 +25,7 @@ public class PlayerData
 	string mbname
 	string rank = "Newbie"
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+	boolean admin = false
 
 	Escaper escaper
 	Builder builder
@@ -50,8 +51,8 @@ public class PlayerData
 		pData[id] = this
 		name = GetPlayerName(p)
 		mbname = name
-		if mbname == "Frotty" or mbname == "FrottyZ"
-			AddSpecialEffectTarget( "Righteousness.MDX", escaper.actor, "chest" )
+		if mbname == "Frotty"
+			admin = true
 		for int i = 0 to 999
 			if names[i] == null
 				break
@@ -102,7 +103,7 @@ public class PlayerData
 		else if XP > 1000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
 		
-		if name == "Frotty" or name == "FrottyZ"
+		if admin
 			rank  = "|cffADD642*Creator*"
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
 

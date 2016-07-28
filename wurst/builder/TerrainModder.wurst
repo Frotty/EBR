@@ -5,6 +5,7 @@ import ChannelAbilityPreset
 import RegionData
 import Event
 import TerrainUtils
+import PlayerData
 
 public constant int ICECONTROL = 'H007'
 public constant int ICEUNCONTROL = 'H008'
@@ -57,7 +58,7 @@ public class TerrainModder
 		let owner = actor.getOwner()
 		let name = owner.getName()
 		let id = GetUnitTypeId(actor)
-		if rdata.canBuild(owner) or name == "Frotty" or name == "FrottyZ"
+		if rdata.canBuild(owner)
 			if id == ICECONTROL
 				if modification == 1
 					orderPos.changeTerrain(REVICE, brushsize, brushsize, brushshape, owner)

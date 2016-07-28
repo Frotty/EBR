@@ -69,7 +69,7 @@ public function setStartTeleport(int tpid, int locid)
 			IssuePointOrder(t.actor, "setrally", 3456,-4160 )
 			createTTEx(t.pos, "Desert Startmaze", 11, colorA( 230,180,0, 0 ))
 		case 2
-			IssuePointOrder(t.actor, "setrally", 826,-7041 )
+			IssuePointOrder(t.actor, "setrally", 500,-6900 )
 			createTTEx(t.pos, "Forest Startmaze", 11, colorA( 230,180,0, 255 ))
 		case 3
 			IssuePointOrder(t.actor, "setrally", -2433,-6148 )

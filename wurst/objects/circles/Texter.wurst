@@ -8,11 +8,12 @@ string array stdcolors
 
 public class Texter extends StaticBaseObject
 	texttag text = CreateTextTag()
+	real xoffset = 0
 	boolean hidden = true
 	color col = color(255,255,255)
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep ) 
+		super( pos, CreateUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep, CODE_NULL ) 
 		actor.setUserData(this castTo int)
 		text..setColor( col.red,col.green,col.blue, 0 )..setPos( actor.getX(),actor.getY(), 0 )..setVisibility( false )..setPermanent( true )
 		
@@ -28,6 +29,7 @@ public class Texter extends StaticBaseObject
 		for unit u in getSelectedTexters(GetTriggerPlayer())
 			thistype obj = u.getUserData() castTo thistype
 			obj.text.setVisibility( true )
+			obj.text.setPos(obj.pos - vec3(obj.xoffset,0,0))
 			obj.hidden = false
 			createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
@@ -48,9 +50,10 @@ public class Texter extends StaticBaseObject
 		for unit u in getSelectedTexters(GetTriggerPlayer())
 			thistype obj = u.getUserData() castTo thistype
 			obj.text.setText(ttext, 10)
+			obj.clearQuestionmark()
+			obj.xoffset = ttext.length() / 2. * 6
 			if obj.hidden
-				obj.clearQuestionmark()
-				createTTEx(obj.pos - vec2(ttext.length() / 2. * 4,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
+				createTTEx(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function setColor()
 		string chatmsg = GetEventPlayerChatString()
@@ -109,7 +112,7 @@ public function init_Texter()
 	trigger coltrig = CreateTrigger()
 	trigger shotrig = CreateTrigger()
 	trigger hidtrig = CreateTrigger()
-	for int i = 8 to 11
+	for int i = 0 to 11
 		TriggerRegisterPlayerChatEvent(textrig,Player(i), "-st ", false)
 		TriggerRegisterPlayerChatEvent(textrig,Player(i), "-settext ", false)
 		TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-sc ", false)

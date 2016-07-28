@@ -24,6 +24,7 @@ import TerrainBlocker
 import Fountain
 import Decoration
 import Pedestal
+import PlayerData
 
 function condition() returns boolean
 	return (GetTriggerUnit().getEntity()) instanceof Builder
@@ -52,7 +53,7 @@ public function callback()
 	data.b.updatePos()
 	data.b.setPos(data.b.pos)
 	var rdata = getRegionData(data.tpos)
-	if rdata != null and rdata.canBuild(data.b.owner) or data.b.owner.getName() == "Frotty" or data.b.owner.getName() == "FrottyZ"
+	if rdata != null and rdata.canBuild(data.b.owner)
 		switch data.oId
 			case buildorders[1]
 				new Jumper(vec2(data.tpos.x,data.tpos.y), data.b.owner)

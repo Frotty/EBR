@@ -18,7 +18,7 @@ public class TerrainBlocker extends StaticBaseObject
 	boolean silent = false
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, BLOCKER_ID, ((pos.x/128).round())*128., ((pos.y/128).round())*128., 0. ), 0, CODE_NULL)
+		super(pos, CreateUnit(owner, BLOCKER_ID, ((pos.x/128).round())*128., ((pos.y/128).round())*128., 0. ), 0, CODE_NULL, CODE_NULL)
 		m = matrixpos((pos.x/128.0).round(), (pos.y/128.0).round())
 		if tileModifierMap.hasInt(m.x, m.y)
 			let bs = bitset(tileModifierMap.loadInt(m.x, m.y))

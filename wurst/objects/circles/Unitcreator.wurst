@@ -21,7 +21,7 @@ public class UnitCreator extends StaticBaseObject
 	TimerMode tmode = TimerMode.FIXED
 
 	construct( vec2 pos, player owner)
-		super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL )
+		super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL , CODE_NULL)
 		active = false
 		actor.addAbility(FIXED_ID)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -41,7 +41,7 @@ public class UnitCreator extends StaticBaseObject
 				
 	static function create(UnitCreator obj)
 		let rallyPos = obj.getRallyPoint().toVec2()
-		let pos = obj.pos.toVec2()
+		let pos = obj.pos.toVec2()// + vec2(-0.01,0)
 		EscaperSensorSetup ek = null
 		switch obj.spawnUnitType
 			case 'BIGK'

@@ -31,7 +31,7 @@ public class Jumper extends StaticBaseObject
 
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange)
+		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange, CODE_NULL)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		forUnitsInRange(pos, 8, (unit u) -> begin
 			if u != actor and u.getTypeId() == JUMPER_ID
@@ -67,9 +67,9 @@ public class Jumper extends StaticBaseObject
 				actor..removeAbility(UNFORCED_ID)..addAbility(FORCED_ID)..setVertexColor(color(50,50,255))
 				mode = JumpMode.FORCED
 			case DECREASE_ID
-				jumpForce.decrement(this, 5)
+				jumpForce.decrement(this, 6)
 			case INCREASE_ID
-				jumpForce.increment(this, 20)
+				jumpForce.increment(this, 30)
 			case SPECIAL_ID
 				if goocounter < 5
 					let x = (GetSpellTargetX()/128).round()

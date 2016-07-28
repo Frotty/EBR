@@ -19,7 +19,7 @@ constant AIR_KILLER = 'A07Y'
 public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
-		super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL)
+		super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL, CODE_NULL)
 		actor.addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 

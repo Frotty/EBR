@@ -1,6 +1,7 @@
 package FirstSnow
 import Startmaze
 import Door
+import Knockbacker
 
 public class FirstSnowMaze extends Startmaze
 	
@@ -26,12 +27,21 @@ public class FirstSnowMaze extends Startmaze
 		gg_unit_n007_0013.issuePointOrder("patrol", vec2(4700, -6400))
 		gg_unit_n007_0014.issuePointOrder("patrol", vec2(4700, -6550))
 		gg_unit_n007_0012.issuePointOrder("patrol", vec2(6500, -4400))
+		gg_unit_n007_0036.issuePointOrder("patrol", vec2(4320, -5200))
 		
 		let tealDoor = new Door(gg_unit_h00C_0023)
 		tealDoor..changeColor('A05W')
 
 		let purpleDoor = new Door(gg_unit_h00C_0011)
 		purpleDoor..changeColor('A05S')..turn()
+
+		let k1 = new Knockbacker(gg_unit_u00G_0033.getPos(), gg_unit_u00G_0033.getOwner(), angle(0))
+		gg_unit_u00G_0033.remove()
+		let k2 = new Knockbacker(gg_unit_u00G_0034.getPos(), gg_unit_u00G_0034.getOwner(), angle(0))
+		gg_unit_u00G_0034.remove()
+
+		k1.setup.issuePointOrder("patrol", vec2(5920,-4320))
+		k2.setup.issuePointOrder("patrol", vec2(5110,-3830))
 	
 	override function getStart() returns vec2
 		return vec2(6400, -6760)

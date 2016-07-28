@@ -14,7 +14,7 @@ public class BossDamager extends StaticBaseObject
 	real damage
 	
 	construct(vec2 pos, player owner)
-		super(vec2((pos.x/64).round()*64., (pos.y/64).round()*64.), CreateUnit(owner, DAMAGER_ID,(pos.x/64).round()*64., (pos.y/64).round()*64., 0. ), EVENT_RADIUS, function BossDamager.onInRange)
+		super(vec2((pos.x/64).round()*64., (pos.y/64).round()*64.), CreateUnit(owner, DAMAGER_ID,(pos.x/64).round()*64., (pos.y/64).round()*64., 0. ), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
 //		actor.registerCastEvent(Condition(function BossDamager.onCast))
 		
 	function damage(Escaper e)

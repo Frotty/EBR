@@ -16,7 +16,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	private LinkedList<Serializable> entities = new LinkedList<Serializable>()
 	
 	construct(vec2 pos, player owner)
-		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL)
+		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
 		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
 		..addAbility(SAVE_ID)..addAbility(LOAD_ID)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())

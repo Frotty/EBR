@@ -24,7 +24,7 @@ public class StaticBaseObject extends UnitEntity
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
-	construct( vec2 pos, unit u, real radius, code c )
+	construct( vec2 pos, unit u, real radius, code c, code cond )
 		super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
 		noRally = addEffect(Other.questionmark, pos)
 		actor.addAbility(GHOST_VIS_ID)
@@ -35,7 +35,10 @@ public class StaticBaseObject extends UnitEntity
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 			inRangeTrig = CreateTrigger()
 			inRangeTrig.registerUnitInRangeSource( actor, radius )
-			inRangeTrig.addCondition(Condition(function isProper))
+			if cond == null
+				inRangeTrig.addCondition(Condition((function isProper)))
+			else
+				inRangeTrig.addCondition(Condition(cond))
 			inRangeTrig.addAction( c )
 		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_POINT_ORDER) 
 		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_TARGET_ORDER )

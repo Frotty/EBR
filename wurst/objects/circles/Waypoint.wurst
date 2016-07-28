@@ -10,6 +10,7 @@ constant int INC_ID = 'A054'
 constant int DEC_ID = 'A055'
 constant int WISP_ID = 'A027'
 constant INTERVAL = .25
+
 	
 constant real 	EVENT_RADIUS	= 32.
 
@@ -26,7 +27,7 @@ public class Waypoint extends StaticBaseObject
 	boolean wisps = true
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove )
+		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove, function Waypoint.isProper2 )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		printLog(Loglevel.DEBUG, "On create waypoint")
 		
@@ -60,6 +61,10 @@ public class Waypoint extends StaticBaseObject
 			data.entity.actor.issuePointOrder("move", data.pos)
 		destroy data
 		t.release()
+
+	static function isProper2() returns boolean
+		return true
+
 
 	function onCast()
 		let id = GetSpellAbilityId()

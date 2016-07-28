@@ -13,7 +13,7 @@ constant real SLIDE_ADD = 3.3
 
 constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
-constant JUMP_SPELL = 'A062'
+public constant JUMP_SPELL = 'A062'
 
 real time = 0.
 
@@ -21,7 +21,7 @@ public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
 public class Escaper extends UnitEntity	
 	use PhysicsModule
-	RevivePointModifier revmod
+	RevivePointModifier revmod = null
 	boolean onUnwalkable = false
 	boolean sliding = false
 	boolean poisoned = false
@@ -96,7 +96,7 @@ public class Escaper extends UnitEntity
 			return
 		actor.setPropWindow(60.)
 		pos.z = .1
-		vel *= 0.20
+		vel *= 0.175
 		vel.z = 0.
 		
 	override function onEscapeGround()
@@ -123,7 +123,7 @@ public class Escaper extends UnitEntity
 		else
 			if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.ORANGEGOO castTo int)
 				vel += walkVel
-				vel *= 1.025
+				vel *= 1.0075
 			vel *= 0.96
 			sliding = false
 			setLava(false)
@@ -209,6 +209,7 @@ public class Escaper extends UnitEntity
 
 	static function changeAngle()
 		var u = GetTriggerUnit()
+		let id = GetIssuedOrderId()
 		Escaper e = u.getUserData() castTo Escaper
 		var w = GetOrderTarget()
 		let orderPos = getOrderPos()
@@ -220,10 +221,13 @@ public class Escaper extends UnitEntity
 			else
 				e.actor.setFacing(e.pos.angleTo2d(widgetPos))
 		else if ttype == REVICE
-			if w == null
-				e.actor.setFacing(e.pos.angleTo2d(orderPos)-(180).asAngleDegrees())
+			if OrderId2String(id) == "lightningshield"
+				e.actor.setFacing(e.pos.angleTo2d(orderPos))
 			else
-				e.actor.setFacing(e.pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
+				if w == null
+					e.actor.setFacing(e.pos.angleTo2d(orderPos)-(180).asAngleDegrees())
+				else
+					e.actor.setFacing(e.pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
 				
 	static function neutralDeath()
 		var escaper = GetTriggerUnit().getUserData() castTo Escaper
@@ -245,7 +249,6 @@ public class Escaper extends UnitEntity
 					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
 				else
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
-				actor.setAnimation("spell")
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
