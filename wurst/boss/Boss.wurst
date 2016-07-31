@@ -3,6 +3,7 @@ import SetupObject
 import PlayerData
 import public BossSpellTarget
 import CustomBar
+import Minion
 
 constant BOSS_TOMB_ID = 'n01P'
 constant HP_UP_ID = 'A06U'
@@ -16,6 +17,7 @@ constant REAL_DMG_SMALL_ID = 'A001'
 constant AOE_SPELL_ID = 'A06V'
 constant MISSILE_SPELL_ID = 'A06W'
 constant REVIVE_ID = 'A07L'
+constant SUMMON_MINION_ID = 'A085'
 
 public class Boss extends SetupObject
 	real maxHp = 400.
@@ -78,6 +80,11 @@ public class Boss extends SetupObject
 				for target in tgts
 					new BossMissile(actor,target)
 				destroy tgts
+			case SUMMON_MINION_ID
+				let a = true
+				// TODO `for spawner in minionspawners`
+				// new Minion(pos, owner, getRallyAngle())
+				// TODO play sound effect
 			case REVIVE_ID
 				revive()
 	

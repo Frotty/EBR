@@ -19,23 +19,23 @@ public class Minion extends EscaperSensorSetup
 		super(existing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
         selectTarget()
 
-    function update()
+    override function update()
         super.update()
         if target.alive != true or getRegionData(target.pos) != currentRegion
             selectTarget()
         else if target != null
             // Spamming the order like this might not be a good idea
-            IssueTargetOrderById(actor, "move", target.pos)
+            IssuePointOrder(actor, "move", target.pos.x, target.pos.y)
 
     function selectTarget()
         updatePos()
         target = null
-        let closestDist = -1
+        var closestDist = -1.
 		for Escaper e in currentRegion.getEscapers()
             if e.alive
-                let dist = e.pos.toVec2().distanceTo2dSq(pos.toVec2())
-				if closestDist == -1 or dist < closestDist
+                let dist = e.pos.toVec2().distanceTo(pos.toVec2())
+				if closestDist == -1. or dist < closestDist
                     closestDist = dist
                     target = e
 		if target != null
-            IssueTargetOrderById(actor, "move", target.pos)
+            IssuePointOrder(actor, "move", target.pos.x, target.pos.y)
