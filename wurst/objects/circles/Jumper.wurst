@@ -14,7 +14,7 @@ constant int INCREASE_ID = 'A072'
 constant int DECREASE_ID = 'A073'
 constant SPECIAL_ID = 'A07O'
 
-SoundDefinition snd = new SoundDefinition("Units\\Human\\Priest\\PriestPissed3.wav", 1039, false)
+SoundDefinition snd = new SoundDefinition("Units\\Human\\Priest\\PriestPissed3.wav", false)
 
 enum JumpMode
 	FORCED
