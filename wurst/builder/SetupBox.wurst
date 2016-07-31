@@ -21,7 +21,7 @@ constant INC_GRAVITY = 'A07X'
 constant DEC_GRAVITY = 'A07W'
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
-constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1.mp3", 2299, false)
+constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1.mp3", false)
 
 public class SetupBox extends UnitEntity
 	private RegionData rdata
