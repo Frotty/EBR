@@ -7,16 +7,16 @@ public constant COLL_SIZE_MINION = 68.
 public class Minion extends EscaperSensorSetup
     private Escaper target
 
-	construct(vec2 pos, player owner, angle facing)
-		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+    construct(vec2 pos, player owner, angle facing)
+        super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
         selectTarget()
 
-	construct(vec2 pos, player owner)
-		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+    construct(vec2 pos, player owner)
+        super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
         selectTarget()
-	
-	construct(unit existing)
-		super(existing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+
+    construct(unit existing)
+        super(existing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
         selectTarget()
 
     override function update()
@@ -31,11 +31,11 @@ public class Minion extends EscaperSensorSetup
         updatePos()
         target = null
         var closestDist = -1.
-		for Escaper e in currentRegion.getEscapers()
+        for Escaper e in currentRegion.getEscapers()
             if e.alive
                 let dist = e.pos.toVec2().distanceTo(pos.toVec2())
-				if closestDist == -1. or dist < closestDist
+                if closestDist == -1. or dist < closestDist
                     closestDist = dist
                     target = e
-		if target != null
+        if target != null
             IssuePointOrder(actor, "move", target.pos.x, target.pos.y)
