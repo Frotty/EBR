@@ -83,7 +83,7 @@ public class Boss extends SetupObject
 			case SUMMON_MINION_ID
 				let a = true
 				// TODO `for spawner in minionspawners`
-				// new Minion(pos, owner, getRallyAngle())
+				new Minion(pos.toVec2(), owner, actor.getFacingAngle())
 				// TODO play sound effect
 			case REVIVE_ID
 				revive()
