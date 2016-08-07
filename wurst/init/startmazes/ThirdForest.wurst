@@ -1,6 +1,6 @@
 package ThirdForest
 import Startmaze
-import EscaperKillers
+
 public class ThirdForestMaze extends Startmaze
 
 	construct(RegionData rd)

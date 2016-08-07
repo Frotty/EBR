@@ -11,7 +11,8 @@ constant MAX_EVENTS = 50
 public abstract class EventListener
 	static HashMap<int, LinkedList<EventListener>> listenerMap = new HashMap<int, LinkedList<EventListener>>()
 	static HashMap<unit, int> unitListenerMap = new HashMap<unit, int>()
-	static EventListener last = null
+
+	abstract function onEvent()
 	
 	static function add(eventid eventId, EventListener listener)
 		let id = eventId.toIntId()
@@ -49,8 +50,6 @@ public abstract class EventListener
 			if list != null
 				for listener in list
 					listener.onEvent()
-			
-	abstract function onEvent()
 			
 	
 trigger unitTrig = CreateTrigger()

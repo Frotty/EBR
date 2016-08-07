@@ -22,12 +22,12 @@ public class WeaponObject extends ItemObject
 			e.weaponAttach = e.actor.addEffect(weapontypes[weaponId].attachment, "hand")
 			holder = e
 			setup.hide()
-			holder.actor.addAbility(weapontypes[weaponId].abilId)
+			holder.actor.addAbility(weapontypes[weaponId].attackAbil)
 		else
 			fixItem()
 		
 	override function onDrop(Escaper e)
-		holder.actor..removeAbility(ATTACK_MELEE)..removeAbility(ATTACK_RANGED)
+		holder.actor..removeAbility(weapontypes[weaponId].attackAbil)
 		holder.weapon = null
 		e.weaponAttach.destr()
 		e.weaponAttach = null

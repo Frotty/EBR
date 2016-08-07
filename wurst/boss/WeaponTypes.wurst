@@ -3,6 +3,7 @@ import Escaper
 import Assets
 import ClosureForGroups
 import Boss
+import BoomerangProjectile
 
 public constant weaponcount = 4
 tuple WeaponType(int itemId, int abilId, int attackAbil, string attachment, WeaponListener listener)
@@ -35,15 +36,8 @@ function onHammer(Escaper e)
 	end)
 
 function onGlaive(Escaper e)
-	let facing = e.actor.getFacingAngle()
-	let tpos = e.pos.toVec2().polarOffset(facing, 64)
-	addEffect(Other.thunderclapcaster, tpos).destr()
-	forUnitsInRange(tpos, 100, (unit u) -> begin
-		let entity = u.getEntity()
-		if entity != null and entity instanceof Boss
-			Boss b = entity castTo Boss
-			b.onDamage(e, 20)
-	end)
+	let tpos = getSpellTargetPos()
+	new Boomerang(e, tpos)
 
 function onBow(Escaper e)
 	let facing = e.actor.getFacingAngle()
