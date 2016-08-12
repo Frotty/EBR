@@ -36,7 +36,7 @@ public abstract class SetupObject extends UnitEntity
 		actor.setPos(pos.x, pos.y)
 		setup.setPos(pos.x, pos.y)
 	
-	function setAngle(real angl)
+	function setFacing(angle angl)
 		actor.setFacing(angl)
 		setup.setFacing(angl)
 		

@@ -1,7 +1,11 @@
+[0.86c]
+[*] continued third startmaze revamp [wip]
+[*] 
+
 [0.86a]
 [*] new icons thx to kari
-[*] Bugfixes
-[*] Bosses in alpha status
+[*] bugfixes
+[*] bosses in alpha status
 
 [0.85i]
 [*] can now order power nodes and conga heads

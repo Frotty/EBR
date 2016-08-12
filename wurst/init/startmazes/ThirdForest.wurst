@@ -1,5 +1,7 @@
 package ThirdForest
 import Startmaze
+import Unit
+import Knockbacker
 
 public class ThirdForestMaze extends Startmaze
 
@@ -29,9 +31,19 @@ public class ThirdForestMaze extends Startmaze
 		t.setRallyPoint(vec2(-6000,-6900))
 
 		let sk1 = new SmallKiller(gg_unit_n009_0038)
-		sk1.setup.issuePointOrder("patrol", vec2(-122,-6140))
+		sk1.setup.issuePointOrder("patrol", vec2(-122.01,-6140))
 		let sk2 = new SmallKiller(gg_unit_n009_0039)
-		sk2.setup.issuePointOrder("patrol", vec2(122,-6140))
+		sk2.setup.issuePointOrder("patrol", vec2(122.01,-6140))
+		let sk3 = new SmallKiller(gg_unit_n009_0050)
+		sk3.setup.issuePointOrder("patrol", vec2(0.01,-5800))
+
+		let k1 = new Knockbacker(gg_unit_u00G_0053.getPos(), gg_unit_u00G_0053.getOwner(), angle(0))
+		gg_unit_u00G_0053.remove()
+		let k2 = new Knockbacker(gg_unit_u00G_0054.getPos(), gg_unit_u00G_0054.getOwner(), angle(0))
+		gg_unit_u00G_0054.remove()
+
+		k1.setup.issuePointOrder("patrol", vec2(-1000.01,-6150))
+		k2.setup.issuePointOrder("patrol", vec2(-900.01,-7200))
 		
 	override function getStart() returns vec2
 		return vec2(830, -7050)
