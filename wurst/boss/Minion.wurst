@@ -15,17 +15,13 @@ public class Minion extends EscaperSensorSetup
         super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
         selectTarget()
 
-    construct(unit existing)
-        super(existing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
-        selectTarget()
-
     override function update()
         super.update()
         if target.alive != true or getRegionData(target.pos) != currentRegion
             selectTarget()
         else if target != null
             // Spamming the order like this might not be a good idea
-            IssuePointOrder(actor, "move", target.pos.x, target.pos.y)
+            actor.issuePointOrder("move", target.pos.toVec2())
 
     function selectTarget()
         updatePos()
@@ -38,4 +34,4 @@ public class Minion extends EscaperSensorSetup
                     closestDist = dist
                     target = e
         if target != null
-            IssuePointOrder(actor, "move", target.pos.x, target.pos.y)
+            actor.issuePointOrder("move", target.pos.toVec2())
