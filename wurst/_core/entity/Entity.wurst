@@ -222,7 +222,7 @@ abstract public class FxEntity extends Entity
 		
 	override function setPos(vec3 tpos)
 		pos = tpos
-		fx.setPos(tpos.x,tpos.y)
+		fx.setXYZ(tpos)
 		
 	ondestroy
 		if silent

@@ -67,8 +67,8 @@ public class BezierMissile extends Projectile
 		y = ((p1.y*q + 3*p*p2.y)*q + 3*p*p*p3.y)*q +  p*p*p*p4.y
 		z = ((p1.z*q + 3*p*p2.z)*q + 3*p*p*p3.z)*q +  p*p*p*p4.z
 		
-		dx = x - fx.getX()
-		dy = y - fx.getY()
+		dx = x - fx.getPos2().x
+		dy = y - fx.getPos2().y
 		dz = z - fx.getZ()
 		
 		if dx != 0 or dy != 0 
