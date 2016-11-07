@@ -188,6 +188,9 @@ abstract public class UnitEntity extends Entity
 		updatePos()
 		return pos
 
+	ondestroy
+		actor.setEntity(null)
+
 abstract public class FxEntity extends Entity
 	protected Fx fx
 	boolean silent = false
