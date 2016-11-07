@@ -15,7 +15,7 @@ timer fixPos = CreateTimer()
 public abstract class SetupObject extends UnitEntity
 	private real time = GetRandomReal(30,45)
 	
-	unit setup
+	unit setup 
 					
 	construct( vec3 pos, unit u, unit setup, real radius )
 		super( pos, u )
@@ -55,8 +55,9 @@ public abstract class SetupObject extends UnitEntity
 			time = GetRandomReal(30,45)
 	
 	ondestroy
-		actor.remove()
+		setup.setEntity(null)
 		setup.remove()
+		setup = null
 		
 	static function onOrderEvent()
 		var entity = GetTriggerUnit().getEntity()
@@ -87,7 +88,7 @@ public abstract class SetupObject extends UnitEntity
 public abstract class StaticSetupObject extends UnitEntity
 	unit setup
 	
-	trigger inRangeTrig // Trigger for inRange detection
+	trigger inRangeTrig = null // Trigger for inRange detection
 	
 	construct( vec3 pos, real radius, code c )
 		super( pos, setup )
@@ -113,10 +114,14 @@ public abstract class StaticSetupObject extends UnitEntity
 	override function update()
 
 	ondestroy
-		actor.clearRegister()
 		actor.remove()
+		actor = null
+		setup.clearRegister()
 		setup.remove()
-		inRangeTrig.destr()
+		setup = null
+		if inRangeTrig != null
+			inRangeTrig.destr()
+			inRangeTrig = null
 		
 int count = -1
 real array offsets
