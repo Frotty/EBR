@@ -39,44 +39,28 @@ public function initStartmazes()
 	
 function setBuilderTeleporter()
 	if pData[8] != null
-		new Teleporter(gg_unit_n00C_0058)
+		new Teleporter(gg_unit_n00C_0058).actor.removeAbility('A00K')
 		createTTEx(gg_unit_n00C_0058.getPos().toVec3(), pData[8].mbname, 11, colorA( 230,180,0, 255 ))
 	else
 		gg_unit_n00C_0058.remove()
 	
 	if pData[9] != null
-		new Teleporter(gg_unit_n00C_0063)
+		new Teleporter(gg_unit_n00C_0063).actor.removeAbility('A00K')
 		createTTEx(gg_unit_n00C_0063.getPos().toVec3(), pData[9].mbname, 11, colorA( 230,180,0, 255 ))
 	else
 		gg_unit_n00C_0063.remove()
 
 	if pData[10] != null
-		new Teleporter(gg_unit_n00C_0115)
+		new Teleporter(gg_unit_n00C_0115).actor.removeAbility('A00K')
 		createTTEx(gg_unit_n00C_0115.getPos().toVec3(), pData[10].mbname, 11, colorA( 230,180,0, 255 ))
 	else
 		gg_unit_n00C_0115.remove()
 
 	if pData[11] != null
-		new Teleporter(gg_unit_n00C_0143)
+		new Teleporter(gg_unit_n00C_0143).actor.removeAbility('A00K')
 		createTTEx(gg_unit_n00C_0143.getPos().toVec3(), pData[11].mbname, 11, colorA( 230,180,0, 255 ))
 	else
 		gg_unit_n00C_0143.remove()
-
-
-			
-public function clearEBRRect(int r)
-	var rd = regions[r]
-	GroupEnumUnitsInRect(ENUM_GROUP, rd.theRect, null)
-	for u in ENUM_GROUP
-		let e = u.getEntity()
-		if e != null
-			e.terminate()
-		else
-			u.remove()
-	ENUM_GROUP.clear()
-	EnumItemsInRect(rd.theRect, null, function deleteKeys)
-	EnumDestructablesInRectAll(rd.theRect, function deleteDes)
-
 
 	
 public function setStartTeleport(int tpid, int locid)
