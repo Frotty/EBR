@@ -62,27 +62,26 @@ public abstract class SetupObject extends UnitEntity
 	static function onOrderEvent()
 		var entity = GetTriggerUnit().getEntity()
 		var order = GetIssuedOrderId()
-		var x = GetOrderPointX()
-		var y = GetOrderPointY()
+		var targetPos = getOrderPos()
 		var u = GetOrderTargetUnit()
 		string orderS = OrderId2String(order)
 		var obj = entity castTo SetupObject
 		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
 			if orderS == "smart" and u == null
-				IssuePointOrder(obj.actor, "move", x+getOffset(), y)
+				obj.actor.issuePointOrder("move", targetPos+getOffset())
 			else
 				if u != null
-					IssueTargetOrderById(obj.actor, order, u)
-				else if x != 0.	
-					IssuePointOrderById(obj.actor, order, x, y)
+					obj.actor.issueTargetOrderById(order, u)
+				else if targetPos.x != 0.	
+					obj.actor.issuePointOrderById(order, targetPos)
 				else
-					IssueImmediateOrderById(obj.actor, order)
+					obj.actor.issueImmediateOrderById(order)
 		else
 			if not orderS == "waterelemental" and not orderS == "roar" and not order == 851974
 				obj.actor.issueImmediateOrder("stop")
-		obj.setup.setXY(obj.actor.getPos3())
-		obj.setup.setFacing(obj.actor.getFacingAngle())
-		obj.setup.setTurnSpeed(GetUnitTurnSpeed(obj.actor))
+		obj.setup..setXY(obj.actor.getPos3())
+			..setFacing(obj.actor.getFacingAngle())
+			..setTurnSpeed(GetUnitTurnSpeed(obj.actor))
 	  
 				
 public abstract class StaticSetupObject extends UnitEntity
@@ -113,8 +112,8 @@ public abstract class StaticSetupObject extends UnitEntity
 			inRangeTrig = null
 		
 int count = -1
-real array offsets
-function getOffset() returns real
+vec2 array offsets
+function getOffset() returns vec2
 	count++
 	if count > 50
 		count = -1
@@ -123,64 +122,64 @@ function getOffset() returns real
 public function initSetupObj()
 	orderTrigger = CreateTrigger()
 	orderTrigger.addAction(function SetupObject.onOrderEvent )
-	offsets[0] = 0.049
-	offsets[1] = 0.048
-	offsets[2] = 0.047
-	offsets[3] = 0.046
-	offsets[4] = 0.045
-	offsets[5] = 0.044
-	offsets[6] = 0.043
-	offsets[7] = 0.041
-	offsets[8] = 0.040
-	offsets[9] = 0.039
-	offsets[10] = 0.038
-	offsets[11] = 0.037
-	offsets[12] = 0.036
-	offsets[13] = 0.035
-	offsets[14] = 0.034
-	offsets[15] = 0.033
-	offsets[16] = 0.032
-	offsets[17] = 0.031
-	offsets[18] = 0.030
-	offsets[19] = 0.029
-	offsets[20] = 0.028
-	offsets[21] = 0.027
-	offsets[22] = 0.026
-	offsets[23] = 0.025
-	offsets[24] = 0.024
-	offsets[25] = 0.023
-	offsets[26] = 0.022
-	offsets[27] = 0.021
-	offsets[28] = 0.020
-	offsets[29] = 0.019
-	offsets[30] = -0.049
-	offsets[31] = -0.048
-	offsets[32] = -0.047
-	offsets[33] = -0.046
-	offsets[34] = -0.045
-	offsets[35] = -0.044
-	offsets[36] = -0.043
-	offsets[37] = -0.041
-	offsets[38] = -0.040
-	offsets[39] = -0.039
-	offsets[40] = -0.038
-	offsets[41] = -0.037
-	offsets[42] = -0.036
-	offsets[43] = -0.035
-	offsets[44] = -0.034
-	offsets[45] = -0.033
-	offsets[46] = -0.032
-	offsets[47] = -0.031
-	offsets[48] = -0.030
-	offsets[49] = -0.029
-	offsets[50] = -0.028
-	offsets[51] = -0.027
-	offsets[52] = -0.026
-	offsets[53] = -0.025
-	offsets[54] = -0.024
-	offsets[55] = -0.023
-	offsets[56] = -0.022
-	offsets[57] = -0.021
-	offsets[58] = -0.020
-	offsets[59] = -0.019
+	offsets[0] = vec2(0.049, 0.001)
+	offsets[1] = vec2(0.048, 0.002)
+	offsets[2] = vec2(0.047, 0.003)
+	offsets[3] = vec2(0.046, 0.004)
+	offsets[4] = vec2(0.045, 0.005)
+	offsets[5] = vec2(0.044, 0.006)
+	offsets[6] = vec2(0.043, 0.007)
+	offsets[7] = vec2(0.041, 0.008)
+	offsets[8] = vec2(0.040, 0.009)
+	offsets[9] = vec2(0.039, 0.008)
+	offsets[10] = vec2(0.038, 0.007)
+	offsets[11] = vec2(0.037, 0.006)
+	offsets[12] = vec2(0.036, 0.005)
+	offsets[13] = vec2(0.035, 0.004)
+	offsets[14] = vec2(0.034, 0.003)
+	offsets[15] = vec2(0.033, 0.002)
+	offsets[16] = vec2(0.032, 0.001)
+	offsets[17] = vec2(0.031, 0.002)
+	offsets[18] = vec2(0.030, 0.003)
+	offsets[19] = vec2(0.029, 0.004)
+	offsets[20] = vec2(0.028, 0.005)
+	offsets[21] = vec2(0.027, 0.006)
+	offsets[22] = vec2(0.026, 0.007)
+	offsets[23] = vec2(0.025, 0.008)
+	offsets[24] = vec2(0.024, 0.009)
+	offsets[25] = vec2(0.023, 0.008)
+	offsets[26] = vec2(0.022, 0.007)
+	offsets[27] = vec2(0.021, 0.006)
+	offsets[28] = vec2( 0.020, 0.005)
+	offsets[29] = vec2( 0.019, 0.004)
+	offsets[30] = vec2( -0.049, 0.003)
+	offsets[31] = vec2( -0.048, 0.002)
+	offsets[32] = vec2( -0.047, 0.001)
+	offsets[33] = vec2( -0.046, 0.002)
+	offsets[34] = vec2( -0.045, 0.003)
+	offsets[35] = vec2( -0.044, 0.004)
+	offsets[36] = vec2( -0.043, 0.005)
+	offsets[37] = vec2( -0.041, 0.006)
+	offsets[38] = vec2( -0.040, 0.007)
+	offsets[39] = vec2( -0.039, 0.008)
+	offsets[40] = vec2( -0.038, 0.009)
+	offsets[41] = vec2( -0.037, 0.008)
+	offsets[42] = vec2( -0.036, 0.007)
+	offsets[43] = vec2( -0.035, 0.006)
+	offsets[44] = vec2( -0.034, 0.005)
+	offsets[45] = vec2( -0.033, 0.004)
+	offsets[46] = vec2( -0.032, 0.003)
+	offsets[47] = vec2( -0.031, 0.002)
+	offsets[48] = vec2( -0.030, 0.001)
+	offsets[49] = vec2( -0.029, 0.002)
+	offsets[50] = vec2( -0.028, 0.003)
+	offsets[51] = vec2( -0.027, 0.004)
+	offsets[52] = vec2( -0.026, 0.005)
+	offsets[53] = vec2( -0.025, 0.006)
+	offsets[54] = vec2( -0.024, 0.007)
+	offsets[55] = vec2( -0.023, 0.008)
+	offsets[56] = vec2( -0.022, 0.009)
+	offsets[57] = vec2( -0.021, 0.000)
+	offsets[58] = vec2( -0.020, 0.009)
+	offsets[59] = vec2( -0.019, 0.008)
 
