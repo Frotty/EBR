@@ -19,7 +19,7 @@ public abstract class Startmaze
 
 	function clearMaze()
 		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, null)
-		for vicu in ENUM_GROUP
+		for vicu from ENUM_GROUP
 			if vicu.getPos().isInRect(rdata.theRect)
 				var data = vicu.getEntity()
 				if data != null
@@ -28,19 +28,14 @@ public abstract class Startmaze
 					vicu.remove()
 		ENUM_GROUP.clear()
 
-		EnumDestructablesInRect(rdata.theRect, null, function killD)
+		EnumDestructablesInRectAll(rdata.theRect, function killD)
 			
 		EnumItemsInRect(rdata.theRect, null, function deleteKeys)
-		EnumDestructablesInRectAll(rdata.theRect, function deleteDes)
 	
 	abstract function getStart() returns vec2
 	
 public function killD()
 	RemoveDestructable(GetEnumDestructable())
-	
-public function deleteDes()
-	var d = GetEnumDestructable()
-	RemoveDestructable(d)
 	
 public function deleteKeys()
 	item itm = GetEnumItem()
