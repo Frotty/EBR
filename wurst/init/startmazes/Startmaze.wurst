@@ -29,7 +29,6 @@ public abstract class Startmaze
 		ENUM_GROUP.clear()
 
 		EnumDestructablesInRectAll(rdata.theRect, function killD)
-			
 		EnumItemsInRect(rdata.theRect, null, function deleteKeys)
 	
 	abstract function getStart() returns vec2
@@ -39,7 +38,10 @@ public function killD()
 	
 public function deleteKeys()
 	item itm = GetEnumItem()
-	itm.remove()		
+	if(itm.getEntity() != null) 
+		itm.getEntity().terminate()
+	else
+		itm.remove()		
 	
 public function correctKeys()
 	item itm = GetEnumItem()
