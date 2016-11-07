@@ -25,7 +25,8 @@ class SpinNode
 		this.dist = dist
 	
 	ondestroy
-		obj.setup.addAbility(REMOVE_ID)
+		if not obj.done and obj.actor != null
+			obj.setup.addAbility(REMOVE_ID)
 
 public class Spinner extends SetupObject
 	LinkedList<SpinNode> spinningEntities = new LinkedList<SpinNode>()
@@ -41,20 +42,16 @@ public class Spinner extends SetupObject
 	override function update()
 		super.update()
 		let speed = spinSpeed.get()
-		LinkedList<SpinNode> dirty = null
-		for node in spinningEntities
-			if node.obj.done
-				if dirty == null
-					dirty = new LinkedList<SpinNode>()
-				dirty.add(node)
-			node.obj.setXY( vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0. ) )
-			node.angl += speed
-		if dirty != null
-			for dirt in dirty
-				spinningEntities.remove(dirt)
-				destroy dirt
-				
-			destroy dirty
+		let itr = spinningEntities.iterator()
+		while itr.hasNext()
+			let next = itr.next()
+			if not next.obj.done and next.obj.actor != null
+				next.obj.setXY( vec3(pos.x + next.dist * Cos(next.angl+speed) * cosFactor.get(), pos.y + next.dist * Sin(next.angl+speed) * sinFactor.get(), 0. ) )
+				next.angl += speed
+			else
+				itr.remove()
+				destroy next
+		itr.close()
 			
 	function checkObj(Entity e)
 		if e instanceof SetupObject and not e instanceof Obstacle
@@ -75,10 +72,8 @@ public class Spinner extends SetupObject
 				spinningEntities.add(new SpinNode(dobj, pos.angleTo2d(dobj.pos).radians(), pos.distanceTo(dobj.pos) ))
 
 	ondestroy
-		while spinningEntities.getSize() > 0
-			SpinNode n = spinningEntities.get(0)
-			spinningEntities.removeAt(0)
-			destroy n 
+		for node in spinningEntities
+			destroy node
 		destroy spinningEntities
 				
 	
