@@ -162,9 +162,12 @@ abstract public class UnitEntity extends Entity
 		setupUnitEntity(actor)
 
 	function setupUnitEntity(unit actor)
-		if not actor.isAlive() or actor.getEntity() != null
+		if not actor.isAlive()
 			terminate()
-			error("Duplicate or invalid entity aissgnment")
+			error("Entity - Actor to be applied is not alive")
+		else if actor.getEntity() != null
+			terminate()
+			error("Entity - Duplicate assignment")
 		else
 			this.actor = actor
 			actor..setEntity(this)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)

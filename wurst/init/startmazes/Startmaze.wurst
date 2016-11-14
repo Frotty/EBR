@@ -11,9 +11,10 @@ public constant real STARTY = -7000
 
 public abstract class Startmaze
 	boolean inited = false
-	RegionData rdata
+	RegionData rdata = RegionData.EMPTY_REGION
 
 	abstract function initMaze()
+
 	function isInit() returns boolean
 		return inited
 

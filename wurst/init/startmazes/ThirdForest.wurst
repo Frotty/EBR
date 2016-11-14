@@ -14,17 +14,6 @@ public class ThirdForestMaze extends Startmaze
 		inited = true
 		RegionData data = getRegionData(vec2(368, -6647))
 		data.setOwner(STAFF_PLAYER)
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h018", null )
-		for u2 in ENUM_GROUP
-			new BigKiller(u2) 
-			
-		ENUM_GROUP.clear()
-		
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n009", null )
-		for u5 in ENUM_GROUP
-			new SmallKiller(u5) 
-			
-		ENUM_GROUP.clear()
 
 		let t = new Teleporter(gg_unit_n00C_0044.getPos(), gg_unit_n00C_0044.getOwner())
 		gg_unit_n00C_0044.remove()
@@ -44,7 +33,12 @@ public class ThirdForestMaze extends Startmaze
 
 		k1.setup.issuePointOrder("patrol", vec2(-1000.01,-6150))
 		k2.setup.issuePointOrder("patrol", vec2(-900.01,-7200))
-		
+
+		let bk1 = new BigKiller(gg_unit_h018_0145)
+		bk1.setup.issuePointOrder("patrol", vec2(-1010.01,-4040))
+		let bk2 = new BigKiller(gg_unit_h018_0146)
+		bk2.setup.issuePointOrder("patrol", vec2(-940.01,-4500))
+
 	override function getStart() returns vec2
 		return vec2(830, -7050)
 

@@ -1,6 +1,6 @@
-[0.86c]
+[0.86f]
 [*] continued third startmaze revamp [wip]
-[*] 
+[*] general code cleanup and fixes to hopefully fix crashbug
 
 [0.86a]
 [*] new icons thx to kari

@@ -23,7 +23,7 @@ public class RevivePoint extends StaticSetupObject
 			if currentRegion != null and currentRegion.getPermission(STAFF_PLAYER) == Permission.OWNER
 				// Is Startmaze
 				if startmaze > -1
-					if (startmazes[currentMaze] castTo int) > 0
+					if (startmazes[currentMaze] castTo int) > 0 and startmazes[currentMaze].isInit()
 						startmazes[currentMaze].clearMaze()
 						destroy startmazes[currentMaze]
 						startmazes[currentMaze] = null
