@@ -21,13 +21,13 @@ public class FirstSnowMaze extends Startmaze
 			new SmallKiller(u)
 		ENUM_GROUP.clear()
 		
-		gg_unit_h015_0020.issuePointOrder("patrol", vec2(6800, -5237))
-		gg_unit_h015_0018.issuePointOrder("patrol", vec2(5325, -6000))
+		gg_unit_h015_0020.issuePointOrder("patrol", vec2(6800.01, -5237))
+		gg_unit_h015_0018.issuePointOrder("patrol", vec2(5325.01, -6000))
 
-		gg_unit_n007_0013.issuePointOrder("patrol", vec2(4700, -6400))
-		gg_unit_n007_0014.issuePointOrder("patrol", vec2(4700, -6550))
-		gg_unit_n007_0012.issuePointOrder("patrol", vec2(6500, -4400))
-		gg_unit_n007_0036.issuePointOrder("patrol", vec2(4320, -5200))
+		gg_unit_n007_0013.issuePointOrder("patrol", vec2(4700.01, -6400))
+		gg_unit_n007_0014.issuePointOrder("patrol", vec2(4700.01, -6550))
+		gg_unit_n007_0012.issuePointOrder("patrol", vec2(6500.01, -4400))
+		gg_unit_n007_0036.issuePointOrder("patrol", vec2(4320.01, -5200))
 		
 		let tealDoor = new Door(gg_unit_h00C_0023)
 		tealDoor..changeColor('A05W')
@@ -40,8 +40,8 @@ public class FirstSnowMaze extends Startmaze
 		let k2 = new Knockbacker(gg_unit_u00G_0034.getPos(), gg_unit_u00G_0034.getOwner(), angle(0))
 		gg_unit_u00G_0034.remove()
 
-		k1.setup.issuePointOrder("patrol", vec2(5920,-4320))
-		k2.setup.issuePointOrder("patrol", vec2(5110,-3830))
+		k1.setup.issuePointOrder("patrol", vec2(5920.01,-4320))
+		k2.setup.issuePointOrder("patrol", vec2(5110.01,-3830))
 	
 	override function getStart() returns vec2
 		return vec2(6400, -6760)

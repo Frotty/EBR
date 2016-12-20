@@ -3,9 +3,10 @@ import Escaper
 import Assets
 import ClosureForGroups
 import Boss
+import BoomerangProjectile
 
 public constant weaponcount = 4
-tuple WeaponType(int itemId, int abilId, boolean melee, string attachment, WeaponListener listener)
+tuple WeaponType(int itemId, int abilId, int attackAbil, string attachment, WeaponListener listener)
 
 public interface WeaponListener
 	function onAttack(Escaper attacker)
@@ -35,6 +36,10 @@ function onHammer(Escaper e)
 	end)
 
 function onGlaive(Escaper e)
+	let tpos = getSpellTargetPos()
+	new Boomerang(e, tpos)
+
+function onBow(Escaper e)
 	let facing = e.actor.getFacingAngle()
 	let tpos = e.pos.toVec2().polarOffset(facing, 64)
 	addEffect(Other.thunderclapcaster, tpos).destr()
@@ -46,7 +51,7 @@ function onGlaive(Escaper e)
 	end)
 
 init
-	weapontypes[0] = WeaponType('I00U','A081', true, "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onSabre(e))
-	weapontypes[1] = WeaponType('I00W','A082', true, "weapons\\attachment\\ThrallHammer.mdx", (Escaper e) -> onHammer(e))
-	weapontypes[2] = WeaponType('I00V','A083', false, "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onGlaive(e))
-	weapontypes[3] = WeaponType('I00Y','A084', false, "weapons\\attachment\\Sabre.mdx", (Escaper e) -> print("Bow"))
+	weapontypes[0] = WeaponType('I00U','A081', 'A07G', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onSabre(e))
+	weapontypes[1] = WeaponType('I00W','A082', 'A085', "weapons\\attachment\\ThrallHammer.mdx", (Escaper e) -> onHammer(e))
+	weapontypes[2] = WeaponType('I00V','A083', 'A07H', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onGlaive(e))
+	weapontypes[3] = WeaponType('I00Y','A084', 'A086', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onBow(e))

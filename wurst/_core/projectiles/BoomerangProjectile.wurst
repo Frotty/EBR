@@ -2,13 +2,31 @@ package BoomerangProjectile
 import Projectile
 import Escaper
 import Assets
+import Interpolation
 
 public class Boomerang extends Projectile
+	vec2 initialPos
+	vec2 middleone
+	vec2 middletwo
+	vec2 target
+	Escaper caster 
 
 	construct(Escaper caster, vec2 target)
 		super(caster.pos, 32, caster.owner, caster.actor.getFacingAngle(), Other.sentinelmissile)
-		let direction = pos.angleTo2d(target).toVec(1).toVec3()
-		let distance = pos.distanceTo2d(target)
-		let perp_dir = vec3(-direction.y, direction.x, 0)
-		let par_acc = (-(1500 * 1500) / (2 * distance))
-		let perp_acc = 2 * par_acc * 300 / 1500
+		initialPos = caster.pos.toVec2()
+		this.caster = caster
+		this.target = target
+		middleone = initialPos.polarOffset(initialPos.angleTo(target) + (40).asAngleDegrees(), initialPos.distanceTo(target) / 1.8)
+		middletwo = initialPos.polarOffset(initialPos.angleTo(target) + (-40).asAngleDegrees(), initialPos.distanceTo(target) / 1.8)
+		setTimed(0)
+		active = true
+		
+	override function update()
+		if lifespan > 2
+			terminate()
+		else if lifespan >= 1
+			setPos(target.bezier(middletwo, caster.getPos().toVec2(), lifespan-1.).toVec3())
+			lifespan = lifespan.lerp(2.3, 0.040)
+		else
+			lifespan = lifespan.lerp(1.2, 0.035)
+			setPos(initialPos.bezier(middleone, target, lifespan).toVec3())

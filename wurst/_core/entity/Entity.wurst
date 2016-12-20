@@ -155,13 +155,22 @@ abstract public class UnitEntity extends Entity
 	
 	construct( vec3 pos, unit actor )
 		super(pos, actor.getOwner())
-		this.actor = actor
-		actor..setEntity(this)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
+		setupUnitEntity(actor)
 		
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
-		this.actor = actor
-		actor..setEntity(this)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
+		setupUnitEntity(actor)
+
+	function setupUnitEntity(unit actor)
+		if not actor.isAlive()
+			terminate()
+			error("Entity - Actor to be applied is not alive")
+		else if actor.getEntity() != null
+			terminate()
+			error("Entity - Duplicate assignment")
+		else
+			this.actor = actor
+			actor..setEntity(this)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 		
 	override function update()
 		updatePos()
@@ -170,6 +179,9 @@ abstract public class UnitEntity extends Entity
 		pos = vec3(actor.getX(), actor.getY(), pos.z)
 		
 	function setNewActor(unit u)
+		if u == null or not u.isAlive() or u.getEntity() != null
+			error("invalid actor replacement") 
+		actor.setEntity(null)
 		actor.remove()
 		actor = u
 		actor.setEntity(this)
@@ -187,6 +199,11 @@ abstract public class UnitEntity extends Entity
 	override function getPos() returns vec3
 		updatePos()
 		return pos
+
+	ondestroy
+		actor.setEntity(null)
+		actor.remove()
+		actor = null
 
 abstract public class FxEntity extends Entity
 	protected Fx fx
@@ -222,7 +239,7 @@ abstract public class FxEntity extends Entity
 		
 	override function setPos(vec3 tpos)
 		pos = tpos
-		fx.setPos(tpos.x,tpos.y)
+		fx.setXYZ(tpos)
 		
 	ondestroy
 		if silent

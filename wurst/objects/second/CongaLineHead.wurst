@@ -24,9 +24,9 @@ public class CongaLineHead extends SetupObject
 		UnitEntity se = null
 		for e in segments
 			if i == 0
-				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), e.pos.angleTo2d(pos).degrees())
+				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), e.pos.angleTo2d(pos))
 			else
-				e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), e.pos.angleTo2d(pos).degrees())
+				e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), e.pos.angleTo2d(pos))
 				
 			se = e
 			i++
@@ -76,10 +76,10 @@ public class CongaLineHead extends SetupObject
 		destroy segments
 
 		
-function UnitEntity.setNewPosA( vec2 tpos, real angl)
+function UnitEntity.setNewPosA( vec2 tpos, angle angl)
 	if this instanceof SetupObject
 		(this castTo SetupObject).setXY(tpos.toVec3())
-		(this castTo SetupObject).setAngle(angl)
+		(this castTo SetupObject).setFacing(angl)
 	else if this instanceof Spinner
 		(this castTo Spinner).setXY(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angl)
