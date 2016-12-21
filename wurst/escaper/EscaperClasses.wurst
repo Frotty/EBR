@@ -28,7 +28,7 @@ public class HolyEscaper extends Escaper
 	override function revive()
 		super.revive()
 		if revivetomb != null
-			setPos(revivetomb.getPos3())
+			setPos(revivetomb.getPos3Real())
 			if selectatrevive
 				if (GetLocalPlayer() == owner)
 					PanCameraToTimed(pos.x, pos.y, 0)

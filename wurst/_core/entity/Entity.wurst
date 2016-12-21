@@ -154,7 +154,7 @@ abstract public class UnitEntity extends Entity
 	unit actor
 
 	construct( unit actor )
-		super(actor.getPos3(), actor.getOwner())
+		super(actor.getPos3Real(), actor.getOwner())
 		setupUnitEntity(actor)
 	
 	construct( vec3 pos, unit actor )

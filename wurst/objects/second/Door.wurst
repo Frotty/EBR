@@ -25,7 +25,7 @@ public class Door extends StaticSetupObject
 	boolean opened = false
 
 	construct(unit existing)
-		super(existing.getPos3(), createUnit(existing.getOwner(), DOORDUMMY_ID, existing.getPos(), (270).asAngleDegrees()), existing, EVENT_RADIUS, function Door.keyopen )
+		super(existing.getPos3Real(), createUnit(existing.getOwner(), DOORDUMMY_ID, existing.getPos(), (270).asAngleDegrees()), existing, EVENT_RADIUS, function Door.keyopen )
 		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
 		pathing.setUserData(this castTo int)
 	
