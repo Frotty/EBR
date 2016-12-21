@@ -5,16 +5,17 @@ import Builder
 import TerrainModder
 
 public function startIntroFor(PlayerData pd)
-	cinematicModeForPlayer(true, pd.p, 0.)
-	printTimedToPlayerClear("starting intro...", 5, pd.p)
-	if isBuilder(pd.p)
-		CameraSetupApplyForPlayer(true, gg_cam_IntroBuilderCam, pd.p, 3.)
-		getTimer()..start(3, function startBuilderIntro)
-					..setData(pd castTo int)
-	else
-		CameraSetupApplyForPlayer(true, gg_cam_IntroEscaperCam, pd.p, 3.)
-		getTimer()..start(3, function startEscaperIntro)
-					..setData(pd castTo int)
+	// cinematicModeForPlayer(true, pd.p, 0.)
+	printTimedToPlayerClear("not yet implemented...", 5, pd.p)
+	return
+	// if isBuilder(pd.p)
+	// 	CameraSetupApplyForPlayer(true, gg_cam_IntroBuilderCam, pd.p, 3.)
+	// 	getTimer()..start(3, function startBuilderIntro)
+	// 				..setData(pd castTo int)
+	// else
+	// 	CameraSetupApplyForPlayer(true, gg_cam_IntroEscaperCam, pd.p, 3.)
+	// 	getTimer()..start(3, function startEscaperIntro)
+	// 				..setData(pd castTo int)
 	
 function startBuilderIntro()
 	let expt = GetExpiredTimer()
