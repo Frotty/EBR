@@ -12,7 +12,7 @@ public int DMG_DEC_ID
 public class Knockbacker extends EscaperSensorSetup
 	ConfigValue kforce = new ConfigValue(20, 2.5, "Knockback")
 	ConfigValue damage = new ConfigValue(50, 25, "Damage")
-	
+
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, KNOCKER_ID, facing, 64., 160.)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)

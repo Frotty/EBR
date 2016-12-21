@@ -79,7 +79,7 @@ public abstract class SetupObject extends UnitEntity
 		else
 			if not orderS == "waterelemental" and not orderS == "roar" and not order == 851974
 				obj.actor.issueImmediateOrder("stop")
-		obj.setup..setXY(obj.actor.getPos3())
+		obj.setup..setXY(obj.actor.getPos3Zero())
 			..setFacing(obj.actor.getFacingAngle())
 			..setTurnSpeed(GetUnitTurnSpeed(obj.actor))
 	  

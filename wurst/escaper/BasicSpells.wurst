@@ -11,7 +11,7 @@ public class BallProjectile extends AirPhysicsProjectile
 	BallItem ballitem
 	
 	construct(unit caster, vec2 target, BallItem itm)
-		super(caster.getPos3(128), 32, caster.getOwner(), caster.getPos().angleTo(target), "Cannonball.mdx")
+		super(caster.getPos3with(128), 32, caster.getOwner(), caster.getPos().angleTo(target), "Cannonball.mdx")
 		setSpeed(10)
 		fx.getDummy().setColor(caster.getOwner().getColor())
 		setMass(100)
