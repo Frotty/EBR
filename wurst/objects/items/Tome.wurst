@@ -19,7 +19,7 @@ public class Tome extends ItemObject
 	override function onPickup(Escaper holder)
 		picked = true
 		this.holder = holder
-		done = true
+		terminate()
 		
 	override function onDrop(Escaper e)
 		

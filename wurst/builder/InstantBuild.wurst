@@ -25,9 +25,6 @@ import Decoration
 import Pedestal
 import PlayerData
 
-function condition() returns boolean
-	return (GetTriggerUnit().getEntity()) instanceof Builder
-
 public function isOrderBuildOrder( int o ) returns boolean
 	int i = 0
 	while buildorders[i] != 0
@@ -49,8 +46,7 @@ public class BuildData
 public function callback()
 	var t = GetExpiredTimer()
 	var data = t.getData() castTo BuildData
-	data.b.updatePos()
-	data.b.setPos(data.b.pos)
+	data.b.setPos(data.b.getPos())
 	var rdata = getRegionData(data.tpos)
 	if rdata != null and rdata.canBuild(data.b.owner)
 		switch data.oId

@@ -2,7 +2,7 @@ package BaseObject
 import public Entity
 import public TerrainUtils
 import public ConfigValue
-import SetupObject
+import public SetupObject
 import Assets
 
 trigger rallyTrigger
@@ -25,10 +25,9 @@ public class StaticBaseObject extends UnitEntity
 	protected trigger inRangeTrig // Trigger for inRange detection
 
 	construct( vec2 pos, unit u, real radius, code c, code cond )
-		super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
+		super(u)
 		noRally = addEffect(Other.questionmark, pos)
 		actor.addAbility(GHOST_VIS_ID)
-		active = false
 
 		rallyPoint = this.pos
 
@@ -100,7 +99,6 @@ public class StaticBaseObject extends UnitEntity
 
 	ondestroy
 		actor.clearRegister()
-		actor.remove()
 		inRangeTrig.destr()
 		clearQuestionmark()
 

@@ -42,10 +42,11 @@ public class Powernode extends SetupObject
 	LinkedList<Link> links = new LinkedList<Link>()
 	private ConfigValue bounciness = new ConfigValue(0.75, 0.25, "Bounciness")
 
-	construct( vec2 pos, player owner )
-		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
+	construct(vec2 pos, player owner)
+		super(createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
 		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
 		..addAbility(INCREASE_BOUNCE_ID).addAbility(DECREASE_BOUNCE_ID)
+		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function unlink( Link l )
@@ -71,7 +72,7 @@ public class Powernode extends SetupObject
 				Link l = links.get(i)
 				if not l.linkedNode.done 
 					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
-					for Escaper e in currentRegion.getEscapers()
+					for Escaper e in this.getCurrentRegion().getEscapers()
 						if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
 							if e.pos.z < 24 or l.ltype == LinkType.AIRTETHER
 								switch l.ltype
@@ -84,7 +85,7 @@ public class Powernode extends SetupObject
 										calBounceD(l.linkedNode.pos,e, (1.00 + bounciness.get()))	
 									case LinkType.AIRTETHER
 										if e.pos.z > 20
-											addEffect(Other.dispelmagictarget, pos).destr()
+											addEffect(Other.dispelmagictarget, e.getPos()).destr()
 										calBounceAir(l.linkedNode.pos,e, (1.00 + bounciness.get()))		
 				else
 					links.removeAt(i)
@@ -106,7 +107,7 @@ public class Powernode extends SetupObject
 		var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
 		if b.lengthSquared() < 75
 			b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setXY(e.pos+b)
+		e.setPos(e.pos+b)
 		e.setVel(b)
 		
 	function calBounceD(vec3 lpos, Escaper e, real bounceFactor)
@@ -114,13 +115,13 @@ public class Powernode extends SetupObject
 		let dy = lpos.y - e.pos.y
 		let normal = vec2(-dy,dx).norm().toVec3()
 		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setXY(e.pos+b)
+		e.setPos(e.pos+b)
 		e.setVel(b)
 
 	function calBounceAir(vec3 lpos, Escaper e, real bounceFactor)
 		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
 		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setXY(e.pos+b)
+		e.setPos(e.pos+b)
 		e.setVel(b)
 		
 		

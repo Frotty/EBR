@@ -79,13 +79,13 @@ public function setStartTeleport(int tpid, int locid)
 	switch locid
 		case 1
 			t.setRallyPoint(vec2(3456,-4160))
-			createTTEx(t.pos, "Desert Startmaze", 11, colorA( 230,180,0, 255 ))
+			createTTEx(t.getPos(), "Desert Startmaze", 11, colorA( 230,180,0, 255 ))
 		case 2
 			t.setRallyPoint(vec2(500,-6900))
-			createTTEx(t.pos, "Forest Startmaze", 11, colorA( 230,180,0, 255 ))
+			createTTEx(t.getPos(), "Forest Startmaze", 11, colorA( 230,180,0, 255 ))
 		case 3
 			t.setRallyPoint(vec2(-2433,-6148))
-			createTTEx(t.pos, "Citadel Startmaze", 11, colorA( 230,180,0, 255 ))
+			createTTEx(t.getPos(), "Citadel Startmaze", 11, colorA( 230,180,0, 255 ))
 		
 
 public function initBaseObjects()
@@ -95,7 +95,7 @@ public function initBaseObjects()
 	ENUM_GROUP.clear()
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", null )
 	for u in ENUM_GROUP
-		if u.getHP() > .405
+		if u.isAlive()
 			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), STAFF_PLAYER)
 			if u == gg_unit_n000_0002
 				r.startmaze = 0

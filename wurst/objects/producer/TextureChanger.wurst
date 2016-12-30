@@ -28,7 +28,7 @@ public class TextureChanger extends SetupObject
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), 0)
+		super(createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), 0)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		

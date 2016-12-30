@@ -2,6 +2,7 @@ package SetupObject
 import public Entity
 import public TerrainUtils
 import public ConfigValue
+import public initlater RegionData
 
 
 /**
@@ -17,19 +18,18 @@ public abstract class SetupObject extends UnitEntity
 	
 	unit setup 
 					
-	construct( vec3 pos, unit u, unit setup, real radius )
-		super( pos, u )
+	construct(unit u, unit setup, real radius)
+		super(u)
 		this.setup = setup
-		active = true
 		this.radius = radius
 		actor..addAbility(LOCUST_ID)
 		..setPathing(true)
+		setup..setEntity(this)
+		..setXY(actor.getPos())
+		..addAbility(GHOST_INVIS_ID)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
-		setup..setXY(actor.getPos())
-		..addAbility(GHOST_INVIS_ID)
-		..setEntity(this)
 		
 	override function setPos(vec3 pos)
 		this.pos = pos
@@ -40,12 +40,6 @@ public abstract class SetupObject extends UnitEntity
 		actor.setFacing(angl)
 		setup.setFacing(angl)
 		
-	override function setXY(vec3 pos)
-		this.pos = pos
-		actor.setXY(pos)
-		setup.setXY(pos)
-
-	
 	override function update()
 		super.update()
 		time-=ANIMATION_PERIOD
@@ -89,9 +83,9 @@ public abstract class StaticSetupObject extends UnitEntity
 	
 	trigger inRangeTrig = null // Trigger for inRange detection
 						
-	construct( vec3 pos, unit u, unit setup, real radius, code c )
-		super( pos, u )
-		active = false
+	construct(unit u, unit setup, real radius, code c)
+		super(u)
+		deactivate()
 		actor.addAbility(LOCUST_ID)
 		setup.addAbility(GHOST_INVIS_ID)
 		this.setup = setup

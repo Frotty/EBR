@@ -12,10 +12,11 @@ constant string FILE_NAME = "data"
 public constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant int saveTechnique = 331
 
-
 public function checkLocalFiles(PlayerData pd)
 	if not pd.localFilesEnabled
+		printTimed(pd.mbname + " checking 2", 5)
 		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
+		printTimed(pd.mbname + " checking 3", 5)
 
 public function PlayerData.createNewPlayerFile()
 	var scode = new Savecode()

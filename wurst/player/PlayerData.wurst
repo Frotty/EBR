@@ -1,7 +1,8 @@
 package PlayerData
 import MultiboardClass
 import public Escaper
-import BuilderConstants
+import public BuilderConstants
+import public GameConstants
 import Builder
 import PickSystem
 import initlater TerrainModder
@@ -9,6 +10,7 @@ import UnitProducer
 import RevivePointModifier
 import PlayerMemoryData
 import ClosureTimers
+import DebugInfo
 
 trigger leaveTrig
 
@@ -149,6 +151,7 @@ function rebuildBoard()
 	playerboard.board.getItem(0,2)..setWidth(0.05)..setStyle(true,false)
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
+
 	allow()
 	
 	
@@ -230,6 +233,21 @@ public function initPlayers()
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 20)
 
    
+public function loadPlayerDatas()
+	doAfter(8.0, () -> begin 
+		printTimed("Please stay tuned while localfiles are being checked..", 15)
+		TriggerSyncStart()
+		printTimed("Ok..", 15)
+		// for pd in allPlayers
+		// 	printTimed(pd.mbname + " checking", 5)
+		// 	checkLocalFiles(pd)
+		// 	printTimed(pd.mbname + " (" + pd.localFilesEnabled.toString() + ")", 5)
+
+		// for pd in allPlayers
+		// 	pd.loadPlayerFile()
+		// 	printTimed("Loaded XP: " + pd.XP.toString(), 5)
+	end)
+
 public int minutes = 0
 public int seconds = 0
 

@@ -1,6 +1,8 @@
 package RegionData
 import initlater Builder
 import initlater Boss
+import public GameConstants
+import HashMap
 import PlayerData
 import DummyRecycler
 
@@ -149,7 +151,16 @@ function rect.changeTerrain( integer ttype )
 		x = xmin
 		y = y + 128
 
-  
+RegionData array currentRegion
+
+public function Entity.setCurrentRegion()
+	currentRegion[this castTo int] = getRegionData(this.getPos())
+
+public function Entity.getCurrentRegion() returns RegionData
+	if currentRegion[this castTo int] == null
+		currentRegion[this castTo int] = getRegionData(this.getPos())
+	return currentRegion[this castTo int]
+
 public function getRegionData(vec3 pos) returns RegionData
 	return getRegionData(pos.toVec2())     
 

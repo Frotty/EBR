@@ -30,9 +30,9 @@ public class SecondDesertMaze extends Startmaze
 		IssuePointOrder(gg_unit_h01H_0081, "patrol", 1840, -6537 )
 		IssuePointOrder(gg_unit_h01H_0080, "patrol", 1293, -6286 )
 		IssuePointOrder(gg_unit_h01H_0104, "patrol", 1293, -6286 )
-		var t = new Teleporter(vec2(gg_unit_n00C_0141.getX(),gg_unit_n00C_0141.getY()),STAFF_PLAYER)
-		IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
-		gg_unit_n00C_0141.remove()
+		
+		var t = new Teleporter(gg_unit_n00C_0141)
+		t.setRallyPoint(LOUNGE)
 
 	
 	

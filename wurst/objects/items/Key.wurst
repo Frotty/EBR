@@ -1,7 +1,6 @@
 package Key
 import ItemObject
 import Escaper
-import BuilderConstants
 import ClosureTimers
 public int array keyIds
 
@@ -22,7 +21,7 @@ public class Key extends ItemObject
 	function recolor()
 		RemoveItem(actorItem)
 		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
-		actorItem.setUserData(this castTo int)
+		actorItem.setEntity(this)
 		
 	override function onUse(Escaper user)
 		
@@ -38,7 +37,7 @@ public class Key extends ItemObject
 			picked = true
 			this.holder = holder
 			setup.hide()
-		
+			activate()
 		
 	override function onDrop(Escaper e)
 		picked = false
@@ -52,10 +51,14 @@ public class Key extends ItemObject
 		end)
 		
 	override function update()
+		print("updt1")
 		if picked and followWalkable
+			print("updt2")
 			if not holder.flying and not holder.sliding and not holder.onUnwalkable
 				pos = holder.getPos()
-				
+		else
+			super.update()
+			print("updt3")
 		
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()

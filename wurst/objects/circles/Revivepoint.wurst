@@ -2,6 +2,7 @@ package Revivepoint
 import SetupObject
 import PlayerData
 import Startmazes
+import ClosureTimers
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
@@ -10,8 +11,8 @@ public class RevivePoint extends StaticSetupObject
 	boolean reached = false
 	int startmaze = -1
 
-	construct( vec3 pos, player owner)
-		super( pos, CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.onReach ) 
+	construct(vec3 pos, player owner)
+		super(CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), CreateUnit(owner, REVIVEPOINT_ID, pos.x, pos.y, 0), EVENT_RADIUS, function RevivePoint.onReach ) 
 
 	function reach(Escaper reacher)
 		if not reached
@@ -20,7 +21,8 @@ public class RevivePoint extends StaticSetupObject
 			currentRevivepoint = pos.toVec2()
 			PlaySoundBJ(gg_snd_Rescue)
 			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
-			if currentRegion != null and currentRegion.getPermission(STAFF_PLAYER) == Permission.OWNER
+			this.setCurrentRegion()
+			if this.getCurrentRegion().getPermission(STAFF_PLAYER) == Permission.OWNER
 				// Is Startmaze
 				if startmaze > -1
 					if (startmazes[currentMaze] castTo int) > 0 and startmazes[currentMaze].isInit()
@@ -29,7 +31,7 @@ public class RevivePoint extends StaticSetupObject
 						startmazes[currentMaze] = null
 					currentMaze = startmaze
 					if ((startmazes[currentMaze] castTo int) > 0 and not startmazes[currentMaze].isInit())
-						startmazes[currentMaze].initMaze()
+						doAfter(0.5, () -> startmazes[currentMaze].initMaze())
 						svRev.reached = false
 			
 			let getExp = currentRevivepoint.distanceTo(pos.toVec2()) > 512

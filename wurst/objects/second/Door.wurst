@@ -25,15 +25,13 @@ public class Door extends StaticSetupObject
 	boolean opened = false
 
 	construct(unit existing)
-		super(existing.getPos3Real(), createUnit(existing.getOwner(), DOORDUMMY_ID, existing.getPos(), (270).asAngleDegrees()), existing, EVENT_RADIUS, function Door.keyopen )
-		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
-		pathing.setUserData(this castTo int)
+		super(createUnit(existing.getOwner(), DOORDUMMY_ID, existing.getPos(), (270).asAngleDegrees()), existing, EVENT_RADIUS, function Door.keyopen )
+		pathing = createUnit(this.owner, DOORPATH, pos, (270).asAngleDegrees())
 	
 	construct( vec2 pos, player owner )
-		super( pos.toVec3(), createUnit(owner,DOORDUMMY_ID, pos, (270).asAngleDegrees()), 
+		super(createUnit(owner,DOORDUMMY_ID, pos, (270).asAngleDegrees()), 
 							CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
 		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
-		pathing.setUserData(this castTo int)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	
@@ -106,27 +104,25 @@ public class Door extends StaticSetupObject
 	function turn()
 		if vertical
 			pathing.remove()
-			actor.remove()
 			vertical = false
 			if opened
-				actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
+				setNewActor(CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 ))
 				SetUnitAnimation( actor, "Death Alternate" )
 				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 270 )
 			else
-				actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 )
+				setNewActor(CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 270 ))
 				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 270 )
 			
 		else
 			pathing.remove()
-			actor.remove()
 			vertical = true
 			if opened 
-				actor = CreateUnit(owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
+				setNewActor(CreateUnit(owner, DOORDUMMY_ID , pos.x, pos.y, 0 ))
 				SetUnitAnimation( actor, "Death Alternate" )
 				pathing  = CreateUnit( owner, DOORPATH_O, pos.x, pos.y, 0 )
 			else
 				printLog(Loglevel.DEBUG, "yes " + GetPlayerId(owner).toString())
-				actor = CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 )
+				setNewActor(CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 ))
 				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
 		if col == COLOR.WHITE
 			actor.setVertexColor(COLOR_WHITE)
@@ -134,6 +130,7 @@ public class Door extends StaticSetupObject
 			actor.setVertexColor(playercolors[col castTo int - 1])
 		
 	ondestroy
+		pathing.setEntity(null)
 		pathing.remove()
 
 	function onCast() returns boolean

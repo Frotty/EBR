@@ -15,5 +15,4 @@ public class RevivePointModifier
 		active = true
 		
 	ondestroy
-		actor.remove()
 		active = false

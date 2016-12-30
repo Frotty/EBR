@@ -13,9 +13,8 @@ constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecial
 
 public class Fountain extends StaticSetupObject
 	boolean cure = true
-	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ), 200., function Fountain.cure )
-		active = false
+	construct(vec2 pos, player owner)
+		super(createUnit(owner, FOUNTAIN_BOTH_ID, pos, (270).asAngleDegrees()), createUnit(owner, FOUNTAIN_BOTH_ID, pos, (270).asAngleDegrees()), 200., function Fountain.cure)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 	
 	static function cure()

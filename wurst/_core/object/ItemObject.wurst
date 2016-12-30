@@ -5,14 +5,17 @@ public abstract class ItemObject extends Entity
 	unit setup
 	item actorItem
 
-	construct( vec2 pos, item i, unit setup )
-		super( pos.toVec3(), setup.getOwner() )
+	construct(vec2 pos, item i, unit setup)
+		super(setup.getOwner(), pos.toVec3())
 		this.setup = setup
 		actorItem = i
-		SetItemUserData(actorItem, this castTo int)
-		setup.setUserData(this castTo int)
+		actorItem.setEntity(this)
+		setup..addAbility(GHOST_VIS_ID)
+		..setEntity(this)
+		actorItem.setPos(pos.x, pos.y)
 		
 	ondestroy
+		setup.setEntity(null)
 		setup.remove()
 		actorItem.remove()
 		

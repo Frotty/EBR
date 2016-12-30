@@ -36,7 +36,6 @@ public class VoidWalker extends EscaperSensorSetup
 		setup()
 		
 	function setup()
-		active = true
 		setup..setVertexColor(colorA(55,55,55,55))..setScale(0.5)
 		..addAbility(UP_VIS_ID)..addAbility(DOWN_VIS_ID)
 		..addAbility(UP_INVIS_ID)..addAbility(DOWN_INVIS_ID)
@@ -73,7 +72,6 @@ public class VoidWalker extends EscaperSensorSetup
 		actor.setVertexColor(color)
 		
 	function onCast()
-		updatePos()
 		let id = GetSpellAbilityId()
 		switch id
 			case UP_VIS_ID

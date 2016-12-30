@@ -34,9 +34,14 @@ public class Spinner extends SetupObject
 	ConfigValue cosFactor = new ConfigValue(1, 0.1, "Cos-Factor")
 	ConfigValue sinFactor = new ConfigValue(1, 0.1, "Sin-Factor")
 
+	construct(unit existing)
+		super(createUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0)), existing, 0)
+		sleeps = false
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), createUnit(owner, SPINNER_ID, pos, angle(0)), createUnit(owner, SPINNER_ID, pos, angle(0)), 0)
-		actor.addAbility(LOCUST_ID)
+		super(createUnit(owner, SPINNER_ID, pos, angle(0)), createUnit(owner, SPINNER_ID, pos, angle(0)), 0)
+		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
@@ -46,7 +51,7 @@ public class Spinner extends SetupObject
 		while itr.hasNext()
 			let next = itr.next()
 			if not next.obj.done and next.obj.actor != null
-				next.obj.setXY( vec3(pos.x + next.dist * Cos(next.angl+speed) * cosFactor.get(), pos.y + next.dist * Sin(next.angl+speed) * sinFactor.get(), 0. ) )
+				next.obj.setPos( vec3(pos.x + next.dist * Cos(next.angl+speed) * cosFactor.get(), pos.y + next.dist * Sin(next.angl+speed) * sinFactor.get(), 0. ) )
 				next.angl += speed
 			else
 				itr.remove()
@@ -68,7 +73,6 @@ public class Spinner extends SetupObject
 				i++
 			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == STAFF_PLAYER)
 				dobj.setup.removeAbility(REMOVE_ID)
-				dobj.updatePos()
 				spinningEntities.add(new SpinNode(dobj, pos.angleTo2d(dobj.pos).radians(), pos.distanceTo(dobj.pos) ))
 
 	ondestroy

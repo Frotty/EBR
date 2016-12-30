@@ -3,6 +3,7 @@ package TerrainModder
 import BuilderConstants
 import ChannelAbilityPreset
 import PlayerData
+import RegionData
 
 public constant int ICECONTROL = 'H007'
 public constant int ICEUNCONTROL = 'H008'

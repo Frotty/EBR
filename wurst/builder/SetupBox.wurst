@@ -1,6 +1,7 @@
 package SetupBox
 import PlayerData
 import initlater Builder
+import RegionData
 import RegisterEvents
 import SoundUtils
 
@@ -27,7 +28,7 @@ public class SetupBox extends UnitEntity
 	private RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
-		super(pos.toVec3(), createUnit( owner, SETUP_BOX, pos, angle(0) ))
+		super(createUnit( owner, SETUP_BOX, pos, angle(0) ))
 		rdata = data
 		actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
 		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)
@@ -155,7 +156,6 @@ function claimRegion()
 	let itm = GetSoldItem()
 	var id = GetItemTypeId(itm)
 	var builder = buyer.getUserData() castTo Builder
-	builder.updatePos()
 	var rdata = getRegionData(seller.getPos())
 	let rtype = getRegionTypeFromItem(id)
 	if rdata.rtype == RegionType.UNKNOWN and rtype != RegionType.UNKNOWN

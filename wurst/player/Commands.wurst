@@ -43,9 +43,9 @@ function onCommandChat()
 				doAfter(0.1, () -> pd.escaper.revive())
 		case "info"
 			string s = "|cffFFD621[Info]|r - Current Region:\n"
-			s += "            |cff63DEFFSlidespeed|r: " + pd.escaper.currentRegion.slidespeed.toString() + "\n"
-			s += "            |cff08AD4APoison Damage|r: " + pd.escaper.currentRegion.poisonDmg.toString() + "\n"
-			s += "            |cffA52108Lava Damage|r: " + pd.escaper.currentRegion.lavaDmg.toString() + "\n"
+			s += "            |cff63DEFFSlidespeed|r: " + pd.escaper.getCurrentRegion().slidespeed.toString() + "\n"
+			s += "            |cff08AD4APoison Damage|r: " + pd.escaper.getCurrentRegion().poisonDmg.toString() + "\n"
+			s += "            |cffA52108Lava Damage|r: " + pd.escaper.getCurrentRegion().lavaDmg.toString() + "\n"
 			s += "            |cffFF9C29Owners|r: " 
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"

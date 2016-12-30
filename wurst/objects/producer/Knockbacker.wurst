@@ -33,7 +33,6 @@ public class Knockbacker extends EscaperSensorSetup
 		return false
 		
 	override function onSensor(UnitEntity source, UnitEntity target)
-		updatePos()
 		if target instanceof Escaper
 			if target.pos.z <= sensorHeight
 				let escaper = target castTo Escaper

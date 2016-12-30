@@ -4,6 +4,7 @@ import EscaperKillers
 import Pointer
 import Knockbacker
 import ChannelAbilityPreset
+import HashMap
 
 constant int 	UNITCREATOR_ID   = 'n006'
 
@@ -22,21 +23,19 @@ public class UnitCreator extends StaticBaseObject
 
 	construct( vec2 pos, player owner)
 		super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL , CODE_NULL)
-		active = false
 		actor.addAbility(FIXED_ID)
+		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 	
 	override function update()
-		super.update()
-		if active
-			if timerreal <= 0.0
-				create(this)
-				if tmode == TimerMode.FIXED
-					timerreal = interval
-				else if tmode == TimerMode.RANDOM
-					timerreal = GetRandomReal(0.5, interval)
-			else
-				timerreal -= ANIMATION_PERIOD	
+		if timerreal <= 0.0
+			create(this)
+			if tmode == TimerMode.FIXED
+				timerreal = interval
+			else if tmode == TimerMode.RANDOM
+				timerreal = GetRandomReal(0.5, interval)
+		else
+			timerreal -= ANIMATION_PERIOD	
 			
 				
 	static function create(UnitCreator obj)
@@ -79,14 +78,14 @@ public class UnitCreator extends StaticBaseObject
 					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 					//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 			case START_ABIL
-				active = true
+				activate()
 				timerreal = interval
 				UnitAddAbility(actor,PAUSE_ABIL)
 				UnitRemoveAbility(actor,START_ABIL)
 			case PAUSE_ABIL
 				UnitRemoveAbility(actor,PAUSE_ABIL)
 				UnitAddAbility(actor,START_ABIL)
-				active = false
+				deactivate()
 			case 'A045' // Big killer
 				spawnUnitType = 'BIGK'
 			case 'A046' // Small killer

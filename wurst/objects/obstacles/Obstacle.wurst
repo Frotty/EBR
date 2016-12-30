@@ -10,7 +10,6 @@ constant VOLCANO_ID = 'n00K'
 public class Obstacle extends EscaperSensorSetup
 	construct(vec2 pos, player owner, int id, real radius )
 		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, radius)
-		active = false
 		setup.addAbility(REMOVE_ID)
 
 public class SmallObstacle extends Obstacle

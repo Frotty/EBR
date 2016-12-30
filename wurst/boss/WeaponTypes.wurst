@@ -4,6 +4,7 @@ import Assets
 import ClosureForGroups
 import Boss
 import BoomerangProjectile
+import Fx
 
 public constant weaponcount = 4
 tuple WeaponType(int itemId, int abilId, int attackAbil, string attachment, WeaponListener listener)
@@ -15,7 +16,7 @@ public WeaponType array weapontypes
 
 function onSabre(Escaper e)
 	let facing = e.actor.getFacingAngle()
-	let tpos = e.pos.toVec2().polarOffset(facing, 64)
+	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	destroy new Fx(tpos, facing, Other.defendcaster)
 	forUnitsInRange(tpos, 100, (unit u) -> begin
 		let entity = u.getEntity()
@@ -26,7 +27,7 @@ function onSabre(Escaper e)
 
 function onHammer(Escaper e)
 	let facing = e.actor.getFacingAngle()
-	let tpos = e.pos.toVec2().polarOffset(facing, 64)
+	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	addEffect(Other.thunderclapcaster, tpos).destr()
 	forUnitsInRange(tpos, 100, (unit u) -> begin
 		let entity = u.getEntity()
@@ -41,7 +42,7 @@ function onGlaive(Escaper e)
 
 function onBow(Escaper e)
 	let facing = e.actor.getFacingAngle()
-	let tpos = e.pos.toVec2().polarOffset(facing, 64)
+	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	addEffect(Other.thunderclapcaster, tpos).destr()
 	forUnitsInRange(tpos, 100, (unit u) -> begin
 		let entity = u.getEntity()

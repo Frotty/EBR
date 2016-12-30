@@ -18,6 +18,7 @@ import GlobalShop
 import Remove
 import BasicSpells
 import ClosureTimers
+import PlayerData
 
 init
 	callGen()
@@ -66,6 +67,8 @@ function initGame()
 	invis_init()
 	init_remove()
 	getTimer().start(0.01, function initPartTwo)
+
+
 function initPartTwo()
 	initBaseObjects()
 	printLog(Loglevel.DEBUG, "Init - BObj")
@@ -78,5 +81,7 @@ function initPartTwo()
 	initSpells()
 	initItem()
 	initStartmazes()
+
+	loadPlayerDatas()
 	GetExpiredTimer().release()
 

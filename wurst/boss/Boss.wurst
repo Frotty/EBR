@@ -22,8 +22,8 @@ public class Boss extends SetupObject
 	real currentHP = 400
 	CustomBar hpBar
 
-	construct( player owner, vec2 tpos, int id)
-		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
+	construct(player owner, vec2 tpos, int id)
+		super(createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		hpBar = new CustomBar(pos, "|", 120, 8)
 		hpBar.setForeground(colorA(200,255,125,255))

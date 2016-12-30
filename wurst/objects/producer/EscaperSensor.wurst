@@ -1,6 +1,7 @@
 package EscaperSensor
 import public SetupObject
 import Escaper
+import Sensor
 
 public class EscaperSensorSetup extends SetupObject
 	use Sensor
@@ -8,17 +9,17 @@ public class EscaperSensorSetup extends SetupObject
 	protected real sensorHeight
 	
 	construct(vec3 pos, player owner, int unitId, angle facing, real radius, real sensorHeight )
-		super(pos, createUnit(owner, unitId, pos, facing), createUnit(owner, unitId, pos, facing), radius) 
+		super(createUnit(owner, unitId, pos, facing), createUnit(owner, unitId, pos, facing), radius) 
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
 	construct(vec3 pos, player owner, int unitId, real radius, real sensorHeight )
-		super(pos, createUnit(owner, unitId, pos, angle(0)), createUnit(owner, unitId, pos, angle(0)), radius) 
+		super(createUnit(owner, unitId, pos, angle(0)), createUnit(owner, unitId, pos, angle(0)), radius) 
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
 	construct(unit pactor, real radius, real sensorHeight )
-		super(pactor.getPos3Zero(), pactor, createUnit(pactor.getOwner(), pactor.getTypeId(), pactor.getPos3Zero(), pactor.getFacingAngle()), radius)
+		super(createUnit(pactor.getOwner(), pactor.getTypeId(), pactor.getPos3Zero(), pactor.getFacingAngle()), pactor, radius)
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		

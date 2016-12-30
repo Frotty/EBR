@@ -21,26 +21,24 @@ public class Tracks extends UnitEntity
 	int width  = 0
 	vec2 dir = UP
 	
-	construct( vec2 pos, player owner )
-		super( pos.toVec3(), createUnit(owner, TRACKS[0], pos, angle(0)) )
+	construct(vec2 pos, player owner)
+		super(createUnit(owner, TRACKS[0], pos, angle(0)))
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.setUserData(this castTo int)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		
 	override function update()
-		for escaper in currentRegion.getEscapers()
+		for escaper in this.getCurrentRegion().getEscapers()
 			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
 				escaper.otherVel += dir * trackSpeed.get()
-		
 				
 	function recreateDummy()
-		actor.remove()
-		actor = createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees())
-		
+		setNewActor(createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees()))
+
 	ondestroy
 		setup.remove()
-		actor.remove()
 				
 	function onCast()
 		let id = GetSpellAbilityId()

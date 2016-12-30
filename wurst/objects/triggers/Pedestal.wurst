@@ -13,40 +13,40 @@ public int LOAD_ID
 constant AOE_PICK_RANGE = 378.
 
 public class MemoryAccessPedestal extends StaticBaseObject
-	private LinkedList<Serializable> entities = new LinkedList<Serializable>()
+	// private LinkedList<Serializable> entities = new LinkedList<Serializable>()
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
 		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
 		..addAbility(SAVE_ID)..addAbility(LOAD_ID)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		// EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		
-	function addObj(Serializable serializable)
-		if not entities.contains(serializable)
-			entities.add(serializable)
-			if serializable instanceof UnitEntity
-				let ue = serializable castTo UnitEntity
-				addEffect(Other.furbolgtracker_portrait,ue.actor.getPos())
+	// function addObj(Serializable serializable)
+	// 	if not entities.contains(serializable)
+	// 		entities.add(serializable)
+	// 		if serializable instanceof UnitEntity
+	// 			let ue = serializable castTo UnitEntity
+	// 			addEffect(Other.furbolgtracker_portrait,ue.actor.getPos())
 		
-	function onCast()
-		let id = GetSpellAbilityId()
-		let tpos = getSpellTargetPos()
-		switch id
-			case SELECT_AOE_ID
-				forUnitsInRange(tpos, AOE_PICK_RANGE, (unit u) -> begin
-					if u != actor
-						if u.getEntity() != null
-							var ed = u.getEntity()
-							if ed.owner == owner
-								addObj(ed)
-				end)
-			case SAVE_ID
-				var s = ""
-				for sEnt in entities
-					s += sEnt.serialize()
+	// function onCast()
+	// 	let id = GetSpellAbilityId()
+	// 	let tpos = getSpellTargetPos()
+	// 	switch id
+	// 		case SELECT_AOE_ID
+	// 			forUnitsInRange(tpos, AOE_PICK_RANGE, (unit u) -> begin
+	// 				if u != actor
+	// 					if u.getEntity() != null
+	// 						var ed = u.getEntity()
+	// 						if ed.owner == owner
+	// 							addObj(ed)
+	// 			end)
+	// 		case SAVE_ID
+	// 			var s = ""
+	// 			for sEnt in entities
+	// 				s += sEnt.serialize()
 					
-				print(s)
+	// 			print(s)
 				
 @objectgen function genMAP()
 	PED_ID = UNIT_ID_GEN.next()
