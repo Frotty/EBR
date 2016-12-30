@@ -2,11 +2,13 @@ package Escaper
 import PhysicsEntity
 import Assets
 import public Entity
-import BuilderConstants
+import public BuilderConstants
+import public GameConstants
 import RevivePointModifier
 import TerrainBlocker
 import initlater Weapon
 import initlater ReviveManager
+import public initlater RegionData
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -42,7 +44,7 @@ public class Escaper extends UnitEntity
 
 	
 	construct( vec3 pos, player owner, int typ )
-		super(pos, 32, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
+		super(createUnit(owner, typ, pos, angle(0)))
 		actor..addAbility('Aloc')
 		..hide()
 		..removeAbility('Aloc')
@@ -103,19 +105,23 @@ public class Escaper extends UnitEntity
 		actor.setPropWindow(0)
 		sliding = false
 	
-	override function inAir()
-		slideVelocity *= 0.99
-			
-	override function onGround()
+	override function onGround(Entity e)
+		if e.flying
+			e.flying = false
+			onGroundHit()
+		// If the Entity is moving towards
+		e.scaleVel(surfaceFriction)
 		var ttype = GetTerrainType(pos.x, pos.y)
 		onUnwalkable = false
-		if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
+		let rdata = this.getCurrentRegion()
+		slideVelocity *= 0.99
+		if ttype == rdata.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 			onUnwalkable = true
 			if alive
 				kill()
 		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 			let angl = actor.getFacingAngle()
-			slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
+			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			if not sliding
 				speedFactor = 1
 				sliding = true
@@ -139,13 +145,13 @@ public class Escaper extends UnitEntity
 		if onLava
 			var hp = actor.getHP()
 			if hp > .405
-				actor.setHP(hp-currentRegion.lavaDmg)
+				actor.setHP(hp-this.getCurrentRegion().lavaDmg)
 			else if alive
 				kill()
 		if poisoned
 			var hp2 = actor.getHP()
 			if hp2 > .405
-				actor.setHP(hp2-currentRegion.poisonDmg)
+				actor.setHP(hp2-this.getCurrentRegion().poisonDmg)
 			else if alive
 				kill()
 		
@@ -153,56 +159,65 @@ public class Escaper extends UnitEntity
 		otherVel = vec2(0,0)
 	
 	override function update()
-		if currentRegion != null
-			let newPos = actor.getPos()
-			walkVel = newPos-pos.toVec2()
-			pos = newPos.withZ(pos.z)
-			physicsUpdate(this)
-			pos += vel
-			pos += slideVelocity * (1-speedFactor)
-			if sliding
-				setPos(pos)
-			else
-				setXY(pos)
+		let newPos = actor.getPos()
+		walkVel = newPos-pos.toVec2()
+		pos = newPos.withZ(pos.z)
+		physicsUpdate(this)
+		pos += vel
+		pos += slideVelocity * (1-speedFactor)
+		if sliding
+			setPos(pos)
+		else
+			setXY(pos)
 		
 	function getRealVel() returns vec3
 		return vel + slideVelocity + otherVel + walkVel
 
 	function revive()
-		sliding = false
-		stop()
-		let rev = currentRevivepoint
-		if revmod == null
-			ReviveHero(actor, rev.x, rev.y, false)
-			setPos(vec3(rev.x, rev.y, 32.))
-		else
-			ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
-			setPos(vec3(revmod.pos.x, revmod.pos.y, 32.))
-		actor.setPropWindow(60.)
-		updateRegionData()
-		alive = true
-		setPoison(false)
-		setLava(false)
-		if left
-			terminate()
-			return
+		if not alive
+			stop()
+			let rev = currentRevivepoint
+			if revmod == null
+				ReviveHero(actor, rev.x, rev.y, false)
+				setPos(vec3(rev.x, rev.y, 32.))
+			else
+				ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
+				setPos(vec3(revmod.pos.x, revmod.pos.y, 32.))
+			actor.setPropWindow(60.)
+			updateRegionData()
+			alive = true
+			setPoison(false)
+			setLava(false)
+			if left
+				terminate()
+				return
 
-		CameraClearNoiseForPlayer(owner)
-		if selectatrevive
-			if (GetLocalPlayer() == owner)
-				PanCameraToTimed(rev.x, rev.y, 0)
-				ClearSelection()
-				SelectUnit(actor, true)
-		if camlock
-			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
+			CameraClearNoiseForPlayer(owner)
+			if selectatrevive
+				if (GetLocalPlayer() == owner)
+					PanCameraToTimed(rev.x, rev.y, 0)
+					ClearSelection()
+					SelectUnit(actor, true)
+			if camlock
+				SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
+	
+	override function setTarget(vec3 tpos, real speed)
+		var t = pos.distanceTo2d(tpos) / speed
+		let tangle = pos.angleTo2d(tpos)
+		if t < 1.
+			t = 1./speed
+		
+		let startZVelocity = ((-this.getCurrentRegion().gravity.z * t) / 2 - pos.z/t)
+		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
 			
 	function updateRegionData()
-		let newReg = getRegionData(pos)
-		if newReg != null and newReg != currentRegion
-			currentRegion.removeEscaper(this)
-			currentRegion = newReg
+		let currentReg = this.getCurrentRegion()
+		this.setCurrentRegion()
+		let newReg = this.getCurrentRegion()
+		if newReg != null and newReg != currentReg
+			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
-			if currentRegion.jumpAvailable
+			if this.getCurrentRegion().jumpAvailable
 				actor.addAbility(JUMP_SPELL)
 			else 
 				actor.removeAbility(JUMP_SPELL)
@@ -266,7 +281,6 @@ public class Escaper extends UnitEntity
 	ondestroy
 		lavaEffect.destr()
 		poisonEffect.destr()
-		actor.remove()
 		escapers.remove(this)
 				
 public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
