@@ -1,13 +1,16 @@
-[0.86i]
+[0.86n]
+[*] Unified powernode lightning textures
+[*] Added omnious orb ability as region special (see setup box)
+[*] Added notification for escapers when they receive a region's special ability
+[*] Lounge area teleporters now get removed if no longer needed
+[*] Escaper turnspeed can now be set per region
+[*] Texter messages are now centered
+[*] Minor startmaze changes
+[*] Added new spell to fast escaper (oneway portal)
 [*] Fixed event issues
-[*] Balanced oneway portal
 [*] Fixed portal model glitch
 [*] Optimizations for lower-spec pcs (experimental)
-
-[0.86h]
-[*] Minor startmaze updates
-[*] Added new spell to holy escaper (oneway portal)
-[*] Outsourced entitysystem
+[*] Now using Frentity
 
 [0.86g]
 [*] Third Startmaze finalized
