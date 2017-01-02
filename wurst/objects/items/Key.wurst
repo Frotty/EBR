@@ -26,39 +26,37 @@ public class Key extends ItemObject
 	override function onUse(Escaper user)
 		
 	override function onPickup(Escaper holder)
-		if isBuilder(holder.owner) and this.owner != holder.owner
+		if isEscaper(holder.owner) or this.owner != holder.owner
+			picked = true
+			this.holder = holder
+			setup.hide()
+			activate()
+		else
 			picked = false
 			holder.actor.removeItem(actorItem)
 			actorItem.setPos(pos.toVec2())
 			setup.setXY(pos.toVec2())
 			setup.show()
 			this.holder = null
-		else
-			picked = true
-			this.holder = holder
-			setup.hide()
-			activate()
-		
+			
 	override function onDrop(Escaper e)
 		picked = false
 		holder = null
 		setup.setXY(pos.toVec2())
 		setup.show()
 		nullTimer(() -> begin
+			actorItem.setEntity(null)
 			actorItem.remove()
 			actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
-			actorItem.setUserData(this castTo int)
+			actorItem.setEntity(this)
 		end)
 		
 	override function update()
-		print("updt1")
 		if picked and followWalkable
-			print("updt2")
 			if not holder.flying and not holder.sliding and not holder.onUnwalkable
 				pos = holder.getPos()
 		else
 			super.update()
-			print("updt3")
 		
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()

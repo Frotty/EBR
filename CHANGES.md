@@ -1,3 +1,18 @@
+[0.86i]
+[*] Fixed event issues
+[*] Balanced oneway portal
+[*] Fixed portal model glitch
+[*] Optimizations for lower-spec pcs (experimental)
+
+[0.86h]
+[*] Minor startmaze updates
+[*] Added new spell to holy escaper (oneway portal)
+[*] Outsourced entitysystem
+
+[0.86g]
+[*] Third Startmaze finalized
+[*] crashbug confirmed fixed, other known bugs remain
+
 [0.86f]
 [*] continued third startmaze revamp [wip]
 [*] general code cleanup and fixes to hopefully fix crashbug

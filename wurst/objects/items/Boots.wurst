@@ -16,19 +16,9 @@ public class Boots extends ItemObject
 		
 	override function onPickup(Escaper holder)
 		picked = true
-		this.holder = holder
-		setup.hide()
+		terminate()
 		
 	override function onDrop(Escaper e)
-		picked = false
-		holder = null
-		setup.setXY(pos.toVec2())
-		setup.show()
-		nullTimer(() -> begin
-			actorItem.remove()
-			actorItem = CreateItem( BOOTS_ID, pos.x, pos.y )
-			actorItem.setUserData(this castTo int)
-		end)
 		
 	override function update()
 	

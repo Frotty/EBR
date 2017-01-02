@@ -34,7 +34,6 @@ function bintro1()
 	let expt = GetExpiredTimer()
 	let pd = expt.getData() castTo PlayerData
 	CameraSetupApplyForPlayer(true, gg_cam_BuilderSetupCam, pd.p, 5.)
-	pd.p.selectSingle(gg_unit_n008_0326)
 	printTimedToPlayerClear("|cffFF7B29Let's get started!\n|rThe first thing you have to do in order to |cffFFCC00start building|r is to |cffFFCC00aquire/buy a region|r.\n\nYou buy |cffFFCC00regions |rby buying the |cffFFCC00terrain-item|r of your choice from the |cff6BC54ASetup-Building|r in the middle of the region.\n\nYou can see the |cff6BC54ASetup-Building |rhere.\n\nEach |cffFFCC00Region|r has |cff6BAE3Bone |runtil a builder buys it.\nYou can see the different |cffFFCC00regions |rmarked with a |cffFFCC00letter |ron your |cffFFCC00minimap |rat the bottom left of your screen.", 15, pd.p)
 	expt.start(15, function bintro2)
 	

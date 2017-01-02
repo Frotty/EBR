@@ -3,6 +3,7 @@ import PlayerData
 import Intro
 import ClosureTimers
 import SetupBox
+import EscaperClasses
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -39,7 +40,11 @@ function onCommandChat()
 				SetCameraFieldForPlayer(p, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 1.)
 		case "frev"
 			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Trying forced revive!")
-			if pd.escaper.actor.getHP() < .405
+			if pd.escaper == null
+				doAfter(0.1, () -> begin 
+					pd.escaper = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+				end)
+			else if  pd.escaper.actor == null or not pd.escaper.actor.isAlive()
 				doAfter(0.1, () -> pd.escaper.revive())
 		case "info"
 			string s = "|cffFFD621[Info]|r - Current Region:\n"

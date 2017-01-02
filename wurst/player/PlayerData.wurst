@@ -10,7 +10,8 @@ import UnitProducer
 import RevivePointModifier
 import PlayerMemoryData
 import ClosureTimers
-import DebugInfo
+import CodeManager
+import EscaperClasses
 
 trigger leaveTrig
 
@@ -118,6 +119,7 @@ public class PlayerData
 				escaper.terminate()
 			else
 				escaper.left = true
+			escaper = null
 		allPlayers.remove(this)
 		pData[id] = null
 		if isBuilder(p)
@@ -131,6 +133,8 @@ public class PlayerData
 		else
 			escaperPlayers.remove(this)
 		rebuildBoard()
+		if revmod != null
+			destroy revmod
 		
 function rebuildBoard()
 	playerboard = new Board(allPlayers.getSize()+1,3)
@@ -222,6 +226,10 @@ public function initPlayers()
 		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
 		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
 		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+		new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+		new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+		new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+		new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 		pd.builder = new Builder( pd.p )
 		UnitAddItemById(pd.builder.actor,'I001')
 		UnitAddItemById(pd.builder.actor,'I002')
@@ -234,19 +242,19 @@ public function initPlayers()
 
    
 public function loadPlayerDatas()
-	doAfter(8.0, () -> begin 
-		printTimed("Please stay tuned while localfiles are being checked..", 15)
-		TriggerSyncStart()
-		printTimed("Ok..", 15)
-		// for pd in allPlayers
-		// 	printTimed(pd.mbname + " checking", 5)
-		// 	checkLocalFiles(pd)
-		// 	printTimed(pd.mbname + " (" + pd.localFilesEnabled.toString() + ")", 5)
+	// doAfter(8.0, () -> begin 
+	// 	printTimed("Please stay tuned while localfiles are being checked..", 15)
+	// 	TriggerSyncStart()
+	// 	printTimed("Ok..", 15)
+	// 	for pd in allPlayers
+	// 		printTimed(pd.mbname + " checking", 5)
+	// 		checkLocalFiles(pd)
+	// 		printTimed(pd.mbname + " (" + pd.localFilesEnabled.toString() + ")", 5)
 
-		// for pd in allPlayers
-		// 	pd.loadPlayerFile()
-		// 	printTimed("Loaded XP: " + pd.XP.toString(), 5)
-	end)
+	// 	for pd in allPlayers
+	// 		pd.loadPlayerFile()
+	// 		printTimed("Loaded XP: " + pd.XP.toString(), 5)
+	// end)
 
 public int minutes = 0
 public int seconds = 0

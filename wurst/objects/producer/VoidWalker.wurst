@@ -39,6 +39,7 @@ public class VoidWalker extends EscaperSensorSetup
 		setup..setVertexColor(colorA(55,55,55,55))..setScale(0.5)
 		..addAbility(UP_VIS_ID)..addAbility(DOWN_VIS_ID)
 		..addAbility(UP_INVIS_ID)..addAbility(DOWN_INVIS_ID)
+		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()

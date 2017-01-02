@@ -9,6 +9,7 @@ import Tome
 import JukeBox
 import initlater Weapon
 import initlater Boss
+import Boots
 
 trigger itemTrigger
 trigger orderTrigger
@@ -20,7 +21,7 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super(CreateUnit(p, BUILDER_1, -6500, -7000, 0))
+		super(CreateUnit(p, BUILDER_1, -6000, -7160, 0))
 		deactivate()
 		registerListeners()
 
@@ -29,7 +30,6 @@ public class Builder extends UnitEntity
 
 	override function setNewActor(unit u)
 		super.setNewActor(u)
-		registerListeners()
 		if UnitItemInSlot(actor, 0) == null
 			UnitAddItemById(actor,'I001')
 			UnitAddItemById(actor,'I002')
@@ -70,7 +70,7 @@ public class Builder extends UnitEntity
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 			case BOOTS_SPELL_ID
 				if rdata.canBuild(owner)
-					createItem(BOOTS_ID, tpos)
+					new Boots(tpos, owner)
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 			case TOME_SPELL_ID
@@ -111,10 +111,12 @@ public class Builder extends UnitEntity
 				if rdata != null and i.getUserData() > 0
 					if rdata.canBuild(bdata.owner)
 						var idata = i.getEntity()
-						idata.terminate()
+						if idata.typeId != 0
+							idata.terminate()
+						else
+							i.remove()
 				else 
 					RemoveItem(i)
-
 				actor.abortOrder()
 		else
 			widget w = GetOrderTarget()
@@ -126,11 +128,9 @@ public class Builder extends UnitEntity
 				getTimer()..start(0.01, function callback)
 				..setData((new BuildData(u.getUserData() castTo Builder,
 							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
-				
 			else if OrderId2String(ord) == "smart" or OrderId2String(ord) == "move"
 				if w == null
 					if ( ox > 0. or ox < 0. )
-						
 						SetUnitX(u,ox)
 						SetUnitY(u,oy)
 				else
@@ -144,8 +144,6 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
-		
 public function init_Builder()	
-	gg_unit_n008_0326.pause()
 	jukeBox.playNextMusic()
 	

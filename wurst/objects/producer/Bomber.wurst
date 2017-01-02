@@ -25,9 +25,7 @@ public class Bomber extends UnitEntity
 		UnitAddType(actor, UNIT_TYPE_PEON)
 		setup.addAbility('Agho')
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		setup.setUserData(this castTo int)
-		
-	override function update()
+		setup.setEntity(this)
 		
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()
@@ -47,7 +45,8 @@ public class Bomber extends UnitEntity
 		IssueImmediateOrderById(obj.setup, STOP_ORDER)
 		GetExpiredTimer().release()
 		
-	ondestroy 
+	ondestroy
+		setup.setEntity(null)
 		setup.remove()
 	
 function checkOrder()
@@ -65,7 +64,7 @@ function checkOrder()
 				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
 				getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
 			else if i == STOP_ORDER 
-				if obj.realorder == true
+				if obj.realorder
 					IssueImmediateOrderById(obj.actor, STOP_ORDER)
 				else 
 					obj.realorder = true

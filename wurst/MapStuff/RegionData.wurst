@@ -62,10 +62,11 @@ public class RegionData
 	real slidespeed = 3.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
+	real turnSpeed = 1.75
 	vec3 gravity = vec3(0,0,-0.8)
 	
 	boolean visible = false
-	boolean jumpAvailable = false
+	int specialAbil = 0
 	boolean bossRegion = false
 	Boss boss = null
 	
@@ -77,8 +78,9 @@ public class RegionData
 			..addAction(() -> enterRect())
 			regionMap.put(r, this)
 
-	function getEscapers() returns LinkedList<Escaper>
-		return escapers
+	function getEscapers() returns LLStaticIterator<Escaper>
+		escapers.staticItr().reset()
+		return escapers.staticItr()
 
 	function addEscaper(Escaper e) 
 		escapers.add(e)

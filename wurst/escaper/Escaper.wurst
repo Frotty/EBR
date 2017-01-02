@@ -9,6 +9,7 @@ import TerrainBlocker
 import initlater Weapon
 import initlater ReviveManager
 import public initlater RegionData
+import ErrorHandling
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -21,7 +22,7 @@ real time = 0.
 
 public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
-public class Escaper extends UnitEntity	
+public abstract class Escaper extends UnitEntity	
 	use PhysicsModule
 	RevivePointModifier revmod = null
 	boolean onUnwalkable = false
@@ -52,11 +53,17 @@ public class Escaper extends UnitEntity
 		SetUnitPropWindow(actor, 60.)
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill())
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		updateRegionData()
 		escapers.add(this)
-	
+
+	override function inAir(Entity e)
+		if not e.flying
+			e.flying = true
+			onEscapeGround()
+		if affectedByGravity
+			e.addVel(this.getCurrentRegion().gravity)
 
 	function setLava(boolean add)
 		if add and not onLava
@@ -76,9 +83,9 @@ public class Escaper extends UnitEntity
 	
 	function kill()
 		if alive
-			manageRevive(this)
-			actor.kill()
 			alive = false
+			actor.kill()
+			manageRevive(this)
 			setPoison(false)
 			setLava(false)
 			flying = false
@@ -90,7 +97,9 @@ public class Escaper extends UnitEntity
 		slideVelocity = vec2(0,0)
 		vel = vec3(0,0,0)
 		otherVel = vec2(0,0)
-		
+
+	override function setNewActor(unit u)
+		error("Don't do this..")
 	
 	override function onGroundHit()
 		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.BLUGOO castTo int) and vel.z.abs() > 5
@@ -178,14 +187,21 @@ public class Escaper extends UnitEntity
 			stop()
 			let rev = currentRevivepoint
 			if revmod == null
-				ReviveHero(actor, rev.x, rev.y, false)
-				setPos(vec3(rev.x, rev.y, 32.))
+				if actor == null
+					printLog(Loglevel.ERROR, "why this happening :(")
+					super.setNewActor(createUnit(owner, 1, rev, angle(0)))
+				else
+					ReviveHero(actor, rev.x, rev.y, false)
+				setXY(vec3(rev.x, rev.y, 32.))
 			else
-				ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
-				setPos(vec3(revmod.pos.x, revmod.pos.y, 32.))
+				if actor == null
+					super.setNewActor(createUnit(owner, 1, revmod.pos, angle(0)))
+				else
+					ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
+				setXY(vec3(revmod.pos.x, revmod.pos.y, 32.))
+			alive = true
 			actor.setPropWindow(60.)
 			updateRegionData()
-			alive = true
 			setPoison(false)
 			setLava(false)
 			if left
@@ -217,10 +233,13 @@ public class Escaper extends UnitEntity
 		if newReg != null and newReg != currentReg
 			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
-			if this.getCurrentRegion().jumpAvailable
-				actor.addAbility(JUMP_SPELL)
+			if this.getCurrentRegion().specialAbil > 0
+				actor.addAbility(this.getCurrentRegion().specialAbil)
+				if isEscaper(actor.getOwner())
+					printTimedToPlayer("|cffFFCC00>> |rYou were granted a |cff0884BDspecial ability |rin this region |r(use with hotkey |cffFFCC00T|r)", 10, actor.getOwner())
 			else 
 				actor.removeAbility(JUMP_SPELL)
+			actor.setTurnSpeed(newReg.turnSpeed)
 
 	static function changeAngle()
 		var u = GetTriggerUnit()

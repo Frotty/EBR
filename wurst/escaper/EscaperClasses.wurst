@@ -1,29 +1,40 @@
 package EscaperClasses
-
+import Sensor
+import FxEntity
 import Escaper
 import Assets
+import Key
+import initlater PlayerData
+
 constant REINCARNATION_ID = 'A02X'
+constant PORTAL_ID = 'A085'
 constant SPEEDWAVE_ID = 'A06P'
 constant TOMB_DUMMY_ID = 'u00D'
 constant STAGNANCYSHIELD_ID = 'A008'
-constant SLOWWAVE_ID = 'A07Z'
+constant SLOWWAVE_ID = 'A088'
+constant TEMP_REV_ID = 'A07Z'
 
 public class HolyEscaper extends Escaper
 	unit revivetomb = null
 
-	construct( vec3 pos, player owner, int typ )
-		super( pos, owner, typ )
+	construct( vec3 pos, player owner)
+		super( pos, owner, 'H00B')
 		
 	override function onCast(int id)
 		super.onCast(id)
 		if id == REINCARNATION_ID
-			if not poisoned and not sliding
+			if poisoned or onLava or sliding
+				actor.resetAbilityCooldown(REINCARNATION_ID)
+				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+			else
 				if revivetomb != null
 					revivetomb.remove()
 				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
-			else
-				actor..removeAbility(REINCARNATION_ID)..addAbility(REINCARNATION_ID)
+		else if id == TEMP_REV_ID
+			if poisoned or onLava or sliding
+				actor.resetAbilityCooldown(TEMP_REV_ID)
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				
 			
 	override function revive()
 		super.revive()
@@ -34,12 +45,80 @@ public class HolyEscaper extends Escaper
 					PanCameraToTimed(pos.x, pos.y, 0)
 			revivetomb.remove()
 			revivetomb = null
+
+public class Portal extends FxEntity
+	use Sensor
+
+	vec2 destiny = ZERO2
+	FastEscaper es = null
+	int duration
+
+	construct(FastEscaper es, int duration) 
+		super(es.owner, es.getPos(), 24, angle(0), "PulseTC_fix4.mdx")
+		this.duration = duration
+		this.es = es
+		deactivate()
+		fx.setColor(colorA(125,125,125,125))
+		addSensorListener(this, (UnitEntity source, UnitEntity target) -> begin
+			if destiny != ZERO2 and target instanceof Escaper
+				var teleport = true
+				for i = 0 to 5
+					let ie = UnitItemInSlot(target.actor, i).getEntity()
+					if ie != null and ie instanceof Key
+						teleport = false
+						break
+				if teleport
+					target.setPos(destiny.toVec3())
+					flashEffect("Teleport.mdx", pos)
+					flashEffect("Teleport.mdx", destiny)
+					if not pData[target.actor.getOwner().getId()].escaper.camlock
+						PanCameraToTimedForPlayer(target.actor.getOwner(), destiny.x, destiny.y, 0.03 )
+
+		end)
+
+	override function slowUpdate()
+		super.slowUpdate()
+		if idleSeconds >= duration
+			terminate()
+
+	function setDestiny(vec2 tpos)
+		this.destiny = tpos
+		if tpos != ZERO2
+			fx.setColor(colorA(215,215,215,215))
+		else
+			fx.setColor(colorA(125,125,125,125))
+
+	ondestroy
+		es.portal = null
+
+public class FastEscaper extends Escaper
+	Portal portal = null
+
+	construct(vec3 pos, player owner)
+		super(pos, owner, 'H00D')
+		
+	override function onCast(int id)
+		super.onCast(id)
+		if id == PORTAL_ID
+			if sliding or poisoned or onLava
+				actor.resetAbilityCooldown(PORTAL_ID)
+				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				return
+			if portal == null
+				portal = new Portal(this, 20 + actor.getAbilityLevel(PORTAL_ID) * 15)
+				actor.resetAbilityCooldown(PORTAL_ID)
+			else
+				if portal.destiny != ZERO2
+					portal..setPos(getPos())..setDestiny(ZERO2)
+					actor.resetAbilityCooldown(PORTAL_ID)
+				else
+					portal.setDestiny(getPos().toVec2())
 					
 
 public class IceEscaper extends Escaper
 	
-	construct(vec3 pos, player owner, int typ )
-		super(pos, owner, typ)
+	construct(vec3 pos, player owner)
+		super(pos, owner, 'H00E')
 		
 	override function onCast(int id)
 		super.onCast(id)
@@ -62,14 +141,14 @@ public class StrongEscaper extends Escaper
 	vec2 shieldPos = vec2(0,0)
 	real shieldtimer = 0.
 	
-	construct(vec3 pos, player owner, int typ )
-		super(pos, owner, typ)
+	construct(vec3 pos, player owner)
+		super(pos, owner, 'H003')
 		
 	override function update()
 		super.update()
 		if invulnerable
 			shieldtimer -= ANIMATION_PERIOD
-			if pos.distanceTo2dSq(shieldPos) > 24*24 or shieldtimer <= 0
+			if pos.distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0
 				if shieldtimer > 0
 					createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				shieldtimer = 0
@@ -88,7 +167,9 @@ public class StrongEscaper extends Escaper
 		super.onCast(id)
 		if id == STAGNANCYSHIELD_ID
 			invulnerable = true
-			shieldtimer = 1 + GetUnitAbilityLevel(actor, id)*1.
+			shieldtimer = 1 + GetUnitAbilityLevel(actor, id)*2.
+			if shieldtimer > 5
+				shieldtimer = 5
 			actor.addAbility('Avul')
 			actor.setPos(pos.toVec2())
 			shieldPos = pos.toVec2()

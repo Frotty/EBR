@@ -8,7 +8,7 @@ import initlater SecondDesert
 import initlater ThirdForest
 import initlater FourthCitadelle
 import PlayerData
-import MapBounds
+import StringUtils
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -33,32 +33,48 @@ public function initStartmazes()
 	startmazes[2] = new ThirdForestMaze(regions[2])
 	startmazes[3] = new FourthCitadelleMaze(regions[3])
 
+	let tp = new Teleporter(gg_unit_n00C_0150)
+	tp.tag = createCenteredTexttag(tp.getPos(), "|cffFFCC00Vote for minigame |cffADADAD(soon)", 9.5)
+
+	createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
+
 	setBuilderTeleporter()
 	
 	EnumItemsInRect(playableMapRect, null, function correctKeys)
 	
+texttag array texttags
+int size = 0
+
+function addStartTexttag(texttag tt)
+	texttags[size] = tt
+	size++
+
 function setBuilderTeleporter()
 	if pData[8] != null
-		new Teleporter(gg_unit_n00C_0058).actor.removeAbility('A00K')
-		createTTEx(gg_unit_n00C_0058.getPos().toVec3(), pData[8].mbname, 11, colorA( 230,180,0, 255 ))
+		let tp = new Teleporter(gg_unit_n00C_0058)
+		tp.actor.removeAbility('A00K')
+		tp.tag = createCenteredTexttag(gg_unit_n00C_0058.getPos().toVec3(), pData[8].mbname, 11)
 	else
 		gg_unit_n00C_0058.remove()
 	
 	if pData[9] != null
-		new Teleporter(gg_unit_n00C_0063).actor.removeAbility('A00K')
-		createTTEx(gg_unit_n00C_0063.getPos().toVec3(), pData[9].mbname, 11, colorA( 230,180,0, 255 ))
+		let tp = new Teleporter(gg_unit_n00C_0063)
+		tp.actor.removeAbility('A00K')
+		tp.tag = createCenteredTexttag(gg_unit_n00C_0063.getPos().toVec3(), pData[9].mbname, 11)
 	else
 		gg_unit_n00C_0063.remove()
 
 	if pData[10] != null
-		new Teleporter(gg_unit_n00C_0115).actor.removeAbility('A00K')
-		createTTEx(gg_unit_n00C_0115.getPos().toVec3(), pData[10].mbname, 11, colorA( 230,180,0, 255 ))
+		let tp = new Teleporter(gg_unit_n00C_0115)
+		tp.actor.removeAbility('A00K')
+		createCenteredTexttag(gg_unit_n00C_0115.getPos().toVec3(), pData[10].mbname, 11)
 	else
 		gg_unit_n00C_0115.remove()
 
 	if pData[11] != null
-		new Teleporter(gg_unit_n00C_0143).actor.removeAbility('A00K')
-		createTTEx(gg_unit_n00C_0143.getPos().toVec3(), pData[11].mbname, 11, colorA( 230,180,0, 255 ))
+		let tp = new Teleporter(gg_unit_n00C_0143)
+		tp.actor.removeAbility('A00K')
+		createCenteredTexttag(gg_unit_n00C_0143.getPos().toVec3(), pData[11].mbname, 11)
 	else
 		gg_unit_n00C_0143.remove()
 
@@ -67,25 +83,23 @@ public function setStartTeleport(int tpid, int locid)
 	Teleporter t = null
 	switch tpid
 		case 0
-			t = new Teleporter(vec2(gg_unit_n00C_0061.getX(),gg_unit_n00C_0061.getY()),STAFF_PLAYER)
-			gg_unit_n00C_0061.remove()
+			t = new Teleporter(gg_unit_n00C_0061)
 		case 1
-			t = new Teleporter(vec2(gg_unit_n00C_0324.getX(),gg_unit_n00C_0324.getY()),STAFF_PLAYER)
-			gg_unit_n00C_0324.remove()
+			t = new Teleporter(gg_unit_n00C_0324)
 		case 2
-			t = new Teleporter(vec2(gg_unit_n00C_0323.getX(),gg_unit_n00C_0323.getY()),STAFF_PLAYER)
-			gg_unit_n00C_0323.remove()
-
+			t = new Teleporter(gg_unit_n00C_0323)
+	
+	t.actor.removeAbility('A00K')
 	switch locid
 		case 1
 			t.setRallyPoint(vec2(3456,-4160))
-			createTTEx(t.getPos(), "Desert Startmaze", 11, colorA( 230,180,0, 255 ))
+			t.tag = createCenteredTexttag(t.getPos(), "|cffE68C19Desert Startmaze", 12.5)
 		case 2
 			t.setRallyPoint(vec2(500,-6900))
-			createTTEx(t.getPos(), "Forest Startmaze", 11, colorA( 230,180,0, 255 ))
+			t.tag = createCenteredTexttag(t.getPos(), "|cff3A9C3AForest Startmaze", 12.5)
 		case 3
 			t.setRallyPoint(vec2(-2433,-6148))
-			createTTEx(t.getPos(), "Citadel Startmaze", 11, colorA( 230,180,0, 255 ))
+			t.tag = createCenteredTexttag(t.getPos(), "|cffA5084ACitadel Startmaze", 12.5)
 		
 
 public function initBaseObjects()

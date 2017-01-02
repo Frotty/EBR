@@ -26,21 +26,19 @@ public int BRUSH_RECT_ID
 trigger castTrigger
 
 
-public class TerrainModder
-	unit actor
+public class TerrainModder extends UnitEntity
 	int brushsize = 0
 	TShape brushshape = TShape.RECT
 	int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 	construct(unit u)
-		actor = u
-		actor..setPos(hiddenX, hiddenY)..setPropWindow(0.)..setUserData(this castTo int)
+		super(u)
+		actor..setPos(hiddenX, hiddenY)..setPropWindow(0.)
 		..addAbility(BRUSH_1_ACTIVE_ABILITY)..addAbility(BRUSH_3_IDLE_ABILITY)..addAbility(BRUSH_5_IDLE_ABILITY)
 		..addAbility(BRUSH_RECT_ID)
-		EventListener orderListener = () -> changeTerrain()
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, orderListener)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, orderListener)
-		
+
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> changeTerrain())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> changeTerrain())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> switchMode())
 
 	function changeTerrain()

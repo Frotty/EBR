@@ -18,15 +18,8 @@ public class Tome extends ItemObject
 		
 	override function onPickup(Escaper holder)
 		picked = true
-		this.holder = holder
 		terminate()
 		
 	override function onDrop(Escaper e)
 		
-	override function update()
-		if picked and followWalkable
-			if not holder.flying and not holder.sliding and not holder.onUnwalkable
-				pos = holder.pos
-			
-	
 	

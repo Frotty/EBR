@@ -5,21 +5,28 @@ import RegionData
 import RegisterEvents
 import SoundUtils
 
-constant SETUP_BOX = 'n00A'
+public constant SETUP_BOX = 'n00A'
 constant ICEI_ID = 'A057'
 constant ICED_ID = 'A006'
 constant PI_ID = 'A011'
 constant PD_ID = 'A059'
 constant LI_ID = 'A058'
 constant LD_ID = 'A05A'
+constant TURND_ID = 'A086'
+constant TURNI_ID = 'A087'
 constant ALLOW_ID = 'A01X'
 constant CLEAR_ID = 'A020'
 constant BOSS_MODE_ID = 'A03E'
-constant JUMP_ID = 'A07S'
+constant JUMP_TOGGLE_ID = 'A07S'
+public constant JUMP_SPELL_ID = 'A062'
 constant FIRST_PAGE = 'A07B'
 constant SECOND_PAGE = 'A07A'
 constant INC_GRAVITY = 'A07X'
 constant DEC_GRAVITY = 'A07W'
+constant ABIL_WIZARD = 'A06O'
+constant ORB_TOGGLE_ID = 'A08B'
+public constant ORB_SPELL_ID = 'A08A'
+constant CANCEL_TOGGLE_ID = 'A08C'
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
 constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1.mp3", false)
@@ -30,8 +37,8 @@ public class SetupBox extends UnitEntity
 	construct( vec2 pos, player owner, RegionData data )
 		super(createUnit( owner, SETUP_BOX, pos, angle(0) ))
 		rdata = data
-		actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
-		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)
+		actor..addAbility(ALLOW_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
+		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID).addAbility(ABIL_WIZARD)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 	function addBossSwitch()
@@ -105,17 +112,31 @@ public class SetupBox extends UnitEntity
 						data.terminate()
 
 				rdata.resetTiles()
-			case JUMP_ID
+			case JUMP_TOGGLE_ID
 				let rdata = getRegionData(pos)
-				rdata.jumpAvailable = not rdata.jumpAvailable
-				if rdata.jumpAvailable
-					printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
-					for escaper in rdata.getEscapers()
-						escaper.actor.addAbility(JUMP_SPELL)
-				else
-					printTimedToPlayer("|cff448C29Escapers can't jump in this region!", 25, owner)
-					for escaper in rdata.getEscapers()
-						escaper.actor.removeAbility(JUMP_SPELL)
+				if rdata.specialAbil > 0
+					for escaper from rdata.getEscapers()
+						escaper.actor.removeAbility(rdata.specialAbil)
+				rdata.specialAbil = JUMP_SPELL_ID
+				printTimedToPlayer("|cffFF8C29Escapers can now jump in this region!", 25, owner)
+				for escaper from rdata.getEscapers()
+					escaper.actor.addAbility(rdata.specialAbil)
+			case ORB_TOGGLE_ID
+				let rdata = getRegionData(pos)
+				if rdata.specialAbil > 0
+					for escaper from rdata.getEscapers()
+						escaper.actor.removeAbility(rdata.specialAbil)
+				rdata.specialAbil = ORB_SPELL_ID
+				printTimedToPlayer("|cffFF8C29Escapers can now use the orb in this region!", 25, owner)
+				for escaper from rdata.getEscapers()
+					escaper.actor.addAbility(rdata.specialAbil)
+			case CANCEL_TOGGLE_ID
+				let rdata = getRegionData(pos)
+				if rdata.specialAbil > 0
+					for escaper from rdata.getEscapers()
+						escaper.actor.removeAbility(rdata.specialAbil)
+				rdata.specialAbil = 0
+				printTimedToPlayer("|cffFF8C29Removed all abilities!", 25, owner)
 			case BOSS_MODE_ID
 				if pData[owner.getId()].XP >= 0 //500
 					BOSS_SOUND.play()
@@ -130,15 +151,15 @@ public class SetupBox extends UnitEntity
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 			case SECOND_PAGE
-				actor..removeAbility(ALLOW_ID)..removeAbility(JUMP_ID)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
-				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)
+				actor..removeAbility(ALLOW_ID)..removeAbility(ABIL_WIZARD)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
+				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)..removeAbility(TURND_ID)..removeAbility(TURNI_ID)
 				actor..addAbility(ICEI_ID)..addAbility(ICED_ID)..addAbility(PI_ID)..addAbility(PD_ID)
 				..addAbility(LI_ID)..addAbility(LD_ID)..addAbility(FIRST_PAGE)
 			case FIRST_PAGE
 				actor..removeAbility(ICEI_ID)..removeAbility(ICED_ID)..removeAbility(PI_ID)..removeAbility(PD_ID)
 				..removeAbility(LI_ID)..removeAbility(LD_ID)..removeAbility(FIRST_PAGE)
-				actor..addAbility(ALLOW_ID)..addAbility(JUMP_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
-				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)
+				actor..addAbility(ALLOW_ID)..addAbility(ABIL_WIZARD)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
+				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID)
 			case INC_GRAVITY
 				if(rdata.gravity.z > -10)
 					rdata.gravity -= vec3(0,0,0.1)
@@ -147,6 +168,22 @@ public class SetupBox extends UnitEntity
 				if(rdata.gravity.z < -.1)
 					rdata.gravity += vec3(0,0,0.1)
 					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
+			case TURND_ID
+				if rdata.turnSpeed > 0.
+					rdata.turnSpeed -= .25
+					if rdata.turnSpeed <= 0.01
+						rdata.turnSpeed = 0.01
+					printTimedToPlayer("Turnspeed: " + rdata.turnSpeed.toString(), 10, owner)
+				for escaper from rdata.getEscapers()
+					escaper.actor.setTurnSpeed(rdata.turnSpeed)
+			case TURNI_ID
+				if rdata.turnSpeed < 5.0
+					if rdata.turnSpeed <= 0.01
+						rdata.turnSpeed = 0
+					rdata.turnSpeed += .25
+					printTimedToPlayer("Turnspeed: " + rdata.turnSpeed.toString(), 10, owner)
+				for escaper from rdata.getEscapers()
+					escaper.actor.setTurnSpeed(rdata.turnSpeed)
 init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
 	

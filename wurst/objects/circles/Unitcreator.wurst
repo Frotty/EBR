@@ -40,25 +40,25 @@ public class UnitCreator extends StaticBaseObject
 				
 	static function create(UnitCreator obj)
 		let rallyPos = obj.getRallyPoint().toVec2()
-		let pos = obj.pos.toVec2() + vec2(-0.01,0)
+		let cpos = obj.pos.toVec2() + vec2(0.01,0.0)
 		EscaperSensorSetup ek = null
 		switch obj.spawnUnitType
 			case 'BIGK'
-				ek = new BigKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new BigKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'SMAL'
-				ek = new SmallKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new SmallKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'u00A'
-				ek = new GlaiveKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new GlaiveKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'h001'
-				ek = new TankKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new TankKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'u008'
-				ek = new BigRandomKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new BigRandomKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'u006'
-				ek = new SmallRandomKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new SmallRandomKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'h01Q'
-				ek = new Pointer(pos, obj.owner, obj.getRallyAngle())
+				ek = new Pointer(cpos, obj.owner, obj.getRallyAngle())
 			case KNOCKER_ID
-				ek = new Knockbacker(pos, obj.owner, obj.getRallyAngle())
+				ek = new Knockbacker(cpos, obj.owner, obj.getRallyAngle())
 		ek.setup.issuePointOrder("move", rallyPos)
 		
 	function onCast()

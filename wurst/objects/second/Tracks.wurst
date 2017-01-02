@@ -24,15 +24,16 @@ public class Tracks extends UnitEntity
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, TRACKS[0], pos, angle(0)))
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
-		setup.setUserData(this castTo int)
+		setup.setEntity(this)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
-		for escaper in this.getCurrentRegion().getEscapers()
+		for escaper from this.getCurrentRegion().getEscapers()
 			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
 				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
 				
 				escaper.otherVel += dir * trackSpeed.get()
+		
 				
 	function recreateDummy()
 		setNewActor(createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees()))

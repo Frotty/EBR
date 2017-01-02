@@ -2,6 +2,7 @@ package Sensor
 import public Entity
 import HashMap
 import ErrorHandling
+import FxEntity
 
 public abstract class SensorListener
 	abstract function onSensor(UnitEntity source, UnitEntity target)
@@ -11,12 +12,17 @@ public module Sensor
 	private unit actor = null
 	private static HashMap<trigger, SensorListener> sensorListeners = new HashMap<trigger, SensorListener>()
 
-	function addSensorListener(UnitEntity e, SensorListener listener)
+	function addSensorListener(Entity e, SensorListener listener)
 		if listener == null
 			error("Trying to add null listener")
 		inRangeTrig = CreateTrigger()
-		inRangeTrig.registerUnitInRangeSource(e.actor, e.radius, null)
-		this.actor = e.actor
+		
+		if e instanceof UnitEntity
+			this.actor = (e castTo UnitEntity).actor
+		else if e instanceof FxEntity
+			this.actor = (e castTo FxEntity).getDummy()
+
+		inRangeTrig.registerUnitInRangeSource(actor, e.radius, null)
 		sensorListeners.put(inRangeTrig, listener)
 		inRangeTrig.addAction( () -> begin
 			let trig = GetTriggeringTrigger()

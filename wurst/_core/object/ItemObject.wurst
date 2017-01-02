@@ -17,6 +17,7 @@ public abstract class ItemObject extends Entity
 	ondestroy
 		setup.setEntity(null)
 		setup.remove()
+		actorItem.setEntity(null)
 		actorItem.remove()
 		
 	abstract function onPickup(Escaper e)
