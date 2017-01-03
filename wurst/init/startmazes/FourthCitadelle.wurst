@@ -19,6 +19,10 @@ public class FourthCitadelleMaze extends Startmaze
 		for u from ENUM_GROUP
 			new SmallKiller(u)
 
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u00A", null)
+		for u from ENUM_GROUP
+			new GlaiveKiller(u)
+
 		Spinner s = new Spinner(gg_unit_h01M_0258)
 		s.checkObj( gg_unit_n00E_0260.getEntity())
 		s.checkObj( gg_unit_n00E_0261.getEntity())
@@ -47,10 +51,29 @@ public class FourthCitadelleMaze extends Startmaze
 		s = new Spinner(gg_unit_h01M_0212)
 		s.checkObj( gg_unit_h01I_0220.getEntity())
 		s.spinSpeed.setVal(7 *DEGTORAD)
+
+		s = new Spinner(gg_unit_h01M_0162)
+		s.sinFactor.setVal(0)
+		s.checkObj( gg_unit_u00A_0156.getEntity())
+		s.setup.issueImmediateOrder("fingerofdeath")
+		s.spinSpeed.setVal(4 *DEGTORAD)
+
+		s = new Spinner(gg_unit_h01M_0163)
+		s.sinFactor.setVal(0)
+		s.checkObj( gg_unit_u00A_0157.getEntity())
+		s.setup.issueImmediateOrder("fingerofdeath")
+		s.spinSpeed.setVal(4 *DEGTORAD)
+
+		s = new Spinner(gg_unit_h01M_0161)
+		s.checkObj( gg_unit_u00A_0158.getEntity())
+		s.checkObj( gg_unit_u00A_0159.getEntity())
+		s.checkObj( gg_unit_u00A_0160.getEntity())
+		s.setup.issueImmediateOrder("fingerofdeath")
+		s.spinSpeed.setVal(1.25 *DEGTORAD)
 			
-		gg_unit_n00E_0263.issuePointOrder("patrol", vec2(-2948, -6192))
-		gg_unit_n00E_0264.issuePointOrder("patrol", vec2(-2645, -6798))
-		gg_unit_n00E_0265.issuePointOrder("patrol", vec2(-3129, -6798))
+		gg_unit_n00E_0263.issuePointOrder("patrol", vec2(-2765, -6283))
+		gg_unit_n00E_0264.issuePointOrder("patrol", vec2(-2545, -6780))
+		gg_unit_n00E_0265.issuePointOrder("patrol", vec2(-3050, -6523))
 		gg_unit_n00E_0268.issuePointOrder("patrol", vec2(-3552, -6419))
 		gg_unit_n00E_0269.issuePointOrder("patrol", vec2(-4317, -5883))
 		gg_unit_n00E_0267.issuePointOrder("patrol", vec2(-4045, -6441))

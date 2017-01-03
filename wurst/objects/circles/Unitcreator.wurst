@@ -39,7 +39,7 @@ public class UnitCreator extends StaticBaseObject
 			
 				
 	static function create(UnitCreator obj)
-		let rallyPos = obj.getRallyPoint().toVec2()
+		let rPos = obj.getRallyPoint().toVec2()
 		let cpos = obj.pos.toVec2() + vec2(0.01,0.0)
 		EscaperSensorSetup ek = null
 		switch obj.spawnUnitType
@@ -59,7 +59,7 @@ public class UnitCreator extends StaticBaseObject
 				ek = new Pointer(cpos, obj.owner, obj.getRallyAngle())
 			case KNOCKER_ID
 				ek = new Knockbacker(cpos, obj.owner, obj.getRallyAngle())
-		ek.setup.issuePointOrder("move", rallyPos)
+		ek.setup.issuePointOrder("move", rPos)
 		
 	function onCast()
 		let id = GetSpellAbilityId()
