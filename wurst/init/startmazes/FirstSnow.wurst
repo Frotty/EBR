@@ -11,12 +11,12 @@ public class FirstSnowMaze extends Startmaze
 	
 	override function initMaze()
 		inited = true
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", pickFilter)
 		for u in ENUM_GROUP
 			new BigKiller(u)
 		ENUM_GROUP.clear()
 
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", null )
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", pickFilter)
 		for u in ENUM_GROUP
 			new SmallKiller(u)
 		ENUM_GROUP.clear()

@@ -7,6 +7,7 @@ import public GameConstants
 import Key
 
 public constant vec2 LOUNGE = vec2(-6000,-7000)
+public constant boolexpr pickFilter = Condition(() -> GetFilterUnit().getOwner() == STAFF_PLAYER)
 
 public abstract class Startmaze
 	boolean inited = false

@@ -1,12 +1,13 @@
-[0.86n]
-[*] Unified powernode lightning textures
+[0.86s]
 [*] Added omnious orb ability as region special (see setup box)
+[*] Unified powernode lightning textures
+[*] Escaper turnspeed can now be set per region
+[*] Minor startmaze redesigns
 [*] Added notification for escapers when they receive a region's special ability
 [*] Lounge area teleporters now get removed if no longer needed
-[*] Escaper turnspeed can now be set per region
-[*] Texter messages are now centered
-[*] Minor startmaze changes
 [*] Added new spell to fast escaper (oneway portal)
+[*] Fixed startmaze init affecting player mazes
+[*] Fixed losing escaper when flying out of map
 [*] Fixed event issues
 [*] Fixed portal model glitch
 [*] Optimizations for lower-spec pcs (experimental)

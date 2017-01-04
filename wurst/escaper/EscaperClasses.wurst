@@ -68,7 +68,7 @@ public class Portal extends FxEntity
 						teleport = false
 						break
 				if teleport
-					target.setXY(destiny.withZ(target.pos.z))
+					target.setPos(destiny.withZ(target.pos.z))
 					flashEffect(Other.blinkcaster, pos)
 					flashEffect(Other.blinktarget, destiny)
 					if not pData[target.actor.getOwner().getId()].escaper.camlock
@@ -77,7 +77,8 @@ public class Portal extends FxEntity
 		end)
 
 	override function slowUpdate()
-		super.slowUpdate()
+		if destiny != ZERO2
+			super.slowUpdate()
 		if idleSeconds >= duration
 			terminate()
 

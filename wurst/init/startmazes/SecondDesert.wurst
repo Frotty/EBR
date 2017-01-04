@@ -10,13 +10,13 @@ public class SecondDesertMaze extends Startmaze
 	
 	override function initMaze()
 		inited = true
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01H", null )
-		for u1 in ENUM_GROUP
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01H", pickFilter)
+		for u1 from ENUM_GROUP
 			new BigKiller(u1)
 			
 		ENUM_GROUP.clear()
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00D", null )
-		for u3 in ENUM_GROUP
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00D", pickFilter)
+		for u3 from ENUM_GROUP
 			new SmallKiller(u3) 
 			
 		ENUM_GROUP.clear()

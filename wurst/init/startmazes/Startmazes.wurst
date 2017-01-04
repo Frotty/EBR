@@ -107,7 +107,7 @@ public function initBaseObjects()
 	for vicu in ENUM_GROUP
 		vicu.setOwner(STAFF_PLAYER, true)
 	ENUM_GROUP.clear()
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", null )
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", pickFilter)
 	for u in ENUM_GROUP
 		if u.isAlive()
 			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), STAFF_PLAYER)
@@ -126,58 +126,58 @@ public function initBaseObjects()
 		
 	ENUM_GROUP.clear()
 
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", null )
-	for u2 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", pickFilter)
+	for u2 from ENUM_GROUP
 		if u2 != gg_unit_h00C_0023 and u2 != gg_unit_h00C_0011
 			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
 			u2.remove()
 		
 	ENUM_GROUP.clear()
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00S", null )
-	for u3 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00S", pickFilter)
+	for u3 from ENUM_GROUP
 		new BigObstacle(vec2(u3.getX(), u3.getY()), STAFF_PLAYER)
 		u3.remove()
 		
 	ENUM_GROUP.clear()
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00R", null )
-	for u4 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00R", pickFilter)
+	for u4 from ENUM_GROUP
 		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
 	ENUM_GROUP.clear()
 		
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n018", null )
-	for u4 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n018", pickFilter)
+	for u4 from ENUM_GROUP
 		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
 	ENUM_GROUP.clear()
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n019", null )
-	for u4 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n019", pickFilter)
+	for u4 from ENUM_GROUP
 		new BigObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
 	ENUM_GROUP.clear()
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", null )
-	for u5 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", pickFilter)
+	for u5 from ENUM_GROUP
 		new SmallObstacle(vec2(u5.getX(), u5.getY()), STAFF_PLAYER)
 		u5.remove()
 		
 	ENUM_GROUP.clear()
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", null )
-	for u6 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", pickFilter)
+	for u6 from ENUM_GROUP
 		new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)
 		u6.remove()
 		
 	ENUM_GROUP.clear()
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n003", null )
-	for u7 in ENUM_GROUP
+	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n003", pickFilter)
+	for u7 from ENUM_GROUP
 		new UnitRemover(vec2(u7.getX(), u7.getY()), STAFF_PLAYER)
 		u7.remove()
 		

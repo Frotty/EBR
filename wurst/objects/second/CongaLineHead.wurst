@@ -17,6 +17,7 @@ public class CongaLineHead extends SetupObject
 		super(createUnit(owner, UNIT_ID, pos, angle(0)), createUnit(owner, UNIT_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		segments = new LinkedList<SetupObject>()
+		sleeps = false
 		
 	override function update()
 		super.update()

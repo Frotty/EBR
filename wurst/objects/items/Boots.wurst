@@ -16,10 +16,12 @@ public class Boots extends ItemObject
 		
 	override function onPickup(Escaper holder)
 		picked = true
+		this.holder = holder
+		actorItem.setEntity(null)
+		actorItem = null
 		terminate()
-		
+
 	override function onDrop(Escaper e)
-		
 	override function update()
 	
 	

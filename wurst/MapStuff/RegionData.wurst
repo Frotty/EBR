@@ -155,8 +155,9 @@ function rect.changeTerrain( integer ttype )
 
 RegionData array currentRegion
 
-public function Entity.setCurrentRegion()
+public function Entity.setCurrentRegion() returns RegionData
 	currentRegion[this castTo int] = getRegionData(this.getPos())
+	return currentRegion[this castTo int]
 
 public function Entity.getCurrentRegion() returns RegionData
 	if currentRegion[this castTo int] == null

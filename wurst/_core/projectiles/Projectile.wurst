@@ -49,6 +49,7 @@ public class Projectile extends FxEntity
 	override function update()
 		vel *= acc
 		pos += vel
+		setXY(pos)
 		if timed
 			lifespan -= ANIMATION_PERIOD
 			if lifespan <= 0

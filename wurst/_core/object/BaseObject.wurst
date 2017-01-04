@@ -5,8 +5,6 @@ import public ConfigValue
 import public SetupObject
 import Assets
 
-trigger rallyTrigger
-
 /*  ---Creating a new Baseobject---
 	Creating the baseobject will need 3 parameters
 	the unit u: in whichs Userdata the struct is saved
@@ -39,8 +37,8 @@ public class StaticBaseObject extends UnitEntity
 			else
 				inRangeTrig.addCondition(Condition(cond))
 			inRangeTrig.addAction( c )
-		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_POINT_ORDER) 
-		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> adjustRallypoint())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> adjustRallypoint())
 
 	function clearQuestionmark()
 		if noRally != null
@@ -102,7 +100,4 @@ public class StaticBaseObject extends UnitEntity
 		inRangeTrig.destr()
 		clearQuestionmark()
 
-init
-	rallyTrigger = CreateTrigger()
-	rallyTrigger.addAction( function StaticBaseObject.adjustRallypoint )
 

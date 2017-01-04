@@ -16,7 +16,7 @@ constant int 	LEVER_DUMMY_ID = 'DTlv'
 constant int 	PLATE_DUMMY_ID = 'B001'
 
 
-constant real 	EVENT_RADIUS	= 32.
+constant real 	EVENT_RADIUS	= 42.
 
 public enum Emode
 	NONE
@@ -90,11 +90,13 @@ public class Executer extends StaticBaseObject
 					if obj.ON
 						obj.negativeAction()
 						obj.ON = false
-						SetDestructableAnimation(obj.dummy, "death")
+						if obj.dummy != null
+							SetDestructableAnimation(obj.dummy, "death")
 					else
 						obj.findAction()
 						obj.ON = true
-						SetDestructableAnimation(obj.dummy, "stand")
+						if obj.dummy != null
+							SetDestructableAnimation(obj.dummy, "stand")
 						//obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
 				case Emode.PRESSUREPLATE
 					skip
@@ -114,7 +116,8 @@ public class Executer extends StaticBaseObject
 			if c == 0
 				obj.negativeAction()
 				obj.ON = false
-				SetDestructableAnimation(obj.dummy, "stand alternate")
+				if obj.dummy != null
+					SetDestructableAnimation(obj.dummy, "stand alternate")
 			
 	static function onEnterEvent()
 		unit u = GetTriggerUnit()
@@ -125,7 +128,8 @@ public class Executer extends StaticBaseObject
 			if not obj.ON
 				obj.findAction()
 				obj.ON = true
-				SetDestructableAnimation(obj.dummy, "death")
+				if obj.dummy != null
+					SetDestructableAnimation(obj.dummy, "death")
 		
 
 	function findAction()
@@ -297,16 +301,15 @@ public class Executer extends StaticBaseObject
 	function changeVis(boolean invis)
 		if eventMode == Emode.PRESSUREPLATE
 			if invis
-				RemoveDestructable(dummy)
-				printLog(Loglevel.DEBUG, "meh meh destructable removed")
+				ShowDestructable(dummy, false)
 			else
-				dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
+				ShowDestructable(dummy, true)
 				SetDestructableAnimation(dummy, "death")
 		else if eventMode == Emode.LEVER
 			if invis
-				RemoveDestructable(dummy)
+				ShowDestructable(dummy, false)
 			else
-				dummy = CreateDestructable( PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
+				ShowDestructable(dummy, true)
 				SetDestructableAnimation(dummy, "stand alternate")
 	
 	function registerRect(real centerx, real centery, real offset)
@@ -378,12 +381,10 @@ public class Executer extends StaticBaseObject
 				disabled = false
 				SetUnitVertexColor(actor, 0,128,0,255)
 				UnitRemoveAbility(actor, REACTIVATE_ABIL)
-					
 			case VIS_ID
-				changeVis(true)
-			case INVIS_ID
 				changeVis(false)
-			
+			case INVIS_ID
+				changeVis(true)
 			case KILLER_TRIGGER_ABIL
 				canKillerTrigger = true
 				canEscaperTrigger = true

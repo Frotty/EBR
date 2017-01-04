@@ -9,6 +9,7 @@ import TerrainBlocker
 import initlater Weapon
 import initlater ReviveManager
 import public initlater RegionData
+import Projectile
 import ErrorHandling
 
 constant real COLL_RADIUS = 32.
@@ -17,6 +18,8 @@ constant real SLIDE_ADD = 3.3
 constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
 public constant JUMP_SPELL = 'A062'
+public constant ORB_SPELL = 'A08A'
+public constant JAUNT_SPELL = 'A08D'
 
 real time = 0.
 
@@ -179,6 +182,14 @@ public abstract class Escaper extends UnitEntity
 		else
 			setXY(pos)
 		
+	override function setXY(vec3 tpos)
+		if tpos.inPlayable()
+			pos = tpos
+			actor.setXYZ(pos)
+		else 
+			setPos(currentRevivepoint.toVec3())
+			kill()
+
 	function getRealVel() returns vec3
 		return vel + slideVelocity + otherVel + walkVel
 
@@ -233,8 +244,9 @@ public abstract class Escaper extends UnitEntity
 		if newReg != null and newReg != currentReg
 			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
-			if this.getCurrentRegion().specialAbil > 0
-				actor.addAbility(this.getCurrentRegion().specialAbil)
+			actor.removeAbility(currentReg.specialAbil)
+			if newReg.specialAbil > 0
+				actor.addAbility(newReg.specialAbil)
 				if isEscaper(actor.getOwner())
 					printTimedToPlayer("|cffFFCC00>> |rYou were granted a |cff0884BDspecial ability |rin this region |r(use with hotkey |cffFFCC00T|r)", 10, actor.getOwner())
 			else 
@@ -271,6 +283,8 @@ public abstract class Escaper extends UnitEntity
 	static function onCastEvent()
 		let data = GetTriggerUnit().getUserData() castTo Escaper
 		data.onCast(GetSpellAbilityId())
+
+	OrbProjectile orb = null
 		
 	function onCast(int id)
 		actor.setAnimation("spell")
@@ -283,6 +297,14 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
 				else
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
+		else if id == ORB_SPELL
+			orb = new OrbProjectile(this, getSpellTargetPos())
+			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
+		else if id == JAUNT_SPELL
+			if orb != null
+				setXY(orb.getPos())
+				flashEffect(Other.polymorphtarget, pos)
+				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
@@ -302,6 +324,20 @@ public abstract class Escaper extends UnitEntity
 		poisonEffect.destr()
 		escapers.remove(this)
 				
+class OrbProjectile extends Projectile
+	Escaper e
+
+	construct(Escaper e, vec2 target)
+		super(e.getPos() + vec3(0,0,32), 16, e.owner, e.pos.angleTo2d(target), "TC_EnergyBolt.mdx")
+		this.e = e
+		setRanged(360)
+		setSpeed(8.5)
+
+	ondestroy
+		e.orb = null
+		e.actor..removeAbility(JAUNT_SPELL)..addAbility(e.getCurrentRegion().specialAbil)
+		
+
 public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
 		
 trigger slideAssist
