@@ -1,3 +1,13 @@
+[0.86u]
+[*] Improved Texture Changer (only removes tiles behind)
+[*] Fixed orb being colord wrong and adjusted trajectory
+
+[0.86t]
+[*] Added blink to all test-escapers in singleplayer test mode and made them spawn after pick
+[*] Fixed some tooltips and hotkeys
+[*] Improved Portal ability UX
+[*] Reenable teamattacks (so builder escaper dies for testing)
+
 [0.86s]
 [*] Added omnious orb ability as region special (see setup box)
 [*] Unified powernode lightning textures

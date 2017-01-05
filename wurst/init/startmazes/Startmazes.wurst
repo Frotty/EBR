@@ -104,11 +104,11 @@ public function setStartTeleport(int tpid, int locid)
 
 public function initBaseObjects()
 	GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
-	for vicu in ENUM_GROUP
+	for vicu from ENUM_GROUP
 		vicu.setOwner(STAFF_PLAYER, true)
-	ENUM_GROUP.clear()
+
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", pickFilter)
-	for u in ENUM_GROUP
+	for u from ENUM_GROUP
 		if u.isAlive()
 			var r = new RevivePoint(vec3(u.getX(), u.getY(), 0.), STAFF_PLAYER)
 			if u == gg_unit_n000_0002
@@ -124,7 +124,6 @@ public function initBaseObjects()
 				svRev = r
 			u.remove()
 		
-	ENUM_GROUP.clear()
 
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", pickFilter)
 	for u2 from ENUM_GROUP
@@ -132,55 +131,41 @@ public function initBaseObjects()
 			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
 			u2.remove()
 		
-	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00S", pickFilter)
 	for u3 from ENUM_GROUP
 		new BigObstacle(vec2(u3.getX(), u3.getY()), STAFF_PLAYER)
 		u3.remove()
 		
-	ENUM_GROUP.clear()
 	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00R", pickFilter)
 	for u4 from ENUM_GROUP
 		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	ENUM_GROUP.clear()
-		
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n018", pickFilter)
 	for u4 from ENUM_GROUP
 		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	ENUM_GROUP.clear()
-	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n019", pickFilter)
 	for u4 from ENUM_GROUP
 		new BigObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	ENUM_GROUP.clear()
-	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", pickFilter)
 	for u5 from ENUM_GROUP
 		new SmallObstacle(vec2(u5.getX(), u5.getY()), STAFF_PLAYER)
 		u5.remove()
 		
-	ENUM_GROUP.clear()
-	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", pickFilter)
 	for u6 from ENUM_GROUP
 		new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)
 		u6.remove()
 		
-	ENUM_GROUP.clear()
-	
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n003", pickFilter)
 	for u7 from ENUM_GROUP
 		new UnitRemover(vec2(u7.getX(), u7.getY()), STAFF_PLAYER)
 		u7.remove()
 		
-	ENUM_GROUP.clear()
-	
 	

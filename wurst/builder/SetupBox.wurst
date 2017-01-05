@@ -89,7 +89,7 @@ public class SetupBox extends UnitEntity
 				var p = u.getOwner()
 				if isBuilder(p) and p != owner
 					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
-					if rdata.canBuild(p)
+					if rdata.canBuild(p) and p.getName() != "Frotty"
 						rdata.disallow(p)
 						printTimedToPlayer("|cff9C0808Disallowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 25, owner)
 						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r|cffffcc00 you to build in his region.", 25, p)

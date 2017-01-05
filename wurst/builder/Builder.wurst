@@ -11,9 +11,6 @@ import initlater Weapon
 import initlater Boss
 import Boots
 
-trigger itemTrigger
-trigger orderTrigger
-
 JukeBox jukeBox = new JukeBox()
 
 public class Builder extends UnitEntity

@@ -106,7 +106,7 @@ public class FastEscaper extends Escaper
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				return
 			if portal == null
-				portal = new Portal(this, 20 + actor.getAbilityLevel(PORTAL_ID) * 15)
+				portal = new Portal(this, 25 + actor.getAbilityLevel(PORTAL_ID) * 10)
 				actor.resetAbilityCooldown(PORTAL_ID)
 			else
 				if portal.destiny != ZERO2

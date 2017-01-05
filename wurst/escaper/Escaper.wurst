@@ -325,13 +325,14 @@ public abstract class Escaper extends UnitEntity
 		escapers.remove(this)
 				
 class OrbProjectile extends Projectile
-	Escaper e
+	Escaper e = null
 
 	construct(Escaper e, vec2 target)
-		super(e.getPos() + vec3(0,0,32), 16, e.owner, e.pos.angleTo2d(target), "TC_EnergyBolt.mdx")
+		super(e.getPos().moveTowards(target.toVec3(), 16) + vec3(0,0,16), 16, e.owner, e.pos.angleTo2d(target), "TC_EnergyBolt.mdx")
 		this.e = e
-		setRanged(360)
-		setSpeed(8.5)
+		setAcc(0.985)
+		setRanged(365)
+		setSpeed(9.85)
 
 	ondestroy
 		e.orb = null

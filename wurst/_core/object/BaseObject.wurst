@@ -16,8 +16,8 @@ public code CODE_NULL = null
 
 public class StaticBaseObject extends UnitEntity
 	private vec3 rallyPoint
-	private unit rallyUnit
-	private angle rallyAngle
+	private unit rallyUnit = null
+	private angle rallyAngle = angle(0)
 	effect noRally
 
 	protected trigger inRangeTrig // Trigger for inRange detection
@@ -26,7 +26,7 @@ public class StaticBaseObject extends UnitEntity
 		super(u)
 		noRally = addEffect(Other.questionmark, pos)
 		actor.addAbility(GHOST_VIS_ID)
-
+		this.setCurrentRegion()
 		rallyPoint = this.pos
 
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers

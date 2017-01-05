@@ -133,6 +133,16 @@ function keypick()
 			SetTextTagVisibility(herott[currentView[pd.id]-1],false)
 			SetUnitVertexColor( pickheros[currentView[pd.id]-1], 0, 0, 0, 0 )
 			SetTextTagVisibility(herott[herocount],false)
+
+		if allPlayers.getSize() == 1
+			Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
+			e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
+			e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
+			e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
 			
 
 	else

@@ -4,7 +4,6 @@ import public TerrainUtils
 import public ConfigValue
 import public initlater RegionData
 
-
 /**
 	Objects which are unclickable for escapers,
 	but clickable for builders.	 
@@ -27,6 +26,7 @@ public abstract class SetupObject extends UnitEntity
 		setup..setEntity(this)
 		..setXY(actor.getPos())
 		..addAbility(GHOST_INVIS_ID)
+		this.setCurrentRegion()
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
