@@ -58,8 +58,5 @@ public class RevivePoint extends StaticSetupObject
 		if(isEscaper(target.getOwner()) and target.getEntity() instanceof Escaper)
 			(source.getEntity() castTo RevivePoint).reach(target.getEntity() castTo Escaper)
 				
-			
-		printLog(Loglevel.DEBUG, "reach-3")
-
 	static function filter() returns boolean
 		return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID

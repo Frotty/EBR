@@ -5,7 +5,6 @@ import ErrorHandling
 import Escaper
 import EscaperKillers
 import Door
-import BuilderConstants
 import Pointer
 import Knockbacker
 import Unitcreator
@@ -14,8 +13,6 @@ constant int 	EXECUTER_ID   = 'n01D'
 constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
 constant int 	LEVER_DUMMY_ID = 'DTlv'
 constant int 	PLATE_DUMMY_ID = 'B001'
-
-
 constant real 	EVENT_RADIUS	= 42.
 
 public enum Emode
