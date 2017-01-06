@@ -24,7 +24,9 @@ public class ThirdForestMaze extends Startmaze
 		let sk2 = new SmallKiller(gg_unit_n009_0039)
 		sk2.setup.issuePointOrder("patrol", vec2(122.01,-6140))
 		let sk3 = new SmallKiller(gg_unit_n009_0050)
-		sk3.setup.issuePointOrder("patrol", vec2(0.01,-5800))
+		sk3.setup.issuePointOrder("patrol", vec2(0.01,-5670))
+		sk3.setup.setMoveSpeed(365)
+		sk3.actor.setMoveSpeed(365)
 		let sk4 = new SmallKiller(gg_unit_n009_0153)
 		sk4.setup.issuePointOrder("patrol", vec2(640.01,-5500.01))
 

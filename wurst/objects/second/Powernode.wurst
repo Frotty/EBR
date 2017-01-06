@@ -8,10 +8,12 @@ constant LINK_ID = 'A051'
 constant LINK_BOUNCE_ID = 'A07Q'
 constant LINK_DIODE_ID = 'A061'
 constant LINK_TETHER_ID = 'A07D'
+constant LINK_ORB_ID = 'A08E'
 constant EFFECT_STRING = "DRAM"
 constant EFFECT_BOUNCE_STRING = "LGRO"
 constant EFFECT_DIODE_STRING = "LONE"
 constant EFFECT_TETHER_STRING = "LBOT"
+constant EFFECT_ORB_STRING = "LORB"
 constant KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant NODE_ID = 'h0nn'
 constant ACTIVATION_DIST = 22.
@@ -23,6 +25,7 @@ enum LinkType
 	BOUNCE
 	BOUNCE_DIODE
 	AIRTETHER
+	ORBTETHER
 
 class Link
 	Link next = null
@@ -74,6 +77,8 @@ public class Powernode extends SetupObject
 				new Link(this, p, AddLightning(EFFECT_DIODE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case AIRTETHER
 				new Link(this, p, AddLightning(EFFECT_TETHER_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
+			case ORBTETHER
+				new Link(this, p, AddLightning(EFFECT_ORB_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 		
 	override function update()
 		super.update()
@@ -84,7 +89,11 @@ public class Powernode extends SetupObject
 			else
 				MoveLightning(l.sfx, false, pos.x, pos.y, l.target.pos.x, l.target.pos.y)
 				for Escaper e from this.getCurrentRegion().getEscapers()
-					if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
+					if l.ltype == LinkType.ORBTETHER
+						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
+							flashEffect(Other.spellbreakerattack, e.orb.pos)
+							e.orb.terminate()
+					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
 						if e.pos.z < 24 or l.ltype == LinkType.AIRTETHER
 							switch l.ltype
 								case LinkType.KILL
@@ -97,7 +106,9 @@ public class Powernode extends SetupObject
 								case LinkType.AIRTETHER
 									if e.pos.z > 20
 										addEffect(Other.dispelmagictarget, e.getPos()).destr()
-									calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))		
+									calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
+								case LinkType.ORBTETHER
+									
 			l = l.next
 			
 				
@@ -148,7 +159,7 @@ public class Powernode extends SetupObject
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	or id == LINK_TETHER_ID
+		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	or id == LINK_TETHER_ID	or id == LINK_ORB_ID
 			var data = target.getEntity()
 			if data instanceof Powernode
 				var pdata = data castTo Powernode
@@ -169,6 +180,8 @@ public class Powernode extends SetupObject
 						node.link(data castTo Powernode, LinkType.BOUNCE_DIODE)
 					else if id == LINK_TETHER_ID	
 						node.link(data castTo Powernode, LinkType.AIRTETHER)
+					else if id == LINK_ORB_ID	
+						node.link(data castTo Powernode, LinkType.ORBTETHER)
 		else if id == INCREASE_BOUNCE_ID
 			node.bounciness.increment(node, 8)
 			var link = node.firstLink

@@ -299,6 +299,8 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
+			orb.addVel(getRealVel()*0.25)
+			orb.setXYAngle(orb.vel.toVec2().getAngle())
 			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
 		else if id == JAUNT_SPELL
 			if orb != null
@@ -331,7 +333,8 @@ class OrbProjectile extends Projectile
 		super(e.getPos().moveTowards(target.toVec3(), 16) + vec3(0,0,16), 16, e.owner, e.pos.angleTo2d(target), "TC_EnergyBolt.mdx")
 		this.e = e
 		setAcc(0.985)
-		setRanged(365)
+		setRanged(360)
+		setTimed(3)
 		setSpeed(9.85)
 
 	ondestroy

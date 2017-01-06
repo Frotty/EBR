@@ -1,6 +1,12 @@
+[0.86v]
+[*] Made it harder to skip the door in the forest mazes
+[*] Increased Door activation height
+[*] Added orb tether to powernode
+[*]
+
 [0.86u]
 [*] Improved Texture Changer (only removes tiles behind)
-[*] Fixed orb being colord wrong and adjusted trajectory
+[*] Fixed orb being colored wrong and changed trajectory
 
 [0.86t]
 [*] Added blink to all test-escapers in singleplayer test mode and made them spawn after pick
