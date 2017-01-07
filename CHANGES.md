@@ -1,15 +1,16 @@
 [0.86x]
-[*] Tile cutting works more easily now if enabled
 [*] Waypoints can now be "and"-linked, meaning they only order units on the waypoint when both waypoints have been triggered
+[*] Tile cutting now works more easily if enabled
 [*] Fixed obstacles in forest startmaze
 [*] Added fountain and fixed torches in desert maze
 [*] Fixed terrainchanger changing blocked terrain
 [*] Fixed regression in key pickup prevention
+[*] Improved Lounge visuals
 
 [0.86v]
+[*] Added orb tether to powernode
 [*] Made it harder to skip the door in the forest mazes
 [*] Increased Door activation height
-[*] Added orb tether to powernode
 [*] Escapers now die on snow in the choose area
 [*] Added region option to allow diagonal tile cutting similar to the ice4 escapes
 

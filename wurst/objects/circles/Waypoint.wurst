@@ -63,9 +63,17 @@ public class Waypoint extends StaticBaseObject
 						andPartner.ready = false
 						ready = false
 			else if delay < INTERVAL
-				data.actor.issuePointOrder("move", rallyPos.toVec2())
+				if data instanceof SetupObject
+					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
+					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
+				else
+					data.actor.issuePointOrder("move", rallyPos.toVec2())
 			else
-				data.actor.issuePointOrder("move", pos.toVec2())
+				if data instanceof SetupObject
+					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
+					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
+				else
+					data.actor.issuePointOrder("move", rallyPos.toVec2())
 				getTimer()..start(delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
 
 	function onCast()
