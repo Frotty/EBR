@@ -1,3 +1,11 @@
+[0.86x]
+[*] Tile cutting works more easily now if enabled
+[*] Waypoints can now be "and"-linked, meaning they only order units on the waypoint when both waypoints have been triggered
+[*] Fixed obstacles in forest startmaze
+[*] Added fountain and fixed torches in desert maze
+[*] Fixed terrainchanger changing blocked terrain
+[*] Fixed regression in key pickup prevention
+
 [0.86v]
 [*] Made it harder to skip the door in the forest mazes
 [*] Increased Door activation height

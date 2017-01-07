@@ -8,6 +8,7 @@ constant int 	WAYPOINT_ID   = 'n004'
 constant int INC_ID = 'A054'
 constant int DEC_ID = 'A055'
 constant int WISP_ID = 'A027'
+constant AND_ID = 'A08H'
 constant INTERVAL = .25
 
 	
@@ -24,48 +25,48 @@ class DelayData
 public class Waypoint extends StaticBaseObject
 	real delay = 0.
 	boolean wisps = true
+
+	//logic
 	Waypoint andPartner = null
+	boolean ready = false
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove, function Waypoint.isProper2 )
+		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		printLog(Loglevel.DEBUG, "On create waypoint")
-		
-	static function orderMove()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
-		let rallyPos = obj.getRallyPoint() + vec2(0.001,0)
-		if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
-			var data = e castTo UnitEntity
-			if not obj.wisps and data instanceof TeleporterTarget
-				return
-			if obj.delay < INTERVAL
+
+	function orderLogicMove()
+		let rallyPos = getRallyPoint() + vec2(0.001,0)
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius+48., Condition(() -> true))
+		for u from ENUM_GROUP
+			let data = u.getEntity() castTo UnitEntity
+			if owner == data.owner and not data instanceof Escaper and not data instanceof Builder and not data instanceof StaticBaseObject
 				if data instanceof SetupObject
 					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
 					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
 				else
 					data.actor.issuePointOrder("move", rallyPos.toVec2())
+		
+	function onEnter(unit entry)
+		Entity e = entry.getEntity()
+		let rallyPos = getRallyPoint() + vec2(0.001,0)
+		if owner == e.owner and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
+			var data = e castTo UnitEntity
+			if not wisps and data instanceof TeleporterTarget
+				return
+			if andPartner != null
+				if not ready
+					ready = true
+					if andPartner.ready
+						andPartner.orderLogicMove()
+						orderLogicMove()
+						andPartner.ready = false
+						ready = false
+			else if delay < INTERVAL
+				data.actor.issuePointOrder("move", rallyPos.toVec2())
 			else
-				u.issueImmediateOrder("stop")
-				getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
-	
-				
-	static function delayMove()
-		var t = GetExpiredTimer()
-		DelayData data = t.getData() castTo DelayData
-		if data.entity instanceof SetupObject
-			(data.entity castTo SetupObject).setup.issuePointOrder("move", data.pos)
-			(data.entity castTo SetupObject).actor.issuePointOrder("move", data.pos)
-		else
-			data.entity.actor.issuePointOrder("move", data.pos)
-		destroy data
-		t.release()
-
-	static function isProper2() returns boolean
-		return true
-
+				data.actor.issuePointOrder("move", pos.toVec2())
+				getTimer()..start(delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
 
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -89,3 +90,29 @@ public class Waypoint extends StaticBaseObject
 				else
 					wisps = true
 					createTTEx(pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., colorA(255,255,255,0), owner  )
+			case AND_ID
+				let target = GetSpellTargetUnit().getEntity()
+				if target != null and target instanceof Waypoint
+					andPartner = target castTo Waypoint
+					andPartner.andPartner = this
+					createTTEx(target.getPos(), vec2(0,0.1), "|cff0873C5Linked", 9., 1.5, colorA(255,255,255,255), owner)
+				else
+					andPartner = null
+	
+	static function delayMove()
+		var t = GetExpiredTimer()
+		DelayData data = t.getData() castTo DelayData
+		if data.entity instanceof SetupObject
+			(data.entity castTo SetupObject).setup.issuePointOrder("move", data.pos)
+			(data.entity castTo SetupObject).actor.issuePointOrder("move", data.pos)
+		else
+			data.entity.actor.issuePointOrder("move", data.pos)
+		destroy data
+		t.release()
+
+	static function onInRange()
+		unit source = GetTriggeringTrigger().getSource()
+		thistype obj = source.getUserData() castTo thistype
+		obj.onEnter(GetTriggerUnit())
+
+

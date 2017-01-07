@@ -3,6 +3,7 @@ import Startmaze
 import Unit
 import Knockbacker
 import SetupBox
+import Obstacle
 
 public class ThirdForestMaze extends Startmaze
 
@@ -45,6 +46,14 @@ public class ThirdForestMaze extends Startmaze
 
 		let fk = new AirKiller(gg_unit_u00J_0149)
 		fk.setup.issuePointOrder("patrol", vec2(-1025,-4565))
+
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", pickFilter)
+		for u from ENUM_GROUP
+			new SmallObstacle(u)
+
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01H", pickFilter)
+		for u from ENUM_GROUP
+			new BigObstacle(u)
 
 	override function getStart() returns vec2
 		return vec2(830, -7050)

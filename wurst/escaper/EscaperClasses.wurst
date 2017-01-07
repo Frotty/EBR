@@ -9,13 +9,11 @@ import initlater PlayerData
 constant REINCARNATION_ID = 'A02X'
 constant PORTAL_ID = 'A085'
 constant SPEEDWAVE_ID = 'A06P'
-constant TOMB_DUMMY_ID = 'u00D'
 constant STAGNANCYSHIELD_ID = 'A008'
 constant SLOWWAVE_ID = 'A088'
 constant TEMP_REV_ID = 'A07Z'
 
 public class HolyEscaper extends Escaper
-	unit revivetomb = null
 
 	construct( vec3 pos, player owner)
 		super( pos, owner, 'H00B')
@@ -36,15 +34,6 @@ public class HolyEscaper extends Escaper
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				
 			
-	override function revive()
-		super.revive()
-		if revivetomb != null
-			setPos(revivetomb.getPos3Real())
-			if selectatrevive
-				if (GetLocalPlayer() == owner)
-					PanCameraToTimed(pos.x, pos.y, 0)
-			revivetomb.remove()
-			revivetomb = null
 
 public class Portal extends FxEntity
 	use Sensor

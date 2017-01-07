@@ -60,6 +60,8 @@ public class Spinner extends SetupObject
 				node.angl += speed
 			else
 				destroy node
+				if node == firstNode
+					firstNode = node.next
 			node = node.next
 			
 	function checkObj(Entity e)

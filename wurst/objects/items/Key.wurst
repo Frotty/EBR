@@ -26,7 +26,7 @@ public class Key extends ItemObject
 	override function onUse(Escaper user)
 		
 	override function onPickup(Escaper holder)
-		if isEscaper(holder.owner) or this.owner != holder.owner
+		if isEscaper(holder.owner) or this.owner == holder.owner
 			picked = true
 			this.holder = holder
 			setup.hide()

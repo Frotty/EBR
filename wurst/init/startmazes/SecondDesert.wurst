@@ -1,6 +1,7 @@
 package SecondDesert
 import Startmaze
 import Jumper
+import Fountain
 
 public class SecondDesertMaze extends Startmaze
 
@@ -37,9 +38,13 @@ public class SecondDesertMaze extends Startmaze
 
 		var j = new Jumper(gg_unit_n00B_0151)
 		j.setRallyPoint(vec2(3329, -6557))
+		j.jumpForce.setVal(5)
 
 		j = new Jumper(gg_unit_n00B_0152)
 		j.setRallyPoint(vec2(3834, -6645))
+		j.jumpForce.setVal(6)
+
+		new Fountain(gg_unit_h00H_0067)
 	
 	
 	override function getStart() returns vec2

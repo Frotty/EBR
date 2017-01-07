@@ -153,11 +153,6 @@ public function initBaseObjects()
 		new BigObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", pickFilter)
-	for u5 from ENUM_GROUP
-		new SmallObstacle(vec2(u5.getX(), u5.getY()), STAFF_PLAYER)
-		u5.remove()
-		
 	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", pickFilter)
 	for u6 from ENUM_GROUP
 		new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)

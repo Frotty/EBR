@@ -21,8 +21,8 @@ constant int TERRAIN_DEC_V_ID = 'A01T'
 
 
 public class TextureChanger extends SetupObject
-	int sizeX = 1
-	int sizeY = 1
+	ConfigValue sizeX = new ConfigValue(1, 1, "Width")
+	ConfigValue sizeY = new ConfigValue(1, 1, "Height")
 	matrixpos mp = matrixpos(0,0)
 	int innerTile = '0000'
 	int outerTile = '0001'
@@ -40,30 +40,32 @@ public class TextureChanger extends SetupObject
 		var tY = (pos.y/128).round()
 		RegionData data
 		int tileID
+		let sizeXI = sizeX.getInt()
+		let sizeYI = sizeY.getInt()
 		if tX != mp.x or tY != mp.y
 			// Clear old terrain
 			if tX < mp.x
-				for i = -(sizeY) to sizeY
-					if not bitset(tileModifierMap.loadInt(tX+sizeX, tY+i)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX+sizeX+1)*128., (tY + i)*128., outerTile, -1, 1, 1 )
+				for i = -(sizeYI) to sizeYI
+					if not bitset(tileModifierMap.loadInt(tX+sizeXI+1, tY+i)).contains(TileModifiers.BLOCK castTo int)
+						SetTerrainType((tX+sizeXI+1)*128., (tY + i)*128., outerTile, -1, 1, 1 )
 			else if tX > mp.x
-				for i = -(sizeY) to sizeY
-					if not bitset(tileModifierMap.loadInt(tX-sizeX-1, tY+i)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX-sizeX-1)*128., (tY + i)*128., outerTile, -1, 1, 1 )
+				for i = -(sizeYI) to sizeYI
+					if not bitset(tileModifierMap.loadInt(tX-sizeXI-1, tY+i)).contains(TileModifiers.BLOCK castTo int)
+						SetTerrainType((tX-sizeXI-1)*128., (tY + i)*128., outerTile, -1, 1, 1 )
 				
 			if tY < mp.y
-				for j = -(sizeX) to sizeX
-					if not bitset(tileModifierMap.loadInt(tX+j, tY + sizeY+1)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX+j)*128., (tY + sizeY+1)*128., outerTile, -1, 1, 1 )
+				for j = -(sizeXI) to sizeXI
+					if not bitset(tileModifierMap.loadInt(tX+j, tY + sizeYI+1)).contains(TileModifiers.BLOCK castTo int)
+						SetTerrainType((tX+j)*128., (tY + sizeYI+1)*128., outerTile, -1, 1, 1 )
 			else if tY > mp.y
-				for j = -(sizeX) to sizeX
-					if not bitset(tileModifierMap.loadInt(tX+j, tY - sizeY-1)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX+j)*128., (tY - sizeY-1)*128., outerTile, -1, 1, 1 )
+				for j = -(sizeXI) to sizeXI
+					if not bitset(tileModifierMap.loadInt(tX+j, tY - sizeYI-1)).contains(TileModifiers.BLOCK castTo int)
+						SetTerrainType((tX+j)*128., (tY - sizeYI-1)*128., outerTile, -1, 1, 1 )
 			// Make new
 			mp.x = tX
 			mp.y = tY
-			for i = -(sizeY) to sizeY
-				for j = -(sizeX) to sizeX
+			for i = -(sizeYI) to sizeYI
+				for j = -(sizeXI) to sizeXI
 					if not bitset(tileModifierMap.loadInt(tX+j, tY+i)).contains(TileModifiers.BLOCK castTo int)
 						var x = (tX+j)*128.
 						var y = (tY+i)*128.
@@ -80,25 +82,13 @@ public class TextureChanger extends SetupObject
 		
 		switch i
 			case TERRAIN_INC_H_ID
-				if sizeX < 3
-					sizeX ++
-				else
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Max Horizontal", 10,  2., colorA(255,255,255,0), owner )
+				sizeX.increment(this, 3)
 			case TERRAIN_INC_V_ID
-				if sizeY < 3
-					sizeY ++
-				else
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Max Vertical", 10,  2., colorA(255,255,255,0), owner )
+				sizeY.increment(this, 4)
 			case TERRAIN_DEC_H_ID
-				if sizeX > 0
-					sizeX --
-				else
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Min Horizontal", 10,  2., colorA(255,255,255,0), owner )
+				sizeX.decrement(this, 3)
 			case TERRAIN_DEC_V_ID
-				if sizeY > 0
-					sizeY --
-				else
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Min Vertical", 10,  2., colorA(255,255,255,0), owner )
+				sizeY.decrement(this, 3)
 			case TERRAIN_I_WALKABLE_ID
 				innerTile = this.getCurrentRegion().getTypeSet().walkableId
 			case TERRAIN_I_UNWALKABLE_ID
