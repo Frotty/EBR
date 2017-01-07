@@ -16,6 +16,9 @@ public class ConfigValue
 		
 	function get() returns real
 		return value
+
+	function getInt() returns int
+		return value.toInt()
 		
 	function increment(UnitEntity caster, real max)
 		if value < max

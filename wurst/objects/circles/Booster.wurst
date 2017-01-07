@@ -1,6 +1,5 @@
 package Booster
 import BaseObject
-import SetupObject
 
 constant BOOSTER_ID = 'n00J'
 constant EVENT_RADIUS = 32.

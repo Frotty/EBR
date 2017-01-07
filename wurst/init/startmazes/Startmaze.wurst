@@ -6,8 +6,8 @@ import public EscaperKillers
 import public GameConstants
 import Key
 
-public constant real STARTX = -6000
-public constant real STARTY = -7000
+public constant vec2 LOUNGE = vec2(-6000,-7000)
+public constant boolexpr pickFilter = Condition(() -> GetFilterUnit().getOwner() == STAFF_PLAYER)
 
 public abstract class Startmaze
 	boolean inited = false
@@ -19,11 +19,11 @@ public abstract class Startmaze
 		return inited
 
 	function clearMaze()
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, null)
+		GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, Filter(() -> GetFilterUnit().getOwner() == STAFF_PLAYER))
 		for vicu from ENUM_GROUP
-			if vicu.getPos().isInRect(rdata.theRect)
+			if vicu.isAlive() and vicu.getPos().isInRect(rdata.theRect)
 				var data = vicu.getEntity()
-				if data != null
+				if data != null and (data castTo UnitEntity).actor.getName() != null and data.typeId > 0
 					data.terminate()
 				else
 					vicu.remove()

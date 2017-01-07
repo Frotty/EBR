@@ -1,16 +1,15 @@
 package Builder
 import Entity
-import BuilderConstants
+import public BuilderConstants
+import public GameConstants
+import initlater RegionData
 import Key
 import initlater InstantBuild
 import Tome
 import JukeBox
 import initlater Weapon
 import initlater Boss
-
-trigger swapTrigger
-trigger itemTrigger
-trigger orderTrigger
+import Boots
 
 JukeBox jukeBox = new JukeBox()
 
@@ -19,19 +18,16 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super( vec3(0,0,0), CreateUnit(p, BUILDER_1, -6500, -7000, 0) )
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrder())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		super(CreateUnit(p, BUILDER_1, -6000, -7160, 0))
+		deactivate()
+		registerListeners()
+		this.setCurrentRegion()
 
 	override function update()
 		pos = actor.getPos().toVec3()
-	
+
 	override function setNewActor(unit u)
 		super.setNewActor(u)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrder())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		if UnitItemInSlot(actor, 0) == null
 			UnitAddItemById(actor,'I001')
 			UnitAddItemById(actor,'I002')
@@ -39,6 +35,12 @@ public class Builder extends UnitEntity
 			SelectUnitForPlayerSingle( actor, owner )
 		if hasBossMenu
 			setBossMenu()
+
+	function registerListeners()
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrder())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_CONSTRUCT_FINISH, () -> GetTriggerUnit().remove())
 
 	function onCast()
 		var id = GetSpellAbilityId()
@@ -48,17 +50,17 @@ public class Builder extends UnitEntity
 			return
 		switch id
 			case MENU_1
-				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_1, pos.x, pos.y, GetUnitFacing(GetTriggerUnit() )) )
+				setNewActor(createUnit(owner, BUILDER_1, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
 			case MENU_2
-				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, pos.x, pos.y, GetUnitFacing(GetTriggerUnit())))
+				setNewActor(createUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
 			case MENU_3
-				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, pos.x, pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+				setNewActor(createUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
 			case MENU_4
-				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_4, pos.x, pos.y, GetUnitFacing(GetTriggerUnit()) ) )
+				setNewActor(createUnit(owner, BUILDER_4, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
 			case MENU_5
-				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_2, pos.x, pos.y, GetUnitFacing(GetTriggerUnit() )) )
+				setNewActor(createUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
 			case MENU_6
-				setNewActor( CreateUnit( GetOwningPlayer( GetTriggerUnit() ), BUILDER_3, pos.x, pos.y, GetUnitFacing(GetTriggerUnit() )) )
+				setNewActor(createUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
 			case KEY_SPELL_ID
 				if rdata.canBuild(owner)
 					new Key(tpos, owner)
@@ -66,7 +68,7 @@ public class Builder extends UnitEntity
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 			case BOOTS_SPELL_ID
 				if rdata.canBuild(owner)
-					createItem(BOOTS_ID, tpos)
+					new Boots(tpos, owner)
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 			case TOME_SPELL_ID
@@ -104,14 +106,16 @@ public class Builder extends UnitEntity
 			if GetTriggerUnit().getUserData() > 0
 				var bdata = GetTriggerUnit().getUserData() castTo Builder
 				var rdata = getRegionData(i.getPos())
-				bdata.actor.abortOrder()
 				if rdata != null and i.getUserData() > 0
 					if rdata.canBuild(bdata.owner)
 						var idata = i.getEntity()
-						idata.terminate()
+						if idata.typeId != 0
+							idata.terminate()
+						else
+							i.remove()
 				else 
 					RemoveItem(i)
-					
+				actor.abortOrder()
 		else
 			widget w = GetOrderTarget()
 			var ord = GetIssuedOrderId()
@@ -122,11 +126,9 @@ public class Builder extends UnitEntity
 				getTimer()..start(0.01, function callback)
 				..setData((new BuildData(u.getUserData() castTo Builder,
 							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
-				
 			else if OrderId2String(ord) == "smart" or OrderId2String(ord) == "move"
 				if w == null
 					if ( ox > 0. or ox < 0. )
-						
 						SetUnitX(u,ox)
 						SetUnitY(u,oy)
 				else
@@ -140,17 +142,6 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
-		
 public function init_Builder()	
-	itemTrigger = CreateTrigger()
-	gg_unit_n008_0326.pause()
-	
-	let t = CreateTrigger()
-	t.registerBuilderEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
-	t.addAction(function removeWrong)
 	jukeBox.playNextMusic()
-
-function removeWrong()
-	GetTriggerUnit().remove()
-
 	

@@ -32,10 +32,9 @@ public class Trap extends StaticBaseObject
 	int goocounter = 0
 	private image array[5] goos
 	construct( vec2 pos, player owner )
-			super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep, CODE_NULL)
-			active = false
-			
-			EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		super(pos, CreateUnit( owner, TRAP_ID, pos.x, pos.y, 0.  ) , EVENT_RADIUS, function onStep, CODE_NULL)
+		deactivate()
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 			
 	static function onStep()
 		unit source = GetTriggeringTrigger().getSource()
@@ -57,20 +56,18 @@ public class Trap extends StaticBaseObject
 				goos[i].remove()
 				
 	override function update()
-		super.update()
-		if active
-			if timerreal <= 0.0
-				DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
-				GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), EVENT_RADIUS, null)
-				for unit u in ENUM_GROUP
-					Entity e = u.getEntity()
-					if e instanceof Escaper
-						var escaper = e castTo Escaper
-						doEffect(escaper)
-				ENUM_GROUP.clear()
-				timerreal = interval
-			else
-				timerreal -= ANIMATION_PERIOD
+		if timerreal <= 0.0
+			flashEffect(SFX_STRINGS[sfxid], actor.getPos())
+			GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), EVENT_RADIUS, null)
+			for u from ENUM_GROUP
+				Entity e = u.getEntity()
+				if e instanceof Escaper
+					var escaper = e castTo Escaper
+					doEffect(escaper)
+			ENUM_GROUP.clear()
+			timerreal = interval
+		else
+			timerreal -= ANIMATION_PERIOD
 				
 	function doEffect(Escaper e)
 		switch a
@@ -287,11 +284,11 @@ public class Trap extends StaticBaseObject
 						skip
 			
 			case START_ABIL
-				active = true
+				activate()
 				UnitRemoveAbility(actor,START_ABIL)
 				UnitAddAbility(actor,STOP_ABIL)
 			case STOP_ABIL
-				active = false
+				deactivate()
 				timerreal = 0.
 				UnitRemoveAbility(actor,STOP_ABIL)
 				UnitAddAbility(actor,START_ABIL)

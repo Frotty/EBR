@@ -2,10 +2,8 @@ package BaseObject
 import public Entity
 import public TerrainUtils
 import public ConfigValue
-import SetupObject
+import public SetupObject
 import Assets
-
-trigger rallyTrigger
 
 /*  ---Creating a new Baseobject---
 	Creating the baseobject will need 3 parameters
@@ -18,18 +16,18 @@ public code CODE_NULL = null
 
 public class StaticBaseObject extends UnitEntity
 	private vec3 rallyPoint
-	private unit rallyUnit
-	private angle rallyAngle
+	private unit rallyUnit = null
+	private angle rallyAngle = angle(0)
 	effect noRally
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
 	construct( vec2 pos, unit u, real radius, code c, code cond )
-		super( pos.withZ(getTerrainZ(pos.x, pos.y)), u )
+		super(u)
+		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)
 		actor.addAbility(GHOST_VIS_ID)
-		active = false
-
+		this.setCurrentRegion()
 		rallyPoint = this.pos
 
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
@@ -40,8 +38,8 @@ public class StaticBaseObject extends UnitEntity
 			else
 				inRangeTrig.addCondition(Condition(cond))
 			inRangeTrig.addAction( c )
-		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_POINT_ORDER) 
-		rallyTrigger.registerUnitEvent(actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> adjustRallypoint())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> adjustRallypoint())
 
 	function clearQuestionmark()
 		if noRally != null
@@ -100,11 +98,7 @@ public class StaticBaseObject extends UnitEntity
 
 	ondestroy
 		actor.clearRegister()
-		actor.remove()
 		inRangeTrig.destr()
 		clearQuestionmark()
 
-init
-	rallyTrigger = CreateTrigger()
-	rallyTrigger.addAction( function StaticBaseObject.adjustRallypoint )
 

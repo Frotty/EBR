@@ -5,6 +5,7 @@ import HomingProjectile
 import Assets
 import ClosureForGroups
 import ClosureTimers
+import HashMap
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
@@ -23,7 +24,7 @@ public class SpellTarget extends SetupObject
 	SpellType stype = SpellType.NONE
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 32)
+		super(CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), CreateUnit(owner, SPELLTARGET_ID, pos.x, pos.y, 0), 32)
 		stype = SpellType.NONE
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		if not targets.has(owner.getId())

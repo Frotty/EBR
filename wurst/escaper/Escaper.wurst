@@ -2,24 +2,31 @@ package Escaper
 import PhysicsEntity
 import Assets
 import public Entity
-import BuilderConstants
+import public BuilderConstants
+import public GameConstants
 import RevivePointModifier
 import TerrainBlocker
 import initlater Weapon
 import initlater ReviveManager
+import public initlater RegionData
+import Projectile
+import ErrorHandling
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
+constant ANK_ITEM_ID = 'A091'
 
 constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
 public constant JUMP_SPELL = 'A062'
-
+public constant ORB_SPELL = 'A08A'
+public constant JAUNT_SPELL = 'A08D'
+public constant TOMB_DUMMY_ID = 'u00D'
 real time = 0.
 
 public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 
-public class Escaper extends UnitEntity	
+public abstract class Escaper extends UnitEntity	
 	use PhysicsModule
 	RevivePointModifier revmod = null
 	boolean onUnwalkable = false
@@ -39,10 +46,10 @@ public class Escaper extends UnitEntity
 	boolean alive = true
 	boolean selectatrevive = true
 	boolean left = false
-
+	unit revivetomb = null
 	
 	construct( vec3 pos, player owner, int typ )
-		super(pos, 32, CreateUnit(owner, typ, pos.x, pos.y, 0.) )
+		super(createUnit(owner, typ, pos, angle(0)))
 		actor..addAbility('Aloc')
 		..hide()
 		..removeAbility('Aloc')
@@ -50,11 +57,17 @@ public class Escaper extends UnitEntity
 		SetUnitPropWindow(actor, 60.)
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
 		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-		TriggerRegisterUnitEvent( neutralDeathTrig, actor, EVENT_UNIT_DEATH)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill())
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		updateRegionData()
 		escapers.add(this)
-	
+
+	override function inAir(Entity e)
+		if not e.flying
+			e.flying = true
+			onEscapeGround()
+		if affectedByGravity
+			e.addVel(this.getCurrentRegion().gravity)
 
 	function setLava(boolean add)
 		if add and not onLava
@@ -74,9 +87,9 @@ public class Escaper extends UnitEntity
 	
 	function kill()
 		if alive
-			manageRevive(this)
-			actor.kill()
 			alive = false
+			actor.kill()
+			manageRevive(this)
 			setPoison(false)
 			setLava(false)
 			flying = false
@@ -88,7 +101,9 @@ public class Escaper extends UnitEntity
 		slideVelocity = vec2(0,0)
 		vel = vec3(0,0,0)
 		otherVel = vec2(0,0)
-		
+
+	override function setNewActor(unit u)
+		error("Don't do this..")
 	
 	override function onGroundHit()
 		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.BLUGOO castTo int) and vel.z.abs() > 5
@@ -103,19 +118,34 @@ public class Escaper extends UnitEntity
 		actor.setPropWindow(0)
 		sliding = false
 	
-	override function inAir()
-		slideVelocity *= 0.99
-			
-	override function onGround()
+	override function onGround(Entity e)
+		if e.flying
+			e.flying = false
+			onGroundHit()
+		// If the Entity is moving towards
+		e.scaleVel(surfaceFriction)
 		var ttype = GetTerrainType(pos.x, pos.y)
 		onUnwalkable = false
-		if ttype == currentRegion.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
-			onUnwalkable = true
+		let rdata = this.getCurrentRegion()
+		slideVelocity *= 0.99
+		if ttype == rdata.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 			if alive
-				kill()
+				if rdata.allowCut
+					let rv = getRealVel()
+					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 12)
+					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 12)
+					let t1type = GetTerrainType(lpos.x, lpos.y)
+					let t2type = GetTerrainType(rpos.x, rpos.y)
+					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and
+						(t1type == rdata.getTypeSet().unwalkableId or t1type == 'Ibkb' or t1type == RUNES)
+						kill()
+						onUnwalkable = true
+				else
+					kill()
+					onUnwalkable = true
 		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 			let angl = actor.getFacingAngle()
-			slideVelocity = vec2(angl.cos() * currentRegion.slidespeed * SLIDE_ADD, angl.sin() * currentRegion.slidespeed * SLIDE_ADD)
+			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			if not sliding
 				speedFactor = 1
 				sliding = true
@@ -139,13 +169,13 @@ public class Escaper extends UnitEntity
 		if onLava
 			var hp = actor.getHP()
 			if hp > .405
-				actor.setHP(hp-currentRegion.lavaDmg)
+				actor.setHP(hp-this.getCurrentRegion().lavaDmg)
 			else if alive
 				kill()
 		if poisoned
 			var hp2 = actor.getHP()
 			if hp2 > .405
-				actor.setHP(hp2-currentRegion.poisonDmg)
+				actor.setHP(hp2-this.getCurrentRegion().poisonDmg)
 			else if alive
 				kill()
 		
@@ -153,59 +183,94 @@ public class Escaper extends UnitEntity
 		otherVel = vec2(0,0)
 	
 	override function update()
-		if currentRegion != null
-			let newPos = actor.getPos()
-			walkVel = newPos-pos.toVec2()
-			pos = newPos.withZ(pos.z)
-			physicsUpdate(this)
-			pos += vel
-			pos += slideVelocity * (1-speedFactor)
-			if sliding
-				setPos(pos)
-			else
-				setXY(pos)
+		let newPos = actor.getPos()
+		walkVel = newPos-pos.toVec2()
+		pos = newPos.withZ(pos.z)
+		physicsUpdate(this)
+		pos += vel
+		pos += slideVelocity * (1-speedFactor)
+		if sliding
+			setPos(pos)
+		else
+			setXY(pos)
 		
+	override function setXY(vec3 tpos)
+		if tpos.inPlayable()
+			pos = tpos
+			actor.setXYZ(pos)
+		else 
+			setPos(currentRevivepoint.toVec3())
+			kill()
+
 	function getRealVel() returns vec3
 		return vel + slideVelocity + otherVel + walkVel
 
 	function revive()
-		sliding = false
-		stop()
-		let rev = currentRevivepoint
-		if revmod == null
-			ReviveHero(actor, rev.x, rev.y, false)
-			setPos(vec3(rev.x, rev.y, 32.))
-		else
-			ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
-			setPos(vec3(revmod.pos.x, revmod.pos.y, 32.))
-		actor.setPropWindow(60.)
-		updateRegionData()
-		alive = true
-		setPoison(false)
-		setLava(false)
-		if left
-			terminate()
-			return
+		if not alive
+			stop()
+			let rev = currentRevivepoint
+			if revmod == null
+				if actor == null
+					printLog(Loglevel.ERROR, "why this happening :(")
+					super.setNewActor(createUnit(owner, 1, rev, angle(0)))
+				else
+					ReviveHero(actor, rev.x, rev.y, false)
+				setXY(vec3(rev.x, rev.y, 32.))
+			else
+				if actor == null
+					super.setNewActor(createUnit(owner, 1, revmod.pos, angle(0)))
+				else
+					ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
+				setXY(vec3(revmod.pos.x, revmod.pos.y, 32.))
+			alive = true
+			actor.setPropWindow(60.)
+			updateRegionData()
+			setPoison(false)
+			setLava(false)
+			if left
+				terminate()
+				return
 
-		CameraClearNoiseForPlayer(owner)
-		if selectatrevive
-			if (GetLocalPlayer() == owner)
-				PanCameraToTimed(rev.x, rev.y, 0)
-				ClearSelection()
-				SelectUnit(actor, true)
-		if camlock
-			SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
+			CameraClearNoiseForPlayer(owner)
+			if selectatrevive
+				if (GetLocalPlayer() == owner)
+					PanCameraToTimed(rev.x, rev.y, 0)
+					ClearSelection()
+					SelectUnit(actor, true)
+			if camlock
+				SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
+			if revivetomb != null
+				setPos(revivetomb.getPos3Real())
+				if selectatrevive
+					if (GetLocalPlayer() == owner)
+						PanCameraToTimed(pos.x, pos.y, 0)
+				revivetomb.remove()
+				revivetomb = null
+	
+	override function setTarget(vec3 tpos, real speed)
+		var t = pos.distanceTo2d(tpos) / speed
+		let tangle = pos.angleTo2d(tpos)
+		if t < 1.
+			t = 1./speed
+		
+		let startZVelocity = ((-this.getCurrentRegion().gravity.z * t) / 2 - pos.z/t)
+		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
 			
 	function updateRegionData()
-		let newReg = getRegionData(pos)
-		if newReg != null and newReg != currentRegion
-			currentRegion.removeEscaper(this)
-			currentRegion = newReg
+		let currentReg = this.getCurrentRegion()
+		this.setCurrentRegion()
+		let newReg = this.getCurrentRegion()
+		if newReg != null and newReg != currentReg
+			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
-			if currentRegion.jumpAvailable
-				actor.addAbility(JUMP_SPELL)
+			actor.removeAbility(currentReg.specialAbil)
+			if newReg.specialAbil > 0
+				actor.addAbility(newReg.specialAbil)
+				if isEscaper(actor.getOwner())
+					printTimedToPlayer("|cffFFCC00>> |rYou were granted a |cff0884BDspecial ability |rin this region |r(use with hotkey |cffFFCC00T|r)", 10, actor.getOwner())
 			else 
 				actor.removeAbility(JUMP_SPELL)
+			actor.setTurnSpeed(newReg.turnSpeed)
 
 	static function changeAngle()
 		var u = GetTriggerUnit()
@@ -237,6 +302,8 @@ public class Escaper extends UnitEntity
 	static function onCastEvent()
 		let data = GetTriggerUnit().getUserData() castTo Escaper
 		data.onCast(GetSpellAbilityId())
+
+	OrbProjectile orb = null
 		
 	function onCast(int id)
 		actor.setAnimation("spell")
@@ -249,6 +316,16 @@ public class Escaper extends UnitEntity
 					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
 				else
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
+		else if id == ORB_SPELL
+			orb = new OrbProjectile(this, getSpellTargetPos())
+			orb.addVel(getRealVel()*0.25)
+			orb.setXYAngle(orb.vel.toVec2().getAngle())
+			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
+		else if id == JAUNT_SPELL
+			if orb != null
+				setXY(orb.getPos())
+				flashEffect(Other.polymorphtarget, pos)
+				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
 			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
@@ -262,13 +339,36 @@ public class Escaper extends UnitEntity
 		else if id == ATTACK_MELEE or id == ATTACK_RANGED
 			weapon.onUse(this)
 			actor.setAnimation("attack")
+		else if id == ANK_ITEM_ID
+			if poisoned or onLava or sliding
+				actor.resetAbilityCooldown(ANK_ITEM_ID)
+				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+			else
+				if revivetomb != null
+					revivetomb.remove()
+				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
 			
 	ondestroy
 		lavaEffect.destr()
 		poisonEffect.destr()
-		actor.remove()
 		escapers.remove(this)
 				
+class OrbProjectile extends Projectile
+	Escaper e = null
+
+	construct(Escaper e, vec2 target)
+		super(e.getPos().moveTowards(target.toVec3(), 16) + vec3(0,0,16), 16, e.owner, e.pos.angleTo2d(target), "TC_EnergyBolt.mdx")
+		this.e = e
+		setAcc(0.985)
+		setRanged(360)
+		setTimed(3)
+		setSpeed(9.85)
+
+	ondestroy
+		e.orb = null
+		e.actor..removeAbility(JAUNT_SPELL)..addAbility(e.getCurrentRegion().specialAbil)
+		
+
 public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
 		
 trigger slideAssist

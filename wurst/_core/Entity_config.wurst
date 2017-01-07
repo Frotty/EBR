@@ -1,0 +1,4 @@
+package Entity_config
+
+@configurable public constant DYNAMIC_Z = false
+@configurable public constant KILL_ACTORS = false

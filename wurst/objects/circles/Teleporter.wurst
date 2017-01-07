@@ -18,6 +18,7 @@ enum TeleportMode
 
 public class Teleporter extends StaticBaseObject
 	boolean teleportWisps = false
+	texttag tag = null
 	TeleportMode mode = TeleportMode.ESCAPER
 	
 	construct( vec2 pos, player owner )
@@ -32,7 +33,7 @@ public class Teleporter extends StaticBaseObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
+		Teleporter obj = source.getUserData() castTo Teleporter
 		let rallyPos = obj.getRallyPoint()
 		let rdata = getRegionData(rallyPos)
 		SetupObject dyn
@@ -62,11 +63,9 @@ public class Teleporter extends StaticBaseObject
 					addEffect(EFFECT_STRING, rallyPos).destr()
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 						PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
-			
+		if isEscaper(e.owner) and obj.owner == STAFF_PLAYER and  not obj.actor.hasAbility('A00K') 
+			obj.terminate()
 
-	override function update()
-		skip
-		
 	function onCast()
 		var id = GetSpellAbilityId()
 		switch id
@@ -79,3 +78,7 @@ public class Teleporter extends StaticBaseObject
 			case KILL_ID
 				actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
 				mode = TeleportMode.BOTH
+
+	ondestroy
+		if tag != null
+			tag.destr()

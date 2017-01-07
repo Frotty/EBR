@@ -14,9 +14,10 @@ public class CongaLineHead extends SetupObject
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), createUnit(owner, UNIT_ID, pos, angle(0)), createUnit(owner, UNIT_ID, pos, angle(0)), 0. )
+		super(createUnit(owner, UNIT_ID, pos, angle(0)), createUnit(owner, UNIT_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		segments = new LinkedList<SetupObject>()
+		sleeps = false
 		
 	override function update()
 		super.update()
@@ -78,10 +79,10 @@ public class CongaLineHead extends SetupObject
 		
 function UnitEntity.setNewPosA( vec2 tpos, angle angl)
 	if this instanceof SetupObject
-		(this castTo SetupObject).setXY(tpos.toVec3())
+		(this castTo SetupObject).setPos(tpos.toVec3())
 		(this castTo SetupObject).setFacing(angl)
 	else if this instanceof Spinner
-		(this castTo Spinner).setXY(tpos.toVec3())
+		(this castTo Spinner).setPos(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angl)
 		
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2

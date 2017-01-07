@@ -12,9 +12,8 @@ public class GlobalShop
 	
 	construct( real x, real y, player owner )
 		actor = CreateUnit(owner, SHOP_ID, x, y, 270. )
-		actor.setUserData( this castTo int )
 
 
 public function init_GlobalShop()
-	shop = new GlobalShop(-6530,-6910,Player(12))
+	shop = new GlobalShop(-6530,-7050,Player(12))
 

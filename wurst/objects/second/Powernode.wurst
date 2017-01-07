@@ -8,10 +8,12 @@ constant LINK_ID = 'A051'
 constant LINK_BOUNCE_ID = 'A07Q'
 constant LINK_DIODE_ID = 'A061'
 constant LINK_TETHER_ID = 'A07D'
+constant LINK_ORB_ID = 'A08E'
 constant EFFECT_STRING = "DRAM"
-constant EFFECT_BOUNCE_STRING = "DRAL"
+constant EFFECT_BOUNCE_STRING = "LGRO"
 constant EFFECT_DIODE_STRING = "LONE"
-constant EFFECT_TETHER_STRING = "AFOD"
+constant EFFECT_TETHER_STRING = "LBOT"
+constant EFFECT_ORB_STRING = "LORB"
 constant KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant NODE_ID = 'h0nn'
 constant ACTIVATION_DIST = 22.
@@ -23,76 +25,92 @@ enum LinkType
 	BOUNCE
 	BOUNCE_DIODE
 	AIRTETHER
+	ORBTETHER
 
 class Link
+	Link next = null
+	Link prev = null
 	LinkType ltype
-	Powernode linkedNode
+	Powernode parent
+	Powernode target
 	lightning sfx
 	
-	construct( Powernode node, lightning sfx, LinkType ltype )
-		linkedNode = node
+	construct(Powernode parent, Powernode target, lightning sfx, LinkType ltype)
+		this.parent = parent
+		this.target = target
 		this.sfx = sfx
 		this.ltype = ltype
+		if parent.firstLink != null
+			next = parent.firstLink
+			parent.firstLink.prev = this
+		parent.firstLink = this
 		
 	ondestroy
+		if prev != null
+			prev.next = next
+		if next != null
+			next.prev = prev
+		if parent.firstLink == this
+			parent.firstLink = next
+
 		DestroyLightning(sfx)
 
 
 public class Powernode extends SetupObject
-	LinkedList<Link> links = new LinkedList<Link>()
 	private ConfigValue bounciness = new ConfigValue(0.75, 0.25, "Bounciness")
+	protected Link firstLink = null
 
-	construct( vec2 pos, player owner )
-		super( pos.toVec3(), createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
+	construct(vec2 pos, player owner)
+		super(createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
 		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
 		..addAbility(INCREASE_BOUNCE_ID).addAbility(DECREASE_BOUNCE_ID)
+		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
-	function unlink( Link l )
-		links.remove(l)
-		destroy l
 		
 	function link( Powernode p, LinkType ltype )
 		switch ltype
 			case LinkType.KILL
-				links.add(new Link(p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+				new Link(this, p, AddLightning(EFFECT_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case LinkType.BOUNCE
-				links.add(new Link(p, AddLightning(EFFECT_BOUNCE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+				new Link(this, p, AddLightning(EFFECT_BOUNCE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case LinkType.BOUNCE_DIODE
-				links.add(new Link(p, AddLightning(EFFECT_DIODE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+				new Link(this, p, AddLightning(EFFECT_DIODE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case AIRTETHER
-				links.add(new Link(p, AddLightning(EFFECT_TETHER_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype))
+				new Link(this, p, AddLightning(EFFECT_TETHER_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
+			case ORBTETHER
+				new Link(this, p, AddLightning(EFFECT_ORB_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 		
 	override function update()
 		super.update()
-		if links.getSize() > 0
-			var i = 0
-			while i < links.getSize()
-				Link l = links.get(i)
-				if not l.linkedNode.done 
-					MoveLightning(l.sfx, false, pos.x, pos.y, l.linkedNode.pos.x, l.linkedNode.pos.y)
-					for Escaper e in currentRegion.getEscapers()
-						if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.linkedNode.pos.toVec2() ) < ACTIVATION_DIST.squared()
-							if e.pos.z < 24 or l.ltype == LinkType.AIRTETHER
-								switch l.ltype
-									case LinkType.KILL
-										AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
-										e.kill()
-									case LinkType.BOUNCE
-										calBounce(l.linkedNode.pos,e, (2.00 + bounciness.get()))
-									case LinkType.BOUNCE_DIODE
-										calBounceD(l.linkedNode.pos,e, (1.00 + bounciness.get()))	
-									case LinkType.AIRTETHER
-										if e.pos.z > 20
-											addEffect(Other.dispelmagictarget, pos).destr()
-										calBounceAir(l.linkedNode.pos,e, (1.00 + bounciness.get()))		
-				else
-					links.removeAt(i)
-					destroy l
-					if i == links.getSize()
-						break
-					i--
-				i++
+		var l = firstLink
+		while l != null
+			if l.target.done 
+				destroy l
+			else
+				MoveLightning(l.sfx, false, pos.x, pos.y, l.target.pos.x, l.target.pos.y)
+				for Escaper e from this.getCurrentRegion().getEscapers()
+					if l.ltype == LinkType.ORBTETHER
+						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
+							flashEffect(Other.spellbreakerattack, e.orb.pos)
+							e.orb.terminate()
+					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
+						if e.pos.z < 24 or l.ltype == LinkType.AIRTETHER
+							switch l.ltype
+								case LinkType.KILL
+									AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
+									e.kill()
+								case LinkType.BOUNCE
+									calBounce(l.target.pos,e, (2.00 + bounciness.get()))
+								case LinkType.BOUNCE_DIODE
+									calBounceD(l.target.pos,e, (1.00 + bounciness.get()))	
+								case LinkType.AIRTETHER
+									if e.pos.z > 20
+										addEffect(Other.dispelmagictarget, e.getPos()).destr()
+									calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
+								case LinkType.ORBTETHER
+									
+			l = l.next
+			
 				
 	function getNormal(vec2 la, vec2 lb, vec2 pos) returns vec3
 		let dx = lb.x - la.x
@@ -106,7 +124,7 @@ public class Powernode extends SetupObject
 		var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
 		if b.lengthSquared() < 75
 			b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setXY(e.pos+b)
+		e.setPos(e.pos+b)
 		e.setVel(b)
 		
 	function calBounceD(vec3 lpos, Escaper e, real bounceFactor)
@@ -114,13 +132,13 @@ public class Powernode extends SetupObject
 		let dy = lpos.y - e.pos.y
 		let normal = vec2(-dy,dx).norm().toVec3()
 		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setXY(e.pos+b)
+		e.setPos(e.pos+b)
 		e.setVel(b)
 
 	function calBounceAir(vec3 lpos, Escaper e, real bounceFactor)
 		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
 		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setXY(e.pos+b)
+		e.setPos(e.pos+b)
 		e.setVel(b)
 		
 		
@@ -132,31 +150,27 @@ public class Powernode extends SetupObject
 		return vel3 + pv2
 	
 	ondestroy
-		while links.getSize() > 0
-			Link l = links.get(0)
-			links.removeAt(0)
+		var l = firstLink
+		while l != null
 			destroy l
-		destroy links	
+			l = l.next
 	
 	function onCast()
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	or id == LINK_TETHER_ID
+		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	or id == LINK_TETHER_ID	or id == LINK_ORB_ID
 			var data = target.getEntity()
 			if data instanceof Powernode
 				var pdata = data castTo Powernode
 				var isNew = true
-				var i = 0
-				while i < node.links.getSize()
-					Link l = node.links.get(i)
-					if l.linkedNode == pdata 
-						node.links.removeAt(i)
+				var l = node.firstLink
+				while l != null
+					if l.target == pdata
 						destroy l
 						isNew = false
 						break
-						
-					i++
+					l = l.next
 				if isNew
 					if id == LINK_ID
 						node.link(data castTo Powernode, LinkType.KILL)
@@ -166,16 +180,23 @@ public class Powernode extends SetupObject
 						node.link(data castTo Powernode, LinkType.BOUNCE_DIODE)
 					else if id == LINK_TETHER_ID	
 						node.link(data castTo Powernode, LinkType.AIRTETHER)
+					else if id == LINK_ORB_ID	
+						node.link(data castTo Powernode, LinkType.ORBTETHER)
 		else if id == INCREASE_BOUNCE_ID
 			node.bounciness.increment(node, 8)
-			for link in links
-				if link.linkedNode != this
-					link.linkedNode.bounciness.setVal(node.bounciness.get())
+			var link = node.firstLink
+			while link != null
+				if link.target != this
+					link.target.bounciness.setVal(node.bounciness.get())
+				link = link.next
+				
 		else if id == DECREASE_BOUNCE_ID
 			node.bounciness.decrement(node, 0)
-			for link in links
-				if link.linkedNode != this
-					link.linkedNode.bounciness.setVal(node.bounciness.get())
+			var link = node.firstLink
+			while link != null
+				if link.target != this
+					link.target.bounciness.setVal(node.bounciness.get())
+				link = link.next
 
 @objectgen function genSpells()
 	INCREASE_BOUNCE_ID = ABIL_ID_GEN.next()

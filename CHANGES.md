@@ -1,3 +1,48 @@
+[0.86x]
+[*] Waypoints can now be "and"-linked, meaning they only order units on the waypoint when both waypoints have been triggered
+[*] Tile cutting now works more easily if enabled
+[*] Fixed obstacles in forest startmaze
+[*] Added fountain and fixed torches in desert maze
+[*] Fixed terrainchanger changing blocked terrain
+[*] Fixed regression in key pickup prevention
+[*] Improved Lounge visuals
+
+[0.86v]
+[*] Added orb tether to powernode
+[*] Made it harder to skip the door in the forest mazes
+[*] Increased Door activation height
+[*] Escapers now die on snow in the choose area
+[*] Added region option to allow diagonal tile cutting similar to the ice4 escapes
+
+[0.86u]
+[*] Improved Texture Changer (only removes tiles behind)
+[*] Fixed orb being colored wrong and changed trajectory
+
+[0.86t]
+[*] Added blink to all test-escapers in singleplayer test mode and made them spawn after pick
+[*] Fixed some tooltips and hotkeys
+[*] Improved Portal ability UX
+[*] Reenable teamattacks (so builder escaper dies for testing)
+
+[0.86s]
+[*] Added omnious orb ability as region special (see setup box)
+[*] Unified powernode lightning textures
+[*] Escaper turnspeed can now be set per region
+[*] Minor startmaze redesigns
+[*] Added notification for escapers when they receive a region's special ability
+[*] Lounge area teleporters now get removed if no longer needed
+[*] Added new spell to fast escaper (oneway portal)
+[*] Fixed startmaze init affecting player mazes
+[*] Fixed losing escaper when flying out of map
+[*] Fixed event issues
+[*] Fixed portal model glitch
+[*] Optimizations for lower-spec pcs (experimental)
+[*] Now using Frentity
+
+[0.86g]
+[*] Third Startmaze finalized
+[*] crashbug confirmed fixed, other known bugs remain
+
 [0.86f]
 [*] continued third startmaze revamp [wip]
 [*] general code cleanup and fixes to hopefully fix crashbug

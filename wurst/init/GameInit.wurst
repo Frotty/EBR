@@ -18,6 +18,7 @@ import GlobalShop
 import Remove
 import BasicSpells
 import ClosureTimers
+import PlayerData
 
 init
 	callGen()
@@ -41,9 +42,6 @@ function initGame()
 	printLog(Loglevel.DEBUG, "Init - TMod")
 	init_UnitProducer()
 	printLog(Loglevel.DEBUG, "Init - UP")
-	printLog(Loglevel.DEBUG, "Init - Regions")
-	
-	printLog(Loglevel.DEBUG, "Init - SetTeleports")
 	init_Choose()
 	printLog(Loglevel.DEBUG, "Init - Choose")
 	init_Builder()
@@ -58,7 +56,6 @@ function initGame()
 	printLog(Loglevel.DEBUG, "Init - BTower")
 	init_Bomber()
 	printLog(Loglevel.DEBUG, "Init - Bomber")
-	printLog(Loglevel.DEBUG, "Init - Reinc")
 	init_Pointer()
 	printLog(Loglevel.DEBUG, "Init - Pointer")
 	init_GlobalShop()
@@ -66,17 +63,19 @@ function initGame()
 	invis_init()
 	init_remove()
 	getTimer().start(0.01, function initPartTwo)
+
+
 function initPartTwo()
 	initBaseObjects()
 	printLog(Loglevel.DEBUG, "Init - BObj")
-	printLog(Loglevel.DEBUG, "Init - Startmazes")
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 	
 	printLog(Loglevel.DEBUG, "Init - Finished")
 	startChoose()
 	printLog(Loglevel.DEBUG, "Starting choose...")
 	initSpells()
-	initItem()
 	initStartmazes()
+
+	loadPlayerDatas()
 	GetExpiredTimer().release()
 

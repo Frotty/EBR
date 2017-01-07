@@ -1,5 +1,6 @@
 package AirPhysicsModule
 import public Entity
+import RegionData
 import Interpolation
 
 public constant MAX_MASS = 250
@@ -22,36 +23,34 @@ public module AirPhysicsModule
 		
 	// This function should be called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
-		terrainZ = getTerrainZ(e.pos.x, e.pos.y)
-		if e.pos.z <= terrainZ + .2
+		let pos = e.getPos()
+		terrainZ = getTerrainZ(pos.x, pos.y)
+		if pos.z <= terrainZ + .2
 			onGround(e)
 		else
 			inAir(e)
 		
-		e.pos += e.vel
-		
 	// When the Entity is on or near the ground	
 	function onGround(Entity e)
+		let pos = e.getPos()
 		// If the Entity is moving towards 
-		vec3 normal = getTerrainNormal(e.pos.x, e.pos.y, 2.).norm()
+		vec3 normal = getTerrainNormal(pos.x, pos.y, 2.).norm()
 		// Is the Entity going away from the ground?
-		if e.vel.dot(normal) > 0 
+		if e.getVel().dot(normal) > 0 
 			return
 
-		vec3 pv = e.vel.project(normal)
+		vec3 pv = e.getVel().project(normal)
 		pv *= (-1. - restitution)
 		if pv.z > 4.
-			e.vel += pv
+			e.addVel(pv)
 		else	
-			e.vel *= surfaceFriction * bezier_3(1,0.85,0,mass/MAX_MASS)
+			e.scaleVel(surfaceFriction * bezier_3(1,0.85,0,mass/MAX_MASS))
 			
-		e.pos.z = terrainZ
 		
 	function inAir(Entity e)
 		let coef = bezier_3(0.930,0.985,1,mass/MAX_MASS)
 		let gcoef = bezier_3(0.1,0.875,1,mass/MAX_MASS)
 		if affectedByGravity
-			e.vel += e.currentRegion.gravity * gcoef
-		e.vel.x *= coef
-		e.vel.y *= coef
+			e.addVel(e.getCurrentRegion().gravity * gcoef)
+		e.scaleVel(coef)
 		

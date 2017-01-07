@@ -15,8 +15,8 @@ public class Bomber extends UnitEntity
 	boolean realorder = true
 	
 	construct( vec2 pos, player owner )
-		super(pos.toVec3(), CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0.))
-		active = false
+		super(createUnit(owner, BOMBER_ID, pos, angle(0)))
+		this.setCurrentRegion()
 		setup = CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0.)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
@@ -26,9 +26,7 @@ public class Bomber extends UnitEntity
 		UnitAddType(actor, UNIT_TYPE_PEON)
 		setup.addAbility('Agho')
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		setup.setUserData(this castTo int)
-		
-	override function update()
+		setup.setEntity(this)
 		
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()
@@ -48,9 +46,9 @@ public class Bomber extends UnitEntity
 		IssueImmediateOrderById(obj.setup, STOP_ORDER)
 		GetExpiredTimer().release()
 		
-	ondestroy 
+	ondestroy
+		setup.setEntity(null)
 		setup.remove()
-		actor.remove()
 	
 function checkOrder()
 	var i = GetIssuedOrderId()
@@ -67,7 +65,7 @@ function checkOrder()
 				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
 				getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
 			else if i == STOP_ORDER 
-				if obj.realorder == true
+				if obj.realorder
 					IssueImmediateOrderById(obj.actor, STOP_ORDER)
 				else 
 					obj.realorder = true

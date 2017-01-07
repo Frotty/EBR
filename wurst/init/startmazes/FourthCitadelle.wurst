@@ -1,6 +1,7 @@
 package FourthCitadelle
 import Startmaze
 import Spinner
+import ClosureTimers
 
 public class FourthCitadelleMaze extends Startmaze
 
@@ -10,71 +11,89 @@ public class FourthCitadelleMaze extends Startmaze
 		
 	override function initMaze()
 		inited = true
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01I", null )
-		for u in ENUM_GROUP
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01I", pickFilter)
+		for u from ENUM_GROUP
 			new BigKiller(u) 
-			
-		ENUM_GROUP.clear()
 		
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00E", null )
-		for u in ENUM_GROUP
-			new SmallKiller(u) 
-			
-		ENUM_GROUP.clear()
-	
-		IssuePointOrder(gg_unit_n00E_0263, "patrol", -2948, -6192 )
-		IssuePointOrder(gg_unit_n00E_0264, "patrol", -2645, -6798 )
-		IssuePointOrder(gg_unit_n00E_0265, "patrol", -3129, -6798 )
-		IssuePointOrder(gg_unit_n00E_0268, "patrol", -3552, -6419 )
-		IssuePointOrder(gg_unit_n00E_0269, "patrol", -4317, -5883 )
-		IssuePointOrder(gg_unit_n00E_0267, "patrol", -4045, -6441 )
-		IssuePointOrder(gg_unit_n00E_0270, "patrol", -4719, -6655 )
-		IssuePointOrder(gg_unit_n00E_0210, "patrol", -4544, -6881 )
-		IssuePointOrder(gg_unit_n00E_0211, "patrol", -4553, -7000 )
-		IssuePointOrder(gg_unit_n00E_0219, "patrol", -4754, -7185 )
-		IssuePointOrder(gg_unit_n00E_0218, "patrol", -4720, -7060 )
-		IssuePointOrder(gg_unit_n00E_0214, "patrol", -2710, -5120 )
-		IssuePointOrder(gg_unit_n00E_0213, "patrol", -2728, -5100 )
-		IssuePointOrder(gg_unit_n00E_0221, "patrol", -4576, -4748 )
-		IssuePointOrder(gg_unit_n00E_0222, "patrol", -4320, -5164 )
-		IssuePointOrder(gg_unit_h01I_0266, "patrol", -2533, -7195 )
-		IssuePointOrder(gg_unit_h01I_0262, "patrol", -3502, -6077 )
-		IssuePointOrder(gg_unit_h01I_0280, "patrol", -3953, -5678 )
-		IssuePointOrder(gg_unit_h01I_0225, "patrol", -4648, -3995 )
-		
-		var t = new Teleporter(vec2(gg_unit_n00C_0234.getX(),gg_unit_n00C_0234.getY()),STAFF_PLAYER)
-		IssuePointOrder(t.actor, "setrally", STARTX,STARTY )
-		gg_unit_n00C_0234.remove()
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00E", pickFilter)
+		for u from ENUM_GROUP
+			new SmallKiller(u)
 
-		Spinner s = new Spinner(vec2(gg_unit_h01M_0258.getX(),gg_unit_h01M_0258.getY()), STAFF_PLAYER)
-		gg_unit_h01M_0258.remove()
-		s.checkObj( gg_unit_n00E_0260.getEntity() )
-		s.checkObj( gg_unit_n00E_0261.getEntity() )
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u00A", pickFilter)
+		for u from ENUM_GROUP
+			new GlaiveKiller(u)
+
+		Spinner s = new Spinner(gg_unit_h01M_0258)
+		s.checkObj( gg_unit_n00E_0260.getEntity())
+		s.checkObj( gg_unit_n00E_0261.getEntity())
 		s.spinSpeed.setVal(4.5 *DEGTORAD)
-		s = new Spinner(vec2(gg_unit_h01M_0257.getX(),gg_unit_h01M_0257.getY()), STAFF_PLAYER)
-		gg_unit_h01M_0257.remove()
-		s.checkObj( gg_unit_n00E_0271.getEntity() )
-		s.checkObj( gg_unit_n00E_0272.getEntity() )
-		s.checkObj( gg_unit_n00E_0273.getEntity() )
-		s.checkObj( gg_unit_n00E_0274.getEntity() )
-		s.checkObj( gg_unit_n00E_0275.getEntity() )
-		s.checkObj( gg_unit_n00E_0276.getEntity() )
-		s.checkObj( gg_unit_n00E_0277.getEntity() )
-		s.checkObj( gg_unit_n00E_0278.getEntity() )
+
+		s = new Spinner(gg_unit_h01M_0147)
+		s.checkObj( gg_unit_n00E_0215.getEntity())
+		s.checkObj( gg_unit_n00E_0216.getEntity())
+		s.checkObj( gg_unit_n00E_0217.getEntity())
+		s.spinSpeed.setVal(4. *DEGTORAD)
+		doAfter(0.2,() -> gg_unit_h01M_0147.issuePointOrder("patrol", vec2(-3900, -4604)) )
+		
+
+		s = new Spinner(gg_unit_h01M_0257)
+		s.checkObj( gg_unit_n00E_0271.getEntity())
+		s.checkObj( gg_unit_n00E_0272.getEntity())
+		s.checkObj( gg_unit_n00E_0273.getEntity())
+		s.checkObj( gg_unit_n00E_0274.getEntity())
+		s.checkObj( gg_unit_n00E_0275.getEntity())
+		s.checkObj( gg_unit_n00E_0276.getEntity())
+		s.checkObj( gg_unit_n00E_0277.getEntity())
+		s.checkObj( gg_unit_n00E_0278.getEntity())
 		s.spinSpeed.setVal(2. *DEGTORAD)
 		
-		s = new Spinner(vec2(gg_unit_h01M_0259.getX(),gg_unit_h01M_0259.getY()), STAFF_PLAYER)
-		gg_unit_h01M_0259.remove()
-		s.checkObj( gg_unit_n00E_0215.getEntity() )
-		s.checkObj( gg_unit_n00E_0216.getEntity() )
-		s.checkObj( gg_unit_n00E_0217.getEntity() )
-		s.spinSpeed.setVal(4. *DEGTORAD)
-		//SetUnitOwner( gg_unit_h01M_0259, STAFF_PLAYER, true )
-		IssuePointOrder( s.setup, "patrol", -3820, -4661 )
-		s = new Spinner(vec2(gg_unit_h01M_0212.getX(),gg_unit_h01M_0212.getY()), STAFF_PLAYER)
-		gg_unit_h01M_0212.remove()
-		s.checkObj( gg_unit_h01I_0220.getEntity() )
+
+		s = new Spinner(gg_unit_h01M_0212)
+		s.checkObj( gg_unit_h01I_0220.getEntity())
 		s.spinSpeed.setVal(7 *DEGTORAD)
+
+		s = new Spinner(gg_unit_h01M_0162)
+		s.sinFactor.setVal(0)
+		s.checkObj( gg_unit_u00A_0156.getEntity())
+		s.setup.issueImmediateOrder("fingerofdeath")
+		s.spinSpeed.setVal(4 *DEGTORAD)
+
+		s = new Spinner(gg_unit_h01M_0163)
+		s.sinFactor.setVal(0)
+		s.checkObj( gg_unit_u00A_0157.getEntity())
+		s.setup.issueImmediateOrder("fingerofdeath")
+		s.spinSpeed.setVal(4 *DEGTORAD)
+
+		s = new Spinner(gg_unit_h01M_0161)
+		s.checkObj( gg_unit_u00A_0158.getEntity())
+		s.checkObj( gg_unit_u00A_0159.getEntity())
+		s.checkObj( gg_unit_u00A_0160.getEntity())
+		s.setup.issueImmediateOrder("fingerofdeath")
+		s.spinSpeed.setVal(1.25 *DEGTORAD)
+			
+		gg_unit_n00E_0263.issuePointOrder("patrol", vec2(-2765, -6283))
+		gg_unit_n00E_0264.issuePointOrder("patrol", vec2(-2545, -6780))
+		gg_unit_n00E_0265.issuePointOrder("patrol", vec2(-3050, -6523))
+		gg_unit_n00E_0268.issuePointOrder("patrol", vec2(-3552, -6419))
+		gg_unit_n00E_0269.issuePointOrder("patrol", vec2(-4317, -5883))
+		gg_unit_n00E_0267.issuePointOrder("patrol", vec2(-4045, -6441))
+		gg_unit_n00E_0270.issuePointOrder("patrol", vec2(-4719, -6655))
+		gg_unit_n00E_0210.issuePointOrder("patrol", vec2(-4544, -6881))
+		gg_unit_n00E_0211.issuePointOrder("patrol", vec2(-4553, -7000))
+		gg_unit_n00E_0219.issuePointOrder("patrol", vec2(-4754, -7185))
+		gg_unit_n00E_0218.issuePointOrder("patrol", vec2(-4720, -7060))
+		gg_unit_n00E_0214.issuePointOrder("patrol", vec2(-2710, -5120))
+		gg_unit_n00E_0213.issuePointOrder("patrol", vec2(-2728, -5100))
+		gg_unit_n00E_0221.issuePointOrder("patrol", vec2(-4576, -4748))
+		gg_unit_n00E_0222.issuePointOrder("patrol", vec2(-4320, -5164))
+		gg_unit_h01I_0266.issuePointOrder("patrol", vec2(-2533, -7195))
+		gg_unit_h01I_0262.issuePointOrder("patrol", vec2(-3502, -6077))
+		gg_unit_h01I_0280.issuePointOrder("patrol", vec2(-3953, -5678))
+		gg_unit_h01I_0225.issuePointOrder("patrol", vec2(-4648, -3995))
+		
+		var t = new Teleporter(gg_unit_n00C_0234)
+		t.setRallyPoint(LOUNGE)
+
 
 	override function getStart() returns vec2
 		return vec2(-2450, -6150)

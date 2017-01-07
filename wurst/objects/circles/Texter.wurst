@@ -1,6 +1,7 @@
 package Texter
 import BaseObject
 import Escaper
+import StringUtils
 
 constant int 	TEXTER_ID   = 'n01B'
 constant real 	EVENT_RADIUS	= 32.
@@ -14,7 +15,6 @@ public class Texter extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 		super( pos, CreateUnit(owner, TEXTER_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Texter.onStep, CODE_NULL ) 
-		actor.setUserData(this castTo int)
 		text..setColor( col.red,col.green,col.blue, 0 )..setPos( actor.getX(),actor.getY(), 0 )..setVisibility( false )..setPermanent( true )
 		
 	static function onStep()
@@ -54,6 +54,7 @@ public class Texter extends StaticBaseObject
 			obj.xoffset = ttext.length() / 2. * 6
 			if obj.hidden
 				createTTEx(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
+			obj.text.center(obj.getPos(), ttext, 10)
 	
 	static function setColor()
 		string chatmsg = GetEventPlayerChatString()
@@ -70,7 +71,8 @@ public class Texter extends StaticBaseObject
 				createTTEx(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
 
 	ondestroy
-		DestroyTextTag(text)
+		if text != null
+			text.destr()
 		
 	
 function getSelectedTexters(player p) returns group

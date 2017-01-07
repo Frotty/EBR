@@ -10,12 +10,13 @@ constant real GRAV_RADIUS_SQ = 172225 //415
 public class Vortex extends UnitEntity
 	real gravity = 2.
 	
-	construct( vec2 pos, player owner )
-		super( pos.toVec3(), CreateUnit(owner, ID, pos.x, pos.y, 0) )
+	construct(vec2 pos, player owner)
+		super(CreateUnit(owner, ID, pos.x, pos.y, 0) )
+		this.setCurrentRegion()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
-		for e in currentRegion.getEscapers()
+		for e from this.getCurrentRegion().getEscapers()
 			if pos.toVec2().distanceToSq( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
 				var angl = e.pos.toVec2().angleTo(pos.toVec2())
 				e.otherVel += vec3( Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0 )
@@ -34,7 +35,3 @@ public class Vortex extends UnitEntity
 					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
 		return false
 
-
-	ondestroy
-		actor.remove()
-				

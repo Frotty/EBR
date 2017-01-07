@@ -1,11 +1,13 @@
 package ReviveManager
 import Escaper
-
+import ErrorHandling
 tuple RevivePod(Escaper escaper, real time)
 
 RevivePod array pods
 
 public function manageRevive(Escaper e)
+	if e == null
+		error("bug")
 	let id = e.owner.getId()
 	if pods[id].time <= 0
 		pods[id] = RevivePod(e, 3.0)
@@ -17,7 +19,10 @@ function update()
 		if pods[i].escaper != null
 			pods[i].time -= TIMER_PERIOD
 			if pods[i].time <= 0
-				pods[i].escaper.revive()
+				if pods[i].escaper == null
+					printLog(Loglevel.ERROR, "THis neither")
+				else	
+					pods[i].escaper.revive()
 				pods[i] = RevivePod(null, 0)
 
 constant TIMER_PERIOD = 0.1

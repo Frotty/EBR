@@ -1,5 +1,5 @@
 package Projectile
-import public Entity
+import public FxEntity
 
 public class Projectile extends FxEntity
 	// Angles
@@ -17,10 +17,9 @@ public class Projectile extends FxEntity
 	protected real lifespan = 0
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
-		super(pos, radius, owner, xyAngle, fxpath)
+		super(owner, pos, radius, xyAngle, fxpath)
 		startpos = pos
 		setXYAngle(xyAngle)
-		active = false
 				
 	function setRanged(real maxDistance)
 		this.maxDist = maxDistance*maxDistance
@@ -50,13 +49,13 @@ public class Projectile extends FxEntity
 	override function update()
 		vel *= acc
 		pos += vel
-		fixPos()
+		setXY(pos)
 		if timed
 			lifespan -= ANIMATION_PERIOD
 			if lifespan <= 0
-				done = true
+				terminate()
 				return
 		if ranged
 			if startpos.distanceToSq(pos) > maxDist
-				done = true
+				terminate()
 		

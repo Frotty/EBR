@@ -1,0 +1,52 @@
+package Sensor
+import public Entity
+import HashMap
+import ErrorHandling
+import FxEntity
+
+public abstract class SensorListener
+	abstract function onSensor(UnitEntity source, UnitEntity target)
+	
+public module Sensor
+	private trigger inRangeTrig = null
+	private unit actor = null
+	private static HashMap<trigger, SensorListener> sensorListeners = new HashMap<trigger, SensorListener>()
+
+	function addSensorListener(Entity e, SensorListener listener)
+		if listener == null
+			error("Trying to add null listener")
+		inRangeTrig = CreateTrigger()
+		
+		if e instanceof UnitEntity
+			this.actor = (e castTo UnitEntity).actor
+		else if e instanceof FxEntity
+			this.actor = (e castTo FxEntity).getDummy()
+
+		inRangeTrig.registerUnitInRangeSource(actor, e.radius, null)
+		sensorListeners.put(inRangeTrig, listener)
+		inRangeTrig.addAction( () -> begin
+			let trig = GetTriggeringTrigger()
+			let u = GetTriggerUnit()
+			if u.getUserData() > 0
+				let target = u.getEntity() castTo UnitEntity
+				if target != null and not target.done
+					let slistener = sensorListeners.get(trig)
+					if slistener != null
+						slistener.onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
+		end)
+		
+	ondestroy
+		if inRangeTrig != null
+			destroy sensorListeners.get(inRangeTrig)
+			sensorListeners.remove(inRangeTrig)
+			actor.clearRegister()
+
+
+public function unit.abortOrder() returns boolean
+	if IsUnitPaused(this)
+		return false
+	else
+		PauseUnit(this, true)
+		IssueImmediateOrder(this, "stop")
+		PauseUnit(this, false)
+	return true

@@ -11,15 +11,13 @@ public class FirstSnowMaze extends Startmaze
 	
 	override function initMaze()
 		inited = true
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", null )
-		for u in ENUM_GROUP
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h015", pickFilter)
+		for u from ENUM_GROUP
 			new BigKiller(u)
-		ENUM_GROUP.clear()
 
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", null )
-		for u in ENUM_GROUP
+		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n007", pickFilter)
+		for u from ENUM_GROUP
 			new SmallKiller(u)
-		ENUM_GROUP.clear()
 		
 		gg_unit_h015_0020.issuePointOrder("patrol", vec2(6800.01, -5237))
 		gg_unit_h015_0018.issuePointOrder("patrol", vec2(5325.01, -6000))

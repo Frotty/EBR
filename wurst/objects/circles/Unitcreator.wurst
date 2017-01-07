@@ -4,6 +4,7 @@ import EscaperKillers
 import Pointer
 import Knockbacker
 import ChannelAbilityPreset
+import HashMap
 
 constant int 	UNITCREATOR_ID   = 'n006'
 
@@ -22,45 +23,43 @@ public class UnitCreator extends StaticBaseObject
 
 	construct( vec2 pos, player owner)
 		super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL , CODE_NULL)
-		active = false
 		actor.addAbility(FIXED_ID)
+		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 	
 	override function update()
-		super.update()
-		if active
-			if timerreal <= 0.0
-				create(this)
-				if tmode == TimerMode.FIXED
-					timerreal = interval
-				else if tmode == TimerMode.RANDOM
-					timerreal = GetRandomReal(0.5, interval)
-			else
-				timerreal -= ANIMATION_PERIOD	
+		if timerreal <= 0.0
+			create(this)
+			if tmode == TimerMode.FIXED
+				timerreal = interval
+			else if tmode == TimerMode.RANDOM
+				timerreal = GetRandomReal(0.5, interval)
+		else
+			timerreal -= ANIMATION_PERIOD	
 			
 				
 	static function create(UnitCreator obj)
-		let rallyPos = obj.getRallyPoint().toVec2()
-		let pos = obj.pos.toVec2() + vec2(-0.01,0)
+		let rPos = obj.getRallyPoint().toVec2() + vec2(0.001,0.001)
+		let cpos = obj.pos.toVec2() + vec2(0.001,0.001)
 		EscaperSensorSetup ek = null
 		switch obj.spawnUnitType
 			case 'BIGK'
-				ek = new BigKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new BigKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'SMAL'
-				ek = new SmallKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new SmallKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'u00A'
-				ek = new GlaiveKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new GlaiveKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'h001'
-				ek = new TankKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new TankKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'u008'
-				ek = new BigRandomKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new BigRandomKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'u006'
-				ek = new SmallRandomKiller(pos, obj.owner, obj.getRallyAngle())
+				ek = new SmallRandomKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'h01Q'
-				ek = new Pointer(pos, obj.owner, obj.getRallyAngle())
+				ek = new Pointer(cpos, obj.owner, obj.getRallyAngle())
 			case KNOCKER_ID
-				ek = new Knockbacker(pos, obj.owner, obj.getRallyAngle())
-		ek.setup.issuePointOrder("move", rallyPos)
+				ek = new Knockbacker(cpos, obj.owner, obj.getRallyAngle())
+		ek.setup.issuePointOrder("move", rPos)
 		
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -79,14 +78,14 @@ public class UnitCreator extends StaticBaseObject
 					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 					//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
 			case START_ABIL
-				active = true
+				activate()
 				timerreal = interval
 				UnitAddAbility(actor,PAUSE_ABIL)
 				UnitRemoveAbility(actor,START_ABIL)
 			case PAUSE_ABIL
 				UnitRemoveAbility(actor,PAUSE_ABIL)
 				UnitAddAbility(actor,START_ABIL)
-				active = false
+				deactivate()
 			case 'A045' // Big killer
 				spawnUnitType = 'BIGK'
 			case 'A046' // Small killer

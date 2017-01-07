@@ -3,6 +3,7 @@ import PlayerData
 import Intro
 import ClosureTimers
 import SetupBox
+import EscaperClasses
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -39,13 +40,17 @@ function onCommandChat()
 				SetCameraFieldForPlayer(p, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 1.)
 		case "frev"
 			DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Trying forced revive!")
-			if pd.escaper.actor.getHP() < .405
+			if pd.escaper == null
+				doAfter(0.1, () -> begin 
+					pd.escaper = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+				end)
+			else if  pd.escaper.actor == null or not pd.escaper.actor.isAlive()
 				doAfter(0.1, () -> pd.escaper.revive())
 		case "info"
 			string s = "|cffFFD621[Info]|r - Current Region:\n"
-			s += "            |cff63DEFFSlidespeed|r: " + pd.escaper.currentRegion.slidespeed.toString() + "\n"
-			s += "            |cff08AD4APoison Damage|r: " + pd.escaper.currentRegion.poisonDmg.toString() + "\n"
-			s += "            |cffA52108Lava Damage|r: " + pd.escaper.currentRegion.lavaDmg.toString() + "\n"
+			s += "            |cff63DEFFSlidespeed|r: " + pd.escaper.getCurrentRegion().slidespeed.toString() + "\n"
+			s += "            |cff08AD4APoison Damage|r: " + pd.escaper.getCurrentRegion().poisonDmg.toString() + "\n"
+			s += "            |cffA52108Lava Damage|r: " + pd.escaper.getCurrentRegion().lavaDmg.toString() + "\n"
 			s += "            |cffFF9C29Owners|r: " 
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"

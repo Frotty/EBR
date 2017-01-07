@@ -104,13 +104,13 @@ function keypick()
 		printTimedToPlayer("|cffE68C19Welcome to |cff086BC5EBR|cffE68C19!\n    |rIf you're new to the game, type \"-intro\" to get a short tutorial for your role.", 20, pd.p)
 		switch currentView[pd.id]-1
 			case 0
-				pd.escaper = new HolyEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[0]) )
+				pd.escaper = new HolyEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p )
 			case 1
-				pd.escaper = new StrongEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[1]) )
+				pd.escaper = new StrongEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p)
 			case 2
-				pd.escaper = new Escaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[2]) )
+				pd.escaper = new FastEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p)
 			case 3
-				pd.escaper = new IceEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p, GetUnitTypeId(pickheros[3]) )
+				pd.escaper = new IceEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p)
 		pd.icon = mbPic[currentView[pd.id]-1]
 		if pd.admin
 			AddSpecialEffectTarget( "Righteousness.MDX", pd.escaper.actor, "chest" )
@@ -133,6 +133,16 @@ function keypick()
 			SetTextTagVisibility(herott[currentView[pd.id]-1],false)
 			SetUnitVertexColor( pickheros[currentView[pd.id]-1], 0, 0, 0, 0 )
 			SetTextTagVisibility(herott[herocount],false)
+
+		if allPlayers.getSize() == 1
+			Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
+			e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
+			e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
+			e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
+			e.actor.addAbility('A001')
 			
 
 	else
@@ -152,7 +162,7 @@ public function init_Choose()
 	
 	heroinfos[0] = "|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation."
 	heroinfos[1] = "|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat."
-	heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can turn invisible."
+	heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can create a portal."
 	heroinfos[3] = "|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice."
 
 	for pd in allPlayers

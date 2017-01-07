@@ -5,6 +5,7 @@ import FileIO
 import Sync
 import Thread
 import PlayerMemoryData
+import SyncInteger
 
 constant int XPMAX = 500000
 constant string FOLDER_NAME = "EBR"
@@ -12,10 +13,11 @@ constant string FILE_NAME = "data"
 public constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant int saveTechnique = 331
 
-
 public function checkLocalFiles(PlayerData pd)
-	if not pd.localFilesEnabled
-		pd.localFilesEnabled = File.isEnabled().sync(pd.p)
+	// if not pd.localFilesEnabled
+	// 	printTimed(pd.mbname + " checking 2", 5)
+	// 	pd.localFilesEnabled = File.isEnabled().sync(pd.p)
+	// 	printTimed(pd.mbname + " checking 3", 5)
 
 public function PlayerData.createNewPlayerFile()
 	var scode = new Savecode()

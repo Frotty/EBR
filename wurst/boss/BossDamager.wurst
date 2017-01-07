@@ -1,5 +1,4 @@
 package BossDamager
-
 import Boss
 import Escaper
 import BaseObject
@@ -18,7 +17,7 @@ public class BossDamager extends StaticBaseObject
 //		actor.registerCastEvent(Condition(function BossDamager.onCast))
 		
 	function damage(Escaper e)
-		GroupEnumUnitsInRect(ENUM_GROUP, getRegionData(pos).theRect, null)
+		GroupEnumUnitsInRect(ENUM_GROUP, this.getCurrentRegion().theRect, null)
 		for u in ENUM_GROUP
 			var es = u.getEntity()	
 			if es instanceof Boss
