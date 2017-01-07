@@ -2,7 +2,8 @@
 [*] Made it harder to skip the door in the forest mazes
 [*] Increased Door activation height
 [*] Added orb tether to powernode
-[*]
+[*] Escapers now die on snow in the choose area
+[*] Added region option to allow diagonal tile cutting similar to the ice4 escapes
 
 [0.86u]
 [*] Improved Texture Changer (only removes tiles behind)

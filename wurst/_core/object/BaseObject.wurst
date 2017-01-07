@@ -24,6 +24,7 @@ public class StaticBaseObject extends UnitEntity
 
 	construct( vec2 pos, unit u, real radius, code c, code cond )
 		super(u)
+		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)
 		actor.addAbility(GHOST_VIS_ID)
 		this.setCurrentRegion()

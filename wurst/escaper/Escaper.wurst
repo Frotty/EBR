@@ -128,9 +128,20 @@ public abstract class Escaper extends UnitEntity
 		let rdata = this.getCurrentRegion()
 		slideVelocity *= 0.99
 		if ttype == rdata.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
-			onUnwalkable = true
 			if alive
-				kill()
+				if rdata.allowCut
+					let rv = getRealVel()
+					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 12)
+					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 12)
+					let t1type = GetTerrainType(lpos.x, lpos.y)
+					let t2type = GetTerrainType(rpos.x, rpos.y)
+					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and
+						(t1type == rdata.getTypeSet().unwalkableId or t1type == 'Ibkb' or t1type == RUNES)
+						kill()
+						onUnwalkable = true
+				else
+					kill()
+					onUnwalkable = true
 		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 			let angl = actor.getFacingAngle()
 			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)

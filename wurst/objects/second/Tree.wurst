@@ -11,8 +11,8 @@ public class Tree extends UnitEntity
 	construct(vec2 pos, player owner)
 		super(createUnit( owner, TREE_ID, pos, angle(0)))
 		var rdata = this.setCurrentRegion().getTypeSet()
-		dummy = CreateDestructable( rdata.treeId, pos.x, pos.y, GetRandomReal(0,360), GetRandomReal(0.8,1.2), GetRandomInt(0,2) )
+		dummy = createDestructable( rdata.treeId, pos, GetRandomReal(0,360).asAngleDegrees(), GetRandomReal(0.8,1.2), GetRandomInt(0,2) )
 
 	ondestroy
-		RemoveDestructable(this.dummy)
+		dummy.remove()
 

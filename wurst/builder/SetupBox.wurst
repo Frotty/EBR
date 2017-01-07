@@ -30,15 +30,19 @@ constant CANCEL_TOGGLE_ID = 'A08C'
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
 constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1.mp3", false)
+constant CUT_ALLOW = 'A08F'
+constant CUT_DISABLE = 'A08G'
 
 public class SetupBox extends UnitEntity
 	private RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
 		super(createUnit( owner, SETUP_BOX, pos, angle(0) ))
+		this.setCurrentRegion()
 		rdata = data
 		actor..addAbility(ALLOW_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
-		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID).addAbility(ABIL_WIZARD)
+		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID)..addAbility(ABIL_WIZARD)
+		.addAbility(CUT_ALLOW)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 	function addBossSwitch()
@@ -152,14 +156,14 @@ public class SetupBox extends UnitEntity
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 			case SECOND_PAGE
 				actor..removeAbility(ALLOW_ID)..removeAbility(ABIL_WIZARD)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
-				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)..removeAbility(TURND_ID)..removeAbility(TURNI_ID)
+				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)..removeAbility(TURND_ID)..removeAbility(TURNI_ID).removeAbility(CUT_ALLOW)
 				actor..addAbility(ICEI_ID)..addAbility(ICED_ID)..addAbility(PI_ID)..addAbility(PD_ID)
 				..addAbility(LI_ID)..addAbility(LD_ID)..addAbility(FIRST_PAGE)
 			case FIRST_PAGE
 				actor..removeAbility(ICEI_ID)..removeAbility(ICED_ID)..removeAbility(PI_ID)..removeAbility(PD_ID)
 				..removeAbility(LI_ID)..removeAbility(LD_ID)..removeAbility(FIRST_PAGE)
 				actor..addAbility(ALLOW_ID)..addAbility(ABIL_WIZARD)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
-				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID)
+				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID).addAbility(CUT_ALLOW)
 			case INC_GRAVITY
 				if(rdata.gravity.z > -10)
 					rdata.gravity -= vec3(0,0,0.1)
@@ -184,6 +188,14 @@ public class SetupBox extends UnitEntity
 					printTimedToPlayer("Turnspeed: " + rdata.turnSpeed.toString(), 10, owner)
 				for escaper from rdata.getEscapers()
 					escaper.actor.setTurnSpeed(rdata.turnSpeed)
+			case CUT_ALLOW
+				rdata.allowCut = true
+				actor..removeAbility(CUT_ALLOW)..addAbility(CUT_DISABLE)
+				printTimedToPlayer("|cffFF9C29Escapers can now cut diagonal tiles", 15, owner)
+			case CUT_DISABLE
+				rdata.allowCut = false
+				actor..removeAbility(CUT_DISABLE)..addAbility(CUT_ALLOW)
+				printTimedToPlayer("|cffFF9C29Escapers can no longer cut diagonal tiles.", 15, owner)
 init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
 	

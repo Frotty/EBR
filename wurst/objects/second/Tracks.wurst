@@ -23,6 +23,7 @@ public class Tracks extends UnitEntity
 	
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, TRACKS[0], pos, angle(0)))
+		this.setCurrentRegion()
 		setup = CreateUnit(owner, TRACK_ID, pos.x, pos.y, 0 )
 		setup.setEntity(this)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())

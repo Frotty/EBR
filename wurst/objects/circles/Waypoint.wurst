@@ -24,6 +24,7 @@ class DelayData
 public class Waypoint extends StaticBaseObject
 	real delay = 0.
 	boolean wisps = true
+	Waypoint andPartner = null
 	
 	construct( vec2 pos, player owner )
 		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.orderMove, function Waypoint.isProper2 )
@@ -35,7 +36,7 @@ public class Waypoint extends StaticBaseObject
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		thistype obj = source.getUserData() castTo thistype
-		let rallyPos = obj.getRallyPoint() + vec2(-0.01,0)
+		let rallyPos = obj.getRallyPoint() + vec2(0.001,0)
 		if obj.owner == u.getOwner() and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 			var data = e castTo UnitEntity
 			if not obj.wisps and data instanceof TeleporterTarget
@@ -49,6 +50,7 @@ public class Waypoint extends StaticBaseObject
 			else
 				u.issueImmediateOrder("stop")
 				getTimer()..start(obj.delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
+	
 				
 	static function delayMove()
 		var t = GetExpiredTimer()

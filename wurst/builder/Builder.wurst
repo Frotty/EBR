@@ -21,6 +21,7 @@ public class Builder extends UnitEntity
 		super(CreateUnit(p, BUILDER_1, -6000, -7160, 0))
 		deactivate()
 		registerListeners()
+		this.setCurrentRegion()
 
 	override function update()
 		pos = actor.getPos().toVec3()

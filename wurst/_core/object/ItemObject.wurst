@@ -8,11 +8,11 @@ public abstract class ItemObject extends Entity
 	construct(vec2 pos, item i, unit setup)
 		super(setup.getOwner(), pos.toVec3())
 		this.setup = setup
-		actorItem = i
-		actorItem.setEntity(this)
 		setup..addAbility(GHOST_VIS_ID)
 		..setEntity(this)
-		actorItem.setPos(pos.x, pos.y)
+		actorItem = i
+		actorItem..setEntity(this)
+		..setPos(pos)
 		
 	ondestroy
 		setup.setEntity(null)
@@ -27,39 +27,39 @@ public abstract class ItemObject extends Entity
 	
 	abstract function onUse(Escaper e)
 	
-	static function onItemUse()
-		let itm = GetManipulatedItem()
-		let hero = GetManipulatingUnit()
-		
-		let idata = itm.getEntity()
-		let edata = hero.getEntity()
-		if idata instanceof ItemObject and not idata.done
-			if edata instanceof Escaper and not edata.done
-				(idata castTo ItemObject).onUse(edata castTo Escaper)
+function onItemUse()
+	let itm = GetManipulatedItem()
+	let hero = GetManipulatingUnit()
+	
+	let idata = itm.getEntity()
+	let edata = hero.getEntity()
+	if idata instanceof ItemObject and not idata.done
+		if edata instanceof Escaper and not edata.done
+			(idata castTo ItemObject).onUse(edata castTo Escaper)
 				
-	static function onItemPickup()
-		let itm = GetManipulatedItem()
-		let hero = GetManipulatingUnit()
-		
-		let idata = itm.getEntity()
-		let edata = hero.getEntity()
-		if idata instanceof ItemObject and not idata.done
-			if edata instanceof Escaper and not edata.done
-				(idata castTo ItemObject).onPickup(edata castTo Escaper)
+function onItemPickup()
+	let itm = GetManipulatedItem()
+	let hero = GetManipulatingUnit()
+	
+	let idata = itm.getEntity()
+	let edata = hero.getEntity()
+	if idata instanceof ItemObject and not idata.done
+		if edata instanceof Escaper and not edata.done
+			(idata castTo ItemObject).onPickup(edata castTo Escaper)
 				
-	static function onItemDrop()
-		let itm = GetManipulatedItem()
-		let hero = GetManipulatingUnit()
-		
-		let idata = itm.getEntity()
-		let edata = hero.getEntity()
-		if idata instanceof ItemObject and not idata.done
-			if edata instanceof Escaper and not edata.done
-				(idata castTo ItemObject).onDrop(edata castTo Escaper)
+function onItemDrop()
+	let itm = GetManipulatedItem()
+	let hero = GetManipulatingUnit()
+	
+	let idata = itm.getEntity()
+	let edata = hero.getEntity()
+	if idata instanceof ItemObject and not idata.done
+		if edata instanceof Escaper and not edata.done
+			(idata castTo ItemObject).onDrop(edata castTo Escaper)
 				
 
-public function initItem()
-	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> ItemObject.onItemPickup())
-	EventListener.add(EVENT_PLAYER_UNIT_DROP_ITEM, () -> ItemObject.onItemDrop())
-	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> ItemObject.onItemUse())
+init
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> onItemPickup())
+	EventListener.add(EVENT_PLAYER_UNIT_DROP_ITEM, () -> onItemDrop())
+	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> onItemUse())
 	

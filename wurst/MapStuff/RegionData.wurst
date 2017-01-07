@@ -68,6 +68,7 @@ public class RegionData
 	boolean visible = false
 	int specialAbil = 0
 	boolean bossRegion = false
+	boolean allowCut = false
 	Boss boss = null
 	
 	construct(rect r)
@@ -168,45 +169,50 @@ public function getRegionData(vec3 pos) returns RegionData
 	return getRegionData(pos.toVec2())     
 
 public function getRegionData(vec2 pos) returns RegionData
-	for i = 0 to 21
+	var i = 0
+	while regions[i] != null
 		if regions[i].theRect.contains(pos)
 			return regions[i]
+		i++
 	return RegionData.EMPTY_REGION
 
 public RegionData array regions
 
 public function init_Regions()
-	regions[0] = new RegionData( gg_rct_Region_024 )
+	regions[0] = new RegionData(gg_rct_Region_024)
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
 	regions[0].setOwner(STAFF_PLAYER)
-	regions[1] = new RegionData( gg_rct_Region_018 )
+	regions[1] = new RegionData(gg_rct_Region_018 )
 	regions[1].setType(getRegionTypeFromItem('I00G'), false)
 	regions[1].setOwner(STAFF_PLAYER)
-	regions[2] = new RegionData( gg_rct_Region_000 )
+	regions[2] = new RegionData(gg_rct_Region_000 )
 	regions[2].setType(getRegionTypeFromItem('I00E'), false)
 	regions[2].setOwner(STAFF_PLAYER)
-	regions[3] = new RegionData( gg_rct_Region_001 )
+	regions[3] = new RegionData(gg_rct_Region_001 )
 	regions[3].setType(getRegionTypeFromItem('I00H'), false)
 	regions[3].setOwner(STAFF_PLAYER)
-	regions[4] = new RegionData( gg_rct_Region_004 )
-	regions[5] = new RegionData( gg_rct_Region_005 )
-	regions[6] = new RegionData( gg_rct_Region_006 )
-	regions[7] = new RegionData( gg_rct_Region_007 )
-	regions[8] = new RegionData( gg_rct_Region_008 )
-	regions[9] = new RegionData( gg_rct_Region_009 )
-	regions[10] = new RegionData( gg_rct_Region_010 )
-	regions[11] = new RegionData( gg_rct_Region_011 )
-	regions[12] = new RegionData( gg_rct_Region_012 )
-	regions[13] = new RegionData( gg_rct_Region_013 )
-	regions[14] = new RegionData( gg_rct_Region_014 )
-	regions[15] = new RegionData( gg_rct_Region_015 )
-	regions[16] = new RegionData( gg_rct_Region_016 )
-	regions[17] = new RegionData( gg_rct_Region_017 )
-	regions[18] = new RegionData( gg_rct_Region_002 )
-	regions[19] = new RegionData( gg_rct_Region_003 )
-	regions[20] = new RegionData( gg_rct_Region_026 )
-	regions[21] = new RegionData( gg_rct_Start )
+	regions[4] = new RegionData(gg_rct_Region_004)
+	regions[5] = new RegionData(gg_rct_Region_005)
+	regions[6] = new RegionData(gg_rct_Region_006)
+	regions[7] = new RegionData(gg_rct_Region_007)
+	regions[8] = new RegionData(gg_rct_Region_008)
+	regions[9] = new RegionData(gg_rct_Region_009)
+	regions[10] = new RegionData(gg_rct_Region_010)
+	regions[11] = new RegionData(gg_rct_Region_011)
+	regions[12] = new RegionData(gg_rct_Region_012)
+	regions[13] = new RegionData(gg_rct_Region_013)
+	regions[14] = new RegionData(gg_rct_Region_014)
+	regions[15] = new RegionData(gg_rct_Region_015)
+	regions[16] = new RegionData(gg_rct_Region_016)
+	regions[17] = new RegionData(gg_rct_Region_017)
+	regions[18] = new RegionData(gg_rct_Region_002)
+	regions[19] = new RegionData(gg_rct_Region_003)
+	regions[20] = new RegionData(gg_rct_Region_026)
+	regions[21] = new RegionData(gg_rct_Start)
 	regions[21].setOwner(STAFF_PLAYER) 
+	regions[22] = new RegionData(gg_rct_Choose)
+	regions[22].setType(getRegionTypeFromItem('I00D'), false)
+	regions[22].setOwner(STAFF_PLAYER) 
 	
 	let t = CreateTrigger()
 	t.registerRectLeaveEventSource(gg_rct_Region_023)
