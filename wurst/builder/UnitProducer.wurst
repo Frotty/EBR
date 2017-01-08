@@ -88,7 +88,7 @@ public class UnitProducer extends StaticBaseObject
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 		return false
 		
-public function init_UnitProducer()
+@init2 function init_UnitProducer()
 	for pd in builderPlayers
 		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
 

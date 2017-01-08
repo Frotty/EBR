@@ -85,7 +85,7 @@ public class JukeBox
 				return
 			idx++
 
-init
+@init1 function init_Jukebox()	
 	musics.add(new Music('0000', "Sound\\Music\\mp3Music\\Doom.mp3"))
 	musics.add(new Music('A03M', "Sound\\Music\\mp3Music\\Human1.mp3"))
 	musics.add(new Music('0000', "Sound\\Music\\mp3Music\\Human2.mp3"))

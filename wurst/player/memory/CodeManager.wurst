@@ -3,14 +3,17 @@ import initlater  PlayerData
 import CodeGenerator
 import FileIO
 import SyncWrapper
-import Thread
 import PlayerMemoryData
+import Thread
+import Playerfile
 
 constant XPMAX = 500000
 constant FOLDER_NAME = "EBR"
-constant FILE_NAME = "data"
+constant FILE_NAME = "playerdata"
 public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
+
+
 
 public function checkLocalFiles(PlayerData pd)
 	if not pd.localFilesEnabled
@@ -20,43 +23,85 @@ public function checkLocalFiles(PlayerData pd)
 		sd.addEventListener(() -> begin
 			let pdc = pData[getSyncedData().p.getId()]
 			pdc.localFilesEnabled = getSyncedData().readBool(0)
-			if pdc.localFilesEnabled
-				printTimedToPlayer("You have local files enabled and will be able to save data!", 15, pdc.p)
-			else
-				printTimedToPlayer("You don't have local files enabled. You need to in order to save stuff!", 15, pdc.p)
-
 			destroy getSyncedData()
 
+			
+			if pdc.localFilesEnabled
+				printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 15, pdc.p)
+				checkPlayerfile(pdc)
+			else
+				printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to in order to save stuff!", 15, pdc.p)
 		end)
 
 		sd.start()
 
 
-public function PlayerData.createNewPlayerFile()
+public function checkPlayerfile(PlayerData pd)
+	if pd.localFilesEnabled
+		if GetLocalPlayer() == pd.p
+			let file = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+			let start = file.read()
+			printTimed(start, 15)
+			if Playerfile.verify(start)
+				printTimed("Found a |cffFFCC00valid savefile.|r", 15)
+				let pf = new Playerfile()
+				pf.load(file)	
+			else
+				file.close()
+				printTimed("|cffFFCC00No savefile found|r. Creating new..", 15)
+				createPlayerfile(pd)
+
+function loadPlayerfile(File file)
+	string array lines
+	var linecount = 0
+	var line = file.read()
+	while line != null and line.length() > 0
+		lines[linecount] = line
+		line = file.read()
+		linecount++
+
+	file.close()
+	print("Loaded (" + linecount.toString() + ") lines of savedata")
+
+function createPlayerfile(PlayerData pd)
+	let file = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
+	let pfile = new Playerfile()
+	let pmdata = new PMData()
 	var scode = new Savecode()
-	scode.encode(this.XP, XPMAX)
-	printLog(Loglevel.DEBUG, "saving: " + this.XP.toString() + " XP")
-	let lcode = scode.save(this.p, saveTechnique)
-	if this.pmData == null
-		this.pmData = new PMData()
-		this.pmData.namehash = fhash(this.name).toString()
-	this.pmData.expcode = lcode
-	printLog(Loglevel.DEBUG, "saving: " + lcode)
-	synchronizeThread()
-	if GetLocalPlayer() == this.p
-		if File.isEnabled()
-			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
-			f.write(this.pmData.serialize())
-			f.close()
-	synchronizeThread()
-	printLog(Loglevel.DEBUG, "saved new")
+	scode.encode(pd.XP, XPMAX)
+	pmdata.namehash = pd.name.getHash().toString()
+	pmdata.expcode = scode.save(pd.p, saveTechnique)
+	pmdata.adminToken = "no"
+	pfile.pmDatas = new LinkedList<PMData>()
+	pfile.pmDatas.add(pmdata)
+	pfile.save(file)
+
+	file.close()
+
+
+// public function PlayerData.createNewPlayerFile()
+// 	var scode = new Savecode()
+// 	scode.encode(this.XP, XPMAX)
+// 	printLog(Loglevel.DEBUG, "saving: " + this.XP.toString() + " XP")
+// 	let lcode = 
+// 	if this.pmData == null
+// 		this.pmData = new PMData()
+// 		this.pmData.namehash = fhash(this.name).toString()
+// 	this.pmData.expcode = lcode
+// 	printLog(Loglevel.DEBUG, "saving: " + lcode)
+// 	synchronizeThread()
+// 	if GetLocalPlayer() == this.p
+// 		if File.isEnabled()
+// 			var f = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
+// 			f.write(this.pmData.serialize())
+// 			f.close()
+// 	printLog(Loglevel.DEBUG, "saved new")
 				
 public function PlayerData.loadPlayerFile()
 	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Will now check for saved data."  )
 	string array lines
 	var count = 0
 	let nameHash = fhash(this.name).toString()
-	synchronizeThread()
 	if GetLocalPlayer() == this.p
 		var f = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
 		lines[count] = f.read()
@@ -64,7 +109,6 @@ public function PlayerData.loadPlayerFile()
 			count++
 			lines[count] = f.read()
 		f.close()		
-	synchronizeThread()
 	
 	// let sCount = count.sync(this.p)
 	// string array sLines

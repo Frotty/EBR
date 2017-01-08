@@ -196,7 +196,8 @@ public class SetupBox extends UnitEntity
 				rdata.allowCut = false
 				actor..removeAbility(CUT_DISABLE)..addAbility(CUT_ALLOW)
 				printTimedToPlayer("|cffFF9C29Escapers can no longer cut diagonal tiles.", 15, owner)
-init
+
+@init1 function init_Setup()	
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
 	
 function claimRegion()

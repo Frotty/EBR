@@ -89,7 +89,7 @@ function onCommandChat()
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode, -rename [name]")
 
-init
+@init1 function init_Commands()
 	trigger trg = CreateTrigger()
 	for i = 0 to 11
 		trg.registerPlayerChatEvent(Player(i), "-", false)

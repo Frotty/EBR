@@ -51,7 +51,7 @@ function onBow(Escaper e)
 			b.onDamage(e, 20)
 	end)
 
-init
+@init1 function init_WeaponTypes()
 	weapontypes[0] = WeaponType('I00U','A081', 'A07G', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onSabre(e))
 	weapontypes[1] = WeaponType('I00W','A082', 'A085', "weapons\\attachment\\ThrallHammer.mdx", (Escaper e) -> onHammer(e))
 	weapontypes[2] = WeaponType('I00V','A083', 'A07H', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onGlaive(e))

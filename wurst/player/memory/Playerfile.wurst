@@ -1,0 +1,28 @@
+package Playerfile
+import FileIO
+import LinkedList
+import PlayerMemoryData
+
+
+constant HASH = (-1739309337).toInt().toString()
+
+public class Playerfile
+	LinkedList<PMData> pmDatas
+
+	function save(File file)
+		file.write(HASH)
+		for pmd in pmDatas
+			pmd.save(file)
+
+	function load(File file)
+		if pmDatas != null
+			destroy pmDatas
+		pmDatas = new LinkedList<PMData>()
+		
+		while file.read() != null
+			let pmd = new PMData()
+			pmd.load(file)
+			pmDatas.add(pmd)
+
+	static function verify(string hash) returns boolean
+		return hash == HASH

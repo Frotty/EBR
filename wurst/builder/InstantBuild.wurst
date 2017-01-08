@@ -141,7 +141,7 @@ public function trigger.registerBuilderEvent(playerunitevent ev)
 		this.registerPlayerUnitEvent( Player(i), ev, null)
 
 
-init
+@init1 function init_InstantBuild()
 	buildorders[0] = 'n00G'
 	buildorders[1] = 'n00B' // Jumper
 	buildorders[2] = 'n000' // Revivepoint

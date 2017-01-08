@@ -379,7 +379,7 @@ function correctRegion()
 	for e in escapers
 		e.updateRegionData()
 		
-init
+@init1 function init_Escaper()	
 	slideAssist = CreateTrigger()
 	slideAssist.addAction(function Escaper.changeAngle)
 	neutralDeathTrig = CreateTrigger()

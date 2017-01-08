@@ -8,7 +8,6 @@ import PickSystem
 import initlater TerrainModder
 import UnitProducer
 import RevivePointModifier
-import PlayerMemoryData
 import ClosureTimers
 import CodeManager
 import EscaperClasses
@@ -45,8 +44,6 @@ public class PlayerData
 	
 	TerrainModder tmod 
 	UnitProducer prod
-	
-	PMData pmData
 	
 	construct (player p)
 		this.p = p
@@ -195,10 +192,7 @@ function playerLeft()
 	var pd = pData[p.getId()]
 	destroy pd
 
-init
-	doAfter(0.01, () -> initPlayers())
-	
-public function initPlayers()
+@init1 function initPlayers()
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11
@@ -238,19 +232,10 @@ public function initPlayers()
 
    
 public function loadPlayerDatas()
-	// doAfter(8.0, () -> begin 
-	// 	printTimed("Please stay tuned while localfiles are being checked..", 15)
-	// 	TriggerSyncStart()
-	// 	printTimed("Ok..", 15)
-	// 	for pd in allPlayers
-	// 		printTimed(pd.mbname + " checking", 5)
-	// 		checkLocalFiles(pd)
-	// 		printTimed(pd.mbname + " (" + pd.localFilesEnabled.toString() + ")", 5)
-
-	// 	for pd in allPlayers
-	// 		pd.loadPlayerFile()
-	// 		printTimed("Loaded XP: " + pd.XP.toString(), 5)
-	// end)
+	doAfter(1.0, () -> begin 
+		for pd in allPlayers
+			checkLocalFiles(pd)
+	end)
 
 public int minutes = 0
 public int seconds = 0

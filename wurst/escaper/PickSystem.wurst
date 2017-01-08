@@ -2,6 +2,7 @@ package PickSystem
 import initlater  PlayerData
 import EscaperClasses
 import RevivePointModifier
+import FileIO
 
 unit array pickheros
 int array herotypes
@@ -150,7 +151,7 @@ function keypick()
 
 	
 	
-public function init_Choose()
+@init2 function init_Choose()
 	trigger left = CreateTrigger()
 	trigger right = CreateTrigger()
 	trigger pick = CreateTrigger()

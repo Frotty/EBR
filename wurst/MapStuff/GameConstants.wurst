@@ -32,7 +32,7 @@ public enum COLOR
 	BROWN
 
 
-init
+@init1 function init_GameConstants()
 	mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"
 	mbPic[ 1 ] = "ReplaceableTextures\\CommandButtons\\BTNFootman.blp"
 	mbPic[ 2 ] = "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp"

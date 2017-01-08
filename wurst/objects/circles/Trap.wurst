@@ -340,7 +340,7 @@ constant int PUSH_ID = 'A075'
 
 constant SFX_COUNT = 9
 
-public function init_Trap()
+@init1 function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
 	SFX_STRINGS[1] = "Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl"
 	SFX_STRINGS[2] = "Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl"

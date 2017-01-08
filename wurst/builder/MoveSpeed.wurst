@@ -22,5 +22,5 @@ function onChanceSpeed()
 				ddata.actor.setMoveSpeed(speed-25.)
 				createTTEx(data.getPos(), vec2(0,0.05), (speed-25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
 
-init
+@init1 function init_Movespeed()	
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChanceSpeed())

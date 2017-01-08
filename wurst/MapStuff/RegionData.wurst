@@ -178,7 +178,7 @@ public function getRegionData(vec2 pos) returns RegionData
 
 public RegionData array regions
 
-public function init_Regions()
+@init1 function init_Regions()
 	regions[0] = new RegionData(gg_rct_Region_024)
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
 	regions[0].setOwner(STAFF_PLAYER)

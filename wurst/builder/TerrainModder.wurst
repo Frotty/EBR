@@ -172,7 +172,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	if rdata != null and rdata.canBuild(caster)
 		offset.setTerrainType(ttype, -1, 1, 0)
 
-public function init_TerrainModder()
+@init1 function init_TerrainModder()
 	UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
 	UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
 	UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'

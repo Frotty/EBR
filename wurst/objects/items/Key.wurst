@@ -97,7 +97,7 @@ public class Key extends ItemObject
 			returnSfx.destr()
 			
 		
-init
+@init1 function init_Key()
 	keyIds[0] = 'I009'
 	keyIds[1] = 'I00C'
 	keyIds[2] = 'I004'

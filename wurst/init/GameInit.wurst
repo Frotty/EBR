@@ -1,81 +1,30 @@
 package GameInit
-import SetupObject
-import UnitProducer
-import PickSystem
-import Builder
-import Door
-import TerrainModder
-import Trap
-import Texter
-import Bombertower
-import Bomber
-import Startmazes
 import EntityManagement
-import ItemObject
-import Pointer
-import Invisible
-import GlobalShop
-import Remove
-import BasicSpells
+import PickSystem
 import ClosureTimers
 import PlayerData
 
 init
 	callGen()
-	VolumeGroupReset()
-	EndThematicMusic()
 	startEntityLoop()
-	doAfter(.1, () -> initGame())
+	doAfter(.01, () -> initGame())
 	
 	
 @compiletime function callGen()
 	callFunctionsWithAnnotation("@objectgen")
 	
 function initGame()
-	init_Regions()
-	initSetupObj()
-	printLog(Loglevel.DEBUG, "Starting Init")
+	printLog(Loglevel.INFO, "Debug 1...")
+	callFunctionsWithAnnotation("@init1")
+	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 	VolumeGroupReset()
 	EndThematicMusic()
-	printLog(Loglevel.DEBUG, "Init - Music")
-	init_TerrainModder()
-	printLog(Loglevel.DEBUG, "Init - TMod")
-	init_UnitProducer()
-	printLog(Loglevel.DEBUG, "Init - UP")
-	init_Choose()
-	printLog(Loglevel.DEBUG, "Init - Choose")
-	init_Builder()
-	printLog(Loglevel.DEBUG, "Init - Builder")
-	init_Trap()
-	printLog(Loglevel.DEBUG, "Init - Trap")
-	init_Door()
-	printLog(Loglevel.DEBUG, "Init - Door")
-	init_Texter()
-	printLog(Loglevel.DEBUG, "Init - Txter")
-	init_Bombertower()
-	printLog(Loglevel.DEBUG, "Init - BTower")
-	init_Bomber()
-	printLog(Loglevel.DEBUG, "Init - Bomber")
-	init_Pointer()
-	printLog(Loglevel.DEBUG, "Init - Pointer")
-	init_GlobalShop()
-	printLog(Loglevel.DEBUG, "Init - Shop")
-	invis_init()
-	init_remove()
-	getTimer().start(0.01, function initPartTwo)
-
+	doAfter(0.1, () -> initPartTwo())
+	
 
 function initPartTwo()
-	initBaseObjects()
-	printLog(Loglevel.DEBUG, "Init - BObj")
-	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
-	
-	printLog(Loglevel.DEBUG, "Init - Finished")
-	startChoose()
-	printLog(Loglevel.DEBUG, "Starting choose...")
-	initSpells()
-	initStartmazes()
-
+	printLog(Loglevel.INFO, "Debug 2...")
+	callFunctionsWithAnnotation("@init2")
 	loadPlayerDatas()
-	GetExpiredTimer().release()
+	startChoose()
 
