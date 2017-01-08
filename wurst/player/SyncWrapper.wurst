@@ -1,0 +1,34 @@
+package SyncWrapper
+
+public function getSyncedData() returns SyncData
+	return GetSyncedData() castTo SyncData
+
+public class SyncData
+	int vjassId = 0
+	player p
+	construct(player p)
+		this.p = p
+		vjassId = s__SyncData_create(p)
+		print("wurst-id: " + (this castTo int).toString() + " vjassid: " + vjassId.toString())
+
+	function addString(string str, int length)
+		s__SyncData_addString(vjassId, str, length)
+
+	function addBool(boolean b)
+		s__SyncData_addBool(vjassId, b)
+
+	function readString(int index) returns string
+		return s__SyncData_readString(vjassId, index)
+
+	function readBool(int index) returns boolean
+		return s__SyncData_readBool(vjassId, index)
+
+	function addEventListener(code listener)
+		s__SyncData_addEventListener(vjassId, listener)
+
+	function start()
+		s__SyncData_start(vjassId)
+
+	ondestroy
+		s__SyncData_destroy(vjassId)
+		vjassId = 0

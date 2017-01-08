@@ -2,22 +2,35 @@ package CodeManager
 import initlater  PlayerData
 import CodeGenerator
 import FileIO
-import Sync
+import SyncWrapper
 import Thread
 import PlayerMemoryData
-import SyncInteger
 
-constant int XPMAX = 500000
-constant string FOLDER_NAME = "EBR"
-constant string FILE_NAME = "data"
-public constant string MSG_PREFIX = "|cffDE7B19Save/Load|r :"
-constant int saveTechnique = 331
+constant XPMAX = 500000
+constant FOLDER_NAME = "EBR"
+constant FILE_NAME = "data"
+public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
+constant saveTechnique = 331
 
 public function checkLocalFiles(PlayerData pd)
-	// if not pd.localFilesEnabled
-	// 	printTimed(pd.mbname + " checking 2", 5)
-	// 	pd.localFilesEnabled = File.isEnabled().sync(pd.p)
-	// 	printTimed(pd.mbname + " checking 3", 5)
+	if not pd.localFilesEnabled
+		let sd = new SyncData(pd.p)
+		sd.addBool(File.isEnabled())
+
+		sd.addEventListener(() -> begin
+			let pdc = pData[getSyncedData().p.getId()]
+			pdc.localFilesEnabled = getSyncedData().readBool(0)
+			if pdc.localFilesEnabled
+				printTimedToPlayer("You have local files enabled and will be able to save data!", 15, pdc.p)
+			else
+				printTimedToPlayer("You don't have local files enabled. You need to in order to save stuff!", 15, pdc.p)
+
+			destroy getSyncedData()
+
+		end)
+
+		sd.start()
+
 
 public function PlayerData.createNewPlayerFile()
 	var scode = new Savecode()
@@ -53,52 +66,52 @@ public function PlayerData.loadPlayerFile()
 		f.close()		
 	synchronizeThread()
 	
-	let sCount = count.sync(this.p)
-	string array sLines
-	printLog(Loglevel.DEBUG, sCount.toString())
-	if sCount > 0
-		for i = 0 to sCount-1
-			sLines[i] = lines[i].sync(this.p)
-			printLog(Loglevel.DEBUG, sLines[i])
-	printLog(Loglevel.DEBUG, "syncing for " + this.id.toString() + " done")
-	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your Data was loaded."  )
-	int idx = - 1
-	PMData data = null
-	for i = 0 to sCount-1
-		if sLines[i].startsWith(nameHash)
-			printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
-			idx = i
-			data = new PMData()
-			data.namehash = nameHash
-			break
-		else if sLines[i].startsWith("name")
-			data = new PMData()
-			data.deserialize(sLines[i])
-			if data.namehash == nameHash
-				printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
-				DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
-				idx = i
-				break
+	// let sCount = count.sync(this.p)
+	// string array sLines
+	// printLog(Loglevel.DEBUG, sCount.toString())
+	// if sCount > 0
+	// 	for i = 0 to sCount-1
+	// 		sLines[i] = lines[i].sync(this.p)
+	// 		printLog(Loglevel.DEBUG, sLines[i])
+	// printLog(Loglevel.DEBUG, "syncing for " + this.id.toString() + " done")
+	// DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your Data was loaded."  )
+	// int idx = - 1
+	// PMData data = null
+	// for i = 0 to sCount-1
+	// 	if sLines[i].startsWith(nameHash)
+	// 		printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
+	// 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
+	// 		idx = i
+	// 		data = new PMData()
+	// 		data.namehash = nameHash
+	// 		break
+	// 	else if sLines[i].startsWith("name")
+	// 		data = new PMData()
+	// 		data.deserialize(sLines[i])
+	// 		if data.namehash == nameHash
+	// 			printLog(Loglevel.DEBUG, "character Found in Line " + i.toString())
+	// 			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - Your saved Character has been found." )
+	// 			idx = i
+	// 			break
 			
-	if idx > -1 and data != null
-		this.pmData = data
-		if data.expcode == null
-			data.expcode = sLines[idx].substring(nameHash.length(), sLines[idx].length())
-		var scode = new Savecode()
-		if scode.load(this.p, data.expcode, saveTechnique)
-			printLog(Loglevel.DEBUG, "load success")
-			let xp = scode.decode(XPMAX)
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
-			this.setXp(xp)
-		else
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - Your saved Character was invalid, a new one got created."  )
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You either have an old code-version or this is an EBR-Bug."  )
-			DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To report a bug go to sunayama.de or tinyurl.com/EscapeBuilder."  )
+	// if idx > -1 and data != null
+	// 	this.pmData = data
+	// 	if data.expcode == null
+	// 		data.expcode = sLines[idx].substring(nameHash.length(), sLines[idx].length())
+	// 	var scode = new Savecode()
+	// 	if scode.load(this.p, data.expcode, saveTechnique)
+	// 		printLog(Loglevel.DEBUG, "load success")
+	// 		let xp = scode.decode(XPMAX)
+	// 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
+	// 		this.setXp(xp)
+	// 	else
+	// 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffBD1910[Error]|r - Your saved Character was invalid, a new one got created."  )
+	// 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You either have an old code-version or this is an EBR-Bug."  )
+	// 		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - To report a bug go to sunayama.de or tinyurl.com/EscapeBuilder."  )
 			
-	else
-		DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You have no saved Character with this name, a new one was created."  )
-		this.createNewPlayerFile()
+	// else
+	// 	DisplayTextToPlayer(this.p,0,0,MSG_PREFIX + "|cffFFD621[Info]|r - You have no saved Character with this name, a new one was created."  )
+	// 	this.createNewPlayerFile()
 
-	this.updateRank()
+	// this.updateRank()
 	
