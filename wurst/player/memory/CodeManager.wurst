@@ -4,7 +4,7 @@ import CodeGenerator
 import FileIO
 import SyncWrapper
 import PlayerMemoryData
-import Thread
+import ClosureTimers
 import Playerfile
 
 constant XPMAX = 500000
@@ -14,69 +14,171 @@ public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
 
 
-
+/** Checks if the player's localfiles are enabled
+	If they are enabled, searches for a profile */
 public function checkLocalFiles(PlayerData pd)
+	printTimed("Checking localfiles for: " + pd.name, 25)
 	if not pd.localFilesEnabled
 		let sd = new SyncData(pd.p)
 		sd.addBool(File.isEnabled())
-
-		sd.addEventListener(() -> begin
-			let pdc = pData[getSyncedData().p.getId()]
-			pdc.localFilesEnabled = getSyncedData().readBool(0)
-			destroy getSyncedData()
-
-			
-			if pdc.localFilesEnabled
-				printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 15, pdc.p)
-				checkPlayerfile(pdc)
-			else
-				printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to in order to save stuff!", 15, pdc.p)
-		end)
-
+		sd.addEventListener(() -> onLocalFilesSynced())
 		sd.start()
 
+function onLocalFilesSynced()
+	let pdc = pData[getSyncedData().p.getId()]
+	pdc.localFilesEnabled = getSyncedData().readBool(0)
+	destroy getSyncedData()
+	
+	if pdc.localFilesEnabled
+		printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pdc.p)
+	else
+		printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pdc.p)
 
+
+string array sync_lines
+int array sizes
+init
+	for i = 0 to 200
+		sync_lines[i] = ""
+		sizes[i] = 0
+
+/** Load and sync playerfile */
 public function checkPlayerfile(PlayerData pd)
+	printLog(Loglevel.DEBUG, "check playerfile")
 	if pd.localFilesEnabled
+		var lineCount = 0
 		if GetLocalPlayer() == pd.p
 			let file = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
 			let start = file.read()
-			printTimed(start, 15)
 			if Playerfile.verify(start)
-				printTimed("Found a |cffFFCC00valid savefile.|r", 15)
-				let pf = new Playerfile()
-				pf.load(file)	
+				printTimed("Found a |cffFFCC00valid savefile.|r", 25)
+				var line = file.read()
+				while line != null
+					lineCount++
+					sizes[lineCount] = line.length()
+					line = file.read()
 			else
-				file.close()
-				printTimed("|cffFFCC00No savefile found|r. Creating new..", 15)
-				createPlayerfile(pd)
+				printTimed("|cffFFCC00No savefile found|r. Creating new..", 25)
+			file.close()
+		
+		let sd = new SyncData(pd.p)
+		sd.addInt(lineCount)
+		for i = 1 to lineCount
+			sd.addInt(sizes[i])
+			sizes[i] = 0
+		sd.addEventListener(() -> onLinecountSynced())
+		sd.start()
+		printLog(Loglevel.DEBUG, "Start Sync")
+		
 
-function loadPlayerfile(File file)
-	string array lines
-	var linecount = 0
-	var line = file.read()
-	while line != null and line.length() > 0
-		lines[linecount] = line
-		line = file.read()
-		linecount++
+function onLinecountSynced()
+	printLog(Loglevel.DEBUG, "OnLCSync")
+	let pdc = pData[getSyncedData().p.getId()]
+	let lineCount = getSyncedData().readInt(0)
+	
+	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
+	if lineCount > 0
+		if GetLocalPlayer() == pdc.p
+			let file = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+			// Remove verify hash
+			file.read()
+			for i = 0 to lineCount-1
+				sync_lines[i] = file.read()
+				printLog(Loglevel.DEBUG, "sync_lines[i]: " + sync_lines[i])
+			file.close()
+		printLog(Loglevel.DEBUG, "OnLCSync1")
+		let sd = new SyncData(pdc.p)
+		for i = 0 to lineCount-1
+			let length = getSyncedData().readInt(i+1)
+			printLog(Loglevel.DEBUG, "length: " + length.toString() + "synlinelength: "  + sync_lines[i].length().toString() )
+			sd.addString(sync_lines[i], length)
+			sync_lines[i] = ""
+		printLog(Loglevel.DEBUG, "OnLCSync2")
+		sd.addEventListener(() -> onPlayerfileSynced())
+		sd.start()
+		printLog(Loglevel.DEBUG, "OnLCSync3")
+	else
+		// A new file was created
+		printLog(Loglevel.DEBUG, "New Playerfile1")
+		createNewPlayerfile(pdc)
+		printLog(Loglevel.DEBUG, "New Playerfile2")
+		checkPlayerfile(pdc)
+		printLog(Loglevel.DEBUG, "New Playerfile3")
+	destroy getSyncedData()	
 
-	file.close()
-	print("Loaded (" + linecount.toString() + ") lines of savedata")
+function onPlayerfileSynced()
+	printLog(Loglevel.DEBUG, "OnPFSync")
+	let pdc = pData[getSyncedData().p.getId()]
+	// A file was found
+	let file = new SyncedFile(getSyncedData())
+	let pf = new Playerfile()
+	destroy getSyncedData()
+	pf.load(file)
+	pdc.pfile = pf
+	printLog(Loglevel.DEBUG, "OnPFSync1")
+	for pmd in pf.pmDatas
+		if pmd.namehash == pdc.hash
+			printTimedToPlayer("Found a profile for |cffFFCC00" + pdc.name + "|r", 25, pdc.p)
+			loadPlayerMemory(pdc, pmd)
+			return
 
-function createPlayerfile(PlayerData pd)
-	let file = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
-	let pfile = new Playerfile()
+	// Savedata exists, but no profile for that name
+	printTimedToPlayer("Didn't find a profile for |cffFFCC00" + pdc.name + "|r - creating new..", 25, pdc.p)
+	addPlayerProfile(pdc)
+	loadPlayerMemory(pdc, pdc.pmdata)
+		
+	
+
+function loadPlayerMemory(PlayerData pd, PMData pmd)
+	var scode = new Savecode()
+	if scode.load(pd.p, pmd.expcode, saveTechnique)
+		printLog(Loglevel.DEBUG, "load success")
+		let xp = scode.decode(XPMAX)
+		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
+		pd.setXp(xp)
+		pd.pmdata = pmd
+	else
+		printLog(Loglevel.ERROR, "load failed! your savefile is outdated or broken.")
+	destroy scode
+
+function addPlayerProfile(PlayerData pd)
+	printLog(Loglevel.DEBUG, "addPlayerProfile1")
 	let pmdata = new PMData()
 	var scode = new Savecode()
 	scode.encode(pd.XP, XPMAX)
-	pmdata.namehash = pd.name.getHash().toString()
-	pmdata.expcode = scode.save(pd.p, saveTechnique)
+	pmdata.namehash = pd.hash
+	pmdata.setXP(scode.save(pd.p, saveTechnique))
 	pmdata.adminToken = "no"
-	pfile.pmDatas = new LinkedList<PMData>()
-	pfile.pmDatas.add(pmdata)
-	pfile.save(file)
+	pd.pmdata = pmdata
+	destroy scode
 
-	file.close()
+	pd.pfile.pmDatas.add(pmdata)
+	printLog(Loglevel.DEBUG, "addPlayerProfile2")
+	savePlayerfile(pd)
+	printTimedToPlayer("|cffFFCC00Profile|r created!", 25, pd.p)
+
+public function savePlayerfile(PlayerData pd)
+	var scode = new Savecode()
+	scode.encode(pd.XP, XPMAX)
+	print("saving " + pd.XP.toString() + " XP")
+	pd.pmdata.setXP(scode.save(pd.p, saveTechnique))
+	destroy scode
+	if GetLocalPlayer() == pd.p
+		let file = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
+		pd.pfile.save(file)
+		file.close()
+	
+function createNewPlayerfile(PlayerData pd)
+	printLog(Loglevel.DEBUG, "createNewPlayerfile0")
+	pd.pfile = new Playerfile()
+	printLog(Loglevel.DEBUG, "createNewPlayerfile1")
+	addPlayerProfile(pd)
+	printLog(Loglevel.DEBUG, "createNewPlayerfile2")
+	destroy pd.pfile
+	printLog(Loglevel.DEBUG, "createNewPlayerfile3")
+	pd.pfile = null
+	printLog(Loglevel.DEBUG, "createNewPlayerfile4")
+	pd.pmdata = null
 
 
 // public function PlayerData.createNewPlayerFile()

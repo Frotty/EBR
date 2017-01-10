@@ -2,7 +2,7 @@ package PickSystem
 import initlater  PlayerData
 import EscaperClasses
 import RevivePointModifier
-import FileIO
+import CodeManager
 
 unit array pickheros
 int array herotypes
@@ -144,7 +144,8 @@ function keypick()
 			e.actor.addAbility('A001')
 			e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 			e.actor.addAbility('A001')
-			
+		
+		checkPlayerfile(pd)
 
 	else
 		return

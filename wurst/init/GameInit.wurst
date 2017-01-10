@@ -14,7 +14,6 @@ init
 	callFunctionsWithAnnotation("@objectgen")
 	
 function initGame()
-	printLog(Loglevel.INFO, "Debug 1...")
 	callFunctionsWithAnnotation("@init1")
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 	VolumeGroupReset()
@@ -23,7 +22,6 @@ function initGame()
 	
 
 function initPartTwo()
-	printLog(Loglevel.INFO, "Debug 2...")
 	callFunctionsWithAnnotation("@init2")
 	loadPlayerDatas()
 	startChoose()

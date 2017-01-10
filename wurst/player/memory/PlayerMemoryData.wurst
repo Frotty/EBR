@@ -1,6 +1,7 @@
 package PlayerMemoryData
 import ErrorHandling
 import FileIO
+import SyncWrapper
 
 public class PMData
 	string namehash
@@ -11,12 +12,16 @@ public class PMData
 		file.write(namehash)
 		file.write(expcode)
 		file.write(adminToken)
+		printLog(Loglevel.INFO, "PMData save: hash <"  + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
+
+	function setXP(string xpcode)
+		expcode = xpcode.trim()
 		
-	function load(File file)
+	function load(SyncedFile file)
 		adminToken = file.read()
 		expcode = file.read()
 		namehash = file.read()
-		printLog(Loglevel.DEBUG, "PMData: hash: "  + namehash + " exp: " + expcode + "admin: " + adminToken)
+		printLog(Loglevel.INFO, "PMData load: hash <"  + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
 			
 
 	function assert(boolean b) 

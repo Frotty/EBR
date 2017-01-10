@@ -11,6 +11,8 @@ import RevivePointModifier
 import ClosureTimers
 import CodeManager
 import EscaperClasses
+import Playerfile
+import PlayerMemoryData
 
 trigger leaveTrig
 
@@ -22,6 +24,7 @@ public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
 public class PlayerData
 	int id
+	string hash
 	player p
 	string name
 	string mbname
@@ -39,17 +42,21 @@ public class PlayerData
 	boolean picked = false
 	boolean localFilesEnabled = false
 	int lastExpGain = 0
-	
+	int lastSave = -1
 	real zCam = 1600.
 	
 	TerrainModder tmod 
 	UnitProducer prod
+
+	Playerfile pfile = null
+	PMData pmdata = null
 	
 	construct (player p)
 		this.p = p
 		id = GetPlayerId(p)
 		pData[id] = this
 		name = GetPlayerName(p)
+		hash = name.getHash().toString()
 		mbname = name
 		if mbname == "Frotty"
 			admin = true
@@ -85,6 +92,7 @@ public class PlayerData
 	function setXp(int amount)
 		printLog(Loglevel.DEBUG, "set current xp:" + XP.toString())
 		XP = amount
+		updateRank()
 		printLog(Loglevel.DEBUG, "set new xp:" + XP.toString())
 	
 	function updateRank()
@@ -107,6 +115,12 @@ public class PlayerData
 			rank  = "|cffADD642*Creator*"
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
 
+		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
+			lastSave = minutes*60+seconds
+			printLog(Loglevel.DEBUG, "Playerfile saving")
+			savePlayerfile(this)
+
+		
 		
 	ondestroy
 		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
@@ -231,8 +245,10 @@ function playerLeft()
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 
    
+
+
 public function loadPlayerDatas()
-	doAfter(1.0, () -> begin 
+	doAfter(0.1, () -> begin
 		for pd in allPlayers
 			checkLocalFiles(pd)
 	end)

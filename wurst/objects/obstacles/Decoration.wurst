@@ -1,7 +1,5 @@
 package Decoration
-import SetupObject
 import BaseObject
-
 
 public class Decoration extends StaticSetupObject
 	

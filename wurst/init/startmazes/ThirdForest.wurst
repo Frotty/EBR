@@ -1,6 +1,5 @@
 package ThirdForest
 import Startmaze
-import Unit
 import Knockbacker
 import SetupBox
 import Obstacle

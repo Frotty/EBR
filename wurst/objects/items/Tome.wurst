@@ -1,7 +1,6 @@
 package Tome
 import ItemObject
 import Escaper
-import BuilderConstants
 
 constant TOME_DUMMY_ID = 1
 
