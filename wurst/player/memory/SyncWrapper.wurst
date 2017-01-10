@@ -56,7 +56,6 @@ public class SyncedFile
 		size = 0
 		var str = content.readString(size)
 		while str != null and str.length() > 0
-			print("syncstr: <" + str + ">")
 			if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
 				str = str.substring(0, str.length()-1)
 			stringTable.saveString(size, str)
