@@ -132,8 +132,8 @@ public abstract class Escaper extends UnitEntity
 			if alive
 				if rdata.allowCut
 					let rv = getRealVel()
-					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 12)
-					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 12)
+					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 18)
+					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 18)
 					let t1type = GetTerrainType(lpos.x, lpos.y)
 					let t2type = GetTerrainType(rpos.x, rpos.y)
 					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and
@@ -258,8 +258,7 @@ public abstract class Escaper extends UnitEntity
 			
 	function updateRegionData()
 		let currentReg = this.getCurrentRegion()
-		this.setCurrentRegion()
-		let newReg = this.getCurrentRegion()
+		let newReg = this.setCurrentRegion()
 		if newReg != null and newReg != currentReg
 			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
@@ -379,7 +378,7 @@ function correctRegion()
 	for e in escapers
 		e.updateRegionData()
 		
-@init1 function init_Escaper()	
+@init2 function init_Escaper()
 	slideAssist = CreateTrigger()
 	slideAssist.addAction(function Escaper.changeAngle)
 	neutralDeathTrig = CreateTrigger()

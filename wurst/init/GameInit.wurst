@@ -1,13 +1,13 @@
 package GameInit
 import EntityManagement
 import PickSystem
-import ClosureTimers
+import TimerUtils
 import PlayerData
 
 init
 	callGen()
 	startEntityLoop()
-	doAfter(.01, () -> initGame())
+	getTimer().start(0.01, () -> initGame())
 	
 	
 @compiletime function callGen()
@@ -18,10 +18,11 @@ function initGame()
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 	VolumeGroupReset()
 	EndThematicMusic()
-	doAfter(0.1, () -> initPartTwo())
+	GetExpiredTimer().start(0.01, () -> initPartTwo())
 	
 
 function initPartTwo()
+	GetExpiredTimer().release()
 	callFunctionsWithAnnotation("@init2")
 	loadPlayerDatas()
 	startChoose()
