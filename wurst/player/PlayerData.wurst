@@ -21,6 +21,11 @@ public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
+public enum ROLE
+	USER
+	MOD
+	CREATOR
+
 public class PlayerData
 	int id
 	string hash
@@ -60,12 +65,11 @@ public class PlayerData
 		mbname = name
 		if mbname == "Frotty"
 			admin = true
-		for int i = 0 to 999
-			if names[i] == null
-				break
+		int i = 0
+		while names[i] != null
 			if mbname.toLowerCase() == names[i].toLowerCase()
 				mbname = tags[i] + "|r" + p.getNameColored()
-				break
+			i++
 		mbname = p.getNameColored()
 		allPlayers.add(this)
 		if id > 7
@@ -110,10 +114,14 @@ public class PlayerData
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
 		else if XP > 1000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
+
+		if XP > 400 and UnitHasItemOfTypeBJ(escaper.actor, 'I002')
+			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
+			UnitAddItemById(escaper.actor,'I002')
 		
-		if admin
-			rank  = "|cffADD642*Creator*"
-			lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+		if admin and rank != "|cffADD642*Admin*"
+			rank = "|cffADD642*Admin*"
+			AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
 
 		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
 			lastSave = minutes*60+seconds

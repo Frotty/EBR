@@ -66,6 +66,7 @@ public class RegionData
 	real turnSpeed = 1.75
 	vec3 gravity = vec3(0,0,-0.8)
 	
+	boolean easyMode = false
 	boolean visible = false
 	int specialAbil = 0
 	boolean bossRegion = false
@@ -221,7 +222,7 @@ public RegionData array regions
 		let entity = GetTriggerUnit().getEntity()
 		if entity instanceof Escaper
 			(entity castTo Escaper).stop()
-			(entity castTo Escaper).kill()
+			(entity castTo Escaper).kill(null)
 		else if entity != null and GetTriggerUnit().getTypeId() != DUMMY_UNIT_ID
 			entity.terminate()
 	end)

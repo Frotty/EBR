@@ -11,7 +11,7 @@ import initlater Weapon
 import initlater Boss
 import Boots
 
-JukeBox jukeBox = new JukeBox()
+public JukeBox jukeBox = new JukeBox()
 
 public class Builder extends UnitEntity
 	int regionCount = 0

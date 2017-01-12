@@ -72,7 +72,7 @@ public class Trap extends StaticBaseObject
 	function doEffect(Escaper e)
 		switch a
 			case ABIL.KILL
-				e.kill()
+				e.kill(this)
 			case ABIL.STUN
 				InstantDummyCaster.castTarget(DUMMY_PLAYER, STUN_BUFF, duration.toInt(), "thunderbolt", e.actor)
 			case ABIL.SHAKE

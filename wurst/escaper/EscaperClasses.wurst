@@ -146,9 +146,9 @@ public class StrongEscaper extends Escaper
 				invulnerable = false
 				shieldeffect.destr()
 				
-	override function kill()
+	override function kill(UnitEntity entity)
 		if not invulnerable
-			super.kill()
+			super.kill(entity)
 		else
 			addEffect(Other.spellshieldcaster, pos).destr()
 				

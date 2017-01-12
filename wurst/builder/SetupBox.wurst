@@ -2,6 +2,7 @@ package SetupBox
 import PlayerData
 import initlater Builder
 import RegionData
+import ChannelAbilityPreset
 import RegisterEvents
 import SoundUtils
 
@@ -32,6 +33,8 @@ constant MAX_DOT_DMG = 20.
 constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1.mp3", false)
 constant CUT_ALLOW = 'A08F'
 constant CUT_DISABLE = 'A08G'
+int EASY_ENABLE
+int EASY_DISABLE
 
 public class SetupBox extends UnitEntity
 	private RegionData rdata
@@ -42,7 +45,7 @@ public class SetupBox extends UnitEntity
 		rdata = data
 		actor..addAbility(ALLOW_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
 		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID)..addAbility(ABIL_WIZARD)
-		.addAbility(CUT_ALLOW)
+		..addAbility(CUT_ALLOW)..addAbility(EASY_ENABLE)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 	function addBossSwitch()
@@ -156,14 +159,24 @@ public class SetupBox extends UnitEntity
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
 			case SECOND_PAGE
 				actor..removeAbility(ALLOW_ID)..removeAbility(ABIL_WIZARD)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
-				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)..removeAbility(TURND_ID)..removeAbility(TURNI_ID).removeAbility(CUT_ALLOW)
+				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)..removeAbility(TURND_ID)..removeAbility(TURNI_ID)
+				..removeAbility(CUT_ALLOW)..removeAbility(CUT_DISABLE)..removeAbility(EASY_DISABLE)..removeAbility(EASY_ENABLE)
 				actor..addAbility(ICEI_ID)..addAbility(ICED_ID)..addAbility(PI_ID)..addAbility(PD_ID)
 				..addAbility(LI_ID)..addAbility(LD_ID)..addAbility(FIRST_PAGE)
 			case FIRST_PAGE
 				actor..removeAbility(ICEI_ID)..removeAbility(ICED_ID)..removeAbility(PI_ID)..removeAbility(PD_ID)
 				..removeAbility(LI_ID)..removeAbility(LD_ID)..removeAbility(FIRST_PAGE)
 				actor..addAbility(ALLOW_ID)..addAbility(ABIL_WIZARD)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
-				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID).addAbility(CUT_ALLOW)
+				..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID)
+				if rdata.allowCut
+					actor.addAbility(CUT_DISABLE)
+				else
+					actor.addAbility(CUT_ALLOW)
+
+				if rdata.easyMode
+					actor.addAbility(EASY_DISABLE)
+				else
+					actor.addAbility(EASY_ENABLE)
 			case INC_GRAVITY
 				if(rdata.gravity.z > -10)
 					rdata.gravity -= vec3(0,0,0.1)
@@ -196,6 +209,14 @@ public class SetupBox extends UnitEntity
 				rdata.allowCut = false
 				actor..removeAbility(CUT_DISABLE)..addAbility(CUT_ALLOW)
 				printTimedToPlayer("|cffFF9C29Escapers can no longer cut diagonal tiles.", 15, owner)
+			case EASY_ENABLE
+				rdata.easyMode = true
+				actor..removeAbility(EASY_ENABLE)..addAbility(EASY_DISABLE)
+				printTimedToPlayer("|cffFF9C29Activated easy mode", 15, owner)
+			case EASY_DISABLE
+				rdata.easyMode = false
+				actor..removeAbility(EASY_DISABLE)..addAbility(EASY_ENABLE)
+				printTimedToPlayer("|cffFF9C29Deactivated easy mode", 15, owner)
 
 @init1 function init_Setup()	
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
@@ -224,3 +245,26 @@ function claimRegion()
 				SelectUnit(builder.actor, true)
 		else
 			printTimedToPlayer("|cff3187CBYou have used up all your regions. Leave some for the other builders", 15, builder.owner)
+
+
+
+@objectgen function genAbils()
+	EASY_ENABLE = ABIL_ID_GEN.next()
+	EASY_DISABLE = ABIL_ID_GEN.next()
+
+	if compiletime
+		new ChannelAbilityPreset(EASY_ENABLE, 1, true)
+		..setName("Enable Easy Mode")
+		..presetTooltipNormal((int levle) -> "Currently in |cffFF9C29normal |rmode.")
+		..presetTooltipNormalExtended((int levle) -> "Click to enable easy mode.\nIn Easy mode escapers don't instantly die when they normally would but instead receive damage and knockback.")
+		..presetIcon("BTNSacrifice.blp")
+		..presetButtonPosNormal(1, 0)
+		..presetHotkey("W")
+
+		new ChannelAbilityPreset(EASY_DISABLE, 1, true)
+		..setName("Disable Easy Mode")
+		..presetTooltipNormal((int levle) -> "Currently in |cff0884BDeasy |rmode.")
+		..presetTooltipNormalExtended((int levle) -> "Click to disable easy mode.\nEscapers will die normally again.")
+		..presetIcon("BTNShockWave.blp")
+		..presetButtonPosNormal(1, 0)
+		..presetHotkey("W")

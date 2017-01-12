@@ -5,7 +5,7 @@ public string array tags
 public integer array expBounds
 public string array ranks
 
-public constant string MAP_VER = "EBR 0.86"
+public constant string MAP_VER = "EBR 0.87"
 
 public constant STAFF_PLAYER = players[14]
 
@@ -33,9 +33,9 @@ public enum COLOR
 
 @init1 function init_GameConstants()
 	names   [0] = "Frotty"
-	tags    [0] = "|cffEF6B21[God]"
+	tags    [0] = "|cffEF6B21[A]"
 	names   [1] = "FrottyZ"
-	tags    [1] = "|cffEF6B21[God]"
+	tags    [1] = "|cffEF6B21[A]"
 	names   [2] = "Feuerblume"
 	tags    [2] = "|cff9C94E6[Tester]"
 	names   [3] = "jkkopp"

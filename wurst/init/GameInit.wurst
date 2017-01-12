@@ -1,7 +1,6 @@
 package GameInit
 import EntityManagement
-import PickSystem
-import TimerUtils
+import Startmazes
 import PlayerData
 
 init
@@ -14,6 +13,8 @@ init
 	callFunctionsWithAnnotation("@objectgen")
 	
 function initGame()
+	printTimed("Waiting for players..", 10.)
+	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
 	callFunctionsWithAnnotation("@init1")
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 	VolumeGroupReset()
@@ -24,5 +25,6 @@ function initGame()
 function initPartTwo()
 	GetExpiredTimer().release()
 	callFunctionsWithAnnotation("@init2")
+	initStartmazes()
 	checkPlayerLocalFiles()
-
+	

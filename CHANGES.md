@@ -3,6 +3,10 @@
 [*] Remaining builders gain control over left builder's regions and setupboxes(for clearing)
 [*] Some new amazing icons by kari!
 [*] Revamped picksystem to use abilities instead of arrowkeys
+[*] Now randomizing the first Escaper disaplayed for picking for each player
+[*] Added perks that are unlocked at certain ranks
+[*] Added easy mode region option that damages and knockbacks escapers in situations where they would die otherwise
+[*] Setting rallypoints on items is now possible
 
 [0.86x]
 [*] Waypoints can now be "and"-linked, meaning they only order units on the waypoint when both waypoints have been triggered

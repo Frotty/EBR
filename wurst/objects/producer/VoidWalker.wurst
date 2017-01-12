@@ -17,9 +17,9 @@ enum WalkerMode
 
 public class VoidWalker extends EscaperSensorSetup
 	private colorA color = COLOR_WHITE
-	private ConfigValue visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
+	ConfigValue visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
 	private real fadeDur = 1
-	private ConfigValue invisDur = new ConfigValue(.5, 0.5, "Invisible Duration")
+	ConfigValue invisDur = new ConfigValue(.5, 0.5, "Invisible Duration")
 	private WalkerMode mode = WalkerMode.VIS
 	private real dur = visibleDur.get()
 

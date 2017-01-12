@@ -27,6 +27,6 @@ public class EscaperSensorSetup extends SetupObject
 		if target instanceof Escaper
 			if target.pos.z <= sensorHeight
 				let escaper = target castTo Escaper
-				escaper.kill()
+				escaper.kill(source)
 				
 	

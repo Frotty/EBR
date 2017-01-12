@@ -14,7 +14,7 @@ public Startmaze array startmazes
 public int currentMaze = -1
 public RevivePoint svRev
 
-@init2 function initStartmazes()
+public function initStartmazes()
 	GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, null)
 	for vicu from ENUM_GROUP
 		vicu.setOwner(STAFF_PLAYER, true)

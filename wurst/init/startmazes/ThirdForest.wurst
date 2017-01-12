@@ -3,6 +3,8 @@ import Startmaze
 import Knockbacker
 import SetupBox
 import Obstacle
+import VoidWalker
+import Waypoint
 
 public class ThirdForestMaze extends Startmaze
 
@@ -20,9 +22,9 @@ public class ThirdForestMaze extends Startmaze
 		t.setRallyPoint(vec2(-6000,-6900))
 
 		let sk1 = new SmallKiller(gg_unit_n009_0038)
-		sk1.setup.issuePointOrder("patrol", vec2(-122.01,-6140))
+		sk1.setup.issuePointOrder("patrol", vec2(-122.01,-5897))
 		let sk2 = new SmallKiller(gg_unit_n009_0039)
-		sk2.setup.issuePointOrder("patrol", vec2(122.01,-6140))
+		sk2.setup.issuePointOrder("patrol", vec2(122.01,-5888))
 		let sk3 = new SmallKiller(gg_unit_n009_0050)
 		sk3.setup.issuePointOrder("patrol", vec2(0.01,-5670))
 		sk3.setup.setMoveSpeed(365)
@@ -53,6 +55,15 @@ public class ThirdForestMaze extends Startmaze
 		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01H", pickFilter)
 		for u from ENUM_GROUP
 			new BigObstacle(u)
+
+		new Waypoint(gg_unit_n004_0068)..setRallyPoint(gg_unit_n004_0066.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0066)..setRallyPoint(gg_unit_n004_0099.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0078)..setRallyPoint(gg_unit_n004_0068.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0099)..setRallyPoint(gg_unit_n004_0078.getPos()).delay = 1
+
+		let vw = new VoidWalker(gg_unit_u00I_0100)
+		vw.setup.issuePointOrder("move", gg_unit_n004_0068.getPos())
+		vw.invisDur.setVal(2)
 
 	override function getStart() returns vec2
 		return vec2(830, -7050)
