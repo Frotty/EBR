@@ -1,140 +1,67 @@
 package PickSystem
 import initlater  PlayerData
+import LinkedListModule
 import EscaperClasses
 import RevivePointModifier
+import ChannelAbilityPreset
 import CodeManager
 
-unit array pickheros
-int array herotypes
-string array heroinfos
-texttag array herott
-int array currentView
-constant int herocount = 4
+EscaperDefinition array currentView
 
-constant real SX = 6398
-constant real SY = -6791
-constant real PX = -6743
-constant real PY = 6616
+constant START = vec3(6398,-6791,getTerrainZ(vec2(6398,-6791)))
+constant PICK = vec3(-6743, 6616,getTerrainZ(vec2(-6743, 6616)))
+constant BLINK_ID = 'A001'
+constant PICK_DUMMY_ID = 'h00P'
 
-constant int BLINK_ID = 'A001'
-boolean started= false
+interface EscaperClsr
+	function create(PlayerData pd)
 
-public function startChoose()
-	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
-	for pd in allPlayers
-		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
-		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
-		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
-		SetCameraTargetControllerNoZForPlayer( pd.p, pickheros[0], 0, 0, false ) 
-		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
-		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
-		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
-		
+class EscaperDefinition
+	use LinkedListModule
 
-	EnablePreSelect( true, false )
-	
-public function allow()
-	EnableUserControl(true)
-	EnableOcclusion(true)
-	started = true
+	private texttag nameTt
+	private string mbicon
+	unit escaper
+	EscaperClsr cb
 
-function keyleft()
-	if not started
-		return
-	var p = GetTriggerPlayer()
-	var pi = GetPlayerId(p)
-	var id = currentView[pi]
-	PlayerData pd = pData[p.getId()]
-	
-	if not pd.picked
-		if id <= 1
-			currentView[pi] = herocount
-			id = herocount
-		else
-			currentView[pi]--
-			id--
-		if id == herocount
-			if GetLocalPlayer() == p
-				SetTextTagVisibility(herott[0],false)
-				SetUnitVertexColor( pickheros[0], 0, 0, 0, 0 )
-		else
-			if GetLocalPlayer() == p
-				SetTextTagVisibility(herott[id],false)
-				SetUnitVertexColor( pickheros[id], 0, 0, 0, 0 )
-		if GetLocalPlayer() == p	
-			SetUnitVertexColor( pickheros[id-1], 255, 255, 255, 255 )
-			SetTextTagVisibility(herott[id-1],true)
-	
-function keyright()
-	if not started
-		return
-	var p = GetTriggerPlayer()
-	var pi = GetPlayerId(p)
-	var id = currentView[pi]
-	PlayerData pd = pData[p.getId()]
-		
-	if not pd.picked
-		if id >= herocount
-			currentView[pi] = 1
-			id = 1
-		else
-			currentView[pi]++
-			id++
-		if id == 1
-			if GetLocalPlayer() == p
-				SetTextTagVisibility(herott[herocount-1],false)
-				SetUnitVertexColor( pickheros[herocount-1], 0, 0, 0, 0 )
-		else
-			if GetLocalPlayer() == p
-				SetTextTagVisibility(herott[id-2],false)
-				SetUnitVertexColor( pickheros[id-2], 0, 0, 0, 0 )
-		if GetLocalPlayer() == p	
-			SetUnitVertexColor( pickheros[id-1], 255, 255, 255, 255 )
-			SetTextTagVisibility(herott[id-1],true)
-	
-	
-	
-function keypick()
-	if not started
-		return
-	var p = GetTriggerPlayer()
-	PlayerData pd = pData[p.getId()]
-		
-	if not pd.picked
-		pd.picked = true
-		printTimedToPlayer("|cffE68C19Welcome to |cff086BC5EBR|cffE68C19!\n    |rIf you're new to the game, type \"-intro\" to get a short tutorial for your role.", 20, pd.p)
-		switch currentView[pd.id]-1
-			case 0
-				pd.escaper = new HolyEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p )
-			case 1
-				pd.escaper = new StrongEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p)
-			case 2
-				pd.escaper = new FastEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p)
-			case 3
-				pd.escaper = new IceEscaper( vec3(currentRevivepoint.x, currentRevivepoint.y,20.), p)
-		pd.icon = mbPic[currentView[pd.id]-1]
-		if pd.admin
-			AddSpecialEffectTarget( "Righteousness.MDX", pd.escaper.actor, "chest" )
+	construct(int escaperId)
+		nameTt = createTTEx(PICK-vec2(64,64), "", 12)
+		nameTt.setVisibility(false)
+		escaper = createUnit(DUMMY_PLAYER, escaperId, PICK, (315).fromDeg())
+		escaper.setVertexColor(COLOR_BLACK)
+
+	function setIcon(string path)
+		mbicon = path
+
+	function setName(string name)
+		nameTt.setText(name, 12)
+
+	function showTo(PlayerData pd)
+		if GetLocalPlayer() == pd.p
+			nameTt.setVisibility(true)
+			escaper.setVertexColor(COLOR_WHITE)
+
+	function hide(PlayerData pd)
+		if GetLocalPlayer() == pd.p
+			nameTt.setVisibility(false)
+			escaper.setVertexColor(COLOR_BLACK)
+
+	function createFor(PlayerData pd)
+		cb.create(pd)
+		ResetToGameCameraForPlayer(pd.p,0.5)
 		if isBuilder(pd.p)
-			UnitAddAbility( pd.escaper.actor, BLINK_ID )
-			UnitAddAbility( pd.escaper.actor, CREATE_REV_MOD_ID )
+			pd.escaper.actor..addAbility(BLINK_ID)..addAbility(CREATE_REV_MOD_ID)
 			pd.escaper.selectatrevive = false
-			ResetToGameCameraForPlayer(p,0.5)
-			PanCameraToTimedForPlayer(p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
-			SelectUnitForPlayerSingle( pd.builder.actor,p)
-			CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
+			PanCameraToTimedForPlayer(pd.p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
+			pd.p.selectSingle(pd.builder.actor)
+			CreateFogModifierRectBJ(true, pd.p, FOG_OF_WAR_VISIBLE, playableMapRect)
 			printTimedToPlayer("    You chose the role |cff528CDEBuilder|r!", 20, pd.p)
 		else
-			ResetToGameCameraForPlayer(p,0.5)
-			PanCameraToTimedForPlayer(p,SX,SY,0)
-			SelectUnitForPlayerSingle( pd.escaper.actor,p)
+			PanCameraToTimedForPlayer(pd.p,START.x,START.y,0)
+			pd.p.selectSingle(pd.escaper.actor)
 			printTimedToPlayer("    You chose the role |cff528CDEEscaper|r!", 20, pd.p)
-			
-		if GetLocalPlayer() == p
-			SetTextTagVisibility(herott[currentView[pd.id]-1],false)
-			SetUnitVertexColor( pickheros[currentView[pd.id]-1], 0, 0, 0, 0 )
-			SetTextTagVisibility(herott[herocount],false)
 
+		// SP testmode
 		if allPlayers.getSize() == 1
 			Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
 			e.actor.addAbility('A001')
@@ -145,59 +72,111 @@ function keypick()
 			e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 			e.actor.addAbility('A001')
 		
+		// CHeck for savefile
 		checkPlayerfile(pd)
 
-	else
-		return
-
+	function setCallback(EscaperClsr closure)
+		this.cb = closure
 	
+
+public class Selector extends UnitEntity
+
+	construct(PlayerData pd)
+		super(createUnit(pd.p, PICK_DUMMY_ID, PICK, (0).fromRad()))
+		actor..addAbility(PREV_ID)..addAbility(NEXT_ID)..addAbility(PICK_ID)..setVertexColor(COLOR_BLACK)
+		pd.p.selectSingle(actor)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
+	function onCast()
+		let id = GetSpellAbilityId()
+		let pd = pData[actor.getOwner().getId()]
+		switch id
+			case PREV_ID
+				currentView[pd.id].hide(pd)
+				currentView[pd.id] = currentView[pd.id].prev
+				currentView[pd.id].showTo(pd)
+			case NEXT_ID
+				currentView[pd.id].hide(pd)
+				currentView[pd.id] = currentView[pd.id].next
+				currentView[pd.id].showTo(pd)	
+			case PICK_ID
+				currentView[pd.id].hide(pd)
+				pd.picked = true
+				printTimedToPlayer("|cffE68C19Welcome to |cff086BC5Escape Builder Reloaded|cffE68C19!\n    |r", 20, pd.p)
+				currentView[pd.id].createFor(pd)
+				destroy this
+			
+public function startChoose()
+	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
+	for pd in allPlayers
+		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
+		SetCameraTargetControllerNoZForPlayer( pd.p, EscaperDefinition.first.escaper, 0, 0, false ) 
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
+		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
+		new Selector(pd)
+
+	EnablePreSelect( true, false )
+	
+public function allow()
+	EnableUserControl(true)
+	EnableOcclusion(true)
 	
 @init2 function init_Choose()
-	trigger left = CreateTrigger()
-	trigger right = CreateTrigger()
-	trigger pick = CreateTrigger()
+	new EscaperDefinition('H00B')
+	..setName("|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation.")
+	..setIcon("ReplaceableTextures\\CommandButtons\\BTNPriest.blp")
+	..setCallback((PlayerData pd) -> begin 
+		pd.escaper = new HolyEscaper(START, pd.p)
+	end)
+	new EscaperDefinition('H003')
+	..setName("|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat.")
+	..setIcon("ReplaceableTextures\\CommandButtons\\BTNFootman.blp")
+	..setCallback((PlayerData pd) -> begin 
+		pd.escaper = new StrongEscaper(START, pd.p)
+	end)
+	new EscaperDefinition('H00D')
+	..setName("|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can create a portal.")
+	..setIcon("ReplaceableTextures\\CommandButtons\\BTNPeasant.blp")
+	..setCallback((PlayerData pd) -> begin 
+		pd.escaper = new FastEscaper(START, pd.p)
+	end)
+	new EscaperDefinition('H00E')
+	..setName("|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice.")
+	..setIcon("ReplaceableTextures\\CommandButtons\\BTNIceTrollBeserker.blp")
+	..setCallback((PlayerData pd) -> begin 
+		pd.escaper = new IceEscaper(START, pd.p)
+	end)
 	
-	herotypes[0] = 'H00B'
-	herotypes[1] = 'H003'
-	herotypes[2] = 'H00D'
-	herotypes[3] = 'H00E'
-	
-	heroinfos[0] = "|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation."
-	heroinfos[1] = "|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat."
-	heroinfos[2] = "|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can create a portal."
-	heroinfos[3] = "|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice."
-
 	for pd in allPlayers
-		currentView[pd.id] = 1
-		TriggerRegisterPlayerEvent(left, pd.p, EVENT_PLAYER_ARROW_LEFT_DOWN)
-		TriggerRegisterPlayerEvent(right, pd.p, EVENT_PLAYER_ARROW_RIGHT_DOWN)
-		TriggerRegisterPlayerEvent(pick, pd.p, EVENT_PLAYER_ARROW_DOWN_DOWN)
+		currentView[pd.id] = EscaperDefinition.first
+		currentView[pd.id].showTo(pd)
 
-	TriggerAddAction( left, function keyleft )
-	TriggerAddAction( right, function keyright )
-	TriggerAddAction( pick, function keypick )
-	
-	
-	var x2 = PX + 140 * Cos(180 * bj_DEGTORAD)
-	var y2 = PY + 140 * Sin(180 * bj_DEGTORAD)
-	for i = 0 to herocount-1
-		pickheros[i] = CreateUnit(DUMMY_PLAYER, herotypes[i], PX, PY, 315)
-		herott[i] = CreateTextTag()
-		SetTextTagText(herott[i],heroinfos[i],12* 0.023 / 10)
-		SetTextTagPermanent(herott[i],true)
-		SetTextTagVisibility(herott[i],true)
-		
-		SetTextTagPos(herott[i],x2,y2,110)
-		if i > 0
-			SetUnitVertexColor( pickheros[i], 0, 0, 0, 0 )
-			SetTextTagVisibility(herott[i],false)
-		pickheros[i].addAbility(LOCUST_ID)
-		
-	x2 = PX + 150 * Cos(360 * bj_DEGTORAD)
-	y2 = PY + 150 * Sin(360 * bj_DEGTORAD)
-	herott[herocount] = CreateTextTag()
-	SetTextTagText(herott[herocount],"Press the |cff2194EFLeft|r/|cff08B552Right|r |cffB5B5B5Arrowkey|r to switch the escaper.\nChoose by Pressing the |cff2194EFDown|r |cffB5B5B5Arrowkey|r. ",10* 0.023 / 10)
-	SetTextTagPermanent(herott[herocount],true)
-	SetTextTagVisibility(herott[herocount],true)
-	SetTextTagPos(herott[herocount],x2,y2,70)
+int PREV_ID
+int NEXT_ID
+int PICK_ID
 
+@objectgen function getSelectorAbils()
+	PREV_ID = ABIL_ID_GEN.next()
+	NEXT_ID = ABIL_ID_GEN.next()
+	PICK_ID = ABIL_ID_GEN.next()
+	if compiletime
+		new ChannelAbilityPreset(PREV_ID, 1, true)..presetIcon("BTNprevEffect.blp")..presetButtonPosNormal(0, 2)
+		..setName("Go to previous Escaper")
+		..presetHotkey("V")
+		..presetTooltipNormal((int lvl) -> "Go to previous Escaper")
+		..presetTooltipNormalExtended((int lvl) -> "")
+
+		new ChannelAbilityPreset(NEXT_ID, 1, true)..presetIcon("BTNnextEffect.blp")..presetButtonPosNormal(3, 2)
+		..setName("Go to next Escaper")
+		..presetHotkey("Y")
+		..presetTooltipNormal((int lvl) -> "Go to next Escaper")
+		..presetTooltipNormalExtended((int lvl) -> "")
+
+		new ChannelAbilityPreset(PICK_ID, 1, true)..presetIcon("BTNstart.blp")..presetButtonPosNormal(0, 0)
+		..setName("Pick Escaper")
+		..presetTooltipNormal((int lvl) -> "Pick Escaper")
+		..presetHotkey("Q")
+		..presetTooltipNormalExtended((int lvl) -> "This will start your game as escaper.\nIf you have local files enabled your rank will be loaded and saved automatically.")

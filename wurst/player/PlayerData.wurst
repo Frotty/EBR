@@ -10,7 +10,6 @@ import UnitProducer
 import RevivePointModifier
 import ClosureTimers
 import CodeManager
-import EscaperClasses
 import Playerfile
 import PlayerMemoryData
 
@@ -216,6 +215,8 @@ function playerLeft()
 	destroy pd
 
 @init1 function initPlayers()
+
+
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11

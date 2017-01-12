@@ -5,6 +5,7 @@ import public GameConstants
 import HashMap
 import PlayerData
 import DummyRecycler
+import PickSystem
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 
@@ -133,7 +134,7 @@ public class RegionData
 				rdata.visible = true
 			edata.updateRegionData()
 		else if data instanceof UnitEntity
-			if not rdata.canBuild(data.owner) and not data instanceof Builder
+			if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector
 				printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 				data.terminate()
 								

@@ -1,7 +1,8 @@
 [0.87f]
 [*] Ranks can be saved again
 [*] Remaining builders gain control over left builder's regions and setupboxes(for clearing)
-[*] 
+[*] Some new amazing icons by kari!
+[*] Revamped picksystem to use abilities instead of arrowkeys
 
 [0.86x]
 [*] Waypoints can now be "and"-linked, meaning they only order units on the waypoint when both waypoints have been triggered
