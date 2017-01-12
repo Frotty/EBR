@@ -24,6 +24,5 @@ function initGame()
 function initPartTwo()
 	GetExpiredTimer().release()
 	callFunctionsWithAnnotation("@init2")
-	loadPlayerDatas()
-	startChoose()
+	checkPlayerLocalFiles()
 

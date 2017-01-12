@@ -6,6 +6,7 @@ import SyncWrapper
 import PlayerMemoryData
 import ClosureTimers
 import Playerfile
+import initlater PickSystem
 
 constant XPMAX = 500000
 constant FOLDER_NAME = "EBR"
@@ -13,10 +14,15 @@ constant FILE_NAME = "playerdata"
 public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
 
+int pdCount = -1
+function onAllLocalSynced()
+	startChoose()
 
 /** Checks if the player's localfiles are enabled
 	If they are enabled, searches for a profile */
 public function checkLocalFiles(PlayerData pd)
+	if pdCount < 0
+		pdCount = allPlayers.getSize()
 	printTimed("Checking localfiles for: " + pd.name, 25)
 	if not pd.localFilesEnabled
 		let sd = new SyncData(pd.p)
@@ -33,6 +39,10 @@ function onLocalFilesSynced()
 		printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pdc.p)
 	else
 		printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pdc.p)
+
+	pdCount--
+	if pdCount <= 0
+		onAllLocalSynced()
 
 
 string array sync_lines

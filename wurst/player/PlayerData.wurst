@@ -49,6 +49,7 @@ public class PlayerData
 
 	Playerfile pfile = null
 	PMData pmdata = null
+	Selector selector = null
 	
 	construct (player p)
 		this.p = p
@@ -124,6 +125,8 @@ public class PlayerData
 	ondestroy
 		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
 		PlaySoundBJ( gg_snd_QuestFailed )
+		if selector != null
+			destroy selector
 		if escaper != null
 			if escaper.alive
 				escaper.terminate()
@@ -254,10 +257,7 @@ function playerLeft()
 		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 
-   
-
-
-public function loadPlayerDatas()
+public function checkPlayerLocalFiles()
 	doAfter(0.1, () -> begin
 		for pd in allPlayers
 			checkLocalFiles(pd)

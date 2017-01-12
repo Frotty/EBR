@@ -71,7 +71,8 @@ class EscaperDefinition
 			e.actor.addAbility('A001')
 			e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 			e.actor.addAbility('A001')
-		
+			
+		pd.icon = mbicon
 		// CHeck for savefile
 		checkPlayerfile(pd)
 
@@ -85,6 +86,7 @@ public class Selector extends UnitEntity
 		super(createUnit(pd.p, PICK_DUMMY_ID, PICK, (0).fromRad()))
 		actor..addAbility(PREV_ID)..addAbility(NEXT_ID)..addAbility(PICK_ID)..setVertexColor(COLOR_BLACK)
 		pd.p.selectSingle(actor)
+		pd.selector = this
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function onCast()
@@ -105,7 +107,8 @@ public class Selector extends UnitEntity
 				printTimedToPlayer("|cffE68C19Welcome to |cff086BC5Escape Builder Reloaded|cffE68C19!\n    |r", 20, pd.p)
 				currentView[pd.id].createFor(pd)
 				destroy this
-			
+
+
 public function startChoose()
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
 	for pd in allPlayers
@@ -118,7 +121,7 @@ public function startChoose()
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
 		new Selector(pd)
 
-	EnablePreSelect( true, false )
+	EnablePreSelect(true, false)
 	
 public function allow()
 	EnableUserControl(true)
