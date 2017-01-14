@@ -12,6 +12,7 @@ public class ThirdForestMaze extends Startmaze
 		rdata = rd
 		rdata.setType(RegionType.CITY, false)
 		rdata.specialAbil = JUMP_SPELL_ID
+		rdata.allowCut = true
 	
 	override function initMaze()
 		inited = true

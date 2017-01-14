@@ -47,9 +47,6 @@ public class Trap extends StaticBaseObject
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
 	
-	function canTrigger(Entity e) returns boolean
-		return false
-	
 	ondestroy 
 		for i = 0 to 4
 			if goos[i] != null

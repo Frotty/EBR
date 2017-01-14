@@ -35,7 +35,7 @@ public class PlayerData
 	string rank = "Newbie"
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 	boolean admin = false
-
+	boolean checked = false
 	Escaper escaper
 	Builder builder
 	RevivePointModifier revmod
@@ -141,7 +141,6 @@ public class PlayerData
 			else
 				escaper.left = true
 			escaper = null
-		allPlayers.remove(this)
 		
 		// Give remaining builders control
 		if builderPlayers.getSize() > 1 and isBuilder(p)
@@ -154,17 +153,18 @@ public class PlayerData
 			GroupEnumUnitsOfPlayer(ENUM_GROUP, p, Filter(() -> GetFilterUnit().getTypeId() == 'n00A'))
 			for setup from ENUM_GROUP
 				setup.setOwner(builderPlayers.pop().p, true)
-			
+		
+		allPlayers.remove(this)
 		if isBuilder(p)
 			builderPlayers.remove(this)
 		else
 			escaperPlayers.remove(this)
 
 		
+		pData[id] = null
 		rebuildBoard()
 		if revmod != null
 			destroy revmod
-		pData[id] = null
 		
 function rebuildBoard()
 	playerboard = new Board(allPlayers.getSize()+1,3)

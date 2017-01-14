@@ -99,7 +99,8 @@ public abstract class Escaper extends UnitEntity
 				if tt2un
 					vel.y = -vel.y*1.25
 				setVel(vel)
-				actor.setFacing(vel.toVec2().getAngle())
+				if sliding
+					actor.setFacing(vel.toVec2().getAngle())
 			else
 				if killer != null
 					let ang = killer.getPos().angleTo2d(pos)
@@ -213,7 +214,6 @@ public abstract class Escaper extends UnitEntity
 		pos += slideVelocity * (1-speedFactor)
 		if sliding
 			setPos(pos)
-			print("slide")
 		else
 			setXY(pos)
 		

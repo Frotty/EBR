@@ -1,9 +1,7 @@
 package TerrainModder
 //The Terrainers appear as heroes, and which with the builders change tiles.
-import BuilderConstants
 import ChannelAbilityPreset
 import PlayerData
-import RegionData
 
 public constant int ICECONTROL = 'H007'
 public constant int ICEUNCONTROL = 'H008'

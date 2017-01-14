@@ -1,8 +1,6 @@
 package SyncWrapper
 import FileIO
 import Table
-import StringUtils
-
 
 public function getSyncedData() returns SyncData
 	return GetSyncedData() castTo SyncData

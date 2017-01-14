@@ -73,8 +73,9 @@ class EscaperDefinition
 			e.actor.addAbility('A001')
 			
 		pd.icon = mbicon
-		CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
-		// CHeck for savefile
+		if GetLocalPlayer() == pd.p
+			CinematicFadeBJ(bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
+		// Check for savefile
 		checkPlayerfile(pd)
 
 	function setCallback(EscaperClsr closure)
@@ -82,9 +83,10 @@ class EscaperDefinition
 	
 
 public class Selector extends UnitEntity
-
+	PlayerData pd
 	construct(PlayerData pd)
 		super(createUnit(pd.p, PICK_DUMMY_ID, PICK, (0).fromRad()))
+		this.pd = pd
 		actor..addAbility(PREV_ID)..addAbility(NEXT_ID)..addAbility(PICK_ID)..setVertexColor(COLOR_BLACK)
 		pd.p.selectSingle(actor)
 		pd.selector = this
@@ -108,6 +110,9 @@ public class Selector extends UnitEntity
 				printTimedToPlayer("|cffE68C19Welcome to |cff086BC5Escape Builder Reloaded|cffE68C19!\n    |r", 20, pd.p)
 				currentView[pd.id].createFor(pd)
 				destroy this
+
+	ondestroy
+		pd.selector = null
 
 
 public function startChoose()

@@ -2,7 +2,6 @@ package Pedestal
 import ChannelAbilityPreset
 import Assets
 import BaseObject
-import ClosureForGroups
 
 public int PED_ID
 public int SELECT_SINGLE_ID
