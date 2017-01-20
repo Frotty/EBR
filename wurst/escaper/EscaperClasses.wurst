@@ -41,6 +41,7 @@ public class Portal extends FxEntity
 	vec2 destiny = ZERO2
 	FastEscaper es = null
 	int duration
+	effect targetFx = null
 
 	construct(FastEscaper es, int duration) 
 		super(es.owner, es.getPos(), 24, angle(0), "PulseTC_fix4.mdx")
@@ -68,7 +69,7 @@ public class Portal extends FxEntity
 
 	override function update()
 		if destiny != ZERO2 and fx.getColor() != COLOR_WHITE
-			fx.setColor(fx.getColor().mix(COLOR_WHITE, (fx.getColor().red / 255.).lerp(1.05, 0.2)))
+			fx.setColor(fx.getColor().mix(COLOR_WHITE, (fx.getColor().red / 255.).lerp(1.05, 0.1)))
 		else
 			super.update()
 
@@ -80,7 +81,7 @@ public class Portal extends FxEntity
 
 	function setDestiny(vec2 tpos)
 		this.destiny = tpos
-		addEffect("PulseTC_tgt.mdx", tpos)
+		targetFx = addEffect("PulseTC_tgt.mdx", tpos)
 		if tpos != ZERO2
 			fx.setColor(colorA(215,215,215,215))
 		else
@@ -88,6 +89,8 @@ public class Portal extends FxEntity
 
 	ondestroy
 		es.portal = null
+		if targetFx != null
+			targetFx.destr()
 
 public class FastEscaper extends Escaper
 	Portal portal = null
@@ -103,7 +106,7 @@ public class FastEscaper extends Escaper
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				return
 			if portal == null
-				portal = new Portal(this, 25 + actor.getAbilityLevel(PORTAL_ID) * 10)
+				portal = new Portal(this, 20 + actor.getAbilityLevel(PORTAL_ID) * 10)
 				actor.resetAbilityCooldown(PORTAL_ID)
 			else
 				if portal.destiny != ZERO2

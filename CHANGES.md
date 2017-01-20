@@ -1,5 +1,5 @@
 [0.87n]
-[*] fixed oneway portal fx staying too long
+[*] fixed oneway portal fx staying too long and added target effect
 [*] fixed game init stopping if a player left during syncing
 
 
