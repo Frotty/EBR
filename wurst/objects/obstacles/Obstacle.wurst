@@ -29,7 +29,7 @@ public class BigObstacle extends Obstacle
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_BIG)
 
-	construct( vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(pos, owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG)
 
 public class VolcanoObstacle extends Obstacle

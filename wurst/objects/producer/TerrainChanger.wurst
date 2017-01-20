@@ -1,26 +1,27 @@
-package TextureChanger
+package TerrainChanger
 import SetupObject
 import TerrainBlocker
 import BuilderConstants
 import Preloader
+import Assets
 
-constant int TEXTURECHANGER_ID	= 'n01E'
+constant TEXTURECHANGER_ID	= 'n01E'
 
-constant int TERRAIN_O_WALKABLE_ID = 'A02G'
-constant int TERRAIN_O_UNWALKABLE_ID = 'A02C'
-constant int TERRAIN_O_ICE_ID = 'A02B'
-constant int TERRAIN_O_UNICE_ID = 'A02E'
-constant int TERRAIN_I_WALKABLE_ID = 'A02H'
-constant int TERRAIN_I_UNWALKABLE_ID = 'A02F'
-constant int TERRAIN_I_ICE_ID = 'A02A'
-constant int TERRAIN_I_UNICE_ID = 'A02D'
-constant int TERRAIN_INC_H_ID = 'A01K'
-constant int TERRAIN_INC_V_ID = 'A01M'
-constant int TERRAIN_DEC_H_ID = 'A01U'
-constant int TERRAIN_DEC_V_ID = 'A01T'
+constant TERRAIN_O_WALKABLE_ID = 'A02G'
+constant TERRAIN_O_UNWALKABLE_ID = 'A02C'
+constant TERRAIN_O_ICE_ID = 'A02B'
+constant TERRAIN_O_UNICE_ID = 'A02E'
+constant TERRAIN_I_WALKABLE_ID = 'A02H'
+constant TERRAIN_I_UNWALKABLE_ID = 'A02F'
+constant TERRAIN_I_ICE_ID = 'A02A'
+constant TERRAIN_I_UNICE_ID = 'A02D'
+constant TERRAIN_INC_H_ID = 'A01K'
+constant TERRAIN_INC_V_ID = 'A01M'
+constant TERRAIN_DEC_H_ID = 'A01U'
+constant TERRAIN_DEC_V_ID = 'A01T'
 
 
-public class TextureChanger extends SetupObject
+public class TerrainChanger extends SetupObject
 	ConfigValue sizeX = new ConfigValue(1, 1, "Width")
 	ConfigValue sizeY = new ConfigValue(1, 1, "Height")
 	matrixpos mp = matrixpos(0,0)
@@ -38,29 +39,36 @@ public class TextureChanger extends SetupObject
 		super.update()
 		var tX = (pos.x/128).round()
 		var tY = (pos.y/128).round()
-		RegionData data
+		let rdata = getRegionData(pos)
+		if not rdata.canBuild(owner)
+			return
 		int tileID
 		let sizeXI = sizeX.getInt()
 		let sizeYI = sizeY.getInt()
 		if tX != mp.x or tY != mp.y
 			// Clear old terrain
+			var xoffset = 0
+			var yoffset = 0
 			if tX < mp.x
+				xoffset = (sizeXI*2)
 				for i = -(sizeYI) to sizeYI
-					if not bitset(tileModifierMap.loadInt(tX+sizeXI+1, tY+i)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX+sizeXI+1)*128., (tY + i)*128., outerTile, -1, 1, 1 )
+					checkAndSetTile(rdata, tX+sizeXI+1, tY+i, outerTile)
 			else if tX > mp.x
+				xoffset = (-sizeXI*2)
 				for i = -(sizeYI) to sizeYI
-					if not bitset(tileModifierMap.loadInt(tX-sizeXI-1, tY+i)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX-sizeXI-1)*128., (tY + i)*128., outerTile, -1, 1, 1 )
-				
+					checkAndSetTile(rdata, tX-sizeXI-1, tY+i, outerTile)
 			if tY < mp.y
+				yoffset = (sizeYI*2)
 				for j = -(sizeXI) to sizeXI
-					if not bitset(tileModifierMap.loadInt(tX+j, tY + sizeYI+1)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX+j)*128., (tY + sizeYI+1)*128., outerTile, -1, 1, 1 )
+					checkAndSetTile(rdata, tX+j, tY + sizeYI+1, outerTile)
 			else if tY > mp.y
+				yoffset = (-sizeYI*2)
 				for j = -(sizeXI) to sizeXI
-					if not bitset(tileModifierMap.loadInt(tX+j, tY - sizeYI-1)).contains(TileModifiers.BLOCK castTo int)
-						SetTerrainType((tX+j)*128., (tY - sizeYI-1)*128., outerTile, -1, 1, 1 )
+					checkAndSetTile(rdata, tX+j, tY - sizeYI-1, outerTile)
+			if xoffset != 0 and yoffset != 0
+				flashEffect(Other.vengeancemissile, vec2((tX+xoffset)*128., (tY+yoffset)*128.))
+				checkAndSetTile(rdata, tX+xoffset, tY+yoffset, outerTile)
+				
 			// Make new
 			mp.x = tX
 			mp.y = tY
@@ -70,13 +78,16 @@ public class TextureChanger extends SetupObject
 						var x = (tX+j)*128.
 						var y = (tY+i)*128.
 						tileID = innerTile
-						data = getRegionData(vec2(x,y))
-						if data != null 
-							if data.canBuild(owner) 
-								if GetTerrainType(x, y) != tileID
-									SetTerrainType(x, y, tileID, -1, 1, 1 )
-							
+						if rdata.theRect.contains(vec2(x,y))
+							if GetTerrainType(x, y) != tileID
+								SetTerrainType(x, y, tileID, -1, 1, 1 )
 	
+	function checkAndSetTile(RegionData rdata, int x, int y, int id)
+		if not bitset(tileModifierMap.loadInt(x, y)).contains(TileModifiers.BLOCK castTo int)
+			let newP = vec2(x*128., y*128.)
+			if rdata.theRect.contains(newP)
+				SetTerrainType(newP.x, newP.y, id, -1, 1, 1)
+
 	function onCast()
 		let i = GetSpellAbilityId()
 		
@@ -84,11 +95,11 @@ public class TextureChanger extends SetupObject
 			case TERRAIN_INC_H_ID
 				sizeX.increment(this, 3)
 			case TERRAIN_INC_V_ID
-				sizeY.increment(this, 4)
+				sizeY.increment(this, 3)
 			case TERRAIN_DEC_H_ID
-				sizeX.decrement(this, 3)
+				sizeX.decrement(this, 0)
 			case TERRAIN_DEC_V_ID
-				sizeY.decrement(this, 3)
+				sizeY.decrement(this, 0)
 			case TERRAIN_I_WALKABLE_ID
 				innerTile = this.getCurrentRegion().getTypeSet().walkableId
 			case TERRAIN_I_UNWALKABLE_ID

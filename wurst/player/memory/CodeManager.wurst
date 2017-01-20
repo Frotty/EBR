@@ -14,6 +14,11 @@ public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
 
 int pdCount = -1
+public function onPlayerSynced()
+	pdCount--
+	if pdCount <= 0
+		onAllLocalSynced()
+
 function onAllLocalSynced()
 	startChoose()
 
@@ -39,9 +44,9 @@ function onLocalFilesSynced()
 	else
 		printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pdc.p)
 
+	pdc.localFilesChecked = true
 	pdCount--
-	if pdCount <= 0
-		onAllLocalSynced()
+	onPlayerSynced()
 
 
 string array sync_lines
@@ -57,7 +62,7 @@ public function checkPlayerfile(PlayerData pd)
 	if pd.localFilesEnabled
 		var lineCount = 0
 		if GetLocalPlayer() == pd.p
-			let file = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+			let file = File.open(FOLDER_NAME, FILE_NAME, Mode.READ)
 			let start = file.read()
 			if Playerfile.verify(start)
 				printTimed("Found a |cffFFCC00valid savefile.|r", 25)
@@ -88,7 +93,7 @@ function onLinecountSynced()
 	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
 	if lineCount > 0
 		if GetLocalPlayer() == pdc.p
-			let file = File.open(FOLDER_NAME, FILE_NAME, Flag.READ)
+			let file = File.open(FOLDER_NAME, FILE_NAME, Mode.READ)
 			// Remove verify hash
 			file.read()
 			for i = 0 to lineCount-1
@@ -172,7 +177,7 @@ public function savePlayerfile(PlayerData pd)
 	pd.pmdata.setXP(scode.save(pd.p, saveTechnique))
 	destroy scode
 	if GetLocalPlayer() == pd.p
-		let file = File.open(FOLDER_NAME, FILE_NAME, Flag.WRITE)
+		let file = File.open(FOLDER_NAME, FILE_NAME, Mode.WRITE)
 		pd.pfile.save(file)
 		file.close()
 	

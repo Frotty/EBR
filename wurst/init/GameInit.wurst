@@ -2,6 +2,8 @@ package GameInit
 import EntityManagement
 import Startmazes
 import PlayerData
+import FileIO
+import SyncWrapper
 
 init
 	callGen()
@@ -20,7 +22,6 @@ function initGame()
 	VolumeGroupReset()
 	EndThematicMusic()
 	GetExpiredTimer().start(0.01, () -> initPartTwo())
-	
 
 function initPartTwo()
 	GetExpiredTimer().release()

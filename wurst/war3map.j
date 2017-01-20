@@ -42,47 +42,47 @@ player SyncInteger__LocalPlayer
 //globals from Sync:
 constant boolean LIBRARY_Sync=true
         // characters that can be synced (ascii)
-constant string Sync___ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
+constant string Sync__ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
 
         // safe characters for use in game cache keys
         // (case sensitive)
-constant string Sync___SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~`"
+constant string Sync__SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~`"
 
         // how fast the buffer updates
-constant real Sync___UPDATE_PERIOD= 0.03125
+constant real Sync__UPDATE_PERIOD= 0.03125
 
         // automatically recycle indices when the syncing player leaves
-constant boolean Sync___AUTO_DESTROY_ON_LEAVE= true
+constant boolean Sync__AUTO_DESTROY_ON_LEAVE= true
 
         // automatically stop buffering when an error occurs
-constant boolean Sync___STOP_BUFFERING_ON_ERROR= true
+constant boolean Sync__STOP_BUFFERING_ON_ERROR= true
 
         // preload game cache key strings on init
-constant boolean Sync___PRELOAD_STR_CACHE= true
+constant boolean Sync__PRELOAD_STR_CACHE= true
      
         // size of the alphabet
-constant integer Sync___ALPHABET_BASE= StringLength(Sync___ALPHABET)
+constant integer Sync__ALPHABET_BASE= StringLength(Sync__ALPHABET)
 
         // stop reading the string buffer when reaching this char
-constant string Sync___TERM_CHAR= "`"
+constant string Sync__TERM_CHAR= "`"
 
         // maximum number of strings *per instance*
-constant integer Sync___MAX_STRINGS= 8192
+constant integer Sync__MAX_STRINGS= 8192
 
         // filenames for gc
-constant string Sync___CACHE_FILE= "i.w3v"
-constant string Sync___CACHE_FILE_STR= "s.w3v"
+constant string Sync__CACHE_FILE= "i.w3v"
+constant string Sync__CACHE_FILE_STR= "s.w3v"
 
         // don't edit below this line
 constant integer EVENT_SYNC_CACHE= 3
 constant integer SYNC_ERROR_TIMEOUT= 1
 constant integer SYNC_ERROR_PLAYERLEFT= 2
         // string table keys
-constant integer Sync___KEY_STR_POS= ( 0 * Sync___MAX_STRINGS )
-constant integer Sync___KEY_STR_LEN= ( 1 * Sync___MAX_STRINGS )
+constant integer Sync__KEY_STR_POS= ( 0 * Sync__MAX_STRINGS )
+constant integer Sync__KEY_STR_LEN= ( 1 * Sync__MAX_STRINGS )
 
         // pending data storage space
-constant integer Sync___KEY_STR_CACHE= ( 2 * Sync___MAX_STRINGS )
+constant integer Sync__KEY_STR_CACHE= ( 2 * Sync__MAX_STRINGS )
 //endglobals from Sync
     // Generated
 rect gg_rct_Choose= null
@@ -140,8 +140,7 @@ trigger gg_trg_Untitled_Trigger_005= null
 trigger gg_trg_Untitled_Trigger_002= null
 trigger gg_trg_UnitVariables= null
 trigger gg_trg_Untitled_Trigger_003= null
-trigger gg_trg_Sync= null
-trigger gg_trg_SyncInteger= null
+trigger gg_trg_Untitled_Trigger_004= null
 unit gg_unit_n000_0002= null
 unit gg_unit_u00J_0149= null
 unit gg_unit_n00C_0150= null
@@ -201,7 +200,7 @@ unit gg_unit_n00E_0263= null
 unit gg_unit_h01I_0262= null
 unit gg_unit_n00E_0261= null
 unit gg_unit_n00E_0260= null
-unit gg_unit_h018_0146= null
+unit gg_unit_u00I_0100= null
 unit gg_unit_h01M_0258= null
 unit gg_unit_h01M_0257= null
 unit gg_unit_n00C_0234= null
@@ -236,12 +235,18 @@ unit gg_unit_n00C_0063= null
 unit gg_unit_n00C_0115= null
 unit gg_unit_n00C_0143= null
 unit gg_unit_h00H_0067= null
+unit gg_unit_n004_0066= null
 unit gg_unit_n004_0068= null
 unit gg_unit_n004_0078= null
-unit gg_unit_n004_0066= null
 unit gg_unit_n004_0099= null
-unit gg_unit_u00I_0100= null
-trigger gg_trg_Untitled_Trigger_004= null
+unit gg_unit_n004_0101= null
+unit gg_unit_n004_0102= null
+unit gg_unit_n004_0114= null
+unit gg_unit_n004_0116= null
+unit gg_unit_n001_0117= null
+unit gg_unit_n003_0118= null
+trigger gg_trg_SyncInteger= null
+trigger gg_trg_Sync= null
 
 trigger l__library_init
 
@@ -673,7 +678,7 @@ endfunction
         set l=makeLen - l
         loop
             exitwhen i > l
-            set s=s + Sync___TERM_CHAR
+            set s=s + Sync__TERM_CHAR
             set i=i + 1
         endloop
         return s
@@ -715,12 +720,12 @@ endfunction
         function s__SyncData_getKey takes integer pos returns string
             local string position=""
          
-            if ( HaveSavedString(s__SyncData_Table, Sync___KEY_STR_CACHE, pos) ) then
-                return LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos)
+            if ( HaveSavedString(s__SyncData_Table, Sync__KEY_STR_CACHE, pos) ) then
+                return LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos)
             endif
          
-            set position=Sync_ConvertBase(Sync___SAFE_KEYS , pos)
-            call SaveStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos, position)
+            set position=Sync_ConvertBase(Sync__SAFE_KEYS , pos)
+            call SaveStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos, position)
          
             return position
         endfunction
@@ -762,8 +767,8 @@ endfunction
                         set p=i
 //#                 endif
 
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + p)
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + p)
                 call RemoveSavedBoolean(s__SyncData_Table, p, this) // playerdone
 
                 set i=i + 1
@@ -802,11 +807,11 @@ endfunction
         endfunction
 
         function s__SyncData_hasString takes integer this,integer index returns boolean
-            local integer i= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
+            local integer i= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
             if ( index > 0 and i == 0 ) then
                 return false
             endif
-            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)))
+            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)))
         endfunction
      
         function s__SyncData_addInt takes integer this,integer i returns nothing
@@ -852,12 +857,12 @@ endfunction
        
             // store the string position in the table
             if ( s__SyncData_strCount[this] == 0 ) then
-                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS, 0)
+                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS, 0)
             else
-                set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
-                set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
+                set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
+                set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
 
-                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + s__SyncData_strCount[this], strPos)
+                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + s__SyncData_strCount[this], strPos)
             endif
 
             // convert each character in the string to an integer
@@ -867,14 +872,14 @@ endfunction
                 set position=s__SyncData_getKey(strPos + i)
 
                 if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, Sync_Char2I(Sync___ALPHABET , SubString(s, i, i + 1)))
+                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, Sync_Char2I(Sync__ALPHABET , SubString(s, i, i + 1)))
                 endif
 
                 set i=i + 1
             endloop
 
             set s__SyncData_strBufferLen[this]=s__SyncData_strBufferLen[this] + length
-            call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
+            call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
             set s__SyncData_strCount[this]=s__SyncData_strCount[this] + 1
         endfunction
 
@@ -894,22 +899,22 @@ endfunction
             local string s= ""
             local string c
             local integer i= 0
-            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
+            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
             local integer strPos
          
             if ( not s__SyncData_hasString(this,index) ) then
                 return null
             endif
 
-            set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
-            set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
+            set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
+            set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
          
             loop
                 exitwhen i > strLen
              
-                set c=Sync_I2Char(Sync___ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
+                set c=Sync_I2Char(Sync__ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
 
-                if ( c == Sync___TERM_CHAR ) then
+                if ( c == Sync__TERM_CHAR ) then
                     return s
                 endif
 
@@ -946,7 +951,7 @@ endfunction
                 call s__SyncData_fireEvent(this,s__SyncData_onError[this])
             endif
 
-//#             static if  Sync___STOP_BUFFERING_ON_ERROR  then
+//#             static if  Sync__STOP_BUFFERING_ON_ERROR  then
                     set s__SyncData_buffering[this]=false
 //#             endif
         endfunction
@@ -970,7 +975,7 @@ endfunction
                     return
                 endif
 
-                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync___UPDATE_PERIOD
+                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync__UPDATE_PERIOD
 
                 if ( s__SyncData_onUpdate[data] != null ) then
                     call s__SyncData_fireEvent(data,s__SyncData_onUpdate[data])
@@ -983,7 +988,7 @@ endfunction
                 // if the player has left, destroy the instance
                 if ( GetPlayerSlotState(s__SyncData_from[data]) != PLAYER_SLOT_STATE_PLAYING ) then
                     call s__SyncData_error(data,SYNC_ERROR_PLAYERLEFT)
-//#                     static if  Sync___AUTO_DESTROY_ON_LEAVE  then
+//#                     static if  Sync__AUTO_DESTROY_ON_LEAVE  then
                             call s__SyncData_destroy(data)
 //#                     endif
                 endif
@@ -1036,7 +1041,7 @@ endfunction
             loop
                 exitwhen i > end
 
-                set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, i)
+                set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, i)
            
                 if ( i < s__SyncData_intCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                     call SyncStoredInteger(s__SyncData_Cache[0], s__SyncData_mkey[this], position)
@@ -1049,15 +1054,15 @@ endfunction
                 endif
            
                 if ( i < s__SyncData_strCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    set n=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + i)
-                    set p=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + i)
+                    set n=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + i)
+                    set p=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + i)
                
                     set j=0
                
                     loop
                         exitwhen j > n
                    
-                        set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, p + j)
+                        set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, p + j)
 
                         if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                             call SyncStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position)
@@ -1077,10 +1082,10 @@ endfunction
             set s__SyncData_timeStarted[this]=s__SyncData_gameTime()
             set s__SyncData_playersDone[this]=0
             set s__SyncData_buffering[this]=true
-            set s__SyncData_timeElapsed[this]=( Sync___UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
+            set s__SyncData_timeElapsed[this]=( Sync__UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
          
             if ( s__SyncData_Running == 0 ) then
-                call TimerStart(s__SyncData_BufferTimer, Sync___UPDATE_PERIOD, true, function s__SyncData_readBuffer)
+                call TimerStart(s__SyncData_BufferTimer, Sync__UPDATE_PERIOD, true, function s__SyncData_readBuffer)
             endif
 
             set s__SyncData_Running=s__SyncData_Running + 1
@@ -1181,8 +1186,8 @@ endfunction
         function s__SyncData_onInit takes nothing returns nothing
             set s__SyncData_Table=InitHashtable()
 
-            set s__SyncData_Cache[0]=InitGameCache(Sync___CACHE_FILE)
-            set s__SyncData_Cache[1]=InitGameCache(Sync___CACHE_FILE_STR)
+            set s__SyncData_Cache[0]=InitGameCache(Sync__CACHE_FILE)
+            set s__SyncData_Cache[1]=InitGameCache(Sync__CACHE_FILE_STR)
 
             set s__SyncData_Elapsed=CreateTimer()
             set s__SyncData_BufferTimer=CreateTimer()
@@ -1198,9 +1203,9 @@ endfunction
             call OnSyncInteger(function s__SyncData_updateStatus)
             call TimerStart(s__SyncData_Elapsed, 10., true, function s__SyncData_trackTime)
          
-//#             static if  Sync___PRELOAD_STR_CACHE  then
+//#             static if  Sync__PRELOAD_STR_CACHE  then
                     loop
-                        exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
+                        exitwhen s__SyncData_Last == Sync__ALPHABET_BASE
                         call s__SyncData_getKey(s__SyncData_Last)
                         set s__SyncData_Last=s__SyncData_Last + 1
                     endloop
@@ -1215,11 +1220,11 @@ endfunction
 //library Sync ends
 //===========================================================================
 // 
-// |cff217199Escape Builder |r[R] 0.87g
+// |cff217199Escape Builder |r[R] 0.87m
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Sat Jan 14 04:22:42 2017
+//   Date: Fri Jan 20 05:29:40 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -1275,23 +1280,24 @@ function CreateAllItems takes nothing returns nothing
     local integer itemID
 
     call CreateItem('I008', 4416.3, - 6725.5)
-    call CreateItem('I009', - 1799.0, - 6347.4)
-    call CreateItem('I009', 3502.6, - 7042.6)
-    call CreateItem('I009', - 4731.9, - 6904.0)
-    call CreateItem('I009', 1264.1, - 6134.2)
     call CreateItem('I009', - 2345.8, - 4226.5)
-    call CreateItem('I00A', 4413.5, - 4294.3)
-    call CreateItem('I00A', 3832.8, - 6648.4)
-    call CreateItem('I00A', - 1280.7, - 4227.1)
-    call CreateItem('I00A', 4472.1, - 6148.3)
-    call CreateItem('I00A', 755.2, - 5499.9)
-    call CreateItem('I00A', 2421.6, - 5123.5)
+    call CreateItem('I009', - 1799.0, - 6347.4)
+    call CreateItem('I009', - 4731.9, - 6904.0)
+    call CreateItem('I009', 3502.6, - 7042.6)
+    call CreateItem('I009', 1264.1, - 6134.2)
     call CreateItem('I00A', 2270.3, - 6918.5)
+    call CreateItem('I00A', 2421.6, - 5123.5)
+    call CreateItem('I00A', 4413.5, - 4294.3)
+    call CreateItem('I00A', - 1280.7, - 4227.1)
+    call CreateItem('I00A', - 2940.6, - 4992.7)
+    call CreateItem('I00A', - 1926.5, - 6347.4)
+    call CreateItem('I00A', 4472.1, - 6148.3)
     call CreateItem('I00A', - 3298.6, - 6271.6)
     call CreateItem('I00A', - 3837.0, - 4998.9)
     call CreateItem('I00A', - 4733.9, - 5386.1)
-    call CreateItem('I00A', - 2940.6, - 4992.7)
-    call CreateItem('I00A', - 1926.5, - 6347.4)
+    call CreateItem('I00A', 3832.8, - 6648.4)
+    call CreateItem('I00A', 755.2, - 5499.9)
+    call CreateItem('I00A', - 3458.5, - 6785.1)
     call CreateItem('I00J', 6735.7, - 7105.2)
 endfunction
 
@@ -1354,30 +1360,30 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     local real life
 
     set gg_unit_n000_0002=CreateUnit(p, 'n000', 5632.0, - 6912.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 4832.0, - 6944.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 6816.0, - 6880.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 6048.0, - 5920.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 4864.0, - 6912.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6848.0, - 6848.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6080.0, - 5888.0, 270.000)
     set u=CreateUnit(p, 'n00R', 5184.0, - 7040.0, 270.000)
     set u=CreateUnit(p, 'n00R', 6144.0, - 5824.0, 270.000)
     set u=CreateUnit(p, 'n00R', 6784.0, - 5504.0, 270.000)
     set u=CreateUnit(p, 'n00R', 6720.0, - 6912.0, 270.000)
     set gg_unit_h00C_0011=CreateUnit(p, 'h00C', 5312.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'n00R', 5376.0, - 4736.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 2272.0, - 4192.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1504.0, - 3808.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 2304.0, - 4160.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1536.0, - 3776.0, 270.000)
     set u=CreateUnit(p, 'n00R', 2240.0, - 3776.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 6624.0, - 6944.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6656.0, - 6912.0, 270.000)
     set gg_unit_n000_0022=CreateUnit(p, 'n000', 512.0, - 6912.0, 270.000)
     set gg_unit_h00C_0023=CreateUnit(p, 'h00C', 6656.0, - 6656.0, 270.000)
     set u=CreateUnit(p, 'h00C', 0.0, - 4992.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 5344.0, - 4640.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 5728.0, - 4896.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 5728.0, - 4768.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 5376.0, - 4608.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 5760.0, - 4864.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 5760.0, - 4736.0, 270.000)
     set u=CreateUnit(p, 'n00R', 5440.0, - 4736.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 5984.0, - 4576.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6016.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'n00R', 5760.0, - 4032.0, 270.000)
     set u=CreateUnit(p, 'n00R', 4992.0, - 4096.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 6560.0, - 4256.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6720.0, - 3968.0, 270.000)
     set u=CreateUnit(p, 'n00R', 4480.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 320.0, - 6336.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 1472.0, - 6976.0, 270.000)
@@ -1388,68 +1394,88 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n01I', - 1536.0, - 7104.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 64.0, - 5760.0, 270.000)
     set u=CreateUnit(p, 'n01I', 64.0, - 5760.0, 270.000)
-    set u=CreateUnit(p, 'n01H', - 1888.0, - 6816.0, 270.000)
+    set u=CreateUnit(p, 'n01H', - 1856.0, - 6784.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 128.0, - 5056.0, 270.000)
     set u=CreateUnit(p, 'n01I', 128.0, - 5056.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1952.0, - 4128.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1984.0, - 4096.0, 270.000)
     set u=CreateUnit(p, 'n000', 4864.0, - 4736.0, 270.000)
     set gg_unit_n00C_0061=CreateUnit(p, 'n00C', 4352.0, - 3968.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2336.0, - 6432.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2368.0, - 6400.0, 270.000)
     set gg_unit_n004_0066=CreateUnit(p, 'n004', 128.0, - 6016.0, 270.000)
     set gg_unit_h00H_0067=CreateUnit(p, 'h00H', 3456.0, - 7168.0, 270.000)
     set gg_unit_n004_0068=CreateUnit(p, 'n004', 128.0, - 6144.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 2144.0, - 4576.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 2176.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1920.0, - 5248.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1600.0, - 5056.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 2080.0, - 5728.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1568.0, - 5536.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2208.0, - 6560.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2592.0, - 6048.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2144.0, - 6816.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2464.0, - 7072.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 2112.0, - 5696.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1600.0, - 5504.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2240.0, - 6528.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2624.0, - 6016.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2176.0, - 6784.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2496.0, - 7040.0, 270.000)
     set gg_unit_n004_0078=CreateUnit(p, 'n004', 0.0, - 6144.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 1824.0, - 6304.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2528.0, - 5984.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2080.0, - 6368.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2016.0, - 6304.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 1856.0, - 6272.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2560.0, - 5952.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2112.0, - 6336.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2048.0, - 6272.0, 270.000)
     set gg_unit_n000_0085=CreateUnit(p, 'n000', 3456.0, - 4160.0, 270.000)
     set u=CreateUnit(p, 'h00C', 2752.0, - 4288.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3552.0, - 4832.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3552.0, - 5152.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3616.0, - 5536.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3360.0, - 5472.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2912.0, - 5536.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3040.0, - 5792.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3232.0, - 5984.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3744.0, - 6240.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3808.0, - 6432.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2336.0, - 6048.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2272.0, - 5984.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3584.0, - 4800.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3584.0, - 5120.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3648.0, - 5504.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3392.0, - 5440.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2944.0, - 5504.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3072.0, - 5760.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3264.0, - 5952.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3776.0, - 6208.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3840.0, - 6400.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2368.0, - 6016.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2304.0, - 5952.0, 270.000)
     set gg_unit_n004_0099=CreateUnit(p, 'n004', 0.0, - 6016.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3168.0, - 3808.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 1952.0, - 6560.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2464.0, - 4576.0, 270.000)
+    set gg_unit_n004_0101=CreateUnit(p, 'n004', - 768.0, - 4096.0, 270.000)
+    set gg_unit_n004_0102=CreateUnit(p, 'n004', - 896.0, - 3968.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3200.0, - 3776.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 1984.0, - 6528.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2496.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1856.0, - 4096.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2080.0, - 4256.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 1376.0, - 4640.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3360.0, - 5216.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2272.0, - 6240.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3168.0, - 6496.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 3680.0, - 5280.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1696.0, - 5152.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2336.0, - 6304.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2112.0, - 4224.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 1408.0, - 4608.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3392.0, - 5184.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2304.0, - 6208.0, 270.000)
+    set gg_unit_n004_0114=CreateUnit(p, 'n004', - 256.0, - 3968.0, 270.000)
+    set gg_unit_n004_0116=CreateUnit(p, 'n004', - 320.0, - 4096.0, 270.000)
+    set gg_unit_n001_0117=CreateUnit(p, 'n001', - 320.0, - 4416.0, 270.000)
+    set gg_unit_n003_0118=CreateUnit(p, 'n003', - 256.0, - 3776.0, 270.000)
+    set u=CreateUnit(p, 'n01I', - 576.0, - 3776.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3200.0, - 6464.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 3712.0, - 5248.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1728.0, - 5120.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2368.0, - 6272.0, 270.000)
+    set u=CreateUnit(p, 'n01I', - 704.0, - 4416.0, 270.000)
+    set u=CreateUnit(p, 'n01I', - 768.0, - 4416.0, 270.000)
+    set u=CreateUnit(p, 'n01I', - 832.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'h00C', 2752.0, - 4416.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 2528.0, - 4128.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1824.0, - 4128.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1696.0, - 4192.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1632.0, - 4512.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 2560.0, - 4096.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1856.0, - 4096.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1728.0, - 4160.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1664.0, - 4480.0, 270.000)
     set gg_unit_n00C_0141=CreateUnit(p, 'n00C', 2432.0, - 6656.0, 270.000)
+    set u=CreateUnit(p, 'n01I', - 896.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'n000', 0.0, - 4480.0, 270.000)
+    set u=CreateUnit(p, 'n01I', - 960.0, - 4416.0, 270.000)
     set gg_unit_n00C_0150=CreateUnit(p, 'n00C', - 6656.0, - 6784.0, 270.000)
     set gg_unit_n00B_0151=CreateUnit(p, 'n00B', 3328.0, - 6272.0, 270.000)
     set gg_unit_n00B_0152=CreateUnit(p, 'n00B', 3456.0, - 6592.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 2016.0, - 4512.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1824.0, - 5216.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 2048.0, - 4480.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1856.0, - 5184.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 2624.0, - 6336.0, 270.000)
+    set u=CreateUnit(p, 'n019', - 2816.0, - 6528.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 2944.0, - 6464.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3008.0, - 6528.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3136.0, - 6720.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3328.0, - 6848.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3328.0, - 6720.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3136.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3968.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4096.0, - 4352.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4800.0, - 4096.0, 270.000)
@@ -1459,9 +1485,8 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'h00C', - 4736.0, - 4608.0, 270.000)
     set gg_unit_n00C_0234=CreateUnit(p, 'n00C', - 4736.0, - 5632.0, 270.000)
     set u=CreateUnit(p, 'n008', - 128.0, - 448.0, 270.000)
-    set u=CreateUnit(p, 'n019', - 2848.0, - 6560.0, 270.000)
-    set u=CreateUnit(p, 'n019', - 4064.0, - 6112.0, 270.000)
-    set u=CreateUnit(p, 'n018', - 3776.0, - 6400.0, 270.000)
+    set u=CreateUnit(p, 'n019', - 4032.0, - 6080.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3648.0, - 6336.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2688.0, - 5440.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4032.0, - 5504.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4096.0, - 5504.0, 270.000)
@@ -1487,7 +1512,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 3840.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2240.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3264.0, - 7104.0, 270.000)
-    set u=CreateUnit(p, 'n018', - 2944.0, - 6592.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 2880.0, - 6464.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2880.0, - 6976.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2688.0, - 6208.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2688.0, - 6272.0, 270.000)
@@ -1507,19 +1532,19 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n008', 5568.0, 6144.0, 270.000)
     set u=CreateUnit(p, 'n008', 5568.0, 1856.0, 270.000)
     set u=CreateUnit(p, 'n008', 5568.0, - 1600.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 5408.0, - 6240.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 4448.0, - 5472.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 5440.0, - 6208.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 4480.0, - 5440.0, 270.000)
     set gg_unit_n000_0322=CreateUnit(p, 'n000', - 6016.0, - 6912.0, 270.000)
     set gg_unit_n00C_0323=CreateUnit(p, 'n00C', - 5248.0, - 6784.0, 270.000)
     set gg_unit_n00C_0324=CreateUnit(p, 'n00C', - 5248.0, - 7040.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4608.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'n00R', 4288.0, - 6912.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 1568.0, - 4768.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 1600.0, - 4736.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1600.0, - 4608.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2016.0, - 7136.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2208.0, - 7264.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2048.0, - 7104.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2240.0, - 7232.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1728.0, - 4160.0, 270.000)
-    set u=CreateUnit(p, 'n018', - 3712.0, - 6336.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3648.0, - 6272.0, 270.000)
 endfunction
 
 //===========================================================================
@@ -1536,7 +1561,7 @@ function CreateNeutralPassive takes nothing returns nothing
     set gg_unit_h015_0018=CreateUnit(p, 'h015', 6654.4, - 6060.8, 151.979)
     set gg_unit_h015_0020=CreateUnit(p, 'h015', 5671.2, - 5156.0, 232.972)
     set gg_unit_u00G_0033=CreateUnit(p, 'u00G', 6231.5, - 3905.0, 167.030)
-    set gg_unit_u00G_0034=CreateUnit(p, 'u00G', 5112.6, - 4388.3, 106.560)
+    set gg_unit_u00G_0034=CreateUnit(p, 'u00G', 5104.2, - 4483.1, 106.560)
     set gg_unit_n007_0036=CreateUnit(p, 'n007', 4363.1, - 6030.3, 214.330)
     set gg_unit_n009_0038=CreateUnit(p, 'n009', - 114.8, - 5065.0, 138.740)
     set gg_unit_n009_0039=CreateUnit(p, 'n009', 125.1, - 5044.2, 313.988)
@@ -1555,12 +1580,11 @@ function CreateNeutralPassive takes nothing returns nothing
     set gg_unit_n00D_0125=CreateUnit(p, 'n00D', 3074.3, - 6143.2, 11.701)
     set gg_unit_h01H_0127=CreateUnit(p, 'h01H', 3610.2, - 6376.1, 15.293)
     set gg_unit_h01H_0128=CreateUnit(p, 'h01H', 3615.6, - 6882.5, 221.118)
-    set gg_unit_h018_0145=CreateUnit(p, 'h018', 91.8, - 4065.7, 177.990)
-    set gg_unit_h018_0146=CreateUnit(p, 'h018', - 288.8, - 3812.3, 9.990)
+    set gg_unit_h018_0145=CreateUnit(p, 'h018', 622.4, - 4978.6, 177.990)
     set gg_unit_h01M_0147=CreateUnit(p, 'h01M', - 3155.8, - 4606.2, 115.415)
     call SetUnitState(gg_unit_h01M_0147, UNIT_STATE_MANA, 0)
     set gg_unit_u00J_0149=CreateUnit(p, 'u00J', - 1025.9, - 4395.5, 201.480)
-    set gg_unit_n009_0153=CreateUnit(p, 'n009', 435.6, - 5505.3, 313.988)
+    set gg_unit_n009_0153=CreateUnit(p, 'n009', 496.5, - 5509.7, 356.673)
     set gg_unit_u00A_0156=CreateUnit(p, 'u00A', - 2552.2, - 6514.2, 305.445)
     set gg_unit_u00A_0157=CreateUnit(p, 'u00A', - 2618.9, - 6820.0, 319.656)
     set gg_unit_u00A_0158=CreateUnit(p, 'u00A', - 2319.1, - 6907.7, 160.548)
@@ -1599,12 +1623,12 @@ function CreateNeutralPassive takes nothing returns nothing
     set gg_unit_n00E_0261=CreateUnit(p, 'n00E', - 3853.0, - 6677.5, 93.847)
     set gg_unit_h01I_0262=CreateUnit(p, 'h01I', - 3586.0, - 6653.9, 73.303)
     set gg_unit_n00E_0263=CreateUnit(p, 'n00E', - 3013.2, - 6283.2, 0.670)
-    set gg_unit_n00E_0264=CreateUnit(p, 'n00E', - 3199.3, - 6801.1, 240.992)
+    set gg_unit_n00E_0264=CreateUnit(p, 'n00E', - 3248.7, - 6787.6, 240.992)
     set gg_unit_n00E_0265=CreateUnit(p, 'n00E', - 3067.2, - 6924.9, 127.775)
     set gg_unit_h01I_0266=CreateUnit(p, 'h01I', - 3693.4, - 7180.5, 49.209)
     set gg_unit_n00E_0267=CreateUnit(p, 'n00E', - 4409.7, - 6029.0, 114.569)
     set gg_unit_n00E_0268=CreateUnit(p, 'n00E', - 3654.3, - 6038.5, 315.779)
-    set gg_unit_n00E_0269=CreateUnit(p, 'n00E', - 3772.6, - 5905.2, 128.445)
+    set gg_unit_n00E_0269=CreateUnit(p, 'n00E', - 3822.9, - 5904.0, 128.445)
     set gg_unit_n00E_0270=CreateUnit(p, 'n00E', - 4417.1, - 6635.4, 228.358)
     set gg_unit_n00E_0271=CreateUnit(p, 'n00E', - 3073.2, - 5425.8, 41.036)
     call SetUnitState(gg_unit_n00E_0271, UNIT_STATE_MANA, 0)
@@ -1873,9 +1897,10 @@ endfunction
 //===========================================================================
 // Trigger: Untitled Trigger 001
 //===========================================================================
+//TESH.scrollpos=0
+//TESH.alwaysfold=0
 function Trig_Untitled_Trigger_001_Actions takes nothing returns nothing
     call KillUnit(gg_unit_h018_0145)
-    call KillUnit(gg_unit_h018_0146)
 endfunction
 
 //===========================================================================
@@ -1907,12 +1932,21 @@ endfunction
 //===========================================================================
 // Trigger: Untitled Trigger 008
 //===========================================================================
+//TESH.scrollpos=0
+//TESH.alwaysfold=0
 function Trig_Untitled_Trigger_008_Actions takes nothing returns nothing
     call RemoveUnit(gg_unit_n000_0002)
     call RemoveUnit(gg_unit_n000_0085)
     call RemoveUnit(gg_unit_n000_0022)
     call RemoveUnit(gg_unit_n000_0226)
     call RemoveUnit(gg_unit_n000_0322)
+    
+    call RemoveUnit(gg_unit_n001_0117)
+    call RemoveUnit(gg_unit_n004_0116)
+    call RemoveUnit(gg_unit_n004_0101)
+    call RemoveUnit(gg_unit_n004_0102)
+    call RemoveUnit(gg_unit_n004_0114)
+    call RemoveUnit(gg_unit_n003_0118)
 endfunction
 
 //===========================================================================
@@ -1951,7 +1985,7 @@ endfunction
 //===========================================================================
 // Trigger: UnitVariables
 //===========================================================================
-//TESH.scrollpos=30
+//TESH.scrollpos=0
 //TESH.alwaysfold=0
 function Trig_UnitVariables_Actions takes nothing returns nothing
     call MoveRectToLoc(gg_rct_Region_026, GetRectCenter(GetPlayableMapRect()))
@@ -2074,15 +2108,6 @@ function InitTrig_Untitled_Trigger_003 takes nothing returns nothing
 endfunction
 
 //===========================================================================
-// Trigger: Sync
-//===========================================================================
-//TESH.scrollpos=79
-//TESH.alwaysfold=0
-//===========================================================================
-// Trigger: SyncInteger
-//===========================================================================
-//TESH.scrollpos=0
-//TESH.alwaysfold=0
 // Trigger: Untitled Trigger 004
 //===========================================================================
 function Trig_Untitled_Trigger_004_Actions takes nothing returns nothing
@@ -2096,6 +2121,15 @@ function InitTrig_Untitled_Trigger_004 takes nothing returns nothing
 endfunction
 
 //===========================================================================
+// Trigger: SyncInteger
+//===========================================================================
+//TESH.scrollpos=0
+//TESH.alwaysfold=0
+// Trigger: Sync
+//===========================================================================
+//TESH.scrollpos=701
+//TESH.alwaysfold=0
+//===========================================================================
 function InitCustomTriggers takes nothing returns nothing
     call InitTrig_Untitled_Trigger_014()
     call InitTrig_Untitled_Trigger_001()
@@ -2105,9 +2139,9 @@ function InitCustomTriggers takes nothing returns nothing
     call InitTrig_Untitled_Trigger_002()
     call InitTrig_UnitVariables()
     call InitTrig_Untitled_Trigger_003()
-    //Function not found: call InitTrig_Sync()
-    //Function not found: call InitTrig_SyncInteger()
     call InitTrig_Untitled_Trigger_004()
+    //Function not found: call InitTrig_SyncInteger()
+    //Function not found: call InitTrig_Sync()
 endfunction
 
 //***************************************************************************
@@ -2557,7 +2591,7 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs582185062")
+call ExecuteFunc("jasshelper__initstructs215076437")
 call ExecuteFunc("SyncInteger__Init")
 
     call InitGlobals()
@@ -2602,7 +2636,7 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs582185062 takes nothing returns nothing
+function jasshelper__initstructs215076437 takes nothing returns nothing
 
 
     call ExecuteFunc("s__SyncData_onInit")

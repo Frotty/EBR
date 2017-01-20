@@ -2,6 +2,7 @@ package CongaLineHead
 import SetupObject
 import Spinner
 import Remove
+import Interpolation
 
 constant int UNIT_ID = 'h000'
 
@@ -9,42 +10,93 @@ constant int ADD_ID = 'A02Y'
 constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
 
+public enum CongaMode
+	STRICT
+	LOOSE
+	PENDULUM
+
+class CongaSegment
+	CongaSegment next = null
+	CongaSegment prev = null
+	SetupObject target
+	CongaMode cmode = CongaMode.LOOSE
+	CongaLineHead head
+	angle phi = angle(0)
+	real dPhi = 0
+	real angularMomentum = 0
+
+	construct(CongaLineHead head, SetupObject target)
+		this.target = target
+		this.head = head
+		target.setup.removeAbility(REMOVE_ID)
+
+	function calcPos()
+		if cmode == CongaMode.STRICT
+			if prev == null
+				target.setNewPosA(calculateSegmentPos(head.pos.toVec2(), target.pos.toVec2(), 75.), target.pos.angleTo2d(head.pos))
+			else
+				target.setNewPosA(calculateSegmentPos(prev.target.pos.toVec2(), target.pos.toVec2(), head.segLength), target.pos.angleTo2d(prev.target.pos))
+		else if cmode == CongaMode.LOOSE
+			if prev == null
+				if target.pos.distanceTo2dSq(head.pos.toVec2()) > 32*32 
+					target.setNewPosA(target.pos.toVec2().lerp(head.pos.toVec2(), head.segLength * 0.001), target.pos.angleTo2d(head.pos))
+			else
+				if target.pos.distanceTo2dSq(prev.target.pos.toVec2()) > 24*24
+					target.setNewPosA(target.pos.toVec2().lerp(prev.target.pos.toVec2(), head.segLength * 0.001), target.pos.angleTo2d(prev.target.pos))
+		else if cmode == CongaMode.PENDULUM
+			if prev == null
+				phi = target.pos.angleTo2d(head.pos)
+				target.setNewPosA(head.pos.toVec2().polarOffset(phi, -75.), phi)
+			else
+				animate(prev, this, head.segLength)
+				target.setNewPosA(prev.target.pos.toVec2().polarOffset(prev.phi, head.segLength).polarOffset(phi, head.segLength), phi)
+
+	ondestroy
+		if next != null
+			next.prev = prev
+		if prev != null
+			prev.next = next
+		if head.firstSegment == this
+			head.firstSegment = next
+		if not target.done and target.actor != null
+			target.setup.addAbility(REMOVE_ID)
+
 public class CongaLineHead extends SetupObject
-	LinkedList<SetupObject> segments
+	CongaSegment firstSegment = null
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, UNIT_ID, pos, angle(0)), createUnit(owner, UNIT_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		segments = new LinkedList<SetupObject>()
 		sleeps = false
 		
 	override function update()
 		super.update()
-		int i = 0
-		UnitEntity se = null
-		for e in segments
-			if i == 0
-				e.setNewPosA(calculateSegmentPos(pos.toVec2(), e.pos.toVec2(), 75.), e.pos.angleTo2d(pos))
-			else
-				e.setNewPosA(calculateSegmentPos(se.pos.toVec2(), e.pos.toVec2(), segLength), e.pos.angleTo2d(pos))
-				
-			se = e
-			i++
-
+		var segment = firstSegment
+		while segment != null
+			segment.calcPos()
+			segment = segment.next
 		
 	function addSegment(SetupObject e)
 		boolean isNew = true
-		for de in segments
-			if de == e
+		var segment = firstSegment
+		while segment != null
+			if segment.target == e
 				isNew = false
 				break
+			segment = segment.next
 		if isNew
-			segments.add(e)
-			e.setup.removeAbility(REMOVE_ID)
+			if firstSegment == null
+				firstSegment = new CongaSegment(this, e)
+			else
+				segment = firstSegment
+				while segment.next != null
+					segment = segment.next
+				segment.next = new CongaSegment(this, e)
+				segment.next.prev = segment
+				segment.next.phi = e.getPos().angleTo2d(pos.toVec2())
 		else
-			segments.remove(e)
-			e.setup.addAbility(REMOVE_ID)
+			destroy segment
 	
 	static function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -72,21 +124,33 @@ public class CongaLineHead extends SetupObject
 		return false
 		
 	ondestroy
-		for SetupObject dso in segments
-			dso.setup.addAbility(REMOVE_ID)
-		destroy segments
+		var l = firstSegment
+		while l != null
+			destroy l
+			l = l.next
 
 		
 function UnitEntity.setNewPosA( vec2 tpos, angle angl)
 	if this instanceof SetupObject
-		(this castTo SetupObject).setPos(tpos.toVec3())
+		(this castTo SetupObject).setXY(tpos.toVec3())
 		(this castTo SetupObject).setFacing(angl)
 	else if this instanceof Spinner
-		(this castTo Spinner).setPos(tpos.toVec3())
+		(this castTo Spinner).setXY(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angl)
 		
+function calculateSegmentPos(vec2 pos1, vec2 pos2, angle a, real segLength) returns vec2
+	let angl = pos2.angleTo(pos1) + a
+	return vec2(pos1.x - Cos(angl.radians()) * segLength, pos1.y - Sin(angl.radians()) * segLength)
+
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angl = pos2.angleTo(pos1)
-	return vec2(pos1.x - Cos(angl.radians()) * segLength,
-				pos1.y - Sin(angl.radians()) * segLength)
+	return vec2(pos1.x - Cos(angl.radians()) * segLength, pos1.y - Sin(angl.radians()) * segLength)
 				
+function animate(CongaSegment seg1, CongaSegment seg2, real segLength)
+	let mu      =  1
+	var d2phi1 = ((-mu*seg1.phi.sin())-(segLength*seg2.dPhi*seg2.dPhi+segLength*seg1.dPhi*seg1.dPhi*(seg1.phi-seg2.phi).cos())*(seg1.phi-seg2.phi).sin())/(segLength*(mu-(seg1.phi-seg2.phi).cos()*(seg1.phi-seg2.phi).cos()))
+	var d2phi2 = ((-(seg2.phi).sin())+(mu*segLength*seg1.dPhi*seg1.dPhi+segLength*seg2.dPhi*seg2.dPhi*(seg1.phi-seg2.phi).cos())*(seg1.phi-seg2.phi).sin())/(segLength*(mu-(seg1.phi-seg2.phi).cos()*(seg1.phi-seg2.phi).cos()))
+	seg1.dPhi  += d2phi1*ANIMATION_PERIOD
+	seg2.dPhi   += d2phi2*ANIMATION_PERIOD
+	seg1.phi   += angle(seg1.dPhi*ANIMATION_PERIOD)
+	seg2.phi    += angle(seg2.dPhi*ANIMATION_PERIOD)

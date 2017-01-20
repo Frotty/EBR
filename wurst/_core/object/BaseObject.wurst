@@ -62,7 +62,6 @@ public class StaticBaseObject extends UnitEntity
 			if target == null
 				if itm == null
 					obj.setRallyPoint(targetPoint)
-					obj.rallyAngle = obj.pos.angleTo2d(targetPoint)
 				else
 					obj.rallyPoint = itm.getPos().toVec3()
 			else
@@ -76,9 +75,10 @@ public class StaticBaseObject extends UnitEntity
 				obj.noRally.destr()
 				obj.noRally = null
 					
-	function setRallyPoint(vec2 pos)
-		rallyPoint = pos.toVec3()
+	function setRallyPoint(vec2 tpos)
+		rallyPoint = tpos.toVec3()
 		rallyUnit = null
+		rallyAngle = pos.angleTo2d(rallyPoint)
 		clearQuestionmark()
 
 	function getRallyPoint() returns vec3
@@ -86,9 +86,7 @@ public class StaticBaseObject extends UnitEntity
 			return rallyPoint
 		else
 			if rallyUnit.getOwner() != DUMMY_PLAYER
-				real x = GetUnitX( rallyUnit )
-				real y = GetUnitY( rallyUnit )
-				return vec3( x, y, getTerrainZ( x, y ) )
+				return rallyUnit.getPos3with(0)
 			else
 				return pos
 

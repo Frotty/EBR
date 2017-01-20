@@ -4,36 +4,38 @@ import initlater Builder
 import ChannelAbilityPreset
 import RegisterEvents
 import SoundUtils
+import Preloader
 
-public constant SETUP_BOX = 'n00A'
-constant ICEI_ID = 'A057'
-constant ICED_ID = 'A006'
-constant PI_ID = 'A011'
-constant PD_ID = 'A059'
-constant LI_ID = 'A058'
-constant LD_ID = 'A05A'
-constant TURND_ID = 'A086'
-constant TURNI_ID = 'A087'
-constant ALLOW_ID = 'A01X'
-constant CLEAR_ID = 'A020'
-constant BOSS_MODE_ID = 'A03E'
-constant JUMP_TOGGLE_ID = 'A07S'
+public constant SETUP_BOX 	= 'n00A'
+constant ICEI_ID 			= 'A057'
+constant ICED_ID 			= 'A006'
+constant PI_ID 				= 'A011'
+constant PD_ID 				= 'A059'
+constant LI_ID 				= 'A058'
+constant LD_ID 				= 'A05A'
+constant TURND_ID 			= 'A086'
+constant TURNI_ID 			= 'A087'
+constant ALLOW_ID 			= 'A01X'
+constant CLEAR_ID 			= 'A020'
+constant BOSS_MODE_ID 		= 'A03E'
+constant JUMP_TOGGLE_ID 	= 'A07S'
 public constant JUMP_SPELL_ID = 'A062'
-constant FIRST_PAGE = 'A07B'
-constant SECOND_PAGE = 'A07A'
-constant INC_GRAVITY = 'A07X'
-constant DEC_GRAVITY = 'A07W'
-constant ABIL_WIZARD = 'A06O'
-constant ORB_TOGGLE_ID = 'A08B'
+constant FIRST_PAGE 		= 'A07B'
+constant SECOND_PAGE 		= 'A07A'
+constant INC_GRAVITY 		= 'A07X'
+constant DEC_GRAVITY 		= 'A07W'
+constant ABIL_WIZARD 		= 'A06O'
+constant ORB_TOGGLE_ID 		= 'A08B'
 public constant ORB_SPELL_ID = 'A08A'
-constant CANCEL_TOGGLE_ID = 'A08C'
+constant CANCEL_TOGGLE_ID 	= 'A08C'
+constant CUT_ALLOW 			= 'A08F'
+constant CUT_DISABLE 		= 'A08G'
+int EASY_ENABLE
+int EASY_DISABLE
+
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
 constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1.mp3", false)
-constant CUT_ALLOW = 'A08F'
-constant CUT_DISABLE = 'A08G'
-int EASY_ENABLE
-int EASY_DISABLE
 
 public class SetupBox extends UnitEntity
 	private RegionData rdata
@@ -217,9 +219,6 @@ public class SetupBox extends UnitEntity
 				actor..removeAbility(EASY_DISABLE)..addAbility(EASY_ENABLE)
 				printTimedToPlayer("|cffFF9C29Deactivated easy mode", 15, owner)
 
-@init1 function init_Setup()	
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
-	
 function claimRegion()
 	var seller = GetTriggerUnit()
 	var buyer = GetBuyingUnit()
@@ -245,7 +244,32 @@ function claimRegion()
 		else
 			printTimedToPlayer("|cff3187CBYou have used up all your regions. Leave some for the other builders", 15, builder.owner)
 
-
+init	
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
+	preloadAbility(SETUP_BOX)
+	preloadAbility(ICEI_ID)
+	preloadAbility(ICED_ID)
+	preloadAbility(PI_ID)
+	preloadAbility(PD_ID)
+	preloadAbility(LI_ID)
+	preloadAbility(LD_ID)
+	preloadAbility(TURND_ID)
+	preloadAbility(TURNI_ID)
+	preloadAbility(ALLOW_ID)
+	preloadAbility(CLEAR_ID)
+	preloadAbility(BOSS_MODE_ID)
+	preloadAbility(JUMP_TOGGLE_ID)
+	preloadAbility(JUMP_SPELL_ID)
+	preloadAbility(FIRST_PAGE)
+	preloadAbility(SECOND_PAGE)
+	preloadAbility(INC_GRAVITY)
+	preloadAbility(DEC_GRAVITY)
+	preloadAbility(ABIL_WIZARD)
+	preloadAbility(ORB_TOGGLE_ID)
+	preloadAbility(ORB_SPELL_ID)
+	preloadAbility(CANCEL_TOGGLE_ID)
+	preloadAbility(CUT_ALLOW)
+	preloadAbility(CUT_DISABLE)
 
 @objectgen function genAbils()
 	EASY_ENABLE = ABIL_ID_GEN.next()

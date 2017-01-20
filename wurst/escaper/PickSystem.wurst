@@ -9,7 +9,7 @@ import CodeManager
 EscaperDefinition array currentView
 
 constant START = gg_unit_n000_0002.getPos3Real()
-constant PICK = vec3(-6743, 6616,getTerrainZ(vec2(-6743, 6616)))
+constant PICK = vec3(-6743, 6616,100)
 constant BLINK_ID = 'A001'
 constant PICK_DUMMY_ID = 'h00P'
 
@@ -73,8 +73,6 @@ class EscaperDefinition
 			e.actor.addAbility('A001')
 			
 		pd.icon = mbicon
-		if GetLocalPlayer() == pd.p
-			CinematicFadeBJ(bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
 		// Check for savefile
 		checkPlayerfile(pd)
 
@@ -177,18 +175,18 @@ int PICK_ID
 	if compiletime
 		new ChannelAbilityPreset(PREV_ID, 1, true)..presetIcon("BTNprevEffect.blp")..presetButtonPosNormal(0, 2)
 		..setName("Go to previous Escaper")
-		..presetHotkey("V")
-		..presetTooltipNormal((int lvl) -> "Go to previous Escaper")
+		..presetHotkey("Y")
+		..presetTooltipNormal((int lvl) -> "Go to previous Escaper [|cffFFCC00Y|r]")
 		..presetTooltipNormalExtended((int lvl) -> "")
 
 		new ChannelAbilityPreset(NEXT_ID, 1, true)..presetIcon("BTNnextEffect.blp")..presetButtonPosNormal(3, 2)
 		..setName("Go to next Escaper")
-		..presetHotkey("Y")
-		..presetTooltipNormal((int lvl) -> "Go to next Escaper")
+		..presetHotkey("V")
+		..presetTooltipNormal((int lvl) -> "Go to next Escaper [|cffFFCC00V|r]")
 		..presetTooltipNormalExtended((int lvl) -> "")
 
 		new ChannelAbilityPreset(PICK_ID, 1, true)..presetIcon("BTNstart.blp")..presetButtonPosNormal(0, 0)
 		..setName("Pick Escaper")
-		..presetTooltipNormal((int lvl) -> "Pick Escaper")
+		..presetTooltipNormal((int lvl) -> "Pick Escaper [|cffFFCC00Q|r]")
 		..presetHotkey("Q")
 		..presetTooltipNormalExtended((int lvl) -> "This will start your game as escaper.\nIf you have local files enabled your rank will be loaded and saved automatically.")

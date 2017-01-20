@@ -41,10 +41,12 @@ public class PlayerData
 	RevivePointModifier revmod
 
 	int XP = 40
-	effect lvlfx
-	
+	effect lvlfx = null
+	effect tagfx = null
+
 	boolean picked = false
 	boolean localFilesEnabled = false
+	boolean localFilesChecked = false
 	int lastExpGain = 0
 	int lastSave = -1
 	real zCam = 1600.
@@ -101,6 +103,10 @@ public class PlayerData
 	
 	function updateRank()
 		int i = 0
+		if admin
+			rank = "|cffADD642*Admin*"
+			if tagfx == null
+				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
 		if lvlfx != null
 			lvlfx.destr()
 		while XP >= expBounds[i]
@@ -119,9 +125,7 @@ public class PlayerData
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			UnitAddItemById(escaper.actor,'I002')
 		
-		if admin and rank != "|cffADD642*Admin*"
-			rank = "|cffADD642*Admin*"
-			AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+		
 
 		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
 			lastSave = minutes*60+seconds
@@ -131,8 +135,8 @@ public class PlayerData
 		
 		
 	ondestroy
-		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
-		PlaySoundBJ( gg_snd_QuestFailed )
+		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
+		PlaySoundBJ(gg_snd_QuestFailed)
 		if selector != null
 			destroy selector
 		if escaper != null
@@ -159,12 +163,16 @@ public class PlayerData
 			builderPlayers.remove(this)
 		else
 			escaperPlayers.remove(this)
-
+		
+		if not localFilesChecked
+			onPlayerSynced()
 		
 		pData[id] = null
 		rebuildBoard()
 		if revmod != null
 			destroy revmod
+		if tagfx != null
+			tagfx.destr()
 		
 function rebuildBoard()
 	playerboard = new Board(allPlayers.getSize()+1,3)
@@ -226,8 +234,6 @@ function playerLeft()
 	destroy pd
 
 @init1 function initPlayers()
-
-
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11

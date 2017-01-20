@@ -44,7 +44,7 @@ public class SyncData
 		s__SyncData_destroy(vjassId)
 		vjassId = 0
 
-constant ALPHABET = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
+public constant ALPHABET = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
 public class SyncedFile
 	int size
 	int readpos

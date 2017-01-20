@@ -62,8 +62,8 @@ public class Teleporter extends StaticBaseObject
 					addEffect(EFFECT_STRING, obj.pos).destr()
 					addEffect(EFFECT_STRING, rallyPos).destr()
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-						PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
-		if isEscaper(e.owner) and obj.owner == STAFF_PLAYER and  not obj.actor.hasAbility('A00K') 
+						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
+		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility('A00K') 
 			obj.terminate()
 
 	function onCast()

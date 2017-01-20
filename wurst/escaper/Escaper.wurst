@@ -11,6 +11,7 @@ import initlater ReviveManager
 import public initlater RegionData
 import Projectile
 import ErrorHandling
+import JukeBox
 import initlater Builder
 
 constant real COLL_RADIUS = 32.
@@ -202,9 +203,6 @@ public abstract class Escaper extends UnitEntity
 			else if alive
 				kill(null)
 		
-		pos += otherVel
-		otherVel = vec2(0,0)
-	
 	override function update()
 		let newPos = actor.getPos()
 		walkVel = newPos-pos.toVec2()
@@ -212,6 +210,8 @@ public abstract class Escaper extends UnitEntity
 		physicsUpdate(this)
 		pos += vel
 		pos += slideVelocity * (1-speedFactor)
+		pos += otherVel
+		otherVel = vec2(0,0)
 		if sliding
 			setPos(pos)
 		else
@@ -333,9 +333,9 @@ public abstract class Escaper extends UnitEntity
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Other.aneucaster, pos).destr()
 				if sliding
-					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
+					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 11.5))
 				else
-					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
+					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 11.5))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
 			orb.addVel(getRealVel()*0.25)

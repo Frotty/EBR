@@ -1,4 +1,27 @@
-[0.87f]
+[0.87n]
+[*] fixed oneway portal fx staying too long
+[*] fixed game init stopping if a player left during syncing
+
+
+[0.87l]
+[*] fixed terrainchanger leaving tiles behind (this still happens at absurd speeds)
+[*] fixed builder not being able to drop items
+
+[0.87k]
+[*] Fixed Builder getting in forbidden regions
+[*] Fixed tiles not getting blocked after a tc-blocker had been removed
+[*] Fixed some tooltips, names and hotkeys
+[*] Fixed Big Obstacles being placed off center from build position
+[*] Fixed JukeBox getting stuck
+[*] Fixed TerrainChanger changing unallowed regions
+[*] Fixed Builders being able to remove level books in startmazes with builder
+[*] Removed some leftover unit soundsets
+[*] Reduced first time lagg for actions like claiming regions or switching pages
+[*] Replaced some jukebox entries
+[*] Reduced noise on powernode tethers
+[*] More new icons
+
+[0.87i]
 [*] Ranks can be saved again
 [*] Remaining builders gain control over left builder's regions and setupboxes(for clearing)
 [*] Some new amazing icons by kari!

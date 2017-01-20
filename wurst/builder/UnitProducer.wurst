@@ -2,24 +2,37 @@ package UnitProducer
 import BaseObject
 import EscaperKillers
 import initlater  PlayerData
-import BuilderConstants
+import Preloader
 import TeleporterTarget
 import BomberTarget
-import TextureChanger
+import TerrainChanger
 import Bomber
 import Pointer
 import Knockbacker
 import VoidWalker
 
-constant int ID = 'H00A'
-constant FIRST_PAGE = 'A07B'
-constant SECOND_PAGE = 'A07A'
-constant AIR_KILLER = 'A07Y'
+constant PRODUCER_ID 	= 'H00A'
+constant FIRST_PAGE 	= 'A07B'
+constant SECOND_PAGE	= 'A07A'
+constant AIR_KILLER 	= 'A07Y'
+constant BIG_KILLER 	= 'A05F'
+constant SMALL_KILLER 	= 'A05K'
+constant BR_KILLER 		= 'A05G'
+constant SR_KILLER 		= 'A05J'
+constant TANK_KILLER 	= 'A05M'
+constant TP_TARGET 		= 'A05N'
+constant GLAIVE_KILLER 	= 'A05H'
+constant BOMB_TARGET 	= 'A05P'
+constant T_CHANGER 		= 'A05L'
+constant POINTER	 	= 'A05I'
+constant BOMBER	 		= 'A05O'
+constant KNOCKBACK	 	= 'A07C'
+constant FACELESS	 	= 'A07U'
 
 public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
-		super(pos, CreateUnit( owner, ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL, CODE_NULL)
+		super(pos, CreateUnit( owner, PRODUCER_ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL, CODE_NULL)
 		actor.addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
@@ -30,7 +43,7 @@ public class UnitProducer extends StaticBaseObject
 		let rallyPos = obj.getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)
 		if id == SECOND_PAGE
-			obj.actor..removeAbility('A05F')..removeAbility('A05K')
+			obj.actor..removeAbility(BIG_KILLER)..removeAbility(SMALL_KILLER)
 			..removeAbility('A05J')..removeAbility('A05G')
 			..removeAbility('A05M')..removeAbility('A05N')
 			..removeAbility('A05H')..removeAbility('A07A')
@@ -41,7 +54,7 @@ public class UnitProducer extends StaticBaseObject
 			..addAbility('A07B')
 			return false
 		else if id == FIRST_PAGE
-			obj.actor..addAbility('A05F')..addAbility('A05K')
+			obj.actor..addAbility(BIG_KILLER)..addAbility(SMALL_KILLER)
 			..addAbility('A05J')..addAbility('A05G')
 			..addAbility('A05M')..addAbility('A05N')
 			..addAbility('A05H')..addAbility('A07A')
@@ -55,7 +68,7 @@ public class UnitProducer extends StaticBaseObject
 			return false
 		if data.canBuild(obj.owner) and data.getTypeSet().bigKillerId > 0 
 			switch id 
-				case 'A05F' // Big Killer
+				case BIG_KILLER // Big Killer
 					new BigKiller(rallyPos,obj.owner)
 				case 'A05K' // Small Killer
 					new SmallKiller(rallyPos,obj.owner)
@@ -72,7 +85,7 @@ public class UnitProducer extends StaticBaseObject
 				case 'A05P'
 					new BomberTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case 'A05L'
-					new TextureChanger( vec2(rallyPos.x,rallyPos.y), obj.owner )
+					new TerrainChanger( vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case 'A05I'
 					new Pointer(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case 'A05O'
@@ -87,6 +100,25 @@ public class UnitProducer extends StaticBaseObject
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 		return false
+
+init
+	preloadAbility(PRODUCER_ID)
+	preloadAbility(FIRST_PAGE)
+	preloadAbility(SECOND_PAGE)
+	preloadAbility(AIR_KILLER)
+	preloadAbility(BIG_KILLER)
+	preloadAbility(SMALL_KILLER)
+	preloadAbility(BR_KILLER)
+	preloadAbility(SR_KILLER)
+	preloadAbility(TANK_KILLER)
+	preloadAbility(TP_TARGET)
+	preloadAbility(GLAIVE_KILLER)
+	preloadAbility(BOMB_TARGET)
+	preloadAbility(T_CHANGER)
+	preloadAbility(POINTER)
+	preloadAbility(BOMBER)
+	preloadAbility(KNOCKBACK)
+	preloadAbility(FACELESS)
 		
 @init2 function init_UnitProducer()
 	for pd in builderPlayers

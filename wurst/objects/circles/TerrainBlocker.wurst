@@ -20,20 +20,18 @@ public class TerrainBlocker extends StaticBaseObject
 	construct(vec2 pos, player owner)
 		super(pos, CreateUnit(owner, BLOCKER_ID, ((pos.x/128).round())*128., ((pos.y/128).round())*128., 0. ), 0, CODE_NULL, CODE_NULL)
 		m = matrixpos((pos.x/128.0).round(), (pos.y/128.0).round())
+		clearQuestionmark()
 		if tileModifierMap.hasInt(m.x, m.y)
-			let bs = bitset(tileModifierMap.loadInt(m.x, m.y))
+			var bs = bitset(tileModifierMap.loadInt(m.x, m.y))
 			if bs.contains(TileModifiers.BLOCK castTo int)
-				DisplayTextToPlayer( owner, 0, 0, "|cffC51019|cff2963CEYo Dawg, I heard you like TC-Blockers so I put a "
-							+"TC-Blocker in your TC-Blocker so you can block while blocking.\nIn other words: Why would you want to block a tile twice?")
 				silent = true
-				destroy this
+				terminate()
 			else
-				bs.add(TileModifiers.BLOCK castTo int)
+				bs = bs.add(TileModifiers.BLOCK castTo int)
 				tileModifierMap.saveInt(m.x, m.y, bs.val)
 		else
 			tileModifierMap.saveInt(m.x, m.y, bitset(0).add(TileModifiers.BLOCK castTo int).val)
 		
-		clearQuestionmark()
 		
 	ondestroy
 		if not silent

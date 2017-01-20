@@ -44,10 +44,11 @@ public class Portal extends FxEntity
 
 	construct(FastEscaper es, int duration) 
 		super(es.owner, es.getPos(), 24, angle(0), "PulseTC_fix4.mdx")
+		silent = true
 		this.duration = duration
 		this.es = es
 		deactivate()
-		fx.setColor(colorA(125,125,125,125))
+		fx.setColor(colorA(100,100,100,100))
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> begin
 			if destiny != ZERO2 and target instanceof Escaper
 				var teleport = true
@@ -65,6 +66,12 @@ public class Portal extends FxEntity
 
 		end)
 
+	override function update()
+		if destiny != ZERO2 and fx.getColor() != COLOR_WHITE
+			fx.setColor(fx.getColor().mix(COLOR_WHITE, (fx.getColor().red / 255.).lerp(1.05, 0.2)))
+		else
+			super.update()
+
 	override function slowUpdate()
 		if destiny != ZERO2
 			super.slowUpdate()
@@ -73,6 +80,7 @@ public class Portal extends FxEntity
 
 	function setDestiny(vec2 tpos)
 		this.destiny = tpos
+		addEffect("PulseTC_tgt.mdx", tpos)
 		if tpos != ZERO2
 			fx.setColor(colorA(215,215,215,215))
 		else
