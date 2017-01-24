@@ -1,6 +1,7 @@
 package CongaLineHead
 import SetupObject
 import Spinner
+import ChannelAbilityPreset
 import Remove
 import Interpolation
 
@@ -19,8 +20,10 @@ class CongaSegment
 	CongaSegment next = null
 	CongaSegment prev = null
 	SetupObject target
-	CongaMode cmode = CongaMode.LOOSE
 	CongaLineHead head
+
+	real mass = 1
+
 	angle phi = angle(0)
 	real dPhi = 0
 	real angularMomentum = 0
@@ -29,28 +32,22 @@ class CongaSegment
 		this.target = target
 		this.head = head
 		target.setup.removeAbility(REMOVE_ID)
+		phi = head.getPos().angleTo2d(target.getPos())
 
 	function calcPos()
-		if cmode == CongaMode.STRICT
+		if head.cmode == CongaMode.STRICT
 			if prev == null
 				target.setNewPosA(calculateSegmentPos(head.pos.toVec2(), target.pos.toVec2(), 75.), target.pos.angleTo2d(head.pos))
 			else
 				target.setNewPosA(calculateSegmentPos(prev.target.pos.toVec2(), target.pos.toVec2(), head.segLength), target.pos.angleTo2d(prev.target.pos))
-		else if cmode == CongaMode.LOOSE
+		else if head.cmode == CongaMode.LOOSE
 			if prev == null
-				if target.pos.distanceTo2dSq(head.pos.toVec2()) > 32*32 
+				if target.pos.distanceTo2dSq(head.getPos().toVec2()) > 32*32 
 					target.setNewPosA(target.pos.toVec2().lerp(head.pos.toVec2(), head.segLength * 0.001), target.pos.angleTo2d(head.pos))
 			else
 				if target.pos.distanceTo2dSq(prev.target.pos.toVec2()) > 24*24
 					target.setNewPosA(target.pos.toVec2().lerp(prev.target.pos.toVec2(), head.segLength * 0.001), target.pos.angleTo2d(prev.target.pos))
-		else if cmode == CongaMode.PENDULUM
-			if prev == null
-				phi = target.pos.angleTo2d(head.pos)
-				target.setNewPosA(head.pos.toVec2().polarOffset(phi, -75.), phi)
-			else
-				animate(prev, this, head.segLength)
-				target.setNewPosA(prev.target.pos.toVec2().polarOffset(prev.phi, head.segLength).polarOffset(phi, head.segLength), phi)
-
+		
 	ondestroy
 		if next != null
 			next.prev = prev
@@ -63,12 +60,14 @@ class CongaSegment
 
 public class CongaLineHead extends SetupObject
 	CongaSegment firstSegment = null
+	CongaMode cmode = CongaMode.PENDULUM
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, UNIT_ID, pos, angle(0)), createUnit(owner, UNIT_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		sleeps = false
+		setup.addAbility(CONGA_CONFIG_ID)
 		
 	override function update()
 		super.update()
@@ -98,30 +97,32 @@ public class CongaLineHead extends SetupObject
 		else
 			destroy segment
 	
-	static function onCast() returns boolean
+	function onCast()
 		var id = GetSpellAbilityId()
 		var t = GetSpellTargetUnit()
-		var data = GetSpellAbilityUnit().getUserData() castTo CongaLineHead
+		print("cast")
 		switch id
 			case ADD_ID
 				var ed = t.getUserData() castTo UnitEntity
-				if ed.owner == data.owner and ed instanceof SetupObject
-					data.addSegment(ed castTo SetupObject)
+				if ed.owner == owner and ed instanceof SetupObject
+					addSegment(ed castTo SetupObject)
 			case INC_ID
-				if data.segLength < 500.
-					data.segLength += 25
-					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				if segLength < 500.
+					segLength += 25
+					createTTEx(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
+					createTTEx(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner)
 			case DEC_ID
-				if data.segLength > 25
-					data.segLength -= 25
-					createTTEx(data.pos, vec2(0,0.05), "Segment Length: "+ R2SW(data.segLength,1,2), 10,  2., colorA(255,255,255,0), data.owner  )
+				if segLength > 25
+					segLength -= 25
+					createTTEx(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
 				else
-					createTTEx(data.pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), data.owner  )
-			
-				
-		return false
+					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner)
+			case CONGA_STRICT_ID
+				print("strict")
+				cmode = CongaMode.STRICT
+			case CONGA_LOOSE_ID
+				cmode = CongaMode.LOOSE
 		
 	ondestroy
 		var l = firstSegment
@@ -146,11 +147,41 @@ function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angl = pos2.angleTo(pos1)
 	return vec2(pos1.x - Cos(angl.radians()) * segLength, pos1.y - Sin(angl.radians()) * segLength)
 				
-function animate(CongaSegment seg1, CongaSegment seg2, real segLength)
-	let mu      =  1
-	var d2phi1 = ((-mu*seg1.phi.sin())-(segLength*seg2.dPhi*seg2.dPhi+segLength*seg1.dPhi*seg1.dPhi*(seg1.phi-seg2.phi).cos())*(seg1.phi-seg2.phi).sin())/(segLength*(mu-(seg1.phi-seg2.phi).cos()*(seg1.phi-seg2.phi).cos()))
-	var d2phi2 = ((-(seg2.phi).sin())+(mu*segLength*seg1.dPhi*seg1.dPhi+segLength*seg2.dPhi*seg2.dPhi*(seg1.phi-seg2.phi).cos())*(seg1.phi-seg2.phi).sin())/(segLength*(mu-(seg1.phi-seg2.phi).cos()*(seg1.phi-seg2.phi).cos()))
-	seg1.dPhi  += d2phi1*ANIMATION_PERIOD
-	seg2.dPhi   += d2phi2*ANIMATION_PERIOD
-	seg1.phi   += angle(seg1.dPhi*ANIMATION_PERIOD)
-	seg2.phi    += angle(seg2.dPhi*ANIMATION_PERIOD)
+public int CONGA_STRICT_ID
+public int CONGA_LOOSE_ID
+public int CONGA_PENDULUM_ID
+public int CONGA_CONFIG_ID
+
+@objectgen function genObj()
+	CONGA_STRICT_ID = ABIL_ID_GEN.next()
+	CONGA_LOOSE_ID = ABIL_ID_GEN.next()
+	CONGA_PENDULUM_ID = ABIL_ID_GEN.next()
+	CONGA_CONFIG_ID = ABIL_ID_GEN.next()
+
+	if not compiletime
+		return
+
+	new ChannelAbilityPreset(CONGA_STRICT_ID, 1, true)
+	..setName("Strict mode")
+	..setHeroAbility(false)
+	..presetTooltipNormal((int lvl) -> "Conga: Set strict mode")
+	..presetTooltipNormalExtended((int lvl) -> "Makes the conga act like a strict chain")
+	..presetIcon("BTNDevourMagic.blp")
+	..presetButtonPosNormal(0, 0)
+
+	new ChannelAbilityPreset(CONGA_LOOSE_ID, 1, true)
+	..setName("Loose mode")
+	..setHeroAbility(false)
+	..presetTooltipNormal((int lvl) -> "Conga: Set loose mode")
+	..presetTooltipNormalExtended((int lvl) -> "Makes conga elements follow the head smoothly")
+	..presetIcon("BTNDevourMagic.blp")
+	..presetButtonPosNormal(0, 0)
+
+	new AbilityDefinitionSpellBook(CONGA_CONFIG_ID)
+	..setName("Conga Config")
+	..presetTooltipNormal((int lvl) -> "Conga: Conga Config")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetIcon("BTNsettingsCog.blp")
+	..setItemAbility(false)
+	..setMaximumSpells(1, 10)
+	..setSpellList(1, int2fourchar(CONGA_LOOSE_ID)  + "," + int2fourchar(CONGA_STRICT_ID) + ",A02Z,A030")

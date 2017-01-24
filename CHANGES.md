@@ -1,6 +1,15 @@
-[0.87n]
+[0.87q]
 [*] fixed oneway portal fx staying too long and added target effect
-[*] fixed game init stopping if a player left during syncing
+[*] fixed game init stopping if a player leaves during startup or syncing
+[*] fixed congalinehead and added new mode
+[*] fixed builder escapers gaining XP from escaper deaths
+[*] fixed big obstacles having collision
+[*] removed TC-changer debug sfx
+[*] introduced restrictions for moving units via executer
+[*] made localfiles sync sequential to avoid laggs and desyncs at start
+[*] more startmaze reworks
+[*] added different vortex modes
+[*] more icons by krari
 
 
 [0.87l]

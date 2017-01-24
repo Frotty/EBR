@@ -273,8 +273,7 @@ function playerLeft()
 
 public function checkPlayerLocalFiles()
 	doAfter(0.1, () -> begin
-		for pd in allPlayers
-			checkLocalFiles(pd)
+		doSequentialSync()
 	end)
 
 public int minutes = 0

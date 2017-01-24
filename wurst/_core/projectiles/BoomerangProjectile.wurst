@@ -24,8 +24,8 @@ public class Boomerang extends Projectile
 		if lifespan > 2
 			terminate()
 		else if lifespan >= 1
-			setPos(target.bezier(middletwo, caster.getPos().toVec2(), lifespan-1.).toVec3())
+			setPos(target.bezier3(middletwo, caster.getPos().toVec2(), lifespan-1.).toVec3())
 			lifespan = lifespan.lerp(2.3, 0.040)
 		else
 			lifespan = lifespan.lerp(1.2, 0.035)
-			setPos(initialPos.bezier(middleone, target, lifespan).toVec3())
+			setPos(initialPos.bezier3(middleone, target, lifespan).toVec3())
