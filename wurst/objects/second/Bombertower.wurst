@@ -56,7 +56,7 @@ function checkAttackOrder()
 			
 				
 
-public function init_Bombertower()
+@init1 function init_Bombertower()
 	orderTrigger = CreateTrigger()
 	orderTrigger.addAction(function checkAttackOrder)
 		

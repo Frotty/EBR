@@ -1,81 +1,31 @@
 package GameInit
-import SetupObject
-import UnitProducer
-import PickSystem
-import Builder
-import Door
-import TerrainModder
-import Trap
-import Texter
-import Bombertower
-import Bomber
-import Startmazes
 import EntityManagement
-import ItemObject
-import Pointer
-import Invisible
-import GlobalShop
-import Remove
-import BasicSpells
-import ClosureTimers
+import Startmazes
 import PlayerData
+import FileIO
+import SyncWrapper
 
 init
 	callGen()
-	VolumeGroupReset()
-	EndThematicMusic()
 	startEntityLoop()
-	doAfter(.1, () -> initGame())
+	getTimer().start(0.01, () -> initGame())
 	
 	
 @compiletime function callGen()
 	callFunctionsWithAnnotation("@objectgen")
 	
 function initGame()
-	init_Regions()
-	initSetupObj()
-	printLog(Loglevel.DEBUG, "Starting Init")
+	printTimed("Waiting for players..", 10.)
+	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
+	callFunctionsWithAnnotation("@init1")
+	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
 	VolumeGroupReset()
 	EndThematicMusic()
-	printLog(Loglevel.DEBUG, "Init - Music")
-	init_TerrainModder()
-	printLog(Loglevel.DEBUG, "Init - TMod")
-	init_UnitProducer()
-	printLog(Loglevel.DEBUG, "Init - UP")
-	init_Choose()
-	printLog(Loglevel.DEBUG, "Init - Choose")
-	init_Builder()
-	printLog(Loglevel.DEBUG, "Init - Builder")
-	init_Trap()
-	printLog(Loglevel.DEBUG, "Init - Trap")
-	init_Door()
-	printLog(Loglevel.DEBUG, "Init - Door")
-	init_Texter()
-	printLog(Loglevel.DEBUG, "Init - Txter")
-	init_Bombertower()
-	printLog(Loglevel.DEBUG, "Init - BTower")
-	init_Bomber()
-	printLog(Loglevel.DEBUG, "Init - Bomber")
-	init_Pointer()
-	printLog(Loglevel.DEBUG, "Init - Pointer")
-	init_GlobalShop()
-	printLog(Loglevel.DEBUG, "Init - Shop")
-	invis_init()
-	init_remove()
-	getTimer().start(0.01, function initPartTwo)
-
+	GetExpiredTimer().start(0.01, () -> initPartTwo())
 
 function initPartTwo()
-	initBaseObjects()
-	printLog(Loglevel.DEBUG, "Init - BObj")
-	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
-	
-	printLog(Loglevel.DEBUG, "Init - Finished")
-	startChoose()
-	printLog(Loglevel.DEBUG, "Starting choose...")
-	initSpells()
-	initStartmazes()
-
-	loadPlayerDatas()
 	GetExpiredTimer().release()
-
+	callFunctionsWithAnnotation("@init2")
+	initStartmazes()
+	checkPlayerLocalFiles()
+	

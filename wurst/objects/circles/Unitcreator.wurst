@@ -11,7 +11,7 @@ constant int 	UNITCREATOR_ID   = 'n006'
 int FIXED_ID
 int RANDOM_ID
 
-enum TimerMode
+public enum TimerMode
 	FIXED
 	RANDOM
 
@@ -20,6 +20,10 @@ public class UnitCreator extends StaticBaseObject
 	real timerreal = 5.
 	int spawnUnitType = 'h001'
 	TimerMode tmode = TimerMode.FIXED
+
+	construct(unit existing)
+		super(existing.getPos(), existing, 0., CODE_NULL , CODE_NULL)
+		deactivate()
 
 	construct( vec2 pos, player owner)
 		super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL , CODE_NULL)

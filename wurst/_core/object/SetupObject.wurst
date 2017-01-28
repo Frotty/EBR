@@ -2,6 +2,7 @@ package SetupObject
 import public Entity
 import public TerrainUtils
 import public ConfigValue
+import public Json
 import public initlater RegionData
 
 /**
@@ -126,7 +127,7 @@ function getOffset() returns vec2
 		count = -1
 	return offsets[count]
 
-public function initSetupObj()
+@init1 function initSetupObj()
 	orderTrigger = CreateTrigger()
 	orderTrigger.addAction(function SetupObject.onOrderEvent )
 	offsets[0] = vec2(0.049, 0.001)

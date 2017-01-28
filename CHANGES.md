@@ -1,3 +1,45 @@
+[0.87q]
+[*] fixed oneway portal fx staying too long and added target effect
+[*] fixed game init stopping if a player leaves during startup or syncing
+[*] fixed congalinehead and added new mode
+[*] fixed builder escapers gaining XP from escaper deaths
+[*] fixed big obstacles having collision
+[*] removed TC-changer debug sfx
+[*] introduced restrictions for moving units via executer
+[*] made localfiles sync sequential to avoid laggs and desyncs at start
+[*] more startmaze reworks
+[*] added different vortex modes
+[*] more icons by krari
+
+
+[0.87l]
+[*] fixed terrainchanger leaving tiles behind (this still happens at absurd speeds)
+[*] fixed builder not being able to drop items
+
+[0.87k]
+[*] Fixed Builder getting in forbidden regions
+[*] Fixed tiles not getting blocked after a tc-blocker had been removed
+[*] Fixed some tooltips, names and hotkeys
+[*] Fixed Big Obstacles being placed off center from build position
+[*] Fixed JukeBox getting stuck
+[*] Fixed TerrainChanger changing unallowed regions
+[*] Fixed Builders being able to remove level books in startmazes with builder
+[*] Removed some leftover unit soundsets
+[*] Reduced first time lagg for actions like claiming regions or switching pages
+[*] Replaced some jukebox entries
+[*] Reduced noise on powernode tethers
+[*] More new icons
+
+[0.87i]
+[*] Ranks can be saved again
+[*] Remaining builders gain control over left builder's regions and setupboxes(for clearing)
+[*] Some new amazing icons by kari!
+[*] Revamped picksystem to use abilities instead of arrowkeys
+[*] Now randomizing the first Escaper disaplayed for picking for each player
+[*] Added perks that are unlocked at certain ranks
+[*] Added easy mode region option that damages and knockbacks escapers in situations where they would die otherwise
+[*] Setting rallypoints on items is now possible
+
 [0.86x]
 [*] Waypoints can now be "and"-linked, meaning they only order units on the waypoint when both waypoints have been triggered
 [*] Tile cutting now works more easily if enabled

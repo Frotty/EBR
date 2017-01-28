@@ -7,6 +7,7 @@ import EscaperKillers
 import Door
 import Pointer
 import Knockbacker
+import Builder
 import Unitcreator
 
 constant int 	EXECUTER_ID   = 'n01D'
@@ -32,7 +33,6 @@ public enum Amode
 	CHANGETERRAIN
 	TOGGLEUNITPRODUCER
 
-	
 enum ActionUnit
 	NONE
 	TANK
@@ -466,8 +466,10 @@ public class Executer extends StaticBaseObject
 			case MOVE_UNIT_STOP_ABIL
 				moveOrderString = "stop"
 			case MOVE_UNIT_SELECT_ABIL
-				printLog(Loglevel.DEBUG, GetUnitTypeId(GetSpellTargetUnit()).toString())
-				unitToMove = GetSpellTargetUnit()
+				let target = GetSpellTargetUnit()
+				if target.getOwner() == owner and target.getEntity().getCurrentRegion() == this.getCurrentRegion() and not target.getEntity() instanceof Builder
+					unitToMove = target
+					
 			
 			case TERRAIN_INCREASE_H_ABIL
 				if not horizontalTileSize > 3

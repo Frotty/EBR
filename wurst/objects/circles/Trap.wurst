@@ -47,9 +47,6 @@ public class Trap extends StaticBaseObject
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
 	
-	function canTrigger(Entity e) returns boolean
-		return false
-	
 	ondestroy 
 		for i = 0 to 4
 			if goos[i] != null
@@ -72,7 +69,7 @@ public class Trap extends StaticBaseObject
 	function doEffect(Escaper e)
 		switch a
 			case ABIL.KILL
-				e.kill()
+				e.kill(this)
 			case ABIL.STUN
 				InstantDummyCaster.castTarget(DUMMY_PLAYER, STUN_BUFF, duration.toInt(), "thunderbolt", e.actor)
 			case ABIL.SHAKE
@@ -340,7 +337,7 @@ constant int PUSH_ID = 'A075'
 
 constant SFX_COUNT = 9
 
-public function init_Trap()
+@init1 function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
 	SFX_STRINGS[1] = "Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl"
 	SFX_STRINGS[2] = "Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl"

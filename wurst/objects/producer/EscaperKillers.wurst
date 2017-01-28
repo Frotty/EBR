@@ -99,5 +99,5 @@ public class AirKiller extends EscaperSensorSetup
 			let zdelta = AIR_HEIGHT - target.pos.z
 			if zdelta - COLL_SIZE_AIR <= sensorHeight and zdelta > 0
 				let escaper = target castTo Escaper
-				escaper.kill()
+				escaper.kill(this)
 		

@@ -5,6 +5,7 @@ import public GameConstants
 import HashMap
 import PlayerData
 import DummyRecycler
+import PickSystem
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 
@@ -65,6 +66,7 @@ public class RegionData
 	real turnSpeed = 1.75
 	vec3 gravity = vec3(0,0,-0.8)
 	
+	boolean easyMode = false
 	boolean visible = false
 	int specialAbil = 0
 	boolean bossRegion = false
@@ -133,7 +135,7 @@ public class RegionData
 				rdata.visible = true
 			edata.updateRegionData()
 		else if data instanceof UnitEntity
-			if not rdata.canBuild(data.owner) and not data instanceof Builder
+			if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector
 				printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 				data.terminate()
 								
@@ -178,7 +180,7 @@ public function getRegionData(vec2 pos) returns RegionData
 
 public RegionData array regions
 
-public function init_Regions()
+@init1 function init_Regions()
 	regions[0] = new RegionData(gg_rct_Region_024)
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
 	regions[0].setOwner(STAFF_PLAYER)
@@ -220,7 +222,7 @@ public function init_Regions()
 		let entity = GetTriggerUnit().getEntity()
 		if entity instanceof Escaper
 			(entity castTo Escaper).stop()
-			(entity castTo Escaper).kill()
+			(entity castTo Escaper).kill(null)
 		else if entity != null and GetTriggerUnit().getTypeId() != DUMMY_UNIT_ID
 			entity.terminate()
 	end)

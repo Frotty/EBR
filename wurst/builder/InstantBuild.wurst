@@ -33,115 +33,95 @@ public function isOrderBuildOrder( int o ) returns boolean
 		i++
 	return false
 
-public class BuildData
-	Builder b
-	vec2 tpos
-	int oId
-	
-	construct(Builder b, vec2 tpos, int oId)
-		this. b = b
-		this.tpos = tpos
-		this.oId = oId
-
-public function callback()
-	var t = GetExpiredTimer()
-	var data = t.getData() castTo BuildData
-	data.b.setPos(data.b.getPos())
-	var rdata = getRegionData(data.tpos)
-	if rdata != null and rdata.canBuild(data.b.owner)
-		switch data.oId
+public function instantBuild(Builder b, vec2 tpos, int id)
+	var rdata = getRegionData(tpos)
+	if rdata != null and rdata.canBuild(b.owner)
+		switch id
 			case buildorders[1]
-				new Jumper(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Jumper(tpos, b.owner)
 			case buildorders[2]
-				new RevivePoint(vec3(data.tpos.x,data.tpos.y, 0.), data.b.owner)
+				new RevivePoint(vec3(tpos.x,tpos.y, 0.), b.owner)
 			case buildorders[3]
-				new Texter(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Texter(tpos, b.owner)
 			case buildorders[5]
-				new Bombertower(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Bombertower(tpos, b.owner)
 			case buildorders[6]
-				new Vortex(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Vortex(tpos, b.owner)
 			case buildorders[8]
-				new Executer(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Executer(tpos, b.owner)
 			case buildorders[11]
-				new Booster(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Booster(tpos, b.owner)
 			case buildorders[12]
-				new UnitRemover(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new UnitRemover(tpos, b.owner)
 			case buildorders[13]
-				new Waypoint(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Waypoint(tpos, b.owner)
 			case buildorders[14]
-				new Teleporter(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Teleporter(tpos, b.owner)
 			case buildorders[15]
-				new Door(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Door(tpos, b.owner)
 			case buildorders[16]
-				new SmallObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new SmallObstacle(tpos, b.owner)
 			case buildorders[17]
-				new BigObstacle(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new BigObstacle(tpos, b.owner)
 			case buildorders[18]
-				new Tree(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new Tree(tpos, b.owner)
 			case buildorders[21]
-				new Spinner(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
+				new Spinner(tpos, b.owner)	
 			case buildorders[20]
-				new UnitCreator(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new UnitCreator(tpos, b.owner)
 			case buildorders[22]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,270.)
+				new Decoration(tpos, b.owner,id,270.)
 			case buildorders[23]
-				new Tracks(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
+				new Tracks(tpos, b.owner)	
 			case buildorders[24]
-				new Fountain(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
+				new Fountain(tpos, b.owner)	
 			case buildorders[25]
-				new Powernode(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
+				new Powernode(tpos, b.owner)	
 			case buildorders[26]
-				new Trap(vec2(data.tpos.x,data.tpos.y), data.b.owner)	
+				new Trap(tpos, b.owner)	
 			case buildorders[27]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,270.)	
+				new Decoration(tpos, b.owner,id,270.)	
 			case buildorders[28]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,270.)
+				new Decoration(tpos, b.owner,id,270.)
 			case buildorders[29]
-				new CongaLineHead(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new CongaLineHead(tpos, b.owner)
 			case buildorders[30]
-				new TerrainBlocker(vec2(data.tpos.x,data.tpos.y), data.b.owner)
+				new TerrainBlocker(tpos, b.owner)
 			case buildorders[31]
-				new VolcanoObstacle(data.tpos, data.b.owner)
+				new VolcanoObstacle(tpos, b.owner)
 			case buildorders[32]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[33]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[34]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[35]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[36]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[37]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[38]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[39]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[40]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[41]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[42]
-				new Decoration(vec2(data.tpos.x,data.tpos.y), data.b.owner,data.oId,GetRandomReal(0, 360))
+				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
 			case buildorders[43]
-				new MemoryAccessPedestal(data.tpos, data.b.owner)
-				
-		data.b.actor.abortOrder()
+				new MemoryAccessPedestal(tpos, b.owner)
 	else
-		DisplayTextToPlayer( data.b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
-	t.release()
-	destroy data
+		DisplayTextToPlayer( b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
+
+	b.actor.abortOrder()
 
 
 int array buildorders
 
-public function trigger.registerBuilderEvent(playerunitevent ev)
-	for i = 8 to 11
-		this.registerPlayerUnitEvent( Player(i), ev, null)
-
-
-init
+@init1 function init_InstantBuild()
 	buildorders[0] = 'n00G'
 	buildorders[1] = 'n00B' // Jumper
 	buildorders[2] = 'n000' // Revivepoint
@@ -186,4 +166,4 @@ init
 	buildorders[40] = 'n016' // Obelisk
 	buildorders[41] = 'n015' // Poison eggs
 	buildorders[42] = 'n017' // Remains
-	buildorders[43] = PED_ID // Remains
+	buildorders[43] = PED_ID // Pedestal

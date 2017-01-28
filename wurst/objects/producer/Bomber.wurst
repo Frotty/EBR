@@ -71,6 +71,6 @@ function checkOrder()
 					obj.realorder = true
 						
 	
-public function init_Bomber()
+@init1 function init_Bomber()
 	orderTrigger = CreateTrigger()
 	orderTrigger.addAction(function checkOrder)

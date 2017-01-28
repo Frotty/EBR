@@ -1,5 +1,6 @@
 package Builder
 import Entity
+import ClosureTimers
 import public BuilderConstants
 import public GameConstants
 import initlater RegionData
@@ -11,20 +12,14 @@ import initlater Weapon
 import initlater Boss
 import Boots
 
-JukeBox jukeBox = new JukeBox()
-
 public class Builder extends UnitEntity
 	int regionCount = 0
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super(CreateUnit(p, BUILDER_1, -6000, -7160, 0))
-		deactivate()
+		super(createUnit(p, BUILDER_1, vec2(-6000, -7160), angle(0)))
 		registerListeners()
 		this.setCurrentRegion()
-
-	override function update()
-		pos = actor.getPos().toVec3()
 
 	override function setNewActor(unit u)
 		super.setNewActor(u)
@@ -102,38 +97,32 @@ public class Builder extends UnitEntity
 
 	function onOrder()
 		var i = GetOrderTargetItem()
+		var u = GetOrderTargetUnit()
+		var orderPos = getOrderPos()
+
 		if i != null
-			if GetTriggerUnit().getUserData() > 0
-				var bdata = GetTriggerUnit().getUserData() castTo Builder
-				var rdata = getRegionData(i.getPos())
-				if rdata != null and i.getUserData() > 0
-					if rdata.canBuild(bdata.owner)
-						var idata = i.getEntity()
-						if idata.typeId != 0
-							idata.terminate()
-						else
-							i.remove()
+			orderPos = i.getPos()
+		else if u != null
+			orderPos = u.getPos()
+
+		let rdata = getRegionData(orderPos)
+
+		if rdata != RegionData.EMPTY_REGION and (rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or rdata.canBuild(owner))
+			if i != null and rdata.canBuild(owner)
+				if i.getEntity() != null
+					i.getEntity().terminate()
 				else 
 					RemoveItem(i)
 				actor.abortOrder()
+			else
+				var orderId = GetIssuedOrderId()
+				if isOrderBuildOrder(orderId)
+					doAfter(0.01, () -> instantBuild(this, orderPos, orderId))
+					actor.abortOrder()
+				else if OrderId2String(orderId) == "smart" or OrderId2String(orderId) == "move"
+					setPos(orderPos.toVec3())
 		else
-			widget w = GetOrderTarget()
-			var ord = GetIssuedOrderId()
-			var u = GetTriggerUnit()
-			var ox = GetOrderPointX()
-			var oy = GetOrderPointY()
-			if isOrderBuildOrder(ord)
-				getTimer()..start(0.01, function callback)
-				..setData((new BuildData(u.getUserData() castTo Builder,
-							 vec2(GetOrderPointX(), GetOrderPointY()), ord)castTo int))
-			else if OrderId2String(ord) == "smart" or OrderId2String(ord) == "move"
-				if w == null
-					if ( ox > 0. or ox < 0. )
-						SetUnitX(u,ox)
-						SetUnitY(u,oy)
-				else
-					SetUnitX(u,GetWidgetX(w))
-					SetUnitY(u,GetWidgetY(w))
+			actor.abortOrder()
 		
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == 'n008'
@@ -142,6 +131,6 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
-public function init_Builder()	
+@init2 function init_Builder()	
 	jukeBox.playNextMusic()
 	

@@ -1,8 +1,6 @@
 package Boots
 import ItemObject
 import Escaper
-import BuilderConstants
-import ClosureTimers
 
 public class Boots extends ItemObject
 	boolean picked = false

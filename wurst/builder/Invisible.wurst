@@ -28,5 +28,5 @@ function onChangeVisibility()
 				..removeAbility(INVIS_ID)
 				..addAbility(VIS_ID)
 	
-public function invis_init()
+@init1 function invis_init()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChangeVisibility())

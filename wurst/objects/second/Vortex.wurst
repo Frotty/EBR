@@ -1,37 +1,95 @@
 package Vortex
 import Escaper
+import ChannelAbilityPreset
 
-constant int ID = 'n013'
-constant int INC_ID = 'A04J'
-constant int DEC_ID = 'A04K'
+constant VORTEX_ID 		= 'n013'
+constant INC_GRAV_ID 	= 'A04J'
+constant DEC_GRAV_ID 	= 'A04K'
 
-constant real GRAV_RADIUS_SQ = 172225 //415
+constant real GRAV_RADIUS_SQ = 415.*415. //415
+
+int ZMODE_NONE
+int ZMODE_CYLI
+int ZMODE_HEMI
+
+enum ZMode
+	NONE
+	CYLINDER
+	HEMISPHERE
 
 public class Vortex extends UnitEntity
 	real gravity = 2.
+	ZMode zMode = ZMode.NONE
 	
 	construct(vec2 pos, player owner)
-		super(CreateUnit(owner, ID, pos.x, pos.y, 0) )
+		super(CreateUnit(owner, VORTEX_ID, pos.x, pos.y, 0) )
 		this.setCurrentRegion()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor..addAbility(ZMODE_NONE)..addAbility(ZMODE_CYLI)..addAbility(ZMODE_HEMI)
 		
 	override function update()
 		for e from this.getCurrentRegion().getEscapers()
-			if pos.toVec2().distanceToSq( e.pos.toVec2() ) < GRAV_RADIUS_SQ and not e.flying
-				var angl = e.pos.toVec2().angleTo(pos.toVec2())
-				e.otherVel += vec3( Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0 )
+			switch zMode
+				case ZMode.NONE
+					if pos.toVec2().distanceToSq(e.pos.toVec2()) < GRAV_RADIUS_SQ and not e.flying
+						var angl = e.pos.toVec2().angleTo(pos.toVec2())
+						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
+				case ZMode.CYLINDER
+					if pos.toVec2().distanceToSq(e.pos.toVec2()) < GRAV_RADIUS_SQ
+						var angl = e.pos.toVec2().angleTo(pos.toVec2())
+						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
+				case ZMode.HEMISPHERE
+					if pos.distanceToSq(e.pos) < GRAV_RADIUS_SQ
+						var angl = e.pos.toVec2().angleTo(pos.toVec2())
+						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
 		
-	static function onCast() returns boolean
+	function onCast()
 		var id = GetSpellAbilityId()
-		var vdata = GetTriggerUnit().getUserData() castTo Vortex
 		switch id
-			case INC_ID
-				if vdata.gravity < 25.
-					vdata.gravity += .5
-					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
-			case DEC_ID
-				if vdata.gravity > -25.
-					vdata.gravity -= .5
-					createTTEx(vdata.pos, vec2(0,0.06), "Gravity : " + vdata.gravity.toString(), 12,  2., colorA(255,255,255,0), vdata.owner  )
-		return false
+			case INC_GRAV_ID
+				if gravity < 25.
+					gravity += .5
+					createTTEx(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
+			case DEC_GRAV_ID
+				if gravity > -25.
+					gravity -= .5
+					createTTEx(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
+			case ZMODE_NONE
+				zMode = ZMode.NONE
+				createTTEx(pos, vec2(0,0.06), "Z Mode: None", 12,  2., colorA(255,255,255,0), owner)
+			case ZMODE_CYLI
+				zMode = ZMode.CYLINDER
+				createTTEx(pos, vec2(0,0.06), "Z Mode: Cylinder", 12,  2., colorA(255,255,255,0), owner)
+			case ZMODE_HEMI
+				zMode = ZMode.HEMISPHERE
+				createTTEx(pos, vec2(0,0.06), "Z Mode: Hemisphere", 12,  2., colorA(255,255,255,0), owner)
 
+@objectgen function genAbils()
+	ZMODE_NONE = ABIL_ID_GEN.next()
+	ZMODE_CYLI = ABIL_ID_GEN.next()
+	ZMODE_HEMI = ABIL_ID_GEN.next()
+
+	if compiletime
+		new ChannelAbilityPreset(ZMODE_NONE, 1, true)
+		..setName("Set no Z Mode")
+		..presetTooltipNormal((int levle) -> "Set to |cffFF9C29normal |rmode.")
+		..presetTooltipNormalExtended((int levle) -> "In this mode escapers are only affected while on ground")
+		..presetIcon("BTNSacrifice.blp")
+		..presetButtonPosNormal(0, 1)
+		..presetHotkey("A")
+
+		new ChannelAbilityPreset(ZMODE_CYLI, 1, true)
+		..setName("Set Cylinder Z Mode")
+		..presetTooltipNormal((int levle) -> "Set to |cff0884BDcylinder |rmode.")
+		..presetTooltipNormalExtended((int levle) -> "In this mode escapers are affected also while flying, at any height")
+		..presetIcon("BTNShockWave.blp")
+		..presetButtonPosNormal(1, 1)
+		..presetHotkey("S")
+
+		new ChannelAbilityPreset(ZMODE_HEMI, 1, true)
+		..setName("Set Hemisphere Z Mode")
+		..presetTooltipNormal((int levle) -> "Set to |cff0884BDhemisphere |rmode.")
+		..presetTooltipNormalExtended((int levle) -> "In this mode escapers are affected in a hemisphere above the center")
+		..presetIcon("BTNShockWave.blp")
+		..presetButtonPosNormal(2, 1)
+		..presetHotkey("D")

@@ -16,5 +16,5 @@ function onRemoveObject()
 		else
 			GetSpellAbilityUnit().remove()
 	
-public function init_remove()
+@init1 function init_remove()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onRemoveObject())

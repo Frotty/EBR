@@ -98,7 +98,7 @@ public class Powernode extends SetupObject
 							switch l.ltype
 								case LinkType.KILL
 									AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
-									e.kill()
+									e.kill(this)
 								case LinkType.BOUNCE
 									calBounce(l.target.pos,e, (2.00 + bounciness.get()))
 								case LinkType.BOUNCE_DIODE

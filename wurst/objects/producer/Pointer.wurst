@@ -84,7 +84,7 @@ function getSelectedPointers(player p) returns group
 	ENUM_GROUP.clear()
 	return g	
 	
-public function init_Pointer()
+@init1 function init_Pointer()
 	trigger t = CreateTrigger()
 	for int i = 8 to 10
 		TriggerRegisterPlayerChatEvent(t,Player(i), "-setangle ", false)

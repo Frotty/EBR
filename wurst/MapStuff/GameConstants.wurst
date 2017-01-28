@@ -1,12 +1,11 @@
 package GameConstants
 import initlater PlayerData
-public string array mbPic
 public string array names
 public string array tags
 public integer array expBounds
 public string array ranks
 
-public constant string MAP_VER = "EBR 0.86"
+public constant string MAP_VER = "EBR 0.87"
 
 public constant STAFF_PLAYER = players[14]
 
@@ -32,16 +31,11 @@ public enum COLOR
 	BROWN
 
 
-init
-	mbPic[ 0 ] = "ReplaceableTextures\\CommandButtons\\BTNPriest.blp"
-	mbPic[ 1 ] = "ReplaceableTextures\\CommandButtons\\BTNFootman.blp"
-	mbPic[ 2 ] = "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp"
-	mbPic[ 3 ] = "ReplaceableTextures\\CommandButtons\\BTNIceTrollBeserker.blp"
-
+@init1 function init_GameConstants()
 	names   [0] = "Frotty"
-	tags    [0] = "|cffEF6B21[God]"
+	tags    [0] = "|cffEF6B21[A]"
 	names   [1] = "FrottyZ"
-	tags    [1] = "|cffEF6B21[God]"
+	tags    [1] = "|cffEF6B21[A]"
 	names   [2] = "Feuerblume"
 	tags    [2] = "|cff9C94E6[Tester]"
 	names   [3] = "jkkopp"

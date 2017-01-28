@@ -146,7 +146,7 @@ public class Door extends StaticSetupObject
 
 	
 
-public function init_Door()
+@init1 function init_Door()
 	//color id		unit id
 	KEY_COLOR_ID[0] = 'I009' //white
 	KEY_COLOR_ID[1] = 'I00C' //red

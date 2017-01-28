@@ -1,7 +1,7 @@
 package Questlog
 
 
-init
+@init1 function init_Quest()
 	var q = CreateQuest()
 	QuestSetTitle(q, "Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
@@ -27,5 +27,8 @@ init
 							+ "-hiveworkshop ppl\n"
 							+ "-old b.net friends whos names I forgot ;( good ol' times\n"
 							+ "-Geronimo\n"
-							+ "-The koreans (pockpoong, kagu, sayack)\n"
-							+ "-The pubs who continue joining to this day\n" )
+							+ "-The koreans: pockpoong, kagu, sayack\n"
+							+ "-Gamestargamer"
+							+ "-Garfield1337\n"
+							+ "-Masterstryke\n"
+							+ "-SFan042\n" )

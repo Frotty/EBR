@@ -83,6 +83,16 @@ public class Jumper extends StaticBaseObject
 					goos[goocounter] = goo
 					goocounter++
 					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.BLUGOO castTo int).val )
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property("jforce", (jumpForce.get() * 100.).toInt().toString()))
+		return json
+
+	override function deserialize(Json json)
+		super.deserialize(json)
+		jumpForce.setVal(json.getReal("jforce") / 100.)
+		print("loaded jumper: " + jumpForce.get().toString())
 				
 	ondestroy
 		for i = 0 to 4

@@ -1,11 +1,14 @@
 package UnitRemover
 import BaseObject
-import SetupObject
 import Remove
 
 constant int ID = 'n003'
 
 public class UnitRemover extends StaticBaseObject
+
+	construct(unit existing)
+		super(existing.getPos(), existing, 64., function UnitRemover.removeUnit, CODE_NULL )
+		clearQuestionmark()
 
 	construct( vec2 pos, player owner)
 		super( pos, CreateUnit(owner, ID, pos.x, pos.y, 0), 64., function UnitRemover.removeUnit, CODE_NULL )

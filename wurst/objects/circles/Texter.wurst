@@ -109,7 +109,7 @@ function getColorFromString(string s) returns color
 				tempstring = ""
 	return stringcolor
 	
-public function init_Texter()
+@init1 function init_Texter()
 	trigger textrig = CreateTrigger()
 	trigger coltrig = CreateTrigger()
 	trigger shotrig = CreateTrigger()

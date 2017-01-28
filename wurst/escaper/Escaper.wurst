@@ -11,6 +11,8 @@ import initlater ReviveManager
 import public initlater RegionData
 import Projectile
 import ErrorHandling
+import JukeBox
+import initlater Builder
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -49,15 +51,15 @@ public abstract class Escaper extends UnitEntity
 	unit revivetomb = null
 	
 	construct( vec3 pos, player owner, int typ )
-		super(createUnit(owner, typ, pos, angle(0)))
+		super(createUnit(owner, typ, pos + vec3(0,0,32), angle(0)))
 		actor..addAbility('Aloc')
 		..hide()
 		..removeAbility('Aloc')
 		..show()
 		SetUnitPropWindow(actor, 60.)
-		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_POINT_ORDER )
-		TriggerRegisterUnitEvent( slideAssist, actor, EVENT_UNIT_ISSUED_TARGET_ORDER )
-		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> changeAngle())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> changeAngle())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill(null))
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		updateRegionData()
 		escapers.add(this)
@@ -85,8 +87,30 @@ public abstract class Escaper extends UnitEntity
 			poisonEffect.destr()
 			poisoned = false
 	
-	function kill()
-		if alive
+	function kill(UnitEntity killer)
+		if this.getCurrentRegion().easyMode and actor.isAlive()
+			setPos(pos-getRealVel()*1.05)
+			var vel = getRealVel()
+			if onUnwalkable
+				let norm = vel.norm() * 16
+				let tt1un = GetTerrainType(pos.x - norm.x, pos.y) != this.getCurrentRegion().getTypeSet().unwalkableId
+				let tt2un = GetTerrainType(pos.x+vel.x, pos.y - norm.y) != this.getCurrentRegion().getTypeSet().unwalkableId
+				if tt1un
+					vel.x = -vel.x*1.25
+				if tt2un
+					vel.y = -vel.y*1.25
+				setVel(vel)
+				if sliding
+					actor.setFacing(vel.toVec2().getAngle())
+			else
+				if killer != null
+					let ang = killer.getPos().angleTo2d(pos)
+					addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
+				else
+					setVel(getRealVel() * -1.75)
+			flashEffect(Other.boltimpact, pos)
+			actor.damageTarget(actor, 85)
+		else if alive
 			alive = false
 			actor.kill()
 			manageRevive(this)
@@ -107,7 +131,7 @@ public abstract class Escaper extends UnitEntity
 	
 	override function onGroundHit()
 		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.BLUGOO castTo int) and vel.z.abs() > 5
-			vel.z = -vel.z
+			vel.z = -vel.z*1.5
 			return
 		actor.setPropWindow(60.)
 		pos.z = .1
@@ -132,17 +156,17 @@ public abstract class Escaper extends UnitEntity
 			if alive
 				if rdata.allowCut
 					let rv = getRealVel()
-					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 12)
-					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 12)
+					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 18)
+					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 18)
 					let t1type = GetTerrainType(lpos.x, lpos.y)
 					let t2type = GetTerrainType(rpos.x, rpos.y)
 					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and
 						(t1type == rdata.getTypeSet().unwalkableId or t1type == 'Ibkb' or t1type == RUNES)
-						kill()
 						onUnwalkable = true
+						kill(null)
 				else
-					kill()
 					onUnwalkable = true
+					kill(null)
 		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
 			let angl = actor.getFacingAngle()
 			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
@@ -171,17 +195,14 @@ public abstract class Escaper extends UnitEntity
 			if hp > .405
 				actor.setHP(hp-this.getCurrentRegion().lavaDmg)
 			else if alive
-				kill()
+				kill(null)
 		if poisoned
 			var hp2 = actor.getHP()
 			if hp2 > .405
 				actor.setHP(hp2-this.getCurrentRegion().poisonDmg)
 			else if alive
-				kill()
+				kill(null)
 		
-		pos += otherVel
-		otherVel = vec2(0,0)
-	
 	override function update()
 		let newPos = actor.getPos()
 		walkVel = newPos-pos.toVec2()
@@ -189,6 +210,8 @@ public abstract class Escaper extends UnitEntity
 		physicsUpdate(this)
 		pos += vel
 		pos += slideVelocity * (1-speedFactor)
+		pos += otherVel
+		otherVel = vec2(0,0)
 		if sliding
 			setPos(pos)
 		else
@@ -200,7 +223,7 @@ public abstract class Escaper extends UnitEntity
 			actor.setXYZ(pos)
 		else 
 			setPos(currentRevivepoint.toVec3())
-			kill()
+			kill(null)
 
 	function getRealVel() returns vec3
 		return vel + slideVelocity + otherVel + walkVel
@@ -258,8 +281,7 @@ public abstract class Escaper extends UnitEntity
 			
 	function updateRegionData()
 		let currentReg = this.getCurrentRegion()
-		this.setCurrentRegion()
-		let newReg = this.getCurrentRegion()
+		let newReg = this.setCurrentRegion()
 		if newReg != null and newReg != currentReg
 			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
@@ -272,32 +294,30 @@ public abstract class Escaper extends UnitEntity
 				actor.removeAbility(JUMP_SPELL)
 			actor.setTurnSpeed(newReg.turnSpeed)
 
-	static function changeAngle()
-		var u = GetTriggerUnit()
+	function changeAngle()
 		let id = GetIssuedOrderId()
-		Escaper e = u.getUserData() castTo Escaper
 		var w = GetOrderTarget()
 		let orderPos = getOrderPos()
 		let widgetPos = w.getPos()
-		var ttype = GetTerrainType(e.pos.x, e.pos.y)
+		var ttype = GetTerrainType(pos.x, pos.y)
 		if ttype == CONTROLLABLEICE
 			if w == null
-				e.actor.setFacing(e.pos.angleTo2d(orderPos))
+				actor.setFacing(pos.angleTo2d(orderPos))
 			else
-				e.actor.setFacing(e.pos.angleTo2d(widgetPos))
+				actor.setFacing(pos.angleTo2d(widgetPos))
 		else if ttype == REVICE
 			if OrderId2String(id) == "lightningshield"
-				e.actor.setFacing(e.pos.angleTo2d(orderPos))
+				actor.setFacing(pos.angleTo2d(orderPos))
 			else
 				if w == null
-					e.actor.setFacing(e.pos.angleTo2d(orderPos)-(180).asAngleDegrees())
+					actor.setFacing(pos.angleTo2d(orderPos)-(180).asAngleDegrees())
 				else
-					e.actor.setFacing(e.pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
+					actor.setFacing(pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
 				
 	static function neutralDeath()
 		var escaper = GetTriggerUnit().getUserData() castTo Escaper
 		if GetKillingUnit() != null
-			escaper.kill()
+			escaper.kill(null)
 			
 	static function onCastEvent()
 		let data = GetTriggerUnit().getUserData() castTo Escaper
@@ -313,9 +333,9 @@ public abstract class Escaper extends UnitEntity
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Other.aneucaster, pos).destr()
 				if sliding
-					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 12))
+					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 11.5))
 				else
-					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 12))
+					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 11.5))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
 			orb.addVel(getRealVel()*0.25)
@@ -347,6 +367,8 @@ public abstract class Escaper extends UnitEntity
 				if revivetomb != null
 					revivetomb.remove()
 				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
+		else
+			jukeBox.checkSpell(id)
 			
 	ondestroy
 		lavaEffect.destr()
@@ -371,7 +393,6 @@ class OrbProjectile extends Projectile
 
 public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
 		
-trigger slideAssist
 trigger neutralDeathTrig
 trigger spellTrig
 
@@ -379,9 +400,7 @@ function correctRegion()
 	for e in escapers
 		e.updateRegionData()
 		
-init
-	slideAssist = CreateTrigger()
-	slideAssist.addAction(function Escaper.changeAngle)
+@init2 function init_Escaper()
 	neutralDeathTrig = CreateTrigger()
 	neutralDeathTrig.addAction(function Escaper.neutralDeath)
 	getTimer().startPeriodic(1., function correctRegion)

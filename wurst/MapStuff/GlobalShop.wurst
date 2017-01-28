@@ -14,6 +14,6 @@ public class GlobalShop
 		actor = CreateUnit(owner, SHOP_ID, x, y, 270. )
 
 
-public function init_GlobalShop()
+@init2 function init_GlobalShop()
 	shop = new GlobalShop(-6530,-7050,Player(12))
 

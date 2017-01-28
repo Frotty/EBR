@@ -27,5 +27,5 @@ function update()
 
 constant TIMER_PERIOD = 0.1
 
-init
+@init2 function init_Revive()
 	CreateTimer().startPeriodic(TIMER_PERIOD, () -> update())

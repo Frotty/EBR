@@ -12,6 +12,8 @@ function onCommandChat()
 	let p = GetTriggerPlayer()
 	let id = p.getId()
 	let pd = pData[id]
+	if not pd.picked
+		return
 	var cstr = str.substring(1, str.indexOf(" "))
 	switch cstr
 		case "rename"
@@ -32,7 +34,7 @@ function onCommandChat()
 			else
 				pd.zCam = nstr.toInt() * 1.
 				if pd.zCam > 3000
-					pd.zCam = 2500
+					pd.zCam = 3000
 					DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Maximum Zoom is 3000")
 				else if pd.zCam < 500
 					pd.zCam = 500
@@ -74,8 +76,10 @@ function onCommandChat()
 					let id2 = tr.getOwner().getId()
 					let pd2 = pData[id2]
 					pd2.addXp(10000, true)
+					print("grant1")
 				else	
 					pd.addXp(10000, true)
+					print("grant2")
 		case "d"
 			var debuglvl = str.substring(str.indexOf(" ") + 1, str.length()).toInt() castTo Loglevel
 			DEBUG_LEVEL = debuglvl
@@ -89,7 +93,7 @@ function onCommandChat()
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode, -rename [name]")
 
-init
+@init1 function init_Commands()
 	trigger trg = CreateTrigger()
 	for i = 0 to 11
 		trg.registerPlayerChatEvent(Player(i), "-", false)

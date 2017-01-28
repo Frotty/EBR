@@ -8,10 +8,10 @@ import PickSystem
 import initlater TerrainModder
 import UnitProducer
 import RevivePointModifier
-import PlayerMemoryData
 import ClosureTimers
 import CodeManager
-import EscaperClasses
+import Playerfile
+import PlayerMemoryData
 
 trigger leaveTrig
 
@@ -21,47 +21,57 @@ public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
+public enum ROLE
+	USER
+	MOD
+	CREATOR
+
 public class PlayerData
 	int id
+	string hash
 	player p
 	string name
 	string mbname
 	string rank = "Newbie"
 	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 	boolean admin = false
-
+	boolean checked = false
 	Escaper escaper
 	Builder builder
 	RevivePointModifier revmod
 
 	int XP = 40
-	effect lvlfx
-	
+	effect lvlfx = null
+	effect tagfx = null
+
 	boolean picked = false
 	boolean localFilesEnabled = false
+	boolean localFilesChecked = false
 	int lastExpGain = 0
-	
+	int lastSave = -1
 	real zCam = 1600.
 	
 	TerrainModder tmod 
 	UnitProducer prod
-	
-	PMData pmData
+
+	Playerfile pfile = null
+	PMData pmdata = null
+	Selector selector = null
 	
 	construct (player p)
 		this.p = p
 		id = GetPlayerId(p)
 		pData[id] = this
 		name = GetPlayerName(p)
+		hash = name.getHash().toString()
 		mbname = name
 		if mbname == "Frotty"
 			admin = true
-		for int i = 0 to 999
-			if names[i] == null
-				break
+		int i = 0
+		while names[i] != null
 			if mbname.toLowerCase() == names[i].toLowerCase()
 				mbname = tags[i] + "|r" + p.getNameColored()
-				break
+			i++
 		mbname = p.getNameColored()
 		allPlayers.add(this)
 		if id > 7
@@ -88,10 +98,15 @@ public class PlayerData
 	function setXp(int amount)
 		printLog(Loglevel.DEBUG, "set current xp:" + XP.toString())
 		XP = amount
+		updateRank()
 		printLog(Loglevel.DEBUG, "set new xp:" + XP.toString())
 	
 	function updateRank()
 		int i = 0
+		if admin
+			rank = "|cffADD642*Admin*"
+			if tagfx == null
+				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
 		if lvlfx != null
 			lvlfx.destr()
 		while XP >= expBounds[i]
@@ -105,36 +120,59 @@ public class PlayerData
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
 		else if XP > 1000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
+
+		if XP > 400 and UnitHasItemOfTypeBJ(escaper.actor, 'I002')
+			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
+			UnitAddItemById(escaper.actor,'I002')
 		
-		if admin
-			rank  = "|cffADD642*Creator*"
-			lvlfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+		
+
+		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
+			lastSave = minutes*60+seconds
+			printLog(Loglevel.DEBUG, "Playerfile saving")
+			savePlayerfile(this)
 
 		
+		
 	ondestroy
-		DisplayTimedTextToPlayer( GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
-		PlaySoundBJ( gg_snd_QuestFailed )
+		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
+		PlaySoundBJ(gg_snd_QuestFailed)
+		if selector != null
+			destroy selector
 		if escaper != null
 			if escaper.alive
 				escaper.terminate()
 			else
 				escaper.left = true
 			escaper = null
-		allPlayers.remove(this)
-		pData[id] = null
-		if isBuilder(p)
+		
+		// Give remaining builders control
+		if builderPlayers.getSize() > 1 and isBuilder(p)
 			if builder != null
 				builder.terminate()
-			for int i=0 to 21
+			for int i=0 to 22
 				if regions[i].getPermission(this.p) == Permission.OWNER
 					for j = 8 to 11
 						regions[i].allow(players[j])
+			GroupEnumUnitsOfPlayer(ENUM_GROUP, p, Filter(() -> GetFilterUnit().getTypeId() == 'n00A'))
+			for setup from ENUM_GROUP
+				setup.setOwner(builderPlayers.pop().p, true)
+		
+		allPlayers.remove(this)
+		if isBuilder(p)
 			builderPlayers.remove(this)
 		else
 			escaperPlayers.remove(this)
+		
+		if not localFilesChecked
+			onPlayerSynced()
+		
+		pData[id] = null
 		rebuildBoard()
 		if revmod != null
 			destroy revmod
+		if tagfx != null
+			tagfx.destr()
 		
 function rebuildBoard()
 	playerboard = new Board(allPlayers.getSize()+1,3)
@@ -195,10 +233,7 @@ function playerLeft()
 	var pd = pData[p.getId()]
 	destroy pd
 
-init
-	doAfter(0.01, () -> initPlayers())
-	
-public function initPlayers()
+@init1 function initPlayers()
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11
@@ -206,7 +241,7 @@ public function initPlayers()
 			pData[i] = new PlayerData(players[i])
 			leaveTrig.registerPlayerEvent(players[i], EVENT_PLAYER_LEAVE)
 
-	doAfter(0.2, () -> rebuildBoard())
+	TimerStart(CreateTimer(), .1, false, () -> rebuildBoard())
 	TimerStart(CreateTimer(), 1., true, function setTime)
 	
 	for pd in builderPlayers
@@ -236,21 +271,10 @@ public function initPlayers()
 		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 
-   
-public function loadPlayerDatas()
-	// doAfter(8.0, () -> begin 
-	// 	printTimed("Please stay tuned while localfiles are being checked..", 15)
-	// 	TriggerSyncStart()
-	// 	printTimed("Ok..", 15)
-	// 	for pd in allPlayers
-	// 		printTimed(pd.mbname + " checking", 5)
-	// 		checkLocalFiles(pd)
-	// 		printTimed(pd.mbname + " (" + pd.localFilesEnabled.toString() + ")", 5)
-
-	// 	for pd in allPlayers
-	// 		pd.loadPlayerFile()
-	// 		printTimed("Loaded XP: " + pd.XP.toString(), 5)
-	// end)
+public function checkPlayerLocalFiles()
+	doAfter(0.1, () -> begin
+		doSequentialSync()
+	end)
 
 public int minutes = 0
 public int seconds = 0
