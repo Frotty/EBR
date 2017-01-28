@@ -121,7 +121,7 @@ public class PlayerData
 		else if XP > 1000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
 
-		if XP > 400 and UnitHasItemOfTypeBJ(escaper.actor, 'I002')
+		if XP > 400 and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			UnitAddItemById(escaper.actor,'I002')
 		

@@ -6,14 +6,13 @@ package Questlog
 	QuestSetTitle(q, "Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
 	QuestSetDescription(q, "Available Commands:\n"
-							+ "-intro (starts a short introduction sequence for your role\n"
 							+ "-clear (clears textmessages)\n"
+							+ "-smode (Toggles revive selection, also effects camera pan)\n"
 							+ "-cam [value] (sets camera distance)\n"
 							+ "-cam lock (locks the camera onto your escaper)\n"
 							+ "-cam unlock (unlocks the camera)\n"
 							+ "-frev (revives your escaper, when he doesn't revive anymore due to a bug)\n"
-							+ "-info (shows basic information about the current Area)\n" 
-							+ "-smode (Toggles revive selection, also effects camera pan)\n")
+							+ "-info (shows basic information about the current Area)\n")
 	q = CreateQuest()
 	
 	QuestSetTitle(q, "Credits")

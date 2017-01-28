@@ -60,7 +60,7 @@ class CongaSegment
 
 public class CongaLineHead extends SetupObject
 	CongaSegment firstSegment = null
-	CongaMode cmode = CongaMode.PENDULUM
+	CongaMode cmode = CongaMode.LOOSE
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
@@ -100,7 +100,6 @@ public class CongaLineHead extends SetupObject
 	function onCast()
 		var id = GetSpellAbilityId()
 		var t = GetSpellTargetUnit()
-		print("cast")
 		switch id
 			case ADD_ID
 				var ed = t.getUserData() castTo UnitEntity
@@ -119,7 +118,6 @@ public class CongaLineHead extends SetupObject
 				else
 					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner)
 			case CONGA_STRICT_ID
-				print("strict")
 				cmode = CongaMode.STRICT
 			case CONGA_LOOSE_ID
 				cmode = CongaMode.LOOSE

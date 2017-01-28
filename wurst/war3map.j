@@ -302,7 +302,6 @@ function s__SyncData__allocate takes nothing returns integer
         set this=si__SyncData_I
     endif
     if (this>8190) then
-        call DisplayTimedTextToPlayer(GetLocalPlayer(),0,0,1000.,"Unable to allocate id for an object of type: SyncData")
         return 0
     endif
 
@@ -313,10 +312,8 @@ endfunction
 //Generated destructor of SyncData
 function s__SyncData_deallocate takes integer this returns nothing
     if this==null then
-            call DisplayTimedTextToPlayer(GetLocalPlayer(),0,0,1000.,"Attempt to destroy a null struct of type: SyncData")
         return
     elseif (si__SyncData_V[this]!=-1) then
-            call DisplayTimedTextToPlayer(GetLocalPlayer(),0,0,1000.,"Double free of type: SyncData")
         return
     endif
     set si__SyncData_V[this]=si__SyncData_F
@@ -386,17 +383,17 @@ endfunction
             local unit last
             local player p
 
-//#             static if  SyncInteger___ALLOW_DEBUGGING and true  then
-                    if ( SyncInteger___OnSelectTrigger == null ) then
-                        call BJDebugMsg("SyncInteger_SyncInteger: OnSelectTrigger is destroyed")
-                    endif
-              
-                    if ( not IsSyncEnabled() ) then
-                        call BJDebugMsg("SyncInteger_SyncInteger: OnSelectTrigger is disabled")
-                    endif
-//#             endif
+
+
+
+
+
+
+
+
+
       
-            if ( not IsSyncEnabled() ) then
+            if ( not (IsTriggerEnabled(SyncInteger___OnSelectTrigger)) ) then // INLINED!!
                 return false
             endif
       
@@ -477,12 +474,12 @@ endfunction
                 set SyncInteger___OnSelectTrigger=null
                 set SyncInteger___EventTrig=null
 
-//#                 static if not LIBRARY_GroupUtils then
-                        call DestroyGroup(SyncInteger___SelectionGroup)
-                        set SyncInteger___SelectionGroup=null
-//#                 endif
+
+                    call DestroyGroup(SyncInteger___SelectionGroup)
+                    set SyncInteger___SelectionGroup=null
+
             else
-                call SyncIntegerDisable()
+                call DisableTrigger(SyncInteger___OnSelectTrigger) // INLINED!!
             endif
       
             loop
@@ -496,34 +493,34 @@ endfunction
         function SyncInitialize takes nothing returns nothing
             local integer i= 0
       
-//#             static if  SyncInteger___ALLOW_DEBUGGING and true  then
-                    if ( SyncInteger___OnSelectTrigger == null ) then
-                        call BJDebugMsg("SyncInteger_SyncInitialize: OnSelectTrigger is null and has no events attached to it")
-                    endif
-//#             endif
+
+
+
+
+
       
             loop
                 exitwhen i >= SyncInteger___DUMMY_COUNT
                 set SyncInteger___SyncIntegerDummy[i]=CreateUnit(SyncInteger___DUMMY_PLAYER, SyncInteger___DUMMY_ID, 1000000, 1000000, i)
           
-//#                 static if  SyncInteger___ALLOW_DEBUGGING and true  then
-                        if ( i == 0 ) then // display once
-                            if ( SyncInteger___SyncIntegerDummy[i] == null ) then
-                                call BJDebugMsg("SyncInteger_SyncInitialize: Dummy unit is null (check DUMMY_ID)")
-                            endif
-                  
-                            if ( GetUnitAbilityLevel(SyncInteger___SyncIntegerDummy[i], 'Aloc') > 0 ) then
-                                call BJDebugMsg("SyncInteger_SyncInitialize: Dummy units must be selectable (detected locust)")
-                                call UnitRemoveAbility(SyncInteger___SyncIntegerDummy[i], 'Aloc')
-                            endif
-                        endif
-//#                 endif
+
+
+
+
+
+
+
+
+
+
+
+
             
-//#                 static if  LIBRARY_UnitDex  then
-//#                     set SyncInteger___AttachedInteger[GetUnitId(SyncInteger___SyncIntegerDummy[i])] = i + 1
-//#                 else
-                        call SetUnitUserData(SyncInteger___SyncIntegerDummy[i], i + 1)
-//#                 endif
+
+
+
+                    call SetUnitUserData(SyncInteger___SyncIntegerDummy[i], i + 1)
+
 
                 call UnitAddAbility(SyncInteger___SyncIntegerDummy[i], SyncInteger___DUMMY_ABILITY)
                 call PauseUnit(SyncInteger___SyncIntegerDummy[i], true)
@@ -542,22 +539,22 @@ endfunction
             local boolean isNeg= ( SyncInteger___SyncIntegerDummy[SyncInteger___DUMMY_COUNT - 1] == u )
             local integer index
 
-//#             static if  LIBRARY_UnitDex  then
-//#                 set index = SyncInteger___AttachedInteger[GetUnitId(u)] - 1
-//#             else
-                    set index=GetUnitUserData(u) - 1
-//#             endif
+
+
+
+                set index=GetUnitUserData(u) - 1
+
 
             if ( index == - 1 or SyncInteger___SyncIntegerDummy[index] != u ) then
                 set u=null
                 return false
             endif
 
-//#             static if  SyncInteger___ALLOW_DEBUGGING and true  then
-                    if ( SyncInteger___OnSelectTrigger == null ) then
-                        call BJDebugMsg("SyncInteger_SyncInteger: OnSelectTrigger is null")
-                    endif
-//#             endif
+
+
+
+
+
       
             if ( isNeg ) then
                 set SyncInteger___SyncData[id]=SyncInteger___SyncData[id] * - 1
@@ -605,21 +602,21 @@ endfunction
 
             call TriggerAddCondition(SyncInteger___OnSelectTrigger, Filter(function SyncInteger___OnSelect))
       
-//#             static if  SyncInteger___AUTO_INIT  then
-                    call TimerStart(CreateTimer(), 0, false, function SyncInitialize)
-//#             endif
-      
-//#             static if  LIBRARY_GroupUtils  then
-//#                 set SyncInteger___SelectionGroup=ENUM_GROUP
-//#             else
-                    set SyncInteger___SelectionGroup=CreateGroup()
-//#             endif
 
-//#             static if  LIBRARY_PlayerUtils  then
-//#                 set SyncInteger___LocalPlayer=User.Local
-//#             else
-                    set SyncInteger___LocalPlayer=GetLocalPlayer()
-//#             endif
+                call TimerStart(CreateTimer(), 0, false, function SyncInitialize)
+
+      
+
+
+
+                set SyncInteger___SelectionGroup=CreateGroup()
+
+
+
+
+
+                set SyncInteger___LocalPlayer=GetLocalPlayer()
+
         endfunction
 
 
@@ -759,13 +756,13 @@ endfunction
             local integer p= 0
              
             loop
-//#                 static if  LIBRARY_PlayerUtils  then
-//#                     exitwhen i == User.AmountPlaying
-//#                     set p = User.fromPlaying(i).id
-//#                 else
-                        exitwhen i == bj_MAX_PLAYER_SLOTS
-                        set p=i
-//#                 endif
+
+
+
+
+                    exitwhen i == bj_MAX_PLAYER_SLOTS
+                    set p=i
+
 
                 call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + p)
                 call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + p)
@@ -951,9 +948,9 @@ endfunction
                 call s__SyncData_fireEvent(this,s__SyncData_onError[this])
             endif
 
-//#             static if  Sync___STOP_BUFFERING_ON_ERROR  then
-                    set s__SyncData_buffering[this]=false
-//#             endif
+
+                set s__SyncData_buffering[this]=false
+
         endfunction
      
         function s__SyncData_readBuffer takes nothing returns nothing
@@ -988,20 +985,20 @@ endfunction
                 // if the player has left, destroy the instance
                 if ( GetPlayerSlotState(s__SyncData_from[data]) != PLAYER_SLOT_STATE_PLAYING ) then
                     call s__SyncData_error(data,SYNC_ERROR_PLAYERLEFT)
-//#                     static if  Sync___AUTO_DESTROY_ON_LEAVE  then
-                            call s__SyncData_destroy(data)
-//#                     endif
+
+                        call s__SyncData_destroy(data)
+
                 endif
 
                 set b=true
 
                 // make sure all integers have been synced
-                if ( s__SyncData_intCount[data] > 0 and not s__SyncData_hasInt(data,s__SyncData_intCount[data] - 1) ) then
+                if ( s__SyncData_intCount[data] > 0 and not (HaveStoredInteger(s__SyncData_Cache[0], s__SyncData_mkey[(data)], s__SyncData_getKey((s__SyncData_intCount[data] - 1)))) ) then // INLINED!!
                     set b=false
                 endif
 
                 // make sure all reals have been synced
-                if ( s__SyncData_realCount[data] > 0 and not s__SyncData_hasReal(data,s__SyncData_realCount[data] - 1) ) then
+                if ( s__SyncData_realCount[data] > 0 and not (HaveStoredReal(s__SyncData_Cache[0], s__SyncData_mkey[(data)], s__SyncData_getKey((s__SyncData_realCount[data] - 1)))) ) then // INLINED!!
                     set b=false
                 endif
 
@@ -1011,7 +1008,7 @@ endfunction
                 endif
 
                 // and booleans
-                if ( s__SyncData_boolCount[data] > 0 and not s__SyncData_hasBool(data,s__SyncData_boolCount[data] - 1) ) then
+                if ( s__SyncData_boolCount[data] > 0 and not (HaveStoredBoolean(s__SyncData_Cache[0], s__SyncData_mkey[(data)], s__SyncData_getKey((s__SyncData_boolCount[data] - 1)))) ) then // INLINED!!
                     set b=false
                 endif
 
@@ -1079,7 +1076,7 @@ endfunction
                 return
             endif
 
-            set s__SyncData_timeStarted[this]=s__SyncData_gameTime()
+            set s__SyncData_timeStarted[this]=(s__SyncData_timeCounter + TimerGetElapsed(s__SyncData_Elapsed)) // INLINED!!
             set s__SyncData_playersDone[this]=0
             set s__SyncData_buffering[this]=true
             set s__SyncData_timeElapsed[this]=( Sync___UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
@@ -1118,10 +1115,10 @@ endfunction
 
         function s__SyncData_updateStatus takes nothing returns boolean
             local integer i= 0
-            local integer p= GetSyncedPlayerId()
+            local integer p= (SyncInteger___LastPlayer) // INLINED!!
             local boolean b= true
             local boolean c= true
-            local integer data= GetSyncedInteger()
+            local integer data= (SyncInteger___LastSync) // INLINED!!
             local triggercondition tc
 
             if ( not s__SyncData_buffering[data] ) then
@@ -1133,15 +1130,15 @@ endfunction
 
             // check if everyone has received the data
             loop
-//#                 static if  LIBRARY_PlayerUtils  then
-//#                     exitwhen i == User.AmountPlaying
-//#                     set p = User.fromPlaying(i).id
-//#                     set c = User.fromPlaying(i).isPlaying
-//#                 else
-                        exitwhen i == bj_MAX_PLAYER_SLOTS
-                        set p=i
-                        set c=( GetPlayerController(Player(p)) == MAP_CONTROL_USER and GetPlayerSlotState(Player(p)) == PLAYER_SLOT_STATE_PLAYING )
-//#                 endif
+
+
+
+
+
+                    exitwhen i == bj_MAX_PLAYER_SLOTS
+                    set p=i
+                    set c=( GetPlayerController(Player(p)) == MAP_CONTROL_USER and GetPlayerSlotState(Player(p)) == PLAYER_SLOT_STATE_PLAYING )
+
              
                 if ( c and not s__SyncData_isPlayerIdDone(data,p) ) then
                     set b=false // someone hasn't
@@ -1159,7 +1156,7 @@ endfunction
                 endif
            
                 set s__SyncData_buffering[data]=false
-                set s__SyncData_timeFinished[data]=s__SyncData_gameTime()
+                set s__SyncData_timeFinished[data]=(s__SyncData_timeCounter + TimerGetElapsed(s__SyncData_Elapsed)) // INLINED!!
                 set s__SyncData_timeElapsed[data]=s__SyncData_timeFinished[data] - s__SyncData_timeStarted[data]
               
                 // fire events
@@ -1192,25 +1189,25 @@ endfunction
             set s__SyncData_Elapsed=CreateTimer()
             set s__SyncData_BufferTimer=CreateTimer()
 
-//#             static if  LIBRARY_PlayerUtils  then
-//#                 set LocalPlayer   = User.Local
-//#                 set LocalPlayerID = User.fromLocal().id
-//#             else
-                    set s__SyncData_LocalPlayer=GetLocalPlayer()
-                    set s__SyncData_LocalPlayerID=GetPlayerId(s__SyncData_LocalPlayer)
-//#             endif
 
-            call OnSyncInteger(function s__SyncData_updateStatus)
+
+
+
+                set s__SyncData_LocalPlayer=GetLocalPlayer()
+                set s__SyncData_LocalPlayerID=GetPlayerId(s__SyncData_LocalPlayer)
+
+
+call TriggerAddCondition(SyncInteger___EventTrig, Filter((function s__SyncData_updateStatus))) // INLINED!!
             call TimerStart(s__SyncData_Elapsed, 10., true, function s__SyncData_trackTime)
          
-//#             static if  Sync___PRELOAD_STR_CACHE  then
-                    loop
-                        exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
-                        call s__SyncData_getKey(s__SyncData_Last)
-                        set s__SyncData_Last=s__SyncData_Last + 1
-                    endloop
-                    set s__SyncData_Last=0
-//#             endif
+
+                loop
+                    exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
+                    call s__SyncData_getKey(s__SyncData_Last)
+                    set s__SyncData_Last=s__SyncData_Last + 1
+                endloop
+                set s__SyncData_Last=0
+
          
             set s__SyncData_Initialized=true
         endfunction
@@ -1220,11 +1217,11 @@ endfunction
 //library Sync ends
 //===========================================================================
 // 
-// |cff217199Escape Builder |r[R] 0.87q
+// |cff217199Escape Builder |r[R] 0.87r
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Tue Jan 24 18:19:21 2017
+//   Date: Sat Jan 28 00:51:33 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -1488,7 +1485,6 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n008', - 128.0, - 448.0, 270.000)
     set u=CreateUnit(p, 'n019', - 4032.0, - 6080.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3648.0, - 6336.0, 270.000)
-    set u=CreateUnit(p, 'n018', - 2688.0, - 5440.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4032.0, - 5504.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4096.0, - 5504.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4160.0, - 5568.0, 270.000)
@@ -1498,7 +1494,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 4416.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4288.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2560.0, - 7104.0, 270.000)
-    set u=CreateUnit(p, 'n008', - 6080.0, - 3968.0, 270.000)
+    set u=CreateUnit(p, 'n008', - 5952.0, - 3904.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4352.0, - 6656.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4672.0, - 4992.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3456.0, - 5184.0, 270.000)
@@ -1519,8 +1515,8 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 2688.0, - 6272.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3648.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4160.0, - 6144.0, 270.000)
-    set u=CreateUnit(p, 'n008', - 1792.0, - 1344.0, 270.000)
-    set u=CreateUnit(p, 'n008', - 4608.0, - 256.0, 270.000)
+    set u=CreateUnit(p, 'n008', - 1792.0, - 1600.0, 270.000)
+    set u=CreateUnit(p, 'n008', - 4928.0, - 384.0, 270.000)
     set u=CreateUnit(p, 'n008', - 5760.0, 2880.0, 270.000)
     set u=CreateUnit(p, 'n008', - 1664.0, 6208.0, 270.000)
     set u=CreateUnit(p, 'n008', - 2752.0, 2816.0, 270.000)
@@ -1633,7 +1629,7 @@ function CreateNeutralPassive takes nothing returns nothing
     set gg_unit_n00E_0270=CreateUnit(p, 'n00E', - 4417.1, - 6635.4, 228.358)
     set gg_unit_n00E_0271=CreateUnit(p, 'n00E', - 3073.2, - 5425.8, 41.036)
     call SetUnitState(gg_unit_n00E_0271, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0272=CreateUnit(p, 'n00E', - 3159.5, - 5505.2, 42.306)
+    set gg_unit_n00E_0272=CreateUnit(p, 'n00E', - 2978.4, - 5409.7, 42.306)
     call SetUnitState(gg_unit_n00E_0272, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0273=CreateUnit(p, 'n00E', - 3232.0, - 5586.6, 44.570)
     call SetUnitState(gg_unit_n00E_0273, UNIT_STATE_MANA, 0)
@@ -1641,7 +1637,7 @@ function CreateNeutralPassive takes nothing returns nothing
     call SetUnitState(gg_unit_n00E_0274, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0275=CreateUnit(p, 'n00E', - 3254.9, - 5146.0, 319.182)
     call SetUnitState(gg_unit_n00E_0275, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0276=CreateUnit(p, 'n00E', - 2800.1, - 5537.5, 133.355)
+    set gg_unit_n00E_0276=CreateUnit(p, 'n00E', - 2895.7, - 5473.7, 133.355)
     call SetUnitState(gg_unit_n00E_0276, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0277=CreateUnit(p, 'n00E', - 2760.2, - 5125.9, 224.828)
     call SetUnitState(gg_unit_n00E_0277, UNIT_STATE_MANA, 0)
@@ -2592,7 +2588,7 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs112306203")
+call ExecuteFunc("jasshelper__initstructs395035468")
 call ExecuteFunc("SyncInteger___Init")
 
     call InitGlobals()
@@ -2637,7 +2633,7 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs112306203 takes nothing returns nothing
+function jasshelper__initstructs395035468 takes nothing returns nothing
 
 
     call ExecuteFunc("s__SyncData_onInit")

@@ -18,10 +18,10 @@ public class EscaperSensorSetup extends SetupObject
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
-	construct(unit pactor, real radius, real sensorHeight )
+	construct(unit pactor, real radius, real sensorHeight)
 		super(createUnit(pactor.getOwner(), pactor.getTypeId(), pactor.getPos3Zero(), pactor.getFacingAngle()), pactor, radius)
 		this.sensorHeight = sensorHeight
-		setXY(pactor.getPos().toVec3() + vec2(0.001, 0))
+		setXY(pactor.getPos().toVec3() + vec2(0.01, 0))
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
 	function onSensor(UnitEntity source, UnitEntity target)
