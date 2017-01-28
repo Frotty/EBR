@@ -1,3 +1,9 @@
+[0.87s]
+[*] region shops are now centered
+[*] more fixes to leaver control share
+[*] fix cam change for oneway portal
+[*] minor startmaze adjustments
+
 [0.87q]
 [*] fixed oneway portal fx staying too long and added target effect
 [*] fixed game init stopping if a player leaves during startup or syncing

@@ -103,15 +103,17 @@ public class PlayerData
 	
 	function updateRank()
 		int i = 0
-		if admin
-			rank = "|cffADD642*Admin*"
-			if tagfx == null
-				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+		
 		if lvlfx != null
 			lvlfx.destr()
 		while XP >= expBounds[i]
 			i++
 		rank = ranks[i]
+		if admin
+			rank = "|cffADD642*Admin*"
+			if tagfx == null
+				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+
 		if XP > 10000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life High_Portrait.mdx", escaper.actor, "chest" )
 		else if XP > 7500
@@ -121,18 +123,14 @@ public class PlayerData
 		else if XP > 1000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
 
-		if XP > 400 and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
+		if XP >= expBounds[3] and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			UnitAddItemById(escaper.actor,'I002')
 		
-		
-
 		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
 			lastSave = minutes*60+seconds
 			printLog(Loglevel.DEBUG, "Playerfile saving")
 			savePlayerfile(this)
-
-		
 		
 	ondestroy
 		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
@@ -162,7 +160,7 @@ public class PlayerData
 						regions[i].allow(players[j])
 			GroupEnumUnitsOfPlayer(ENUM_GROUP, p, Filter(() -> GetFilterUnit().getTypeId() == 'n00A'))
 			for setup from ENUM_GROUP
-				setup.setOwner(builderPlayers.pop().p, true)
+				setup.setOwner(builderPlayers.peek().p, true)
 		
 		if not localFilesChecked
 			onPlayerSynced()

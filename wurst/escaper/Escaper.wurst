@@ -157,7 +157,7 @@ public abstract class Escaper extends UnitEntity
 				if rdata.allowCut
 					let rv = getRealVel()
 					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 18)
-					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 18)
+					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), -18)
 					let t1type = GetTerrainType(lpos.x, lpos.y)
 					let t2type = GetTerrainType(rpos.x, rpos.y)
 					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and

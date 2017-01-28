@@ -78,7 +78,7 @@ public enum COLOR
 	ranks[2] = "|cffFFE6AD3:Novice"
 	expBounds[2] = 400
 	ranks[3] = "|cffFFD64A4:Rookie"
-	expBounds[3] = 1500
+	expBounds[3] = 1250
 	ranks[4] = "|cffFFCE195:Superior"
 	expBounds[4] = 2750
 	ranks[5] = "|cffFFA53A6:Major"
