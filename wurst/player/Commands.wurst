@@ -57,12 +57,27 @@ function onCommandChat()
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"
 			startIntroFor(pd)
+		case "test"
+			startTestmode(pd)
 		case "smode"
 			pd.escaper.selectatrevive = not pd.escaper.selectatrevive
 			if pd.escaper.selectatrevive
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned on - selecting on revive.")
 			else
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned off - not selecting on revive.")
+		case "admin"
+			if pd.admin
+				int i = 0
+				unit tr = null
+				for u in GetUnitsSelectedAll(pd.p)
+					i++
+					tr = u
+					if i > 1
+						break
+				if i < 2
+					let id2 = tr.getOwner().getId()
+					let pd2 = pData[id2]
+					pd2.createAdminToken()
 		case "exp"
 			if pd.admin
 				int i = 0

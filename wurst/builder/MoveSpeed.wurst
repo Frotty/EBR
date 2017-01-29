@@ -10,9 +10,9 @@ function onChanceSpeed()
 	var data = caster.getEntity()
 	if (id == INC_SPEED_ID or id == DEC_SPEED_ID) and data instanceof SetupObject
 		var ddata = data castTo SetupObject
-		var speed = ddata.setup.getMoveSpeed()
+		var speed = (ddata.setup.getMoveSpeed() / 25.).round() * 25.
 		if id == INC_SPEED_ID
-			if speed < 475.
+			if speed <= 500.
 				ddata.setup.setMoveSpeed(speed+25.)
 				ddata.actor.setMoveSpeed(speed+25.)
 				createTTEx(data.getPos(), vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )

@@ -3,10 +3,8 @@ import SetupObject
 import TerrainBlocker
 import BuilderConstants
 import Preloader
-import Assets
 
 constant TEXTURECHANGER_ID	= 'n01E'
-
 constant TERRAIN_O_WALKABLE_ID = 'A02G'
 constant TERRAIN_O_UNWALKABLE_ID = 'A02C'
 constant TERRAIN_O_ICE_ID = 'A02B'

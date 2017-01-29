@@ -1,8 +1,15 @@
-[0.87s]
-[*] region shops are now centered
+[0.87t]
+[*] region shops are now centered and have reduced activation range
 [*] more fixes to leaver control share
-[*] fix cam change for oneway portal
+[*] fixed cam changing for builders from oneway portal regardless of smode
+[*] fixed bomber attackspeed and autoattack mode
+[*] fixed movespeed and boosterspeed inconsistencies
+[*] fixed escapers getting vision across unbought regions
+[*] fixed pointer setangle command and enabled it for SP test mode
 [*] minor startmaze adjustments
+[*] terrainchangers are now visible by default but can be made invisible
+[*] SP testmode must now be enabled via the -test command
+[*] rename doesn't break savefiles anymore
 
 [0.87q]
 [*] fixed oneway portal fx staying too long and added target effect

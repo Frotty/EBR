@@ -3,11 +3,13 @@ import MultiboardClass
 import public Escaper
 import public BuilderConstants
 import public GameConstants
+import initlater CodeGenerator
 import Builder
 import PickSystem
 import initlater TerrainModder
 import UnitProducer
 import RevivePointModifier
+import EscaperClasses
 import ClosureTimers
 import CodeManager
 import Playerfile
@@ -61,12 +63,11 @@ public class PlayerData
 	construct (player p)
 		this.p = p
 		id = GetPlayerId(p)
-		pData[id] = this
 		name = GetPlayerName(p)
+		pData[id] = this
 		hash = name.getHash().toString()
 		mbname = name
-		if mbname == "Frotty"
-			admin = true
+			
 		int i = 0
 		while names[i] != null
 			if mbname.toLowerCase() == names[i].toLowerCase()
@@ -85,7 +86,7 @@ public class PlayerData
 		playerboard.setNewItem(row,2,rank, null)  
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and allPlayers.getSize() > 0
+		if localFilesEnabled and allPlayers.getSize() > 1
 			if time
 				XP += amount
 			else if lastExpGain < minutes
@@ -131,7 +132,20 @@ public class PlayerData
 			lastSave = minutes*60+seconds
 			printLog(Loglevel.DEBUG, "Playerfile saving")
 			savePlayerfile(this)
-		
+
+	function validateAdmintoken()
+		if pmdata != null and not admin
+			if pmdata.adminToken == "no"
+				admin = false
+			else if name.getHash() - fhash(name) == pmdata.adminToken.toInt()
+				printTimedToPlayer("You are an admin!", 10, p)
+				admin = true
+
+	function createAdminToken()
+		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
+		savePlayerfile(this)
+		validateAdmintoken()
+
 	ondestroy
 		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
 		PlaySoundBJ(gg_snd_QuestFailed)
@@ -225,6 +239,41 @@ function setTime()
 	for pd in allPlayers
 		pd.setMBRow(i)
 		i++
+
+public function startTestmode(PlayerData pd)
+	if (allPlayers.getSize() == 1 or pd.admin) and pd.builder == null
+		pd.escaper.terminate()
+		builderPlayers.add(pd)
+		var i = 0
+		var reg = regions[i]
+		while reg != null
+			reg.revealRegion(pd.p)
+			i++
+			reg = regions[i]
+
+		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
+		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = e
+		e.actor.addAbility('A001')
+		e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+		e.actor.addAbility('A001')
+		e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+		e.actor.addAbility('A001')
+		e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
+		e.actor.addAbility('A001')
+		pd.builder = new Builder( pd.p )
+		UnitAddItemById(pd.builder.actor,'I001')
+		UnitAddItemById(pd.builder.actor,'I002')
+		UnitAddItemById(pd.builder.actor,'I003')
+		pd.builder.regionCount = 17
+		pd.escaper.actor.addAbility('A001')
+		
+		
+		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 			 
 function playerLeft()
 	var p = GetTriggerPlayer()
@@ -252,22 +301,6 @@ function playerLeft()
 		UnitAddItemById(pd.builder.actor,'I002')
 		UnitAddItemById(pd.builder.actor,'I003')
 		pd.builder.regionCount = (17. / builderPlayers.getSize()).round()
-
-	if allPlayers.getSize() == 1 and builderPlayers.getSize() == 0
-		let pd = allPlayers.get(0)
-		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
-		pd.builder = new Builder( pd.p )
-		UnitAddItemById(pd.builder.actor,'I001')
-		UnitAddItemById(pd.builder.actor,'I002')
-		UnitAddItemById(pd.builder.actor,'I003')
-		pd.builder.regionCount = 17
-		pd.escaper.actor.addAbility('A001')
-		builderPlayers.add(pd)
-		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
-		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 
 public function checkPlayerLocalFiles()
 	doAfter(0.1, () -> begin

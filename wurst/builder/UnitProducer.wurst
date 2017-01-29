@@ -35,6 +35,7 @@ public class UnitProducer extends StaticBaseObject
 		super(pos, CreateUnit( owner, PRODUCER_ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL, CODE_NULL)
 		actor.addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		clearQuestionmark()
 
 	function onCast() returns boolean
 		var id = GetSpellAbilityId()

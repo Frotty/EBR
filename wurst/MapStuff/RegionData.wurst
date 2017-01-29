@@ -4,6 +4,8 @@ import initlater Boss
 import public GameConstants
 import HashMap
 import PlayerData
+import TerrainModder
+import UnitProducer
 import DummyRecycler
 import PickSystem
 
@@ -55,6 +57,7 @@ public class RegionData
 	private trigger visTrig
 	private LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	private HashMap<player, Permission> permissions = new HashMap<player, Permission>()
+	private fogmodifier array[12] fmods
 	
 	RegionType rtype = RegionType.UNKNOWN
 	
@@ -80,6 +83,12 @@ public class RegionData
 			..registerRectEnterEventSource(r)
 			..addAction(() -> enterRect())
 			regionMap.put(r, this)
+			for i = 0 to 7
+				fmods[i] = CreateFogModifierRect(players[i], FOG_OF_WAR_MASKED, r, false, true)
+				FogModifierStart(fmods[i])
+			for i = 8 to 11
+				fmods[i] = CreateFogModifierRect(players[i], FOG_OF_WAR_VISIBLE, r, false, true)
+				FogModifierStart(fmods[i])
 
 	function getEscapers() returns LLStaticIterator<Escaper>
 		escapers.staticItr().reset()
@@ -124,7 +133,14 @@ public class RegionData
 		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or pData[p.getId()].admin
 
 	function createSetup()
-		createUnit(DUMMY_PLAYER, 'n008', theRect.getCenter(), (270).asAngleDegrees())
+		createUnit(STAFF_PLAYER, 'n008', theRect.getCenter(), (270).asAngleDegrees())
+
+	function revealRegion(player p)
+		let id = p.getId()
+		visible = true
+		DestroyFogModifier(fmods[id])
+		fmods[id] = CreateFogModifierRect(p, FOG_OF_WAR_VISIBLE, theRect, true, true)
+		FogModifierStart(fmods[id])
 		
 	static function enterRect()
 		var u = GetTriggerUnit()
@@ -133,12 +149,14 @@ public class RegionData
 
 		if data instanceof Escaper
 			var edata = data castTo Escaper
-			if not rdata.visible and isEscaper(data.owner)
-				CreateFogModifierRectBJ( true, data.owner, FOG_OF_WAR_VISIBLE, rdata.theRect )
-				rdata.visible = true
-			edata.updateRegionData()
+			if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet()
+				edata.kill(null)
+			else if not rdata.visible and isEscaper(data.owner)
+				rdata.revealRegion(data.owner)
+				edata.updateRegionData()
 		else if data instanceof UnitEntity
 			if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector
+				and not data instanceof TerrainModder and not data instanceof UnitProducer
 				printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 				data.terminate()
 								
@@ -214,7 +232,8 @@ public RegionData array regions
 	regions[19] = new RegionData(gg_rct_Region_003)..createSetup()
 	regions[20] = new RegionData(gg_rct_Region_026)..createSetup()
 	regions[21] = new RegionData(gg_rct_Start)
-	regions[21].setOwner(STAFF_PLAYER) 
+	regions[21].setOwner(STAFF_PLAYER)
+	regions[21].setType(getRegionTypeFromItem('I00D'), false)
 	regions[22] = new RegionData(gg_rct_Choose)
 	regions[22].setType(getRegionTypeFromItem('I00D'), false)
 	regions[22].setOwner(STAFF_PLAYER) 

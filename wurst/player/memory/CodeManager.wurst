@@ -159,12 +159,13 @@ function onPlayerfileSynced()
 
 function loadPlayerMemory(PlayerData pd, PMData pmd)
 	var scode = new Savecode()
-	if scode.load(pd.p, pmd.expcode, saveTechnique)
+	if scode.load(pd.name, pmd.expcode, saveTechnique)
 		printLog(Loglevel.DEBUG, "load success")
 		let xp = scode.decode(XPMAX)
 		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
 		pd.setXp(xp)
 		pd.pmdata = pmd
+		pd.validateAdmintoken()
 	else
 		printLog(Loglevel.ERROR, "load failed! your savefile is outdated or broken.")
 	destroy scode
@@ -175,7 +176,7 @@ function addPlayerProfile(PlayerData pd)
 	var scode = new Savecode()
 	scode.encode(pd.XP, XPMAX)
 	pmdata.namehash = pd.hash
-	pmdata.setXP(scode.save(pd.p, saveTechnique))
+	pmdata.setXP(scode.save(pd.name, saveTechnique))
 	pmdata.adminToken = "no"
 	pd.pmdata = pmdata
 	destroy scode
@@ -188,7 +189,7 @@ function addPlayerProfile(PlayerData pd)
 public function savePlayerfile(PlayerData pd)
 	var scode = new Savecode()
 	scode.encode(pd.XP, XPMAX)
-	pd.pmdata.setXP(scode.save(pd.p, saveTechnique))
+	pd.pmdata.setXP(scode.save(pd.name, saveTechnique))
 	destroy scode
 	if GetLocalPlayer() == pd.p
 		let file = File.open(FOLDER_NAME, FILE_NAME, Mode.WRITE)

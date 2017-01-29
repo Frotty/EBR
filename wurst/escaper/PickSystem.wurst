@@ -54,24 +54,12 @@ class EscaperDefinition
 			pd.escaper.selectatrevive = false
 			PanCameraToTimedForPlayer(pd.p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
 			pd.p.selectSingle(pd.builder.actor)
-			CreateFogModifierRectBJ(true, pd.p, FOG_OF_WAR_VISIBLE, playableMapRect)
 			printTimedToPlayer("    You chose the role |cff528CDEBuilder|r!", 20, pd.p)
 		else
 			PanCameraToTimedForPlayer(pd.p,START.x,START.y,0)
 			pd.p.selectSingle(pd.escaper.actor)
 			printTimedToPlayer("    You chose the role |cff528CDEEscaper|r!", 20, pd.p)
 
-		// SP testmode
-		if allPlayers.getSize() == 1
-			Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
-			e.actor.addAbility('A001')
-			e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
-			e.actor.addAbility('A001')
-			e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
-			e.actor.addAbility('A001')
-			e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
-			e.actor.addAbility('A001')
-			
 		pd.icon = mbicon
 		// Check for savefile
 		checkPlayerfile(pd)
@@ -117,7 +105,7 @@ public function startChoose()
 	CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
 	for pd in allPlayers
-		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, gg_rct_Choose )
+		regions[22].revealRegion(pd.p)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
 		SetCameraTargetControllerNoZForPlayer( pd.p, EscaperDefinition.first.escaper, 0, 0, false ) 
