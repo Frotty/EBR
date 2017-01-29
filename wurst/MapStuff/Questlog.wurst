@@ -5,7 +5,7 @@ package Questlog
 	var q = CreateQuest()
 	QuestSetTitle(q, "Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
-	QuestSetDescription(q, "Check out - dircord:https://discord.gg/yr3ZyYQ - hiveworkshop: https://goo.gl/R4G2FM\n"
+	QuestSetDescription(q, "Check out - discord:https://discord.gg/yr3ZyYQ - hiveworkshop: https://goo.gl/R4G2FM\n"
 							+ "Available Commands:\n"
 							+ "-clear (clears textmessages)\n"
 							+ "-smode (Toggles revive selection, also effects camera pan)\n"
@@ -19,7 +19,7 @@ package Questlog
 	QuestSetTitle(q, "Credits")
 	QuestSetRequired(q, false)
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNtemp.blp")
-	QuestSetDescription(q, "Check out - dircord:https://discord.gg/yr3ZyYQ - hiveworkshop: https://goo.gl/R4G2FM\n"
+	QuestSetDescription(q, "Check out - discord:https://discord.gg/yr3ZyYQ - hiveworkshop: https://goo.gl/R4G2FM\n"
 							+ "Special thanks in unsorted manner:\n"
 							+ "-kari0003\n"
 							+ "-menag\n"
