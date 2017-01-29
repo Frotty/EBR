@@ -86,7 +86,7 @@ public class PlayerData
 		playerboard.setNewItem(row,2,rank, null)  
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and allPlayers.getSize() > 1
+		if localFilesEnabled and allPlayers.getSize() > 1 or admin
 			if time
 				XP += amount
 			else if lastExpGain < minutes
@@ -128,7 +128,7 @@ public class PlayerData
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			UnitAddItemById(escaper.actor,'I002')
 		
-		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
+		if pfile != null and pmdata != null and (lastSave+20 < minutes*60+seconds)
 			lastSave = minutes*60+seconds
 			printLog(Loglevel.DEBUG, "Playerfile saving")
 			savePlayerfile(this)

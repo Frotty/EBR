@@ -167,7 +167,7 @@ public abstract class Escaper extends UnitEntity
 				else
 					onUnwalkable = true
 					kill(null)
-		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
+		else if alive and (ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE)
 			let angl = actor.getFacingAngle()
 			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			if not sliding

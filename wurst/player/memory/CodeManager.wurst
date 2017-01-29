@@ -163,9 +163,9 @@ function loadPlayerMemory(PlayerData pd, PMData pmd)
 		printLog(Loglevel.DEBUG, "load success")
 		let xp = scode.decode(XPMAX)
 		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
-		pd.setXp(xp)
 		pd.pmdata = pmd
 		pd.validateAdmintoken()
+		pd.setXp(xp)
 	else
 		printLog(Loglevel.ERROR, "load failed! your savefile is outdated or broken.")
 	destroy scode
