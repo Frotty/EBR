@@ -36,13 +36,11 @@ public class Bomber extends UnitEntity
 				UnitRemoveType(actor, UNIT_TYPE_PEON)
 				setup.setPropWindow(0)
 				actor.setPropWindow(0)
-				actor.abortOrder()
 				createTTEx(getPos(), vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner)
 			else
 				UnitAddType(actor, UNIT_TYPE_PEON)
 				setup.setPropWindow(60)
 				actor.setPropWindow(60)
-				actor.abortOrder()
 				createTTEx(getPos(), vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner)
 		
 	static function orderSetup()
