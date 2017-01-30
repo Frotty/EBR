@@ -90,10 +90,10 @@ function onCommandChat()
 				if i < 2
 					let id2 = tr.getOwner().getId()
 					let pd2 = pData[id2]
-					pd2.addXp(10000, true)
+					pd2.addXp(6500, true)
 					print("grant1")
 				else	
-					pd.addXp(10000, true)
+					pd.addXp(6500, true)
 					print("grant2")
 		case "d"
 			var debuglvl = str.substring(str.indexOf(" ") + 1, str.length()).toInt() castTo Loglevel

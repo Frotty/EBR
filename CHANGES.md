@@ -1,3 +1,6 @@
+[0.87u]
+[*] Adjusted regions a bit
+
 [0.87t]
 [*] region shops are now centered and have reduced activation range
 [*] more fixes to leaver control share
