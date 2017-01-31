@@ -42,47 +42,47 @@ player SyncInteger___LocalPlayer
 //globals from Sync:
 constant boolean LIBRARY_Sync=true
         // characters that can be synced (ascii)
-constant string Sync___ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
+constant string Sync__ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
 
         // safe characters for use in game cache keys
         // (case sensitive)
-constant string Sync___SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~`"
+constant string Sync__SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~`"
 
         // how fast the buffer updates
-constant real Sync___UPDATE_PERIOD= 0.03125
+constant real Sync__UPDATE_PERIOD= 0.03125
 
         // automatically recycle indices when the syncing player leaves
-constant boolean Sync___AUTO_DESTROY_ON_LEAVE= true
+constant boolean Sync__AUTO_DESTROY_ON_LEAVE= true
 
         // automatically stop buffering when an error occurs
-constant boolean Sync___STOP_BUFFERING_ON_ERROR= true
+constant boolean Sync__STOP_BUFFERING_ON_ERROR= true
 
         // preload game cache key strings on init
-constant boolean Sync___PRELOAD_STR_CACHE= true
+constant boolean Sync__PRELOAD_STR_CACHE= true
      
         // size of the alphabet
-constant integer Sync___ALPHABET_BASE= StringLength(Sync___ALPHABET)
+constant integer Sync__ALPHABET_BASE= StringLength(Sync__ALPHABET)
 
         // stop reading the string buffer when reaching this char
-constant string Sync___TERM_CHAR= "`"
+constant string Sync__TERM_CHAR= "`"
 
         // maximum number of strings *per instance*
-constant integer Sync___MAX_STRINGS= 8192
+constant integer Sync__MAX_STRINGS= 8192
 
         // filenames for gc
-constant string Sync___CACHE_FILE= "i.w3v"
-constant string Sync___CACHE_FILE_STR= "s.w3v"
+constant string Sync__CACHE_FILE= "i.w3v"
+constant string Sync__CACHE_FILE_STR= "s.w3v"
 
         // don't edit below this line
 constant integer EVENT_SYNC_CACHE= 3
 constant integer SYNC_ERROR_TIMEOUT= 1
 constant integer SYNC_ERROR_PLAYERLEFT= 2
         // string table keys
-constant integer Sync___KEY_STR_POS= ( 0 * Sync___MAX_STRINGS )
-constant integer Sync___KEY_STR_LEN= ( 1 * Sync___MAX_STRINGS )
+constant integer Sync__KEY_STR_POS= ( 0 * Sync__MAX_STRINGS )
+constant integer Sync__KEY_STR_LEN= ( 1 * Sync__MAX_STRINGS )
 
         // pending data storage space
-constant integer Sync___KEY_STR_CACHE= ( 2 * Sync___MAX_STRINGS )
+constant integer Sync__KEY_STR_CACHE= ( 2 * Sync__MAX_STRINGS )
 //endglobals from Sync
     // Generated
 rect gg_rct_Choose= null
@@ -256,6 +256,7 @@ unit gg_unit_n004_0078= null
 unit gg_unit_n004_0099= null
 unit gg_unit_n004_0101= null
 unit gg_unit_n004_0102= null
+trigger gg_trg_Untitled_Trigger_003= null
 
 trigger l__library_init
 
@@ -684,7 +685,7 @@ endfunction
         set l=makeLen - l
         loop
             exitwhen i > l
-            set s=s + Sync___TERM_CHAR
+            set s=s + Sync__TERM_CHAR
             set i=i + 1
         endloop
         return s
@@ -726,12 +727,12 @@ endfunction
         function s__SyncData_getKey takes integer pos returns string
             local string position=""
          
-            if ( HaveSavedString(s__SyncData_Table, Sync___KEY_STR_CACHE, pos) ) then
-                return LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos)
+            if ( HaveSavedString(s__SyncData_Table, Sync__KEY_STR_CACHE, pos) ) then
+                return LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos)
             endif
          
-            set position=Sync_ConvertBase(Sync___SAFE_KEYS , pos)
-            call SaveStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos, position)
+            set position=Sync_ConvertBase(Sync__SAFE_KEYS , pos)
+            call SaveStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos, position)
          
             return position
         endfunction
@@ -773,8 +774,8 @@ endfunction
                     set p=i
 
 
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + p)
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + p)
                 call RemoveSavedBoolean(s__SyncData_Table, p, this) // playerdone
 
                 set i=i + 1
@@ -813,11 +814,11 @@ endfunction
         endfunction
 
         function s__SyncData_hasString takes integer this,integer index returns boolean
-            local integer i= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
+            local integer i= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
             if ( index > 0 and i == 0 ) then
                 return false
             endif
-            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)))
+            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)))
         endfunction
      
         function s__SyncData_addInt takes integer this,integer i returns nothing
@@ -863,12 +864,12 @@ endfunction
        
             // store the string position in the table
             if ( s__SyncData_strCount[this] == 0 ) then
-                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS, 0)
+                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS, 0)
             else
-                set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
-                set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
+                set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
+                set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
 
-                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + s__SyncData_strCount[this], strPos)
+                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + s__SyncData_strCount[this], strPos)
             endif
 
             // convert each character in the string to an integer
@@ -878,14 +879,14 @@ endfunction
                 set position=s__SyncData_getKey(strPos + i)
 
                 if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, Sync_Char2I(Sync___ALPHABET , SubString(s, i, i + 1)))
+                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, Sync_Char2I(Sync__ALPHABET , SubString(s, i, i + 1)))
                 endif
 
                 set i=i + 1
             endloop
 
             set s__SyncData_strBufferLen[this]=s__SyncData_strBufferLen[this] + length
-            call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
+            call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
             set s__SyncData_strCount[this]=s__SyncData_strCount[this] + 1
         endfunction
 
@@ -905,22 +906,22 @@ endfunction
             local string s= ""
             local string c
             local integer i= 0
-            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
+            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
             local integer strPos
          
             if ( not s__SyncData_hasString(this,index) ) then
                 return null
             endif
 
-            set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
-            set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
+            set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
+            set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
          
             loop
                 exitwhen i > strLen
              
-                set c=Sync_I2Char(Sync___ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
+                set c=Sync_I2Char(Sync__ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
 
-                if ( c == Sync___TERM_CHAR ) then
+                if ( c == Sync__TERM_CHAR ) then
                     return s
                 endif
 
@@ -981,7 +982,7 @@ endfunction
                     return
                 endif
 
-                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync___UPDATE_PERIOD
+                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync__UPDATE_PERIOD
 
                 if ( s__SyncData_onUpdate[data] != null ) then
                     call s__SyncData_fireEvent(data,s__SyncData_onUpdate[data])
@@ -1047,7 +1048,7 @@ endfunction
             loop
                 exitwhen i > end
 
-                set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, i)
+                set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, i)
            
                 if ( i < s__SyncData_intCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                     call SyncStoredInteger(s__SyncData_Cache[0], s__SyncData_mkey[this], position)
@@ -1060,15 +1061,15 @@ endfunction
                 endif
            
                 if ( i < s__SyncData_strCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    set n=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + i)
-                    set p=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + i)
+                    set n=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + i)
+                    set p=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + i)
                
                     set j=0
                
                     loop
                         exitwhen j > n
                    
-                        set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, p + j)
+                        set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, p + j)
 
                         if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                             call SyncStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position)
@@ -1088,10 +1089,10 @@ endfunction
             set s__SyncData_timeStarted[this]=(s__SyncData_timeCounter + TimerGetElapsed(s__SyncData_Elapsed)) // INLINED!!
             set s__SyncData_playersDone[this]=0
             set s__SyncData_buffering[this]=true
-            set s__SyncData_timeElapsed[this]=( Sync___UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
+            set s__SyncData_timeElapsed[this]=( Sync__UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
          
             if ( s__SyncData_Running == 0 ) then
-                call TimerStart(s__SyncData_BufferTimer, Sync___UPDATE_PERIOD, true, function s__SyncData_readBuffer)
+                call TimerStart(s__SyncData_BufferTimer, Sync__UPDATE_PERIOD, true, function s__SyncData_readBuffer)
             endif
 
             set s__SyncData_Running=s__SyncData_Running + 1
@@ -1192,8 +1193,8 @@ endfunction
         function s__SyncData_onInit takes nothing returns nothing
             set s__SyncData_Table=InitHashtable()
 
-            set s__SyncData_Cache[0]=InitGameCache(Sync___CACHE_FILE)
-            set s__SyncData_Cache[1]=InitGameCache(Sync___CACHE_FILE_STR)
+            set s__SyncData_Cache[0]=InitGameCache(Sync__CACHE_FILE)
+            set s__SyncData_Cache[1]=InitGameCache(Sync__CACHE_FILE_STR)
 
             set s__SyncData_Elapsed=CreateTimer()
             set s__SyncData_BufferTimer=CreateTimer()
@@ -1211,7 +1212,7 @@ call TriggerAddCondition(SyncInteger___EventTrig, Filter((function s__SyncData_u
          
 
                 loop
-                    exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
+                    exitwhen s__SyncData_Last == Sync__ALPHABET_BASE
                     call s__SyncData_getKey(s__SyncData_Last)
                     set s__SyncData_Last=s__SyncData_Last + 1
                 endloop
@@ -1230,7 +1231,7 @@ call TriggerAddCondition(SyncInteger___EventTrig, Filter((function s__SyncData_u
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Tue Jan 31 11:59:43 2017
+//   Date: Tue Jan 31 23:30:45 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -2116,6 +2117,19 @@ endfunction
 //===========================================================================
 //TESH.scrollpos=0
 //TESH.alwaysfold=0
+// Trigger: Untitled Trigger 003
+//===========================================================================
+function Trig_Untitled_Trigger_003_Actions takes nothing returns nothing
+    call CreateUbersplatBJ(GetRectCenter(GetPlayableMapRect()), "NGOL", 100, 100, 100, 0, false, false)
+endfunction
+
+//===========================================================================
+function InitTrig_Untitled_Trigger_003 takes nothing returns nothing
+    set gg_trg_Untitled_Trigger_003=CreateTrigger()
+    call TriggerAddAction(gg_trg_Untitled_Trigger_003, function Trig_Untitled_Trigger_003_Actions)
+endfunction
+
+//===========================================================================
 function InitCustomTriggers takes nothing returns nothing
     call InitTrig_Untitled_Trigger_014()
     call InitTrig_Untitled_Trigger_001()
@@ -2127,6 +2141,7 @@ function InitCustomTriggers takes nothing returns nothing
     call InitTrig_Untitled_Trigger_004()
     //Function not found: call InitTrig_Sync()
     //Function not found: call InitTrig_SyncInteger()
+    call InitTrig_Untitled_Trigger_003()
 endfunction
 
 //***************************************************************************
@@ -2576,7 +2591,7 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs694325562")
+call ExecuteFunc("jasshelper__initstructs735785609")
 call ExecuteFunc("SyncInteger___Init")
 
     call InitGlobals()
@@ -2621,7 +2636,7 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs694325562 takes nothing returns nothing
+function jasshelper__initstructs735785609 takes nothing returns nothing
 
 
     call ExecuteFunc("s__SyncData_onInit")

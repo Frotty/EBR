@@ -1,6 +1,10 @@
-[0.87u]
+[0.87x]
+[*] added arcanery that silences escapers until they leave a given radius
+[*] 
+
+[0.87w]
 [*] Adjusted regions a bit
-[*] Fixed vision bugs
+[*] Fixed vision bugs and other minor things
 
 [0.87t]
 [*] region shops are now centered and have reduced activation range

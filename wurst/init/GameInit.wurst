@@ -2,8 +2,6 @@ package GameInit
 import EntityManagement
 import Startmazes
 import PlayerData
-import FileIO
-import SyncWrapper
 
 init
 	callGen()

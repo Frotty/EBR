@@ -64,7 +64,6 @@ public class Pointer extends EscaperSensorSetup
 			es.actor.setFacing(data.angl)
 	
 	static function setfacing()
-		print("setf")
 		string chatmsg = GetEventPlayerChatString()
 		real facing = 0
 		if SubString(chatmsg, 0, 4) == "-sa "
@@ -72,7 +71,6 @@ public class Pointer extends EscaperSensorSetup
 		else if SubString(chatmsg, 0, 10) == "-setangle "
 			facing = S2R(SubString(chatmsg, 10, StringLength(chatmsg)))
 		for u from getSelectedPointers(GetTriggerPlayer())
-			print("check p")
 			Pointer obj = u.getUserData() castTo Pointer
 			obj.angl = facing.asAngleDegrees()
 			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )

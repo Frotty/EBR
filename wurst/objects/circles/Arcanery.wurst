@@ -1,0 +1,119 @@
+package Arcanery
+import BaseObject
+import Escaper
+import Assets
+import InstantDummyCaster
+import ChannelAbilityPreset
+import Fx
+import PresetBuffs
+
+constant ARCANERY_ID = 'n002'
+constant SILENCE_BUFF_ID = 'BNsi'
+int SILENCE_ID
+buffTuple SILENCE_BUFF
+
+class SilenceBufff extends NormalBuff
+	Arcanery arcanery
+	int usages = 1
+	real distance = (256.).squared()
+
+	construct(Escaper target, Arcanery arcanery)
+		super(9999, SILENCE_BUFF)
+		InstantDummyCaster.castTarget(DUMMY_PLAYER, SILENCE_ID, 1,  "soulburn", target.actor)
+		this.arcanery = arcanery
+		apply(target)
+
+	override function update()
+		super.update()
+		switch arcanery.expMode
+			case TIME
+			case RANGE
+				if arcanery.pos.distanceToSq(target.pos) > distance
+					done = true
+			case USE
+
+	ondestroy
+		target.actor.removeAbility('BNso')
+
+
+
+enum ArcaneryMode
+	SILENCE
+	JUMP
+	ORB
+
+enum ExpirationMode
+	TIME
+	RANGE
+	USE
+
+function is() returns boolean
+	return true
+
+public class Arcanery extends StaticBaseObject
+	ArcaneryMode arcMode = ArcaneryMode.SILENCE
+	ExpirationMode expMode = ExpirationMode.RANGE
+	Fx currentEffect 
+
+
+	construct(vec2 position, player owner)
+		super(position, createUnit(owner, ARCANERY_ID, position, angle(0)), 64., function onEnterEv, function is)
+		clearQuestionmark()
+		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
+		recreateEffect()
+
+	
+	function recreateEffect()
+		switch arcMode
+			case SILENCE
+				currentEffect.setFx(Other.silencetarget)
+			case JUMP
+				currentEffect.setFx("war3mapImported\\BootsofSpeed.mdx")
+			case ORB
+				currentEffect.setFx("TC_EnergyBolt.mdx")
+
+	function onEnter(Escaper target)
+		printLog(Loglevel.DEBUG, "onEnter(target)")
+		switch arcMode
+			case SILENCE
+				SilenceBufff b = target.getBuff(SilenceBufff.typeId) castTo SilenceBufff
+				if b == null
+					new SilenceBufff(target, this)
+				else
+					b.arcanery = this
+			case JUMP
+				currentEffect.setFx("war3mapImported\\BootsofSpeed.mdx")
+			case ORB
+				currentEffect.setFx("TC_EnergyBolt.mdx")
+
+	ondestroy
+		destroy currentEffect
+
+
+	static function onEnterEv()
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getEntity()
+		thistype obj = source.getUserData() castTo thistype
+		if e instanceof Escaper
+			obj.onEnter(e castTo Escaper)
+
+
+@objectgen function genAbils()
+	SILENCE_ID = ABIL_ID_GEN.next()
+
+	SILENCE_BUFF = createBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp")
+	if compiletime
+		new AbilityDefinitionFirelordSoulBurn(SILENCE_ID)
+		..setLevels(1)
+		..setManaCost(1, 0)
+		..setCastRange(1, 92083)
+		..setCooldown(1, 0)
+		..setTargetsAllowed(1, "ground")
+		..setTooltipNormal(1, "Silence")
+		..setTooltipNormalExtended(1, "This escaper cannot cast spells")
+		..setName("Silence")
+		..setDurationHero(1, 99999)
+		..setDurationNormal(1, 99999)
+		..setHeroAbility(false)
+		..setDamageAmount(1, 0)
