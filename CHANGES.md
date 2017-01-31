@@ -1,5 +1,6 @@
 [0.87u]
 [*] Adjusted regions a bit
+[*] Fixed vision bugs
 
 [0.87t]
 [*] region shops are now centered and have reduced activation range

@@ -92,7 +92,6 @@ public class Selector extends UnitEntity
 				currentView[pd.id].showTo(pd)	
 			case PICK_ID
 				currentView[pd.id].hide(pd)
-				pd.picked = true
 				printTimedToPlayer("|cffE68C19Welcome to |cff086BC5Escape Builder Reloaded|cffE68C19!\n    |r", 20, pd.p)
 				currentView[pd.id].createFor(pd)
 				destroy this

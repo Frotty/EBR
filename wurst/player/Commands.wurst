@@ -12,7 +12,7 @@ function onCommandChat()
 	let p = GetTriggerPlayer()
 	let id = p.getId()
 	let pd = pData[id]
-	if not pd.picked
+	if pd.escaper == null
 		return
 	var cstr = str.substring(1, str.indexOf(" "))
 	switch cstr
@@ -66,7 +66,7 @@ function onCommandChat()
 			else
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned off - not selecting on revive.")
 		case "admin"
-			if pd.admin
+			if pd.title == Title.ADMIN
 				int i = 0
 				unit tr = null
 				for u in GetUnitsSelectedAll(pd.p)
@@ -79,7 +79,7 @@ function onCommandChat()
 					let pd2 = pData[id2]
 					pd2.createAdminToken()
 		case "exp"
-			if pd.admin
+			if pd.title == Title.ADMIN
 				int i = 0
 				unit tr = null
 				for u in GetUnitsSelectedAll(pd.p)

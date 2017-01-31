@@ -23,38 +23,45 @@ public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
-public enum ROLE
-	USER
+public enum Role
+	BUILDER
+	ESCAPER
+
+public enum Title
+	PLAYER
 	MOD
-	CREATOR
+	ADMIN
 
 public class PlayerData
-	int id
-	string hash
-	player p
-	string name
-	string mbname
-	string rank = "Newbie"
-	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
-	boolean admin = false
-	boolean checked = false
+	player 	p
+	int 	id
+	string	hash
+	string 	name
+	string 	mbname
+	string 	icon 		= "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+
+	string 	rank 		= "Newbie"
+	
+
+	Role role 			
+	Title title
 	Escaper escaper
 	Builder builder
-	RevivePointModifier revmod
 
 	int XP = 40
 	effect lvlfx = null
 	effect tagfx = null
 
-	boolean picked = false
 	boolean localFilesEnabled = false
 	boolean localFilesChecked = false
 	int lastExpGain = 0
 	int lastSave = -1
+
 	real zCam = 1600.
 	
 	TerrainModder tmod 
 	UnitProducer prod
+	RevivePointModifier revmod
 
 	Playerfile pfile = null
 	PMData pmdata = null
@@ -76,8 +83,10 @@ public class PlayerData
 		mbname = p.getNameColored()
 		allPlayers.add(this)
 		if id > 7
+			role = Role.BUILDER
 			builderPlayers.add(this)
 		else
+			role = Role.ESCAPER
 			escaperPlayers.add(this)
 
 	function setMBRow(int row)
@@ -86,7 +95,7 @@ public class PlayerData
 		playerboard.setNewItem(row,2,rank, null)  
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and allPlayers.getSize() > 1 or admin
+		if localFilesEnabled and allPlayers.getSize() > 1 or title == Title.ADMIN
 			if time
 				XP += amount
 			else if lastExpGain < minutes
@@ -110,7 +119,7 @@ public class PlayerData
 		while XP >= expBounds[i]
 			i++
 		rank = ranks[i]
-		if admin
+		if title == Title.ADMIN
 			rank = "|cffADD642*Admin*"
 			if tagfx == null
 				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
@@ -134,12 +143,10 @@ public class PlayerData
 			savePlayerfile(this)
 
 	function validateAdmintoken()
-		if pmdata != null and not admin
-			if pmdata.adminToken == "no"
-				admin = false
-			else if name.getHash() - fhash(name) == pmdata.adminToken.toInt()
+		if pmdata != null and not title == Title.ADMIN
+			if pmdata.adminToken != "no" and name.getHash() - fhash(name) == pmdata.adminToken.toInt()
 				printTimedToPlayer("You are an admin!", 10, p)
-				admin = true
+				title = Title.ADMIN
 
 	function createAdminToken()
 		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
@@ -241,7 +248,7 @@ function setTime()
 		i++
 
 public function startTestmode(PlayerData pd)
-	if (allPlayers.getSize() == 1 or pd.admin) and pd.builder == null
+	if (allPlayers.getSize() == 1 or pd.title == Title.ADMIN) and pd.builder == null
 		pd.escaper.terminate()
 		builderPlayers.add(pd)
 		var i = 0
@@ -280,7 +287,7 @@ function playerLeft()
 	var pd = pData[p.getId()]
 	destroy pd
 
-@init1 function initPlayers()
+public function initPlayers()
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11

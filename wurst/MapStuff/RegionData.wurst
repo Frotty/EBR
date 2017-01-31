@@ -50,6 +50,31 @@ public enum Permission
 	GUEST
 	CONTRIBUTOR
 	OWNER
+
+
+class FogData
+	fogmodifier modifier
+	fogstate state
+	boolean visible
+	rect r
+	player p
+
+	construct(player p, rect r)
+		this.r = r
+		this.p = p
+		visible = isBuilder(p)
+		if visible
+			changeFog(FOG_OF_WAR_VISIBLE)
+		else
+			changeFog(FOG_OF_WAR_MASKED)
+	
+	function changeFog(fogstate fstate)
+		if state != fstate
+			state = fstate
+			if modifier != null
+				DestroyFogModifier(modifier)
+			modifier = CreateFogModifierRect(p, state, r, false, false)
+			FogModifierStart(modifier)
   
 // The "Area" RegionData a builder has to claim in order to build
 public class RegionData
@@ -57,7 +82,7 @@ public class RegionData
 	private trigger visTrig
 	private LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	private HashMap<player, Permission> permissions = new HashMap<player, Permission>()
-	private fogmodifier array[12] fmods
+	private FogData array[12] fmods
 	
 	RegionType rtype = RegionType.UNKNOWN
 	
@@ -83,12 +108,10 @@ public class RegionData
 			..registerRectEnterEventSource(r)
 			..addAction(() -> enterRect())
 			regionMap.put(r, this)
-			for i = 0 to 7
-				fmods[i] = CreateFogModifierRect(players[i], FOG_OF_WAR_MASKED, r, false, true)
-				FogModifierStart(fmods[i])
-			for i = 8 to 11
-				fmods[i] = CreateFogModifierRect(players[i], FOG_OF_WAR_VISIBLE, r, false, true)
-				FogModifierStart(fmods[i])
+			for pd from escaperPlayers.staticItr()
+				fmods[pd.id] = new FogData(pd.p, theRect)
+			for pd from builderPlayers.staticItr()
+				fmods[pd.id] = new FogData(pd.p, theRect)
 
 	function getEscapers() returns LLStaticIterator<Escaper>
 		escapers.staticItr().reset()
@@ -130,18 +153,15 @@ public class RegionData
 		return Permission.GUEST
 		
 	function canBuild(player p) returns boolean
-		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or pData[p.getId()].admin
+		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or pData[p.getId()].title == Title.ADMIN
 
 	function createSetup()
 		createUnit(STAFF_PLAYER, 'n008', theRect.getCenter(), (270).asAngleDegrees())
 
 	function revealRegion(player p)
 		let id = p.getId()
-		visible = true
-		DestroyFogModifier(fmods[id])
-		fmods[id] = CreateFogModifierRect(p, FOG_OF_WAR_VISIBLE, theRect, true, true)
-		FogModifierStart(fmods[id])
-		
+		fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
+			
 	static function enterRect()
 		var u = GetTriggerUnit()
 		var data = u.getEntity()
@@ -151,7 +171,7 @@ public class RegionData
 			var edata = data castTo Escaper
 			if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet()
 				edata.kill(null)
-			else if not rdata.visible and isEscaper(data.owner)
+			else if isEscaper(data.owner)
 				rdata.revealRegion(data.owner)
 				edata.updateRegionData()
 		else if data instanceof UnitEntity

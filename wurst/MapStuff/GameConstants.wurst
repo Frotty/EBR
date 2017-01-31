@@ -10,10 +10,10 @@ public constant string MAP_VER = "EBR 0.87"
 public constant STAFF_PLAYER = players[14]
 
 public function isBuilder(player p) returns boolean
-	return builderPlayers.contains(pData[p.getId()])
+	return pData[p.getId()].role == Role.BUILDER
 
 public function isEscaper(player p) returns boolean
-	return escaperPlayers.contains(pData[p.getId()])
+	return pData[p.getId()].role == Role.ESCAPER
 	
 public enum COLOR
 	WHITE
