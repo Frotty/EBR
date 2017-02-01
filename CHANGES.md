@@ -1,6 +1,6 @@
 [0.87x]
 [*] added arcanery that silences escapers until they leave a given radius
-[*] 
+[*] terrainmodder now returns to 1x1 brush size after 20 seconds of idletime
 
 [0.87w]
 [*] Adjusted regions a bit

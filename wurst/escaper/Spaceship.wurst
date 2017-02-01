@@ -1,0 +1,27 @@
+package Spaceship
+import Entity
+import UnitObjEditing
+import Escaper
+import ChannelAbilityPreset
+
+int SHIP_ID
+
+public class Spaceship extends UnitEntity
+
+	construct(vec2 pos, Escaper mounter)
+		super(createUnit(mounter.owner, SHIP_ID, pos, angle(0)))
+
+
+@objectgen function genObjs()
+	SHIP_ID = UNIT_ID_GEN.next()
+
+	if compiletime
+		new UnitDefinition(SHIP_ID, 'hgry')
+			..setName("Spaceship")
+			..setModelFile("Onslaught.mdx")
+			..setMovementHeight(64)
+			..setMovementHeightMinimum(16)
+			..setNormalAbilities("")
+			..setHitPointsMaximumBase(100000000)
+			..setManaMaximum(0)
+			..setCollisionSize(0)

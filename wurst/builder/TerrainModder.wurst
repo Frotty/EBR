@@ -52,6 +52,7 @@ public class TerrainModder extends UnitEntity
 		let owner = actor.getOwner()
 		let id = GetUnitTypeId(actor)
 		if rdata.canBuild(owner)
+			idleSeconds = 0
 			if id == ICECONTROL
 				if modification == 1
 					orderPos.changeTerrain(REVICE, brushsize, brushsize, brushshape, owner)
@@ -71,6 +72,15 @@ public class TerrainModder extends UnitEntity
 		else
 			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
+	override function slowUpdate()
+		super.slowUpdate()
+		if idleSeconds > 20 and brushsize > 0
+			idleSeconds = 0
+			removeAllActive()
+			actor..removeAbility(BRUSH_1_IDLE_ABILITY)
+			..addAbility(BRUSH_1_ACTIVE_ABILITY)
+			brushsize = 0
+
 	function switchMode()
 		let spell_id = GetSpellAbilityId()
 		switch spell_id
@@ -89,7 +99,6 @@ public class TerrainModder extends UnitEntity
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 				modification = 0
 				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
-				
 			case ICE_ABILITY
 				UnitRemoveAbility(actor,ICE_ABILITY)
 				UnitAddAbility(actor,REVICE_ABILITY)
