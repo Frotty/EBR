@@ -1,6 +1,7 @@
 package Boss
 import SetupObject
 import PlayerData
+import SoundUtils
 import public BossSpellTarget
 import CustomBar
 import Minion
@@ -19,17 +20,21 @@ constant AOE_SPELL_ID = 'A06V'
 constant MISSILE_SPELL_ID = 'A06W'
 constant REVIVE_ID = 'A07L'
 public int SUMMON_MINION_ID
+constant ENTER_SOUND = new SoundDefinition("Units\\Undead\\Varimathras\\VarimathrasReady1.wav", false)
+constant MINION_SPAWN_SOUND = new SoundDefinition("Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeTargetWaveNonLoop1.waw", false)
+constant REVIVE_SOUND = new SoundDefinition("Units\\Undead\\Varimathras\\VarimathrasReady1.wav", false)
 
 public class Boss extends SetupObject
 	real maxHp = 400.
-	real currentHP = 400
+	real currentHP = 400.
 	CustomBar hpBar
 
-	construct( player owner, vec2 tpos, int id)
-		super( tpos.toVec3(), createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
+	construct(player owner, vec2 tpos, int id)
+		super(createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
 		setup..addAbility(SUMMON_MINION_ID)
+		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		hpBar = new CustomBar(pos, "|", 120, 8)
+		hpBar = new CustomBar(pos, "|", 120, 6)
 		hpBar.setForeground(colorA(200,255,125,255))
 
 	override function update()
@@ -39,6 +44,9 @@ public class Boss extends SetupObject
 
 	function onDamage(Escaper escaper, real dmg)
 		currentHP -= dmg
+		if currentHP < 0
+			printLog(Loglevel.DEBUG, "Our boss is dead")
+			actor.kill()
 		
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -74,19 +82,20 @@ public class Boss extends SetupObject
 					SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp-1)
 			case AOE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.AOE)
-				for target in tgts
-					target.castAoe()
+				if tgts != null and tgts.getSize() > 0
+					for target in tgts
+						target.castAoe()
 				destroy tgts
 			case MISSILE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.MISSILE)
-				for target in tgts
-					new BossMissile(actor,target)
-				destroy tgts
+				if tgts != null and tgts.getSize() > 0
+					for target in tgts
+						new BossMissile(actor,target)
+					destroy tgts
 			case SUMMON_MINION_ID
-				let a = true
 				// TODO `for spawner in minionspawners`
 				new Minion(pos.toVec2(), owner, actor.getFacingAngle())
-				// TODO PlaySoundBJ(gg_snd_Insert_proper_sound_here)
+				MINION_SPAWN_SOUND.playOnPoint(pos)
 			case REVIVE_ID
 				revive()
 	
@@ -100,7 +109,7 @@ public class Boss extends SetupObject
 	
 				
 	function revive()
-		PlaySound("Units\\Undead\\Varimathras\\VarimathrasReady1.wav")
+		REVIVE_SOUND.play()
 		destroy this
 
 @objectgen function genBoss()
