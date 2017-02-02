@@ -2,14 +2,37 @@ package Spaceship
 import Entity
 import UnitObjEditing
 import Escaper
+import KeyUtils
+import Interpolation
 import ChannelAbilityPreset
 
 int SHIP_ID
 
 public class Spaceship extends UnitEntity
-
+	real maxSpeed = 12
+	real acc = 0
+	angle xyAngle = angle(0)
 	construct(vec2 pos, Escaper mounter)
 		super(createUnit(mounter.owner, SHIP_ID, pos, angle(0)))
+		sleeps = false
+
+	override function update()
+		let downKeys = owner.getDownKeys()
+		acc = acc.lerp(0,0.1)
+		if downKeys.left
+			xyAngle += angle(0.1)
+		if downKeys.right
+			xyAngle -= angle(0.1)
+		actor.setFacing(xyAngle)
+		owner.panCamToTimed(actor, 0.1)
+		if downKeys.up
+			acc = 1
+		vel += (xyAngle).toVec(acc)
+		vel *= 0.955
+		let lgSq = vel.lengthSquared()
+		if lgSq > maxSpeed.squared()
+			vel = vel.setLength(maxSpeed)
+		super.update()
 
 
 @objectgen function genObjs()
@@ -25,3 +48,4 @@ public class Spaceship extends UnitEntity
 			..setHitPointsMaximumBase(100000000)
 			..setManaMaximum(0)
 			..setCollisionSize(0)
+			..setScalingValue(0.25)

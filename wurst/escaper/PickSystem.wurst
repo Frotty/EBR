@@ -84,11 +84,11 @@ public class Selector extends UnitEntity
 		switch id
 			case PREV_ID
 				currentView[pd.id].hide(pd)
-				currentView[pd.id] = currentView[pd.id].prev
+				currentView[pd.id] = currentView[pd.id].getPrev()
 				currentView[pd.id].showTo(pd)
 			case NEXT_ID
 				currentView[pd.id].hide(pd)
-				currentView[pd.id] = currentView[pd.id].next
+				currentView[pd.id] = currentView[pd.id].getNext()
 				currentView[pd.id].showTo(pd)	
 			case PICK_ID
 				currentView[pd.id].hide(pd)
@@ -145,10 +145,11 @@ public function allow()
 		pd.escaper = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 	end)
 	
-	for pd in allPlayers
+	for pd from allPlayers.staticItr()
+		print("name" + pd.name)
 		currentView[pd.id] = EscaperDefinition.first
 		for i = 0 to GetRandomInt(0, 3)
-			currentView[pd.id] = currentView[pd.id].next
+			currentView[pd.id] = currentView[pd.id].getNext()
 		currentView[pd.id].showTo(pd)
 
 int PREV_ID
