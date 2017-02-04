@@ -146,7 +146,6 @@ public function allow()
 	end)
 	
 	for pd from allPlayers.staticItr()
-		print("name" + pd.name)
 		currentView[pd.id] = EscaperDefinition.first
 		for i = 0 to GetRandomInt(0, 3)
 			currentView[pd.id] = currentView[pd.id].getNext()

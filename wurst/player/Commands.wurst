@@ -14,6 +14,7 @@ function onCommandChat()
 	let id = p.getId()
 	let pd = pData[id]
 	if pd.escaper == null
+		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after pick")
 		return
 	var cstr = str.substring(1, str.indexOf(" "))
 	switch cstr

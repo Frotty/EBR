@@ -83,6 +83,7 @@ public class TerrainModder extends UnitEntity
 
 	function switchMode()
 		let spell_id = GetSpellAbilityId()
+		idleSeconds = 0
 		switch spell_id
 			case UNWALKABLE_MOD_ABILITY_ID[1]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])

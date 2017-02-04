@@ -3,36 +3,121 @@ import ChannelAbilityPreset
 import Assets
 import BaseObject
 import ClosureForGroups
+import HashMap
+import TypeCasting
+import Builder
+import BuilderConstants
+import TerrainBlocker
+import Escaper
 
 public int PED_ID
 public int SELECT_SINGLE_ID
 public int SELECT_AOE_ID
-public int SAVE_ID
+public int SELECT_TILE_ID
+public int SAVE1_ID
+public int SAVE2_ID
+public int SAVE3_ID
+public int SAVE4_ID
 public int LOAD_ID
 
 constant AOE_PICK_RANGE = 378.
+function vec2.toTile() returns vec2
+	return vec2((this.x / 128.).round()*128. ,(this.y / 128.).round()*128.)
+
+enum Tile
+	UNWALKABLE
+	WALKABLE
+	LAVA
+	POISON
+	ICE_NORMAL
+	ICE_DARK
+
+class TileData implements Serializable
+	matrixpos offset
+	vec2 pos
+	effect fx
+
+	construct(vec2 realpos, matrixpos offset)
+		this.pos = realpos
+		this.offset = offset
+		this.fx = addEffect(Other.vengeancemissile, pos)
+
+	ondestroy
+		fx.destr()
+
+	override function serialize() returns Json
+		return new Json()
+			..addProperty(new Property("offx", offset.x.toString()))..addProperty(new Property("offy", offset.y.toString()))
+			..addProperty(new Property("tile", (getTileFromType(pos) castTo int).toString()))
+
+	override function deserialize(Json json)
+		offset = matrixpos(json.getInt("offx"),json.getInt("offy"))
+		pos = vec2(serializeOrigin.x + offset.x * 128.,serializeOrigin.y + offset.y * 128.)
+		let tile = json.getInt("tile") castTo Tile
+		let rdat = getRegionData(pos)
+		switch tile
+			case WALKABLE
+				pos.setTerrainType(rdat.getTypeSet().walkableId, -1, 1, 0)
+			case UNWALKABLE
+				pos.setTerrainType(rdat.getTypeSet().unwalkableId, -1, 1, 0)
+			case ICE_NORMAL
+				pos.setTerrainType(CONTROLLABLEICE, -1, 1, 0)
+			case ICE_DARK
+				pos.setTerrainType(UNCONTROLLABLEICE, -1, 1, 0)
+			default
+
+
+function getTileFromType(vec2 pos) returns Tile
+	let ttype = GetTerrainType(pos.x, pos.y)
+	let rdat = getRegionData(pos)
+	switch ttype
+		case rdat.getTypeSet().walkableId
+			return Tile.WALKABLE
+		case rdat.getTypeSet().unwalkableId
+			return Tile.UNWALKABLE
+		case CONTROLLABLEICE
+			return Tile.ICE_NORMAL
+		case UNCONTROLLABLEICE
+			return Tile.ICE_DARK
+	return Tile.UNWALKABLE
 
 public class MemoryAccessPedestal extends StaticBaseObject
 	private LinkedList<Serializable> entities = new LinkedList<Serializable>()
+	private LinkedList<TileData> tiles = new LinkedList<TileData>()
+	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
-		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)..addAbility(SAVE_ID)..addAbility(LOAD_ID)
+		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)..addAbility(SAVE1_ID)..addAbility(LOAD_ID)
+		..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)..addAbility(SAVE4_ID)..addAbility(SELECT_TILE_ID)
 		clearQuestionmark()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 		
 	function addObj(Serializable serializable)
-		let jsonS = serializable.serialize().toString()
-		print("add <" + jsonS + ">")
-		let json = new Json()
-		json.fromString(jsonS)
-		print("check <" + json.toString() + ">")
-		// if not entities.contains(serializable)
-		// 	entities.add(serializable)
-			// if serializable instanceof UnitEntity
-			// 	let ue = serializable castTo UnitEntity
-			// 	addEffect(Other.furbolgtracker_portrait,ue.actor.getPos())
+		if serializable instanceof Escaper
+			return
+		if entities.contains(serializable)
+			entities.remove(serializable)
+			let ef = effects.get(serializable)
+			if ef != null
+				ef.destr()
+		else
+			entities.add(serializable)
+			if serializable instanceof UnitEntity
+				let ue = serializable castTo UnitEntity
+				effects.put(serializable, ue.actor.addEffect(Other.roartarget, "overhead"))
+
+	function addTile(vec2 tpos)
+		let mpos = matrixpos(((tpos-pos.toVec2()).x / 128.).round(), ((tpos-pos.toVec2()).y / 128.).round())
+		let itr = tiles.staticItr()
+		for tile from itr
+			if tile.offset == mpos
+				destroy itr.remove()
+				return
+
+		tiles.add(new TileData(tpos.toTile(), mpos))
+		
 		
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -46,10 +131,15 @@ public class MemoryAccessPedestal extends StaticBaseObject
 							if ed.owner == owner
 								addObj(ed)
 				end)
-			case SAVE_ID
+			case SELECT_SINGLE_ID
+				addObj(GetSpellTargetUnit().getEntity())
+			case SELECT_TILE_ID
+				addTile(tpos)
+			case SAVE1_ID
 				var s = ""
-				// for sEnt in entities
-				// 	s += sEnt.serialize()
+				serializeOrigin = pos
+				for sEnt in entities
+					s += sEnt.serialize().toString() + "_"
 					
 				print(s)
 				
@@ -57,8 +147,12 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	PED_ID = UNIT_ID_GEN.next()
 	SELECT_SINGLE_ID = ABIL_ID_GEN.next()
 	SELECT_AOE_ID = ABIL_ID_GEN.next()
-	SAVE_ID = ABIL_ID_GEN.next()
+	SAVE1_ID = ABIL_ID_GEN.next()
+	SAVE2_ID = ABIL_ID_GEN.next()
+	SAVE3_ID = ABIL_ID_GEN.next()
+	SAVE4_ID = ABIL_ID_GEN.next()
 	LOAD_ID = ABIL_ID_GEN.next()
+	SELECT_TILE_ID = ABIL_ID_GEN.next()
 	if compiletime
 		new BuildingDefinition(PED_ID,'hwtw')
 		..setName("M.A.P.")
@@ -82,19 +176,31 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		..setHeroAbility(false)
 		..presetCastRange((int lvl) -> 2500.)
 		..setName("Select single")
-		..presetTargetTypes(Targettype.UTARGET)
+		..presetTargetTypes(Targettype.UNIT)
 		..presetCooldown((int lvl) -> 0.)
 		..presetManaCost((int lvl) -> 0)
+		..setTargetsAllowed(1, "allies,friend,ground,invulnerable")
 		..presetTooltipNormal((int lvl) -> "Select single entity")
 		..presetTooltipNormalExtended((int lvl) -> "Adds the target entity to the list of saved objects")
 		..presetButtonPosNormal(0, 0)
+
+		new ChannelAbilityPreset(SELECT_TILE_ID, 1, true)
+		..setHeroAbility(false)
+		..presetCastRange((int lvl) -> 2500.)
+		..setName("Select tile")
+		..presetTargetTypes(Targettype.POINT)
+		..presetCooldown((int lvl) -> 0.)
+		..presetManaCost((int lvl) -> 0)
+		..presetTooltipNormal((int lvl) -> "Select tile")
+		..presetTooltipNormalExtended((int lvl) -> "Adds the tile to the saved tiles")
+		..presetButtonPosNormal(2, 0)
 		
 		new ChannelAbilityPreset(SELECT_AOE_ID, 1, true)
 		..setHeroAbility(false)
 		..presetCastRange((int lvl) -> 2500.)
 		..setName("Select multi")
 		..presetOption(Option.TARGETIMAGE, true)
-		..presetTargetTypes(Targettype.PTARGET)
+		..presetTargetTypes(Targettype.POINT)
 		..presetAreaofEffect((int lvl) -> AOE_PICK_RANGE)
 		..presetCooldown((int lvl) -> 0.)
 		..presetManaCost((int lvl) -> 0)
@@ -102,23 +208,53 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		..presetTooltipNormalExtended((int lvl) -> "Adds the target entities to the list of saved objects")
 		..presetButtonPosNormal(1, 0)
 		
-		new ChannelAbilityPreset(SAVE_ID, 1, true)
+		new ChannelAbilityPreset(SAVE1_ID, 1, true)
 		..setHeroAbility(false)
-		..setName("Save")
-		..presetTargetTypes(Targettype.NOTARGET)
+		..setName("Save Slot 1")
+		..presetTargetTypes(Targettype.NONE)
 		..presetCooldown((int lvl) -> 2.)
 		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Save")
-		..presetTooltipNormalExtended((int lvl) -> "Save entities as template.\nSaves to disk if local files enabled")
+		..presetTooltipNormal((int lvl) -> "Save Slot 1")
+		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 1.\nExperimental - use with caution!")
 		..presetButtonPosNormal(0, 2)
-		
+
+		new ChannelAbilityPreset(SAVE2_ID, 1, true)
+		..setHeroAbility(false)
+		..setName("Save Slot 2")
+		..presetTargetTypes(Targettype.NONE)
+		..presetCooldown((int lvl) -> 2.)
+		..presetManaCost((int lvl) -> 0)
+		..presetTooltipNormal((int lvl) -> "Save Slot 2")
+		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 2.\nExperimental - use with caution!")
+		..presetButtonPosNormal(1, 2)
+
+		new ChannelAbilityPreset(SAVE3_ID, 1, true)
+		..setHeroAbility(false)
+		..setName("Save Slot 3")
+		..presetTargetTypes(Targettype.NONE)
+		..presetCooldown((int lvl) -> 2.)
+		..presetManaCost((int lvl) -> 0)
+		..presetTooltipNormal((int lvl) -> "Save Slot 3")
+		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 3.\nExperimental - use with caution!")
+		..presetButtonPosNormal(2, 2)
+
+		new ChannelAbilityPreset(SAVE4_ID, 1, true)
+		..setHeroAbility(false)
+		..setName("Save Slot 4")
+		..presetTargetTypes(Targettype.NONE)
+		..presetCooldown((int lvl) -> 2.)
+		..presetManaCost((int lvl) -> 0)
+		..presetTooltipNormal((int lvl) -> "Save Slot 4")
+		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 4.\nExperimental - use with caution!")
+		..presetButtonPosNormal(3, 2)
+
 		new ChannelAbilityPreset(LOAD_ID, 1, true)
 		..setHeroAbility(false)
 		..setName("Load")
-		..presetTargetTypes(Targettype.NOTARGET)
+		..presetTargetTypes(Targettype.NONE)
 		..presetCooldown((int lvl) -> 2.)
 		..presetManaCost((int lvl) -> 0)
 		..presetTooltipNormal((int lvl) -> "Load")
 		..presetTooltipNormalExtended((int lvl) -> "load template")
-		..presetButtonPosNormal(1, 2)
+		..presetButtonPosNormal(0, 1)
 	
