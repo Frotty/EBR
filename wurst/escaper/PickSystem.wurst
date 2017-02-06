@@ -5,6 +5,7 @@ import EscaperClasses
 import RevivePointModifier
 import ChannelAbilityPreset
 import CodeManager
+import ClosureTimers
 
 EscaperDefinition array currentView
 
@@ -61,8 +62,9 @@ class EscaperDefinition
 			printTimedToPlayer("    You chose the role |cff528CDEEscaper|r!", 20, pd.p)
 
 		pd.icon = mbicon
-		// Check for savefile
-		checkPlayerfile(pd)
+		// Check for savefile#
+		doAfter(0.5, () -> checkPlayerfile(pd))
+		
 
 	function setCallback(EscaperClsr closure)
 		this.cb = closure
@@ -103,7 +105,7 @@ public class Selector extends UnitEntity
 public function startChoose()
 	CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
 	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
-	for pd in allPlayers
+	for pd from allPlayers.staticItr()
 		regions[22].revealRegion(pd.p)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )

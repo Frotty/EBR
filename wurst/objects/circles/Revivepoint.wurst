@@ -38,7 +38,7 @@ public class RevivePoint extends StaticSetupObject
 						svRev.reached = false
 			
 			let getExp = currentRevivepoint.distanceTo(pos.toVec2()) > 512
-			for pd in escaperPlayers
+			for pd from escaperPlayers.staticItr()
 				if pd.escaper != null and pd.escaper.alive
 					pd.escaper.setPos(pos)
 					pd.escaper.stop()

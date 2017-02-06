@@ -1,4 +1,4 @@
-package VoidWalker
+package Faceless
 import EscaperSensor
 import ChannelAbilityPreset
 constant UNIT_ID = 'u00I'
@@ -15,7 +15,7 @@ enum WalkerMode
 	FADEIN
 	FADEOUT
 
-public class VoidWalker extends EscaperSensorSetup
+public class Faceless extends EscaperSensorSetup
 	private colorA color = COLOR_WHITE
 	ConfigValue visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
 	private real fadeDur = 1

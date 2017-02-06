@@ -41,7 +41,8 @@ public class Portal extends FxEntity
 	vec2 destiny = ZERO2
 	FastEscaper es = null
 	int duration
-	effect targetFx = null
+	real lerpy = 0.
+	Fx targetFx = null
 
 	construct(FastEscaper es, int duration) 
 		super(es.owner, es.getPos(), 24, angle(0), "PulseTC_fix4.mdx")
@@ -49,7 +50,7 @@ public class Portal extends FxEntity
 		this.duration = duration
 		this.es = es
 		deactivate()
-		fx.setColor(colorA(100,100,100,100))
+		fx.setColor(colorA(90,90,90,90))
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> begin
 			if destiny != ZERO2 and target instanceof Escaper
 				var teleport = true
@@ -69,7 +70,8 @@ public class Portal extends FxEntity
 
 	override function update()
 		if destiny != ZERO2 and fx.getColor() != COLOR_WHITE
-			fx.setColor(fx.getColor().mix(COLOR_WHITE, (fx.getColor().red / 255.).lerp(1.05, 0.1)))
+			lerpy = lerpy.lerp(1.05, 0.05)
+			fx.setColor(colorA(90,90,90,90).mix(COLOR_WHITE, lerpy))
 		else
 			super.update()
 
@@ -80,17 +82,19 @@ public class Portal extends FxEntity
 			terminate()
 
 	function setDestiny(vec2 tpos)
-		this.destiny = tpos
-		targetFx = addEffect("PulseTC_tgt.mdx", tpos)
 		if tpos != ZERO2
-			fx.setColor(colorA(215,215,215,215))
+			this.destiny = tpos
+			targetFx = new Fx(tpos,"PulseTC_tgt.mdx")
+			targetFx.setScale(0.75)
+			targetFx.setOwner(owner, true)
+			activate()
 		else
-			fx.setColor(colorA(125,125,125,125))
+			fx.setColor(colorA(90,90,90,90))
 
 	ondestroy
 		es.portal = null
 		if targetFx != null
-			targetFx.destr()
+			targetFx.hiddenDestroy()
 
 public class FastEscaper extends Escaper
 	Portal portal = null

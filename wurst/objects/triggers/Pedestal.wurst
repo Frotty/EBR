@@ -5,10 +5,12 @@ import BaseObject
 import ClosureForGroups
 import HashMap
 import TypeCasting
+import FileIO
 import Builder
 import BuilderConstants
 import TerrainBlocker
 import Escaper
+import LastOrder
 
 public int PED_ID
 public int SELECT_SINGLE_ID
@@ -18,7 +20,10 @@ public int SAVE1_ID
 public int SAVE2_ID
 public int SAVE3_ID
 public int SAVE4_ID
-public int LOAD_ID
+public int LOAD1_ID
+public int LOAD2_ID
+public int LOAD3_ID
+public int LOAD4_ID
 
 constant AOE_PICK_RANGE = 378.
 function vec2.toTile() returns vec2
@@ -88,8 +93,8 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
-		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)..addAbility(SAVE1_ID)..addAbility(LOAD_ID)
-		..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)..addAbility(SAVE4_ID)..addAbility(SELECT_TILE_ID)
+		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)
+		..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)..addAbility(SAVE4_ID)..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)
 		clearQuestionmark()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -117,8 +122,21 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				return
 
 		tiles.add(new TileData(tpos.toTile(), mpos))
+
+	function loadSlot(int slotId)
 		
 		
+	function saveSlot(int slotId)
+		var s = ""
+		serializeOrigin = pos
+		for sEnt from entities.staticItr()
+			s += sEnt.serialize().toString() + "_"
+
+		for tile from tiles.staticItr()
+			s += tile.serialize().toString() + "_"
+			
+		print(s)
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		let tpos = getSpellTargetPos()
@@ -136,12 +154,9 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			case SELECT_TILE_ID
 				addTile(tpos)
 			case SAVE1_ID
-				var s = ""
-				serializeOrigin = pos
-				for sEnt in entities
-					s += sEnt.serialize().toString() + "_"
-					
-				print(s)
+				saveSlot(1)
+			case LOAD1_ID
+				loadSlot(1)
 				
 @objectgen function genMAP()
 	PED_ID = UNIT_ID_GEN.next()
@@ -151,7 +166,11 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	SAVE2_ID = ABIL_ID_GEN.next()
 	SAVE3_ID = ABIL_ID_GEN.next()
 	SAVE4_ID = ABIL_ID_GEN.next()
-	LOAD_ID = ABIL_ID_GEN.next()
+	LOAD1_ID = ABIL_ID_GEN.next()
+	LOAD2_ID = ABIL_ID_GEN.next()
+	LOAD3_ID = ABIL_ID_GEN.next()
+	LOAD4_ID = ABIL_ID_GEN.next()
+
 	SELECT_TILE_ID = ABIL_ID_GEN.next()
 	if compiletime
 		new BuildingDefinition(PED_ID,'hwtw')
@@ -248,13 +267,22 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 4.\nExperimental - use with caution!")
 		..presetButtonPosNormal(3, 2)
 
-		new ChannelAbilityPreset(LOAD_ID, 1, true)
+		new ChannelAbilityPreset(LOAD1_ID, 1, true)
 		..setHeroAbility(false)
-		..setName("Load")
+		..setName("Load 1")
 		..presetTargetTypes(Targettype.NONE)
 		..presetCooldown((int lvl) -> 2.)
 		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Load")
+		..presetTooltipNormal((int lvl) -> "Load Slot 1")
 		..presetTooltipNormalExtended((int lvl) -> "load template")
 		..presetButtonPosNormal(0, 1)
 	
+		new ChannelAbilityPreset(LOAD2_ID, 1, true)
+		..setHeroAbility(false)
+		..setName("Load 2")
+		..presetTargetTypes(Targettype.NONE)
+		..presetCooldown((int lvl) -> 2.)
+		..presetManaCost((int lvl) -> 0)
+		..presetTooltipNormal((int lvl) -> "Load Slot 2")
+		..presetTooltipNormalExtended((int lvl) -> "load template")
+		..presetButtonPosNormal(1, 1)

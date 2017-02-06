@@ -1,4 +1,4 @@
-// Converted Wed Jan 18 02:20:47 2017
+// Converted Mon Feb 06 18:26:49 2017
 // MdlxConv Version Jun 29 2010.
 Version {
 	FormatVersion 800,
@@ -100,7 +100,7 @@ Geoset {
 	}
 	MinimumExtent { -92.819443, -93.180557, 15.562887 },
 	MaximumExtent { 93.680557, 93.319443, 15.562887 },
-	BoundsRadius 263.750824,
+	BoundsRadius 100.000000,
 	MaterialID 0,
 	SelectionGroup 0,
 }

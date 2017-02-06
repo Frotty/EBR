@@ -1,4 +1,18 @@
-[0.87x]
+[0.88a]
+[*] reduced small killer height so it can be jumped more easily
+[*] reduced velocity of escaper after orb jaunt
+[*] added fire killer
+[*] fixed buff error spam
+[*] fixed terrainchanger texture selection being unavailable
+[*] camera distance is now set periodically
+[*] changed unwalkable checking to accomodate for texture overlaps (experimental)
+[*] improved visuals for oneway portal
+[*] fixed jukebox incorrect music durations
+
+
+
+[0.87z]
+[*] minor bugfixes
 [*] added arcanery that silences escapers until they leave a given radius
 [*] terrainmodder now returns to 1x1 brush size after 20 seconds of idletime
 

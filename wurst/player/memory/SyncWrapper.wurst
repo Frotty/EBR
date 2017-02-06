@@ -1,6 +1,9 @@
 package SyncWrapper
 import FileIO
 import Table
+import ErrorHandling
+import initlater CodeManager
+import initlater PlayerData
 
 public function getSyncedData() returns SyncData
 	return GetSyncedData() castTo SyncData
@@ -37,6 +40,9 @@ public class SyncData
 	function addEventListener(code listener)
 		s__SyncData_addEventListener(vjassId, listener)
 
+	function addEventListener(filterfunc listener)
+		s__SyncData_addEventFListener(vjassId, listener)
+
 	function start()
 		s__SyncData_start(vjassId)
 
@@ -45,6 +51,98 @@ public class SyncData
 		vjassId = 0
 
 public constant ALPHABET = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
+
+string array sync_lines
+int array sizes
+init
+	for i = 0 to 200
+		sync_lines[i] = ""
+		sizes[i] = 0
+
+public class SyncPayload
+	string fileName
+	filterfunc finalListener
+	SyncedFile syncedFile = null
+
+	construct(string name, filterfunc listener)
+		this.fileName = name
+		this.finalListener = listener
+
+	ondestroy
+		if syncedFile != null
+			destroy syncedFile
+
+public function getSyncedFile(PlayerData pd, string filename, filterfunc listener)
+	if pd.syncPayload != null
+		if pd.syncPayload.syncedFile != null
+			destroy pd.syncPayload
+		else
+			error("trying to sync while other sync in progress")
+	pd.syncPayload = new SyncPayload(filename, listener)
+	printLog(Loglevel.DEBUG, "Start Sync1")
+	var lineCount = 0
+	if GetLocalPlayer() == pd.p
+		let file = File.open(FOLDER_NAME, filename, Mode.READ)
+		printLog(Loglevel.DEBUG, "Start Sync1.1")
+		var line = file.read()
+		printLog(Loglevel.DEBUG, "Start Sync1.2")
+		while line != null
+			printLog(Loglevel.DEBUG, "Start Sync1.3")
+			lineCount++
+			sizes[lineCount] = line.length()
+			line = file.read()
+		printLog(Loglevel.DEBUG, "Start Sync1.4")
+		file.close()
+	printLog(Loglevel.DEBUG, "Start Sync2")
+	let sd = new SyncData(pd.p)
+	sd.addInt(lineCount)
+	for i = 1 to lineCount
+		sd.addInt(sizes[i])
+		sizes[i] = 0
+	sd.addEventListener(() -> onLinecountSynced())
+	sd.start()
+	printLog(Loglevel.DEBUG, "Start Sync3")
+
+function onLinecountSynced()
+	printLog(Loglevel.DEBUG, "OnLCSync")
+	let pdc = pData[getSyncedData().p.getId()]
+	let payload = pdc.syncPayload
+	let lineCount = getSyncedData().readInt(0)
+	
+	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
+	if lineCount > 0
+		if GetLocalPlayer() == pdc.p
+			let file = File.open(FOLDER_NAME, payload.fileName, Mode.READ)
+			// Remove verify hash
+			for i = 0 to lineCount-1
+				sync_lines[i] = file.read()
+				printLog(Loglevel.DEBUG, "sync_lines[i]: " + sync_lines[i])
+			file.close()
+		printLog(Loglevel.DEBUG, "OnLCSync1")
+		let sd = new SyncData(pdc.p)
+		for i = 0 to lineCount-1
+			let length = getSyncedData().readInt(i+1)
+			printLog(Loglevel.DEBUG, "length: " + length.toString() + " synlinelength: "  + sync_lines[i].length().toString() )
+			sd.addString(sync_lines[i], length)
+			sync_lines[i] = ""
+		printLog(Loglevel.DEBUG, "OnLCSync2")
+		sd.addEventListener(function onPlayerfileSynced)
+		sd.addEventListener(pdc.syncPayload.finalListener)
+		sd.start()
+		printLog(Loglevel.DEBUG, "OnLCSync3")
+	
+	destroy getSyncedData()
+
+function onPlayerfileSynced()
+	printLog(Loglevel.DEBUG, "OnPFSyncWrapper")
+	let pdc = pData[getSyncedData().p.getId()]
+	// A file was found
+	pdc.syncPayload.syncedFile = new SyncedFile(getSyncedData())
+	
+	destroy getSyncedData()
+	printLog(Loglevel.DEBUG, "OnPFSyncWrapper done")
+
+
 public class SyncedFile
 	int size
 	int readpos
@@ -59,14 +157,14 @@ public class SyncedFile
 			stringTable.saveString(size, str)
 			size++
 			str = content.readString(size)
-		readpos = size
+		readpos = size+1
 		
 	function hasNext() returns boolean
-		return readpos > 0
+		return readpos > 1
 		
 	function read() returns string
 		readpos--
-		return stringTable.loadString(readpos)
+		return stringTable.loadString(size-readpos)
 		
 
 	

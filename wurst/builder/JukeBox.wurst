@@ -1,6 +1,7 @@
 package JukeBox
 import ClosureTimers
 import LinkedList
+import TimerUtils
 
 class Music
 	int spellid
@@ -29,10 +30,13 @@ LinkedList<Music> musics
 public class JukeBox
 	LinkedList<JukeRequest> requests = new LinkedList<JukeRequest>()
 	LinkedList<int> randomQueue = new LinkedList<int>()
+	timer jukeTimer
 	boolean lastWasRequest = false
 	Music currentMusic
 	
 	construct()
+		jukeTimer = getTimer()
+		jukeTimer.setData(this castTo int)
 		for n = 0 to 3
 			for i = 0 to musics.getSize()
 				if (i * GetRandomInt(1,7)) mod 2 == 0
@@ -59,17 +63,17 @@ public class JukeBox
 			lastWasRequest = false	
 		if currentMusic != null
 			PlayMusic(currentMusic.path)
-			doAfter(currentMusic.duration + 0.05, () -> playNextMusic())
+			jukeTimer.start(currentMusic.duration + 0.01, () -> onMusicCallback())
 		else
 			StopMusic(false)
-			doAfter(60, () -> playNextMusic())
+			jukeTimer.start(60, () -> onMusicCallback())
 	
 	function checkSpell(int id)
 		int idx = 0
-		for music in musics
+		for music from musics.staticItr()
 			if music.spellid == id
 				let p =	GetTriggerUnit().getOwner()
-				for req in requests
+				for req from requests.staticItr()
 					if req.juker == p
 						printTimedToPlayer("You already have a track in the jukebox!", 10, p)
 						return
@@ -77,9 +81,12 @@ public class JukeBox
 				printTimed("The Track |cff84DE52" + music.name + "|r has been queued by " + p.getNameColored(), 10)
 				requests.add(new JukeRequest(p, idx))
 				if requests.getSize() == 1 and not lastWasRequest
-					doAfter(0.5, () -> playNextMusic())
+					jukeTimer.start(0.5, () -> onMusicCallback())
 				return
 			idx++
+
+function onMusicCallback()
+	(GetExpiredTimer().getData() castTo JukeBox).playNextMusic()
 
 init
 	musics = new LinkedList<Music>()

@@ -131,6 +131,4 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
-@init2 function init_Builder()	
-	jukeBox.playNextMusic()
 	

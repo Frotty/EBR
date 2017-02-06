@@ -8,7 +8,7 @@ import Playerfile
 import initlater PickSystem
 
 constant XPMAX = 500000
-constant FOLDER_NAME = "EBR"
+public constant FOLDER_NAME = "EBR"
 constant FILE_NAME = "playerdata"
 public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
@@ -63,97 +63,42 @@ function onLocalFilesSynced()
 	onPlayerSynced()
 
 
-string array sync_lines
-int array sizes
-init
-	for i = 0 to 200
-		sync_lines[i] = ""
-		sizes[i] = 0
-
 /** Load and sync playerfile */
 public function checkPlayerfile(PlayerData pd)
 	printLog(Loglevel.DEBUG, "check playerfile")
 	if pd.localFilesEnabled
-		var lineCount = 0
-		if GetLocalPlayer() == pd.p
-			let file = File.open(FOLDER_NAME, FILE_NAME, Mode.READ)
-			let start = file.read()
-			if Playerfile.verify(start)
-				printTimed("Found a |cffFFCC00valid savefile.|r", 25)
-				var line = file.read()
-				while line != null
-					lineCount++
-					sizes[lineCount] = line.length()
-					line = file.read()
-			else
-				printTimed("|cffFFCC00No savefile found|r. Creating new..", 25)
-			file.close()
-		
-		let sd = new SyncData(pd.p)
-		sd.addInt(lineCount)
-		for i = 1 to lineCount
-			sd.addInt(sizes[i])
-			sizes[i] = 0
-		sd.addEventListener(() -> onLinecountSynced())
-		sd.start()
-		printLog(Loglevel.DEBUG, "Start Sync")
-		
+		getSyncedFile(pd, FILE_NAME, Filter(() -> onFileSynced()))
 
-function onLinecountSynced()
-	printLog(Loglevel.DEBUG, "OnLCSync")
+function onFileSynced()
 	let pdc = pData[getSyncedData().p.getId()]
-	let lineCount = getSyncedData().readInt(0)
-	
-	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
-	if lineCount > 0
-		if GetLocalPlayer() == pdc.p
-			let file = File.open(FOLDER_NAME, FILE_NAME, Mode.READ)
-			// Remove verify hash
-			file.read()
-			for i = 0 to lineCount-1
-				sync_lines[i] = file.read()
-				printLog(Loglevel.DEBUG, "sync_lines[i]: " + sync_lines[i])
-			file.close()
-		printLog(Loglevel.DEBUG, "OnLCSync1")
-		let sd = new SyncData(pdc.p)
-		for i = 0 to lineCount-1
-			let length = getSyncedData().readInt(i+1)
-			printLog(Loglevel.DEBUG, "length: " + length.toString() + "synlinelength: "  + sync_lines[i].length().toString() )
-			sd.addString(sync_lines[i], length)
-			sync_lines[i] = ""
-		printLog(Loglevel.DEBUG, "OnLCSync2")
-		sd.addEventListener(() -> onPlayerfileSynced())
-		sd.start()
-		printLog(Loglevel.DEBUG, "OnLCSync3")
-	else
+	printLog(Loglevel.DEBUG, "on PFCodeManager " + (pdc.syncPayload.syncedFile == null).toString())
+	let file = pdc.syncPayload.syncedFile
+	let token = file.read()
+	printLog(Loglevel.DEBUG, "on PFCodeManager 2 <" + token + ">")
+	if token == null
+		printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
 		// A new file was created
 		printLog(Loglevel.DEBUG, "New Playerfile1")
 		createNewPlayerfile(pdc)
 		printLog(Loglevel.DEBUG, "New Playerfile2")
 		checkPlayerfile(pdc)
 		printLog(Loglevel.DEBUG, "New Playerfile3")
-	destroy getSyncedData()	
+	else if Playerfile.verify(token)
+		printTimed("Found a |cffFFCC00valid savefile.|r", 25)
+		let pf = new Playerfile()
+		pf.load(file)
+		pdc.pfile = pf
+		for pmd in pf.pmDatas
+			printLog(Loglevel.DEBUG, "pdchash: " + pdc.hash + " loaded hash: " + pmd.namehash )
+			if pmd.namehash == pdc.hash
+				printTimedToPlayer("Found a profile for |cffFFCC00" + pdc.name + "|r", 25, pdc.p)
+				loadPlayerMemory(pdc, pmd)
+				return
 
-function onPlayerfileSynced()
-	printLog(Loglevel.DEBUG, "OnPFSync")
-	let pdc = pData[getSyncedData().p.getId()]
-	// A file was found
-	let file = new SyncedFile(getSyncedData())
-	let pf = new Playerfile()
-	destroy getSyncedData()
-	pf.load(file)
-	pdc.pfile = pf
-	printLog(Loglevel.DEBUG, "OnPFSync1")
-	for pmd in pf.pmDatas
-		if pmd.namehash == pdc.hash
-			printTimedToPlayer("Found a profile for |cffFFCC00" + pdc.name + "|r", 25, pdc.p)
-			loadPlayerMemory(pdc, pmd)
-			return
-
-	// Savedata exists, but no profile for that name
-	printTimedToPlayer("Didn't find a profile for |cffFFCC00" + pdc.name + "|r - creating new..", 25, pdc.p)
-	addPlayerProfile(pdc)
-	loadPlayerMemory(pdc, pdc.pmdata)
+		// Savedata exists, but no profile for that name
+		printTimedToPlayer("Didn't find a profile for |cffFFCC00" + pdc.name + "|r - creating new..", 25, pdc.p)
+		addPlayerProfile(pdc)
+		loadPlayerMemory(pdc, pdc.pmdata)
 		
 	
 

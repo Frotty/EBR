@@ -2,6 +2,7 @@ package GameInit
 import EntityManagement
 import Startmazes
 import PlayerData
+import JukeBox
 
 init
 	callGen()
@@ -23,8 +24,9 @@ function initGame()
 	GetExpiredTimer().start(0.01, () -> initPartTwo())
 
 function initPartTwo()
-	GetExpiredTimer().release()
 	callFunctionsWithAnnotation("@init2")
 	initStartmazes()
 	checkPlayerLocalFiles()
+	jukeBox.playNextMusic()
+	GetExpiredTimer().release()
 	

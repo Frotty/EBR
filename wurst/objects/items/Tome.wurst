@@ -2,21 +2,16 @@ package Tome
 import ItemObject
 import Escaper
 
-constant TOME_DUMMY_ID = 1
+constant TOME_DUMMY_ID = 'h10K'
 
 public class Tome extends ItemObject
-	boolean picked = false
-	boolean followWalkable = true
-	Escaper holder
 	
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
-		setup.hide()
 		
 	override function onUse(Escaper user)
 		
 	override function onPickup(Escaper holder)
-		picked = true
 		terminate()
 		
 	override function onDrop(Escaper e)

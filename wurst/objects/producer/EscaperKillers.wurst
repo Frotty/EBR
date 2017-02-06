@@ -9,6 +9,7 @@ public constant COLL_SIZE_BRK = 90.
 public constant COLL_SIZE_TANK = 80.
 public constant COLL_SIZE_GLAIVE = 54.
 public constant COLL_SIZE_AIR = 60.
+public constant COLL_SIZE_FIRE = 16.
 public constant AIR_HEIGHT = 200.
 
 public constant SMALL_RANDOM_KILLER_ID = 'u006'
@@ -16,14 +17,15 @@ public constant BIG_RANDOM_KILLER_ID = 'u008'
 public constant TANK_KILLER_ID = 'h001'
 public constant GLAIVE_KILLER_ID = 'u00A'
 public constant AIR_KILLER_ID = 'u00J'
+public constant FIRE_KILLER_ID = 'u00P'
 
 public class SmallKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
-		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, facing, COLL_SIZE_SK, COLL_SIZE_SK + 16)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, facing, COLL_SIZE_SK, COLL_SIZE_SK + 4)
 
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, COLL_SIZE_SK, COLL_SIZE_SK + 16)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, COLL_SIZE_SK, COLL_SIZE_SK + 4)
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_SK, COLL_SIZE_SK + 16)
@@ -100,4 +102,21 @@ public class AirKiller extends EscaperSensorSetup
 			if zdelta - COLL_SIZE_AIR <= sensorHeight and zdelta > 0
 				let escaper = target castTo Escaper
 				escaper.kill(this)
+
+public class FireKiller extends EscaperSensorSetup
+
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.withZ(256), owner, FIRE_KILLER_ID, facing, COLL_SIZE_FIRE, 64)
+		actor.issueImmediateOrder("immolation")
+		setup.removeAbility('A08I')
+	
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, FIRE_KILLER_ID, COLL_SIZE_FIRE, COLL_SIZE_FIRE)
+		actor.issueImmediateOrder("immolation")
+		setup.removeAbility('A08I')
+	
+	construct(unit existing)
+		super(existing, COLL_SIZE_AIR, COLL_SIZE_AIR)
+		actor.issueImmediateOrder("immolation")
+		setup.removeAbility('A08I')
 		

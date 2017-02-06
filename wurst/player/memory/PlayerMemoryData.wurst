@@ -18,9 +18,9 @@ public class PMData
 		expcode = xpcode.trim()
 		
 	function load(SyncedFile file)
-		adminToken = file.read()
-		expcode = file.read()
 		namehash = file.read()
+		expcode = file.read()
+		adminToken = file.read()
 		printLog(Loglevel.DEBUG, "PMData load: hash <"  + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
 			
 
