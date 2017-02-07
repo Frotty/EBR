@@ -353,7 +353,7 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 11.5))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
-			orb.addVel(getRealVel()*0.25)
+			orb.addVel((getRealVel()-walkVel)*0.45)
 			orb.setXYAngle(orb.vel.toVec2().getAngle())
 			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
 		else if id == JAUNT_SPELL
@@ -419,6 +419,7 @@ function correctRegion()
 @init2 function init_Escaper()
 	neutralDeathTrig = CreateTrigger()
 	neutralDeathTrig.addAction(function Escaper.neutralDeath)
+	getTimer().startPeriodic(1., function correctRegion)
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)

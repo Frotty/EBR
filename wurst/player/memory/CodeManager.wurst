@@ -46,7 +46,7 @@ public function checkLocalFiles(PlayerData pd)
 	if not pd.localFilesEnabled
 		let sd = new SyncData(pd.p)
 		sd.addBool(File.isEnabled())
-		sd.addEventListener(() -> onLocalFilesSynced())
+		sd.addEventListener(Filter(() -> onLocalFilesSynced()))
 		sd.start()
 
 function onLocalFilesSynced()

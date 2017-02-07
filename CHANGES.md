@@ -1,14 +1,19 @@
 [0.88a]
 [*] reduced small killer height so it can be jumped more easily
 [*] reduced velocity of escaper after orb jaunt
+[*] increased orb inherited velocity
 [*] added fire killer
-[*] fixed buff error spam
-[*] fixed terrainchanger texture selection being unavailable
-[*] camera distance is now set periodically
-[*] changed unwalkable checking to accomodate for texture overlaps (experimental)
+[*] added inner strength to strong escaper
+[*] added activation effect for one-shot executer
+[*] now setting camera distance periodically
+[*] changed unwalkable checking to accomodate for texture overlaps (experimental, this makes it impossible to cut diagonals, but allows cutting corners more easily)
 [*] improved visuals for oneway portal
+[*] fixed buff error spam
+[*] fixed arcanery activation radius
+[*] fixed terrainchanger texture selection being unavailable
 [*] fixed jukebox incorrect music durations
-
+[*] fixed savesystem to correctly handle multiple names (allows different accounts on same pc)
+[*] fixed placing portals while flying
 
 
 [0.87z]

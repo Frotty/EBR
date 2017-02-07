@@ -6,6 +6,7 @@ import Escaper
 import EscaperKillers
 import Door
 import Pointer
+import Assets
 import Knockbacker
 import Builder
 import Unitcreator
@@ -81,6 +82,7 @@ public class Executer extends StaticBaseObject
 					obj.findAction()
 				case Emode.ONESHOT
 					if not obj.disabled
+						flashEffect(Other.charmtarget, obj.getPos())
 						obj.findAction()
 						obj.disable()
 				case Emode.LEVER

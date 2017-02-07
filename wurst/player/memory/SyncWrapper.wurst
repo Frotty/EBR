@@ -37,11 +37,8 @@ public class SyncData
 	function readInt(int index) returns int
 		return s__SyncData_readInt(vjassId, index)
 
-	function addEventListener(code listener)
-		s__SyncData_addEventListener(vjassId, listener)
-
 	function addEventListener(filterfunc listener)
-		s__SyncData_addEventFListener(vjassId, listener)
+		s__SyncData_addEventListener(vjassId, listener)
 
 	function start()
 		s__SyncData_start(vjassId)
@@ -50,7 +47,7 @@ public class SyncData
 		s__SyncData_destroy(vjassId)
 		vjassId = 0
 
-public constant ALPHABET = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`"
+public constant ALPHABET = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
 string array sync_lines
 int array sizes
@@ -99,7 +96,7 @@ public function getSyncedFile(PlayerData pd, string filename, filterfunc listene
 	for i = 1 to lineCount
 		sd.addInt(sizes[i])
 		sizes[i] = 0
-	sd.addEventListener(() -> onLinecountSynced())
+	sd.addEventListener(Filter(() -> onLinecountSynced()))
 	sd.start()
 	printLog(Loglevel.DEBUG, "Start Sync3")
 
@@ -126,7 +123,7 @@ function onLinecountSynced()
 			sd.addString(sync_lines[i], length)
 			sync_lines[i] = ""
 		printLog(Loglevel.DEBUG, "OnLCSync2")
-		sd.addEventListener(function onPlayerfileSynced)
+		sd.addEventListener(Filter(() -> onPlayerfileSynced()))
 		sd.addEventListener(pdc.syncPayload.finalListener)
 		sd.start()
 		printLog(Loglevel.DEBUG, "OnLCSync3")

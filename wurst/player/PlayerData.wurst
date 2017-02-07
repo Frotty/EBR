@@ -75,7 +75,6 @@ public class PlayerData
 		name = GetPlayerName(p)
 		pData[id] = this
 		hash = name.getHash().toString()
-		printLog(Loglevel.INFO, name + ":(" + hash + ")")
 		mbname = name
 			
 		int i = 0
