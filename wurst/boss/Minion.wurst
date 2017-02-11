@@ -1,15 +1,28 @@
 package Minion
 import public EscaperSensor
+import Assets
 import Escaper
 import CustomBar
+import ClosureForGroups
+import Fx
 
-public constant COLL_SIZE_MINION = 68.
+public constant COLL_SIZE_MINION = 0.
+public constant ATTACK_DISTANCE = 70.
+public constant ATTACK_RANGE = 120.
+public constant ATTACK_DAMAGE = 100.
+
+class MinionData
+    UnitEntity entity
+    
+    construct(UnitEntity k)
+        entity = k
 
 public class Minion extends EscaperSensorSetup
     private Escaper target
     real maxHp = 40.
     real currentHP = 40.
     CustomBar hpBar
+    boolean attacking = false
 
     construct(vec2 pos, player owner, angle facing)
         super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
@@ -27,8 +40,12 @@ public class Minion extends EscaperSensorSetup
         
     function onDamage(Escaper escaper, real dmg)
         currentHP -= dmg
-        if currentHP < 0
+        if currentHP < 1
             actor.kill()
+            setup.abortOrder()
+            hpBar.fadeOut(1.5, true, 0, 0)
+            sleeps = true
+            getTimer()..start(3, function Minion.removeAfterDeath)..setData(new MinionData(this) castTo int)
 
     override function update()
         super.update()
@@ -37,11 +54,15 @@ public class Minion extends EscaperSensorSetup
         if target == null or target.alive != true or target.getCurrentRegion() != this.getCurrentRegion()
             selectTarget()
         else if target != null
-            // Spamming the order like this might not be a good idea
-            setup.issuePointOrder("move", target.pos.toVec2())
+            if attacking
+                actor.setFacing(pos.angleTo2d(target.pos))
+            if not attacking and target.pos.distanceTo(pos) < ATTACK_DISTANCE
+                attack()
+            else if not attacking
+                // Spamming the order like this might not be a good idea
+                setup.issuePointOrder("move", target.pos.toVec2())
 
     function selectTarget()
-        printLog(Loglevel.DEBUG, "Searching for a new target")
         target = null
         var closestDist = -1.
         for escaper from this.getCurrentRegion().getEscapers()
@@ -50,6 +71,35 @@ public class Minion extends EscaperSensorSetup
                 if closestDist == -1. or dist < closestDist
                     closestDist = dist
                     target = escaper
-                    printLog(Loglevel.DEBUG, "Found a new prey!")
         if target != null
             setup.issuePointOrder("move", target.pos.toVec2())
+
+    function attack()
+        attacking = true
+        actor.setAnimation("attack")
+        getTimer()..start(0.7, function Minion.damage)..setData(new MinionData(this) castTo int)
+
+    static function damage()
+        var t = GetExpiredTimer()
+        MinionData data = t.getData() castTo MinionData
+        let minion = data.entity castTo Minion
+        if minion.currentHP > 0
+            let facing = data.entity.actor.getFacingAngle()
+            let tpos = minion.getPos().toVec2().polarOffset(facing, 80)
+            destroy new Fx(tpos, facing, Other.manaflareboltimpact)..setZ(30)..setScale(1.1)
+            minion.attacking = false
+            forUnitsInRange(tpos, ATTACK_RANGE, (unit u) -> begin
+                let entity = u.getEntity()
+                if entity != null and entity instanceof Escaper
+                    Escaper e = entity castTo Escaper
+                    data.entity.actor.damageTarget(e.actor, ATTACK_DAMAGE)
+            end)
+        destroy data
+        t.release()
+
+    static function removeAfterDeath()
+        var t = GetExpiredTimer()
+        MinionData data = t.getData() castTo MinionData
+        data.entity.terminate()
+        destroy data
+        t.release()
