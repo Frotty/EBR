@@ -11,12 +11,6 @@ public constant ATTACK_DISTANCE = 70.
 public constant ATTACK_RANGE = 120.
 public constant ATTACK_DAMAGE = 100.
 
-class MinionData
-    UnitEntity entity
-    
-    construct(UnitEntity k)
-        entity = k
-
 public class Minion extends EscaperSensorSetup
     private Escaper target
     real maxHp = 40.
@@ -35,8 +29,7 @@ public class Minion extends EscaperSensorSetup
     function setup()
         selectTarget()
         sleeps = false
-        hpBar = new CustomBar(pos, "|", 40, 6)
-        hpBar.setForeground(colorA(200,255,125,255))
+        hpBar = new CustomBar(pos, "|", 40, 6)..setForeground(colorA(200,255,125,255))
         
     function onDamage(Escaper escaper, real dmg)
         currentHP -= dmg
@@ -45,13 +38,13 @@ public class Minion extends EscaperSensorSetup
             setup.abortOrder()
             hpBar.fadeOut(1.5, true, 0, 0)
             sleeps = true
-            getTimer()..start(3, function Minion.removeAfterDeath)..setData(new MinionData(this) castTo int)
+            getTimer()..start(3, function Minion.removeAfterDeath)..setData(this castTo int)
 
     override function update()
         super.update()
         hpBar.setPosXY(pos.x - 50, pos.y + 50)
         hpBar.setValue(currentHP / maxHp * 100.0)
-        if target == null or target.alive != true or target.getCurrentRegion() != this.getCurrentRegion()
+        if target == null or not target.alive or target.getCurrentRegion() != this.getCurrentRegion()
             selectTarget()
         else if target != null
             if attacking
@@ -77,14 +70,19 @@ public class Minion extends EscaperSensorSetup
     function attack()
         attacking = true
         actor.setAnimation("attack")
-        getTimer()..start(0.7, function Minion.damage)..setData(new MinionData(this) castTo int)
+        getTimer()..start(0.7, function Minion.damage)..setData(this castTo int)
+
+    function doDamage(Escaper e) 
+        actor.damageTarget(e.actor, ATTACK_DAMAGE)
+    
+    function getFacingAngle() returns angle
+        return actor.getFacingAngle()
 
     static function damage()
         var t = GetExpiredTimer()
-        MinionData data = t.getData() castTo MinionData
-        let minion = data.entity castTo Minion
+        let minion = t.getData() castTo Minion
         if minion.currentHP > 0
-            let facing = data.entity.actor.getFacingAngle()
+            let facing = minion.getFacingAngle()
             let tpos = minion.getPos().toVec2().polarOffset(facing, 80)
             destroy new Fx(tpos, facing, Other.manaflareboltimpact)..setZ(30)..setScale(1.1)
             minion.attacking = false
@@ -92,14 +90,12 @@ public class Minion extends EscaperSensorSetup
                 let entity = u.getEntity()
                 if entity != null and entity instanceof Escaper
                     Escaper e = entity castTo Escaper
-                    data.entity.actor.damageTarget(e.actor, ATTACK_DAMAGE)
+                    minion.doDamage(e)
             end)
-        destroy data
         t.release()
 
     static function removeAfterDeath()
         var t = GetExpiredTimer()
-        MinionData data = t.getData() castTo MinionData
-        data.entity.terminate()
-        destroy data
+        let data = t.getData() castTo Minion
+        data.terminate()
         t.release()
