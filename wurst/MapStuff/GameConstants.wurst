@@ -15,7 +15,7 @@ public function isBuilder(player p) returns boolean
 public function isEscaper(player p) returns boolean
 	return pData[p.getId()].role == Role.ESCAPER
 	
-public enum COLOR
+public enum EBRColor
 	WHITE
 	RED
 	BLUE
@@ -29,6 +29,13 @@ public enum COLOR
 	LIGHTBLUE
 	DARKGREEN
 	BROWN
+
+public function EBRColor.toColor() returns colorA
+	switch this
+		case WHITE
+			return COLOR_WHITE
+		default
+			return playercolors[this castTo int - 1].withAlpha(255)
 
 
 @init1 function init_GameConstants()

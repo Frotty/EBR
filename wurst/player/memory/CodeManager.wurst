@@ -8,7 +8,7 @@ import Playerfile
 import initlater PickSystem
 
 constant XPMAX = 500000
-public constant FOLDER_NAME = "EBR"
+public constant FOLDER_NAME = "GameData\\EBR"
 constant FILE_NAME = "playerdata"
 public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331

@@ -1,20 +1,24 @@
 package Pedestal
-import ChannelAbilityPreset
 import Assets
 import BaseObject
 import ClosureForGroups
 import HashMap
-import TypeCasting
+import PlayerData
 import FileIO
-import Builder
-import BuilderConstants
+import SyncWrapper
 import TerrainBlocker
-import Escaper
-import LastOrder
+import Scanner
+import TypeCasting
+import ClosureTimers
+import CodeManager
+import Json
+import SeqWorker
+import JsonParser
 
 public int PED_ID
 public int SELECT_SINGLE_ID
 public int SELECT_AOE_ID
+public int SELECT_AOE_TILE_ID
 public int SELECT_TILE_ID
 public int SAVE1_ID
 public int SAVE2_ID
@@ -25,7 +29,9 @@ public int LOAD2_ID
 public int LOAD3_ID
 public int LOAD4_ID
 
-constant AOE_PICK_RANGE = 378.
+constant CHAR_STEPSIZE = 180
+
+public constant AOE_PICK_RANGE = 256.
 function vec2.toTile() returns vec2
 	return vec2((this.x / 128.).round()*128. ,(this.y / 128.).round()*128.)
 
@@ -38,9 +44,15 @@ enum Tile
 	ICE_DARK
 
 class TileData implements Serializable
+	static constant X_KEY = "x"
+	static constant Y_KEY = "y"
+	static constant TYPE_KEY = "t"
 	matrixpos offset
 	vec2 pos
 	effect fx
+	Tile tile = Tile.UNWALKABLE
+
+	construct()
 
 	construct(vec2 realpos, matrixpos offset)
 		this.pos = realpos
@@ -51,14 +63,17 @@ class TileData implements Serializable
 		fx.destr()
 
 	override function serialize() returns Json
-		return new Json()
-			..addProperty(new Property("offx", offset.x.toString()))..addProperty(new Property("offy", offset.y.toString()))
-			..addProperty(new Property("tile", (getTileFromType(pos) castTo int).toString()))
+		this.tile = getTileFromType(pos)
+		let json = new Json()
+			..addProperty(new Property(X_KEY, offset.x.toString()))..addProperty(new Property(Y_KEY, offset.y.toString()))
+		if tile != Tile.UNWALKABLE
+			json..addProperty(new Property(TYPE_KEY, (getTileFromType(pos) castTo int).toString()))
+		return json
 
 	override function deserialize(Json json)
-		offset = matrixpos(json.getInt("offx"),json.getInt("offy"))
-		pos = vec2(serializeOrigin.x + offset.x * 128.,serializeOrigin.y + offset.y * 128.)
-		let tile = json.getInt("tile") castTo Tile
+		offset = matrixpos(json.getInt(X_KEY),json.getInt(Y_KEY))
+		pos = vec2(serializeOrigin.x + offset.x * 128.,serializeOrigin.y + offset.y * 128.).toTile()
+		tile = json.getInt(TYPE_KEY) castTo Tile
 		let rdat = getRegionData(pos)
 		switch tile
 			case WALKABLE
@@ -87,17 +102,24 @@ function getTileFromType(vec2 pos) returns Tile
 	return Tile.UNWALKABLE
 
 public class MemoryAccessPedestal extends StaticBaseObject
+	static constant ENTITIES_KEY = "e"
+	static constant TILES_KEY = "t"
+
+	static MemoryAccessPedestal array lastRef 
 	private LinkedList<Serializable> entities = new LinkedList<Serializable>()
 	private LinkedList<TileData> tiles = new LinkedList<TileData>()
 	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
+	private boolean syncingDone = true
+	let parser = new JsonParser()
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
+		setPos(pos.toTile().toVec3())
 		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)
 		..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)..addAbility(SAVE4_ID)..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)
+		..addAbility(SELECT_AOE_TILE_ID)
 		clearQuestionmark()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
 		
 	function addObj(Serializable serializable)
 		if serializable instanceof Escaper
@@ -113,29 +135,166 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				let ue = serializable castTo UnitEntity
 				effects.put(serializable, ue.actor.addEffect(Other.roartarget, "overhead"))
 
-	function addTile(vec2 tpos)
-		let mpos = matrixpos(((tpos-pos.toVec2()).x / 128.).round(), ((tpos-pos.toVec2()).y / 128.).round())
+	function addTile(vec2 tpos, boolean removeIfExiss)
+		let targPos = tpos.toTile()
+		let ownPos = pos.toVec2()
+		let mpos = matrixpos(((targPos-ownPos).x / 128.).toInt(), ((targPos-ownPos).y / 128.).toInt())
 		let itr = tiles.staticItr()
 		for tile from itr
 			if tile.offset == mpos
-				destroy itr.remove()
+				if removeIfExiss
+					destroy itr.remove()
 				return
 
-		tiles.add(new TileData(tpos.toTile(), mpos))
+		tiles.add(new TileData(targPos, mpos))
 
 	function loadSlot(int slotId)
-		
-		
-	function saveSlot(int slotId)
-		var s = ""
-		serializeOrigin = pos
-		for sEnt from entities.staticItr()
-			s += sEnt.serialize().toString() + "_"
+		lastRef[owner.getId()] = this
+		print("syncing slot")
+		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString(), Filter(() -> onLoadSlotSynced()))
 
-		for tile from tiles.staticItr()
-			s += tile.serialize().toString() + "_"
+	static function onLoadSlotSynced()
+		printLog(Loglevel.DEBUG, "synced")
+		let pd = pData[getSyncedData().p.getId()]
+		let ref = lastRef[pd.id]
+		ref.syncingDone = true
+		var jsonString = new BigString()
+		var buildString = pd.syncPayload.syncedFile.read()
+		while buildString != null
+			jsonString.addString(buildString)
+			buildString = pd.syncPayload.syncedFile.read()
+		printLog(Loglevel.DEBUG, "Reconstructed")
+		jsonString.debugPrint()
+		serializeOrigin = ref.pos.toVec2().toTile().toVec3()
+		ref.parser.setInput(jsonString)
+		ref.parser.parse((SeqCallback cb) -> begin
+			print("synced data parsed")
+			ref.parser.output.getStringList(ENTITIES_KEY, ref.parser, (SeqCallback cb) -> begin
+				cb.terminate()
+				ref.loadEntities()
+			end)
+		end)
+		
+
+	function loadEntities()
+		print("load entities")
+		// TODO load entities
+
+		// Load tiles
+		parser.output.getStringList(TILES_KEY, parser, (SeqCallback cb) -> begin
+			loadTiles((cb.customData castTo JsonParser).outputList)
+			cb.terminate()
+		end)
+
+	function loadTiles(LinkedList<BigSubString> list)
+		print("load tiles")
+		let td = new TileData()
+		let bs = new BigString()
+		
+		var itr = list.staticItr()
+		doSeq(1, (SeqCallback cb1) -> begin
+			cb1.done = true
+			print("next seq")
+			if itr.hasNext()
+				bs.reset()
+				let next = itr.next()
+				parser.setInput(bs..addSubString(next))
+				parser.parse((SeqCallback cb2) -> begin
+					print("on parse")
+					td..deserialize(parser.output)
+					print("parsed")
+					parser.output.reset()
+					cb1.doStep()
+				end)
+			else
+				cb1.terminate()
+				print("loaded tiles")
+		end)
+
+	BigString tileString = new BigString()
+	BigString entString = new BigString()
+	// function loadSeq()
+	// 	let td = new TileData()
+	// 	let tempJson = new Json()
+	// 	
+	// 	print("loading sequential: " + currentList.getSize().toString())
+	// 	int i = 0
+	// 	let itr = currentList.staticItr()
+	// 	for tile from currentList.staticItr()
+	// 		itr.remove()
+	// 		if tile != null and tile.length() > 2
+	// 			print("tile: " + i.toString() + " - " + tile)
+	// 			// let tileJson = tempJson..fromString(tile)
+	// 			// td..deserialize(tileJson)
+	// 			tempJson.reset()
+	// 		i++
+	// 		if i >= 20
+	// 			break
+	// 	print("loaded tiles")
+	// 	destroy tempJson
+	// 	destroy td
 			
-		print(s)
+
+	int currentSlotId
+	function saveSlot(int slotId)
+		let itr = entities.staticItr()
+		currentSlotId = slotId
+		entString.reset()
+		entString.addString(JSON_OPEN_ARRAY.token)
+		doSeq(10, (SeqCallback cb) -> begin
+			if itr.hasNext()
+				itr.next().serialize().addToBigString(entString)
+				if itr.hasNext()
+					entString.addString(JSON_SIGN_COMMA.token)
+				destroy itr.remove()
+			else
+				cb.terminate()
+				entString.addString(JSON_CLOSE_ARRAY.token)
+				entString.debugPrint()
+				nullTimer(() -> saveTileSeq())
+		end)
+
+	function saveTileSeq()
+		print("saving tiles: " + tiles.getSize().toString())
+		tileString.reset()
+		tileString.addString(JSON_OPEN_ARRAY.token)
+		let itr = tiles.staticItr()
+		doSeq(10, (SeqCallback cb) -> begin
+			if itr.hasNext()
+				print("adding tile")
+				itr.next().serialize().addToBigString(tileString)
+				if itr.hasNext()
+					tileString.addString(JSON_SIGN_COMMA.token)
+				print("added tile")
+				destroy itr.remove()
+			else
+				cb.terminate()
+				tileString.addString(JSON_CLOSE_ARRAY.token)
+				nullTimer(() -> saveFile())
+		end)
+
+	function saveFile()
+		let json = new Json()
+		let big = new BigString()
+		json.addProperty(new Property(new BigSubString(ENTITIES_KEY), entString.asSubstring()))
+		json.addProperty(new Property(new BigSubString(TILES_KEY), tileString.asSubstring()))
+		
+		json.addToBigString(big)
+		
+		
+		if GetLocalPlayer() == owner
+			let f = File.open(FOLDER_NAME, "dataSlot" + currentSlotId.toString(), Mode.WRITE)
+			while big.getLength() > BIG_SUBSTRING_LEN
+				print("writing: " + big.getString(0, BIG_SUBSTRING_LEN))
+				f.write(big.getString(0, BIG_SUBSTRING_LEN))
+				big.startoffset += BIG_SUBSTRING_LEN
+			print("writinglast: " + big.getString(0))
+			f.write(big.getString(0))
+			f.close()
+
+		big.debugPrint()
+		destroy json
+		destroy big
 
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -152,137 +311,17 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			case SELECT_SINGLE_ID
 				addObj(GetSpellTargetUnit().getEntity())
 			case SELECT_TILE_ID
-				addTile(tpos)
+				addTile(tpos, true)
 			case SAVE1_ID
 				saveSlot(1)
+			case SAVE2_ID
+				saveSlot(2)
 			case LOAD1_ID
 				loadSlot(1)
-				
-@objectgen function genMAP()
-	PED_ID = UNIT_ID_GEN.next()
-	SELECT_SINGLE_ID = ABIL_ID_GEN.next()
-	SELECT_AOE_ID = ABIL_ID_GEN.next()
-	SAVE1_ID = ABIL_ID_GEN.next()
-	SAVE2_ID = ABIL_ID_GEN.next()
-	SAVE3_ID = ABIL_ID_GEN.next()
-	SAVE4_ID = ABIL_ID_GEN.next()
-	LOAD1_ID = ABIL_ID_GEN.next()
-	LOAD2_ID = ABIL_ID_GEN.next()
-	LOAD3_ID = ABIL_ID_GEN.next()
-	LOAD4_ID = ABIL_ID_GEN.next()
-
-	SELECT_TILE_ID = ABIL_ID_GEN.next()
-	if compiletime
-		new BuildingDefinition(PED_ID,'hwtw')
-		..setName("M.A.P.")
-		..setNormalAbilities("")
-		..setModelFile(Units.bookofSummoningPedestal)
-		..setScalingValue(.75)
-		..setSelectionScale(.8)
-		..setButtonPositionX(2)
-		..setButtonPositionX(1)
-		..setTooltipBasic("Erect M.A.P.")
-		..setTooltipExtended("Creates a Memory Access Pedestal which allows you to save and load entities")
-		..setRace(Race.Creeps)
-		..setGroundTexture("")
-		..setPathingMap("PathTextures\\4x4unbuildable.tga")
-		..setGoldCost(0)..setLumberCost(0)
-		..setPlacementRequires("")
-		..setCollisionSize(0)
-		..setUpgradesTo("")
-			
-		new ChannelAbilityPreset(SELECT_SINGLE_ID, 1, true)
-		..setHeroAbility(false)
-		..presetCastRange((int lvl) -> 2500.)
-		..setName("Select single")
-		..presetTargetTypes(Targettype.UNIT)
-		..presetCooldown((int lvl) -> 0.)
-		..presetManaCost((int lvl) -> 0)
-		..setTargetsAllowed(1, "allies,friend,ground,invulnerable")
-		..presetTooltipNormal((int lvl) -> "Select single entity")
-		..presetTooltipNormalExtended((int lvl) -> "Adds the target entity to the list of saved objects")
-		..presetButtonPosNormal(0, 0)
-
-		new ChannelAbilityPreset(SELECT_TILE_ID, 1, true)
-		..setHeroAbility(false)
-		..presetCastRange((int lvl) -> 2500.)
-		..setName("Select tile")
-		..presetTargetTypes(Targettype.POINT)
-		..presetCooldown((int lvl) -> 0.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Select tile")
-		..presetTooltipNormalExtended((int lvl) -> "Adds the tile to the saved tiles")
-		..presetButtonPosNormal(2, 0)
-		
-		new ChannelAbilityPreset(SELECT_AOE_ID, 1, true)
-		..setHeroAbility(false)
-		..presetCastRange((int lvl) -> 2500.)
-		..setName("Select multi")
-		..presetOption(Option.TARGETIMAGE, true)
-		..presetTargetTypes(Targettype.POINT)
-		..presetAreaofEffect((int lvl) -> AOE_PICK_RANGE)
-		..presetCooldown((int lvl) -> 0.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Select multiple entities")
-		..presetTooltipNormalExtended((int lvl) -> "Adds the target entities to the list of saved objects")
-		..presetButtonPosNormal(1, 0)
-		
-		new ChannelAbilityPreset(SAVE1_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Save Slot 1")
-		..presetTargetTypes(Targettype.NONE)
-		..presetCooldown((int lvl) -> 2.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Save Slot 1")
-		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 1.\nExperimental - use with caution!")
-		..presetButtonPosNormal(0, 2)
-
-		new ChannelAbilityPreset(SAVE2_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Save Slot 2")
-		..presetTargetTypes(Targettype.NONE)
-		..presetCooldown((int lvl) -> 2.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Save Slot 2")
-		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 2.\nExperimental - use with caution!")
-		..presetButtonPosNormal(1, 2)
-
-		new ChannelAbilityPreset(SAVE3_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Save Slot 3")
-		..presetTargetTypes(Targettype.NONE)
-		..presetCooldown((int lvl) -> 2.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Save Slot 3")
-		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 3.\nExperimental - use with caution!")
-		..presetButtonPosNormal(2, 2)
-
-		new ChannelAbilityPreset(SAVE4_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Save Slot 4")
-		..presetTargetTypes(Targettype.NONE)
-		..presetCooldown((int lvl) -> 2.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Save Slot 4")
-		..presetTooltipNormalExtended((int lvl) -> "Saves the currently selected entities to slot 4.\nExperimental - use with caution!")
-		..presetButtonPosNormal(3, 2)
-
-		new ChannelAbilityPreset(LOAD1_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Load 1")
-		..presetTargetTypes(Targettype.NONE)
-		..presetCooldown((int lvl) -> 2.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Load Slot 1")
-		..presetTooltipNormalExtended((int lvl) -> "load template")
-		..presetButtonPosNormal(0, 1)
-	
-		new ChannelAbilityPreset(LOAD2_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Load 2")
-		..presetTargetTypes(Targettype.NONE)
-		..presetCooldown((int lvl) -> 2.)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Load Slot 2")
-		..presetTooltipNormalExtended((int lvl) -> "load template")
-		..presetButtonPosNormal(1, 1)
+			case LOAD2_ID
+				loadSlot(2)
+			case SELECT_AOE_TILE_ID
+				let val = (AOE_PICK_RANGE/128.).round()
+				for x = -val to val
+					for y = -val to val
+						addTile((tpos+vec2(x*128.,y*128.)), false)

@@ -173,6 +173,16 @@ public class Savecode
 
 		
 		SetRandomSeed(seed)
+
+	
+	function save() returns string
+		int hash
+		clean()
+		hash = hash()
+		encode(hash,hashN())
+		clean()
+		pad()
+		return toString()
 	
 	
 	function save(string name, int loadtype ) returns string
@@ -186,6 +196,15 @@ public class Savecode
 		pad()
 		obfuscate(key,1)
 		return toString()
+
+	function load(string s) returns boolean
+		int inputhash
+		fromString(s)
+		inputhash = decode(hashN())
+		
+		clean()
+		let h = hash()
+		return inputhash == h
 	
 	
 	function load( string name, string s, int loadtype ) returns boolean

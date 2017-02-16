@@ -1,18 +1,20 @@
-[0.88a]
+[0.88c]
 [*] reduced small killer height so it can be jumped more easily
 [*] reduced velocity of escaper after orb jaunt
 [*] increased orb inherited velocity
 [*] added fire killer
 [*] added inner strength to strong escaper
 [*] added activation effect for one-shot executer
+[*] added M.A.P (WIP experimental template saving)
 [*] now setting camera distance periodically
 [*] changed unwalkable checking to accomodate for texture overlaps (experimental, this makes it impossible to cut diagonals, but allows cutting corners more easily)
+[*] overhead key effect is now colored accordingly
 [*] improved visuals for oneway portal
 [*] fixed buff error spam
 [*] fixed arcanery activation radius
 [*] fixed terrainchanger texture selection being unavailable
 [*] fixed jukebox incorrect music durations
-[*] fixed savesystem to correctly handle multiple names (allows different accounts on same pc)
+[*] fixed savesystem incorrectly handling multiple profiles
 [*] fixed placing portals while flying
 
 
