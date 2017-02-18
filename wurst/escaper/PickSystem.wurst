@@ -101,18 +101,20 @@ public class Selector extends UnitEntity
 	ondestroy
 		pd.selector = null
 
-
-public function startChoose()
-	CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
-	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
-	for pd from allPlayers.staticItr()
-		regions[22].revealRegion(pd.p)
+	override function slowUpdate()
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_TARGET_DISTANCE, 1000.00, 0.50 )
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ANGLE_OF_ATTACK, 343.00, 0.50 )
 		SetCameraTargetControllerNoZForPlayer( pd.p, EscaperDefinition.first.escaper, 0, 0, false ) 
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
+
+
+public function startChoose()
+	CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
+	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
+	for pd from allPlayers.staticItr()
+		regions[22].revealRegion(pd.p)
 		new Selector(pd)
 
 	EnablePreSelect(true, false)

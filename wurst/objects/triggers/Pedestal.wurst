@@ -7,7 +7,7 @@ import PlayerData
 import FileIO
 import SyncWrapper
 import TerrainBlocker
-import Scanner
+import public PedestalObjects
 import TypeCasting
 import ClosureTimers
 import CodeManager
@@ -15,23 +15,8 @@ import Json
 import SeqWorker
 import JsonParser
 
-public int PED_ID
-public int SELECT_SINGLE_ID
-public int SELECT_AOE_ID
-public int SELECT_AOE_TILE_ID
-public int SELECT_TILE_ID
-public int SAVE1_ID
-public int SAVE2_ID
-public int SAVE3_ID
-public int SAVE4_ID
-public int LOAD1_ID
-public int LOAD2_ID
-public int LOAD3_ID
-public int LOAD4_ID
-
 constant CHAR_STEPSIZE = 180
 
-public constant AOE_PICK_RANGE = 256.
 function vec2.toTile() returns vec2
 	return vec2((this.x / 128.).round()*128. ,(this.y / 128.).round()*128.)
 
@@ -42,6 +27,7 @@ enum Tile
 	POISON
 	ICE_NORMAL
 	ICE_DARK
+	ICE_REVERSE
 
 class TileData implements Serializable
 	static constant X_KEY = "x"
@@ -50,7 +36,7 @@ class TileData implements Serializable
 	matrixpos offset
 	vec2 pos
 	effect fx
-	Tile tile = Tile.UNWALKABLE
+	Tile tile = Tile.WALKABLE
 
 	construct()
 
@@ -66,7 +52,7 @@ class TileData implements Serializable
 		this.tile = getTileFromType(pos)
 		let json = new Json()
 			..addProperty(new Property(X_KEY, offset.x.toString()))..addProperty(new Property(Y_KEY, offset.y.toString()))
-		if tile != Tile.UNWALKABLE
+		if tile != Tile.WALKABLE
 			json..addProperty(new Property(TYPE_KEY, (getTileFromType(pos) castTo int).toString()))
 		return json
 
@@ -74,16 +60,22 @@ class TileData implements Serializable
 		offset = matrixpos(json.getInt(X_KEY),json.getInt(Y_KEY))
 		pos = vec2(serializeOrigin.x + offset.x * 128.,serializeOrigin.y + offset.y * 128.).toTile()
 		tile = json.getInt(TYPE_KEY) castTo Tile
+		if tile == Tile.UNWALKABLE
+			tile = Tile.WALKABLE
 		let rdat = getRegionData(pos)
 		switch tile
 			case WALKABLE
 				pos.setTerrainType(rdat.getTypeSet().walkableId, -1, 1, 0)
-			case UNWALKABLE
-				pos.setTerrainType(rdat.getTypeSet().unwalkableId, -1, 1, 0)
 			case ICE_NORMAL
 				pos.setTerrainType(CONTROLLABLEICE, -1, 1, 0)
 			case ICE_DARK
 				pos.setTerrainType(UNCONTROLLABLEICE, -1, 1, 0)
+			case ICE_REVERSE
+				pos.setTerrainType(REVICE, -1, 1, 0)
+			case LAVA
+				pos.setTerrainType(LAVA, -1, 1, 0)
+			case POISON
+				pos.setTerrainType(POISON, -1, 1, 0)
 			default
 
 
@@ -93,12 +85,16 @@ function getTileFromType(vec2 pos) returns Tile
 	switch ttype
 		case rdat.getTypeSet().walkableId
 			return Tile.WALKABLE
-		case rdat.getTypeSet().unwalkableId
-			return Tile.UNWALKABLE
+		case REVICE
+			return Tile.ICE_REVERSE
 		case CONTROLLABLEICE
 			return Tile.ICE_NORMAL
 		case UNCONTROLLABLEICE
 			return Tile.ICE_DARK
+		case 1147958883
+			return Tile.LAVA
+		case POISON
+			return Tile.POISON
 	return Tile.UNWALKABLE
 
 public class MemoryAccessPedestal extends StaticBaseObject
@@ -115,9 +111,9 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
 		setPos(pos.toTile().toVec3())
-		actor..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)
-		..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)..addAbility(SAVE4_ID)..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)
-		..addAbility(SELECT_AOE_TILE_ID)
+		actor..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)
+		..addAbility(SAVE4_ID)..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
+		..addAbility(LOAD3_ID)..addAbility(LOAD4_ID)
 		clearQuestionmark()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -146,11 +142,11 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					destroy itr.remove()
 				return
 
-		tiles.add(new TileData(targPos, mpos))
+		if getTileFromType(targPos) != Tile.UNWALKABLE
+			tiles.add(new TileData(targPos, mpos))
 
 	function loadSlot(int slotId)
 		lastRef[owner.getId()] = this
-		print("syncing slot")
 		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString(), Filter(() -> onLoadSlotSynced()))
 
 	static function onLoadSlotSynced()
@@ -164,11 +160,9 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			jsonString.addString(buildString)
 			buildString = pd.syncPayload.syncedFile.read()
 		printLog(Loglevel.DEBUG, "Reconstructed")
-		jsonString.debugPrint()
 		serializeOrigin = ref.pos.toVec2().toTile().toVec3()
 		ref.parser.setInput(jsonString)
 		ref.parser.parse((SeqCallback cb) -> begin
-			print("synced data parsed")
 			ref.parser.output.getStringList(ENTITIES_KEY, ref.parser, (SeqCallback cb) -> begin
 				cb.terminate()
 				ref.loadEntities()
@@ -177,7 +171,6 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		
 
 	function loadEntities()
-		print("load entities")
 		// TODO load entities
 
 		// Load tiles
@@ -187,28 +180,25 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		end)
 
 	function loadTiles(LinkedList<BigSubString> list)
-		print("load tiles")
+		print("Loading tiles..")
 		let td = new TileData()
 		let bs = new BigString()
 		
 		var itr = list.staticItr()
 		doSeq(1, (SeqCallback cb1) -> begin
 			cb1.done = true
-			print("next seq")
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
 				parser.setInput(bs..addSubString(next))
 				parser.parse((SeqCallback cb2) -> begin
-					print("on parse")
 					td..deserialize(parser.output)
-					print("parsed")
 					parser.output.reset()
 					cb1.doStep()
 				end)
 			else
 				cb1.terminate()
-				print("loaded tiles")
+				print("Tile loaded!")
 		end)
 
 	BigString tileString = new BigString()
@@ -250,22 +240,18 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				cb.terminate()
 				entString.addString(JSON_CLOSE_ARRAY.token)
-				entString.debugPrint()
 				nullTimer(() -> saveTileSeq())
 		end)
 
 	function saveTileSeq()
-		print("saving tiles: " + tiles.getSize().toString())
 		tileString.reset()
 		tileString.addString(JSON_OPEN_ARRAY.token)
 		let itr = tiles.staticItr()
 		doSeq(10, (SeqCallback cb) -> begin
 			if itr.hasNext()
-				print("adding tile")
 				itr.next().serialize().addToBigString(tileString)
 				if itr.hasNext()
 					tileString.addString(JSON_SIGN_COMMA.token)
-				print("added tile")
 				destroy itr.remove()
 			else
 				cb.terminate()
@@ -285,14 +271,11 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		if GetLocalPlayer() == owner
 			let f = File.open(FOLDER_NAME, "dataSlot" + currentSlotId.toString(), Mode.WRITE)
 			while big.getLength() > BIG_SUBSTRING_LEN
-				print("writing: " + big.getString(0, BIG_SUBSTRING_LEN))
 				f.write(big.getString(0, BIG_SUBSTRING_LEN))
 				big.startoffset += BIG_SUBSTRING_LEN
-			print("writinglast: " + big.getString(0))
 			f.write(big.getString(0))
 			f.close()
 
-		big.debugPrint()
 		destroy json
 		destroy big
 
@@ -316,10 +299,18 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				saveSlot(1)
 			case SAVE2_ID
 				saveSlot(2)
+			case SAVE3_ID
+				saveSlot(3)
+			case SAVE4_ID
+				saveSlot(4)
 			case LOAD1_ID
 				loadSlot(1)
 			case LOAD2_ID
 				loadSlot(2)
+			case LOAD3_ID
+				loadSlot(3)
+			case LOAD4_ID
+				loadSlot(4)
 			case SELECT_AOE_TILE_ID
 				let val = (AOE_PICK_RANGE/128.).round()
 				for x = -val to val

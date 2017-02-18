@@ -84,7 +84,7 @@ public class UnitProducer extends StaticBaseObject
 					new TeleporterTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case GLAIVE_KILLER
 					new GlaiveKiller(rallyPos,obj.owner)
-				case BOMBER
+				case BOMB_TARGET
 					new BomberTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case T_CHANGER
 					new TerrainChanger( vec2(rallyPos.x,rallyPos.y), obj.owner )

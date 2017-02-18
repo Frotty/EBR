@@ -85,17 +85,29 @@ public class TerrainChanger extends SetupObject
 			if rdata.theRect.contains(newP)
 				SetTerrainType(newP.x, newP.y, id, -1, 1, 1)
 
+	function cleanArea()
+		let tin = innerTile
+		let tout = outerTile
+		mp.x = -99999
+		mp.y = -99999
+		innerTile = this.getCurrentRegion().getTypeSet().unwalkableId
+		outerTile = this.getCurrentRegion().getTypeSet().unwalkableId
+		update()
+		innerTile = tin
+		outerTile = tout
+
 	function onCast()
 		let i = GetSpellAbilityId()
-		
 		switch i
 			case TERRAIN_INC_H_ID
 				sizeX.increment(this, 3)
 			case TERRAIN_INC_V_ID
 				sizeY.increment(this, 3)
 			case TERRAIN_DEC_H_ID
+				cleanArea()
 				sizeX.decrement(this, 0)
 			case TERRAIN_DEC_V_ID
+				cleanArea()
 				sizeY.decrement(this, 0)
 			case TERRAIN_I_WALKABLE_ID
 				innerTile = this.getCurrentRegion().getTypeSet().walkableId
@@ -113,6 +125,7 @@ public class TerrainChanger extends SetupObject
 				outerTile = CONTROLLABLEICE
 			case TERRAIN_O_UNICE_ID
 				outerTile = UNCONTROLLABLEICE
+			
 		mp.x = -1
 		update()
 					

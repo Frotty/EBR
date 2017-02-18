@@ -166,7 +166,6 @@ public class SyncedFile
 		while str != null and str.length() > 0
 			if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
 				str = str.substring(0, str.length()-1)
-			print("SyncedFile: " + str)
 			stringTable.saveString(size, str)
 			size++
 			str = content.readString(size)
