@@ -6,6 +6,7 @@ import Assets
 import ClosureForGroups
 import ClosureTimers
 import HashMap
+import RegionData
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 
@@ -79,7 +80,7 @@ public class BossMissile extends HomingProjectile
 	unit caster = null
 
 	construct(unit caster, Entity target)
-		super(caster.getPos3with(92), MISSILE_RADIUS, owner, pos.angleTo2d(vec2(target.pos.x,target.pos.y)), Other.greendragonmissile)
+		super(caster.getPos3with(92), MISSILE_RADIUS, owner, pos.angleTo2d(target.getPos()), Other.greendragonmissile)
 		this.caster = caster
 		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)
@@ -88,6 +89,10 @@ public class BossMissile extends HomingProjectile
 	
 	override function update()
 		super.update()
+		sleeps = false
+		// If outside boss region, terminate the missile
+		if this.getCurrentRegion() != getRegionData(caster.getPos())
+			terminate()
 		for e in escapers
 			if pos.distanceToSq(e.pos) < radius*radius
 				caster.damageTarget(e.actor, 100)

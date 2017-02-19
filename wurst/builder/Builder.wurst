@@ -11,6 +11,7 @@ import JukeBox
 import initlater Weapon
 import initlater Boss
 import Boots
+import initlater BossDamager
 
 public class Builder extends UnitEntity
 	int regionCount = 0
@@ -84,7 +85,7 @@ public class Builder extends UnitEntity
 					new SpellTarget(tpos, owner)
 			case BM_DAMAGER_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
-					// new BossDamager(tpos, owner)
+					new BossDamager(tpos, owner)
 			case BM_WEAPON_ID
 				if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
 					new WeaponObject(tpos, owner)

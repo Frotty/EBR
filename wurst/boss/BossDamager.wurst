@@ -6,52 +6,48 @@ import BaseObject
 constant int DAMAGER_ID = 'n01O'
 constant int DMG_INC_ID = 'A07K'
 constant int DMG_DEC_ID = 'A07J'
-constant real 	EVENT_RADIUS	= 32.
+constant real EVENT_RADIUS = 32.
 
 
 public class BossDamager extends StaticBaseObject
-	real damage
-	
-	construct(vec2 pos, player owner)
-		super(vec2((pos.x/64).round()*64., (pos.y/64).round()*64.), CreateUnit(owner, DAMAGER_ID,(pos.x/64).round()*64., (pos.y/64).round()*64., 0. ), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
-//		actor.registerCastEvent(Condition(function BossDamager.onCast))
-		
-	function damage(Escaper e)
-		GroupEnumUnitsInRect(ENUM_GROUP, this.getCurrentRegion().theRect, null)
-		for u in ENUM_GROUP
-			var es = u.getEntity()	
-			if es instanceof Boss
-				var boss = es castTo Boss
-				boss.onDamage(e, damage)
-		ENUM_GROUP.clear()
-		
-	static function onInRange()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		if e instanceof Escaper
-			var es = e castTo Escaper
-			var obj = source.getUserData() castTo BossDamager
-			obj.damage(es)
-	
-	static function onCast() returns boolean
-		var data = GetTriggerUnit().getEntity()
-		if data instanceof BossDamager
-			var dmger = data castTo BossDamager
-			var id = GetSpellAbilityId()
-			switch id
-				case DMG_INC_ID
-					if dmger.damage >= 500
-						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), dmger.owner  )
-					else
-						dmger.damage += 25
-						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
-				case DMG_DEC_ID
-					if dmger.damage < 0.75
-						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), dmger.owner  )
-					else
-						dmger.damage -= 25
-						createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
-		return false
-		
-		
+    real damage
+
+    construct(vec2 pos, player owner)
+        super(posToGrid(pos), createUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.)), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
+        printLog(Loglevel.DEBUG, "creating Boss Damager")
+        damage = 40
+        EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
+    function damage(Escaper e)
+        this.getCurrentRegion().boss.onDamage(e, damage)
+
+    static function posToGrid(vec2 pos) returns vec2
+        return vec2((pos.x/64).round()*64., (pos.y/64).round()*64.)
+
+    static function onInRange()
+        var data = GetTriggerUnit().getEntity()
+        var bossDamager = GetTriggeringTrigger().getSource().getUserData() castTo BossDamager
+        if data instanceof Escaper
+            var edata = data castTo Escaper
+            bossDamager.damage(edata)
+
+    static function onCast() returns boolean
+        var data = GetTriggerUnit().getEntity()
+        if data instanceof BossDamager
+            var dmger = data castTo BossDamager
+            var id = GetSpellAbilityId()
+            switch id
+                case DMG_INC_ID
+                    if dmger.damage >= 200
+                        createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), dmger.owner  )
+                    else
+                        dmger.damage += 10
+                        createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
+                case DMG_DEC_ID
+                    if dmger.damage <= 0
+                        createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), dmger.owner  )
+                    else
+                        dmger.damage -= 10
+                        createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
+        return false
+

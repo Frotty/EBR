@@ -3,6 +3,7 @@ import Escaper
 import Assets
 import ClosureForGroups
 import Boss
+import Minion
 import BoomerangProjectile
 import Fx
 
@@ -14,15 +15,23 @@ public interface WeaponListener
 
 public WeaponType array weapontypes
 
+function damageTarget(Entity entity, Escaper escaper, real damage)
+	if entity != null 
+		if entity instanceof Boss
+			Boss b = entity castTo Boss
+			b.onDamage(escaper, damage)
+		if entity instanceof Minion
+			Minion m = entity castTo Minion
+			m.onDamage(escaper, damage)
+
 function onSabre(Escaper e)
 	let facing = e.actor.getFacingAngle()
 	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	destroy new Fx(tpos, facing, Other.defendcaster)
 	forUnitsInRange(tpos, 100, (unit u) -> begin
 		let entity = u.getEntity()
-		if entity != null and entity instanceof Boss
-			Boss b = entity castTo Boss
-			b.onDamage(e, 20)
+		damageTarget(entity, e, 20)
+		
 	end)
 
 function onHammer(Escaper e)
@@ -31,9 +40,7 @@ function onHammer(Escaper e)
 	addEffect(Other.thunderclapcaster, tpos).destr()
 	forUnitsInRange(tpos, 100, (unit u) -> begin
 		let entity = u.getEntity()
-		if entity != null and entity instanceof Boss
-			Boss b = entity castTo Boss
-			b.onDamage(e, 20)
+		damageTarget(entity, e, 20)
 	end)
 
 function onGlaive(Escaper e)
@@ -46,9 +53,7 @@ function onBow(Escaper e)
 	addEffect(Other.thunderclapcaster, tpos).destr()
 	forUnitsInRange(tpos, 100, (unit u) -> begin
 		let entity = u.getEntity()
-		if entity != null and entity instanceof Boss
-			Boss b = entity castTo Boss
-			b.onDamage(e, 20)
+		damageTarget(entity, e, 20)
 	end)
 
 @init1 function init_WeaponTypes()

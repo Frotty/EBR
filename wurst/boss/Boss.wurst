@@ -1,8 +1,11 @@
 package Boss
 import SetupObject
 import PlayerData
+import SoundUtils
 import public BossSpellTarget
 import CustomBar
+import Minion
+import ChannelAbilityPreset
 
 constant BOSS_TOMB_ID = 'n01P'
 constant HP_UP_ID = 'A06U'
@@ -16,16 +19,22 @@ constant REAL_DMG_SMALL_ID = 'A001'
 constant AOE_SPELL_ID = 'A06V'
 constant MISSILE_SPELL_ID = 'A06W'
 constant REVIVE_ID = 'A07L'
+public int SUMMON_MINION_ID
+constant ENTER_SOUND = new SoundDefinition("Units\\Undead\\Varimathras\\VarimathrasReady1.wav", false)
+constant MINION_SPAWN_SOUND = new SoundDefinition("Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeTargetWaveNonLoop1.waw", false)
+constant REVIVE_SOUND = new SoundDefinition("Units\\Undead\\Varimathras\\VarimathrasReady1.wav", false)
 
 public class Boss extends SetupObject
 	real maxHp = 400.
-	real currentHP = 400
+	real currentHP = 400.
 	CustomBar hpBar
 
 	construct(player owner, vec2 tpos, int id)
 		super(createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
+		setup..addAbility(SUMMON_MINION_ID)
+		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		hpBar = new CustomBar(pos, "|", 120, 8)
+		hpBar = new CustomBar(pos, "|", 120, 6)
 		hpBar.setForeground(colorA(200,255,125,255))
 
 	override function update()
@@ -35,7 +44,10 @@ public class Boss extends SetupObject
 
 	function onDamage(Escaper escaper, real dmg)
 		currentHP -= dmg
-		
+		if currentHP < 1
+			printLog(Loglevel.DEBUG, "Our boss is dead")
+			actor.kill()
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		actor.setAnimation("spell")
@@ -52,7 +64,7 @@ public class Boss extends SetupObject
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 0)
 					else
 						createTTEx(pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), owner)
-				else 
+				else
 					if smallhp == 0
 						actor.addAbility(REAL_HP_SMALL_ID)
 					else
@@ -66,7 +78,7 @@ public class Boss extends SetupObject
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 4)
 					else
 						createTTEx(pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), owner  )
-				else 
+				else
 					SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp-1)
 			case AOE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.AOE)
@@ -75,12 +87,16 @@ public class Boss extends SetupObject
 				destroy tgts
 			case MISSILE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.MISSILE)
-				for target from tgts.staticItr()
+				for target in tgts
 					new BossMissile(actor,target)
 				destroy tgts
+			case SUMMON_MINION_ID
+				// TODO `for spawner in minionspawners`
+				new Minion(pos.toVec2(), owner, actor.getFacingAngle())
+				MINION_SPAWN_SOUND.playOnPoint(pos)
 			case REVIVE_ID
 				revive()
-	
+
 	function getSpellTargets(SpellType stype) returns LinkedList<SpellTarget>
 		let tgs = targets.get(owner.getId())
 		let newTgs = new LinkedList<SpellTarget>()
@@ -88,8 +104,22 @@ public class Boss extends SetupObject
 			if target.stype == stype
 				newTgs.add(target)
 		return newTgs
-	
-				
+
+
 	function revive()
-		PlaySound("Units\\Undead\\Varimathras\\VarimathrasReady1.wav")
+		REVIVE_SOUND.play()
 		destroy this
+
+@objectgen function genBoss()
+	SUMMON_MINION_ID = ABIL_ID_GEN.next()
+	if compiletime
+		let summon_minion = new ChannelAbilityPreset(SUMMON_MINION_ID, 1, true)
+		summon_minion..presetManaCost((int lvl) -> 0)
+		..setHeroAbility(false)
+		..presetCooldown((int lvl) -> 10)
+		..setName("Summon Minion")
+		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNZombie.blp")
+		..presetHotkey("A")
+		..presetTooltipNormal((int lvl) -> "Summon Minion [|cffFFCC00A|r]")
+		..presetTooltipNormalExtended((int lvl) -> "Summons a minion that follows the nearest escaper")
+		..presetButtonPosNormal(0, 1)
