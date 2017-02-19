@@ -5,7 +5,6 @@ import Escaper
 import CustomBar
 import ClosureForGroups
 import ClosureTimers
-import Fx
 
 public constant COLL_SIZE_MINION = 0.
 public constant ATTACK_DISTANCE = 70.
@@ -26,7 +25,6 @@ public class Minion extends EscaperSensorSetup
     vec2 spawnPoint
     CustomBar hpBar
     MinionState state = MinionState.IDLE
-    // boolean attacking = false
 
     construct(vec2 pos, player owner, angle facing)
         super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
@@ -88,7 +86,7 @@ public class Minion extends EscaperSensorSetup
                     target = escaper
         if not target == null
             state = MinionState.FOLLOW
-            destroy new Fx(pos, actor.getFacingAngle(), Other.spellbreakerattack)..setZ(30)
+            flashEffect(Other.spellbreakerattack, pos)
             setup.issuePointOrder("move", target.pos.toVec2())
 
     function attack()
@@ -98,7 +96,7 @@ public class Minion extends EscaperSensorSetup
             if currentHP > 0
                 let facing = actor.getFacingAngle()
                 let tpos = getPos().toVec2().polarOffset(facing, 80)
-                destroy new Fx(tpos, facing, Other.manaflareboltimpact)..setZ(30)..setScale(1.1)
+                flashEffect(Other.manaflareboltimpact, tpos)
                 forUnitsInRange(tpos, ATTACK_RANGE, (unit u) -> begin
                     let entity = u.getEntity()
                     if entity != null and entity instanceof Escaper
