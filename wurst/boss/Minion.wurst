@@ -51,7 +51,7 @@ public class Minion extends EscaperSensorSetup
 
     override function update()
         super.update()
-        hpBar..setPosXY(pos.x, pos.y + 50)..setValue(currentHP / maxHp * 100.0)
+        hpBar..setPosXY(pos.x - 15, pos.y + 30)..setValue(currentHP / maxHp * 100.0)
         let targetInvalid = target == null or not target.alive or target.getCurrentRegion() != this.getCurrentRegion() or target.pos.distanceTo2d(spawnPoint) > FOLLOW_RANGE
         if targetInvalid
             if (state == MinionState.ATTACK or state == MinionState.FOLLOW)
