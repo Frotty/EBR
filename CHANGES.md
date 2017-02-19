@@ -18,6 +18,7 @@
 [*] fixed savesystem incorrectly handling multiple profiles
 [*] fixed placing portals while flying
 [*] fixed several missing or incorrect hotkeys
+[*] fixed spinning sleeping entities having wrong distance
 
 [0.87z]
 [*] minor bugfixes

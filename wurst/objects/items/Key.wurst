@@ -59,9 +59,9 @@ public class Key extends ItemObject
 		end)
 		
 	override function update()
-		if picked and followWalkable
+		if picked
 			fx.setXYZ(holder.getPos()+vec3(0,0,128))
-			if not holder.flying and not holder.sliding and not holder.onUnwalkable
+			if followWalkable and not holder.flying and not holder.sliding and not holder.onUnwalkable
 				pos = holder.getPos()
 		else
 			super.update()

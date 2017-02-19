@@ -126,7 +126,6 @@ public class TerrainChanger extends SetupObject
 			case TERRAIN_O_UNICE_ID
 				outerTile = UNCONTROLLABLEICE
 			
-		mp.x = -1
 		update()
 					
 			
