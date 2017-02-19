@@ -19,13 +19,7 @@ public class BossDamager extends StaticBaseObject
         EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
     function damage(Escaper e)
-        GroupEnumUnitsInRect(ENUM_GROUP, this.getCurrentRegion().theRect, null)
-        for u in ENUM_GROUP
-            var es = u.getEntity()
-            if es instanceof Boss
-                var boss = es castTo Boss
-                boss.onDamage(e, damage)
-        ENUM_GROUP.clear()
+        this.getCurrentRegion().boss.onDamage(e, damage)
 
     static function posToGrid(vec2 pos) returns vec2
         return vec2((pos.x/64).round()*64., (pos.y/64).round()*64.)
@@ -33,16 +27,9 @@ public class BossDamager extends StaticBaseObject
     static function onInRange()
         var data = GetTriggerUnit().getEntity()
         var bossDamager = GetTriggeringTrigger().getSource().getUserData() castTo BossDamager
-        if data instanceof Escaper and getRegionData(bossDamager.getRallyPoint()).canBuild(bossDamager.owner)
+        if data instanceof Escaper
             var edata = data castTo Escaper
-            edata.actor.abortOrder()
-        unit source = GetTriggeringTrigger().getSource()
-        unit u = GetTriggerUnit()
-        Entity e = u.getEntity()
-        if e instanceof Escaper
-            var es = e castTo Escaper
-            var obj = source.getUserData() castTo BossDamager
-            obj.damage(es)
+            bossDamager.damage(edata)
 
     static function onCast() returns boolean
         var data = GetTriggerUnit().getEntity()

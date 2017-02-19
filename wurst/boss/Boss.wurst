@@ -47,7 +47,7 @@ public class Boss extends SetupObject
 		if currentHP < 1
 			printLog(Loglevel.DEBUG, "Our boss is dead")
 			actor.kill()
-		
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		actor.setAnimation("spell")
@@ -64,7 +64,7 @@ public class Boss extends SetupObject
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 0)
 					else
 						createTTEx(pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), owner)
-				else 
+				else
 					if smallhp == 0
 						actor.addAbility(REAL_HP_SMALL_ID)
 					else
@@ -78,27 +78,25 @@ public class Boss extends SetupObject
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 4)
 					else
 						createTTEx(pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), owner  )
-				else 
+				else
 					SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp-1)
 			case AOE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.AOE)
-				if tgts != null and tgts.getSize() > 0
-					for target in tgts
-						target.castAoe()
+				for target in tgts
+					target.castAoe()
 				destroy tgts
 			case MISSILE_SPELL_ID
 				let tgts = getSpellTargets(SpellType.MISSILE)
-				if tgts != null and tgts.getSize() > 0
-					for target in tgts
-						new BossMissile(actor,target)
-					destroy tgts
+				for target in tgts
+					new BossMissile(actor,target)
+				destroy tgts
 			case SUMMON_MINION_ID
 				// TODO `for spawner in minionspawners`
 				new Minion(pos.toVec2(), owner, actor.getFacingAngle())
 				MINION_SPAWN_SOUND.playOnPoint(pos)
 			case REVIVE_ID
 				revive()
-	
+
 	function getSpellTargets(SpellType stype) returns LinkedList<SpellTarget>
 		let tgs = targets.get(owner.getId())
 		let newTgs = new LinkedList<SpellTarget>()
@@ -106,8 +104,8 @@ public class Boss extends SetupObject
 			if target.stype == stype
 				newTgs.add(target)
 		return newTgs
-	
-				
+
+
 	function revive()
 		REVIVE_SOUND.play()
 		destroy this
