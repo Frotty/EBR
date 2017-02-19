@@ -1,4 +1,4 @@
-[0.88d]
+[0.88f]
 [*] reduced small killer height so it can be jumped more easily
 [*] reduced velocity of escaper after orb jaunt
 [*] increased orb inherited velocity
@@ -19,6 +19,7 @@
 [*] fixed placing portals while flying
 [*] fixed several missing or incorrect hotkeys
 [*] fixed spinning sleeping entities having wrong distance
+[*] even more awesome icons by kari
 
 [0.87z]
 [*] minor bugfixes

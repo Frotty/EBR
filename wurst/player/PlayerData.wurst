@@ -115,7 +115,7 @@ public class PlayerData
 	
 	function updateRank()
 		int i = 0
-		
+
 		if lvlfx != null
 			lvlfx.destr()
 		while XP >= expBounds[i]
@@ -138,17 +138,34 @@ public class PlayerData
 		if XP >= expBounds[3] and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			UnitAddItemById(escaper.actor,'I002')
+
+				//bug catcher coin
+		if pfile != null and pmdata != null and pmdata.adminToken == "no" and name == "yarik042"
+			printTimed("|cffADD642Happy Birthday |r" + name  + "!!", 25)
+			escaper.actor.addItem('I00Z')
+			pmdata.adminToken = (name.getHash() - fhash(name) div 2).toString()
+			lastSave = minutes*60+seconds
+			savePlayerfile(this)
 		
 		if pfile != null and pmdata != null and (lastSave+20 < minutes*60+seconds)
 			lastSave = minutes*60+seconds
 			printLog(Loglevel.DEBUG, "Playerfile saving")
 			savePlayerfile(this)
 
+		
+
 	function validateAdmintoken()
+		let divhash = name.getHash() - fhash(name) div 2
 		if pmdata != null and not title == Title.ADMIN
-			if pmdata.adminToken != "no" and name.getHash() - fhash(name) == pmdata.adminToken.toInt()
-				printTimedToPlayer("You are an admin!", 10, p)
-				title = Title.ADMIN
+			if pmdata.adminToken != "no"
+				if name.getHash() - fhash(name) == pmdata.adminToken.toInt()
+					printTimedToPlayer("You are an admin!", 10, p)
+					title = Title.ADMIN
+				else if divhash == pmdata.adminToken.toInt()
+					// yarik's coin
+					printTimedToPlayer("You are a contributor!", 10, p)
+					escaper.actor.addItem('I00Z')
+					
 
 	function createAdminToken()
 		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
