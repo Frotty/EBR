@@ -100,10 +100,13 @@ function onCommandChat()
 			DEBUG_LEVEL = debuglvl
 			printTimedToPlayer("set debuglvl to: " + (DEBUG_LEVEL castTo int).toString(), 15, p)
 		case "boss"
-			let units = GetUnitsSelectedAll(p)
-			for u in units
-				if u.getEntity() instanceof SetupBox
-					(u.getEntity() castTo SetupBox).addBossSwitch()
+			if pd.XP > 2500
+				let units = GetUnitsSelectedAll(p)
+				for u in units
+					if u.getEntity() instanceof SetupBox
+						(u.getEntity() castTo SetupBox).addBossSwitch()
+			else
+				printTimedToPlayer("|cffFFD621[Info]|r - You are not experienced enough!", 15, pd.p)
 		case "ship"
 			new Spaceship(pd.escaper.getPos().toVec2(), pd.escaper)
 		default
