@@ -70,25 +70,24 @@ public class Pointer extends EscaperSensorSetup
 			facing = S2R(SubString(chatmsg, 4, StringLength(chatmsg)))
 		else if SubString(chatmsg, 0, 10) == "-setangle "
 			facing = S2R(SubString(chatmsg, 10, StringLength(chatmsg)))
-		for unit u in getSelectedPointers(GetTriggerPlayer())
+		for u from getSelectedPointers(GetTriggerPlayer())
 			Pointer obj = u.getUserData() castTo Pointer
 			obj.angl = facing.asAngleDegrees()
 			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
 		
 function getSelectedPointers(player p) returns group
 	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(POINTER_ID), null)
-	group g = CreateGroup()
-	for unit u in ENUM_GROUP
-		if IsUnitSelected( u, p) and GetOwningPlayer(u) == p
-			GroupAddUnit(g, u)
-	ENUM_GROUP.clear()
-	return g	
+	for u in ENUM_GROUP
+		if GetOwningPlayer(u) == p and IsUnitSelected(u, p)
+		else
+			GroupRemoveUnit(ENUM_GROUP, u)
+	return ENUM_GROUP	
 	
-@init1 function init_Pointer()
+@init2 function init_Pointer()
 	trigger t = CreateTrigger()
-	for int i = 8 to 10
-		TriggerRegisterPlayerChatEvent(t,Player(i), "-setangle ", false)
-		TriggerRegisterPlayerChatEvent(t,Player(i), "-sa ", false)
+	for int i = 0 to 11
+		TriggerRegisterPlayerChatEvent(t,players[i], "-setangle ", false)
+		TriggerRegisterPlayerChatEvent(t,players[i], "-sa ", false)
 	TriggerAddAction(t, function Pointer.setfacing)
 	
 init

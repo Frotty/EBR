@@ -26,7 +26,7 @@ public class Texter extends StaticBaseObject
 			obj.hidden = false
 			
 	static function show()
-		for unit u in getSelectedTexters(GetTriggerPlayer())
+		for u in getSelectedTexters(GetTriggerPlayer())
 			thistype obj = u.getUserData() castTo thistype
 			obj.text.setVisibility( true )
 			obj.text.setPos(obj.pos - vec3(obj.xoffset,0,0))
@@ -34,7 +34,7 @@ public class Texter extends StaticBaseObject
 			createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function hide()
-		for unit u in getSelectedTexters(GetTriggerPlayer())
+		for u in getSelectedTexters(GetTriggerPlayer())
 			thistype obj = u.getUserData() castTo thistype
 			obj.text.setVisibility( false )
 			obj.hidden = true
@@ -63,7 +63,7 @@ public class Texter extends StaticBaseObject
 			textcolor = getColorFromString(SubString(chatmsg, 4, StringLength(chatmsg)) + " ")
 		else if SubString(chatmsg, 0, 10) == "-setcolor "
 			textcolor = getColorFromString(SubString(chatmsg, 10, StringLength(chatmsg))+ " ")
-		for unit u in getSelectedTexters(GetTriggerPlayer())
+		for u from getSelectedTexters(GetTriggerPlayer())
 			thistype obj = u.getUserData() castTo thistype
 			if obj.col != textcolor
 				obj.col = textcolor
@@ -77,12 +77,10 @@ public class Texter extends StaticBaseObject
 	
 function getSelectedTexters(player p) returns group
 	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(TEXTER_ID), null)
-	group g = CreateGroup()
-	for unit u in ENUM_GROUP
-		if IsUnitSelected( u, p) and GetOwningPlayer(u) == p
-			GroupAddUnit(g, u)
-	ENUM_GROUP.clear()
-	return g
+	for u in ENUM_GROUP
+		if not IsUnitSelected( u, p) or not GetOwningPlayer(u) == p
+			ENUM_GROUP.removeUnit(u)
+	return ENUM_GROUP
 
 function getColorFromString(string s) returns color
 	boolean isstdcolor = false

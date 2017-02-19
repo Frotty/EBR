@@ -52,6 +52,7 @@ public class TerrainModder extends UnitEntity
 		let owner = actor.getOwner()
 		let id = GetUnitTypeId(actor)
 		if rdata.canBuild(owner)
+			idleSeconds = 0
 			if id == ICECONTROL
 				if modification == 1
 					orderPos.changeTerrain(REVICE, brushsize, brushsize, brushshape, owner)
@@ -71,8 +72,18 @@ public class TerrainModder extends UnitEntity
 		else
 			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
 
+	override function slowUpdate()
+		super.slowUpdate()
+		if idleSeconds > 20 and brushsize > 0
+			idleSeconds = 0
+			removeAllActive()
+			actor..removeAbility(BRUSH_1_IDLE_ABILITY)
+			..addAbility(BRUSH_1_ACTIVE_ABILITY)
+			brushsize = 0
+
 	function switchMode()
 		let spell_id = GetSpellAbilityId()
+		idleSeconds = 0
 		switch spell_id
 			case UNWALKABLE_MOD_ABILITY_ID[1]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
@@ -89,7 +100,6 @@ public class TerrainModder extends UnitEntity
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 				modification = 0
 				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
-				
 			case ICE_ABILITY
 				UnitRemoveAbility(actor,ICE_ABILITY)
 				UnitAddAbility(actor,REVICE_ABILITY)
@@ -188,7 +198,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	if compiletime
 		new ChannelAbilityPreset(BRUSH_1_IDLE_ABILITY, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("1x1 Brush Idle")
+		..setName("Tmod: 1x1 Brush Idle")
 		..presetIcon("BTN1x1inactive")
 		..presetHotkey("Y")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C291|rx|cffFF8C291 |rBrush Size [|cffFFCC00Y|r]")
@@ -197,7 +207,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_1_ACTIVE_ABILITY, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("1x1 Brush Active")
+		..setName("Tmod: 1x1 Brush Active")
 		..presetIcon("BTN1x1active")
 		..presetHotkey("Y")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C291|rx|cffFF8C291 |rBrush Size |cffFFCC00Selected!")
@@ -206,7 +216,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_3_IDLE_ABILITY, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("3x3 Brush Idle")
+		..setName("Tmod: 3x3 Brush Idle")
 		..presetIcon("BTN3x3inactive")
 		..presetHotkey("X")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C293|rx|cffFF8C293 |rBrush Size [|cffFFCC00X|r]")
@@ -215,7 +225,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_3_ACTIVE_ABILITY, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("3x3 Brush Active")
+		..setName("Tmod: 3x3 Brush Active")
 		..presetIcon("BTN3x3active.blp")
 		..presetHotkey("X")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C293|rx|cffFF8C293 |rBrush Size |cffFFCC00Selected!")
@@ -224,7 +234,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_5_IDLE_ABILITY, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("5x5 Brush Idle")
+		..setName("Tmod: 5x5 Brush Idle")
 		..presetIcon("BTN5x5inactive.blp")
 		..presetHotkey("C")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C295|rx|cffFF8C295 |rBrush Size [|cffFFCC00C|r]")
@@ -233,7 +243,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_5_ACTIVE_ABILITY, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("3x3 Brush Active")
+		..setName("Tmod: 3x3 Brush Active")
 		..presetIcon("BTN5x5active.blp")
 		..presetHotkey("C")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C295|rx|cffFF8C295 |rBrush Size |cffFFCC00Selected!")
@@ -242,7 +252,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_RECT_ID, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("Rectengular Brush Shape")
+		..setName("Tmod: Rectengular Brush Shape")
 		..presetIcon("BTNrectangle")
 		..presetHotkey("A")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C29Rectangular |cffF7F7F7brush |cffFFCC00selected")
@@ -251,7 +261,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 		
 		new ChannelAbilityPreset(BRUSH_CIRCLE_ID, 1, true)
 		..makeUnitSpell(0,0)
-		..setName("Circular Brush Shape")
+		..setName("Tmod: Circular Brush Shape")
 		..presetIcon("BTNcircle")
 		..presetHotkey("A")
 		..presetTooltipNormal((int lvl) -> "|cffFF8C29Circular |cffF7F7F7brush |cffFFCC00selected")

@@ -2,8 +2,15 @@ package GameInit
 import EntityManagement
 import Startmazes
 import PlayerData
+import JukeBox
+import Scanner
 import FileIO
-import SyncWrapper
+import CodeManager
+import BigString
+import SeqWorker
+import JsonParser
+import LZW
+import CodeGenerator
 
 init
 	callGen()
@@ -16,16 +23,75 @@ init
 	
 function initGame()
 	printTimed("Waiting for players..", 10.)
+	initPlayers()
 	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
 	callFunctionsWithAnnotation("@init1")
-	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false)
+	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), false, false)
 	VolumeGroupReset()
 	EndThematicMusic()
 	GetExpiredTimer().start(0.01, () -> initPartTwo())
 
+JsonParser jp
 function initPartTwo()
-	GetExpiredTimer().release()
 	callFunctionsWithAnnotation("@init2")
 	initStartmazes()
 	checkPlayerLocalFiles()
+	jukeBox.playNextMusic()
+	GetExpiredTimer().release()
+	// let bs = new BigString()
+	// let test = "x1y0_x1y1_x1y2_x1y3_x1y4_x1y5_x1y6_x2y0_x2y1_x2y2_x2y3_x2y4_x2y5_x2y6_x3y0_x3y1_x3y2_x3y3_x3y4_x3y5_x3y6_x4y0_x4y1_x4y2_x4y3_x4y4_x4y5"
+	// bs.addString(test)
+	// compress(bs, (SeqCallback sq) -> print("compressed"))
+	// jp = new JsonParser()..setInput(bs)
+	// jp..parse((SeqCallback cb) -> begin
+	// 	print("done parse")
+	// 	let bst = new BigString()
+	// 	jp.output.addToBigString(bst)
+	// 	let out = bst.getString(0)
+	// 	print("out = " + out)
+	// 	if out == test
+	// 		print("gg man")
+	// 	jp.output.addProperty(new Property(new BigSubString("a"),new BigSubString("test")))
+	// 	print("getting string list")
+	// 	jp.output.getStringList("t", jp, (SeqCallback cb) -> begin
+	// 		print("got string list")
+	// 		let itr = (cb.customData castTo JsonParser).outputList.staticItr()
+	// 		doSeq(1, (SeqCallback cb2) -> begin
+	// 			cb2.done = true
+	// 			if itr.hasNext()
+	// 				bs.reset()
+	// 				bs.addSubString(itr.next())
+	// 				jp.setInput(bs)
+	// 				jp.parse((SeqCallback cb) -> begin
+	// 					print("parsed")
+	// 					cb2.doStep()
+	// 				end)
+	// 			else
+	// 				cb2.terminate()
+	// 		end)
+			
+				
+	// 	end)
+	// end)
+	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+	// bs.addString("1111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
+
+	// print(bs.getString(500, 5)) // 11111
+
+	// let sc = new Scanner()..addDelimiter(" ")..setInput(bs)
 	
+	// doSeq(3, (SeqCallback cb) -> begin
+	// 	if sc.hasNext()
+	// 		sc.next()
+	// 		i++
+	// 	else
+	// 		print("found tokens <" + i.toString() + ">")
+	// 		cb.terminate()
+	// end) 
+	
+int i = 0

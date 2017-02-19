@@ -22,7 +22,7 @@ public class StaticBaseObject extends UnitEntity
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
-	construct( vec2 pos, unit u, real radius, code c, code cond )
+	construct( vec2 pos, unit u, real radius, code action, code cond )
 		super(u)
 		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)
@@ -37,7 +37,7 @@ public class StaticBaseObject extends UnitEntity
 				inRangeTrig.addCondition(Condition((function isProper)))
 			else
 				inRangeTrig.addCondition(Condition(cond))
-			inRangeTrig.addAction( c )
+			inRangeTrig.addAction(action)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> adjustRallypoint())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> adjustRallypoint())
 

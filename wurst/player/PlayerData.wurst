@@ -3,15 +3,18 @@ import MultiboardClass
 import public Escaper
 import public BuilderConstants
 import public GameConstants
+import initlater CodeGenerator
 import Builder
 import PickSystem
 import initlater TerrainModder
 import UnitProducer
 import RevivePointModifier
+import EscaperClasses
 import ClosureTimers
 import CodeManager
 import Playerfile
 import PlayerMemoryData
+import SyncWrapper
 
 trigger leaveTrig
 
@@ -21,52 +24,59 @@ public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 
-public enum ROLE
-	USER
+public enum Role
+	BUILDER
+	ESCAPER
+
+public enum Title
+	PLAYER
 	MOD
-	CREATOR
+	ADMIN
 
 public class PlayerData
-	int id
-	string hash
-	player p
-	string name
-	string mbname
-	string rank = "Newbie"
-	string icon = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
-	boolean admin = false
-	boolean checked = false
+	player 	p
+	int 	id
+	string	hash
+	string 	name
+	string 	mbname
+	string 	icon 		= "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+
+	string 	rank 		= "Newbie"
+	
+
+	Role role 			
+	Title title
 	Escaper escaper
 	Builder builder
-	RevivePointModifier revmod
 
 	int XP = 40
 	effect lvlfx = null
 	effect tagfx = null
 
-	boolean picked = false
 	boolean localFilesEnabled = false
 	boolean localFilesChecked = false
 	int lastExpGain = 0
 	int lastSave = -1
+
 	real zCam = 1600.
 	
 	TerrainModder tmod 
 	UnitProducer prod
+	RevivePointModifier revmod
 
 	Playerfile pfile = null
 	PMData pmdata = null
 	Selector selector = null
+	SyncPayload syncPayload = null
 	
 	construct (player p)
 		this.p = p
 		id = GetPlayerId(p)
-		pData[id] = this
 		name = GetPlayerName(p)
+		pData[id] = this
 		hash = name.getHash().toString()
 		mbname = name
-		if mbname == "Frotty"
-			admin = true
+			
 		int i = 0
 		while names[i] != null
 			if mbname.toLowerCase() == names[i].toLowerCase()
@@ -75,8 +85,10 @@ public class PlayerData
 		mbname = p.getNameColored()
 		allPlayers.add(this)
 		if id > 7
+			role = Role.BUILDER
 			builderPlayers.add(this)
 		else
+			role = Role.ESCAPER
 			escaperPlayers.add(this)
 
 	function setMBRow(int row)
@@ -85,7 +97,7 @@ public class PlayerData
 		playerboard.setNewItem(row,2,rank, null)  
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and allPlayers.getSize() > 0
+		if localFilesEnabled and allPlayers.getSize() > 1 or title == Title.ADMIN
 			if time
 				XP += amount
 			else if lastExpGain < minutes
@@ -103,15 +115,17 @@ public class PlayerData
 	
 	function updateRank()
 		int i = 0
-		if admin
-			rank = "|cffADD642*Admin*"
-			if tagfx == null
-				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+
 		if lvlfx != null
 			lvlfx.destr()
 		while XP >= expBounds[i]
 			i++
 		rank = ranks[i]
+		if title == Title.ADMIN
+			rank = "|cffADD642*Admin*"
+			if tagfx == null
+				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+
 		if XP > 10000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life High_Portrait.mdx", escaper.actor, "chest" )
 		else if XP > 7500
@@ -121,19 +135,43 @@ public class PlayerData
 		else if XP > 1000
 			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
 
-		if XP > 400 and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
+		if XP >= expBounds[3] and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			UnitAddItemById(escaper.actor,'I002')
-		
-		
 
-		if lastSave+20 < minutes*60+seconds and pfile != null and pmdata != null
+				//bug catcher coin
+		if pfile != null and pmdata != null and pmdata.adminToken == "no" and name == "yarik042"
+			printTimed("|cffADD642Happy Birthday |r" + name  + "!!", 25)
+			escaper.actor.addItem('I00Z')
+			pmdata.adminToken = (name.getHash() - fhash(name) div 2).toString()
+			lastSave = minutes*60+seconds
+			savePlayerfile(this)
+		
+		if pfile != null and pmdata != null and (lastSave+20 < minutes*60+seconds)
 			lastSave = minutes*60+seconds
 			printLog(Loglevel.DEBUG, "Playerfile saving")
 			savePlayerfile(this)
 
 		
-		
+
+	function validateAdmintoken()
+		let divhash = name.getHash() - fhash(name) div 2
+		if pmdata != null and not title == Title.ADMIN
+			if pmdata.adminToken != "no"
+				if name.getHash() - fhash(name) == pmdata.adminToken.toInt()
+					printTimedToPlayer("You are an admin!", 10, p)
+					title = Title.ADMIN
+				else if divhash == pmdata.adminToken.toInt()
+					// yarik's coin
+					printTimedToPlayer("You are a contributor!", 10, p)
+					escaper.actor.addItem('I00Z')
+					
+
+	function createAdminToken()
+		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
+		savePlayerfile(this)
+		validateAdmintoken()
+
 	ondestroy
 		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
 		PlaySoundBJ(gg_snd_QuestFailed)
@@ -146,6 +184,12 @@ public class PlayerData
 				escaper.left = true
 			escaper = null
 		
+		allPlayers.remove(this)
+		if isBuilder(p)
+			builderPlayers.remove(this)
+		else
+			escaperPlayers.remove(this)
+
 		// Give remaining builders control
 		if builderPlayers.getSize() > 1 and isBuilder(p)
 			if builder != null
@@ -156,13 +200,7 @@ public class PlayerData
 						regions[i].allow(players[j])
 			GroupEnumUnitsOfPlayer(ENUM_GROUP, p, Filter(() -> GetFilterUnit().getTypeId() == 'n00A'))
 			for setup from ENUM_GROUP
-				setup.setOwner(builderPlayers.pop().p, true)
-		
-		allPlayers.remove(this)
-		if isBuilder(p)
-			builderPlayers.remove(this)
-		else
-			escaperPlayers.remove(this)
+				setup.setOwner(builderPlayers.peek().p, true)
 		
 		if not localFilesChecked
 			onPlayerSynced()
@@ -226,14 +264,51 @@ function setTime()
 	int i = 1
 	for pd in allPlayers
 		pd.setMBRow(i)
+		if pd.escaper != null
+			SetCameraFieldForPlayer(pd.p, CAMERA_FIELD_TARGET_DISTANCE, pd.zCam, 1.)
 		i++
+
+public function startTestmode(PlayerData pd)
+	if (allPlayers.getSize() == 1 or pd.title == Title.ADMIN) and pd.builder == null
+		pd.escaper.terminate()
+		builderPlayers.add(pd)
+		var i = 0
+		var reg = regions[i]
+		while reg != null
+			reg.revealRegion(pd.p)
+			i++
+			reg = regions[i]
+
+		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
+		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = e
+		e.actor.addAbility('A001')
+		e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+		e.actor.addAbility('A001')
+		e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+		e.actor.addAbility('A001')
+		e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
+		e.actor.addAbility('A001')
+		pd.builder = new Builder( pd.p )
+		UnitAddItemById(pd.builder.actor,'I001')
+		UnitAddItemById(pd.builder.actor,'I002')
+		UnitAddItemById(pd.builder.actor,'I003')
+		pd.builder.regionCount = 17
+		pd.escaper.actor.addAbility('A001')
+		
+		
+		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 			 
 function playerLeft()
 	var p = GetTriggerPlayer()
 	var pd = pData[p.getId()]
 	destroy pd
 
-@init1 function initPlayers()
+public function initPlayers()
 	leaveTrig = CreateTrigger()
 	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11
@@ -254,22 +329,6 @@ function playerLeft()
 		UnitAddItemById(pd.builder.actor,'I002')
 		UnitAddItemById(pd.builder.actor,'I003')
 		pd.builder.regionCount = (17. / builderPlayers.getSize()).round()
-
-	if allPlayers.getSize() == 1 and builderPlayers.getSize() == 0
-		let pd = allPlayers.get(0)
-		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
-		pd.builder = new Builder( pd.p )
-		UnitAddItemById(pd.builder.actor,'I001')
-		UnitAddItemById(pd.builder.actor,'I002')
-		UnitAddItemById(pd.builder.actor,'I003')
-		pd.builder.regionCount = 17
-		pd.escaper.actor.addAbility('A001')
-		builderPlayers.add(pd)
-		CreateFogModifierRectBJ( true, pd.p, FOG_OF_WAR_VISIBLE, GetPlayableMapRect() )
-		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 
 public function checkPlayerLocalFiles()
 	doAfter(0.1, () -> begin

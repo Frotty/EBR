@@ -3,15 +3,19 @@ import Sensor
 import FxEntity
 import Escaper
 import Assets
+import ChannelAbilityPreset
 import Key
-import initlater PlayerData
 
 constant REINCARNATION_ID = 'A02X'
-constant PORTAL_ID = 'A085'
+constant PORTAL_CREATE_ID = 'A08K'
 constant SPEEDWAVE_ID = 'A06P'
 constant STAGNANCYSHIELD_ID = 'A008'
 constant SLOWWAVE_ID = 'A088'
 constant TEMP_REV_ID = 'A07Z'
+constant INNER_STRENGTH_ID = 'A08L'
+int HP_GAIN_50
+int HP_GAIN_75
+int HP_GAIN_100
 
 public class HolyEscaper extends Escaper
 
@@ -41,15 +45,16 @@ public class Portal extends FxEntity
 	vec2 destiny = ZERO2
 	FastEscaper es = null
 	int duration
-	effect targetFx = null
+	real lerpy = 0.
+	Fx targetFx = null
 
 	construct(FastEscaper es, int duration) 
-		super(es.owner, es.getPos(), 24, angle(0), "PulseTC_fix4.mdx")
+		super(es.owner, es.getPos(), 28, angle(0), "PulseTC_fix4.mdx")
 		silent = true
 		this.duration = duration
 		this.es = es
 		deactivate()
-		fx.setColor(colorA(100,100,100,100))
+		fx.setColor(colorA(145,145,145,145))
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> begin
 			if destiny != ZERO2 and target instanceof Escaper
 				var teleport = true
@@ -62,16 +67,17 @@ public class Portal extends FxEntity
 					target.setPos(destiny.withZ(target.pos.z))
 					flashEffect(Other.blinkcaster, pos)
 					flashEffect(Other.blinktarget, destiny)
-					if not pData[target.actor.getOwner().getId()].escaper.camlock
+					if not es.camlock and es.selectatrevive
 						PanCameraToTimedForPlayer(target.actor.getOwner(), destiny.x, destiny.y, 0.03 )
 
 		end)
 
 	override function update()
 		if destiny != ZERO2 and fx.getColor() != COLOR_WHITE
-			fx.setColor(fx.getColor().mix(COLOR_WHITE, (fx.getColor().red / 255.).lerp(1.05, 0.1)))
+			lerpy = lerpy.lerp(1.05, 0.045)
+			fx.setColor(colorA(145,145,145,145).mix(COLOR_WHITE, lerpy))
 		else
-			super.update()
+			deactivate()
 
 	override function slowUpdate()
 		if destiny != ZERO2
@@ -81,16 +87,23 @@ public class Portal extends FxEntity
 
 	function setDestiny(vec2 tpos)
 		this.destiny = tpos
-		targetFx = addEffect("PulseTC_tgt.mdx", tpos)
 		if tpos != ZERO2
-			fx.setColor(colorA(215,215,215,215))
+			if targetFx == null
+				targetFx = new Fx(tpos,"PulseTC_tgt.mdx")
+				targetFx.setScale(0.75)
+				targetFx.setOwner(owner, true)
+			targetFx.setColor(COLOR_WHITE)
+			targetFx.setXY(destiny)
+			activate()
 		else
-			fx.setColor(colorA(125,125,125,125))
+			targetFx.setColor(COLOR_BLACK)
+			fx.setColor(colorA(90,90,90,90))
 
 	ondestroy
 		es.portal = null
 		if targetFx != null
-			targetFx.destr()
+			targetFx.hiddenDestroy()
+			targetFx = null
 
 public class FastEscaper extends Escaper
 	Portal portal = null
@@ -100,18 +113,18 @@ public class FastEscaper extends Escaper
 		
 	override function onCast(int id)
 		super.onCast(id)
-		if id == PORTAL_ID
-			if sliding or poisoned or onLava
-				actor.resetAbilityCooldown(PORTAL_ID)
+		if id == PORTAL_CREATE_ID
+			if sliding or poisoned or onLava or flying
+				actor.resetAbilityCooldown(PORTAL_CREATE_ID)
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				return
 			if portal == null
-				portal = new Portal(this, 20 + actor.getAbilityLevel(PORTAL_ID) * 10)
-				actor.resetAbilityCooldown(PORTAL_ID)
+				portal = new Portal(this, 20 + actor.getAbilityLevel(PORTAL_CREATE_ID) * 10)
+				actor.resetAbilityCooldown(PORTAL_CREATE_ID)
 			else
 				if portal.destiny != ZERO2
 					portal..setPos(getPos())..setDestiny(ZERO2)
-					actor.resetAbilityCooldown(PORTAL_ID)
+					actor.resetAbilityCooldown(PORTAL_CREATE_ID)
 				else
 					portal.setDestiny(getPos().toVec2())
 					
@@ -144,6 +157,18 @@ public class StrongEscaper extends Escaper
 	
 	construct(vec3 pos, player owner)
 		super(pos, owner, 'H003')
+		EventListener.add(actor, EVENT_PLAYER_HERO_SKILL, () -> onSkill())
+
+	function onSkill()
+		let learnedId = GetLearnedSkill()
+		let lvl = GetLearnedSkillLevel()
+		if learnedId == INNER_STRENGTH_ID
+			if lvl == 1
+				actor..addAbility(HP_GAIN_50)
+			else if lvl == 2
+				actor..removeAbility(HP_GAIN_50)..addAbility(HP_GAIN_75)
+			else if lvl == 3
+				actor..removeAbility(HP_GAIN_75)..addAbility(HP_GAIN_100)
 		
 	override function update()
 		super.update()
@@ -178,3 +203,17 @@ public class StrongEscaper extends Escaper
 
 	
 
+@objectgen function gen()
+	HP_GAIN_50 = ABIL_ID_GEN.next()
+	HP_GAIN_75 = ABIL_ID_GEN.next()
+	HP_GAIN_100 = ABIL_ID_GEN.next()
+
+	if compiletime
+		new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_50)
+		..setMaxLifeGained(1, 50)
+
+		new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_75)
+		..setMaxLifeGained(1, 75)
+
+		new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_100)
+		..setMaxLifeGained(1, 100)

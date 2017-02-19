@@ -2,17 +2,19 @@ package Key
 import ItemObject
 import Escaper
 import ClosureTimers
+import Fx
 public int array keyIds
 
 constant int DYN_ID = 'A00M'
 constant int STATIC_ID = 'A01O'
 
 public class Key extends ItemObject
-	COLOR col = COLOR.WHITE
+	EBRColor col = EBRColor.WHITE
 	boolean picked = false
 	boolean followWalkable = true
 	effect returnSfx = null
 	Escaper holder
+	Fx fx
 	
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
@@ -20,7 +22,7 @@ public class Key extends ItemObject
 		
 	function recolor()
 		RemoveItem(actorItem)
-		actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
+		actorItem = createItem(keyIds[col castTo int], pos)
 		actorItem.setEntity(this)
 		
 	override function onUse(Escaper user)
@@ -29,6 +31,9 @@ public class Key extends ItemObject
 		if isEscaper(holder.owner) or this.owner == holder.owner
 			picked = true
 			this.holder = holder
+			fx = new Fx(pos, "war3mapImported\\Key_ITEM.mdx")
+			..setColor(col.toColor())
+			..setXYZ(holder.getPos()+vec3(0,0,128))
 			setup.hide()
 			activate()
 		else
@@ -42,6 +47,8 @@ public class Key extends ItemObject
 	override function onDrop(Escaper e)
 		picked = false
 		holder = null
+		fx.hiddenDestroy()
+		fx = null
 		setup.setXY(pos.toVec2())
 		setup.show()
 		nullTimer(() -> begin
@@ -52,8 +59,9 @@ public class Key extends ItemObject
 		end)
 		
 	override function update()
-		if picked and followWalkable
-			if not holder.flying and not holder.sliding and not holder.onUnwalkable
+		if picked
+			fx.setXYZ(holder.getPos()+vec3(0,0,128))
+			if followWalkable and not holder.flying and not holder.sliding and not holder.onUnwalkable
 				pos = holder.getPos()
 		else
 			super.update()
@@ -62,23 +70,23 @@ public class Key extends ItemObject
 		let id = GetSpellAbilityId()
 		switch id
 			case colorSpells[0]
-				col = COLOR.WHITE
+				col = EBRColor.WHITE
 			case colorSpells[1]
-				col = COLOR.RED
+				col = EBRColor.RED
 			case colorSpells[2]
-				col = COLOR.BLUE
+				col = EBRColor.BLUE
 			case colorSpells[3]
-				col = COLOR.TEAL
+				col = EBRColor.TEAL
 			case colorSpells[4]
-				col = COLOR.PURPLE
+				col = EBRColor.PURPLE
 			case colorSpells[5]
-				col = COLOR.YELLOW
+				col = EBRColor.YELLOW
 			case colorSpells[6]
-				col = COLOR.ORANGE
+				col = EBRColor.ORANGE
 			case colorSpells[7]
-				col = COLOR.GREEN
+				col = EBRColor.GREEN
 			case colorSpells[8]
-				col = COLOR.PINK
+				col = EBRColor.PINK
 			case DYN_ID
 				followWalkable = false
 				setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
@@ -92,6 +100,8 @@ public class Key extends ItemObject
 		return false
 		
 	ondestroy
+		if fx != null
+			fx.hiddenDestroy()
 		holder = null
 		if returnSfx != null
 			returnSfx.destr()

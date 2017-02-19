@@ -1,8 +1,8 @@
 package BuilderConstants
 import Preloader
 
-public constant real hiddenX = -2147483647
-public constant real hiddenY = 2147483647
+public constant real hiddenX = -6000
+public constant real hiddenY = 6000
 
 public constant int CONTROLLABLEICE = 'Nice'
 public constant int UNCONTROLLABLEICE = 'Idki'

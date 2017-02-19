@@ -10,12 +10,12 @@ public constant string MAP_VER = "EBR 0.87"
 public constant STAFF_PLAYER = players[14]
 
 public function isBuilder(player p) returns boolean
-	return builderPlayers.contains(pData[p.getId()])
+	return pData[p.getId()].role == Role.BUILDER
 
 public function isEscaper(player p) returns boolean
-	return escaperPlayers.contains(pData[p.getId()])
+	return pData[p.getId()].role == Role.ESCAPER
 	
-public enum COLOR
+public enum EBRColor
 	WHITE
 	RED
 	BLUE
@@ -29,6 +29,13 @@ public enum COLOR
 	LIGHTBLUE
 	DARKGREEN
 	BROWN
+
+public function EBRColor.toColor() returns colorA
+	switch this
+		case WHITE
+			return COLOR_WHITE
+		default
+			return playercolors[this castTo int - 1].withAlpha(255)
 
 
 @init1 function init_GameConstants()
@@ -78,7 +85,7 @@ public enum COLOR
 	ranks[2] = "|cffFFE6AD3:Novice"
 	expBounds[2] = 400
 	ranks[3] = "|cffFFD64A4:Rookie"
-	expBounds[3] = 1500
+	expBounds[3] = 1250
 	ranks[4] = "|cffFFCE195:Superior"
 	expBounds[4] = 2750
 	ranks[5] = "|cffFFA53A6:Major"
@@ -86,13 +93,13 @@ public enum COLOR
 	ranks[6] = "7:Pro"
 	expBounds[6] = 9500
 	ranks[7] = "|cff5A8CDE8:Expert"
-	expBounds[7] = 12500
+	expBounds[7] = 15500
 	ranks[8] = "|cff087BD69:Craver"
-	expBounds[8] = 15500
+	expBounds[8] = 20000
 	ranks[9] = "|cffD6292110|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
-	expBounds[9] = 20000
+	expBounds[9] = 25000
 	ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
-	expBounds[10] = 27500
+	expBounds[10] = 40000
 	ranks[11] = "|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r"
 	expBounds[11] = 75000
 	ranks[12] = "|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r"

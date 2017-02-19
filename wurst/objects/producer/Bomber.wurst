@@ -8,37 +8,40 @@ constant int ATTACK_ORDER = 851983
 constant int ATTACK_GROUND_ORDER = 851984
 constant int STOP_ORDER = 851972
 constant int MOVE_ORDER = 851971
-trigger orderTrigger
 
 public class Bomber extends UnitEntity
 	unit setup
 	boolean realorder = true
 	
-	construct( vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(createUnit(owner, BOMBER_ID, pos, angle(0)))
 		this.setCurrentRegion()
-		setup = CreateUnit(owner, BOMBER_ID, pos.x, pos.y, 0.)
-		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
-		actor.addAbility(LOCUST_ID)
+		setup = createUnit(owner, BOMBER_ID, pos, angle(0))..addAbility(GHOST_INVIS_ID)..setEntity(this)
+		actor..addAbility(LOCUST_ID)
 		UnitAddType(setup, UNIT_TYPE_PEON)
 		UnitAddType(actor, UNIT_TYPE_PEON)
-		setup.addAbility('Agho')
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> checkOrder())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> checkOrder())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> checkOrder())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ATTACKED, () -> checkOrder())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		setup.setEntity(this)
+		setup.abortOrder()
+		actor.abortOrder()
 		
-	function onCast() returns boolean
+	function onCast()
 		let id = GetSpellAbilityId()
 		onAttackspeedCast(id, actor)
 		if id == AUTOATTACK_ID
 			if IsUnitType(actor, UNIT_TYPE_PEON)
 				UnitRemoveType(actor, UNIT_TYPE_PEON)
-				createTTEx(pos, vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner  )
+				setup.setPropWindow(0)
+				actor.setPropWindow(0)
+				createTTEx(getPos(), vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner)
 			else
 				UnitAddType(actor, UNIT_TYPE_PEON)
-				createTTEx(pos, vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner  )
-		return false
+				setup.setPropWindow(60)
+				actor.setPropWindow(60)
+				createTTEx(getPos(), vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner)
 		
 	static function orderSetup()
 		var obj = GetExpiredTimer().getData() castTo Bomber
@@ -46,31 +49,27 @@ public class Bomber extends UnitEntity
 		IssueImmediateOrderById(obj.setup, STOP_ORDER)
 		GetExpiredTimer().release()
 		
+	function checkOrder()
+		var i = GetIssuedOrderId()
+		var e = GetOrderedUnit().getEntity()
+		if e instanceof Bomber
+			var obj = e castTo Bomber
+			if GetOrderedUnit() == obj.setup
+				if i == MOVE_ORDER
+					IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
+				if i == ATTACK_GROUND_ORDER
+					IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
+					getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
+				else if i == ATTACK_ORDER
+					IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
+					getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
+				else if i == STOP_ORDER 
+					if obj.realorder
+						IssueImmediateOrderById(obj.actor, STOP_ORDER)
+					else 
+						obj.realorder = true
 	ondestroy
 		setup.setEntity(null)
 		setup.remove()
 	
-function checkOrder()
-	var i = GetIssuedOrderId()
-	var e = GetOrderedUnit().getEntity()
-	if e instanceof Bomber
-		var obj = e castTo Bomber
-		if GetOrderedUnit() == obj.setup
-			if i == MOVE_ORDER
-				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
-			if i == ATTACK_GROUND_ORDER
-				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
-				getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
-			else if i == ATTACK_ORDER
-				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
-				getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
-			else if i == STOP_ORDER 
-				if obj.realorder
-					IssueImmediateOrderById(obj.actor, STOP_ORDER)
-				else 
-					obj.realorder = true
 						
-	
-@init1 function init_Bomber()
-	orderTrigger = CreateTrigger()
-	orderTrigger.addAction(function checkOrder)

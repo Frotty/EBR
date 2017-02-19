@@ -1,3 +1,49 @@
+[0.88f]
+[*] reduced small killer height so it can be jumped more easily
+[*] reduced velocity of escaper after orb jaunt
+[*] increased orb inherited velocity
+[*] added fire killer
+[*] added inner strength to strong escaper
+[*] added activation effect for one-shot executer
+[*] added M.A.P (wip, experimental; if you have localfiles enabled you can save and load terrain (saving objects soon))
+[*] now setting camera distance continuously
+[*] changed path-checking to accommodate for texture overlaps (experimental; makes it impossible to cut diagonals, but allows cutting corners to avoid visually incorrect deaths)
+[*] overhead key effect is now colored accordingly
+[*] improved visuals for oneway portal
+[*] fixed buff error spam
+[*] fixed arcanery activation radius
+[*] fixed terrainchanger texture selection being unavailable
+[*] fixed terrainchanger leaving behind tiles when decreasing size
+[*] fixed incorrect jukebox music durations
+[*] fixed savesystem incorrectly handling multiple profiles
+[*] fixed placing portals while flying
+[*] fixed several missing or incorrect hotkeys
+[*] fixed spinning sleeping entities having wrong distance
+[*] even more awesome icons by kari
+
+[0.87z]
+[*] minor bugfixes
+[*] added arcanery that silences escapers until they leave a given radius
+[*] terrainmodder now returns to 1x1 brush size after 20 seconds of idletime
+
+[0.87w]
+[*] Adjusted regions a bit
+[*] Fixed vision bugs and other minor things
+
+[0.87t]
+[*] region shops are now centered and have reduced activation range
+[*] more fixes to leaver control share
+[*] fixed cam changing for builders from oneway portal regardless of smode
+[*] fixed bomber attackspeed and autoattack mode
+[*] fixed movespeed and boosterspeed inconsistencies
+[*] fixed escapers entering and getting vision across unbought regions
+[*] fixed pointer setangle command and enabled it for SP test mode
+[*] minor startmaze adjustments
+[*] terrainchangers are now visible by default but can be made invisible
+[*] SP testmode must now be enabled via the -test command
+[*] rename doesn't break savefiles anymore
+[*] dead escapers no longer continue sliding
+
 [0.87q]
 [*] fixed oneway portal fx staying too long and added target effect
 [*] fixed game init stopping if a player leaves during startup or syncing

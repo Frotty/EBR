@@ -3,6 +3,7 @@ import PlayerData
 import Intro
 import ClosureTimers
 import SetupBox
+import Spaceship
 import EscaperClasses
 
 function onCommandChat()
@@ -12,7 +13,8 @@ function onCommandChat()
 	let p = GetTriggerPlayer()
 	let id = p.getId()
 	let pd = pData[id]
-	if not pd.picked
+	if pd.escaper == null
+		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after pick")
 		return
 	var cstr = str.substring(1, str.indexOf(" "))
 	switch cstr
@@ -57,14 +59,16 @@ function onCommandChat()
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"
 			startIntroFor(pd)
+		case "test"
+			startTestmode(pd)
 		case "smode"
 			pd.escaper.selectatrevive = not pd.escaper.selectatrevive
 			if pd.escaper.selectatrevive
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned on - selecting on revive.")
 			else
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Select mode is now turned off - not selecting on revive.")
-		case "exp"
-			if pd.admin
+		case "admin"
+			if pd.title == Title.ADMIN
 				int i = 0
 				unit tr = null
 				for u in GetUnitsSelectedAll(pd.p)
@@ -75,11 +79,22 @@ function onCommandChat()
 				if i < 2
 					let id2 = tr.getOwner().getId()
 					let pd2 = pData[id2]
-					pd2.addXp(10000, true)
-					print("grant1")
+					pd2.createAdminToken()
+		case "exp"
+			if pd.title == Title.ADMIN
+				int i = 0
+				unit tr = null
+				for u in GetUnitsSelectedAll(pd.p)
+					i++
+					tr = u
+					if i > 1
+						break
+				if i < 2
+					let id2 = tr.getOwner().getId()
+					let pd2 = pData[id2]
+					pd2.addXp(6500, true)
 				else	
-					pd.addXp(10000, true)
-					print("grant2")
+					pd.addXp(6500, true)
 		case "d"
 			var debuglvl = str.substring(str.indexOf(" ") + 1, str.length()).toInt() castTo Loglevel
 			DEBUG_LEVEL = debuglvl
@@ -89,6 +104,8 @@ function onCommandChat()
 			for u in units
 				if u.getEntity() instanceof SetupBox
 					(u.getEntity() castTo SetupBox).addBossSwitch()
+		case "ship"
+			new Spaceship(pd.escaper.getPos().toVec2(), pd.escaper)
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode, -rename [name]")

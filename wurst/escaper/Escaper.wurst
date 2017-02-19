@@ -12,7 +12,7 @@ import public initlater RegionData
 import Projectile
 import ErrorHandling
 import JukeBox
-import initlater Builder
+import initlater PlayerData
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -148,18 +148,33 @@ public abstract class Escaper extends UnitEntity
 			onGroundHit()
 		// If the Entity is moving towards
 		e.scaleVel(surfaceFriction)
-		var ttype = GetTerrainType(pos.x, pos.y)
-		onUnwalkable = false
+		let rv = getRealVel()
+		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 18)
+		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 18)
+		var ttype1 = GetTerrainType(lpos.x, lpos.y)
+		var ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()
+		int ttype = 0
+		if ttype1 == rdata.getTypeSet().unwalkableId
+			if ttype2 == rdata.getTypeSet().unwalkableId
+				ttype = rdata.getTypeSet().unwalkableId
+			else
+				ttype = ttype2
+		else
+			if ttype2 == rdata.getTypeSet().unwalkableId
+				ttype = ttype1
+			else
+				ttype = GetTerrainType(pos.x, pos.y)
+
+		onUnwalkable = false
 		slideVelocity *= 0.99
 		if ttype == rdata.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 			if alive
 				if rdata.allowCut
-					let rv = getRealVel()
-					let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 18)
-					let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(180).asAngleDegrees(), 18)
-					let t1type = GetTerrainType(lpos.x, lpos.y)
-					let t2type = GetTerrainType(rpos.x, rpos.y)
+					let fpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), 18)
+					let bpos = pos.toVec2().polarOffset(rv.toVec2().getAngle(), -18)
+					let t1type = GetTerrainType(fpos.x, fpos.y)
+					let t2type = GetTerrainType(bpos.x, bpos.y)
 					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and
 						(t1type == rdata.getTypeSet().unwalkableId or t1type == 'Ibkb' or t1type == RUNES)
 						onUnwalkable = true
@@ -167,7 +182,7 @@ public abstract class Escaper extends UnitEntity
 				else
 					onUnwalkable = true
 					kill(null)
-		else if ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE
+		else if alive and (ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE)
 			let angl = actor.getFacingAngle()
 			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			if not sliding
@@ -338,12 +353,13 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 11.5))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
-			orb.addVel(getRealVel()*0.25)
+			orb.addVel((getRealVel()-walkVel)*0.45)
 			orb.setXYAngle(orb.vel.toVec2().getAngle())
 			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
 		else if id == JAUNT_SPELL
 			if orb != null
 				setXY(orb.getPos())
+				setVel(vel * 0.25)
 				flashEffect(Other.polymorphtarget, pos)
 				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
@@ -397,12 +413,13 @@ trigger neutralDeathTrig
 trigger spellTrig
 
 function correctRegion()
-	for e in escapers
+	for e from escapers.staticItr()
 		e.updateRegionData()
 		
 @init2 function init_Escaper()
 	neutralDeathTrig = CreateTrigger()
 	neutralDeathTrig.addAction(function Escaper.neutralDeath)
+	getTimer().startPeriodic(1., function correctRegion)
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)

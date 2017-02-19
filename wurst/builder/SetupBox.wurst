@@ -97,7 +97,7 @@ public class SetupBox extends UnitEntity
 				var p = u.getOwner()
 				if isBuilder(p) and p != owner
 					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
-					if rdata.canBuild(p) and p.getName() != "Frotty"
+					if rdata.canBuild(p) and not pData[p.getId()].title == Title.ADMIN
 						rdata.disallow(p)
 						printTimedToPlayer("|cff9C0808Disallowed|r " + p.getNameColored() + " |cffffcc00to build in your region.", 25, owner)
 						printTimedToPlayer(owner.getNameColored() + " |cff9C0808disallowed|r|cffffcc00 you to build in his region.", 25, p)
@@ -114,7 +114,7 @@ public class SetupBox extends UnitEntity
 						
 			case CLEAR_ID
 				GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
-				for u in ENUM_GROUP
+				for u from ENUM_GROUP
 					var data = u.getEntity()
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
 						data.terminate()

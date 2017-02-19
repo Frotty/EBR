@@ -19,7 +19,7 @@ int array KEY_COLOR_ID
 
 public class Door extends StaticSetupObject
 	unit pathing
-	COLOR col = COLOR.WHITE
+	EBRColor col = EBRColor.WHITE
 	
 	boolean vertical = false
 	boolean opened = false
@@ -42,7 +42,7 @@ public class Door extends StaticSetupObject
 		Door door = source.getUserData() castTo Door
 		if not door.opened and e instanceof Escaper
 			var es = e castTo Escaper
-			if es.pos.z < 48
+			if es.pos.z < 64
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) //WARNING BJ function//
 					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
 					if kdata != null
@@ -54,27 +54,24 @@ public class Door extends StaticSetupObject
 	function changeColor( int id )
 		switch id
 			case colorSpells[0]
-				col = COLOR.WHITE
+				col = EBRColor.WHITE
 			case colorSpells[1]
-				col = COLOR.RED
+				col = EBRColor.RED
 			case colorSpells[2]
-				col = COLOR.BLUE
+				col = EBRColor.BLUE
 			case colorSpells[3]
-				col = COLOR.TEAL
+				col = EBRColor.TEAL
 			case colorSpells[4]
-				col = COLOR.PURPLE
+				col = EBRColor.PURPLE
 			case colorSpells[5]
-				col = COLOR.YELLOW
+				col = EBRColor.YELLOW
 			case colorSpells[6]
-				col = COLOR.ORANGE
+				col = EBRColor.ORANGE
 			case colorSpells[7]
-				col = COLOR.GREEN
+				col = EBRColor.GREEN
 			case colorSpells[8]
-				col = COLOR.PINK
-		if col == COLOR.WHITE
-			actor.setVertexColor(COLOR_WHITE)
-		else	
-			actor.setVertexColor(playercolors[col castTo int - 1])
+				col = EBRColor.PINK
+		actor.setVertexColor(col.toColor())
 				
 	function toggleOpen()
 		if opened
@@ -124,10 +121,7 @@ public class Door extends StaticSetupObject
 				printLog(Loglevel.DEBUG, "yes " + GetPlayerId(owner).toString())
 				setNewActor(CreateUnit( owner, DOORDUMMY_ID , pos.x, pos.y, 0 ))
 				pathing  = CreateUnit( owner, DOORPATH, pos.x, pos.y, 0 )
-		if col == COLOR.WHITE
-			actor.setVertexColor(COLOR_WHITE)
-		else	
-			actor.setVertexColor(playercolors[col castTo int - 1])
+		actor.setVertexColor(col.toColor())
 		
 	ondestroy
 		pathing.setEntity(null)

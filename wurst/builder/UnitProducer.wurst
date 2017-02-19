@@ -9,7 +9,7 @@ import TerrainChanger
 import Bomber
 import Pointer
 import Knockbacker
-import VoidWalker
+import Faceless
 
 constant PRODUCER_ID 	= 'H00A'
 constant FIRST_PAGE 	= 'A07B'
@@ -28,6 +28,7 @@ constant POINTER	 	= 'A05I'
 constant BOMBER	 		= 'A05O'
 constant KNOCKBACK	 	= 'A07C'
 constant FACELESS	 	= 'A07U'
+constant FIRE	 		= 'Afre'
 
 public class UnitProducer extends StaticBaseObject
 
@@ -35,6 +36,7 @@ public class UnitProducer extends StaticBaseObject
 		super(pos, CreateUnit( owner, PRODUCER_ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL, CODE_NULL)
 		actor.addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		clearQuestionmark()
 
 	function onCast() returns boolean
 		var id = GetSpellAbilityId()
@@ -44,25 +46,25 @@ public class UnitProducer extends StaticBaseObject
 		var data = getRegionData(rallyPos)
 		if id == SECOND_PAGE
 			obj.actor..removeAbility(BIG_KILLER)..removeAbility(SMALL_KILLER)
-			..removeAbility('A05J')..removeAbility('A05G')
-			..removeAbility('A05M')..removeAbility('A05N')
-			..removeAbility('A05H')..removeAbility('A07A')
-			..removeAbility('A05O')..removeAbility('A07C')
-			..removeAbility('A07U')..removeAbility(AIR_KILLER)
-			..addAbility('A05N')..addAbility('A05P')
-			..addAbility('A05L')..addAbility('A05I')
-			..addAbility('A07B')
+			..removeAbility(SR_KILLER)..removeAbility(BR_KILLER)
+			..removeAbility(TANK_KILLER)
+			..removeAbility(GLAIVE_KILLER)..removeAbility(SECOND_PAGE)
+			..removeAbility(KNOCKBACK)
+			..removeAbility(FACELESS)..removeAbility(AIR_KILLER)..removeAbility(FIRE)
+			..addAbility(TP_TARGET)..addAbility(BOMB_TARGET)
+			..addAbility(T_CHANGER)..addAbility(POINTER)
+			..addAbility(FIRST_PAGE)..addAbility(BOMBER)
 			return false
 		else if id == FIRST_PAGE
 			obj.actor..addAbility(BIG_KILLER)..addAbility(SMALL_KILLER)
-			..addAbility('A05J')..addAbility('A05G')
-			..addAbility('A05M')..addAbility('A05N')
-			..addAbility('A05H')..addAbility('A07A')
-			..addAbility('A05O')..addAbility('A07C')
-			..addAbility('A07U')..addAbility(AIR_KILLER)
-			..removeAbility('A05N')..removeAbility('A05P')
-			..removeAbility('A05L')..removeAbility('A05I')
-			..removeAbility('A07B')
+			..addAbility(SR_KILLER)..addAbility(BR_KILLER)
+			..addAbility(TANK_KILLER)..addAbility(FIRE)
+			..addAbility(GLAIVE_KILLER)..addAbility(SECOND_PAGE)
+			..addAbility(KNOCKBACK)
+			..addAbility(FACELESS)..addAbility(AIR_KILLER)
+			..removeAbility(TP_TARGET)..removeAbility(BOMB_TARGET)
+			..removeAbility(T_CHANGER)..removeAbility(POINTER)
+			..removeAbility(FIRST_PAGE)..removeAbility(BOMBER)
 			return false
 		if data == null
 			return false
@@ -70,32 +72,34 @@ public class UnitProducer extends StaticBaseObject
 			switch id 
 				case BIG_KILLER // Big Killer
 					new BigKiller(rallyPos,obj.owner)
-				case 'A05K' // Small Killer
+				case SMALL_KILLER // Small Killer
 					new SmallKiller(rallyPos,obj.owner)
-				case 'A05G' // Big Random Killer
+				case BR_KILLER // Big Random Killer
 					new BigRandomKiller(rallyPos,obj.owner)
-				case 'A05J' // Small Random Killer
+				case SR_KILLER // Small Random Killer
 					new SmallRandomKiller(rallyPos,obj.owner)
-				case 'A05M' // Tank
+				case TANK_KILLER // Tank
 					new TankKiller(rallyPos,obj.owner)
-				case 'A05N'
+				case TP_TARGET
 					new TeleporterTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
-				case 'A05H'
+				case GLAIVE_KILLER
 					new GlaiveKiller(rallyPos,obj.owner)
-				case 'A05P'
+				case BOMB_TARGET
 					new BomberTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
-				case 'A05L'
+				case T_CHANGER
 					new TerrainChanger( vec2(rallyPos.x,rallyPos.y), obj.owner )
-				case 'A05I'
+				case POINTER
 					new Pointer(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
-				case 'A05O'
+				case BOMBER
 					new Bomber(vec2(rallyPos.x,rallyPos.y), obj.owner)
-				case 'A07C'
+				case KNOCKBACK
 					new Knockbacker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
-				case 'A07U'
-					new VoidWalker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
+				case FACELESS
+					new Faceless(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case AIR_KILLER
 					new AirKiller(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
+				case FIRE
+					new FireKiller(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
@@ -121,6 +125,6 @@ init
 	preloadAbility(FACELESS)
 		
 @init2 function init_UnitProducer()
-	for pd in builderPlayers
+	for pd from builderPlayers.staticItr()
 		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
 

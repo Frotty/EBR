@@ -102,7 +102,7 @@ public class Boss extends SetupObject
 	function getSpellTargets(SpellType stype) returns LinkedList<SpellTarget>
 		let tgs = targets.get(owner.getId())
 		let newTgs = new LinkedList<SpellTarget>()
-		for target in tgs
+		for target from tgs.staticItr()
 			if target.stype == stype
 				newTgs.add(target)
 		return newTgs

@@ -6,6 +6,7 @@ import Escaper
 import EscaperKillers
 import Door
 import Pointer
+import Assets
 import Knockbacker
 import Builder
 import Unitcreator
@@ -81,6 +82,7 @@ public class Executer extends StaticBaseObject
 					obj.findAction()
 				case Emode.ONESHOT
 					if not obj.disabled
+						flashEffect(Other.charmtarget, obj.getPos())
 						obj.findAction()
 						obj.disable()
 				case Emode.LEVER
@@ -105,11 +107,10 @@ public class Executer extends StaticBaseObject
 		if obj.canTrigger(leaver)
 			GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
 			int c = 0
-			for unit u in ENUM_GROUP
+			for u from ENUM_GROUP
 				Entity e = u.getEntity()
 				if obj.canTrigger(e)
 					c++
-			ENUM_GROUP.clear()
 			if c == 0
 				obj.negativeAction()
 				obj.ON = false

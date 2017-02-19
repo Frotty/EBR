@@ -3,7 +3,7 @@ import Startmaze
 import Knockbacker
 import SetupBox
 import Obstacle
-import VoidWalker
+import Faceless
 import Unitcreator
 import Waypoint
 import UnitRemover
@@ -81,7 +81,7 @@ public class ThirdForestMaze extends Startmaze
 		new Waypoint(gg_unit_n004_0078)..setRallyPoint(gg_unit_n004_0068.getPos()).delay = 1
 		new Waypoint(gg_unit_n004_0099)..setRallyPoint(gg_unit_n004_0078.getPos()).delay = 1
 
-		let vw = new VoidWalker(gg_unit_u00I_0100)
+		let vw = new Faceless(gg_unit_u00I_0100)
 		vw.setup.issuePointOrder("move", gg_unit_n004_0068.getPos())
 		vw.invisDur.setVal(2)
 

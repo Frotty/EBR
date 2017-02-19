@@ -173,10 +173,20 @@ public class Savecode
 
 		
 		SetRandomSeed(seed)
+
+	
+	function save() returns string
+		int hash
+		clean()
+		hash = hash()
+		encode(hash,hashN())
+		clean()
+		pad()
+		return toString()
 	
 	
-	function save( player p, int loadtype ) returns string
-		int key = fhash(GetPlayerName(p))+loadtype*73
+	function save(string name, int loadtype ) returns string
+		int key = fhash(name)+loadtype*73
 		int hash
 		clean()
 		hash = hash()
@@ -186,10 +196,19 @@ public class Savecode
 		pad()
 		obfuscate(key,1)
 		return toString()
+
+	function load(string s) returns boolean
+		int inputhash
+		fromString(s)
+		inputhash = decode(hashN())
+		
+		clean()
+		let h = hash()
+		return inputhash == h
 	
 	
-	function load( player p, string s, int loadtype ) returns boolean
-		int ikey = fhash(GetPlayerName(p))+loadtype*73
+	function load( string name, string s, int loadtype ) returns boolean
+		int ikey = fhash(name)+loadtype*73
 		int inputhash
 		fromString(s)
 		obfuscate(ikey,-1)
@@ -216,13 +235,13 @@ function prop_Savecode() returns boolean
 	savecode.encode(medal2,medalmax)
 	savecode.encode(XP,xpmax)
 //--- Savecode_save generates the savecode for a specific player ---
-	s = savecode.save(Player(0),1)
+	s = savecode.save("test",1)
 	destroy savecode
 //	call BJDebugMsg("Savecode: " + Savecode_colorize(s))
 //--- User writes down code, inputs again ---
 
 	loadcode = new Savecode()
-	if loadcode.load(Player(0),s,1)
+	if loadcode.load("test",s,1)
 		BJDebugMsg("load ok")
 	else
 		BJDebugMsg("load failed")   
