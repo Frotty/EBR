@@ -15,6 +15,7 @@ public class BossDamager extends StaticBaseObject
     construct(vec2 pos, player owner)
         super(posToGrid(pos), createUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.)), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
         printLog(Loglevel.DEBUG, "creating Boss Damager")
+        damage = 40
         EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
     function damage(Escaper e)
@@ -50,16 +51,16 @@ public class BossDamager extends StaticBaseObject
             var id = GetSpellAbilityId()
             switch id
                 case DMG_INC_ID
-                    if dmger.damage >= 500
+                    if dmger.damage >= 200
                         createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), dmger.owner  )
                     else
-                        dmger.damage += 25
+                        dmger.damage += 10
                         createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
                 case DMG_DEC_ID
-                    if dmger.damage < 0.75
+                    if dmger.damage <= 0
                         createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), dmger.owner  )
                     else
-                        dmger.damage -= 25
+                        dmger.damage -= 10
                         createTTEx(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
         return false
 
