@@ -3,14 +3,6 @@ import EntityManagement
 import Startmazes
 import PlayerData
 import JukeBox
-import Scanner
-import FileIO
-import CodeManager
-import BigString
-import SeqWorker
-import JsonParser
-import LZW
-import CodeGenerator
 
 init
 	callGen()
@@ -31,7 +23,6 @@ function initGame()
 	EndThematicMusic()
 	GetExpiredTimer().start(0.01, () -> initPartTwo())
 
-JsonParser jp
 function initPartTwo()
 	callFunctionsWithAnnotation("@init2")
 	initStartmazes()

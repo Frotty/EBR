@@ -131,7 +131,15 @@ public abstract class Escaper extends UnitEntity
 	
 	override function onGroundHit()
 		if bitset(tileModifierMap.loadInt((pos.x / 128).round(), (pos.y / 128).round())).contains(TileModifiers.BLUGOO castTo int) and vel.z.abs() > 5
-			vel.z = -vel.z*1.5
+			let rdata = this.getCurrentRegion()
+			var ttype = GetTerrainType(pos.x, pos.y)
+			// Handle Goo it
+			let angl = actor.getFacingAngle()
+			if ttype == CONTROLLABLEICE
+				vel.x = 0
+				vel.y = 0
+				slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
+			vel.z = -vel.z*1.25
 			return
 		actor.setPropWindow(60.)
 		pos.z = .1

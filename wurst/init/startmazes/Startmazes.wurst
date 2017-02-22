@@ -121,28 +121,28 @@ function addStartTexttag(texttag tt)
 function setBuilderTeleporter()
 	if pData[8] != null
 		let tp = new Teleporter(gg_unit_n00C_0058)
-		tp.actor.removeAbility('A00K')
+		tp.actor.removeAbility(REMOVE_ID)
 		tp.tag = createCenteredTexttag(gg_unit_n00C_0058.getPos().toVec3(), pData[8].mbname, 11)
 	else
 		gg_unit_n00C_0058.remove()
 	
 	if pData[9] != null
 		let tp = new Teleporter(gg_unit_n00C_0063)
-		tp.actor.removeAbility('A00K')
+		tp.actor.removeAbility(REMOVE_ID)
 		tp.tag = createCenteredTexttag(gg_unit_n00C_0063.getPos().toVec3(), pData[9].mbname, 11)
 	else
 		gg_unit_n00C_0063.remove()
 
 	if pData[10] != null
 		let tp = new Teleporter(gg_unit_n00C_0115)
-		tp.actor.removeAbility('A00K')
+		tp.actor.removeAbility(REMOVE_ID)
 		createCenteredTexttag(gg_unit_n00C_0115.getPos().toVec3(), pData[10].mbname, 11)
 	else
 		gg_unit_n00C_0115.remove()
 
 	if pData[11] != null
 		let tp = new Teleporter(gg_unit_n00C_0143)
-		tp.actor.removeAbility('A00K')
+		tp.actor.removeAbility(REMOVE_ID)
 		createCenteredTexttag(gg_unit_n00C_0143.getPos().toVec3(), pData[11].mbname, 11)
 	else
 		gg_unit_n00C_0143.remove()
@@ -158,7 +158,7 @@ public function setStartTeleport(int tpid, int locid)
 		case 2
 			t = new Teleporter(gg_unit_n00C_0323)
 	
-	t.actor.removeAbility('A00K')
+	t.actor.removeAbility(REMOVE_ID)
 	switch locid
 		case 1
 			t.setRallyPoint(vec2(3456,-4160))

@@ -89,7 +89,7 @@ public class Portal extends FxEntity
 		this.destiny = tpos
 		if tpos != ZERO2
 			if targetFx == null
-				targetFx = new Fx(tpos,"PulseTC_tgt.mdx")
+				targetFx = new Fx(tpos.withZ(0),"PulseTC_tgt.mdx")
 				targetFx.setScale(0.75)
 				targetFx.setOwner(owner, true)
 			targetFx.setColor(COLOR_WHITE)

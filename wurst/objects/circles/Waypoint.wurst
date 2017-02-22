@@ -56,7 +56,7 @@ public class Waypoint extends StaticBaseObject
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
 		if owner == e.owner and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 			if e instanceof SetupObject
-				if not (e castTo SetupObject).setup.hasAbility('A00K')
+				if not (e castTo SetupObject).setup.hasAbility(REMOVE_ID)
 					return
 			var data = e castTo UnitEntity
 			if not wisps and data instanceof TeleporterTarget

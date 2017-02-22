@@ -14,7 +14,7 @@ constant int STOP_ID = 'A032'
 public class Pointer extends EscaperSensorSetup
 	real turnspeed = 2.
 	angle angl
-	boolean turning
+	boolean turning = false
 	
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, POINTER_ID, facing, POINTER_RADIUS, 16.)
@@ -22,18 +22,14 @@ public class Pointer extends EscaperSensorSetup
 		angl = facing
 		
 	override function update()
-		pos = vec3(setup.getX(), setup.getY(), 0.)
-		
 		if turning
 			angl += turnspeed.asAngleDegrees()
 			angl = (angl.degrees() % 360).asAngleDegrees()
-		actor.setPos(pos.x, pos.y)
-		actor.setFacing(angl)
+			actor..setXY(setup.getPos())
+			..setFacing(angl)
+		else
+			super.update()
 		
-	override function setPos(vec3 pos)
-		super.setPos(pos)
-		setup.setPos(pos.toVec2())
-			
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
@@ -51,9 +47,11 @@ public class Pointer extends EscaperSensorSetup
 					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
 			case START_ID
 				turning = true
+				activate()
 				setup..removeAbility(START_ID)..addAbility(STOP_ID)
 			case STOP_ID
 				turning = false
+				deactivate()
 				setup..removeAbility(STOP_ID)..addAbility(START_ID)
 
 	override function onSensor(UnitEntity source, UnitEntity target)

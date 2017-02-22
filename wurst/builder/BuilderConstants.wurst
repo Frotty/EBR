@@ -3,7 +3,7 @@ import Preloader
 
 public constant real hiddenX = -6000
 public constant real hiddenY = 6000
-
+public constant REMOVE_ID = 'A00K'
 public constant int CONTROLLABLEICE = 'Nice'
 public constant int UNCONTROLLABLEICE = 'Idki'
 public constant int REVICE = 'Glav'

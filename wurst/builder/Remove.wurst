@@ -1,8 +1,7 @@
 package Remove
 import Entity
 import Assets
-
-public constant REMOVE_ID = 'A00K'
+import BuilderConstants
 
 function onRemoveObject()
 	var id = GetSpellAbilityId()

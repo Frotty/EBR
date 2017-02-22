@@ -8,7 +8,8 @@ public constant COLL_SIZE_SRK = 70.
 public constant COLL_SIZE_BRK = 90.
 public constant COLL_SIZE_TANK = 80.
 public constant COLL_SIZE_GLAIVE = 54.
-public constant COLL_SIZE_AIR = 60.
+public constant COLL_SIZE_AIR_Z = 74.
+public constant COLL_SIZE_AIR_XY = 54.
 public constant COLL_SIZE_FIRE = 16.
 public constant AIR_HEIGHT = 200.
 
@@ -88,18 +89,18 @@ public class GlaiveKiller extends EscaperSensorSetup
 public class AirKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
-		super(pos.withZ(256), owner, AIR_KILLER_ID, facing, COLL_SIZE_AIR, COLL_SIZE_AIR)
+		super(pos.withZ(200), owner, AIR_KILLER_ID, facing, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), owner, AIR_KILLER_ID, COLL_SIZE_AIR, COLL_SIZE_AIR)
+		super(pos.toVec3(), owner, AIR_KILLER_ID, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
 	
 	construct(unit existing)
-		super(existing, COLL_SIZE_AIR, COLL_SIZE_AIR)
+		super(existing, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
 
 	override function onSensor(UnitEntity source, UnitEntity target)
 		if target instanceof Escaper
 			let zdelta = AIR_HEIGHT - target.pos.z
-			if zdelta - COLL_SIZE_AIR <= sensorHeight and zdelta > 0
+			if zdelta - COLL_SIZE_AIR_Z <= sensorHeight and zdelta > 0
 				let escaper = target castTo Escaper
 				escaper.kill(this)
 
@@ -116,7 +117,7 @@ public class FireKiller extends EscaperSensorSetup
 		setup.removeAbility('A08I')
 	
 	construct(unit existing)
-		super(existing, COLL_SIZE_AIR, COLL_SIZE_AIR)
+		super(existing, COLL_SIZE_FIRE, COLL_SIZE_FIRE)
 		actor.issueImmediateOrder("immolation")
 		setup.removeAbility('A08I')
 		

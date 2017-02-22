@@ -1,5 +1,4 @@
 package Boss
-import SetupObject
 import PlayerData
 import SoundUtils
 import public BossSpellTarget

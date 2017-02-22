@@ -1,3 +1,12 @@
+[0.88h]
+[*] fixed double free when picking key without permission
+[*] fixed pointer performance issue
+[*] fixed airkiller ghost having different flyheight
+[*] fixed MAP not being deleteable and changing terrain outside region
+[*] improved blue goo jumping behavíour on ice
+[*] renamed firekiller
+
+
 [0.88f]
 [*] reduced small killer height so it can be jumped more easily
 [*] reduced velocity of escaper after orb jaunt

@@ -1,0 +1,92 @@
+package TileData
+import Entity
+import TerrainBlocker
+import Assets
+import RegionData
+import Json
+import BuilderConstants
+
+public function vec2.toTile() returns vec2
+	return vec2((this.x / 128.).round()*128. ,(this.y / 128.).round()*128.)
+
+public enum Tile
+	UNWALKABLE
+	WALKABLE
+	LAVA
+	POISON
+	ICE_NORMAL
+	ICE_DARK
+	ICE_REVERSE
+
+public class TileData implements Serializable
+	static constant X_KEY = "x"
+	static constant Y_KEY = "y"
+	static constant TYPE_KEY = "t"
+	matrixpos offset
+	vec2 pos
+	effect fx
+	player owner
+	Tile tile = Tile.WALKABLE
+
+	construct()
+
+	construct(vec2 realpos, matrixpos offset, player owner)
+		this.pos = realpos
+		this.offset = offset
+		this.owner = owner
+		this.fx = addEffect(Other.vengeancemissile, pos)
+
+	ondestroy
+		fx.destr()
+
+	override function serialize() returns Json
+		this.tile = getTileFromType(pos)
+		let json = new Json()
+			..addProperty(new Property(X_KEY, offset.x.toString()))..addProperty(new Property(Y_KEY, offset.y.toString()))
+		if tile != Tile.WALKABLE
+			json..addProperty(new Property(TYPE_KEY, (getTileFromType(pos) castTo int).toString()))
+		return json
+
+	override function deserialize(Json json)
+		offset = matrixpos(json.getInt(X_KEY),json.getInt(Y_KEY))
+		pos = vec2(serializeOrigin.x + offset.x * 128.,serializeOrigin.y + offset.y * 128.).toTile()
+		if not getRegionData(pos).canBuild(owner)
+			return
+			
+		tile = json.getInt(TYPE_KEY) castTo Tile
+		if tile == Tile.UNWALKABLE
+			tile = Tile.WALKABLE
+		let rdat = getRegionData(pos)
+		switch tile
+			case WALKABLE
+				pos.setTerrainType(rdat.getTypeSet().walkableId, -1, 1, 0)
+			case ICE_NORMAL
+				pos.setTerrainType(CONTROLLABLEICE, -1, 1, 0)
+			case ICE_DARK
+				pos.setTerrainType(UNCONTROLLABLEICE, -1, 1, 0)
+			case ICE_REVERSE
+				pos.setTerrainType(REVICE, -1, 1, 0)
+			case LAVA
+				pos.setTerrainType(LAVA, -1, 1, 0)
+			case POISON
+				pos.setTerrainType(POISON, -1, 1, 0)
+			default
+
+
+public function getTileFromType(vec2 pos) returns Tile
+	let ttype = GetTerrainType(pos.x, pos.y)
+	let rdat = getRegionData(pos)
+	switch ttype
+		case rdat.getTypeSet().walkableId
+			return Tile.WALKABLE
+		case REVICE
+			return Tile.ICE_REVERSE
+		case CONTROLLABLEICE
+			return Tile.ICE_NORMAL
+		case UNCONTROLLABLEICE
+			return Tile.ICE_DARK
+		case 1147958883
+			return Tile.LAVA
+		case POISON
+			return Tile.POISON
+	return Tile.UNWALKABLE

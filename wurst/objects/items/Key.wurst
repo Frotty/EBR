@@ -47,8 +47,9 @@ public class Key extends ItemObject
 	override function onDrop(Escaper e)
 		picked = false
 		holder = null
-		fx.hiddenDestroy()
-		fx = null
+		if fx != null
+			fx.hiddenDestroy()
+			fx = null
 		setup.setXY(pos.toVec2())
 		setup.show()
 		nullTimer(() -> begin
