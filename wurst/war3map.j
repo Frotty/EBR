@@ -2,92 +2,92 @@ globals
 //globals from SyncInteger:
 constant boolean LIBRARY_SyncInteger=true
             // calls SyncInitialize automatically
-constant boolean SyncInteger__AUTO_INIT= true
+constant boolean SyncInteger___AUTO_INIT= true
       
             // owner of the dummy units
-constant player SyncInteger__DUMMY_PLAYER= Player(PLAYER_NEUTRAL_PASSIVE)
+constant player SyncInteger___DUMMY_PLAYER= Player(PLAYER_NEUTRAL_PASSIVE)
       
             // dummy can *not* have locust (must be selectabe)
             // basically anything should work (like 'hfoo')
-constant integer SyncInteger__DUMMY_ID= 'hfoo'
+constant integer SyncInteger___DUMMY_ID= 'hfoo'
       
             // dummy ghost ability
-constant integer SyncInteger__DUMMY_ABILITY= 'Aeth'
+constant integer SyncInteger___DUMMY_ABILITY= 'Aeth'
 
             // debug mode
-constant boolean SyncInteger__ALLOW_DEBUGGING= true
+constant boolean SyncInteger___ALLOW_DEBUGGING= true
       
             // higher == more dummies but faster
-constant integer SyncInteger__BASE= 10
+constant integer SyncInteger___BASE= 10
 
             // don't need to change this
-constant integer SyncInteger__DUMMY_COUNT= SyncInteger__BASE + 2
+constant integer SyncInteger___DUMMY_COUNT= SyncInteger___BASE + 2
       
             // endconfig
 constant integer EVENT_SYNC_INTEGER= 1
       
-trigger SyncInteger__OnSelectTrigger= CreateTrigger()
-trigger SyncInteger__EventTrig= CreateTrigger()
-real SyncInteger__FireEvent= 0
+trigger SyncInteger___OnSelectTrigger= CreateTrigger()
+trigger SyncInteger___EventTrig= CreateTrigger()
+real SyncInteger___FireEvent= 0
       
-group SyncInteger__SelectionGroup
+group SyncInteger___SelectionGroup
 
-integer array SyncInteger__SyncData
-integer SyncInteger__LastPlayer
-integer SyncInteger__LastSync
-unit array SyncInteger__SyncIntegerDummy
-integer array SyncInteger__AttachedInteger
-player SyncInteger__LocalPlayer
+integer array SyncInteger___SyncData
+integer SyncInteger___LastPlayer
+integer SyncInteger___LastSync
+unit array SyncInteger___SyncIntegerDummy
+integer array SyncInteger___AttachedInteger
+player SyncInteger___LocalPlayer
 //endglobals from SyncInteger
 //globals from Table:
 constant boolean LIBRARY_Table=true
-integer Table___less= 0
-integer Table___more= 8190
+integer Table__less= 0
+integer Table__more= 8190
     //Configure it if you use more than 8190 "key" variables in your map (this will never happen though).
     
-hashtable Table___ht= InitHashtable()
-constant integer Table___sizeK=11
-constant integer Table___listK=12
+hashtable Table__ht= InitHashtable()
+constant integer Table__sizeK=9
+constant integer Table__listK=11
 //endglobals from Table
 //globals from StringHashEx:
 constant boolean LIBRARY_StringHashEx=true
-constant integer StringHashEx__REHASH= 1222483
-constant integer StringHashEx__tbKey=13
-integer StringHashEx__t= StringHashEx__tbKey
+constant integer StringHashEx___REHASH= 1222483
+constant integer StringHashEx___tbKey=13
+integer StringHashEx___t= StringHashEx___tbKey
 //endglobals from StringHashEx
 //globals from Sync:
 constant boolean LIBRARY_Sync=true
         // characters that can be synced (ascii)
-constant string Sync__ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+constant string Sync___ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
         // safe characters for use in game cache keys
         // (case sensitive)
-constant string Sync__SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~"
+constant string Sync___SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~"
 
         // how fast the buffer updates
-constant real Sync__UPDATE_PERIOD= 0.03125
+constant real Sync___UPDATE_PERIOD= 0.03125
 
         // automatically recycle indices when the syncing player leaves
-constant boolean Sync__AUTO_DESTROY_ON_LEAVE= true
+constant boolean Sync___AUTO_DESTROY_ON_LEAVE= true
 
         // automatically stop buffering when an error occurs
-constant boolean Sync__STOP_BUFFERING_ON_ERROR= true
+constant boolean Sync___STOP_BUFFERING_ON_ERROR= true
 
         // preload game cache key strings on init
-constant boolean Sync__PRELOAD_STR_CACHE= true
+constant boolean Sync___PRELOAD_STR_CACHE= true
     
         // size of the alphabet
-constant integer Sync__ALPHABET_BASE= StringLength(Sync__ALPHABET)
+constant integer Sync___ALPHABET_BASE= StringLength(Sync___ALPHABET)
 
         // stop reading the string buffer when reaching this char
-constant string Sync__TERM_CHAR= "`"
+constant string Sync___TERM_CHAR= "`"
 
         // maximum number of strings *per instance*
-constant integer Sync__MAX_STRINGS= 8192
+constant integer Sync___MAX_STRINGS= 8192
 
         // filenames for gc
-constant string Sync__CACHE_FILE= "i.w3v"
-constant string Sync__CACHE_FILE_STR= "s.w3v"
+constant string Sync___CACHE_FILE= "i.w3v"
+constant string Sync___CACHE_FILE_STR= "s.w3v"
 
         // don't edit below this line
 constant integer EVENT_SYNC_CACHE= 3
@@ -95,11 +95,11 @@ constant integer SYNC_ERROR_TIMEOUT= 1
 constant integer SYNC_ERROR_PLAYERLEFT= 2
 hashtable ht= null
         // string table keys
-constant integer Sync__KEY_STR_POS= ( 0 * Sync__MAX_STRINGS )
-constant integer Sync__KEY_STR_LEN= ( 1 * Sync__MAX_STRINGS )
+constant integer Sync___KEY_STR_POS= ( 0 * Sync___MAX_STRINGS )
+constant integer Sync___KEY_STR_LEN= ( 1 * Sync___MAX_STRINGS )
 
         // pending data storage space
-constant integer Sync__KEY_STR_CACHE= ( 2 * Sync__MAX_STRINGS )
+constant integer Sync___KEY_STR_CACHE= ( 2 * Sync___MAX_STRINGS )
 //endglobals from Sync
     // Generated
 rect gg_rct_Choose= null
@@ -282,51 +282,51 @@ unit gg_unit_n004_0102= null
 trigger l__library_init
 
 //JASSHelper struct globals:
-constant integer si__Table___dex=1
-constant integer si__Table___handles=2
-constant integer si__Table___agents=3
-constant integer si__Table___reals=4
-constant integer si__Table___booleans=5
-constant integer si__Table___strings=6
-constant integer si__Table___integers=7
-constant integer si__Table___players=8
-constant integer si__Table___widgets=9
-constant integer si__Table___destructables=10
-constant integer si__Table___items=11
-constant integer si__Table___units=12
-constant integer si__Table___abilitys=13
-constant integer si__Table___timers=14
-constant integer si__Table___triggers=15
-constant integer si__Table___triggerconditions=16
-constant integer si__Table___triggeractions=17
-constant integer si__Table___events=18
-constant integer si__Table___forces=19
-constant integer si__Table___groups=20
-constant integer si__Table___locations=21
-constant integer si__Table___rects=22
-constant integer si__Table___boolexprs=23
-constant integer si__Table___sounds=24
-constant integer si__Table___effects=25
-constant integer si__Table___unitpools=26
-constant integer si__Table___itempools=27
-constant integer si__Table___quests=28
-constant integer si__Table___questitems=29
-constant integer si__Table___defeatconditions=30
-constant integer si__Table___timerdialogs=31
-constant integer si__Table___leaderboards=32
-constant integer si__Table___multiboards=33
-constant integer si__Table___multiboarditems=34
-constant integer si__Table___trackables=35
-constant integer si__Table___dialogs=36
-constant integer si__Table___buttons=37
-constant integer si__Table___texttags=38
-constant integer si__Table___lightnings=39
-constant integer si__Table___images=40
-constant integer si__Table___ubersplats=41
-constant integer si__Table___regions=42
-constant integer si__Table___fogstates=43
-constant integer si__Table___fogmodifiers=44
-constant integer si__Table___hashtables=45
+constant integer si__Table__dex=1
+constant integer si__Table__handles=2
+constant integer si__Table__agents=3
+constant integer si__Table__reals=4
+constant integer si__Table__booleans=5
+constant integer si__Table__strings=6
+constant integer si__Table__integers=7
+constant integer si__Table__players=8
+constant integer si__Table__widgets=9
+constant integer si__Table__destructables=10
+constant integer si__Table__items=11
+constant integer si__Table__units=12
+constant integer si__Table__abilitys=13
+constant integer si__Table__timers=14
+constant integer si__Table__triggers=15
+constant integer si__Table__triggerconditions=16
+constant integer si__Table__triggeractions=17
+constant integer si__Table__events=18
+constant integer si__Table__forces=19
+constant integer si__Table__groups=20
+constant integer si__Table__locations=21
+constant integer si__Table__rects=22
+constant integer si__Table__boolexprs=23
+constant integer si__Table__sounds=24
+constant integer si__Table__effects=25
+constant integer si__Table__unitpools=26
+constant integer si__Table__itempools=27
+constant integer si__Table__quests=28
+constant integer si__Table__questitems=29
+constant integer si__Table__defeatconditions=30
+constant integer si__Table__timerdialogs=31
+constant integer si__Table__leaderboards=32
+constant integer si__Table__multiboards=33
+constant integer si__Table__multiboarditems=34
+constant integer si__Table__trackables=35
+constant integer si__Table__dialogs=36
+constant integer si__Table__buttons=37
+constant integer si__Table__texttags=38
+constant integer si__Table__lightnings=39
+constant integer si__Table__images=40
+constant integer si__Table__ubersplats=41
+constant integer si__Table__regions=42
+constant integer si__Table__fogstates=43
+constant integer si__Table__fogmodifiers=44
+constant integer si__Table__hashtables=45
 constant integer si__Table=46
 constant integer si__TableArray=47
 integer s__TableArray_tempTable
@@ -406,58 +406,58 @@ endfunction
 
   
         function GetSyncedInteger takes nothing returns integer
-            return SyncInteger__LastSync
+            return SyncInteger___LastSync
         endfunction
   
         function GetSyncedPlayer takes nothing returns player
-            return Player(SyncInteger__LastPlayer)
+            return Player(SyncInteger___LastPlayer)
         endfunction
   
         function GetSyncedPlayerId takes nothing returns integer
-            return SyncInteger__LastPlayer
+            return SyncInteger___LastPlayer
         endfunction
   
         function IsPlayerSyncing takes player p returns boolean
-            return ( SyncInteger__SyncData[GetPlayerId(p)] != - 1 )
+            return ( SyncInteger___SyncData[GetPlayerId(p)] != - 1 )
         endfunction
   
         function IsPlayerIdSyncing takes integer pid returns boolean
-            return ( SyncInteger__SyncData[pid] != - 1 )
+            return ( SyncInteger___SyncData[pid] != - 1 )
         endfunction
 
         function IsSyncEnabled takes nothing returns boolean
-            return IsTriggerEnabled(SyncInteger__OnSelectTrigger)
+            return IsTriggerEnabled(SyncInteger___OnSelectTrigger)
         endfunction
   
         function SyncIntegerEnable takes nothing returns nothing
-            call EnableTrigger(SyncInteger__OnSelectTrigger)
+            call EnableTrigger(SyncInteger___OnSelectTrigger)
         endfunction
   
         function SyncIntegerDisable takes nothing returns nothing
-            call DisableTrigger(SyncInteger__OnSelectTrigger)
+            call DisableTrigger(SyncInteger___OnSelectTrigger)
         endfunction
   
         function SyncIntegerToggle takes boolean flag returns nothing
             if ( flag ) then
-                call EnableTrigger(SyncInteger__OnSelectTrigger)
+                call EnableTrigger(SyncInteger___OnSelectTrigger)
             else
-                call DisableTrigger(SyncInteger__OnSelectTrigger)
+                call DisableTrigger(SyncInteger___OnSelectTrigger)
             endif
         endfunction
   
         function OnSyncInteger takes code func returns triggercondition
-            return TriggerAddCondition(SyncInteger__EventTrig, Filter(func))
+            return TriggerAddCondition(SyncInteger___EventTrig, Filter(func))
         endfunction
 
         function RemoveSyncEvent takes triggercondition action returns nothing
-           call TriggerRemoveCondition(SyncInteger__EventTrig, action)
+           call TriggerRemoveCondition(SyncInteger___EventTrig, action)
         endfunction
   
   
         function SyncInteger takes integer playerId,integer number returns boolean
             local integer x= number
             local integer i= 0
-            local integer d= SyncInteger__BASE
+            local integer d= SyncInteger___BASE
             local integer j= 0
             local integer n= 0
             local integer l= 0
@@ -475,53 +475,53 @@ endfunction
 
 
       
-            if ( not (IsTriggerEnabled(SyncInteger__OnSelectTrigger)) ) then // INLINED!!
+            if ( not (IsTriggerEnabled(SyncInteger___OnSelectTrigger)) ) then // INLINED!!
                 return false
             endif
       
             if ( number < 0 ) then
-                set d=SyncInteger__DUMMY_COUNT - 1
+                set d=SyncInteger___DUMMY_COUNT - 1
                 set number=number * - 1
             endif
   
             set p=Player(playerId)
       
             loop
-                set x=x / ( SyncInteger__BASE )
+                set x=x / ( SyncInteger___BASE )
                 exitwhen x == 0
                 set i=i + 1
             endloop
       
             // Count how many units are selected
-            call GroupEnumUnitsSelected(SyncInteger__SelectionGroup, p, null)
+            call GroupEnumUnitsSelected(SyncInteger___SelectionGroup, p, null)
             set bj_groupCountUnits=0
 
-            set u=FirstOfGroup(SyncInteger__SelectionGroup)
+            set u=FirstOfGroup(SyncInteger___SelectionGroup)
             loop
                 exitwhen u == null
                 set last=u
-                call GroupRemoveUnit(SyncInteger__SelectionGroup, u)
+                call GroupRemoveUnit(SyncInteger___SelectionGroup, u)
                 set bj_groupCountUnits=bj_groupCountUnits + 1
-                set u=FirstOfGroup(SyncInteger__SelectionGroup)
+                set u=FirstOfGroup(SyncInteger___SelectionGroup)
             endloop
           
             // If the queue is full, de-select the last unit which
             // will allow us to select a dummy, and hopefully
             // avoid a flickering effect.
-            if ( bj_groupCountUnits >= 12 and SyncInteger__LocalPlayer == p ) then
+            if ( bj_groupCountUnits >= 12 and SyncInteger___LocalPlayer == p ) then
                 call SelectUnit(last, false)
             endif
 
-            set j=R2I(Pow(SyncInteger__BASE, i))
+            set j=R2I(Pow(SyncInteger___BASE, i))
 
             loop
                 set n=j
                 set x=number / n
-                set j=j / SyncInteger__BASE
+                set j=j / SyncInteger___BASE
               
-                if ( SyncInteger__LocalPlayer == p ) then
-                    call SelectUnit(SyncInteger__SyncIntegerDummy[x], true)
-                    call SelectUnit(SyncInteger__SyncIntegerDummy[x], false)
+                if ( SyncInteger___LocalPlayer == p ) then
+                    call SelectUnit(SyncInteger___SyncIntegerDummy[x], true)
+                    call SelectUnit(SyncInteger___SyncIntegerDummy[x], false)
                 endif
           
                 set number=number - x * n
@@ -531,9 +531,9 @@ endfunction
                 set i=i - 1
             endloop
   
-            if ( SyncInteger__LocalPlayer == p ) then
-                call SelectUnit(SyncInteger__SyncIntegerDummy[d], true)
-                call SelectUnit(SyncInteger__SyncIntegerDummy[d], false)
+            if ( SyncInteger___LocalPlayer == p ) then
+                call SelectUnit(SyncInteger___SyncIntegerDummy[d], true)
+                call SelectUnit(SyncInteger___SyncIntegerDummy[d], false)
 
                 if ( bj_groupCountUnits >= 12 ) then
                     call SelectUnit(last, true)
@@ -551,23 +551,23 @@ endfunction
             local integer i= 0
       
             if ( destroyEvents ) then
-                call DestroyTrigger(SyncInteger__OnSelectTrigger)
-                call DestroyTrigger(SyncInteger__EventTrig)
-                set SyncInteger__OnSelectTrigger=null
-                set SyncInteger__EventTrig=null
+                call DestroyTrigger(SyncInteger___OnSelectTrigger)
+                call DestroyTrigger(SyncInteger___EventTrig)
+                set SyncInteger___OnSelectTrigger=null
+                set SyncInteger___EventTrig=null
 
 
-                    call DestroyGroup(SyncInteger__SelectionGroup)
-                    set SyncInteger__SelectionGroup=null
+                    call DestroyGroup(SyncInteger___SelectionGroup)
+                    set SyncInteger___SelectionGroup=null
 
             else
-                call DisableTrigger(SyncInteger__OnSelectTrigger) // INLINED!!
+                call DisableTrigger(SyncInteger___OnSelectTrigger) // INLINED!!
             endif
       
             loop
-                exitwhen i >= SyncInteger__DUMMY_COUNT
-                call RemoveUnit(SyncInteger__SyncIntegerDummy[i])
-                set SyncInteger__SyncIntegerDummy[i]=null
+                exitwhen i >= SyncInteger___DUMMY_COUNT
+                call RemoveUnit(SyncInteger___SyncIntegerDummy[i])
+                set SyncInteger___SyncIntegerDummy[i]=null
                 set i=i + 1
             endloop
         endfunction
@@ -582,8 +582,8 @@ endfunction
 
       
             loop
-                exitwhen i >= SyncInteger__DUMMY_COUNT
-                set SyncInteger__SyncIntegerDummy[i]=CreateUnit(SyncInteger__DUMMY_PLAYER, SyncInteger__DUMMY_ID, 1000000, 1000000, i)
+                exitwhen i >= SyncInteger___DUMMY_COUNT
+                set SyncInteger___SyncIntegerDummy[i]=CreateUnit(SyncInteger___DUMMY_PLAYER, SyncInteger___DUMMY_ID, 1000000, 1000000, i)
           
 
 
@@ -601,11 +601,11 @@ endfunction
 
 
 
-                    call SetUnitUserData(SyncInteger__SyncIntegerDummy[i], i + 1)
+                    call SetUnitUserData(SyncInteger___SyncIntegerDummy[i], i + 1)
 
 
-                call UnitAddAbility(SyncInteger__SyncIntegerDummy[i], SyncInteger__DUMMY_ABILITY)
-                call PauseUnit(SyncInteger__SyncIntegerDummy[i], true)
+                call UnitAddAbility(SyncInteger___SyncIntegerDummy[i], SyncInteger___DUMMY_ABILITY)
+                call PauseUnit(SyncInteger___SyncIntegerDummy[i], true)
                 set i=i + 1
             endloop
       
@@ -614,11 +614,11 @@ endfunction
             endif
         endfunction
   
-        function SyncInteger__OnSelect takes nothing returns boolean
+        function SyncInteger___OnSelect takes nothing returns boolean
             local unit u= GetTriggerUnit()
             local player p= GetTriggerPlayer()
             local integer id= GetPlayerId(p)
-            local boolean isNeg= ( SyncInteger__SyncIntegerDummy[SyncInteger__DUMMY_COUNT - 1] == u )
+            local boolean isNeg= ( SyncInteger___SyncIntegerDummy[SyncInteger___DUMMY_COUNT - 1] == u )
             local integer index
 
 
@@ -627,7 +627,7 @@ endfunction
                 set index=GetUnitUserData(u) - 1
 
 
-            if ( index == - 1 or SyncInteger__SyncIntegerDummy[index] != u ) then
+            if ( index == - 1 or SyncInteger___SyncIntegerDummy[index] != u ) then
                 set u=null
                 return false
             endif
@@ -639,23 +639,23 @@ endfunction
 
       
             if ( isNeg ) then
-                set SyncInteger__SyncData[id]=SyncInteger__SyncData[id] * - 1
+                set SyncInteger___SyncData[id]=SyncInteger___SyncData[id] * - 1
             endif
 
-            if ( isNeg or SyncInteger__SyncIntegerDummy[SyncInteger__DUMMY_COUNT - 2] == u ) then
-                set SyncInteger__LastPlayer=id
-                set SyncInteger__LastSync=SyncInteger__SyncData[id]
-                set SyncInteger__SyncData[id]=- 1
+            if ( isNeg or SyncInteger___SyncIntegerDummy[SyncInteger___DUMMY_COUNT - 2] == u ) then
+                set SyncInteger___LastPlayer=id
+                set SyncInteger___LastSync=SyncInteger___SyncData[id]
+                set SyncInteger___SyncData[id]=- 1
 
                 // run "events"
-                set SyncInteger__FireEvent=EVENT_SYNC_INTEGER
-                call TriggerEvaluate(SyncInteger__EventTrig)
-                set SyncInteger__FireEvent=0
+                set SyncInteger___FireEvent=EVENT_SYNC_INTEGER
+                call TriggerEvaluate(SyncInteger___EventTrig)
+                set SyncInteger___FireEvent=0
             else
-                if ( SyncInteger__SyncData[id] == - 1 ) then
-                    set SyncInteger__SyncData[id]=0
+                if ( SyncInteger___SyncData[id] == - 1 ) then
+                    set SyncInteger___SyncData[id]=0
                 endif
-                set SyncInteger__SyncData[id]=SyncInteger__SyncData[id] * SyncInteger__BASE + index
+                set SyncInteger___SyncData[id]=SyncInteger___SyncData[id] * SyncInteger___BASE + index
             endif
       
             set u=null
@@ -664,25 +664,25 @@ endfunction
         endfunction
   
         function SyncInteger_FireEvents takes real eventtype returns nothing
-            set SyncInteger__FireEvent=eventtype
-            set SyncInteger__FireEvent=0
+            set SyncInteger___FireEvent=eventtype
+            set SyncInteger___FireEvent=0
         endfunction
 
         //===========================================================================
-        function SyncInteger__Init takes nothing returns nothing
+        function SyncInteger___Init takes nothing returns nothing
             local integer i= 0
             local integer j
       
             loop
-                call TriggerRegisterPlayerUnitEvent(SyncInteger__OnSelectTrigger, Player(i), EVENT_PLAYER_UNIT_SELECTED, null)
+                call TriggerRegisterPlayerUnitEvent(SyncInteger___OnSelectTrigger, Player(i), EVENT_PLAYER_UNIT_SELECTED, null)
           
-                set SyncInteger__SyncData[i]=- 1
+                set SyncInteger___SyncData[i]=- 1
           
                 set i=i + 1
                 exitwhen i == bj_MAX_PLAYER_SLOTS
             endloop
 
-            call TriggerAddCondition(SyncInteger__OnSelectTrigger, Filter(function SyncInteger__OnSelect))
+            call TriggerAddCondition(SyncInteger___OnSelectTrigger, Filter(function SyncInteger___OnSelect))
       
 
                 call TimerStart(CreateTimer(), 0, false, function SyncInitialize)
@@ -691,13 +691,13 @@ endfunction
 
 
 
-                set SyncInteger__SelectionGroup=CreateGroup()
+                set SyncInteger___SelectionGroup=CreateGroup()
 
 
 
 
 
-                set SyncInteger__LocalPlayer=GetLocalPlayer()
+                set SyncInteger___LocalPlayer=GetLocalPlayer()
 
         endfunction
 
@@ -706,22 +706,22 @@ endfunction
 //library Table:
     
     
-    function s__Table___dex__get_size takes nothing returns integer
-        return Table___sizeK
+    function s__Table__dex__get_size takes nothing returns integer
+        return Table__sizeK
     endfunction
-    function s__Table___dex__get_list takes nothing returns integer
-        return Table___listK
-    endfunction
-    
-    function s__Table___handles_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
-    endfunction
-    function s__Table___handles_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__dex__get_list takes nothing returns integer
+        return Table__listK
     endfunction
     
-    function s__Table___agents__setindex takes integer this,integer key,agent value returns nothing
-        call SaveAgentHandle(Table___ht, this, key, value)
+    function s__Table__handles_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
+    endfunction
+    function s__Table__handles_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
+    endfunction
+    
+    function s__Table__agents__setindex takes integer this,integer key,agent value returns nothing
+        call SaveAgentHandle(Table__ht, this, key, value)
     endfunction
     
     
@@ -730,763 +730,763 @@ endfunction
 //Don't be intimidated by the number of macros - Vexorian's map optimizer is
 //supposed to kill functions which inline (all of these functions inline).
 //textmacro instance: NEW_ARRAY_BASIC("Real", "Real", "real")
-    function s__Table___reals__getindex takes integer this,integer key returns real
-        return LoadReal(Table___ht, this, key)
+    function s__Table__reals__getindex takes integer this,integer key returns real
+        return LoadReal(Table__ht, this, key)
     endfunction
-    function s__Table___reals__setindex takes integer this,integer key,real value returns nothing
-        call SaveReal(Table___ht, this, key, value)
+    function s__Table__reals__setindex takes integer this,integer key,real value returns nothing
+        call SaveReal(Table__ht, this, key, value)
     endfunction
-    function s__Table___reals_has takes integer this,integer key returns boolean
-        return HaveSavedReal(Table___ht, this, key)
+    function s__Table__reals_has takes integer this,integer key returns boolean
+        return HaveSavedReal(Table__ht, this, key)
     endfunction
-    function s__Table___reals_remove takes integer this,integer key returns nothing
-        call RemoveSavedReal(Table___ht, this, key)
+    function s__Table__reals_remove takes integer this,integer key returns nothing
+        call RemoveSavedReal(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY_BASIC("Real", "Real", "real")
 //textmacro instance: NEW_ARRAY_BASIC("Boolean", "Boolean", "boolean")
-    function s__Table___booleans__getindex takes integer this,integer key returns boolean
-        return LoadBoolean(Table___ht, this, key)
+    function s__Table__booleans__getindex takes integer this,integer key returns boolean
+        return LoadBoolean(Table__ht, this, key)
     endfunction
-    function s__Table___booleans__setindex takes integer this,integer key,boolean value returns nothing
-        call SaveBoolean(Table___ht, this, key, value)
+    function s__Table__booleans__setindex takes integer this,integer key,boolean value returns nothing
+        call SaveBoolean(Table__ht, this, key, value)
     endfunction
-    function s__Table___booleans_has takes integer this,integer key returns boolean
-        return HaveSavedBoolean(Table___ht, this, key)
+    function s__Table__booleans_has takes integer this,integer key returns boolean
+        return HaveSavedBoolean(Table__ht, this, key)
     endfunction
-    function s__Table___booleans_remove takes integer this,integer key returns nothing
-        call RemoveSavedBoolean(Table___ht, this, key)
+    function s__Table__booleans_remove takes integer this,integer key returns nothing
+        call RemoveSavedBoolean(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY_BASIC("Boolean", "Boolean", "boolean")
 //textmacro instance: NEW_ARRAY_BASIC("String", "Str", "string")
-    function s__Table___strings__getindex takes integer this,integer key returns string
-        return LoadStr(Table___ht, this, key)
+    function s__Table__strings__getindex takes integer this,integer key returns string
+        return LoadStr(Table__ht, this, key)
     endfunction
-    function s__Table___strings__setindex takes integer this,integer key,string value returns nothing
-        call SaveStr(Table___ht, this, key, value)
+    function s__Table__strings__setindex takes integer this,integer key,string value returns nothing
+        call SaveStr(Table__ht, this, key, value)
     endfunction
-    function s__Table___strings_has takes integer this,integer key returns boolean
-        return HaveSavedString(Table___ht, this, key)
+    function s__Table__strings_has takes integer this,integer key returns boolean
+        return HaveSavedString(Table__ht, this, key)
     endfunction
-    function s__Table___strings_remove takes integer this,integer key returns nothing
-        call RemoveSavedString(Table___ht, this, key)
+    function s__Table__strings_remove takes integer this,integer key returns nothing
+        call RemoveSavedString(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY_BASIC("String", "Str", "string")
 //New textmacro to allow table.integer[] syntax for compatibility with textmacros that might desire it.
 //textmacro instance: NEW_ARRAY_BASIC("Integer", "Integer", "integer")
-    function s__Table___integers__getindex takes integer this,integer key returns integer
-        return LoadInteger(Table___ht, this, key)
+    function s__Table__integers__getindex takes integer this,integer key returns integer
+        return LoadInteger(Table__ht, this, key)
     endfunction
-    function s__Table___integers__setindex takes integer this,integer key,integer value returns nothing
-        call SaveInteger(Table___ht, this, key, value)
+    function s__Table__integers__setindex takes integer this,integer key,integer value returns nothing
+        call SaveInteger(Table__ht, this, key, value)
     endfunction
-    function s__Table___integers_has takes integer this,integer key returns boolean
-        return HaveSavedInteger(Table___ht, this, key)
+    function s__Table__integers_has takes integer this,integer key returns boolean
+        return HaveSavedInteger(Table__ht, this, key)
     endfunction
-    function s__Table___integers_remove takes integer this,integer key returns nothing
-        call RemoveSavedInteger(Table___ht, this, key)
+    function s__Table__integers_remove takes integer this,integer key returns nothing
+        call RemoveSavedInteger(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY_BASIC("Integer", "Integer", "integer")
     
 //textmacro instance: NEW_ARRAY("Player", "player")
-    function s__Table___players__getindex takes integer this,integer key returns player
-        return LoadPlayerHandle(Table___ht, this, key)
+    function s__Table__players__getindex takes integer this,integer key returns player
+        return LoadPlayerHandle(Table__ht, this, key)
     endfunction
-    function s__Table___players__setindex takes integer this,integer key,player value returns nothing
-        call SavePlayerHandle(Table___ht, this, key, value)
+    function s__Table__players__setindex takes integer this,integer key,player value returns nothing
+        call SavePlayerHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___players_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__players_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___players_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__players_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Player", "player")
 //textmacro instance: NEW_ARRAY("Widget", "widget")
-    function s__Table___widgets__getindex takes integer this,integer key returns widget
-        return LoadWidgetHandle(Table___ht, this, key)
+    function s__Table__widgets__getindex takes integer this,integer key returns widget
+        return LoadWidgetHandle(Table__ht, this, key)
     endfunction
-    function s__Table___widgets__setindex takes integer this,integer key,widget value returns nothing
-        call SaveWidgetHandle(Table___ht, this, key, value)
+    function s__Table__widgets__setindex takes integer this,integer key,widget value returns nothing
+        call SaveWidgetHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___widgets_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__widgets_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___widgets_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__widgets_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Widget", "widget")
 //textmacro instance: NEW_ARRAY("Destructable", "destructable")
-    function s__Table___destructables__getindex takes integer this,integer key returns destructable
-        return LoadDestructableHandle(Table___ht, this, key)
+    function s__Table__destructables__getindex takes integer this,integer key returns destructable
+        return LoadDestructableHandle(Table__ht, this, key)
     endfunction
-    function s__Table___destructables__setindex takes integer this,integer key,destructable value returns nothing
-        call SaveDestructableHandle(Table___ht, this, key, value)
+    function s__Table__destructables__setindex takes integer this,integer key,destructable value returns nothing
+        call SaveDestructableHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___destructables_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__destructables_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___destructables_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__destructables_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Destructable", "destructable")
 //textmacro instance: NEW_ARRAY("Item", "item")
-    function s__Table___items__getindex takes integer this,integer key returns item
-        return LoadItemHandle(Table___ht, this, key)
+    function s__Table__items__getindex takes integer this,integer key returns item
+        return LoadItemHandle(Table__ht, this, key)
     endfunction
-    function s__Table___items__setindex takes integer this,integer key,item value returns nothing
-        call SaveItemHandle(Table___ht, this, key, value)
+    function s__Table__items__setindex takes integer this,integer key,item value returns nothing
+        call SaveItemHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___items_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__items_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___items_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__items_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Item", "item")
 //textmacro instance: NEW_ARRAY("Unit", "unit")
-    function s__Table___units__getindex takes integer this,integer key returns unit
-        return LoadUnitHandle(Table___ht, this, key)
+    function s__Table__units__getindex takes integer this,integer key returns unit
+        return LoadUnitHandle(Table__ht, this, key)
     endfunction
-    function s__Table___units__setindex takes integer this,integer key,unit value returns nothing
-        call SaveUnitHandle(Table___ht, this, key, value)
+    function s__Table__units__setindex takes integer this,integer key,unit value returns nothing
+        call SaveUnitHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___units_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__units_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___units_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__units_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Unit", "unit")
 //textmacro instance: NEW_ARRAY("Ability", "ability")
-    function s__Table___abilitys__getindex takes integer this,integer key returns ability
-        return LoadAbilityHandle(Table___ht, this, key)
+    function s__Table__abilitys__getindex takes integer this,integer key returns ability
+        return LoadAbilityHandle(Table__ht, this, key)
     endfunction
-    function s__Table___abilitys__setindex takes integer this,integer key,ability value returns nothing
-        call SaveAbilityHandle(Table___ht, this, key, value)
+    function s__Table__abilitys__setindex takes integer this,integer key,ability value returns nothing
+        call SaveAbilityHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___abilitys_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__abilitys_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___abilitys_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__abilitys_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Ability", "ability")
 //textmacro instance: NEW_ARRAY("Timer", "timer")
-    function s__Table___timers__getindex takes integer this,integer key returns timer
-        return LoadTimerHandle(Table___ht, this, key)
+    function s__Table__timers__getindex takes integer this,integer key returns timer
+        return LoadTimerHandle(Table__ht, this, key)
     endfunction
-    function s__Table___timers__setindex takes integer this,integer key,timer value returns nothing
-        call SaveTimerHandle(Table___ht, this, key, value)
+    function s__Table__timers__setindex takes integer this,integer key,timer value returns nothing
+        call SaveTimerHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___timers_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__timers_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___timers_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__timers_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Timer", "timer")
 //textmacro instance: NEW_ARRAY("Trigger", "trigger")
-    function s__Table___triggers__getindex takes integer this,integer key returns trigger
-        return LoadTriggerHandle(Table___ht, this, key)
+    function s__Table__triggers__getindex takes integer this,integer key returns trigger
+        return LoadTriggerHandle(Table__ht, this, key)
     endfunction
-    function s__Table___triggers__setindex takes integer this,integer key,trigger value returns nothing
-        call SaveTriggerHandle(Table___ht, this, key, value)
+    function s__Table__triggers__setindex takes integer this,integer key,trigger value returns nothing
+        call SaveTriggerHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___triggers_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__triggers_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___triggers_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__triggers_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Trigger", "trigger")
 //textmacro instance: NEW_ARRAY("TriggerCondition", "triggercondition")
-    function s__Table___triggerconditions__getindex takes integer this,integer key returns triggercondition
-        return LoadTriggerConditionHandle(Table___ht, this, key)
+    function s__Table__triggerconditions__getindex takes integer this,integer key returns triggercondition
+        return LoadTriggerConditionHandle(Table__ht, this, key)
     endfunction
-    function s__Table___triggerconditions__setindex takes integer this,integer key,triggercondition value returns nothing
-        call SaveTriggerConditionHandle(Table___ht, this, key, value)
+    function s__Table__triggerconditions__setindex takes integer this,integer key,triggercondition value returns nothing
+        call SaveTriggerConditionHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___triggerconditions_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__triggerconditions_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___triggerconditions_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__triggerconditions_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("TriggerCondition", "triggercondition")
 //textmacro instance: NEW_ARRAY("TriggerAction", "triggeraction")
-    function s__Table___triggeractions__getindex takes integer this,integer key returns triggeraction
-        return LoadTriggerActionHandle(Table___ht, this, key)
+    function s__Table__triggeractions__getindex takes integer this,integer key returns triggeraction
+        return LoadTriggerActionHandle(Table__ht, this, key)
     endfunction
-    function s__Table___triggeractions__setindex takes integer this,integer key,triggeraction value returns nothing
-        call SaveTriggerActionHandle(Table___ht, this, key, value)
+    function s__Table__triggeractions__setindex takes integer this,integer key,triggeraction value returns nothing
+        call SaveTriggerActionHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___triggeractions_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__triggeractions_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___triggeractions_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__triggeractions_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("TriggerAction", "triggeraction")
 //textmacro instance: NEW_ARRAY("TriggerEvent", "event")
-    function s__Table___events__getindex takes integer this,integer key returns event
-        return LoadTriggerEventHandle(Table___ht, this, key)
+    function s__Table__events__getindex takes integer this,integer key returns event
+        return LoadTriggerEventHandle(Table__ht, this, key)
     endfunction
-    function s__Table___events__setindex takes integer this,integer key,event value returns nothing
-        call SaveTriggerEventHandle(Table___ht, this, key, value)
+    function s__Table__events__setindex takes integer this,integer key,event value returns nothing
+        call SaveTriggerEventHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___events_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__events_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___events_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__events_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("TriggerEvent", "event")
 //textmacro instance: NEW_ARRAY("Force", "force")
-    function s__Table___forces__getindex takes integer this,integer key returns force
-        return LoadForceHandle(Table___ht, this, key)
+    function s__Table__forces__getindex takes integer this,integer key returns force
+        return LoadForceHandle(Table__ht, this, key)
     endfunction
-    function s__Table___forces__setindex takes integer this,integer key,force value returns nothing
-        call SaveForceHandle(Table___ht, this, key, value)
+    function s__Table__forces__setindex takes integer this,integer key,force value returns nothing
+        call SaveForceHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___forces_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__forces_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___forces_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__forces_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Force", "force")
 //textmacro instance: NEW_ARRAY("Group", "group")
-    function s__Table___groups__getindex takes integer this,integer key returns group
-        return LoadGroupHandle(Table___ht, this, key)
+    function s__Table__groups__getindex takes integer this,integer key returns group
+        return LoadGroupHandle(Table__ht, this, key)
     endfunction
-    function s__Table___groups__setindex takes integer this,integer key,group value returns nothing
-        call SaveGroupHandle(Table___ht, this, key, value)
+    function s__Table__groups__setindex takes integer this,integer key,group value returns nothing
+        call SaveGroupHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___groups_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__groups_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___groups_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__groups_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Group", "group")
 //textmacro instance: NEW_ARRAY("Location", "location")
-    function s__Table___locations__getindex takes integer this,integer key returns location
-        return LoadLocationHandle(Table___ht, this, key)
+    function s__Table__locations__getindex takes integer this,integer key returns location
+        return LoadLocationHandle(Table__ht, this, key)
     endfunction
-    function s__Table___locations__setindex takes integer this,integer key,location value returns nothing
-        call SaveLocationHandle(Table___ht, this, key, value)
+    function s__Table__locations__setindex takes integer this,integer key,location value returns nothing
+        call SaveLocationHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___locations_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__locations_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___locations_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__locations_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Location", "location")
 //textmacro instance: NEW_ARRAY("Rect", "rect")
-    function s__Table___rects__getindex takes integer this,integer key returns rect
-        return LoadRectHandle(Table___ht, this, key)
+    function s__Table__rects__getindex takes integer this,integer key returns rect
+        return LoadRectHandle(Table__ht, this, key)
     endfunction
-    function s__Table___rects__setindex takes integer this,integer key,rect value returns nothing
-        call SaveRectHandle(Table___ht, this, key, value)
+    function s__Table__rects__setindex takes integer this,integer key,rect value returns nothing
+        call SaveRectHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___rects_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__rects_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___rects_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__rects_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Rect", "rect")
 //textmacro instance: NEW_ARRAY("BooleanExpr", "boolexpr")
-    function s__Table___boolexprs__getindex takes integer this,integer key returns boolexpr
-        return LoadBooleanExprHandle(Table___ht, this, key)
+    function s__Table__boolexprs__getindex takes integer this,integer key returns boolexpr
+        return LoadBooleanExprHandle(Table__ht, this, key)
     endfunction
-    function s__Table___boolexprs__setindex takes integer this,integer key,boolexpr value returns nothing
-        call SaveBooleanExprHandle(Table___ht, this, key, value)
+    function s__Table__boolexprs__setindex takes integer this,integer key,boolexpr value returns nothing
+        call SaveBooleanExprHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___boolexprs_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__boolexprs_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___boolexprs_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__boolexprs_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("BooleanExpr", "boolexpr")
 //textmacro instance: NEW_ARRAY("Sound", "sound")
-    function s__Table___sounds__getindex takes integer this,integer key returns sound
-        return LoadSoundHandle(Table___ht, this, key)
+    function s__Table__sounds__getindex takes integer this,integer key returns sound
+        return LoadSoundHandle(Table__ht, this, key)
     endfunction
-    function s__Table___sounds__setindex takes integer this,integer key,sound value returns nothing
-        call SaveSoundHandle(Table___ht, this, key, value)
+    function s__Table__sounds__setindex takes integer this,integer key,sound value returns nothing
+        call SaveSoundHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___sounds_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__sounds_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___sounds_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__sounds_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Sound", "sound")
 //textmacro instance: NEW_ARRAY("Effect", "effect")
-    function s__Table___effects__getindex takes integer this,integer key returns effect
-        return LoadEffectHandle(Table___ht, this, key)
+    function s__Table__effects__getindex takes integer this,integer key returns effect
+        return LoadEffectHandle(Table__ht, this, key)
     endfunction
-    function s__Table___effects__setindex takes integer this,integer key,effect value returns nothing
-        call SaveEffectHandle(Table___ht, this, key, value)
+    function s__Table__effects__setindex takes integer this,integer key,effect value returns nothing
+        call SaveEffectHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___effects_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__effects_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___effects_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__effects_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Effect", "effect")
 //textmacro instance: NEW_ARRAY("UnitPool", "unitpool")
-    function s__Table___unitpools__getindex takes integer this,integer key returns unitpool
-        return LoadUnitPoolHandle(Table___ht, this, key)
+    function s__Table__unitpools__getindex takes integer this,integer key returns unitpool
+        return LoadUnitPoolHandle(Table__ht, this, key)
     endfunction
-    function s__Table___unitpools__setindex takes integer this,integer key,unitpool value returns nothing
-        call SaveUnitPoolHandle(Table___ht, this, key, value)
+    function s__Table__unitpools__setindex takes integer this,integer key,unitpool value returns nothing
+        call SaveUnitPoolHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___unitpools_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__unitpools_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___unitpools_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__unitpools_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("UnitPool", "unitpool")
 //textmacro instance: NEW_ARRAY("ItemPool", "itempool")
-    function s__Table___itempools__getindex takes integer this,integer key returns itempool
-        return LoadItemPoolHandle(Table___ht, this, key)
+    function s__Table__itempools__getindex takes integer this,integer key returns itempool
+        return LoadItemPoolHandle(Table__ht, this, key)
     endfunction
-    function s__Table___itempools__setindex takes integer this,integer key,itempool value returns nothing
-        call SaveItemPoolHandle(Table___ht, this, key, value)
+    function s__Table__itempools__setindex takes integer this,integer key,itempool value returns nothing
+        call SaveItemPoolHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___itempools_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__itempools_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___itempools_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__itempools_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("ItemPool", "itempool")
 //textmacro instance: NEW_ARRAY("Quest", "quest")
-    function s__Table___quests__getindex takes integer this,integer key returns quest
-        return LoadQuestHandle(Table___ht, this, key)
+    function s__Table__quests__getindex takes integer this,integer key returns quest
+        return LoadQuestHandle(Table__ht, this, key)
     endfunction
-    function s__Table___quests__setindex takes integer this,integer key,quest value returns nothing
-        call SaveQuestHandle(Table___ht, this, key, value)
+    function s__Table__quests__setindex takes integer this,integer key,quest value returns nothing
+        call SaveQuestHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___quests_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__quests_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___quests_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__quests_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Quest", "quest")
 //textmacro instance: NEW_ARRAY("QuestItem", "questitem")
-    function s__Table___questitems__getindex takes integer this,integer key returns questitem
-        return LoadQuestItemHandle(Table___ht, this, key)
+    function s__Table__questitems__getindex takes integer this,integer key returns questitem
+        return LoadQuestItemHandle(Table__ht, this, key)
     endfunction
-    function s__Table___questitems__setindex takes integer this,integer key,questitem value returns nothing
-        call SaveQuestItemHandle(Table___ht, this, key, value)
+    function s__Table__questitems__setindex takes integer this,integer key,questitem value returns nothing
+        call SaveQuestItemHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___questitems_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__questitems_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___questitems_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__questitems_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("QuestItem", "questitem")
 //textmacro instance: NEW_ARRAY("DefeatCondition", "defeatcondition")
-    function s__Table___defeatconditions__getindex takes integer this,integer key returns defeatcondition
-        return LoadDefeatConditionHandle(Table___ht, this, key)
+    function s__Table__defeatconditions__getindex takes integer this,integer key returns defeatcondition
+        return LoadDefeatConditionHandle(Table__ht, this, key)
     endfunction
-    function s__Table___defeatconditions__setindex takes integer this,integer key,defeatcondition value returns nothing
-        call SaveDefeatConditionHandle(Table___ht, this, key, value)
+    function s__Table__defeatconditions__setindex takes integer this,integer key,defeatcondition value returns nothing
+        call SaveDefeatConditionHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___defeatconditions_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__defeatconditions_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___defeatconditions_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__defeatconditions_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("DefeatCondition", "defeatcondition")
 //textmacro instance: NEW_ARRAY("TimerDialog", "timerdialog")
-    function s__Table___timerdialogs__getindex takes integer this,integer key returns timerdialog
-        return LoadTimerDialogHandle(Table___ht, this, key)
+    function s__Table__timerdialogs__getindex takes integer this,integer key returns timerdialog
+        return LoadTimerDialogHandle(Table__ht, this, key)
     endfunction
-    function s__Table___timerdialogs__setindex takes integer this,integer key,timerdialog value returns nothing
-        call SaveTimerDialogHandle(Table___ht, this, key, value)
+    function s__Table__timerdialogs__setindex takes integer this,integer key,timerdialog value returns nothing
+        call SaveTimerDialogHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___timerdialogs_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__timerdialogs_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___timerdialogs_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__timerdialogs_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("TimerDialog", "timerdialog")
 //textmacro instance: NEW_ARRAY("Leaderboard", "leaderboard")
-    function s__Table___leaderboards__getindex takes integer this,integer key returns leaderboard
-        return LoadLeaderboardHandle(Table___ht, this, key)
+    function s__Table__leaderboards__getindex takes integer this,integer key returns leaderboard
+        return LoadLeaderboardHandle(Table__ht, this, key)
     endfunction
-    function s__Table___leaderboards__setindex takes integer this,integer key,leaderboard value returns nothing
-        call SaveLeaderboardHandle(Table___ht, this, key, value)
+    function s__Table__leaderboards__setindex takes integer this,integer key,leaderboard value returns nothing
+        call SaveLeaderboardHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___leaderboards_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__leaderboards_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___leaderboards_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__leaderboards_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Leaderboard", "leaderboard")
 //textmacro instance: NEW_ARRAY("Multiboard", "multiboard")
-    function s__Table___multiboards__getindex takes integer this,integer key returns multiboard
-        return LoadMultiboardHandle(Table___ht, this, key)
+    function s__Table__multiboards__getindex takes integer this,integer key returns multiboard
+        return LoadMultiboardHandle(Table__ht, this, key)
     endfunction
-    function s__Table___multiboards__setindex takes integer this,integer key,multiboard value returns nothing
-        call SaveMultiboardHandle(Table___ht, this, key, value)
+    function s__Table__multiboards__setindex takes integer this,integer key,multiboard value returns nothing
+        call SaveMultiboardHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___multiboards_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__multiboards_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___multiboards_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__multiboards_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Multiboard", "multiboard")
 //textmacro instance: NEW_ARRAY("MultiboardItem", "multiboarditem")
-    function s__Table___multiboarditems__getindex takes integer this,integer key returns multiboarditem
-        return LoadMultiboardItemHandle(Table___ht, this, key)
+    function s__Table__multiboarditems__getindex takes integer this,integer key returns multiboarditem
+        return LoadMultiboardItemHandle(Table__ht, this, key)
     endfunction
-    function s__Table___multiboarditems__setindex takes integer this,integer key,multiboarditem value returns nothing
-        call SaveMultiboardItemHandle(Table___ht, this, key, value)
+    function s__Table__multiboarditems__setindex takes integer this,integer key,multiboarditem value returns nothing
+        call SaveMultiboardItemHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___multiboarditems_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__multiboarditems_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___multiboarditems_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__multiboarditems_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("MultiboardItem", "multiboarditem")
 //textmacro instance: NEW_ARRAY("Trackable", "trackable")
-    function s__Table___trackables__getindex takes integer this,integer key returns trackable
-        return LoadTrackableHandle(Table___ht, this, key)
+    function s__Table__trackables__getindex takes integer this,integer key returns trackable
+        return LoadTrackableHandle(Table__ht, this, key)
     endfunction
-    function s__Table___trackables__setindex takes integer this,integer key,trackable value returns nothing
-        call SaveTrackableHandle(Table___ht, this, key, value)
+    function s__Table__trackables__setindex takes integer this,integer key,trackable value returns nothing
+        call SaveTrackableHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___trackables_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__trackables_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___trackables_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__trackables_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Trackable", "trackable")
 //textmacro instance: NEW_ARRAY("Dialog", "dialog")
-    function s__Table___dialogs__getindex takes integer this,integer key returns dialog
-        return LoadDialogHandle(Table___ht, this, key)
+    function s__Table__dialogs__getindex takes integer this,integer key returns dialog
+        return LoadDialogHandle(Table__ht, this, key)
     endfunction
-    function s__Table___dialogs__setindex takes integer this,integer key,dialog value returns nothing
-        call SaveDialogHandle(Table___ht, this, key, value)
+    function s__Table__dialogs__setindex takes integer this,integer key,dialog value returns nothing
+        call SaveDialogHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___dialogs_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__dialogs_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___dialogs_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__dialogs_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Dialog", "dialog")
 //textmacro instance: NEW_ARRAY("Button", "button")
-    function s__Table___buttons__getindex takes integer this,integer key returns button
-        return LoadButtonHandle(Table___ht, this, key)
+    function s__Table__buttons__getindex takes integer this,integer key returns button
+        return LoadButtonHandle(Table__ht, this, key)
     endfunction
-    function s__Table___buttons__setindex takes integer this,integer key,button value returns nothing
-        call SaveButtonHandle(Table___ht, this, key, value)
+    function s__Table__buttons__setindex takes integer this,integer key,button value returns nothing
+        call SaveButtonHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___buttons_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__buttons_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___buttons_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__buttons_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Button", "button")
 //textmacro instance: NEW_ARRAY("TextTag", "texttag")
-    function s__Table___texttags__getindex takes integer this,integer key returns texttag
-        return LoadTextTagHandle(Table___ht, this, key)
+    function s__Table__texttags__getindex takes integer this,integer key returns texttag
+        return LoadTextTagHandle(Table__ht, this, key)
     endfunction
-    function s__Table___texttags__setindex takes integer this,integer key,texttag value returns nothing
-        call SaveTextTagHandle(Table___ht, this, key, value)
+    function s__Table__texttags__setindex takes integer this,integer key,texttag value returns nothing
+        call SaveTextTagHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___texttags_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__texttags_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___texttags_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__texttags_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("TextTag", "texttag")
 //textmacro instance: NEW_ARRAY("Lightning", "lightning")
-    function s__Table___lightnings__getindex takes integer this,integer key returns lightning
-        return LoadLightningHandle(Table___ht, this, key)
+    function s__Table__lightnings__getindex takes integer this,integer key returns lightning
+        return LoadLightningHandle(Table__ht, this, key)
     endfunction
-    function s__Table___lightnings__setindex takes integer this,integer key,lightning value returns nothing
-        call SaveLightningHandle(Table___ht, this, key, value)
+    function s__Table__lightnings__setindex takes integer this,integer key,lightning value returns nothing
+        call SaveLightningHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___lightnings_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__lightnings_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___lightnings_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__lightnings_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Lightning", "lightning")
 //textmacro instance: NEW_ARRAY("Image", "image")
-    function s__Table___images__getindex takes integer this,integer key returns image
-        return LoadImageHandle(Table___ht, this, key)
+    function s__Table__images__getindex takes integer this,integer key returns image
+        return LoadImageHandle(Table__ht, this, key)
     endfunction
-    function s__Table___images__setindex takes integer this,integer key,image value returns nothing
-        call SaveImageHandle(Table___ht, this, key, value)
+    function s__Table__images__setindex takes integer this,integer key,image value returns nothing
+        call SaveImageHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___images_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__images_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___images_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__images_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Image", "image")
 //textmacro instance: NEW_ARRAY("Ubersplat", "ubersplat")
-    function s__Table___ubersplats__getindex takes integer this,integer key returns ubersplat
-        return LoadUbersplatHandle(Table___ht, this, key)
+    function s__Table__ubersplats__getindex takes integer this,integer key returns ubersplat
+        return LoadUbersplatHandle(Table__ht, this, key)
     endfunction
-    function s__Table___ubersplats__setindex takes integer this,integer key,ubersplat value returns nothing
-        call SaveUbersplatHandle(Table___ht, this, key, value)
+    function s__Table__ubersplats__setindex takes integer this,integer key,ubersplat value returns nothing
+        call SaveUbersplatHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___ubersplats_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__ubersplats_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___ubersplats_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__ubersplats_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Ubersplat", "ubersplat")
 //textmacro instance: NEW_ARRAY("Region", "region")
-    function s__Table___regions__getindex takes integer this,integer key returns region
-        return LoadRegionHandle(Table___ht, this, key)
+    function s__Table__regions__getindex takes integer this,integer key returns region
+        return LoadRegionHandle(Table__ht, this, key)
     endfunction
-    function s__Table___regions__setindex takes integer this,integer key,region value returns nothing
-        call SaveRegionHandle(Table___ht, this, key, value)
+    function s__Table__regions__setindex takes integer this,integer key,region value returns nothing
+        call SaveRegionHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___regions_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__regions_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___regions_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__regions_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Region", "region")
 //textmacro instance: NEW_ARRAY("FogState", "fogstate")
-    function s__Table___fogstates__getindex takes integer this,integer key returns fogstate
-        return LoadFogStateHandle(Table___ht, this, key)
+    function s__Table__fogstates__getindex takes integer this,integer key returns fogstate
+        return LoadFogStateHandle(Table__ht, this, key)
     endfunction
-    function s__Table___fogstates__setindex takes integer this,integer key,fogstate value returns nothing
-        call SaveFogStateHandle(Table___ht, this, key, value)
+    function s__Table__fogstates__setindex takes integer this,integer key,fogstate value returns nothing
+        call SaveFogStateHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___fogstates_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__fogstates_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___fogstates_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__fogstates_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("FogState", "fogstate")
 //textmacro instance: NEW_ARRAY("FogModifier", "fogmodifier")
-    function s__Table___fogmodifiers__getindex takes integer this,integer key returns fogmodifier
-        return LoadFogModifierHandle(Table___ht, this, key)
+    function s__Table__fogmodifiers__getindex takes integer this,integer key returns fogmodifier
+        return LoadFogModifierHandle(Table__ht, this, key)
     endfunction
-    function s__Table___fogmodifiers__setindex takes integer this,integer key,fogmodifier value returns nothing
-        call SaveFogModifierHandle(Table___ht, this, key, value)
+    function s__Table__fogmodifiers__setindex takes integer this,integer key,fogmodifier value returns nothing
+        call SaveFogModifierHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___fogmodifiers_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__fogmodifiers_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___fogmodifiers_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__fogmodifiers_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("FogModifier", "fogmodifier")
 //textmacro instance: NEW_ARRAY("Hashtable", "hashtable")
-    function s__Table___hashtables__getindex takes integer this,integer key returns hashtable
-        return LoadHashtableHandle(Table___ht, this, key)
+    function s__Table__hashtables__getindex takes integer this,integer key returns hashtable
+        return LoadHashtableHandle(Table__ht, this, key)
     endfunction
-    function s__Table___hashtables__setindex takes integer this,integer key,hashtable value returns nothing
-        call SaveHashtableHandle(Table___ht, this, key, value)
+    function s__Table__hashtables__setindex takes integer this,integer key,hashtable value returns nothing
+        call SaveHashtableHandle(Table__ht, this, key, value)
     endfunction
-    function s__Table___hashtables_has takes integer this,integer key returns boolean
-        return HaveSavedHandle(Table___ht, this, key)
+    function s__Table__hashtables_has takes integer this,integer key returns boolean
+        return HaveSavedHandle(Table__ht, this, key)
     endfunction
-    function s__Table___hashtables_remove takes integer this,integer key returns nothing
-        call RemoveSavedHandle(Table___ht, this, key)
+    function s__Table__hashtables_remove takes integer this,integer key returns nothing
+        call RemoveSavedHandle(Table__ht, this, key)
     endfunction
 //end of: NEW_ARRAY("Hashtable", "hashtable")
     
     
     // Implement modules for intuitive syntax (tb.handle; tb.unit; etc.)
-//Implemented from module Table___realm:
+//Implemented from module Table__realm:
     function s__Table__get_real takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___integerm:
+//Implemented from module Table__integerm:
     function s__Table__get_integer takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___booleanm:
+//Implemented from module Table__booleanm:
     function s__Table__get_boolean takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___stringm:
+//Implemented from module Table__stringm:
     function s__Table__get_string takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___playerm:
+//Implemented from module Table__playerm:
     function s__Table__get_player takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___widgetm:
+//Implemented from module Table__widgetm:
     function s__Table__get_widget takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___destructablem:
+//Implemented from module Table__destructablem:
     function s__Table__get_destructable takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___itemm:
+//Implemented from module Table__itemm:
     function s__Table__get_item takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___unitm:
+//Implemented from module Table__unitm:
     function s__Table__get_unit takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___abilitym:
+//Implemented from module Table__abilitym:
     function s__Table__get_ability takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___timerm:
+//Implemented from module Table__timerm:
     function s__Table__get_timer takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___triggerm:
+//Implemented from module Table__triggerm:
     function s__Table__get_trigger takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___triggerconditionm:
+//Implemented from module Table__triggerconditionm:
     function s__Table__get_triggercondition takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___triggeractionm:
+//Implemented from module Table__triggeractionm:
     function s__Table__get_triggeraction takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___eventm:
+//Implemented from module Table__eventm:
     function s__Table__get_event takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___forcem:
+//Implemented from module Table__forcem:
     function s__Table__get_force takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___groupm:
+//Implemented from module Table__groupm:
     function s__Table__get_group takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___locationm:
+//Implemented from module Table__locationm:
     function s__Table__get_location takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___rectm:
+//Implemented from module Table__rectm:
     function s__Table__get_rect takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___boolexprm:
+//Implemented from module Table__boolexprm:
     function s__Table__get_boolexpr takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___soundm:
+//Implemented from module Table__soundm:
     function s__Table__get_sound takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___effectm:
+//Implemented from module Table__effectm:
     function s__Table__get_effect takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___unitpoolm:
+//Implemented from module Table__unitpoolm:
     function s__Table__get_unitpool takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___itempoolm:
+//Implemented from module Table__itempoolm:
     function s__Table__get_itempool takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___questm:
+//Implemented from module Table__questm:
     function s__Table__get_quest takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___questitemm:
+//Implemented from module Table__questitemm:
     function s__Table__get_questitem takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___defeatconditionm:
+//Implemented from module Table__defeatconditionm:
     function s__Table__get_defeatcondition takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___timerdialogm:
+//Implemented from module Table__timerdialogm:
     function s__Table__get_timerdialog takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___leaderboardm:
+//Implemented from module Table__leaderboardm:
     function s__Table__get_leaderboard takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___multiboardm:
+//Implemented from module Table__multiboardm:
     function s__Table__get_multiboard takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___multiboarditemm:
+//Implemented from module Table__multiboarditemm:
     function s__Table__get_multiboarditem takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___trackablem:
+//Implemented from module Table__trackablem:
     function s__Table__get_trackable takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___dialogm:
+//Implemented from module Table__dialogm:
     function s__Table__get_dialog takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___buttonm:
+//Implemented from module Table__buttonm:
     function s__Table__get_button takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___texttagm:
+//Implemented from module Table__texttagm:
     function s__Table__get_texttag takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___lightningm:
+//Implemented from module Table__lightningm:
     function s__Table__get_lightning takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___imagem:
+//Implemented from module Table__imagem:
     function s__Table__get_image takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___ubersplatm:
+//Implemented from module Table__ubersplatm:
     function s__Table__get_ubersplat takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___regionm:
+//Implemented from module Table__regionm:
     function s__Table__get_region takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___fogstatem:
+//Implemented from module Table__fogstatem:
     function s__Table__get_fogstate takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___fogmodifierm:
+//Implemented from module Table__fogmodifierm:
     function s__Table__get_fogmodifier takes integer this returns integer
         return this
     endfunction
-//Implemented from module Table___hashtablem:
+//Implemented from module Table__hashtablem:
     function s__Table__get_hashtable takes integer this returns integer
         return this
     endfunction
@@ -1501,39 +1501,39 @@ endfunction
     
     //set this = tb[GetSpellAbilityId()]
     function s__Table__getindex takes integer this,integer key returns integer
-        return LoadInteger(Table___ht, this, key) //return this.integer[key]
+        return LoadInteger(Table__ht, this, key) //return this.integer[key]
     endfunction
     
     //set tb[389034] = 8192
     function s__Table__setindex takes integer this,integer key,integer tb returns nothing
-        call SaveInteger(Table___ht, this, key, tb) //set this.integer[key] = tb
+        call SaveInteger(Table__ht, this, key, tb) //set this.integer[key] = tb
     endfunction
     
     //set b = tb.has(2493223)
     function s__Table_has takes integer this,integer key returns boolean
-        return HaveSavedInteger(Table___ht, this, key) //return this.integer.has(key)
+        return HaveSavedInteger(Table__ht, this, key) //return this.integer.has(key)
     endfunction
     
     //call tb.remove(294080)
     function s__Table_remove takes integer this,integer key returns nothing
-        call RemoveSavedInteger(Table___ht, this, key) //call this.integer.remove(key)
+        call RemoveSavedInteger(Table__ht, this, key) //call this.integer.remove(key)
     endfunction
     
     //Remove all data from a Table instance
     function s__Table_flush takes integer this returns nothing
-        call FlushChildHashtable(Table___ht, this)
+        call FlushChildHashtable(Table__ht, this)
     endfunction
     
     //local Table tb = Table.create()
     function s__Table_create takes nothing returns integer
-        local integer this= (LoadInteger(Table___ht, ((Table___listK)), (0))) // INLINED!!
+        local integer this= (LoadInteger(Table__ht, ((Table__listK)), (0))) // INLINED!!
         
         if this == 0 then
-            set this=Table___more + 1
-            set Table___more=this
+            set this=Table__more + 1
+            set Table__more=this
         else
-            call SaveInteger(Table___ht, ((Table___listK)), (0), ( (LoadInteger(Table___ht, ((Table___listK)), (this))))) // INLINED!!
-            call RemoveSavedInteger(Table___ht, ((Table___listK)), (this)) //Clear hashed memory // INLINED!!
+            call SaveInteger(Table__ht, ((Table__listK)), (0), ( (LoadInteger(Table__ht, ((Table__listK)), (this))))) // INLINED!!
+            call RemoveSavedInteger(Table__ht, ((Table__listK)), (this)) //Clear hashed memory // INLINED!!
         endif
         
         return this
@@ -1545,10 +1545,10 @@ endfunction
     //
     function s__Table_destroy takes integer this returns nothing
         
-        call FlushChildHashtable(Table___ht, (this)) // INLINED!!
+        call FlushChildHashtable(Table__ht, (this)) // INLINED!!
         
-        call SaveInteger(Table___ht, ((Table___listK)), (this), ( (LoadInteger(Table___ht, ((Table___listK)), (0))))) // INLINED!!
-        call SaveInteger(Table___ht, ((Table___listK)), (0), ( this)) // INLINED!!
+        call SaveInteger(Table__ht, ((Table__listK)), (this), ( (LoadInteger(Table__ht, ((Table__listK)), (0))))) // INLINED!!
+        call SaveInteger(Table__ht, ((Table__listK)), (0), ( this)) // INLINED!!
     endfunction
     
 //ignored textmacro command: TABLE_BC_METHODS()
@@ -1561,25 +1561,25 @@ endfunction
     //    local TableArray ta = TableArray[array_size]
     //
     function s__TableArray__staticgetindex takes integer array_size returns integer
-        local integer tb= (LoadInteger(Table___ht, ((Table___sizeK)), (array_size))) // INLINED!!
-        local integer this= (LoadInteger(Table___ht, (tb), (0))) // INLINED!!
+        local integer tb= (LoadInteger(Table__ht, ((Table__sizeK)), (array_size))) // INLINED!!
+        local integer this= (LoadInteger(Table__ht, (tb), (0))) // INLINED!!
         
         
         if this == 0 then
-            set this=Table___less - array_size
-            set Table___less=this
+            set this=Table__less - array_size
+            set Table__less=this
         else
-            call SaveInteger(Table___ht, (tb), (0), ( (LoadInteger(Table___ht, (tb), (this))))) //Set the last destroyed to the last-last destroyed // INLINED!!
-            call RemoveSavedInteger(Table___ht, (tb), (this)) //Clear hashed memory // INLINED!!
+            call SaveInteger(Table__ht, (tb), (0), ( (LoadInteger(Table__ht, (tb), (this))))) //Set the last destroyed to the last-last destroyed // INLINED!!
+            call RemoveSavedInteger(Table__ht, (tb), (this)) //Clear hashed memory // INLINED!!
         endif
         
-        call SaveInteger(Table___ht, ((Table___sizeK)), (this), ( array_size)) //This remembers the array size // INLINED!!
+        call SaveInteger(Table__ht, ((Table__sizeK)), (this), ( array_size)) //This remembers the array size // INLINED!!
         return this
     endfunction
     
     //Returns the size of the TableArray
     function s__TableArray__get_size takes integer this returns integer
-        return (LoadInteger(Table___ht, ((Table___sizeK)), (this))) // INLINED!!
+        return (LoadInteger(Table__ht, ((Table__sizeK)), (this))) // INLINED!!
     endfunction
     
     //This magic method enables two-dimensional[array][syntax] for Tables,
@@ -1611,19 +1611,19 @@ endfunction
     //need to (ie. if you were flushing all child-keys as you used them).
     //
     function s__TableArray_destroy takes integer this returns nothing
-        local integer tb= (LoadInteger(Table___ht, ((Table___sizeK)), ((LoadInteger(Table___ht, ((Table___sizeK)), ((this))))))) // INLINED!!
+        local integer tb= (LoadInteger(Table__ht, ((Table__sizeK)), ((LoadInteger(Table__ht, ((Table__sizeK)), ((this))))))) // INLINED!!
         
         
         if tb == 0 then
             //Create a Table to index recycled instances with their array size
             set tb=s__Table_create()
-            call SaveInteger(Table___ht, ((Table___sizeK)), ((LoadInteger(Table___ht, ((Table___sizeK)), ((this))))), ( tb)) // INLINED!!
+            call SaveInteger(Table__ht, ((Table__sizeK)), ((LoadInteger(Table__ht, ((Table__sizeK)), ((this))))), ( tb)) // INLINED!!
         endif
         
-        call RemoveSavedInteger(Table___ht, ((Table___sizeK)), (this)) //Clear the array size from hash memory // INLINED!!
+        call RemoveSavedInteger(Table__ht, ((Table__sizeK)), (this)) //Clear the array size from hash memory // INLINED!!
         
-        call SaveInteger(Table___ht, (tb), (this), ( (LoadInteger(Table___ht, (tb), (0))))) // INLINED!!
-        call SaveInteger(Table___ht, (tb), (0), ( this)) // INLINED!!
+        call SaveInteger(Table__ht, (tb), (this), ( (LoadInteger(Table__ht, (tb), (0))))) // INLINED!!
+        call SaveInteger(Table__ht, (tb), (0), ( this)) // INLINED!!
     endfunction
     
     
@@ -1638,7 +1638,7 @@ endfunction
             set end=s__TableArray_tempEnd
         endif
         loop
-            call FlushChildHashtable(Table___ht, (tb)) // INLINED!!
+            call FlushChildHashtable(Table__ht, (tb)) // INLINED!!
             set tb=tb + 1
             exitwhen tb == end
         endloop
@@ -1649,7 +1649,7 @@ endfunction
     //
     function s__TableArray_flush takes integer this returns nothing
         set s__TableArray_tempTable=this
-        set s__TableArray_tempEnd=this + (LoadInteger(Table___ht, ((Table___sizeK)), ((this)))) // INLINED!!
+        set s__TableArray_tempEnd=this + (LoadInteger(Table__ht, ((Table__sizeK)), ((this)))) // INLINED!!
         call ForForce(bj_FORCE_PLAYER[0], function s__TableArray_clean)
         call s__TableArray_destroy(this)
     endfunction
@@ -1662,10 +1662,10 @@ endfunction
     //Basically, it creates a Table in the place of the parent key if
     //it didn't already get created earlier.
     function s__HashTable__getindex takes integer this,integer index returns integer
-        local integer t= (LoadInteger(Table___ht, ((this)), (index))) // INLINED!!
+        local integer t= (LoadInteger(Table__ht, ((this)), (index))) // INLINED!!
         if t == 0 then
             set t=s__Table_create()
-            call SaveInteger(Table___ht, ((this)), (index), ( t)) //whoops! Forgot that line. I'm out of practice! // INLINED!!
+            call SaveInteger(Table__ht, ((this)), (index), ( t)) //whoops! Forgot that line. I'm out of practice! // INLINED!!
         endif
         return t
     endfunction
@@ -1673,16 +1673,16 @@ endfunction
     //You need to call this on each parent key that you used if you
     //intend to destroy the HashTable or simply no longer need that key.
     function s__HashTable_remove takes integer this,integer index returns nothing
-        local integer t= (LoadInteger(Table___ht, ((this)), (index))) // INLINED!!
+        local integer t= (LoadInteger(Table__ht, ((this)), (index))) // INLINED!!
         if t != 0 then
             call s__Table_destroy(t)
-            call RemoveSavedInteger(Table___ht, ((this)), (index)) // INLINED!!
+            call RemoveSavedInteger(Table__ht, ((this)), (index)) // INLINED!!
         endif
     endfunction
     
     //Added in version 4.1
     function s__HashTable_has takes integer this,integer index returns boolean
-        return (HaveSavedInteger(Table___ht, ((this)), (index))) // INLINED!!
+        return (HaveSavedInteger(Table__ht, ((this)), (index))) // INLINED!!
     endfunction
     
     //HashTables are just fancy Table indices.
@@ -1704,12 +1704,12 @@ endfunction
     function StringHashEx takes string key returns integer
         local integer sh= StringHash(key)
         loop
-            if not (HaveSavedString(Table___ht, (((StringHashEx__t))), (sh))) then // INLINED!!
-                call SaveStr(Table___ht, (((StringHashEx__t))), (sh), ( key)) // INLINED!!
+            if not (HaveSavedString(Table__ht, (((StringHashEx___t))), (sh))) then // INLINED!!
+                call SaveStr(Table__ht, (((StringHashEx___t))), (sh), ( key)) // INLINED!!
                 exitwhen true
             endif
-            exitwhen (LoadStr(Table___ht, (((StringHashEx__t))), (sh))) == key // INLINED!!
-            set sh=sh + StringHashEx__REHASH
+            exitwhen (LoadStr(Table__ht, (((StringHashEx___t))), (sh))) == key // INLINED!!
+            set sh=sh + StringHashEx___REHASH
         endloop
         return sh
     endfunction
@@ -1774,7 +1774,7 @@ endfunction
         set l=makeLen - l
         loop
             exitwhen i > l
-            set s=s + Sync__TERM_CHAR
+            set s=s + Sync___TERM_CHAR
             set i=i + 1
         endloop
         return s
@@ -1817,12 +1817,12 @@ endfunction
         function s__SyncData_getKey takes integer pos returns string
             local string position=""
         
-            if ( HaveSavedString(s__SyncData_Table, Sync__KEY_STR_CACHE, pos) ) then
-                return LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos)
+            if ( HaveSavedString(s__SyncData_Table, Sync___KEY_STR_CACHE, pos) ) then
+                return LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos)
             endif
         
-            set position=Sync_ConvertBase(Sync__SAFE_KEYS , pos)
-            call SaveStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos, position)
+            set position=Sync_ConvertBase(Sync___SAFE_KEYS , pos)
+            call SaveStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos, position)
         
             return position
         endfunction
@@ -1864,8 +1864,8 @@ endfunction
                     set p=i
 
 
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + p)
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + p)
                 call RemoveSavedBoolean(s__SyncData_Table, p, this) // playerdone
 
                 set i=i + 1
@@ -1904,11 +1904,11 @@ endfunction
         endfunction
 
         function s__SyncData_hasString takes integer this,integer index returns boolean
-            local integer i= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
+            local integer i= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
             if ( index > 0 and i == 0 ) then
                 return false
             endif
-            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)))
+            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)))
         endfunction
     
         function s__SyncData_addInt takes integer this,integer i returns nothing
@@ -1954,12 +1954,12 @@ endfunction
       
             // store the string position in the table
             if ( s__SyncData_strCount[this] == 0 ) then
-                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS, 0)
+                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS, 0)
             else
-                set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
-                set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
+                set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
+                set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
 
-                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + s__SyncData_strCount[this], strPos)
+                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + s__SyncData_strCount[this], strPos)
             endif
 
             // convert each character in the string to an integer
@@ -1974,7 +1974,7 @@ endfunction
                 set i=i + 1
             endloop
             set s__SyncData_strBufferLen[this]=s__SyncData_strBufferLen[this] + length
-            call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
+            call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
             set s__SyncData_strCount[this]=s__SyncData_strCount[this] + 1
         endfunction
 
@@ -1994,22 +1994,22 @@ endfunction
             local string s= ""
             local string c
             local integer i= 0
-            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
+            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
             local integer strPos
         
             if ( not s__SyncData_hasString(this,index) ) then
                 return null
             endif
 
-            set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
-            set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
+            set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
+            set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
         
             loop
                 exitwhen i > strLen
             
-                set c=Sync_I2Char(Sync__ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
+                set c=Sync_I2Char(Sync___ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
 
-                if ( c == Sync__TERM_CHAR ) then
+                if ( c == Sync___TERM_CHAR ) then
                     return s
                 endif
 
@@ -2084,7 +2084,7 @@ endfunction
                     return
                 endif
 
-                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync__UPDATE_PERIOD
+                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync___UPDATE_PERIOD
 
                 if ( s__SyncData_onUpdate[data] != null ) then
                     call s__SyncData_fireEvent(data,s__SyncData_onUpdate[data])
@@ -2150,7 +2150,7 @@ endfunction
             loop
                 exitwhen i > end
 
-                set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, i)
+                set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, i)
           
                 if ( i < s__SyncData_intCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                     call SyncStoredInteger(s__SyncData_Cache[0], s__SyncData_mkey[this], position)
@@ -2163,15 +2163,15 @@ endfunction
                 endif
           
                 if ( i < s__SyncData_strCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    set n=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + i)
-                    set p=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + i)
+                    set n=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + i)
+                    set p=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + i)
               
                     set j=0
               
                     loop
                         exitwhen j > n
                   
-                        set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, p + j)
+                        set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, p + j)
 
                         if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                             call SyncStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position)
@@ -2191,10 +2191,10 @@ endfunction
             set s__SyncData_timeStarted[this]=(s__SyncData_timeCounter + TimerGetElapsed(s__SyncData_Elapsed)) // INLINED!!
             set s__SyncData_playersDone[this]=0
             set s__SyncData_buffering[this]=true
-            set s__SyncData_timeElapsed[this]=( Sync__UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
+            set s__SyncData_timeElapsed[this]=( Sync___UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
         
             if ( s__SyncData_Running == 0 ) then
-                call TimerStart(s__SyncData_BufferTimer, Sync__UPDATE_PERIOD, true, function s__SyncData_readBuffer)
+                call TimerStart(s__SyncData_BufferTimer, Sync___UPDATE_PERIOD, true, function s__SyncData_readBuffer)
             endif
 
             set s__SyncData_Running=s__SyncData_Running + 1
@@ -2227,10 +2227,10 @@ endfunction
 
         function s__SyncData_updateStatus takes nothing returns boolean
             local integer i= 0
-            local integer p= (SyncInteger__LastPlayer) // INLINED!!
+            local integer p= (SyncInteger___LastPlayer) // INLINED!!
             local boolean b= true
             local boolean c= true
-            local integer data= (SyncInteger__LastSync) // INLINED!!
+            local integer data= (SyncInteger___LastSync) // INLINED!!
             local triggercondition tc
 
             if ( not s__SyncData_buffering[data] ) then
@@ -2290,20 +2290,20 @@ endfunction
         function s__SyncData_onInit takes nothing returns nothing
             local integer i= 0
             local string s
-            local integer len= StringLength(Sync__ALPHABET)
+            local integer len= StringLength(Sync___ALPHABET)
             set s__SyncData_Table=InitHashtable()
             set ht=InitHashtable()
             
             loop
                 exitwhen i >= len
-                set s=SubString(Sync__ALPHABET, i, i + 1)
+                set s=SubString(Sync___ALPHABET, i, i + 1)
                 call SaveInteger(ht, 0, StringHashEx(s), i)
                 
                 set i=i + 1
             endloop
             
-            set s__SyncData_Cache[0]=InitGameCache(Sync__CACHE_FILE)
-            set s__SyncData_Cache[1]=InitGameCache(Sync__CACHE_FILE_STR)
+            set s__SyncData_Cache[0]=InitGameCache(Sync___CACHE_FILE)
+            set s__SyncData_Cache[1]=InitGameCache(Sync___CACHE_FILE_STR)
 
             set s__SyncData_Elapsed=CreateTimer()
             set s__SyncData_BufferTimer=CreateTimer()
@@ -2316,12 +2316,12 @@ endfunction
                 set s__SyncData_LocalPlayerID=GetPlayerId(s__SyncData_LocalPlayer)
 
 
-call TriggerAddCondition(SyncInteger__EventTrig, Filter((function s__SyncData_updateStatus))) // INLINED!!
+call TriggerAddCondition(SyncInteger___EventTrig, Filter((function s__SyncData_updateStatus))) // INLINED!!
             call TimerStart(s__SyncData_Elapsed, 10., true, function s__SyncData_trackTime)
         
 
                 loop
-                    exitwhen s__SyncData_Last == Sync__ALPHABET_BASE
+                    exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
                     call s__SyncData_getKey(s__SyncData_Last)
                     set s__SyncData_Last=s__SyncData_Last + 1
                 endloop
@@ -2336,11 +2336,11 @@ call TriggerAddCondition(SyncInteger__EventTrig, Filter((function s__SyncData_up
 //library Sync ends
 //===========================================================================
 // 
-// |cff217199Escape Builder |r[R] 0.88g
+// |cff217199Escape Builder |r[R] 0.88i
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Wed Feb 22 20:02:04 2017
+//   Date: Sun Feb 26 19:22:23 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -3726,8 +3726,8 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs278167062")
-call ExecuteFunc("SyncInteger__Init")
+call ExecuteFunc("jasshelper__initstructs254143109")
+call ExecuteFunc("SyncInteger___Init")
 
     call InitGlobals()
     call InitCustomTriggers()
@@ -3771,7 +3771,7 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs278167062 takes nothing returns nothing
+function jasshelper__initstructs254143109 takes nothing returns nothing
 
 
 

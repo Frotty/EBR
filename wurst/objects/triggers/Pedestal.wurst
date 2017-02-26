@@ -15,6 +15,7 @@ import JsonParser
 import TerrainBlocker
 import LinkedList
 import TileData
+import LZW
 
 constant CHAR_STEPSIZE = 180
 
@@ -34,7 +35,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		setPos(pos.toTile().toVec3())
 		actor..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)
 		..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
-		..addAbility(LOAD3_ID)..addAbility(REMOVE_ID)..addAbility(SELECT_SINGLE_ID)
+		..addAbility(LOAD3_ID)..addAbility(REMOVE_ID)
 		clearQuestionmark()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -68,7 +69,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					return
 
 			if getTileFromType(targPos) != Tile.UNWALKABLE
-				tiles.add(new TileData(targPos, mpos))
+				tiles.add(new TileData(targPos, mpos, owner))
 
 	function loadSlot(int slotId)
 		lastRef[owner.getId()] = this
@@ -79,29 +80,30 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		let pd = pData[getSyncedData().p.getId()]
 		let ref = lastRef[pd.id]
 		ref.syncingDone = true
-		var jsonString = new BigString()
+		var compressedString = new BigString()
 		var buildString = pd.syncPayload.syncedFile.read()
 		while buildString != null
-			jsonString.addString(buildString)
+			compressedString.addString(buildString)
 			buildString = pd.syncPayload.syncedFile.read()
 		printLog(Loglevel.DEBUG, "Reconstructed")
 		serializeOrigin = ref.pos.toVec2().toTile().toVec3()
-		ref.parser.setInput(jsonString)
-		ref.parser.parse((SeqCallback cb) -> begin
-			ref.parser.output.getStringList(ENTITIES_KEY, ref.parser, (SeqCallback cb) -> begin
-				cb.terminate()
-				ref.loadEntities()
+
+		decompress(compressedString, (PayloadCallback cb1) -> begin
+			ref.parser.setInput(cb1.customData castTo BigString)
+			ref.parser.parse((PayloadCallback cb2) -> begin
+				ref.parser.output.getStringList(ENTITIES_KEY, ref.parser, (PayloadCallback cb3) -> begin
+					ref.loadEntities()
+				end)
 			end)
 		end)
-		
+
 
 	function loadEntities()
 		// TODO load entities
 
 		// Load tiles
-		parser.output.getStringList(TILES_KEY, parser, (SeqCallback cb) -> begin
+		parser.output.getStringList(TILES_KEY, parser, (PayloadCallback cb) -> begin
 			loadTiles((cb.customData castTo JsonParser).outputList)
-			cb.terminate()
 		end)
 
 	function loadTiles(LinkedList<BigSubString> list)
@@ -116,7 +118,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				bs.reset()
 				let next = itr.next()
 				parser.setInput(bs..addSubString(next))
-				parser.parse((SeqCallback cb2) -> begin
+				parser.parse((PayloadCallback cb2) -> begin
 					td..deserialize(parser.output)
 					parser.output.reset()
 					cb1.doStep()
@@ -170,17 +172,22 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		json.addProperty(new Property(new BigSubString(TILES_KEY), tileString.asSubstring()))
 		
 		json.addToBigString(big)
-		
-		if GetLocalPlayer() == owner
-			let f = File.open(FOLDER_NAME, "dataSlot" + currentSlotId.toString(), Mode.WRITE)
-			while big.getLength() > BIG_SUBSTRING_LEN
-				f.write(big.getString(0, BIG_SUBSTRING_LEN))
-				big.startoffset += BIG_SUBSTRING_LEN
-			f.write(big.getString(0))
-			f.close()
-
 		destroy json
-		destroy big
+		compress(big, (PayloadCallback cb) -> begin
+			let compressedData = cb.customData castTo BigString
+			if GetLocalPlayer() == owner
+				let f = File.open(FOLDER_NAME, "dataSlot" + currentSlotId.toString(), Mode.WRITE)
+				while compressedData.getLength() > BIG_SUBSTRING_LEN
+					f.write(compressedData.getString(0, BIG_SUBSTRING_LEN))
+					compressedData.startoffset += BIG_SUBSTRING_LEN
+				f.write(compressedData.getString(0))
+				f.close()
+
+			
+			destroy big
+		end)
+		
+		
 
 	function onCast()
 		let id = GetSpellAbilityId()

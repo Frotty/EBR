@@ -111,3 +111,6 @@ public class Minion extends EscaperSensorSetup
 
     function doDamage(Escaper e)
         actor.damageTarget(e.actor, ATTACK_DAMAGE)
+
+    ondestroy
+        destroy hpBar
