@@ -7,6 +7,7 @@ import initlater FourthCitadelle
 import PlayerData
 import StringUtils
 import Key
+import ClosureTimers
 import Door
 import Obstacle
 
@@ -67,7 +68,6 @@ public function initStartmazes()
 	for u6 from ENUM_GROUP
 		new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)
 		u6.remove()
-		
 	var rand = GetRandomInt(0,7)
 	if rand < 2
 		setStartTeleport(0,3)
@@ -81,19 +81,26 @@ public function initStartmazes()
 		setStartTeleport(0,2)
 		setStartTeleport(1,3)
 		setStartTeleport(2,1)
-	startmazes[0] = new FirstSnowMaze(regions[0])
-	startmazes[1] = new SecondDesertMaze(regions[1])
-	startmazes[2] = new ThirdForestMaze(regions[2])
-	startmazes[3] = new FourthCitadelleMaze(regions[3])
-
-	let tp = new Teleporter(gg_unit_n00C_0150)
-	tp.tag = createCenteredTexttag(tp.getPos(), "|cffFFCC00Vote for minigame |cffADADAD(soon)", 9.5)
-
-	createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
-
-	setBuilderTeleporter()
 	
-	EnumItemsInRect(playableMapRect, null, function correctKeys)
+	doAfter(1., () -> begin
+		startmazes[0] = new FirstSnowMaze(regions[0])
+		startmazes[1] = new SecondDesertMaze(regions[1])
+		startmazes[2] = new ThirdForestMaze(regions[2])
+		startmazes[3] = new FourthCitadelleMaze(regions[3])
+		let tp = new Teleporter(gg_unit_n00C_0150)
+		tp.tag = createCenteredTexttag(tp.getPos(), "|cffFFCC00Vote for minigame |cffADADAD(soon)", 9.5)
+
+		createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
+
+		setBuilderTeleporter()
+		
+		EnumItemsInRect(playableMapRect, null, function correctKeys)
+	end)
+	
+	
+
+	
+	
 
 public function correctKeys()
 	item itm = GetEnumItem()

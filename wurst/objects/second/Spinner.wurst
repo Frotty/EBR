@@ -41,12 +41,12 @@ public class Spinner extends SetupObject
 	ConfigValue sinFactor = new ConfigValue(1, 0.1, "Sin-Factor")
 
 	construct(unit existing)
-		super(createUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0)), existing, 0)
+		super(getUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0), this), existing, 0)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	construct(vec2 pos, player owner)
-		super(createUnit(owner, SPINNER_ID, pos, angle(0)), createUnit(owner, SPINNER_ID, pos, angle(0)), 0)
+		super(getUnit(owner, SPINNER_ID, pos, angle(0), this), getUnit(owner, SPINNER_ID, pos, angle(0), this), 0)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		

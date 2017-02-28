@@ -1,8 +1,8 @@
 package Invisible
 import SetupObject
 
-constant VIS_ID = 'A04F'
-constant INVIS_ID = 'A005'
+public constant VIS_ID = 'A04F'
+public constant INVIS_ID = 'A005'
 
 function onChangeVisibility()
 	var id = GetSpellAbilityId()

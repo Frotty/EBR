@@ -279,11 +279,11 @@ public function startTestmode(PlayerData pd)
 			i++
 			reg = regions[i]
 
-		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
-		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
+		new TerrainModder(createUnit(pd.p, WALKABLE, hidden, angle(0)))
+		new TerrainModder(createUnit(pd.p, UNWALKABLE, hidden, angle(0)))
+		new TerrainModder(createUnit(pd.p, ICECONTROL, hidden, angle(0)))
+		new TerrainModder(createUnit(pd.p, ICEUNCONTROL, hidden, angle(0)))
+		new UnitProducer( hidden, pd.p )
 		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
 		pd.escaper = e
 		e.actor.addAbility('A001')
@@ -320,10 +320,10 @@ public function initPlayers()
 	TimerStart(CreateTimer(), 1., true, function setTime)
 	
 	for pd in builderPlayers
-		new TerrainModder(CreateUnit(pd.p, WALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, UNWALKABLE, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICECONTROL, hiddenX, hiddenY, 0 ) )
-		new TerrainModder(CreateUnit(pd.p, ICEUNCONTROL, hiddenX, hiddenY, 0 ) )
+		new TerrainModder(createUnit(pd.p, WALKABLE, hidden, angle(0)))
+		new TerrainModder(createUnit(pd.p, UNWALKABLE, hidden, angle(0)))
+		new TerrainModder(createUnit(pd.p, ICECONTROL, hidden, angle(0)))
+		new TerrainModder(createUnit(pd.p, ICEUNCONTROL, hidden, angle(0)))
 		pd.builder = new Builder( pd.p )
 		UnitAddItemById(pd.builder.actor,'I001')
 		UnitAddItemById(pd.builder.actor,'I002')

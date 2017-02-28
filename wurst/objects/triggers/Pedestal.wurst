@@ -139,7 +139,9 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		entString.addString(JSON_OPEN_ARRAY.token)
 		doSeq(10, (SeqCallback cb) -> begin
 			if itr.hasNext()
-				itr.next().serialize().addToBigString(entString)
+				let json = itr.next().serialize()
+				json.addToBigString(entString)
+				destroy json
 				if itr.hasNext()
 					entString.addString(JSON_SIGN_COMMA.token)
 				destroy itr.remove()
@@ -162,6 +164,8 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				cb.terminate()
 				tileString.addString(JSON_CLOSE_ARRAY.token)
+				print("added closeing bracket")
+				tileString.debugPrint()
 				nullTimer(() -> saveFile())
 		end)
 

@@ -13,7 +13,7 @@ public class BossDamager extends StaticBaseObject
     real damage
 
     construct(vec2 pos, player owner)
-        super(posToGrid(pos), createUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.)), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
+        super(posToGrid(pos), getUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.), this), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
         printLog(Loglevel.DEBUG, "creating Boss Damager")
         damage = 40
         EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())

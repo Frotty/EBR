@@ -12,10 +12,10 @@ public class RevivePoint extends StaticSetupObject
 	int startmaze = -1
 
 	construct(unit existing)
-		super(existing, createUnit(existing.getOwner(), REVIVEPOINT_ID, existing.getPos(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach ) 
+		super(existing, getUnit(existing.getOwner(), REVIVEPOINT_ID, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach ) 
 
 	construct(vec3 pos, player owner)
-		super(createUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0)), createUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach ) 
+		super(getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach ) 
 
 	function reach(Escaper reacher)
 		if not reached

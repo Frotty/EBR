@@ -5,6 +5,7 @@ import Pointer
 import Knockbacker
 import ChannelAbilityPreset
 import HashMap
+import Preloader
 
 constant int 	UNITCREATOR_ID   = 'n006'
 
@@ -26,7 +27,7 @@ public class UnitCreator extends StaticBaseObject
 		deactivate()
 
 	construct( vec2 pos, player owner)
-		super( pos, CreateUnit(owner, UNITCREATOR_ID, pos.x, pos.y, 0), 0., CODE_NULL , CODE_NULL)
+		super( pos, getUnit(owner, UNITCREATOR_ID, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
 		actor.addAbility(FIXED_ID)
 		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -119,14 +120,21 @@ int START_ABIL = 'A00A'
 int PAUSE_ABIL = 'Tank'
 HashMap<int, int> SPAWN_TYPE_ABIL = new HashMap<int, int>()
 
-public function init_Unitcreator()
-	SPAWN_TYPE_ABIL.saveInt('A045','BIGK') // Big Killer
-	SPAWN_TYPE_ABIL.saveInt('A046','SMAL') // Small Killer
-	SPAWN_TYPE_ABIL.saveInt('A048','u008') // Big Random Killer
-	SPAWN_TYPE_ABIL.saveInt('A04W','u00A') // Glaive
-	SPAWN_TYPE_ABIL.saveInt('A04D','h01Q') // Pointer
-	SPAWN_TYPE_ABIL.saveInt('A04B','u006') // Small Random Killer
-	SPAWN_TYPE_ABIL.saveInt('A04C','h001') // tank
+init
+	preloadAbility('A045')
+	preloadAbility('A046')
+	preloadAbility('A048')
+	preloadAbility('A04D')
+	preloadAbility('A04W')
+	preloadAbility('A04C')
+	preloadAbility('A04B')
+	preloadAbility('A07R')
+	preloadAbility(PAUSE_ABIL)
+	preloadAbility(START_ABIL)
+	preloadAbility(INCREASE_INTERVAL_ABIL)
+	preloadAbility(DECREASE_INTERVAL_ABIL)
+	preloadAbility(FIXED_ID)
+	preloadAbility(RANDOM_ID)
 
 @objectgen function genAbils()
 	FIXED_ID = ABIL_ID_GEN.next()

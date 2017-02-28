@@ -3,6 +3,7 @@ import public Entity
 import public TerrainUtils
 import public ConfigValue
 import public SetupObject
+import Invisible
 import Assets
 
 /*  ---Creating a new Baseobject---
@@ -26,7 +27,10 @@ public class StaticBaseObject extends UnitEntity
 		super(u)
 		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)
-		actor.addAbility(GHOST_VIS_ID)
+		actor..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
+		..addAbility(REMOVE_ID)..issuePointOrder("rally", pos)
+		if actor.hasAbility(VIS_ID)
+			actor..removeAbility(VIS_ID)..addAbility(INVIS_ID)
 		this.setCurrentRegion()
 		rallyPoint = this.pos
 

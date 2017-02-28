@@ -34,7 +34,7 @@ public class Jumper extends StaticBaseObject
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 	
 	construct(vec2 pos, player owner)
-		super(pos, CreateUnit(owner, JUMPER_ID, pos.x, pos.y, 0. ), 40., function Jumper.inRange, CODE_NULL)
+		super(pos, getUnit(owner, JUMPER_ID, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		forUnitsInRange(pos, 8, (unit u) -> begin
 			if u != actor and u.getTypeId() == JUMPER_ID

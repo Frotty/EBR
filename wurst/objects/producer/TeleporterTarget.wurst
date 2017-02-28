@@ -6,4 +6,4 @@ constant int ID = 'u00B'
 public class TeleporterTarget extends SetupObject
 	
 	construct(vec2 pos, player owner)
-		super(createUnit(owner, ID, pos, angle(0)), createUnit(owner, ID, pos, angle(0)), 0.)
+		super(getUnit(owner, ID, pos, angle(0), this), getUnit(owner, ID, pos, angle(0), this), 0.)

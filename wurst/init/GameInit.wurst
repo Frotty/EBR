@@ -11,61 +11,45 @@ init
 	startEntityLoop()
 	getTimer().start(0.01, () -> initGame())
 	
-	
 @compiletime function callGen()
 	callFunctionsWithAnnotation("@objectgen")
 
-
-abstract class Test
-	abstract function do(Test test)
-
-function encodePositions(Test tp)
-	print("e")
-	doSeq((Test t) -> tp.do(tp))
-	print("f")
-
-function compress(Test tp)
-	print("a")
-	doSeq((Test t) -> begin
-		print("c")
-		encodePositions((Test t) -> begin
-			print("g")
-			tp.do(t)
-		end)
-		print("d")
-	end)
-	print("b")
-
-
-function doSeq(Test t)
-	nullTimer(() -> t.do(t))
-	
-	
 function initGame()
 	printTimed("Waiting for players..", 10.)
 	initPlayers()
 	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
-	callFunctionsWithAnnotation("@init1")
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), false, false)
 	VolumeGroupReset()
 	EndThematicMusic()
+	GetExpiredTimer().start(0.01, () -> initOne())
+
+function initOne()
+	callFunctionsWithAnnotation("@init1")
 	GetExpiredTimer().start(0.01, () -> initPartTwo())
 
 function initPartTwo()
 	callFunctionsWithAnnotation("@init2")
+	GetExpiredTimer().start(0.01, () -> partThree())
+
+function partThree()
 	initStartmazes()
 	checkPlayerLocalFiles()
 	jukeBox.playNextMusic()
 	GetExpiredTimer().release()
 	let bs = new BigString()
-	let test = "1"
+	let test = "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
 	bs.addString(test)
-	compress(bs, (PayloadCallback sq) -> begin
-		let compressed = sq.customData castTo BigString
-		decompress(compressed, (PayloadCallback sq2) -> begin
-			let decompressed = sq2.customData castTo BigString
-		end)
-	end)
+	bs.addString("xy0123456789")
+	print("bigstringlength: " + bs.getLength().toString())
+	print("399: " + bs.getString(399,1))
+	print("400: " + bs.getString(400,1))
+	print("401: " + bs.getString(401,1))
+	// compress(bs, (PayloadCallback sq) -> begin
+	// 	let compressed = sq.customData castTo BigString
+	// 	decompress(compressed, (PayloadCallback sq2) -> begin
+	// 		let decompressed = sq2.customData castTo BigString
+	// 	end)
+	// end)
 	// jp = new JsonParser()..setInput(bs)
 	// jp..parse((SeqCallback cb) -> begin
 	// 	print("done parse")
@@ -118,4 +102,3 @@ function initPartTwo()
 	// 		cb.terminate()
 	// end) 
 	
-int i = 0

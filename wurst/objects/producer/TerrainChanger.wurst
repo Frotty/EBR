@@ -27,7 +27,7 @@ public class TerrainChanger extends SetupObject
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), createUnit(owner, TEXTURECHANGER_ID, pos, angle(0)), 0)
+		super(getUnit(owner, TEXTURECHANGER_ID, pos, angle(0), this), getUnit(owner, TEXTURECHANGER_ID, pos, angle(0), this), 0)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		innerTile = this.getCurrentRegion().getTypeSet().walkableId
 		outerTile = this.getCurrentRegion().getTypeSet().unwalkableId

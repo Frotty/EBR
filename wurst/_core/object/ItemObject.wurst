@@ -15,8 +15,7 @@ public abstract class ItemObject extends Entity
 		..setPos(pos)
 		
 	ondestroy
-		setup.setEntity(null)
-		setup.remove()
+		setup.recycle()
 		if actorItem != null
 			actorItem.setEntity(null)
 			actorItem.remove()

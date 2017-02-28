@@ -18,7 +18,7 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super(createUnit(p, BUILDER_1, vec2(-6000, -7160), angle(0)))
+		super(getUnit(p, BUILDER_1, vec2(-6000, -7160), angle(0), this))
 		registerListeners()
 		this.setCurrentRegion()
 
@@ -28,7 +28,7 @@ public class Builder extends UnitEntity
 			UnitAddItemById(actor,'I001')
 			UnitAddItemById(actor,'I002')
 			UnitAddItemById(actor,'I003')				
-			SelectUnitForPlayerSingle( actor, owner )
+		SelectUnitForPlayerSingle(actor, owner)
 		if hasBossMenu
 			setBossMenu()
 
@@ -46,17 +46,17 @@ public class Builder extends UnitEntity
 			return
 		switch id
 			case MENU_1
-				setNewActor(createUnit(owner, BUILDER_1, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
+				setNewActor(getUnit(owner, BUILDER_1, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
 			case MENU_2
-				setNewActor(createUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
+				setNewActor(getUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
 			case MENU_3
-				setNewActor(createUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
+				setNewActor(getUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
 			case MENU_4
-				setNewActor(createUnit(owner, BUILDER_4, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
+				setNewActor(getUnit(owner, BUILDER_4, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
 			case MENU_5
-				setNewActor(createUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
+				setNewActor(getUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
 			case MENU_6
-				setNewActor(createUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees()))
+				setNewActor(getUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
 			case KEY_SPELL_ID
 				if rdata.canBuild(owner)
 					new Key(tpos, owner)

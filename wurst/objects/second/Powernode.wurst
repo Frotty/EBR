@@ -61,7 +61,7 @@ public class Powernode extends SetupObject
 	protected Link firstLink = null
 
 	construct(vec2 pos, player owner)
-		super(createUnit(owner, NODE_ID, pos, angle(0) ), createUnit(owner, NODE_ID, pos, angle(0)), 0.)
+		super(getUnit(owner, NODE_ID, pos, angle(0), this), getUnit(owner, NODE_ID, pos, angle(0), this), 0.)
 		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
 		..addAbility(INCREASE_BOUNCE_ID).addAbility(DECREASE_BOUNCE_ID)
 		sleeps = false

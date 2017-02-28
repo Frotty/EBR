@@ -93,7 +93,7 @@ public class Portal extends FxEntity
 				targetFx.setScale(0.75)
 				targetFx.setOwner(owner, true)
 			targetFx.setColor(COLOR_WHITE)
-			targetFx.setXY(destiny)
+			targetFx.setXYZ(destiny.withZ(0))
 			activate()
 		else
 			targetFx.setColor(COLOR_BLACK)

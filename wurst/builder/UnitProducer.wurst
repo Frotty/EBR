@@ -33,8 +33,8 @@ constant FIRE	 		= 'Afre'
 public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
-		super(pos, CreateUnit( owner, PRODUCER_ID, pos.x, pos.y, 0.  ) , 0., CODE_NULL, CODE_NULL)
-		actor.addAbility(AIR_KILLER)
+		super(pos, getUnit( owner, PRODUCER_ID, pos, angle(0), this) , 0., CODE_NULL, CODE_NULL)
+		actor..removeAbility(REMOVE_ID)..addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		clearQuestionmark()
 
@@ -126,5 +126,5 @@ init
 		
 @init2 function init_UnitProducer()
 	for pd from builderPlayers.staticItr()
-		new UnitProducer( vec2(hiddenX, hiddenY), pd.p )
+		new UnitProducer(hidden, pd.p)
 

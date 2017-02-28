@@ -41,7 +41,7 @@ public class SetupBox extends UnitEntity
 	private RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
-		super(createUnit( owner, SETUP_BOX, pos, angle(0) ))
+		super(getUnit(owner, SETUP_BOX, pos, angle(0), this))
 		this.setCurrentRegion()
 		rdata = data
 		actor..addAbility(ALLOW_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)

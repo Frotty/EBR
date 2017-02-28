@@ -11,7 +11,6 @@ import public initlater RegionData
 	but clickable for builders.	 
 
 */
-trigger orderTrigger
 timer fixPos = CreateTimer()
 
 public abstract class SetupObject extends UnitEntity
@@ -23,15 +22,15 @@ public abstract class SetupObject extends UnitEntity
 		super(u)
 		this.setup = setup
 		this.radius = radius
-		actor..addAbility(LOCUST_ID)
+		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(REMOVE_ID)
 		..setPathing(true)
 		setup..setEntity(this)
 		..setXY(actor.getPos())
-		..addAbility(GHOST_INVIS_ID)
+		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_ID)
 		this.setCurrentRegion()
-		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_POINT_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, setup, EVENT_UNIT_ISSUED_TARGET_ORDER)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> onOrderEvent())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrderEvent())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrderEvent())
 		
 	override function setPos(vec3 pos)
 		this.pos = pos
@@ -63,33 +62,31 @@ public abstract class SetupObject extends UnitEntity
 			time = GetRandomReal(30,45)
 	
 	ondestroy
-		setup.setEntity(null)
-		setup.remove()
+		setup.recycle()
 		setup = null
 		
-	static function onOrderEvent()
-		var entity = GetTriggerUnit().getEntity()
+	function onOrderEvent()
 		var order = GetIssuedOrderId()
 		var targetPos = getOrderPos()
 		var u = GetOrderTargetUnit()
 		string orderS = OrderId2String(order)
-		var obj = entity castTo SetupObject
-		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "stop" or orderS == "holdposition"
+		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "holdposition" or orderS == "stop"
 			if orderS == "smart" and u == null
-				obj.actor.issuePointOrder("move", targetPos+getOffset())
+				actor.issuePointOrder("move", targetPos+getOffset())
 			else
 				if u != null
-					obj.actor.issueTargetOrderById(order, u)
-				else if targetPos.x != 0.	
-					obj.actor.issuePointOrderById(order, targetPos)
+					actor.issueTargetOrderById(order, u)
+				else if targetPos.x != 0.
+					actor.issuePointOrderById(order, targetPos)
 				else
-					obj.actor.issueImmediateOrderById(order)
+					actor.issueImmediateOrderById(order)
 		else
 			if not orderS == "waterelemental" and not orderS == "roar" and not order == 851974
-				obj.actor.issueImmediateOrder("stop")
-		obj.setup..setXY(obj.actor.getPos3Zero())
-			..setFacing(obj.actor.getFacingAngle())
-			..setTurnSpeed(GetUnitTurnSpeed(obj.actor))
+				actor.issueImmediateOrder("stop")
+		pos = setup.getPos3Zero()
+		actor..setXY(pos)
+			..setFacing(setup.getFacingAngle())
+			..setTurnSpeed(GetUnitTurnSpeed(setup))
 	  
 				
 public abstract class StaticSetupObject extends UnitEntity
@@ -113,8 +110,7 @@ public abstract class StaticSetupObject extends UnitEntity
 
 	ondestroy
 		setup.clearRegister()
-		setup.setEntity(null)
-		setup.remove()
+		setup.recycle()
 		setup = null
 		if inRangeTrig != null
 			inRangeTrig.destr()
@@ -129,8 +125,6 @@ function getOffset() returns vec2
 	return offsets[count]
 
 @init1 function initSetupObj()
-	orderTrigger = CreateTrigger()
-	orderTrigger.addAction(function SetupObject.onOrderEvent )
 	offsets[0] = vec2(0.049, 0.001)
 	offsets[1] = vec2(0.048, 0.002)
 	offsets[2] = vec2(0.047, 0.003)

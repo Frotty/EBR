@@ -2,6 +2,7 @@ package EscaperSensor
 import public SetupObject
 import Escaper
 import Sensor
+import UnitRecycler
 
 public class EscaperSensorSetup extends SetupObject
 	use Sensor
@@ -9,22 +10,22 @@ public class EscaperSensorSetup extends SetupObject
 	protected real sensorHeight
 	
 	construct(vec3 pos, player owner, int unitId, angle facing, real radius, real sensorHeight )
-		super(createUnit(owner, unitId, pos, facing), createUnit(owner, unitId, pos, facing), radius) 
+		super(getLocustUnit(owner, unitId, pos, facing, this), getUnit(owner, unitId, pos, facing, this), radius) 
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
 	construct(vec3 pos, player owner, int actorId, int setupId, angle facing, real radius, real sensorHeight )
-		super(createUnit(owner, actorId, pos, facing), createUnit(owner, setupId, pos, facing), radius) 
+		super(getLocustUnit(owner, actorId, pos, facing, this), getUnit(owner, setupId, pos, facing, this), radius) 
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 
 	construct(vec3 pos, player owner, int unitId, real radius, real sensorHeight )
-		super(createUnit(owner, unitId, pos, angle(0)), createUnit(owner, unitId, pos, angle(0)), radius) 
+		super(getLocustUnit(owner, unitId, pos, angle(0), this), getUnit(owner, unitId, pos, angle(0), this), radius) 
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
 	construct(unit pactor, real radius, real sensorHeight)
-		super(createUnit(pactor.getOwner(), pactor.getTypeId(), pactor.getPos3Zero(), pactor.getFacingAngle()), pactor, radius)
+		super(getLocustUnit(pactor.getOwner(), pactor.getTypeId(), pactor.getPos3Zero(), pactor.getFacingAngle(), this), pactor, radius)
 		this.sensorHeight = sensorHeight
 		setXY(pactor.getPos().toVec3() + vec2(0.01, 0))
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))

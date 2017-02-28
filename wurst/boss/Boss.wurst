@@ -29,7 +29,7 @@ public class Boss extends SetupObject
 	CustomBar hpBar
 
 	construct(player owner, vec2 tpos, int id)
-		super(createUnit(owner, id, tpos, angle(0)), createUnit(owner, id, tpos, angle(0)), 64)
+		super(getLocustUnit(owner, id, tpos, angle(0), this), getUnit(owner, id, tpos, angle(0), this), 64)
 		setup..addAbility(SUMMON_MINION_ID)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())

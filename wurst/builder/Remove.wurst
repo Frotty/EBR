@@ -12,8 +12,7 @@ function onRemoveObject()
 			var e = data castTo Entity
 			addEffect(Other.aiamtarget, u.getPos()).destr()
 			e.terminate()
-		else
-			GetSpellAbilityUnit().remove()
+		u..removeAbility(REMOVE_ID)
 	
 @init1 function init_remove()
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onRemoveObject())
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onRemoveObject())

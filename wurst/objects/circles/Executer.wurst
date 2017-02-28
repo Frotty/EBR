@@ -65,7 +65,7 @@ public class Executer extends StaticBaseObject
 	destructable dummy // model for pressure plate, and lever
 	
 	construct( vec2 pos, player owner)
-		super( pos, CreateUnit(owner, EXECUTER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Executer.onEvent, CODE_NULL )
+		super( pos, getUnit(owner, EXECUTER_ID, pos, angle(0), this), EVENT_RADIUS, function Executer.onEvent, CODE_NULL )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	static function onEvent()

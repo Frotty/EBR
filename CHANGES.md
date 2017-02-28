@@ -3,6 +3,8 @@
 [*] fixed pointer performance issue
 [*] fixed airkiller ghost having different flyheight
 [*] fixed MAP not being deleteable and changing terrain outside region
+[*] fixed lagg on placing first unitcreator
+[*] improved MAP functionality
 [*] improved blue goo jumping behavíour on ice
 [*] renamed firekiller
 

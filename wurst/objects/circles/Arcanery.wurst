@@ -57,7 +57,7 @@ public class Arcanery extends StaticBaseObject
 
 
 	construct(vec2 position, player owner)
-		super(position, createUnit(owner, ARCANERY_ID, position, angle(0)), 92., function onEnterEv, function is)
+		super(position, getUnit(owner, ARCANERY_ID, position, angle(0), this), 92., function onEnterEv, function is)
 		clearQuestionmark()
 		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
 		recreateEffect()
