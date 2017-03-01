@@ -2,7 +2,6 @@ package EscaperSensor
 import public SetupObject
 import Escaper
 import Sensor
-import UnitRecycler
 
 public class EscaperSensorSetup extends SetupObject
 	use Sensor

@@ -2,7 +2,6 @@ package CongaLineHead
 import SetupObject
 import Spinner
 import ChannelAbilityPreset
-import Remove
 import Interpolation
 
 constant int UNIT_ID = 'h000'

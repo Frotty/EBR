@@ -1,4 +1,5 @@
 package Pedestal
+import initlater InstantBuild
 import public PedestalObjects
 import Assets
 import BaseObject
@@ -8,12 +9,9 @@ import PlayerData
 import FileIO
 import Builder
 import SyncWrapper
-import TypeCasting
 import CodeManager
-import SeqWorker
 import JsonParser
 import TerrainBlocker
-import LinkedList
 import TileData
 import LZW
 
@@ -29,13 +27,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
 	private boolean syncingDone = true
 	let parser = new JsonParser()
+	let listparser = new JsonParser()
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
 		setPos(pos.toTile().toVec3())
 		actor..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)
 		..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
-		..addAbility(LOAD3_ID)..addAbility(REMOVE_ID)
+		..addAbility(LOAD3_ID)..addAbility(REMOVE_ID)..addAbility(SELECT_SINGLE_ID)
 		clearQuestionmark()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -43,7 +42,6 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		if serializable instanceof Escaper or serializable instanceof Builder or serializable instanceof MemoryAccessPedestal
 			return
 		if getRegionData(serializable.getPos()).canBuild(owner)
-			let ownPos = pos.toVec2()
 			let itr = entities.staticItr()
 			for entity from itr
 				if entity == serializable
@@ -59,8 +57,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	function addTile(vec2 tpos, boolean removeIfExists)
 		let targPos = tpos.toTile()
 		if getRegionData(targPos).canBuild(owner)
-			let ownPos = pos.toVec2()
-			let mpos = matrixpos(((targPos-ownPos).x / 128.).toInt(), ((targPos-ownPos).y / 128.).toInt())
+			let mpos = matrixpos((targPos.x / 128.).toInt(), (targPos.y / 128.).toInt())
 			let itr = tiles.staticItr()
 			for tile from itr
 				if tile.offset == mpos
@@ -91,19 +88,40 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		decompress(compressedString, (PayloadCallback cb1) -> begin
 			ref.parser.setInput(cb1.customData castTo BigString)
 			ref.parser.parse((PayloadCallback cb2) -> begin
-				ref.parser.output.getStringList(ENTITIES_KEY, ref.parser, (PayloadCallback cb3) -> begin
-					ref.loadEntities()
+				ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser, (PayloadCallback cb3) -> begin
+					ref.loadEntities((cb3.customData castTo JsonParser).outputList)
 				end)
 			end)
 		end)
 
 
-	function loadEntities()
-		// TODO load entities
-
-		// Load tiles
-		parser.output.getStringList(TILES_KEY, parser, (PayloadCallback cb) -> begin
-			loadTiles((cb.customData castTo JsonParser).outputList)
+	function loadEntities(LinkedList<BigSubString> list)
+		// load entities
+		print("Loading Entities")
+		let bs = new BigString()
+		var itr = list.staticItr()
+		doSeq(1, (SeqCallback cb) -> begin
+			if itr.hasNext()
+				bs.reset()
+				let next = itr.next()
+				print("Loading Entity length: " + next.getSingleLength().toString())
+				listparser.setInput(bs..addSubString(next))
+				listparser.parse((PayloadCallback cb2) -> begin
+					let json = listparser.output
+					let npos = vec2(json.getReal(KEY_X), json.getReal(KEY_Y))
+					let tId = json.getInt(KEY_TYPE)
+					newObjectFromId(owner,	serializeOrigin.toVec2() + npos, tId)..deserialize(listparser.output)
+					listparser.output.reset()
+					cb.doStep()
+				end)
+			else
+				cb.terminate()
+				destroy bs
+				print("Entites loaded!")
+				// Load tiles
+				parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
+					loadTiles(listparser.outputList)
+				end)
 		end)
 
 	function loadTiles(LinkedList<BigSubString> list)
@@ -113,19 +131,19 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		
 		var itr = list.staticItr()
 		doSeq(1, (SeqCallback cb1) -> begin
-			cb1.done = true
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
 				parser.setInput(bs..addSubString(next))
 				parser.parse((PayloadCallback cb2) -> begin
+					print("load tile")
 					td..deserialize(parser.output)
 					parser.output.reset()
 					cb1.doStep()
 				end)
 			else
 				cb1.terminate()
-				print("Tile loaded!")
+				print("Tiles loaded!")
 		end)
 
 	BigString tileString = new BigString()
@@ -133,6 +151,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	int currentSlotId
 	function saveSlot(int slotId)
+		serializeOrigin = pos.toVec2().toTile().toVec3()
 		let itr = entities.staticItr()
 		currentSlotId = slotId
 		entString.reset()
@@ -148,7 +167,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				cb.terminate()
 				entString.addString(JSON_CLOSE_ARRAY.token)
-				nullTimer(() -> saveTileSeq())
+				saveTileSeq()
 		end)
 
 	function saveTileSeq()
@@ -166,7 +185,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				tileString.addString(JSON_CLOSE_ARRAY.token)
 				print("added closeing bracket")
 				tileString.debugPrint()
-				nullTimer(() -> saveFile())
+				saveFile()
 		end)
 
 	function saveFile()

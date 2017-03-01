@@ -37,89 +37,102 @@ public function isOrderBuildOrder( int o ) returns boolean
 public function instantBuild(Builder b, vec2 tpos, int id)
 	var rdata = getRegionData(tpos)
 	if rdata != null and rdata.canBuild(b.owner)
-		switch id
-			case buildorders[1]
-				new Jumper(tpos, b.owner)
-			case buildorders[2]
-				new RevivePoint(vec3(tpos.x,tpos.y, 0.), b.owner)
-			case buildorders[3]
-				new Texter(tpos, b.owner)
-			case buildorders[5]
-				new Bombertower(tpos, b.owner)
-			case buildorders[6]
-				new Vortex(tpos, b.owner)
-			case buildorders[8]
-				new Executer(tpos, b.owner)
-			case buildorders[11]
-				new Booster(tpos, b.owner)
-			case buildorders[12]
-				new UnitRemover(tpos, b.owner)
-			case buildorders[13]
-				new Waypoint(tpos, b.owner)
-			case buildorders[14]
-				new Teleporter(tpos, b.owner)
-			case buildorders[15]
-				new Door(tpos, b.owner)
-			case buildorders[16]
-				new SmallObstacle(tpos, b.owner)
-			case buildorders[17]
-				new BigObstacle(tpos, b.owner)
-			case buildorders[18]
-				new Tree(tpos, b.owner)
-			case buildorders[21]
-				new Spinner(tpos, b.owner)	
-			case buildorders[20]
-				new UnitCreator(tpos, b.owner)
-			case buildorders[22]
-				new Decoration(tpos, b.owner,id,270.)
-			case buildorders[23]
-				new Tracks(tpos, b.owner)	
-			case buildorders[24]
-				new Fountain(tpos, b.owner)	
-			case buildorders[25]
-				new Powernode(tpos, b.owner)	
-			case buildorders[26]
-				new Trap(tpos, b.owner)	
-			case buildorders[27]
-				new Decoration(tpos, b.owner,id,270.)	
-			case buildorders[28]
-				new Decoration(tpos, b.owner,id,270.)
-			case buildorders[29]
-				new CongaLineHead(tpos, b.owner)
-			case buildorders[30]
-				new TerrainBlocker(tpos, b.owner)
-			case buildorders[31]
-				new VolcanoObstacle(tpos, b.owner)
-			case buildorders[32]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[33]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[34]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[35]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[36]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[37]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[38]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[39]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[40]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[41]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[42]
-				new Decoration(tpos, b.owner,id,GetRandomReal(0, 360))
-			case buildorders[43]
-				new MemoryAccessPedestal(tpos, b.owner)
-			case buildorders[44]
-				new Arcanery(tpos, b.owner)
+		var i = 1
+		while buildorders[i] > 0
+			if id == buildorders[i]
+				newObjectFromId(b.owner, tpos, i)
+				break
+			i++
 	else
 		DisplayTextToPlayer( b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
-
 	b.actor.abortOrder()
+
+
+public constant JUMPER_INDEX = 1
+public constant REVIVE_INDEX = 2
+public constant TELEPORTER_INDEX = 14
+
+public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
+	switch id
+		case JUMPER_INDEX
+			return new Jumper(tpos, owner)
+		case REVIVE_INDEX
+			return new RevivePoint(vec3(tpos.x,tpos.y, 0.), owner)
+		case 3
+			return new Texter(tpos, owner)
+		case 5
+			return new Bombertower(tpos, owner)
+		case 6
+			return new Vortex(tpos, owner)
+		case 8
+			return new Executer(tpos, owner)
+		case 11
+			return new Booster(tpos, owner)
+		case 12
+			return new UnitRemover(tpos, owner)
+		case 13
+			return new Waypoint(tpos, owner)
+		case TELEPORTER_INDEX
+			return new Teleporter(tpos, owner)
+		case 15
+			return new Door(tpos, owner)
+		case 16
+			return new SmallObstacle(tpos, owner)
+		case 17
+			return new BigObstacle(tpos, owner)
+		case 18
+			return new Tree(tpos, owner)
+		case 21
+			return new Spinner(tpos, owner)	
+		case 20
+			return new UnitCreator(tpos, owner)
+		case 22
+			return new Decoration(tpos, owner,id,270.)
+		case 23
+			return new Tracks(tpos, owner)	
+		case 24
+			return new Fountain(tpos, owner)	
+		case 25
+			return new Powernode(tpos, owner)	
+		case 26
+			return new Trap(tpos, owner)	
+		case 27
+			return new Decoration(tpos, owner,id,270.)	
+		case 28
+			return new Decoration(tpos, owner,id,270.)
+		case 29
+			return new CongaLineHead(tpos, owner)
+		case 30
+			return new TerrainBlocker(tpos, owner)
+		case 31
+			return new VolcanoObstacle(tpos, owner)
+		case 32
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 33
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 34
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 35
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 36
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 37
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 38
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 39
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 40
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 41
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 42
+			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+		case 43
+			return new MemoryAccessPedestal(tpos, owner)
+		case 44
+			return new Arcanery(tpos, owner)
+	return null
 
 
 int array buildorders

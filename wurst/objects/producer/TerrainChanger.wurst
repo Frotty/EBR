@@ -1,7 +1,6 @@
 package TerrainChanger
 import SetupObject
 import TerrainBlocker
-import BuilderConstants
 import Preloader
 
 constant TEXTURECHANGER_ID	= 'n01E'

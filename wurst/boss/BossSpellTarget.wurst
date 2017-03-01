@@ -6,7 +6,6 @@ import Assets
 import ClosureForGroups
 import ClosureTimers
 import HashMap
-import RegionData
 
 public constant int SPELLTARGET_ID = 'u00F'
 public constant int AOE_ID = 'A06V' 

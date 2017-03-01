@@ -159,7 +159,7 @@ public abstract class Escaper extends UnitEntity
 		var ttype1 = GetTerrainType(lpos.x, lpos.y)
 		var ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()
-		int ttype = 0
+		int ttype
 		if ttype1 == rdata.getTypeSet().unwalkableId
 			if ttype2 == rdata.getTypeSet().unwalkableId
 				ttype = rdata.getTypeSet().unwalkableId

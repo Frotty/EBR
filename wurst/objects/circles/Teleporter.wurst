@@ -2,6 +2,7 @@ package Teleporter
 import BaseObject
 import PlayerData
 import EscaperSensor
+import initlater InstantBuild
 
 constant TELEPORTER_ID   = 'n00C'
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -78,6 +79,11 @@ public class Teleporter extends StaticBaseObject
 			case KILL_ID
 				actor..removeAbility(KILL_ID)..addAbility(BOTH_ID)
 				mode = TeleportMode.BOTH
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property("t", TELEPORTER_INDEX.toString()))
+		return json
 
 	ondestroy
 		if tag != null

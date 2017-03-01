@@ -5,7 +5,6 @@ import ErrorHandling
 import initlater CodeManager
 import initlater PlayerData
 import ClosureTimers
-import Json
 
 public function getSyncedData() returns SyncData
 	return GetSyncedData() castTo SyncData

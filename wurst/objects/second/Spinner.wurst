@@ -1,6 +1,5 @@
 package Spinner
 import SetupObject
-import Remove
 import Preloader
 import Obstacle
 

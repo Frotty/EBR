@@ -1,5 +1,4 @@
 package RevivePointModifier
-import UnitRecycler
 constant int REV_MODIFIER_DUMMY_ID = 'u00H'
 public constant int CREATE_REV_MOD_ID = 'A07M'
 public constant int REMOVE_REV_MOD_ID = 'A07N'

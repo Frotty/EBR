@@ -19,9 +19,6 @@ public enum Tile
 	ICE_REVERSE
 
 public class TileData implements Serializable
-	static constant X_KEY = "x"
-	static constant Y_KEY = "y"
-	static constant TYPE_KEY = "t"
 	matrixpos offset
 	vec2 pos
 	effect fx
@@ -42,18 +39,19 @@ public class TileData implements Serializable
 	override function serialize() returns Json
 		this.tile = getTileFromType(pos)
 		let json = new Json()
-			..addProperty(new Property(X_KEY, offset.x.toString()))..addProperty(new Property(Y_KEY, offset.y.toString()))
+			..addProperty(new Property(KEY_X, (offset.x - (serializeOrigin.x / 128)).toInt().toString()))
+			..addProperty(new Property(KEY_Y, (offset.y - (serializeOrigin.y / 128)).toInt().toString()))
 		if tile != Tile.WALKABLE
-			json..addProperty(new Property(TYPE_KEY, (getTileFromType(pos) castTo int).toString()))
+			json..addProperty(new Property(KEY_TYPE, (tile castTo int).toString()))
 		return json
 
 	override function deserialize(Json json)
-		offset = matrixpos(json.getInt(X_KEY),json.getInt(Y_KEY))
+		offset = matrixpos(json.getInt(KEY_X),json.getInt(KEY_Y))
 		pos = vec2(serializeOrigin.x + offset.x * 128.,serializeOrigin.y + offset.y * 128.).toTile()
 		if not getRegionData(pos).canBuild(owner)
 			return
 			
-		tile = json.getInt(TYPE_KEY) castTo Tile
+		tile = json.getInt(KEY_TYPE) castTo Tile
 		if tile == Tile.UNWALKABLE
 			tile = Tile.WALKABLE
 		let rdat = getRegionData(pos)
@@ -71,7 +69,7 @@ public class TileData implements Serializable
 			case POISON
 				pos.setTerrainType(POISON, -1, 1, 0)
 			default
-
+				pos.setTerrainType(rdat.getTypeSet().walkableId, -1, 1, 0)
 
 public function getTileFromType(vec2 pos) returns Tile
 	let ttype = GetTerrainType(pos.x, pos.y)

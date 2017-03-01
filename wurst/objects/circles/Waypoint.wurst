@@ -1,7 +1,6 @@
 package Waypoint
 import BaseObject
 import Escaper
-import ClosureTimers
 import TeleporterTarget
 import Builder
 
@@ -11,8 +10,6 @@ constant int DEC_ID = 'A055'
 constant int WISP_ID = 'A027'
 constant AND_ID = 'A08H'
 constant INTERVAL = .25
-
-	
 constant real 	EVENT_RADIUS	= 32.
 
 class DelayData

@@ -1,6 +1,5 @@
 package UnitRemover
 import BaseObject
-import Remove
 
 constant int ID = 'n003'
 
