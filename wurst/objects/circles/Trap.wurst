@@ -307,6 +307,11 @@ public class Trap extends StaticBaseObject
 					goocounter++
 					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.ORANGEGOO castTo int).val )
 		return false
+	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, TRAP_INDEX.toString()))
+		return json
 		
 constant int NEXT_SFX_ABIL = 'A06D'
 constant int PREV_SFX_ABIL = 'A06C'

@@ -486,6 +486,11 @@ public class Executer extends StaticBaseObject
 					verticalTileSize --
 		return false
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, EXECUTER_INDEX.toString()))
+		return json
+
 
 
 //ABILITY ID-s

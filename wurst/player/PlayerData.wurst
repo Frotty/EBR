@@ -15,6 +15,7 @@ import CodeManager
 import Playerfile
 import PlayerMemoryData
 import SyncWrapper
+import SoundUtils
 
 trigger leaveTrig
 
@@ -23,6 +24,7 @@ public PlayerData array pData
 public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
+constant questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
 
 public enum Role
 	BUILDER
@@ -174,7 +176,7 @@ public class PlayerData
 
 	ondestroy
 		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
-		PlaySoundBJ(gg_snd_QuestFailed)
+		questFailedSound.play()
 		if selector != null
 			destroy selector
 		if escaper != null

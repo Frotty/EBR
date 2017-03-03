@@ -1,6 +1,5 @@
 package Commands
 import PlayerData
-import Intro
 import ClosureTimers
 import SetupBox
 import Spaceship
@@ -58,7 +57,6 @@ function onCommandChat()
 			s += "            |cffFF9C29Owners|r: " 
 			DisplayTimedTextToPlayer(p, 0., 0., 20, s)
 		case "intro"
-			startIntroFor(pd)
 		case "test"
 			startTestmode(pd)
 		case "smode"

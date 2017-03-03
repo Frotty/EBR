@@ -87,14 +87,13 @@ public class Jumper extends StaticBaseObject
 
 	override function serialize() returns Json
 		let json = super.serialize()
-		json.addProperty(new Property("t", JUMPER_INDEX.toString()))
+		json.addProperty(new Property(KEY_TYPE, JUMPER_INDEX.toString()))
 		json.addProperty(new Property("f", (jumpForce.get() * 100.).toInt().toString()))
 		return json
 
 	override function deserialize(Json json)
 		super.deserialize(json)
 		jumpForce.setVal(json.getReal("f") / 100.)
-		print("loaded jumper: " + jumpForce.get().toString())
 				
 	ondestroy
 		for i = 0 to 4

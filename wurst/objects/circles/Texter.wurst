@@ -73,6 +73,11 @@ public class Texter extends StaticBaseObject
 	ondestroy
 		if text != null
 			text.destr()
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, TEXTER_INDEX.toString()))
+		return json
 		
 	
 function getSelectedTexters(player p) returns group
@@ -106,7 +111,8 @@ function getColorFromString(string s) returns color
 				component++
 				tempstring = ""
 	return stringcolor
-	
+
+
 @init1 function init_Texter()
 	trigger textrig = CreateTrigger()
 	trigger coltrig = CreateTrigger()

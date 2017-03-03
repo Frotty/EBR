@@ -122,4 +122,9 @@ public class Waypoint extends StaticBaseObject
 		thistype obj = source.getUserData() castTo thistype
 		obj.onEnter(GetTriggerUnit())
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, WAYPOINT_INDEX.toString()))
+		return json
+
 

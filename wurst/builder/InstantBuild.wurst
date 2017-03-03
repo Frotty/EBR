@@ -1,5 +1,6 @@
 package InstantBuild
 import Builder
+import EscaperKillers
 import Door
 import Arcanery
 import Revivepoint
@@ -24,7 +25,7 @@ import TerrainBlocker
 import Fountain
 import Decoration
 import Pedestal
-import PlayerData
+import Bomber
 
 public function isOrderBuildOrder( int o ) returns boolean
 	int i = 0
@@ -47,54 +48,49 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 		DisplayTextToPlayer( b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	b.actor.abortOrder()
 
-
-public constant JUMPER_INDEX = 1
-public constant REVIVE_INDEX = 2
-public constant TELEPORTER_INDEX = 14
-
 public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 	switch id
 		case JUMPER_INDEX
 			return new Jumper(tpos, owner)
 		case REVIVE_INDEX
 			return new RevivePoint(vec3(tpos.x,tpos.y, 0.), owner)
-		case 3
+		case TEXTER_INDEX
 			return new Texter(tpos, owner)
-		case 5
+		case BOMBTOWER_INDEX
 			return new Bombertower(tpos, owner)
-		case 6
+		case VORTEX777_INDEX
 			return new Vortex(tpos, owner)
-		case 8
+		case EXECUTER_INDEX
 			return new Executer(tpos, owner)
-		case 11
+		case BOOSTER_INDEX
 			return new Booster(tpos, owner)
-		case 12
+		case UNITREMOVER_INDEX
 			return new UnitRemover(tpos, owner)
-		case 13
+		case WAYPOINT_INDEX
 			return new Waypoint(tpos, owner)
 		case TELEPORTER_INDEX
 			return new Teleporter(tpos, owner)
-		case 15
+		case DOOR_INDEX
 			return new Door(tpos, owner)
-		case 16
+		case SMALLOBS_INDEX
 			return new SmallObstacle(tpos, owner)
-		case 17
+		case BIGOBS_INDEX
 			return new BigObstacle(tpos, owner)
-		case 18
+		case TREE_INDEX
 			return new Tree(tpos, owner)
-		case 21
+		case SPINNER_INDEX
 			return new Spinner(tpos, owner)	
-		case 20
+		case UNITCREATOR_INDEX
 			return new UnitCreator(tpos, owner)
-		case 22
+		case DECORATION_INDEX
 			return new Decoration(tpos, owner,id,270.)
-		case 23
+		case TRACKS_INDEX
 			return new Tracks(tpos, owner)	
-		case 24
+		case FOUNTAIN_INDEX
 			return new Fountain(tpos, owner)	
-		case 25
+		case POWERNODE_INDEX
 			return new Powernode(tpos, owner)	
-		case 26
+		case TRAP_INDEX
 			return new Trap(tpos, owner)	
 		case 27
 			return new Decoration(tpos, owner,id,270.)	
@@ -102,11 +98,11 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new Decoration(tpos, owner,id,270.)
 		case 29
 			return new CongaLineHead(tpos, owner)
-		case 30
+		case CONGA_INDEX
 			return new TerrainBlocker(tpos, owner)
-		case 31
+		case TBLOCKER_INDEX
 			return new VolcanoObstacle(tpos, owner)
-		case 32
+		case VOLCANO_INDEX
 			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
 		case 33
 			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
@@ -130,8 +126,14 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
 		case 43
 			return new MemoryAccessPedestal(tpos, owner)
-		case 44
+		case ARCANERY_INDEX
 			return new Arcanery(tpos, owner)
+		case SMALLKILL_INDEX
+			new SmallKiller(tpos,owner)
+		case BIGKILL_INDEX
+			new BigKiller(tpos,owner)
+		case BOMBER_INDEX
+			new Bomber(tpos,owner)
 	return null
 
 

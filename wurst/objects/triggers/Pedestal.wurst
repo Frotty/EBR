@@ -14,6 +14,7 @@ import JsonParser
 import TerrainBlocker
 import TileData
 import LZW
+import StringUtils
 
 constant CHAR_STEPSIZE = 180
 
@@ -26,6 +27,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	private LinkedList<TileData> tiles = new LinkedList<TileData>()
 	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
 	private boolean syncingDone = true
+	private texttag ttag = createTTEx(pos, "|cff4AA542ready", 10)
 	let parser = new JsonParser()
 	let listparser = new JsonParser()
 	
@@ -69,6 +71,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				tiles.add(new TileData(targPos, mpos, owner))
 
 	function loadSlot(int slotId)
+		ttag..center(pos, "|cff0884CEloading...", 10)
 		lastRef[owner.getId()] = this
 		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString(), Filter(() -> onLoadSlotSynced()))
 
@@ -97,14 +100,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	function loadEntities(LinkedList<BigSubString> list)
 		// load entities
-		print("Loading Entities")
+		ttag..center(pos, "|cff0884CEloading Entities...", 10)
 		let bs = new BigString()
 		var itr = list.staticItr()
 		doSeq(1, (SeqCallback cb) -> begin
+			cb.done = true
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
-				print("Loading Entity length: " + next.getSingleLength().toString())
 				listparser.setInput(bs..addSubString(next))
 				listparser.parse((PayloadCallback cb2) -> begin
 					let json = listparser.output
@@ -117,7 +120,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				cb.terminate()
 				destroy bs
-				print("Entites loaded!")
+				ttag..center(pos, "|cff0884CEEntites loaded!", 10)
 				// Load tiles
 				parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
 					loadTiles(listparser.outputList)
@@ -125,32 +128,35 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		end)
 
 	function loadTiles(LinkedList<BigSubString> list)
-		print("Loading tiles..")
+		ttag..center(pos, "|cff0884CEloading Tiles...", 10)
 		let td = new TileData()
 		let bs = new BigString()
-		
+		td.owner = owner
 		var itr = list.staticItr()
 		doSeq(1, (SeqCallback cb1) -> begin
+			cb1.done = true
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
 				parser.setInput(bs..addSubString(next))
 				parser.parse((PayloadCallback cb2) -> begin
-					print("load tile")
 					td..deserialize(parser.output)
 					parser.output.reset()
 					cb1.doStep()
 				end)
 			else
 				cb1.terminate()
-				print("Tiles loaded!")
+				ttag..center(pos, "|cffFFBD21load finished!", 10)
 		end)
+		destroy td
+
 
 	BigString tileString = new BigString()
 	BigString entString = new BigString()
 
 	int currentSlotId
 	function saveSlot(int slotId)
+		ttag..center(pos, "|cff0884CEsaving...", 10)
 		serializeOrigin = pos.toVec2().toTile().toVec3()
 		let itr = entities.staticItr()
 		currentSlotId = slotId
@@ -183,7 +189,6 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				cb.terminate()
 				tileString.addString(JSON_CLOSE_ARRAY.token)
-				print("added closeing bracket")
 				tileString.debugPrint()
 				saveFile()
 		end)
@@ -205,7 +210,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					compressedData.startoffset += BIG_SUBSTRING_LEN
 				f.write(compressedData.getString(0))
 				f.close()
-
+				ttag..center(pos, "|cffFFBD21save finished!", 10)
 			
 			destroy big
 		end)
@@ -257,4 +262,5 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		destroy effects
 		destroy entities
 		destroy tiles
+		ttag.destr()
 

@@ -3,9 +3,11 @@ import SetupObject
 import PlayerData
 import Startmazes
 import ClosureTimers
+import SoundUtils
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
+constant SoundDefinition rescueSound = new SoundDefinition("Sound\\Interface\\Rescue.wav", false)
 
 public class RevivePoint extends StaticSetupObject
 	boolean reached = false
@@ -22,7 +24,7 @@ public class RevivePoint extends StaticSetupObject
 			reached = true
 			actor.setColor(reacher.owner.getColor())
 			currentRevivepoint = pos.toVec2()
-			PlaySoundBJ(gg_snd_Rescue)
+			rescueSound.play()
 			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
 			this.setCurrentRegion()
 			if this.getCurrentRegion().getPermission(STAFF_PLAYER) == Permission.OWNER
@@ -63,3 +65,8 @@ public class RevivePoint extends StaticSetupObject
 				
 	static function filter() returns boolean
 		return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, REVIVE_INDEX.toString()))
+		return json

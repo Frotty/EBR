@@ -108,14 +108,15 @@ public class StaticBaseObject extends UnitEntity
 
 	override function serialize() returns Json
 		let json = super.serialize()
-		if rallyUnit == null
-			json
-			..addProperty(new Property(KEY_RALLY_X, (rallyPoint.x-serializeOrigin.x).toInt().toString()))
-			..addProperty(new Property(KEY_RALLY_Y, (rallyPoint.y-serializeOrigin.y).toInt().toString()))
+		if rallyUnit != null
+			rallyPoint = rallyUnit.getPos3Zero()
+
+		json
+		..addProperty(new Property(KEY_RALLY_X, (rallyPoint.x-serializeOrigin.x).toInt().toString()))
+		..addProperty(new Property(KEY_RALLY_Y, (rallyPoint.y-serializeOrigin.y).toInt().toString()))
 		return json
 
 	override function deserialize(Json json)
 		super.deserialize(json)
 		let rpos = vec2(serializeOrigin.x+json.getReal(KEY_RALLY_X), serializeOrigin.y+json.getReal(KEY_RALLY_Y))
-		print("rally : " + rpos.toString())
 		setRallyPoint(rpos)

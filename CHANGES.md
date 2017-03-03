@@ -1,13 +1,16 @@
-[0.88h]
+[0.88m]
 [*] fixed double free when picking key without permission
 [*] fixed pointer performance issue
 [*] fixed airkiller ghost having different flyheight
 [*] fixed MAP not being deleteable and changing terrain outside region
 [*] fixed lagg on placing first unitcreator
-[*] improved MAP functionality
+[*] fixed unitremover removing obstacles and decoration
+[*] fixed multiboard title
+[*] improved MAP functionality (can save some objects but limited, added compression, has known issues - still _experimental_)
 [*] improved blue goo jumping behavíour on ice
+[*] changed big grass obstacle model
 [*] renamed firekiller
-
+[*] removed omnilight from circleOfPower model to avoid graphic glitches
 
 [0.88f]
 [*] reduced small killer height so it can be jumped more easily

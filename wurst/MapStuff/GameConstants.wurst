@@ -5,7 +5,7 @@ public string array tags
 public integer array expBounds
 public string array ranks
 
-public constant string MAP_VER = "EBR 0.87"
+public constant string MAP_VER = "EBR 0.88"
 
 public constant STAFF_PLAYER = players[14]
 

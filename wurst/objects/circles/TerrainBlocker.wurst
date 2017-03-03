@@ -38,4 +38,9 @@ public class TerrainBlocker extends StaticBaseObject
 			var bs = bitset(tileModifierMap.loadInt(m.x, m.y))
 			bs = bs.remove(TileModifiers.BLOCK castTo int)
 			tileModifierMap.saveInt(m.x, m.y, bs.val)
+	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, TBLOCKER_INDEX.toString()))
+		return json
 		

@@ -98,6 +98,11 @@ public class Arcanery extends StaticBaseObject
 		if e instanceof Escaper
 			obj.onEnter(e castTo Escaper)
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, ARCANERY_INDEX.toString()))
+		return json
+
 
 @objectgen function genAbils()
 	SILENCE_ID = ABIL_ID_GEN.next()

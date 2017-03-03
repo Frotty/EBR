@@ -1,5 +1,7 @@
 package UnitRemover
 import BaseObject
+import Obstacle
+import Decoration
 
 constant int ID = 'n003'
 
@@ -19,5 +21,10 @@ public class UnitRemover extends StaticBaseObject
 		var sdata = GetTriggeringTrigger().getSource().getUserData() castTo UnitRemover
 		if data > 0 and (data castTo Entity).owner == sdata.owner and u.hasAbility(REMOVE_ID)
 			var edata = data castTo Entity
-			if edata instanceof SetupObject
+			if edata instanceof SetupObject and not edata instanceof Obstacle and not edata instanceof Decoration
 				edata.terminate()
+	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, UNITREMOVER_INDEX.toString()))
+		return json

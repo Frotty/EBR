@@ -1,7 +1,8 @@
 package UnitProducer
 import BaseObject
 import EscaperKillers
-import initlater  PlayerData
+import initlater PlayerData
+import initlater InstantBuild
 import Preloader
 import TeleporterTarget
 import BomberTarget
@@ -68,12 +69,13 @@ public class UnitProducer extends StaticBaseObject
 			return false
 		if data == null
 			return false
-		if data.canBuild(obj.owner) and data.getTypeSet().bigKillerId > 0 
+		if data.canBuild(obj.owner) and data.getTypeSet().bigKillerId > 0
+			var index = -1
 			switch id 
 				case BIG_KILLER // Big Killer
-					new BigKiller(rallyPos,obj.owner)
+					index = BIGKILL_INDEX
 				case SMALL_KILLER // Small Killer
-					new SmallKiller(rallyPos,obj.owner)
+					index = SMALLKILL_INDEX
 				case BR_KILLER // Big Random Killer
 					new BigRandomKiller(rallyPos,obj.owner)
 				case SR_KILLER // Small Random Killer
@@ -91,7 +93,7 @@ public class UnitProducer extends StaticBaseObject
 				case POINTER
 					new Pointer(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case BOMBER
-					new Bomber(vec2(rallyPos.x,rallyPos.y), obj.owner)
+					index = BOMBER_INDEX
 				case KNOCKBACK
 					new Knockbacker(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case FACELESS
@@ -100,6 +102,8 @@ public class UnitProducer extends StaticBaseObject
 					new AirKiller(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case FIRE
 					new FireKiller(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
+			if index > 0
+				newObjectFromId(obj.owner, rallyPos, index)
 				
 		else
 			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")

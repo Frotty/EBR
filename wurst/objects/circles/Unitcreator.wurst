@@ -114,6 +114,11 @@ public class UnitCreator extends StaticBaseObject
 				actor..removeAbility(RANDOM_ID)..addAbility(FIXED_ID)
 				tmode = TimerMode.FIXED
 	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
+		return json
+	
 int INCREASE_INTERVAL_ABIL = 'A01P'
 int DECREASE_INTERVAL_ABIL = 'A01R'
 int START_ABIL = 'A00A'

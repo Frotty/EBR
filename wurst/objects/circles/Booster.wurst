@@ -32,5 +32,9 @@ public class Booster extends StaticBaseObject
 			case DECREASE_SPEED_ABIL
 				boostspeed.decrement(this, 20)
 
-
+	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, BOOSTER_INDEX.toString()))
+		return json
 

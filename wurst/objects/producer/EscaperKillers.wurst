@@ -30,6 +30,12 @@ public class SmallKiller extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_SK, COLL_SIZE_SK + 16)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, SMALLKILL_INDEX.toString()))
+		return json
 		
 public class SmallRandomKiller extends EscaperSensorSetup
 	
@@ -52,6 +58,12 @@ public class BigKiller extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_BK, COLL_SIZE_BK)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, BIGKILL_INDEX.toString()))
+		return json
 		
 public class BigRandomKiller extends EscaperSensorSetup
 
