@@ -1,3 +1,17 @@
+[0.88r]
+[*] fixed saving only working for a very small amount of tiles/objects
+
+[0.88q]
+[*] fixed not creating savefiles for new players (this prohibited players without prior savefile from save/load via MAP and rank)
+
+[0.88n]
+[*] fixed forest startmaze jump exploit
+[*] fixed instant builder broken due to M.A.P.
+[*] fixed objects being removed on save
+[*] added overhead attachment to COP and Box models
+[*] added serialization for more objects (WIP)
+[*] new icons
+
 [0.88m]
 [*] fixed double free when picking key without permission
 [*] fixed pointer performance issue

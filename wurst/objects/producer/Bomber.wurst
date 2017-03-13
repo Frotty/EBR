@@ -72,4 +72,9 @@ public class Bomber extends UnitEntity
 		setup.setEntity(null)
 		setup.remove()
 	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, BOMBER_INDEX.toString()))
+		return json	
 						

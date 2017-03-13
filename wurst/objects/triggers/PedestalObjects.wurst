@@ -60,7 +60,7 @@ public int LOAD4_ID
 		..presetTargetTypes(Targettype.UNIT)
 		..presetCooldown((int lvl) -> 0.)
 		..presetManaCost((int lvl) -> 0)
-		..setTargetsAllowed(1, "enemies,friend,invulnerable,organic,vulnerable")
+		..setTargetsAllowed(1, "enemies,friend,invulnerable,vulnerable")
 		..presetTooltipNormal((int lvl) -> "Select single entity")
 		..presetTooltipNormalExtended((int lvl) -> "Adds the target entity to the list of saved objects")
 		..presetButtonPosNormal(0, 0)

@@ -11,7 +11,7 @@ public class Playerfile
 
 	function save(File file)
 		file.write(HASH)
-		for pmd in pmDatas
+		for pmd from pmDatas.staticItr()
 			pmd.save(file)
 
 	function load(SyncedFile file)

@@ -1,5 +1,6 @@
 package BuilderConstants
 import Preloader
+import public SerializeIds
 
 public constant vec2 hidden = vec2(-6000,6000)
 public constant REMOVE_ID = 'A00K'
@@ -10,35 +11,6 @@ public constant int LAVA = 'Glvc'
 public constant int POISON = 'Cpos'
 public constant int RUNES = 'Irbk'
 
-public constant JUMPER_INDEX = 1
-public constant REVIVE_INDEX = 2
-public constant TEXTER_INDEX = 3
-public constant BOMBTOWER_INDEX = 5
-public constant VORTEX777_INDEX = 6
-public constant EXECUTER_INDEX = 8
-public constant BOOSTER_INDEX = 11
-public constant UNITREMOVER_INDEX = 12
-public constant WAYPOINT_INDEX = 13
-public constant TELEPORTER_INDEX = 14
-public constant DOOR_INDEX = 15
-public constant SMALLOBS_INDEX = 16
-public constant BIGOBS_INDEX = 17
-public constant TREE_INDEX = 18
-public constant SPINNER_INDEX = 19
-public constant UNITCREATOR_INDEX = 20
-public constant DECORATION_INDEX = 21
-public constant TRACKS_INDEX = 22
-public constant FOUNTAIN_INDEX = 23
-public constant POWERNODE_INDEX = 24
-public constant TRAP_INDEX = 25
-public constant CONGA_INDEX = 29
-public constant TBLOCKER_INDEX = 30
-public constant VOLCANO_INDEX = 31
-public constant ARCANERY_INDEX = 44
-public constant SMALLKILL_INDEX = 45
-public constant BIGKILL_INDEX = 46
-public constant BOMBER_INDEX = 47
-public constant KEY_INDEX = 48
 
 public constant int BUILDER_1 = 'u001'
 public constant int BUILDER_2 = 'u005'

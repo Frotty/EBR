@@ -6,6 +6,7 @@ import InstantDummyCaster
 import ChannelAbilityPreset
 import Fx
 import PresetBuffs
+import SerializeIds
 
 constant ARCANERY_ID = 'n002'
 constant SILENCE_BUFF_ID = 'BNsi'

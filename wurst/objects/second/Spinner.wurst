@@ -123,7 +123,12 @@ public class Spinner extends SetupObject
 				sinFactor.increment(this, 1)
 			case SDEC_ID
 				sinFactor.decrement(this, 0)
-	
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property(KEY_TYPE, SPINNER_INDEX.toString()))
+		return json
+
 init
 	preloadAbility(SPELL_ID)
 	preloadAbility(SPELL2_ID)

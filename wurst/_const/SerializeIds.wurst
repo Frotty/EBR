@@ -1,0 +1,41 @@
+package SerializeIds
+
+// Ids to map between int -> WurstClass
+public constant JUMPER_INDEX = 1
+public constant REVIVE_INDEX = 2
+public constant TEXTER_INDEX = 3
+public constant BOMBTOWER_INDEX = 4
+public constant VORTEX_INDEX = 5
+public constant EXECUTER_INDEX = 6
+public constant BOOSTER_INDEX = 7
+public constant UNITREMOVER_INDEX = 8
+public constant WAYPOINT_INDEX = 9
+public constant TELEPORTER_INDEX = 10
+public constant DOOR_INDEX = 11
+public constant SMALLOBS_INDEX = 12
+public constant BIGOBS_INDEX = 13
+public constant TREE_INDEX = 14
+public constant SPINNER_INDEX = 15
+public constant UNITCREATOR_INDEX = 16
+public constant TRACKS_INDEX = 17
+public constant FOUNTAIN_INDEX = 18
+public constant POWERNODE_INDEX = 19
+public constant TRAP_INDEX = 20
+public constant CONGA_INDEX = 21
+public constant TBLOCKER_INDEX = 22
+public constant VOLCANO_INDEX = 23
+public constant WALL_INDEX = 24
+public constant HWALL_INDEX = 25
+public constant VWALL_INDEX = 26
+public constant ARCANERY_INDEX = 27
+public constant SMALLKILL_INDEX = 28
+public constant BIGKILL_INDEX = 29
+public constant BOMBER_INDEX = 30
+public constant KEY_INDEX = 31
+public constant BOMBTARGET_INDEX = 32
+public constant BIGRANDKILL_INDEX = 33
+public constant SMALLRANDKILL_INDEX = 34
+public constant TANKKILL_INDEX = 35
+public constant GLAIVEKILL_INDEX = 36
+public constant AIRKILL_INDEX = 37
+public constant FIREKILL_INDEX = 38

@@ -50,3 +50,8 @@ public class Fountain extends StaticSetupObject
 				cure = true
 				setup..removeAbility(CURE_ID)..addAbility(BOTH_ID)
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property(KEY_TYPE, FOUNTAIN_INDEX.toString()))
+		return json
+

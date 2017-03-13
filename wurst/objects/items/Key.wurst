@@ -1,12 +1,13 @@
 package Key
 import ItemObject
-import Escaper
+import Json
 import ClosureTimers
 import Fx
 public int array keyIds
 
 constant int DYN_ID = 'A00M'
 constant int STATIC_ID = 'A01O'
+constant KEY_COLOR = "c"
 
 public class Key extends ItemObject
 	EBRColor col = EBRColor.WHITE
@@ -99,6 +100,16 @@ public class Key extends ItemObject
 					returnSfx.destr()
 		recolor()
 		return false
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property(KEY_TYPE, KEY_INDEX.toString()))
+		json.addProperty(new Property(KEY_COLOR, (col castTo int).toString()))
+		return json
+
+	override function deserialize(Json json)
+		col = json.getInt(KEY_COLOR) castTo EBRColor
+		recolor()
 		
 	ondestroy
 		if fx != null
@@ -107,6 +118,7 @@ public class Key extends ItemObject
 		if returnSfx != null
 			returnSfx.destr()
 			
+	
 		
 @init1 function init_Key()
 	keyIds[0] = 'I009'

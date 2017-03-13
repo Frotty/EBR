@@ -3,6 +3,7 @@ import public Entity
 import public TerrainUtils
 import public ConfigValue
 import public SetupObject
+import public SerializeIds
 import Assets
 
 /*  ---Creating a new Baseobject---

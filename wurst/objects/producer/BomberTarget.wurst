@@ -9,3 +9,8 @@ public class BomberTarget extends SetupObject
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, ID, pos, angle(0), this), getUnit(owner, ID, pos, angle(0), this), 0.)
 		
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, BOMBTARGET_INDEX.toString()))
+		return json	

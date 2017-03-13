@@ -64,6 +64,11 @@ public class Vortex extends UnitEntity
 				zMode = ZMode.HEMISPHERE
 				createTTEx(pos, vec2(0,0.06), "Z Mode: Hemisphere", 12,  2., colorA(255,255,255,0), owner)
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property(KEY_TYPE, VORTEX_INDEX.toString()))
+		return json
+
 @objectgen function genAbils()
 	ZMODE_NONE = ABIL_ID_GEN.next()
 	ZMODE_CYLI = ABIL_ID_GEN.next()

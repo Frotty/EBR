@@ -47,6 +47,12 @@ public class SmallRandomKiller extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_SRK, COLL_SIZE_SRK)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, SMALLRANDKILL_INDEX.toString()))
+		return json
 	
 public class BigKiller extends EscaperSensorSetup
 
@@ -75,7 +81,13 @@ public class BigRandomKiller extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_BRK, COLL_SIZE_BRK)
-		
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, BIGRANDKILL_INDEX.toString()))
+		return json
+
 public class TankKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
@@ -86,6 +98,12 @@ public class TankKiller extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_TANK, COLL_SIZE_TANK)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, TANKKILL_INDEX.toString()))
+		return json
 		
 public class GlaiveKiller extends EscaperSensorSetup
 
@@ -97,6 +115,12 @@ public class GlaiveKiller extends EscaperSensorSetup
 
 	construct(unit existing)
 		super(existing, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, GLAIVEKILL_INDEX.toString()))
+		return json
 
 public class AirKiller extends EscaperSensorSetup
 
@@ -116,6 +140,12 @@ public class AirKiller extends EscaperSensorSetup
 				let escaper = target castTo Escaper
 				escaper.kill(this)
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, AIRKILL_INDEX.toString()))
+		return json
+
 public class FireKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
@@ -133,3 +163,8 @@ public class FireKiller extends EscaperSensorSetup
 		actor.issueImmediateOrder("immolation")
 		setup.removeAbility('A08I')
 		
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, FIREKILL_INDEX.toString()))
+		return json

@@ -72,10 +72,7 @@ public class SyncPayload
 
 public function getSyncedFile(PlayerData pd, string filename, filterfunc listener)
 	if pd.syncPayload != null
-		if pd.syncPayload.syncedFile != null
-			destroy pd.syncPayload
-		else
-			error("trying to sync while other sync in progress")
+		error("trying to sync while other sync in progress")
 	pd.syncPayload = new SyncPayload(filename, listener)
 	printLog(Loglevel.DEBUG, "Start Sync1: " + filename)
 	var lineCount = 0
@@ -104,13 +101,13 @@ public function getSyncedFile(PlayerData pd, string filename, filterfunc listene
 function onLinecountSynced()
 	printLog(Loglevel.DEBUG, "OnLCSync")
 	let syncedData = getSyncedData()
-	let pdc = pData[syncedData.p.getId()]
-	let payload = pdc.syncPayload
+	let pd = pData[syncedData.p.getId()]
+	let payload = pd.syncPayload
 	let lineCount = syncedData.readInt(0)
 	
 	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
 	if lineCount > 0
-		if GetLocalPlayer() == pdc.p
+		if GetLocalPlayer() == pd.p
 			let file = File.open(FOLDER_NAME, payload.fileName, Mode.READ)
 			// Remove verify hash
 			for i = 0 to lineCount-1
@@ -119,7 +116,7 @@ function onLinecountSynced()
 			file.close()
 		printLog(Loglevel.DEBUG, "OnLCSync1")
 		nullTimer(() -> begin
-			let sd = new SyncData(pdc.p)
+			let sd = new SyncData(pd.p)
 			for i = 0 to lineCount-1
 				printLog(Loglevel.DEBUG, "read" )
 				let length = getSyncedData().readInt(i+1)
@@ -131,18 +128,19 @@ function onLinecountSynced()
 						nullTimer(() -> begin
 							printLog(Loglevel.DEBUG, "OnLCSync2")
 							sd.addEventListener(Filter(() -> onPlayerfileSynced()))
-							sd.addEventListener(pdc.syncPayload.finalListener)
+							sd.addEventListener(pd.syncPayload.finalListener)
 							sd.start()
 							printLog(Loglevel.DEBUG, "OnLCSync3")
 							destroy getSyncedData()
 						end)				
 					printLog(Loglevel.DEBUG, "string added")
 				end)
-				
-
-			
 		end)
-	
+	else
+		printLog(Loglevel.DEBUG, "No Savefile")
+		let sd = new SyncData(pd.p)
+		sd.addEventListener(payload.finalListener)
+		sd.start()
 
 function onPlayerfileSynced()
 	printLog(Loglevel.DEBUG, "OnPFSyncWrapper")
@@ -176,6 +174,9 @@ public class SyncedFile
 	function read() returns string
 		readpos--
 		return stringTable.loadString(size-readpos)
+
+	// ondestroy
+	// 	destroy stringTable
 		
 
 	

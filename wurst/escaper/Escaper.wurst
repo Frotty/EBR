@@ -1,4 +1,5 @@
 package Escaper
+import public Json
 import PhysicsEntity
 import Assets
 import public Entity
@@ -12,6 +13,7 @@ import public initlater RegionData
 import Projectile
 import ErrorHandling
 import JukeBox
+import public SerializeIds
 import initlater PlayerData
 
 constant real COLL_RADIUS = 32.

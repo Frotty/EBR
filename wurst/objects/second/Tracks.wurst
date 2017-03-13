@@ -1,6 +1,7 @@
 package Tracks
 import Escaper
 import ConfigValue
+import Json
 
 int array TRACKS
 
@@ -88,6 +89,11 @@ public class Tracks extends UnitEntity
 			height = 0
 			width = tsize
 		recreateDummy()
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property(KEY_TYPE, TRACKS_INDEX.toString()))
+		return json
 		
 
 init

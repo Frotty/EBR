@@ -1,5 +1,5 @@
 package ItemObject
-import Escaper
+import public Escaper
 
 public abstract class ItemObject extends Entity
 	unit setup

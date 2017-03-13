@@ -32,6 +32,12 @@ public class Bombertower extends StaticBaseObject
 	ondestroy
 		dummy.remove()
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, BOMBERTOWER_ID.toString()))
+		return json	
+
 function checkAttackOrder()
 	var i = GetIssuedOrderId()
 	var e = GetOrderedUnit().getEntity()
@@ -54,7 +60,7 @@ function checkAttackOrder()
 				IssueImmediateOrderById(obj.actor, STOP_ORDER)
 			
 			
-				
+			
 
 @init1 function init_Bombertower()
 	orderTrigger = CreateTrigger()

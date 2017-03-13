@@ -3,6 +3,8 @@ import EntityManagement
 import Startmazes
 import PlayerData
 import JukeBox
+import Encoder
+import LZW
 
 init
 	callGen()
@@ -30,10 +32,10 @@ function initPartTwo()
 	GetExpiredTimer().start(0.01, () -> partThree())
 
 function partThree()
+	GetExpiredTimer().release()
 	initStartmazes()
 	checkPlayerLocalFiles()
 	jukeBox.playNextMusic()
-	GetExpiredTimer().release()
 	// let bs = new BigString()
 	// let test = "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
 	// bs.addString(test)
@@ -48,37 +50,7 @@ function partThree()
 	// 		let decompressed = sq2.customData castTo BigString
 	// 	end)
 	// end)
-	// jp = new JsonParser()..setInput(bs)
-	// jp..parse((SeqCallback cb) -> begin
-	// 	print("done parse")
-	// 	let bst = new BigString()
-	// 	jp.output.addToBigString(bst)
-	// 	let out = bst.getString(0)
-	// 	print("out = " + out)
-	// 	if out == test
-	// 		print("gg man")
-	// 	jp.output.addProperty(new Property(new BigSubString("a"),new BigSubString("test")))
-	// 	print("getting string list")
-	// 	jp.output.getStringList("t", jp, (SeqCallback cb) -> begin
-	// 		print("got string list")
-	// 		let itr = (cb.customData castTo JsonParser).outputList.staticItr()
-	// 		doSeq(1, (SeqCallback cb2) -> begin
-	// 			cb2.done = true
-	// 			if itr.hasNext()
-	// 				bs.reset()
-	// 				bs.addSubString(itr.next())
-	// 				jp.setInput(bs)
-	// 				jp.parse((SeqCallback cb) -> begin
-	// 					print("parsed")
-	// 					cb2.doStep()
-	// 				end)
-	// 			else
-	// 				cb2.terminate()
-	// 		end)
-			
-				
-	// 	end)
-	// end)
+	// bs.reset()
 	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
 	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
 	// bs.addString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 ")
@@ -90,7 +62,7 @@ function partThree()
 	// print(bs.getString(500, 5)) // 11111
 
 	// let sc = new Scanner()..addDelimiter(" ")..setInput(bs)
-	
+	// int i = 0
 	// doSeq(3, (SeqCallback cb) -> begin
 	// 	if sc.hasNext()
 	// 		sc.next()

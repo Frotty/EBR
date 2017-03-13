@@ -25,10 +25,12 @@ import TerrainBlocker
 import Fountain
 import Decoration
 import Pedestal
+import Key
+import public SerializeIds
 import Bomber
 
 public function isOrderBuildOrder( int o ) returns boolean
-	int i = 0
+	int i = 1
 	while buildorders[i] != 0
 		if buildorders[i] == o
 			return true 
@@ -41,7 +43,7 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 		var i = 1
 		while buildorders[i] > 0
 			if id == buildorders[i]
-				newObjectFromId(b.owner, tpos, i)
+				newObjectFromId(b.owner, tpos, i, id)
 				break
 			i++
 	else
@@ -49,6 +51,9 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 	b.actor.abortOrder()
 
 public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
+	return newObjectFromId(owner, tpos, id, -1)
+
+public function newObjectFromId(player owner, vec2 tpos, int id, int origId) returns Entity
 	switch id
 		case JUMPER_INDEX
 			return new Jumper(tpos, owner)
@@ -58,7 +63,7 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new Texter(tpos, owner)
 		case BOMBTOWER_INDEX
 			return new Bombertower(tpos, owner)
-		case VORTEX777_INDEX
+		case VORTEX_INDEX
 			return new Vortex(tpos, owner)
 		case EXECUTER_INDEX
 			return new Executer(tpos, owner)
@@ -82,8 +87,8 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new Spinner(tpos, owner)	
 		case UNITCREATOR_INDEX
 			return new UnitCreator(tpos, owner)
-		case DECORATION_INDEX
-			return new Decoration(tpos, owner,id,270.)
+		case WALL_INDEX
+			return new Decoration(tpos, owner,origId,270.)
 		case TRACKS_INDEX
 			return new Tracks(tpos, owner)	
 		case FOUNTAIN_INDEX
@@ -92,97 +97,115 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new Powernode(tpos, owner)	
 		case TRAP_INDEX
 			return new Trap(tpos, owner)	
-		case 27
-			return new Decoration(tpos, owner,id,270.)	
-		case 28
-			return new Decoration(tpos, owner,id,270.)
-		case 29
-			return new CongaLineHead(tpos, owner)
+		case HWALL_INDEX
+			return new Decoration(tpos, owner,origId,270.)	
+		case VWALL_INDEX
+			return new Decoration(tpos, owner,origId,270.)
 		case CONGA_INDEX
-			return new TerrainBlocker(tpos, owner)
+			return new CongaLineHead(tpos, owner)
 		case TBLOCKER_INDEX
-			return new VolcanoObstacle(tpos, owner)
+			return new TerrainBlocker(tpos, owner)
 		case VOLCANO_INDEX
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 33
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 34
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 35
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 36
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 37
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 38
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
-		case 39
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+			return new VolcanoObstacle(tpos, owner)
 		case 40
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
 		case 41
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
 		case 42
-			return new Decoration(tpos, owner,id,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
 		case 43
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 44
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 45
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 46
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 47
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 48
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 49
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 50
+			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+		case 51
 			return new MemoryAccessPedestal(tpos, owner)
 		case ARCANERY_INDEX
 			return new Arcanery(tpos, owner)
 		case SMALLKILL_INDEX
-			new SmallKiller(tpos,owner)
+			return new SmallKiller(tpos,owner)
 		case BIGKILL_INDEX
-			new BigKiller(tpos,owner)
+			return new BigKiller(tpos,owner)
 		case BOMBER_INDEX
-			new Bomber(tpos,owner)
+			return new Bomber(tpos,owner)
+		case KEY_INDEX
+			return new Key(tpos, owner)
+		case SMALLRANDKILL_INDEX
+			return new SmallRandomKiller(tpos, owner)
+		case BIGRANDKILL_INDEX
+			return new BigRandomKiller(tpos, owner)
+		case TANKKILL_INDEX
+			return new TankKiller(tpos, owner)
+		case GLAIVEKILL_INDEX
+			return new GlaiveKiller(tpos, owner)
+		case FIREKILL_INDEX
+			return new FireKiller(tpos, owner)
+		case AIRKILL_INDEX
+			return new AirKiller(tpos, owner)
 	return null
-
 
 int array buildorders
 
 @init1 function init_InstantBuild()
-	buildorders[0] = 'n00G'
-	buildorders[1] = 'n00B' // Jumper
-	buildorders[2] = 'n000' // Revivepoint
-	buildorders[3] = 'n01B' // Texter
-	buildorders[4] = 'n001' 
-	buildorders[5] = 'h019' // BomberTower
-	buildorders[6] = 'n012' // Vortex
-	buildorders[7] = 'h009'
-	buildorders[8] = 'n01D'  // Executer
-	buildorders[9] = 'n01E'
-	buildorders[10] = 'n00F'
-	buildorders[11] = 'n00J' // Booster
-	buildorders[12] = 'n003' // UnitRemover
-	buildorders[13] = 'n004' // Waypoint
-	buildorders[14] = 'n00C' // Teleporter
-	buildorders[15] = 'h002' // Door
-	buildorders[16] = 'obSD' // Small Obstacle
-	buildorders[17] = 'obBD' // Big Obstacle
-	buildorders[18] = 'n010' // Tree
-	buildorders[19] = 'n013'
-	buildorders[20] = 'n006' // Unitcreator
-	buildorders[21] = 'h01M' // Spinner
-	buildorders[22] = 'n00P' // Wall
-	buildorders[23] = 'n01C' // Tracks
-	buildorders[24] = 'h00H' // Fountain
-	buildorders[25] = 'h0nn' // Powernode
-	buildorders[26] = 'n00I' // Trap
-	buildorders[27] = 'n00Q' // Horizontal Wall
-	buildorders[28] = 'n011' // Vertical Wall
-	buildorders[29] = 'h000' // Conga Line
-	buildorders[30] = 'h009' // TerrainBlocker
-	//Decoration
-	buildorders[31] = 'n00K' // Volcano
-	buildorders[32] = 'n00V' // Lantern
-	buildorders[33] = 'n00U' // Mushroom
-	buildorders[34] = 'n00Z' // Torch
-	buildorders[35] = 'n00T' // Rune
-	buildorders[36] = 'n01A' // Suppalight
-	buildorders[37] = 'n00M' // Magic Lantern
-	buildorders[38] = 'n014' // Farm
-	buildorders[39] = 'n00G' // Hay
-	buildorders[40] = 'n016' // Obelisk
-	buildorders[41] = 'n015' // Poison eggs
-	buildorders[42] = 'n017' // Remains
-	buildorders[43] = PED_ID // Pedestal
-	buildorders[44] = 'n002' // Arcanery
+	buildorders[JUMPER_INDEX] = 'n00B' // Jumper
+	buildorders[REVIVE_INDEX] = 'n000' // Revivepoint
+	buildorders[TEXTER_INDEX] = 'n01B' // Texter
+	buildorders[BOMBTOWER_INDEX] = 'h019' // BomberTower
+	buildorders[VORTEX_INDEX] = 'n012' // Vortex
+	buildorders[EXECUTER_INDEX] = 'n01D'  // Executer
+	buildorders[BOOSTER_INDEX] = 'n00J' // Booster
+	buildorders[UNITREMOVER_INDEX] = 'n003' // UnitRemover
+	buildorders[WAYPOINT_INDEX] = 'n004' // Waypoint
+	buildorders[TELEPORTER_INDEX] = 'n00C' // Teleporter
+	buildorders[DOOR_INDEX] = 'h002' // Door
+	buildorders[SMALLOBS_INDEX] = 'obSD' // Small Obstacle
+	buildorders[BIGOBS_INDEX] = 'obBD' // Big Obstacle
+	buildorders[TREE_INDEX] = 'n010' // Tree
+	buildorders[SPINNER_INDEX] = 'h01M' // Spinner
+	buildorders[UNITCREATOR_INDEX] = 'n006' // Unitcreator
+	buildorders[TRACKS_INDEX] = 'n01C' // Tracks
+	buildorders[FOUNTAIN_INDEX] = 'h00H' // Fountain
+	buildorders[POWERNODE_INDEX] = 'h0nn' // Powernode
+	buildorders[TRAP_INDEX] = 'n00I' // Trap
+	buildorders[CONGA_INDEX] = 'h000' // Conga Line
+	buildorders[TBLOCKER_INDEX] = 'h009' // TerrainBlocker
+	buildorders[VOLCANO_INDEX] = 'n00K' // Volcano
+	buildorders[WALL_INDEX] = 'n00P' // Wall
+	buildorders[HWALL_INDEX] = 'n00Q' // Horizontal Wall
+	buildorders[VWALL_INDEX] = 'n011' // Vertical Wall
+	buildorders[ARCANERY_INDEX] = 'n002' // Arcanery
+	buildorders[SMALLKILL_INDEX] = 'n002' // Arcanery
+	buildorders[BIGKILL_INDEX] = 'n002' // Arcanery
+	buildorders[BOMBER_INDEX] = 'n002' // Arcanery
+	buildorders[KEY_INDEX] = 'n002' // Arcanery
+	buildorders[BOMBTARGET_INDEX] = 'n002' // Arcanery
+	buildorders[BIGRANDKILL_INDEX] = 'n002' // Arcanery
+	buildorders[SMALLRANDKILL_INDEX] = 'n002' // Arcanery
+	buildorders[TANKKILL_INDEX] = 'n002' // Arcanery
+	buildorders[GLAIVEKILL_INDEX] = 'n002' // Arcanery
+	buildorders[AIRKILL_INDEX] = 'n002' // Arcanery
+	buildorders[FIREKILL_INDEX] = 'n002' // Arcanery
+	buildorders[39] = 'fuck' // Lantern
+	buildorders[40] = 'n00V' // Lantern
+	buildorders[41] = 'n00U' // Mushroom
+	buildorders[42] = 'n00Z' // Torch
+	buildorders[43] = 'n00T' // Rune
+	buildorders[44] = 'n01A' // Suppalight
+	buildorders[45] = 'n00M' // Magic Lantern
+	buildorders[46] = 'n014' // Farm
+	buildorders[47] = 'n00G' // Hay
+	buildorders[48] = 'n016' // Obelisk
+	buildorders[49] = 'n015' // Poison eggs
+	buildorders[50] = 'n017' // Remains
+	buildorders[51] = PED_ID // Pedestal

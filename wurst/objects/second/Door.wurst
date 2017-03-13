@@ -14,7 +14,8 @@ constant real EVENT_RADIUS = 192
 //Item type ids
 
 int array KEY_COLOR_ID
-
+constant KEY_COLOR = "c"
+constant KEY_ROTATION = "d"
 
 public class Door extends StaticSetupObject
 	unit pathing
@@ -137,6 +138,19 @@ public class Door extends StaticSetupObject
 				changeColor(id)
 		return false
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property(KEY_TYPE, DOOR_INDEX.toString()))
+		json.addProperty(new Property(KEY_COLOR, (col castTo int).toString()))
+		json.addProperty(new Property(KEY_ROTATION, (vertical.toInt()).toString()))
+		return json
+
+	override function deserialize(Json json)
+		super.deserialize(json)
+		col = json.getInt(KEY_COLOR) castTo EBRColor
+ 		actor.setVertexColor(col.toColor())
+		if json.getInt(KEY_ROTATION) == 1
+			turn()
 	
 
 @init1 function init_Door()
