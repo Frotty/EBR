@@ -126,6 +126,12 @@ public class TerrainChanger extends SetupObject
 				outerTile = UNCONTROLLABLEICE
 			
 		update()
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, TC_INDEX.toString()))
+		return json
 					
 			
 init

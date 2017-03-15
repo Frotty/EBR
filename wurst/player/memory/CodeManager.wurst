@@ -80,6 +80,8 @@ function onFileSynced()
 		// A new file was created
 		printLog(Loglevel.DEBUG, "New Playerfile1")
 		createNewPlayerfile(pdc)
+		destroy pdc.syncPayload	
+		pdc.syncPayload = null
 		printLog(Loglevel.DEBUG, "New Playerfile2")
 		checkPlayerfile(pdc)
 		printLog(Loglevel.DEBUG, "New Playerfile3")
@@ -93,13 +95,18 @@ function onFileSynced()
 			if pmd.namehash == pdc.hash
 				printTimedToPlayer("Found a profile for |cffFFCC00" + pdc.name + "|r", 25, pdc.p)
 				loadPlayerMemory(pdc, pmd)
+				destroy pdc.syncPayload	
+				pdc.syncPayload = null
 				return
 
 		// Savedata exists, but no profile for that name
 		printTimedToPlayer("Didn't find a profile for |cffFFCC00" + pdc.name + "|r - creating new..", 25, pdc.p)
 		addPlayerProfile(pdc)
 		loadPlayerMemory(pdc, pdc.pmdata)
-		
+		destroy pdc.syncPayload	
+		pdc.syncPayload = null
+
+	
 	
 
 function loadPlayerMemory(PlayerData pd, PMData pmd)

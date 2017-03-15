@@ -41,7 +41,13 @@ public class Knockbacker extends EscaperSensorSetup
 				actor.damageTarget(escaper.actor, damage.get())
 				actor.setAnimation("attack")
 				setup.setAnimation("attack")
-				addEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", escaper.pos).destr()	
+				addEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", escaper.pos).destr()
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, KNOCKBACKER_INDEX.toString()))
+		return json
 
 
 @objectgen function genKnockbacker()

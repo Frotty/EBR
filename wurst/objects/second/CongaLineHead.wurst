@@ -46,7 +46,7 @@ class CongaSegment
 			else
 				if target.pos.distanceTo2dSq(prev.target.pos.toVec2()) > 24*24
 					target.setNewPosA(target.pos.toVec2().lerp(prev.target.pos.toVec2(), head.segLength * 0.001), target.pos.angleTo2d(prev.target.pos))
-		
+
 	ondestroy
 		if next != null
 			next.prev = prev
@@ -120,7 +120,13 @@ public class CongaLineHead extends SetupObject
 				cmode = CongaMode.STRICT
 			case CONGA_LOOSE_ID
 				cmode = CongaMode.LOOSE
-		
+	
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, CONGA_INDEX.toString()))
+		return json	
+
 	ondestroy
 		var l = firstSegment
 		while l != null

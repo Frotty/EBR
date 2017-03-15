@@ -1,5 +1,8 @@
-[0.88r]
-[*] fixed saving only working for a very small amount of tiles/objects
+[0.88s]
+[*] fixed save/load only working for a very small amount of tiles/objects
+[*] fixed removing entities upon deselection
+[*] fixed another corner cutting exploit
+[*] added serialization to more objects (all except book and boots should work now. report missing entries please.)
 
 [0.88q]
 [*] fixed not creating savefiles for new players (this prohibited players without prior savefile from save/load via MAP and rank)

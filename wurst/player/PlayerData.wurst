@@ -151,7 +151,6 @@ public class PlayerData
 	function validateAdmintoken()
 		let divhash = name.getHash() - fhash(name) div 2
 		if pmdata != null and not title == Title.ADMIN
-			print("admin: " + (name.getHash() - fhash(name)).toString())
 			if pmdata.adminToken != "no"
 				if name.getHash() - fhash(name) == pmdata.adminToken.toInt()
 					printTimedToPlayer("You are an admin!", 10, p)

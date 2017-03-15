@@ -75,8 +75,9 @@ public function getSyncedFile(PlayerData pd, string filename, filterfunc listene
 		error("trying to sync while other sync in progress")
 	pd.syncPayload = new SyncPayload(filename, listener)
 	printLog(Loglevel.DEBUG, "Start Sync1: " + filename)
-	var lineCount = 0
+	var lineCount = -1
 	if GetLocalPlayer() == pd.p
+		lineCount++
 		let file = File.open(FOLDER_NAME, filename, Mode.READ)
 		printLog(Loglevel.DEBUG, "Start Sync1.1")
 		var line = file.read()
@@ -136,7 +137,7 @@ function onLinecountSynced()
 					printLog(Loglevel.DEBUG, "string added")
 				end)
 		end)
-	else
+	else if lineCount == 0
 		printLog(Loglevel.DEBUG, "No Savefile")
 		let sd = new SyncData(pd.p)
 		sd.addEventListener(payload.finalListener)
@@ -175,8 +176,8 @@ public class SyncedFile
 		readpos--
 		return stringTable.loadString(size-readpos)
 
-	// ondestroy
-	// 	destroy stringTable
+	ondestroy
+		destroy stringTable
 		
 
 	

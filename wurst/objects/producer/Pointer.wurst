@@ -72,6 +72,12 @@ public class Pointer extends EscaperSensorSetup
 			Pointer obj = u.getUserData() castTo Pointer
 			obj.angl = facing.asAngleDegrees()
 			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, POINTER_INDEX.toString()))
+		return json
 		
 function getSelectedPointers(player p) returns group
 	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(POINTER_ID), null)

@@ -14,3 +14,4 @@ public class BomberTarget extends SetupObject
 		json
 		..addProperty(new Property(KEY_TYPE, BOMBTARGET_INDEX.toString()))
 		return json	
+		

@@ -39,3 +39,12 @@ public constant TANKKILL_INDEX = 35
 public constant GLAIVEKILL_INDEX = 36
 public constant AIRKILL_INDEX = 37
 public constant FIREKILL_INDEX = 38
+public constant FACELESS_INDEX = 39
+public constant KNOCKBACKER_INDEX = 40
+public constant POINTER_INDEX = 41
+public constant TP_TARGET_INDEX = 42
+public constant TC_INDEX = 43
+public constant SMALL_LIGHT_INDEX = 44
+public constant MEDIUM_LIGHT_INDEX = 44
+public constant LARGE_LIGHT_INDEX = 45
+

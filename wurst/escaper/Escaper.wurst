@@ -148,6 +148,8 @@ public abstract class Escaper extends UnitEntity
 	override function onEscapeGround()
 		actor.setPropWindow(0)
 		sliding = false
+
+	int lastVal = -1
 	
 	override function onGround(Entity e)
 		if e.flying
@@ -162,16 +164,23 @@ public abstract class Escaper extends UnitEntity
 		var ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()
 		int ttype
+		int newval = -1
 		if ttype1 == rdata.getTypeSet().unwalkableId
 			if ttype2 == rdata.getTypeSet().unwalkableId
 				ttype = rdata.getTypeSet().unwalkableId
 			else
 				ttype = ttype2
+				newval = 2
 		else
 			if ttype2 == rdata.getTypeSet().unwalkableId
 				ttype = ttype1
+				newval = 1
 			else
 				ttype = GetTerrainType(pos.x, pos.y)
+				newval = 3
+		if((lastVal == 1 and newval == 2) or (lastVal == 2 and newval == 1))
+			ttype = rdata.getTypeSet().unwalkableId
+		lastVal = newval
 
 		onUnwalkable = false
 		slideVelocity *= 0.99

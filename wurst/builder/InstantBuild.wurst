@@ -13,6 +13,7 @@ import Teleporter
 import Waypoint
 import Spinner
 import Unitcreator
+import BomberTarget
 import Trap
 import Tree
 import Texter
@@ -25,7 +26,12 @@ import TerrainBlocker
 import Fountain
 import Decoration
 import Pedestal
+import Knockbacker
+import Pointer
+import TeleporterTarget
 import Key
+import TerrainChanger
+import Faceless
 import public SerializeIds
 import Bomber
 
@@ -35,6 +41,9 @@ public function isOrderBuildOrder( int o ) returns boolean
 		if buildorders[i] == o
 			return true 
 		i++
+	for i2 = 139 to 152
+			if o == buildorders[i2]
+				return true
 	return false
 
 public function instantBuild(Builder b, vec2 tpos, int id)
@@ -46,6 +55,11 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 				newObjectFromId(b.owner, tpos, i, id)
 				break
 			i++
+		// TODO remove
+		for i2 = 139 to 152
+			if id == buildorders[i2]
+				newObjectFromId(b.owner, tpos, i2, id)
+				break
 	else
 		DisplayTextToPlayer( b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	b.actor.abortOrder()
@@ -107,29 +121,29 @@ public function newObjectFromId(player owner, vec2 tpos, int id, int origId) ret
 			return new TerrainBlocker(tpos, owner)
 		case VOLCANO_INDEX
 			return new VolcanoObstacle(tpos, owner)
-		case 40
+		case 140
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 41
+		case 141
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 42
+		case 142
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 43
+		case 143
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 44
+		case 144
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 45
+		case 145
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 46
+		case 146
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 47
+		case 147
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 48
+		case 148
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 49
+		case 149
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 50
+		case 150
 			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
-		case 51
+		case 151
 			return new MemoryAccessPedestal(tpos, owner)
 		case ARCANERY_INDEX
 			return new Arcanery(tpos, owner)
@@ -153,6 +167,20 @@ public function newObjectFromId(player owner, vec2 tpos, int id, int origId) ret
 			return new FireKiller(tpos, owner)
 		case AIRKILL_INDEX
 			return new AirKiller(tpos, owner)
+		case KNOCKBACKER_INDEX
+			return new Knockbacker(tpos, owner, angle(0))
+		case FACELESS_INDEX
+			return new Faceless(tpos, owner)
+		case POINTER_INDEX
+			return new Pointer(tpos, owner, angle(0))
+		case TP_TARGET_INDEX
+			return new TeleporterTarget(tpos, owner)
+		case TC_INDEX
+			return new TerrainChanger(tpos, owner)
+		case TC_INDEX
+			return new TerrainChanger(tpos, owner)
+		case BOMBTARGET_INDEX
+			return new BomberTarget(tpos, owner)
 	return null
 
 int array buildorders
@@ -185,27 +213,32 @@ int array buildorders
 	buildorders[HWALL_INDEX] = 'n00Q' // Horizontal Wall
 	buildorders[VWALL_INDEX] = 'n011' // Vertical Wall
 	buildorders[ARCANERY_INDEX] = 'n002' // Arcanery
-	buildorders[SMALLKILL_INDEX] = 'n002' // Arcanery
-	buildorders[BIGKILL_INDEX] = 'n002' // Arcanery
-	buildorders[BOMBER_INDEX] = 'n002' // Arcanery
+	buildorders[SMALLKILL_INDEX] = 'A05K' // Arcanery
+	buildorders[BIGKILL_INDEX] = 'A05F' // Arcanery
+	buildorders[BOMBER_INDEX] = 'A05O' // Arcanery
 	buildorders[KEY_INDEX] = 'n002' // Arcanery
-	buildorders[BOMBTARGET_INDEX] = 'n002' // Arcanery
-	buildorders[BIGRANDKILL_INDEX] = 'n002' // Arcanery
-	buildorders[SMALLRANDKILL_INDEX] = 'n002' // Arcanery
-	buildorders[TANKKILL_INDEX] = 'n002' // Arcanery
-	buildorders[GLAIVEKILL_INDEX] = 'n002' // Arcanery
-	buildorders[AIRKILL_INDEX] = 'n002' // Arcanery
-	buildorders[FIREKILL_INDEX] = 'n002' // Arcanery
-	buildorders[39] = 'fuck' // Lantern
-	buildorders[40] = 'n00V' // Lantern
-	buildorders[41] = 'n00U' // Mushroom
-	buildorders[42] = 'n00Z' // Torch
-	buildorders[43] = 'n00T' // Rune
-	buildorders[44] = 'n01A' // Suppalight
-	buildorders[45] = 'n00M' // Magic Lantern
-	buildorders[46] = 'n014' // Farm
-	buildorders[47] = 'n00G' // Hay
-	buildorders[48] = 'n016' // Obelisk
-	buildorders[49] = 'n015' // Poison eggs
-	buildorders[50] = 'n017' // Remains
-	buildorders[51] = PED_ID // Pedestal
+	buildorders[BOMBTARGET_INDEX] = 'A05P' // Arcanery
+	buildorders[BIGRANDKILL_INDEX] = 'A05G' // Arcanery
+	buildorders[SMALLRANDKILL_INDEX] = 'A05J' // Arcanery
+	buildorders[TANKKILL_INDEX] = 'A05M' // Arcanery
+	buildorders[GLAIVEKILL_INDEX] = 'A05H' // Arcanery
+	buildorders[AIRKILL_INDEX] = 'A07Y' // Arcanery
+	buildorders[FIREKILL_INDEX] = 'Afre' // Arcanery
+	buildorders[FACELESS_INDEX] = 'A07U' // Arcanery
+	buildorders[KNOCKBACKER_INDEX] = 'A07C' // Arcanery
+	buildorders[POINTER_INDEX] = 'A05I' // Arcanery
+	buildorders[TP_TARGET_INDEX] = 'A05N' // Arcanery
+	buildorders[TC_INDEX] = 'A05L' // Arcanery
+	buildorders[139] = 'fuck' // Lantern
+	buildorders[140] = 'n00V' // Lantern
+	buildorders[141] = 'n00U' // Mushroom
+	buildorders[142] = 'n00Z' // Torch
+	buildorders[143] = 'n00T' // Rune
+	buildorders[144] = 'n01A' // Suppalight
+	buildorders[145] = 'n00M' // Magic Lantern
+	buildorders[146] = 'n014' // Farm
+	buildorders[147] = 'n00G' // Hay
+	buildorders[148] = 'n016' // Obelisk
+	buildorders[149] = 'n015' // Poison eggs
+	buildorders[150] = 'n017' // Remains
+	buildorders[151] = PED_ID // Pedestal

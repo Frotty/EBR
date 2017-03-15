@@ -1,4 +1,5 @@
 package Pedestal
+import ErrorHandling
 import initlater InstantBuild
 import public PedestalObjects
 import Assets
@@ -96,14 +97,17 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			compressedString.addString(buildString)
 			buildString = pd.syncPayload.syncedFile.read()
 		printLog(Loglevel.DEBUG, "Reconstructed")
+		compressedString.debugPrint()
 		serializeOrigin = ref.pos.toVec2().toTile().toVec3()
 		destroy pd.syncPayload
 		pd.syncPayload = null
 		decompress(compressedString, (PayloadCallback cb1) -> begin
+			printLog(Loglevel.DEBUG, "on finish decompress")
 			ref.parser.setInput(cb1.customData castTo BigString)
 			ref.parser.parse((PayloadCallback cb2) -> begin
+				printLog(Loglevel.DEBUG, "on finish parse")
 				ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser, (PayloadCallback cb3) -> begin
-					ref.loadEntities((cb3.customData castTo JsonParser).outputList)
+					ref.loadEntities(ref.listparser.outputList)
 				end)
 			end)
 		end)
@@ -114,10 +118,12 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		ttag..center(pos, "|cff0884CEloading Entities...", 10)
 		let bs = new BigString()
 		var itr = list.staticItr()
-		doSeq(1, (SeqCallback cb) -> begin
+		doSeq((SeqCallback cb) -> begin
+			cb.done = true
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
+				next.next = null
 				listparser.setInput(bs..addSubString(next))
 				listparser.parse((PayloadCallback cb2) -> begin
 					let json = listparser.output
@@ -128,36 +134,46 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					cb.doStep()
 				end)
 			else
-				cb.terminate()
+				destroy cb
 				destroy bs
 				ttag..center(pos, "|cff0884CEEntites loaded!", 10)
+				printLog(Loglevel.DEBUG, "entities loaded")
 				// Load tiles
 				parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
-					loadTiles(listparser.outputList)
+					printLog(Loglevel.DEBUG, "load tiles1")
+					loadTiles((cb.customData castTo JsonParser).outputList)
 				end)
 		end)
 
 	function loadTiles(LinkedList<BigSubString> list)
+		printLog(Loglevel.DEBUG, "load tiles2")
 		ttag..center(pos, "|cff0884CEloading Tiles...", 10)
 		let td = new TileData()
 		let bs = new BigString()
 		td.owner = owner
 		var itr = list.staticItr()
-		doSeq(1, (SeqCallback cb1) -> begin
+		doSeq((SeqCallback cb1) -> begin
+			cb1.done = true
+			printLog(Loglevel.DEBUG, "doSeq loadTiles")
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
+				next.next = null
+				printLog(Loglevel.DEBUG, "doSeq loadTiles1: " + next.getCombined())
 				parser.setInput(bs..addSubString(next))
 				parser.parse((PayloadCallback cb2) -> begin
+					printLog(Loglevel.DEBUG, "doSeq loadTile2s")
 					td..deserialize(parser.output)
 					parser.output.reset()
 					cb1.doStep()
 				end)
 			else
-				cb1.terminate()
+				destroy cb1
+				printLog(Loglevel.DEBUG, "load finished")
 				ttag..center(pos, "|cffFFBD21load finished!", 10)
+				destroy td
 		end)
-		destroy td
+		
 
 
 	BigString tileString = new BigString()
@@ -171,7 +187,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		currentSlotId = slotId
 		entString.reset()
 		entString.addString(JSON_OPEN_ARRAY.token)
-		doSeq(10, (SeqCallback cb) -> begin
+		doSeq((SeqCallback cb) -> begin
 			if itr.hasNext()
 				let next = itr.next()
 				let json = next.serialize()
@@ -193,7 +209,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		tileString.reset()
 		tileString.addString(JSON_OPEN_ARRAY.token)
 		let itr = tiles.staticItr()
-		doSeq(10, (SeqCallback cb) -> begin
+		doSeq((SeqCallback cb) -> begin
 			if itr.hasNext()
 				itr.next().serialize().addToBigString(tileString)
 				if itr.hasNext()

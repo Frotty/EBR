@@ -1,4 +1,5 @@
 package Faceless
+import SerializeIds
 import EscaperSensor
 import ChannelAbilityPreset
 constant UNIT_ID = 'u00I'
@@ -83,6 +84,12 @@ public class Faceless extends EscaperSensorSetup
 				invisDur.increment(this, 10)
 			case DOWN_INVIS_ID
 				invisDur.decrement(this, 0)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json
+		..addProperty(new Property(KEY_TYPE, FACELESS_INDEX.toString()))
+		return json
 		
 @objectgen function genSpells()
 	UP_VIS_ID = ABIL_ID_GEN.next()
