@@ -1,4 +1,7 @@
-[0.88s]
+[0.88v]
+[*] fixed not being able to change facing on ice in special cases due to new pathable check
+
+[0.88u]
 [*] fixed save/load only working for a very small amount of tiles/objects
 [*] fixed removing entities upon deselection
 [*] fixed another corner cutting exploit

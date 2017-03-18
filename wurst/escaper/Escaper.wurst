@@ -330,7 +330,23 @@ public abstract class Escaper extends UnitEntity
 		var w = GetOrderTarget()
 		let orderPos = getOrderPos()
 		let widgetPos = w.getPos()
-		var ttype = GetTerrainType(pos.x, pos.y)
+		let rv = getRealVel()
+		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 18)
+		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 18)
+		var ttype1 = GetTerrainType(lpos.x, lpos.y)
+		var ttype2 = GetTerrainType(rpos.x, rpos.y)
+		let rdata = this.getCurrentRegion()
+		int ttype
+		if ttype1 == rdata.getTypeSet().unwalkableId
+			if ttype2 == rdata.getTypeSet().unwalkableId
+				ttype = rdata.getTypeSet().unwalkableId
+			else
+				ttype = ttype2
+		else
+			if ttype2 == rdata.getTypeSet().unwalkableId
+				ttype = ttype1
+			else
+				ttype = GetTerrainType(pos.x, pos.y)
 		if ttype == CONTROLLABLEICE
 			if w == null
 				actor.setFacing(pos.angleTo2d(orderPos))
