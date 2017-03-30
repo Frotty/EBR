@@ -52,59 +52,59 @@ integer Table__more= 8190
     //Configure it if you use more than 8190 "key" variables in your map (this will never happen though).
     
 hashtable Table__ht= InitHashtable()
-constant integer Table__sizeK=11
-constant integer Table__listK=13
+constant integer Table__sizeK=3
+constant integer Table__listK=5
 //endglobals from Table
 //globals from StringHashEx:
 constant boolean LIBRARY_StringHashEx=true
-constant integer StringHashEx___REHASH= 1222483
-constant integer StringHashEx___tbKey=15
-integer StringHashEx___t= StringHashEx___tbKey
+constant integer StringHashEx__REHASH= 1222483
+constant integer StringHashEx__tbKey=7
+integer StringHashEx__t= StringHashEx__tbKey
 //endglobals from StringHashEx
 //globals from Sync:
 constant boolean LIBRARY_Sync=true
         // characters that can be synced (ascii)
-constant string Sync___ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+constant string Sync__ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
         // safe characters for use in game cache keys
         // (case sensitive)
-constant string Sync___SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~"
+constant string Sync__SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~"
 
         // how fast the buffer updates
-constant real Sync___UPDATE_PERIOD= 0.03125
+constant real Sync__UPDATE_PERIOD= 0.03125
 
         // automatically recycle indices when the syncing player leaves
-constant boolean Sync___AUTO_DESTROY_ON_LEAVE= true
+constant boolean Sync__AUTO_DESTROY_ON_LEAVE= true
 
         // automatically stop buffering when an error occurs
-constant boolean Sync___STOP_BUFFERING_ON_ERROR= true
+constant boolean Sync__STOP_BUFFERING_ON_ERROR= true
 
         // preload game cache key strings on init
-constant boolean Sync___PRELOAD_STR_CACHE= true
+constant boolean Sync__PRELOAD_STR_CACHE= true
 
         // size of the alphabet
-constant integer Sync___ALPHABET_BASE= StringLength(Sync___ALPHABET)
+constant integer Sync__ALPHABET_BASE= StringLength(Sync__ALPHABET)
 
         // stop reading the string buffer when reaching this char
-constant string Sync___TERM_CHAR= "`"
+constant string Sync__TERM_CHAR= "`"
 
         // maximum number of strings *per instance*
-constant integer Sync___MAX_STRINGS= 8192
+constant integer Sync__MAX_STRINGS= 8192
 
         // filenames for gc (short names have faster sync time)
-constant string Sync___CACHE_FILE= "i.w3v"
-constant string Sync___CACHE_FILE_STR= "s.w3v"
+constant string Sync__CACHE_FILE= "i.w3v"
+constant string Sync__CACHE_FILE_STR= "s.w3v"
 
         // don't edit below this line
 constant integer EVENT_SYNC_CACHE= 3
 constant integer SYNC_ERROR_TIMEOUT= 1
 constant integer SYNC_ERROR_PLAYERLEFT= 2
         // string table keys
-constant integer Sync___KEY_STR_POS= ( 0 * Sync___MAX_STRINGS )
-constant integer Sync___KEY_STR_LEN= ( 1 * Sync___MAX_STRINGS )
+constant integer Sync__KEY_STR_POS= ( 0 * Sync__MAX_STRINGS )
+constant integer Sync__KEY_STR_LEN= ( 1 * Sync__MAX_STRINGS )
 
         // pending data storage space
-constant integer Sync___KEY_STR_CACHE= ( 2 * Sync___MAX_STRINGS )
+constant integer Sync__KEY_STR_CACHE= ( 2 * Sync__MAX_STRINGS )
 //endglobals from Sync
     // Generated
 rect gg_rct_Choose= null
@@ -1733,12 +1733,12 @@ endfunction
     function StringHashEx takes string key returns integer
         local integer sh= StringHash(key)
         loop
-            if not (HaveSavedString(Table__ht, (((StringHashEx___t))), (sh))) then // INLINED!!
-                call SaveStr(Table__ht, (((StringHashEx___t))), (sh), ( key)) // INLINED!!
+            if not (HaveSavedString(Table__ht, (((StringHashEx__t))), (sh))) then // INLINED!!
+                call SaveStr(Table__ht, (((StringHashEx__t))), (sh), ( key)) // INLINED!!
                 exitwhen true
             endif
-            exitwhen (LoadStr(Table__ht, (((StringHashEx___t))), (sh))) == key // INLINED!!
-            set sh=sh + StringHashEx___REHASH
+            exitwhen (LoadStr(Table__ht, (((StringHashEx__t))), (sh))) == key // INLINED!!
+            set sh=sh + StringHashEx__REHASH
         endloop
         return sh
     endfunction
@@ -1799,7 +1799,7 @@ endfunction
         set l=makeLen - l
         loop
             exitwhen i > l
-            set s=s + Sync___TERM_CHAR
+            set s=s + Sync__TERM_CHAR
             set i=i + 1
         endloop
         return s
@@ -1857,12 +1857,12 @@ endfunction
         function s__SyncData_getKey takes integer pos returns string
             local string position=""
    
-            if ( HaveSavedString(s__SyncData_Table, Sync___KEY_STR_CACHE, pos) ) then
-                return LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos)
+            if ( HaveSavedString(s__SyncData_Table, Sync__KEY_STR_CACHE, pos) ) then
+                return LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos)
             endif
    
-            set position=Sync_ConvertBase(Sync___SAFE_KEYS , pos)
-            call SaveStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos, position)
+            set position=Sync_ConvertBase(Sync__SAFE_KEYS , pos)
+            call SaveStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos, position)
    
             return position
         endfunction
@@ -1904,8 +1904,8 @@ endfunction
                     set p=i
 
 
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + p)
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + p)
                 call RemoveSavedBoolean(s__SyncData_Table, p, this) // playerdone
 
                 set i=i + 1
@@ -1944,11 +1944,11 @@ endfunction
         endfunction
 
         function s__SyncData_hasString takes integer this,integer index returns boolean
-            local integer i= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
+            local integer i= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
             if ( index > 0 and i == 0 ) then
                 return false
             endif
-            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)))
+            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)))
         endfunction
 
         function s__SyncData_addInt takes integer this,integer i returns nothing
@@ -1994,12 +1994,12 @@ endfunction
  
             // store the string position in the table
             if ( s__SyncData_strCount[this] == 0 ) then
-                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS, 0)
+                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS, 0)
             else
-                set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
-                set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
+                set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
+                set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
 
-                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + s__SyncData_strCount[this], strPos)
+                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + s__SyncData_strCount[this], strPos)
             endif
 
             // convert each character in the string to an integer
@@ -2009,14 +2009,14 @@ endfunction
                 set position=s__SyncData_getKey(strPos + i)
 
                 if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, s__SyncData_char2I(Sync___ALPHABET , SubString(s, i, i + 1)))
+                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, s__SyncData_char2I(Sync__ALPHABET , SubString(s, i, i + 1)))
                 endif
 
                 set i=i + 1
             endloop
 
             set s__SyncData_strBufferLen[this]=s__SyncData_strBufferLen[this] + length
-            call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
+            call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
             set s__SyncData_strCount[this]=s__SyncData_strCount[this] + 1
         endfunction
 
@@ -2036,22 +2036,22 @@ endfunction
             local string s= ""
             local string c
             local integer i= 0
-            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
+            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
             local integer strPos
    
             if ( not s__SyncData_hasString(this,index) ) then
                 return null
             endif
 
-            set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
-            set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
+            set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
+            set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
    
             loop
                 exitwhen i > strLen
        
-                set c=Sync_I2Char(Sync___ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
+                set c=Sync_I2Char(Sync__ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
 
-                if ( c == Sync___TERM_CHAR ) then
+                if ( c == Sync__TERM_CHAR ) then
                     return s
                 endif
 
@@ -2126,7 +2126,7 @@ endfunction
                     return
                 endif
 
-                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync___UPDATE_PERIOD
+                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync__UPDATE_PERIOD
 
                 if ( s__SyncData_onUpdate[data] != null ) then
                     call s__SyncData_fireEvent(data,s__SyncData_onUpdate[data])
@@ -2192,7 +2192,7 @@ endfunction
             loop
                 exitwhen i > end
 
-                set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, i)
+                set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, i)
      
                 if ( i < s__SyncData_intCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                     call SyncStoredInteger(s__SyncData_Cache[0], s__SyncData_mkey[this], position)
@@ -2205,15 +2205,15 @@ endfunction
                 endif
      
                 if ( i < s__SyncData_strCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    set n=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + i)
-                    set p=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + i)
+                    set n=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + i)
+                    set p=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + i)
          
                     set j=0
          
                     loop
                         exitwhen j > n
              
-                        set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, p + j)
+                        set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, p + j)
 
                         if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                             call SyncStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position)
@@ -2233,10 +2233,10 @@ endfunction
             set s__SyncData_timeStarted[this]=(s__SyncData_timeCounter + TimerGetElapsed(s__SyncData_Elapsed)) // INLINED!!
             set s__SyncData_playersDone[this]=0
             set s__SyncData_buffering[this]=true
-            set s__SyncData_timeElapsed[this]=( Sync___UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
+            set s__SyncData_timeElapsed[this]=( Sync__UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
    
             if ( s__SyncData_Running == 0 ) then
-                call TimerStart(s__SyncData_BufferTimer, Sync___UPDATE_PERIOD, true, function s__SyncData_readBuffer)
+                call TimerStart(s__SyncData_BufferTimer, Sync__UPDATE_PERIOD, true, function s__SyncData_readBuffer)
             endif
 
             set s__SyncData_Running=s__SyncData_Running + 1
@@ -2333,14 +2333,14 @@ endfunction
             local integer i= 0
             local string c
          
-            set s__SyncData_AlphaHash=s__SyncData_hashString(Sync___ALPHABET)
+            set s__SyncData_AlphaHash=s__SyncData_hashString(Sync__ALPHABET)
          
             loop
-                exitwhen i >= Sync___ALPHABET_BASE
+                exitwhen i >= Sync__ALPHABET_BASE
 
-                set c=Sync_I2Char(Sync___ALPHABET , i)
+                set c=Sync_I2Char(Sync__ALPHABET , i)
 
-                call SaveInteger(s__SyncData_CharTable, s__SyncData_AlphaHash, s__SyncData_hashString(c), Sync_Char2I(Sync___ALPHABET , c))
+                call SaveInteger(s__SyncData_CharTable, s__SyncData_AlphaHash, s__SyncData_hashString(c), Sync_Char2I(Sync__ALPHABET , c))
 
                 set i=i + 1
             endloop
@@ -2350,8 +2350,8 @@ endfunction
             set s__SyncData_Table=InitHashtable()
             set s__SyncData_CharTable=InitHashtable()
          
-            set s__SyncData_Cache[0]=InitGameCache(Sync___CACHE_FILE)
-            set s__SyncData_Cache[1]=InitGameCache(Sync___CACHE_FILE_STR)
+            set s__SyncData_Cache[0]=InitGameCache(Sync__CACHE_FILE)
+            set s__SyncData_Cache[1]=InitGameCache(Sync__CACHE_FILE_STR)
 
             set s__SyncData_Elapsed=CreateTimer()
             set s__SyncData_BufferTimer=CreateTimer()
@@ -2369,7 +2369,7 @@ call TriggerAddCondition(SyncInteger___EventTrig, (Filter(function s__SyncData_u
    
 
                 loop
-                    exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
+                    exitwhen s__SyncData_Last == Sync__ALPHABET_BASE
                     call s__SyncData_getKey(s__SyncData_Last)
                     set s__SyncData_Last=s__SyncData_Last + 1
                 endloop
@@ -2386,11 +2386,11 @@ call TriggerAddCondition(SyncInteger___EventTrig, (Filter(function s__SyncData_u
 //library Sync ends
 //===========================================================================
 // 
-// |cff217199Escape Builder |r[R] 0.88u
+// |cff217199Escape Builder |r[R] 0.88y
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Wed Mar 15 06:22:05 2017
+//   Date: Mon Mar 27 22:18:59 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -2414,8 +2414,8 @@ endfunction
 function CreateAllItems takes nothing returns nothing
     local integer itemID
 
-    call CreateItem('I008', 4420.3, - 6722.5)
-    call CreateItem('I009', - 2292.2, - 4216.4)
+    call CreateItem('I008', 4411.5, - 6660.8)
+    call CreateItem('I009', - 2696.9, - 4345.6)
     call CreateItem('I009', - 1799.0, - 6347.4)
     call CreateItem('I009', 3502.6, - 7042.6)
     call CreateItem('I009', - 4731.9, - 6904.0)
@@ -2425,15 +2425,25 @@ function CreateAllItems takes nothing returns nothing
     call CreateItem('I00A', 4413.5, - 4294.3)
     call CreateItem('I00A', 3832.8, - 6648.4)
     call CreateItem('I00A', - 1280.7, - 4227.1)
-    call CreateItem('I00A', 4472.1, - 6148.3)
-    call CreateItem('I00A', 755.2, - 5499.9)
-    call CreateItem('I00A', - 2560.2, - 5762.8)
-    call CreateItem('I00A', - 3298.6, - 6271.6)
-    call CreateItem('I00A', - 3837.0, - 4998.9)
-    call CreateItem('I00A', 2270.3, - 6918.5)
-    call CreateItem('I00A', - 3458.5, - 6785.1)
+    call CreateItem('I00A', 4416.8, - 6159.0)
     call CreateItem('I00A', - 1926.5, - 6347.4)
+    call CreateItem('I00A', - 2560.2, - 5762.8)
+    call CreateItem('I00A', 755.2, - 5499.9)
+    call CreateItem('I00A', - 3837.0, - 4998.9)
+    call CreateItem('I00A', 2181.3, - 6914.0)
+    call CreateItem('I00A', - 3458.5, - 6785.1)
     call CreateItem('I00J', 6735.7, - 7105.2)
+    call CreateItem('I010', - 3310.4, - 6268.8)
+    call CreateItem('I010', 4424.0, - 6796.8)
+    call CreateItem('I010', 4387.1, - 4166.0)
+    call CreateItem('I010', 1155.9, - 6146.7)
+    call CreateItem('I010', - 1110.1, - 6852.5)
+    call CreateItem('I010', - 4218.0, - 5127.8)
+    call CreateItem('I010', 4351.9, - 4737.4)
+    call CreateItem('I010', 2551.1, - 7173.8)
+    call CreateItem('I010', 2748.9, - 4658.5)
+    call CreateItem('I010', - 1149.4, - 4366.2)
+    call CreateItem('I010', - 2302.7, - 4229.0)
 endfunction
 
 //***************************************************************************
@@ -2495,7 +2505,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     local real life
 
     set gg_unit_n000_0002=CreateUnit(p, 'n000', 5632.0, - 6912.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 4864.0, - 6912.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 4736.0, - 6784.0, 270.000)
     set u=CreateUnit(p, 'n00S', 6848.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'n00S', 6080.0, - 5888.0, 270.000)
     set u=CreateUnit(p, 'n00R', 5184.0, - 7040.0, 270.000)
@@ -2518,8 +2528,8 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n00S', 6016.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'n00R', 5760.0, - 4032.0, 270.000)
     set u=CreateUnit(p, 'n00R', 4992.0, - 4160.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 6720.0, - 3968.0, 270.000)
-    set u=CreateUnit(p, 'n00R', 4480.0, - 5568.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6656.0, - 3968.0, 270.000)
+    set u=CreateUnit(p, 'n00R', 4608.0, - 5632.0, 270.000)
     set u=CreateUnit(p, 'n01I', 64.0, - 6080.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 1472.0, - 6976.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 1536.0, - 6976.0, 270.000)
@@ -2547,7 +2557,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n00X', 2240.0, - 6528.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2624.0, - 6016.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2176.0, - 6784.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2496.0, - 7040.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 2496.0, - 6784.0, 270.000)
     set gg_unit_n004_0078=CreateUnit(p, 'n004', 0.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n00X', 1856.0, - 6272.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2560.0, - 5952.0, 270.000)
@@ -2612,10 +2622,13 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 3328.0, - 6720.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3136.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'h00C', - 2496.0, - 4864.0, 270.000)
-    set u=CreateUnit(p, 'n01H', - 1920.0, - 6912.0, 270.000)
+    set u=CreateUnit(p, 'n01H', - 576.0, - 6784.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 576.0, - 6464.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 512.0, - 6784.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 576.0, - 7104.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 2496.0, - 4224.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 2496.0, - 4288.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 2624.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3968.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4096.0, - 4352.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4800.0, - 4096.0, 270.000)
@@ -2631,7 +2644,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 4160.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3456.0, - 4480.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3328.0, - 4288.0, 270.000)
-    set u=CreateUnit(p, 'n018', - 3008.0, - 3968.0, 270.000)
+    set u=CreateUnit(p, 'n018', - 3136.0, - 3968.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4416.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4288.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'n018', - 2560.0, - 7104.0, 270.000)
@@ -2654,7 +2667,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 2688.0, - 6336.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3648.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4160.0, - 6144.0, 270.000)
-    set u=CreateUnit(p, 'n00S', 5440.0, - 6208.0, 270.000)
+    set u=CreateUnit(p, 'n00S', 6016.0, - 6272.0, 270.000)
     set u=CreateUnit(p, 'n00S', 4480.0, - 5440.0, 270.000)
     set gg_unit_n000_0322=CreateUnit(p, 'n000', - 6016.0, - 6912.0, 270.000)
     set gg_unit_n00C_0323=CreateUnit(p, 'n00C', - 5248.0, - 6784.0, 270.000)
@@ -2663,8 +2676,8 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n00R', 4288.0, - 6912.0, 270.000)
     set u=CreateUnit(p, 'n00S', 1600.0, - 4736.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1600.0, - 4608.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2048.0, - 7104.0, 270.000)
-    set u=CreateUnit(p, 'n00X', 2240.0, - 7232.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 1792.0, - 7104.0, 270.000)
+    set u=CreateUnit(p, 'n00X', 1600.0, - 7232.0, 270.000)
     set u=CreateUnit(p, 'n00R', 1728.0, - 4160.0, 270.000)
     set u=CreateUnit(p, 'n018', - 3648.0, - 6272.0, 270.000)
 endfunction
@@ -2690,10 +2703,10 @@ function CreateNeutralPassive takes nothing returns nothing
     set gg_unit_n009_0050=CreateUnit(p, 'n009', - 6.2, - 5046.5, 313.988)
     set gg_unit_u00G_0053=CreateUnit(p, 'u00G', - 1779.1, - 6157.4, 106.560)
     set gg_unit_u00G_0054=CreateUnit(p, 'u00G', - 897.4, - 6648.0, 106.560)
-    set gg_unit_h01H_0080=CreateUnit(p, 'h01H', 1439.8, - 7026.0, 294.629)
+    set gg_unit_h01H_0080=CreateUnit(p, 'h01H', 1322.0, - 7034.5, 294.629)
     set gg_unit_h01H_0081=CreateUnit(p, 'h01H', 2670.4, - 5776.1, 78.346)
     set gg_unit_u00I_0100=CreateUnit(p, 'u00I', - 93.7, - 6155.5, 213.890)
-    set gg_unit_h01H_0104=CreateUnit(p, 'h01H', 1670.2, - 7024.5, 258.461)
+    set gg_unit_h01H_0104=CreateUnit(p, 'h01H', 1653.8, - 7047.1, 258.461)
     set gg_unit_n00D_0120=CreateUnit(p, 'n00D', 2936.1, - 5378.4, 11.701)
     set gg_unit_n00D_0121=CreateUnit(p, 'n00D', 3192.2, - 4959.9, 37.530)
     set gg_unit_n00D_0122=CreateUnit(p, 'n00D', 3888.3, - 4974.1, 20.248)
@@ -2701,7 +2714,7 @@ function CreateNeutralPassive takes nothing returns nothing
     set gg_unit_n00D_0124=CreateUnit(p, 'n00D', 3702.9, - 6561.8, 11.701)
     set gg_unit_n00D_0125=CreateUnit(p, 'n00D', 3074.3, - 6143.2, 11.701)
     set gg_unit_h01H_0127=CreateUnit(p, 'h01H', 3610.2, - 6376.1, 15.293)
-    set gg_unit_h01H_0128=CreateUnit(p, 'h01H', 3598.9, - 6904.3, 221.118)
+    set gg_unit_h01H_0128=CreateUnit(p, 'h01H', 3498.3, - 6883.5, 221.118)
     set gg_unit_h018_0145=CreateUnit(p, 'h018', 622.4, - 4978.6, 177.990)
     set gg_unit_h01M_0147=CreateUnit(p, 'h01M', - 3155.8, - 4606.2, 115.415)
     call SetUnitState(gg_unit_h01M_0147, UNIT_STATE_MANA, 0)
@@ -2720,7 +2733,7 @@ function CreateNeutralPassive takes nothing returns nothing
     call SetUnitState(gg_unit_h01M_0163, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0210=CreateUnit(p, 'n00E', - 4232.8, - 6890.6, 228.358)
     set gg_unit_n00E_0211=CreateUnit(p, 'n00E', - 4233.5, - 7041.8, 228.358)
-    set gg_unit_h01M_0212=CreateUnit(p, 'h01M', - 2687.4, - 3967.1, 78.599)
+    set gg_unit_h01M_0212=CreateUnit(p, 'h01M', - 2687.4, - 3967.1, 181.040)
     call SetUnitState(gg_unit_h01M_0212, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0213=CreateUnit(p, 'n00E', - 2290.5, - 5088.0, 136.430)
     set gg_unit_n00E_0214=CreateUnit(p, 'n00E', - 2291.0, - 5374.2, 136.430)
@@ -2732,7 +2745,7 @@ function CreateNeutralPassive takes nothing returns nothing
     call SetUnitState(gg_unit_n00E_0217, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0218=CreateUnit(p, 'n00E', - 4730.5, - 6657.7, 228.358)
     set gg_unit_n00E_0219=CreateUnit(p, 'n00E', - 4228.1, - 7197.2, 228.358)
-    set gg_unit_h01I_0220=CreateUnit(p, 'h01I', - 2691.5, - 4112.5, 173.698)
+    set gg_unit_h01I_0220=CreateUnit(p, 'h01I', - 2690.1, - 4116.1, 173.698)
     call SetUnitState(gg_unit_h01I_0220, UNIT_STATE_MANA, 0)
     set gg_unit_n00E_0221=CreateUnit(p, 'n00E', - 4779.7, - 5046.5, 214.220)
     set gg_unit_n00E_0222=CreateUnit(p, 'n00E', - 4614.0, - 5513.9, 214.220)
@@ -3618,7 +3631,7 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs323788781")
+call ExecuteFunc("jasshelper__initstructs361632609")
 call ExecuteFunc("SyncInteger___Init")
 
     call InitGlobals()
@@ -3663,7 +3676,7 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs323788781 takes nothing returns nothing
+function jasshelper__initstructs361632609 takes nothing returns nothing
 
 
 

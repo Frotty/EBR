@@ -12,6 +12,7 @@ import initlater Weapon
 import initlater Boss
 import Boots
 import initlater BossDamager
+import Coin
 
 public class Builder extends UnitEntity
 	int regionCount = 0
@@ -70,6 +71,11 @@ public class Builder extends UnitEntity
 			case TOME_SPELL_ID
 				if rdata.canBuild(owner)
 					new Tome(tpos, owner)
+				else
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+			case COIN_SPELL_ID
+				if rdata.canBuild(owner)
+					new Coin(tpos, owner)
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
 			case BM_BOSS_ID

@@ -7,7 +7,7 @@ import TerrainBlocker
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
-constant real EVENT_RADIUS = 64.
+constant real EVENT_RADIUS = 65.
 constant SPECIAL_ID = 'A07V'
 
 string array SFX_STRINGS

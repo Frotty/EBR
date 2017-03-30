@@ -1,5 +1,6 @@
 package Escaper
 import public Json
+import StandardTextTags
 import PhysicsEntity
 import Assets
 import public Entity
@@ -59,9 +60,19 @@ public abstract class Escaper extends UnitEntity
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> changeAngle())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> changeAngle())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill(null))
+		EventListener.add(actor, EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> onPick())
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		updateRegionData()
 		escapers.add(this)
+
+	function onPick()
+		let id = GetManipulatedItem().getTypeId()
+		if id == 'I010'
+			flashEffect(Other.goldcredit, pos)
+			createGoldBountyTextTag(actor, 15, owner)
+			owner.addGold(10)
+			for pd in escaperPlayers
+				pd.p.addGold(5)
 
 	override function inAir(Entity e)
 		if not e.flying

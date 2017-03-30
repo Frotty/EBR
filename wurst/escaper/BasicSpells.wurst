@@ -12,10 +12,10 @@ public class BallProjectile extends AirPhysicsProjectile
 	
 	construct(unit caster, vec2 target, BallItem itm)
 		super(caster.getPos3with(128), 32, caster.getOwner(), caster.getPos().angleTo(target), "Cannonball.mdx")
-		setSpeed(10)
+		setSpeed(15)
 		fx.getDummy().setColor(caster.getOwner().getColor())
-		setMass(100)
-		setRestitution(0.5)
+		setMass(125)
+		setRestitution(0.65)
 		ballitem = itm
 		
 	override function update()

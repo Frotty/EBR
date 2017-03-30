@@ -1,3 +1,16 @@
+[0.88y]
+[*] slightly rebalanced activation ranges to better match visuals
+[*] fixed trap periodic evaluation radius being smaller than activation range
+[*] attempted another oneway portal color fix 
+
+[0.88x]
+[*] fixed BigSubString leaks in save/load mechanism
+[*] fixed not being able to delete MAP objects
+[*] fixed revive modifier not being removed
+[*] adjusted lounge revivepoint to be reset every time a revivepoint outside it is reached
+[*] minor startmaze improvements
+[*] added wip gold coins for shop purchases
+
 [0.88v]
 [*] fixed not being able to change facing on ice in special cases due to new pathable check
 

@@ -1,12 +1,12 @@
-package Tome
+package Coin
 import ItemObject
 
-constant TOME_DUMMY_ID = 'h00R'
+constant COIN_DUMMY_ID = 'h00S'
 
-public class Tome extends ItemObject
+public class Coin extends ItemObject
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, TOME_DUMMY_ID, pos.x, pos.y, 0 ) )
+		super( pos, CreateItem(COIN_ID, pos.x, pos.y), CreateUnit(owner, COIN_DUMMY_ID, pos.x, pos.y, 0 ) )
 		
 	override function onUse(Escaper user)
 		

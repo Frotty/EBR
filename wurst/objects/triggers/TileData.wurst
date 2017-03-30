@@ -34,7 +34,8 @@ public class TileData implements Serializable
 		this.fx = addEffect(Other.vengeancemissile, pos)
 
 	ondestroy
-		fx.destr()
+		if fx != null
+			fx.destr()
 
 	override function serialize() returns Json
 		this.tile = getTileFromType(pos)

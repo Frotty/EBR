@@ -3,14 +3,14 @@ import public EscaperSensor
 import Escaper
 
 public constant COLL_SIZE_SK = 72.
-public constant COLL_SIZE_BK = 96.
-public constant COLL_SIZE_SRK = 70.
-public constant COLL_SIZE_BRK = 90.
+public constant COLL_SIZE_BK = 92.
+public constant COLL_SIZE_SRK = 68.
+public constant COLL_SIZE_BRK = 88.
 public constant COLL_SIZE_TANK = 80.
 public constant COLL_SIZE_GLAIVE = 54.
-public constant COLL_SIZE_AIR_Z = 74.
-public constant COLL_SIZE_AIR_XY = 54.
-public constant COLL_SIZE_FIRE = 16.
+public constant COLL_SIZE_AIR_Z = 78.
+public constant COLL_SIZE_AIR_XY = 52.
+public constant COLL_SIZE_FIRE = 8.
 public constant AIR_HEIGHT = 200.
 
 public constant SMALL_RANDOM_KILLER_ID = 'u006'

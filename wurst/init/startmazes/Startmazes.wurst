@@ -10,6 +10,7 @@ import Key
 import ClosureTimers
 import Door
 import Obstacle
+import Ball
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -91,7 +92,7 @@ public function initStartmazes()
 		tp.tag = createCenteredTexttag(tp.getPos(), "|cffFFCC00Vote for minigame |cffADADAD(soon)", 9.5)
 
 		createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
-
+		new BallItem(vec2(-5780,-6687), DUMMY_PLAYER)
 		setBuilderTeleporter()
 		
 		EnumItemsInRect(playableMapRect, null, function correctKeys)

@@ -27,7 +27,7 @@ public constant int MENU_BOSS = 'A03D'
 
 public constant int KEY_SPELL_ID = 'A03Z'
 public constant int TOME_SPELL_ID = 'A040'
-public constant int GOLD_SPELL_ID = 'A040'
+public constant int COIN_SPELL_ID = 'A08N'
 public constant int BOOTS_SPELL_ID = 'A03Y'
 public constant int ANKH_SPELL_ID = 'A041'
 
@@ -39,6 +39,7 @@ public constant int BM_WEAPON_ID = 'A07I'
 public constant int GRIDCLICK_ID = 'A03V'
 
 public constant int TOME_ID = 'I00A'
+public constant int COIN_ID = 'I010'
 public constant int BOOTS_ID = 'I00M'
 public constant int ANKH_ID = 'I00L'
 

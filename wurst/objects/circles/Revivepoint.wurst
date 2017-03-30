@@ -38,6 +38,10 @@ public class RevivePoint extends StaticSetupObject
 					if ((startmazes[currentMaze] castTo int) > 0 and not startmazes[currentMaze].isInit())
 						doAfter(0.5, () -> startmazes[currentMaze].initMaze())
 						svRev.reached = false
+						svRev.actor.setColor(PLAYER_COLOR_LIGHT_GRAY)
+			else
+				svRev.reached = false
+				svRev.actor.setColor(PLAYER_COLOR_LIGHT_GRAY)
 			
 			let getExp = currentRevivepoint.distanceTo(pos.toVec2()) > 512
 			for pd from escaperPlayers.staticItr()

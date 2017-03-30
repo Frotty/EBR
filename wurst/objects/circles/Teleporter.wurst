@@ -2,7 +2,6 @@ package Teleporter
 import BaseObject
 import PlayerData
 import EscaperSensor
-import initlater InstantBuild
 
 constant TELEPORTER_ID   = 'n00C'
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -10,7 +9,7 @@ constant ESC_ID = 'A009'
 constant KILL_ID = 'A012'
 constant BOTH_ID = 'A014'
 
-constant EVENT_RADIUS	= 32.
+constant EVENT_RADIUS	= 38.
 
 enum TeleportMode
 	ESCAPER

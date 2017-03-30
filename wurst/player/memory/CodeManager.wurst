@@ -86,7 +86,7 @@ function onFileSynced()
 		checkPlayerfile(pdc)
 		printLog(Loglevel.DEBUG, "New Playerfile3")
 	else if Playerfile.verify(token)
-		printTimed("Found a |cffFFCC00valid savefile.|r", 25)
+		printTimedToPlayer("Found a |cffFFCC00valid savefile.|r", 25, pdc.p)
 		let pf = new Playerfile()
 		pf.load(file)
 		pdc.pfile = pf
