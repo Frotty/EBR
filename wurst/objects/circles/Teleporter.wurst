@@ -1,7 +1,6 @@
 package Teleporter
 import BaseObject
 import PlayerData
-import EscaperSensor
 
 constant TELEPORTER_ID   = 'n00C'
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -46,13 +45,13 @@ public class Teleporter extends StaticBaseObject
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 						PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
 			case TeleportMode.KILLER
-				if e instanceof EscaperSensorSetup and rdata.canBuild(obj.owner)
+				if e instanceof SetupObject and rdata.canBuild(obj.owner)
 					dyn = e castTo SetupObject
 					dyn.setPos(rallyPos)
 					addEffect(EFFECT_STRING, obj.pos).destr()
 					addEffect(EFFECT_STRING, rallyPos).destr()
 			case TeleportMode.BOTH
-				if e instanceof EscaperSensorSetup and rdata.canBuild(obj.owner)
+				if e instanceof SetupObject and rdata.canBuild(obj.owner)
 					dyn = e castTo SetupObject
 					dyn.setPos(rallyPos)
 					addEffect(EFFECT_STRING, obj.pos).destr()

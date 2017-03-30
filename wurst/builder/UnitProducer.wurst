@@ -7,7 +7,6 @@ import Preloader
 import TeleporterTarget
 import BomberTarget
 import TerrainChanger
-import Bomber
 import Pointer
 import Knockbacker
 import Faceless

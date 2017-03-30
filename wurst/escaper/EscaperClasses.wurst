@@ -13,6 +13,7 @@ constant STAGNANCYSHIELD_ID = 'A008'
 constant SLOWWAVE_ID = 'A088'
 constant TEMP_REV_ID = 'A07Z'
 constant INNER_STRENGTH_ID = 'A08L'
+constant FIRE_RESISTANCE = 'A08Q'
 int HP_GAIN_50
 int HP_GAIN_75
 int HP_GAIN_100
@@ -147,6 +148,22 @@ public class IceEscaper extends Escaper
 			if sliding
 				speedFactor = 0.9 + lvl
 				addEffect(Other.impaletargetdust, pos).destr()
+
+public class CuteEscaper extends Escaper
+	
+	construct(vec3 pos, player owner)
+		super(pos, owner, 'H00T')
+		
+	override function onCast(int id)
+		super.onCast(id)
+
+	override function doLavaDamage()
+		var hp = actor.getHP()
+		var bias = 1 - actor.getAbilityLevel(id)
+		if hp > .405
+			actor.setHP(hp-this.getCurrentRegion().lavaDmg *)
+		else if alive
+			kill(null)
 		
 	
 public class StrongEscaper extends Escaper

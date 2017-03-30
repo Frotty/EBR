@@ -34,8 +34,8 @@ public abstract class SetupObject extends UnitEntity
 		
 	override function setPos(vec3 pos)
 		this.pos = pos
-		actor.setPos(pos.toVec2())
 		setup.setPos(pos.toVec2())
+		actor.setPos(pos.toVec2())
 
 	override function setXY(vec3 pos)
 		this.pos = pos

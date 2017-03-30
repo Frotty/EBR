@@ -1,5 +1,4 @@
 package Faceless
-import SerializeIds
 import EscaperSensor
 import ChannelAbilityPreset
 constant UNIT_ID = 'u00I'

@@ -233,17 +233,20 @@ public abstract class Escaper extends UnitEntity
 		else
 			slideVelocity *= 0.8		
 		if onLava
-			var hp = actor.getHP()
-			if hp > .405
-				actor.setHP(hp-this.getCurrentRegion().lavaDmg)
-			else if alive
-				kill(null)
+			doLavaDamage()
 		if poisoned
 			var hp2 = actor.getHP()
 			if hp2 > .405
 				actor.setHP(hp2-this.getCurrentRegion().poisonDmg)
 			else if alive
 				kill(null)
+
+	function doLavaDamage()
+		var hp = actor.getHP()
+		if hp > .405
+			actor.setHP(hp-this.getCurrentRegion().lavaDmg)
+		else if alive
+			kill(null)
 		
 	override function update()
 		let newPos = actor.getPos()
@@ -396,13 +399,14 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 11.5))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
-			orb.addVel((getRealVel()-walkVel)*0.45)
+			orb.addVel((getRealVel()-walkVel)*0.65)
 			orb.setXYAngle(orb.vel.toVec2().getAngle())
 			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
 		else if id == JAUNT_SPELL
 			if orb != null
 				setXY(orb.getPos())
-				setVel(vel * 0.25)
+				slideVelocity = ZERO2
+				setVel(vel * 0.15)
 				flashEffect(Other.polymorphtarget, pos)
 				orb.terminate()
 		else if id == CREATE_REV_MOD_ID

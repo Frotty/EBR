@@ -123,6 +123,7 @@ public class PlayerData
 		while XP >= expBounds[i]
 			i++
 		rank = ranks[i]
+		p.addGold(i * 15)
 		if title == Title.ADMIN
 			rank = "|cffADD642*Admin*"
 			if tagfx == null
