@@ -22,11 +22,11 @@ public class Teleporter extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 		super( pos, getUnit(owner, TELEPORTER_ID, pos, angle(0), this), EVENT_RADIUS, function Teleporter.teleport, CODE_NULL ) 
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor.addAbility(PAUSE_ABIL)
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS, function Teleporter.teleport, CODE_NULL )
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor.addAbility(PAUSE_ABIL)
 		
 	static function teleport()
 		unit source = GetTriggeringTrigger().getSource()
@@ -65,7 +65,8 @@ public class Teleporter extends StaticBaseObject
 		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_ID) 
 			obj.terminate()
 
-	function onCast()
+	override function onCast()
+		super.onCast()
 		var id = GetSpellAbilityId()
 		switch id
 			case BOTH_ID

@@ -33,7 +33,6 @@ public class Door extends StaticSetupObject
 							CreateUnit(owner,DOORORDER_ID, pos.x, pos.y, 0), EVENT_RADIUS, function Door.keyopen )
 		pathing = CreateUnit( this.owner, DOORPATH, pos.x, pos.y, 270 )
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-
 	
 	static function keyopen() //open with item and color conditions
 		unit source = GetTriggeringTrigger().getSource()
@@ -50,7 +49,7 @@ public class Door extends StaticSetupObject
 						door.openDoor()
 						let pd = pData[e.owner.getId()]
 						pd.addXp(10, false)
-				
+
 	function changeColor( int id )
 		switch id
 			case colorSpells[0]

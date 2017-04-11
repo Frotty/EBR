@@ -1,3 +1,19 @@
+[0.89b]
+[*] increased unit creator maximum spawn interval
+[*] added on/off mechanic for every circle object
+[*] executer modes generalized to turning any circle object and doors on/off/toggle
+[*] added delay for save/load maze process to lower lagg spike
+[*] M.A.P. now paused during save/load to prevent impatient users from causing errors
+[*] now also saving: decorations, booster speed
+[*] removed long texter commands and improved info
+
+[0.88z]
+[*] fix executers turning on unitcreators
+[*] fix escaper spells staying behind when reaching a checkpoint
+[*] fix pointer issues (-sa works again, turn mode starts at current facing)
+[*] fix jumping two tiles
+[*] add new escaper
+
 [0.88y]
 [*] slightly rebalanced activation ranges to better match visuals
 [*] fixed trap periodic evaluation radius being smaller than activation range

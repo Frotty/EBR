@@ -65,6 +65,13 @@ public abstract class Escaper extends UnitEntity
 		updateRegionData()
 		escapers.add(this)
 
+	function onCPReach()
+		if revivetomb != null
+			revivetomb.remove()
+			revivetomb = null
+		actor.setHP(9999)
+
+
 	function onPick()
 		let id = GetManipulatedItem().getTypeId()
 		if id == 'I010'
@@ -394,9 +401,9 @@ public abstract class Escaper extends UnitEntity
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Other.aneucaster, pos).destr()
 				if sliding
-					addVel(vec3(3* angl.cos(), 3 * angl.sin(), 11.5))
+					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.5))
 				else
-					addVel(vec3(8* angl.cos(), 8 * angl.sin(), 11.5))
+					addVel(vec3(7.75 * angl.cos(), 7.75 * angl.sin(), 11.5))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
 			orb.addVel((getRealVel()-walkVel)*0.65)

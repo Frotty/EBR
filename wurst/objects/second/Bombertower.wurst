@@ -21,11 +21,11 @@ public class Bombertower extends StaticBaseObject
 		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_POINT_ORDER)
 		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_TARGET_ORDER)
-		EventListener.add(dummy, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		SetUnitPathing(dummy, true)
 
 		
-	function onCast()
+	override function onCast()
+		super.onCast()
 		let id = GetSpellAbilityId()
 		onAttackspeedCast(id, actor)
 		

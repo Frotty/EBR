@@ -111,6 +111,12 @@ public class FastEscaper extends Escaper
 
 	construct(vec3 pos, player owner)
 		super(pos, owner, 'H00D')
+
+	override function onCPReach()
+		super.onCPReach()
+		if portal != null
+			portal.terminate()
+			portal = null
 		
 	override function onCast(int id)
 		super.onCast(id)
@@ -159,9 +165,9 @@ public class CuteEscaper extends Escaper
 
 	override function doLavaDamage()
 		var hp = actor.getHP()
-		var bias = 1 - actor.getAbilityLevel(id)
+		var bias = 1 - (actor.getAbilityLevel(FIRE_RESISTANCE) * 0.1)
 		if hp > .405
-			actor.setHP(hp-this.getCurrentRegion().lavaDmg *)
+			actor.setHP(hp-this.getCurrentRegion().lavaDmg * bias)
 		else if alive
 			kill(null)
 		

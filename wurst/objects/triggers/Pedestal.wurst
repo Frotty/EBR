@@ -42,7 +42,6 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
 		..addAbility(LOAD3_ID)..addAbility(REMOVE_ID)..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
 		clearQuestionmark()
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function addObj(Entity serializable, boolean removeIfExists)
 		if serializable instanceof Escaper or serializable instanceof Builder or serializable instanceof MemoryAccessPedestal
@@ -56,7 +55,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					return
 			// Isnt added yet
 			entities.add(serializable)
-			
+			flashEffect(Other.healtarget, serializable.getPos())
 			if serializable instanceof ItemObject
 				let io = serializable castTo ItemObject
 				effects.put(serializable, io.setup.addEffect(Other.innerfiretarget, "overhead"))
@@ -82,6 +81,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				tiles.add(new TileData(targPos, mpos, owner))
 
 	function loadSlot(int slotId)
+		actor.pause()
 		ttag..center(pos, "|cff0884CEloading...", 10)
 		lastRef[owner.getId()] = this
 		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString(), Filter(() -> onLoadSlotSynced()))
@@ -137,6 +137,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				destroy cb
 				destroy bs
 				ttag..center(pos, "|cff0884CEEntites loaded!", 10)
+				actor.unpause()
 				printLog(Loglevel.DEBUG, "entities loaded")
 				// Load tiles
 				parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
@@ -181,6 +182,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	int currentSlotId
 	function saveSlot(int slotId)
+		actor.pause()
 		ttag..center(pos, "|cff0884CEsaving...", 10)
 		serializeOrigin = pos.toVec2().toTile().toVec3()
 		let itr = entities.staticItr()
@@ -240,13 +242,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				f.write(compressedData.getString(0))
 				f.close()
 			ttag..center(pos, "|cffFFBD21save finished!", 10)
-			
 			destroy big
+			actor.unpause()
 		end)
 		
 		
 
-	function onCast()
+	override function onCast()
+		super.onCast()
 		let id = GetSpellAbilityId()
 		let tpos = getSpellTargetPos()
 		switch id

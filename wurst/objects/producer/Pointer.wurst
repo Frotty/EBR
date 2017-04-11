@@ -47,6 +47,7 @@ public class Pointer extends EscaperSensorSetup
 					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
 			case START_ID
 				turning = true
+				angl = actor.getFacingAngle()
 				activate()
 				setup..removeAbility(START_ID)..addAbility(STOP_ID)
 			case STOP_ID
@@ -62,6 +63,7 @@ public class Pointer extends EscaperSensorSetup
 			es.actor.setFacing(data.angl)
 	
 	static function setfacing()
+		print("set facing")
 		string chatmsg = GetEventPlayerChatString()
 		real facing = 0
 		if SubString(chatmsg, 0, 4) == "-sa "
@@ -71,6 +73,8 @@ public class Pointer extends EscaperSensorSetup
 		for u from getSelectedPointers(GetTriggerPlayer())
 			Pointer obj = u.getUserData() castTo Pointer
 			obj.angl = facing.asAngleDegrees()
+			obj.setup.setFacing(obj.angl)
+			obj.actor.setFacing(obj.angl)
 			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
 
 	override function serialize() returns Json
@@ -82,8 +86,7 @@ public class Pointer extends EscaperSensorSetup
 function getSelectedPointers(player p) returns group
 	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(POINTER_ID), null)
 	for u in ENUM_GROUP
-		if GetOwningPlayer(u) == p and IsUnitSelected(u, p)
-		else
+		if not (GetOwningPlayer(u) == p and IsUnitSelected(u, p))
 			GroupRemoveUnit(ENUM_GROUP, u)
 	return ENUM_GROUP	
 	

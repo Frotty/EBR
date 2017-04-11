@@ -9,7 +9,7 @@ public abstract class SensorListener
 	
 public module Sensor
 	private trigger inRangeTrig = null
-	private unit actor = null
+	private unit actorRef = null
 	private static HashMap<trigger, SensorListener> sensorListeners = new HashMap<trigger, SensorListener>()
 
 	function addSensorListener(Entity e, SensorListener listener)
@@ -18,11 +18,11 @@ public module Sensor
 		inRangeTrig = CreateTrigger()
 		
 		if e instanceof UnitEntity
-			this.actor = (e castTo UnitEntity).actor
+			this.actorRef = (e castTo UnitEntity).actor
 		else if e instanceof FxEntity
-			this.actor = (e castTo FxEntity).getDummy()
+			this.actorRef = (e castTo FxEntity).getDummy()
 
-		inRangeTrig.registerUnitInRangeSource(actor, e.radius, null)
+		inRangeTrig.registerUnitInRangeSource(actorRef, e.radius, null)
 		sensorListeners.put(inRangeTrig, listener)
 		inRangeTrig.addAction( () -> begin
 			let trig = GetTriggeringTrigger()
@@ -39,7 +39,7 @@ public module Sensor
 		if inRangeTrig != null
 			destroy sensorListeners.get(inRangeTrig)
 			sensorListeners.remove(inRangeTrig)
-			actor.clearRegister()
+			actorRef.clearRegister()
 
 
 public function unit.abortOrder() returns boolean

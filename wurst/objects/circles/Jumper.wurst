@@ -32,11 +32,11 @@ public class Jumper extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, 40., function Jumper.inRange, CODE_NULL)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor.addAbility(PAUSE_ABIL)
 	
 	construct(vec2 pos, player owner)
 		super(pos, getUnit(owner, JUMPER_ID, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor.addAbility(PAUSE_ABIL)
 		forUnitsInRange(pos, 8, (unit u) -> begin
 			if u != actor and u.getTypeId() == JUMPER_ID
 				snd.play()
@@ -61,7 +61,8 @@ public class Jumper extends StaticBaseObject
 			addEffect(EFFECT_STRING, data.pos).destr()
 					
 				
-	function onCast()
+	override function onCast()
+		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id
 			case FORCED_ID

@@ -34,6 +34,7 @@ import TerrainChanger
 import Faceless
 import public SerializeIds
 import Bomber
+import Wall
 
 public function isOrderBuildOrder( int o ) returns boolean
 	int i = 1
@@ -52,22 +53,19 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 		var i = 1
 		while buildorders[i] > 0
 			if id == buildorders[i]
-				newObjectFromId(b.owner, tpos, i, id)
+				newObjectFromId(b.owner, tpos, i)
 				break
 			i++
 		// TODO remove
 		for i2 = 139 to 152
 			if id == buildorders[i2]
-				newObjectFromId(b.owner, tpos, i2, id)
+				newObjectFromId(b.owner, tpos, i2)
 				break
 	else
 		DisplayTextToPlayer( b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
 	b.actor.abortOrder()
 
 public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
-	return newObjectFromId(owner, tpos, id, -1)
-
-public function newObjectFromId(player owner, vec2 tpos, int id, int origId) returns Entity
 	switch id
 		case JUMPER_INDEX
 			return new Jumper(tpos, owner)
@@ -102,7 +100,7 @@ public function newObjectFromId(player owner, vec2 tpos, int id, int origId) ret
 		case UNITCREATOR_INDEX
 			return new UnitCreator(tpos, owner)
 		case WALL_INDEX
-			return new Decoration(tpos, owner,origId,270.)
+			return new Wall(tpos, owner,270., WALL_INDEX)
 		case TRACKS_INDEX
 			return new Tracks(tpos, owner)	
 		case FOUNTAIN_INDEX
@@ -112,9 +110,9 @@ public function newObjectFromId(player owner, vec2 tpos, int id, int origId) ret
 		case TRAP_INDEX
 			return new Trap(tpos, owner)	
 		case HWALL_INDEX
-			return new Decoration(tpos, owner,origId,270.)	
+			return new Wall(tpos, owner,270.,HWALL_INDEX)	
 		case VWALL_INDEX
-			return new Decoration(tpos, owner,origId,270.)
+			return new Wall(tpos, owner,270.,VWALL_INDEX)
 		case CONGA_INDEX
 			return new CongaLineHead(tpos, owner)
 		case TBLOCKER_INDEX
@@ -122,27 +120,27 @@ public function newObjectFromId(player owner, vec2 tpos, int id, int origId) ret
 		case VOLCANO_INDEX
 			return new VolcanoObstacle(tpos, owner)
 		case 140
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner, GetRandomReal(0, 360), id)
 		case 141
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner, GetRandomReal(0, 360), id)
 		case 142
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner, GetRandomReal(0, 360), id)
 		case 143
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner, GetRandomReal(0, 360), id)
 		case 144
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 145
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 146
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 147
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 148
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 149
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 150
-			return new Decoration(tpos, owner,origId,GetRandomReal(0, 360))
+			return new Decoration(tpos, owner,GetRandomReal(0, 360), id)
 		case 151
 			return new MemoryAccessPedestal(tpos, owner)
 		case ARCANERY_INDEX
@@ -183,7 +181,7 @@ public function newObjectFromId(player owner, vec2 tpos, int id, int origId) ret
 			return new BomberTarget(tpos, owner)
 	return null
 
-int array buildorders
+public int array buildorders
 
 @init1 function init_InstantBuild()
 	buildorders[JUMPER_INDEX] = 'n00B' // Jumper

@@ -9,7 +9,6 @@ import Pointer
 import Assets
 import Knockbacker
 import Builder
-import Unitcreator
 
 constant int 	EXECUTER_ID   = 'n01D'
 constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
@@ -26,13 +25,12 @@ public enum Emode
 
 public enum Amode
 	NONE
-	OPENDOOR
-	CLOSEDOOR
-	TOGGLEDOOR
+	ENABLEOBJ
+	DISABLEOBJ
+	TOGGLEOBJ
 	CREATEUNIT
 	MOVEUNIT
 	CHANGETERRAIN
-	TOGGLEUNITPRODUCER
 
 enum ActionUnit
 	NONE
@@ -67,7 +65,8 @@ public class Executer extends StaticBaseObject
 	construct( vec2 pos, player owner)
 		super( pos, getUnit(owner, EXECUTER_ID, pos, angle(0), this), EVENT_RADIUS, function Executer.onEvent, CODE_NULL )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+		actor..addAbility(PAUSE_ABIL)
+
 	static function onEvent()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
@@ -104,7 +103,7 @@ public class Executer extends StaticBaseObject
 		region r = GetTriggeringRegion()
 		Entity leaver = GetLeavingUnit().getEntity()
 		thistype obj = r.loadRegionData() castTo thistype
-		if obj.canTrigger(leaver)
+		if obj.enabled and obj.canTrigger(leaver)
 			GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
 			int c = 0
 			for u from ENUM_GROUP
@@ -122,7 +121,7 @@ public class Executer extends StaticBaseObject
 		region r = GetTriggeringRegion()
 		Entity e = u.getEntity()
 		thistype obj = r.loadRegionData() castTo thistype
-		if obj.canTrigger(e)
+		if obj.enabled and obj.canTrigger(e)
 			if not obj.ON
 				obj.findAction()
 				obj.ON = true
@@ -131,64 +130,84 @@ public class Executer extends StaticBaseObject
 		
 
 	function findAction()
+		let target = getRallyUnit().getEntity()
 		switch actionMode
 			case Amode.NONE
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
-			case Amode.CLOSEDOOR
-				Door closingdoor = getRallyUnit().getUserData() castTo Door
-				if closingdoor == null
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
+			case Amode.DISABLEOBJ
+				if target == null
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
+				if target instanceof StaticBaseObject
+					(target castTo StaticBaseObject).setEnabled(false)
+				else if target instanceof Door
+					(target castTo Door).closeDoor()
 				else
-					closingdoor.closeDoor()
-			case Amode.TOGGLEDOOR
-				Door togglingdoor = getRallyUnit().getUserData() castTo Door
-				if togglingdoor == null
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-				else
-					if togglingdoor.opened
-						togglingdoor.closeDoor()
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Invalid object selected")
+			case Amode.TOGGLEOBJ
+				if target == null
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
+				if target instanceof StaticBaseObject
+					(target castTo StaticBaseObject).setEnabled(not (target castTo StaticBaseObject).enabled)
+				else if target instanceof Door
+					let door = target castTo Door
+					if door.opened
+						door.closeDoor()
 					else
-						togglingdoor.openDoor()
-			case Amode.OPENDOOR
-				Door openingdoor = getRallyUnit().getUserData() castTo Door
-				if openingdoor == null
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+						door.openDoor()
 				else
-					openingdoor.openDoor()
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Invalid object selected")
+			case Amode.ENABLEOBJ
+				if target == null
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
+				if target instanceof StaticBaseObject
+					(target castTo StaticBaseObject).setEnabled(true)
+				else if target instanceof Door
+					(target castTo Door).openDoor()
+				else
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Invalid object selected")
 			case Amode.CHANGETERRAIN
 				changeTerrain(true)
 			case Amode.MOVEUNIT
 				moveUnit()
 			case Amode.CREATEUNIT
 				createUnit()
-			case Amode.TOGGLEUNITPRODUCER
-				toggleUnitProducer()
 			default
 				printTimedToPlayer("Executer has no action set", 15, owner)
 					
-	function negativeAction()		
+	function negativeAction()	
+		let target = getRallyUnit().getEntity()	
 		switch actionMode
-			case Amode.CLOSEDOOR
-				Door closingdoor = getRallyUnit().getUserData() castTo Door
-				if closingdoor == null
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+			case Amode.DISABLEOBJ
+				if target == null
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
+				if target instanceof StaticBaseObject
+					(target castTo StaticBaseObject).setEnabled(true)
+				else if target instanceof Door
+					(target castTo Door).openDoor()
 				else
-					closingdoor.openDoor()
-			case Amode.TOGGLEDOOR
-				Door togglingdoor = getRallyUnit().getUserData() castTo Door
-				if togglingdoor == null
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
-				else
-					if togglingdoor.opened
-						togglingdoor.closeDoor()
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Invalid object selected")
+			case Amode.TOGGLEOBJ
+				if target == null
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
+				if target instanceof StaticBaseObject
+					(target castTo StaticBaseObject).setEnabled(not (target castTo StaticBaseObject).enabled)
+				else if target instanceof Door
+					let door = target castTo Door
+					if door.opened
+						door.closeDoor()
 					else
-						togglingdoor.openDoor()
-			case Amode.OPENDOOR
-				Door openingdoor = getRallyUnit().getUserData() castTo Door
-				if openingdoor == null
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019Must select a door with the Executer")
+						door.openDoor()
 				else
-					openingdoor.closeDoor()
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Invalid object selected")
+			case Amode.ENABLEOBJ
+				if target == null
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
+				if target instanceof StaticBaseObject
+					(target castTo StaticBaseObject).setEnabled(false)
+				else if target instanceof Door
+					(target castTo Door).closeDoor()
+				else
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Invalid object selected")
 			case Amode.CHANGETERRAIN
 				changeTerrain(false)
 			default
@@ -200,16 +219,17 @@ public class Executer extends StaticBaseObject
 			IssueImmediateOrder(unitToMove, moveOrderString)
 		else
 			IssuePointOrder(unitToMove, moveOrderString, rallyPos.x, rallyPos.y)
-	
-	function toggleUnitProducer()
+
+
+	function toggleObject()
 		let ru = getRallyUnit()
 		if ru != null
 			let data = ru.getEntity()
-			if data instanceof UnitCreator
-				let uc = data castTo UnitCreator
-				uc.active = not uc.active
-				return
-		printLog(owner, Loglevel.WARNING, "Executer: No UnitCreator selected")
+			if data instanceof StaticBaseObject
+				var bo = data castTo StaticBaseObject
+				bo.setEnabled(not bo.enabled)
+		else
+			printLog(owner, Loglevel.WARNING, "Executer: No object selected")
 			
 	function createUnit()
 		let rallyPos = getRallyPoint().toVec2()
@@ -258,7 +278,6 @@ public class Executer extends StaticBaseObject
 		UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitAddAbility(actor,SPAWN_UNIT_ID)
-		UnitAddAbility(actor,START_UC_ID)
 		
 	function addActionAbilsReversable()
 		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
@@ -279,7 +298,6 @@ public class Executer extends StaticBaseObject
 		UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitRemoveAbility(actor,SPAWN_UNIT_ID)
-		UnitRemoveAbility(actor,START_UC_ID)
 		
 	function addTerrainAdjuster()
 		UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
@@ -372,9 +390,8 @@ public class Executer extends StaticBaseObject
 				addActionAbilsReversable()
 				removeModeAbils()
 				registerRect(actor.getX(), actor.getY(), 50)
-				dummy = CreateDestructable( PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
+				dummy = CreateDestructable(PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 				SetDestructableAnimation(dummy, "stand alternate")
-				
 			case REACTIVATE_ABIL
 				disabled = false
 				SetUnitVertexColor(actor, 0,128,0,255)
@@ -398,17 +415,15 @@ public class Executer extends StaticBaseObject
 				canEscaperTrigger = true
 				UnitRemoveAbility(actor, BOTH_TRIGGER_ABIL)
 				UnitAddAbility(actor, ESCAPER_TRIGGER_ABIL)
-			
 			case DOOR_OPEN_ABIL
-				actionMode = Amode.OPENDOOR
+				actionMode = Amode.ENABLEOBJ
 				removeActionAbils()
 			case DOOR_CLOSE_ABIL
-				actionMode = Amode.CLOSEDOOR
+				actionMode = Amode.DISABLEOBJ
 				removeActionAbils()
 			case DOOR_TOGGLE_ABIL
-				actionMode = Amode.TOGGLEDOOR
+				actionMode = Amode.TOGGLEOBJ
 				removeActionAbils()
-				
 			case TERRAIN_CHANGE_ABIL
 				actionMode = Amode.CHANGETERRAIN
 				removeActionAbils()
@@ -436,9 +451,6 @@ public class Executer extends StaticBaseObject
 				actionUnit = ActionUnit.TANK
 				removeActionAbils()
 				UnitAddAbility(actor,TRAIN_BOOK_ABIL)
-			case START_UC_ID
-				actionMode = Amode.TOGGLEUNITPRODUCER
-				removeActionAbils()
 			case TRAIN_BK_ABIL
 					actionUnit = ActionUnit.BIGKILLER
 			case TRAIN_SK_ABIL
@@ -536,7 +548,6 @@ constant int INVIS_ID = 'A005'
 constant int TRAIN_BOOK_ABIL = 'A042'
 
 constant int SPAWN_UNIT_ID = 'A06S'
-constant int START_UC_ID = 'A07P'
 constant int TRAIN_BK_ABIL = 'A045'
 constant int TRAIN_SK_ABIL = 'A046'
 constant int TRAIN_BRK_ABIL = 'A048'

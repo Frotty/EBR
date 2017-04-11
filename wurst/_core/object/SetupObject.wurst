@@ -5,11 +5,11 @@ import public ConfigValue
 import public Json
 import public BuilderConstants
 import public initlater RegionData
+import ErrorHandling
 
 /**
 	Objects which are unclickable for escapers,
 	but clickable for builders.	 
-
 */
 timer fixPos = CreateTimer()
 
@@ -99,6 +99,7 @@ public abstract class StaticSetupObject extends UnitEntity
 		deactivate()
 		actor.addAbility(LOCUST_ID)
 		setup.addAbility(GHOST_INVIS_ID)
+		setup.setVertexColor(colorA(255, 255, 255, 155))
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 			inRangeTrig = CreateTrigger()
@@ -107,6 +108,13 @@ public abstract class StaticSetupObject extends UnitEntity
 		setup.setEntity(this)
 	
 	override function update()
+
+	function setNewSetup(unit u)
+		if u == null or not u.isAlive() or u.getEntity() != null
+			error("invalid actor replacement") 
+		setup.recycle()
+		setup = u
+		setup.setEntity(this)
 
 	ondestroy
 		setup.clearRegister()

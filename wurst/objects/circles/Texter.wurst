@@ -2,6 +2,7 @@ package Texter
 import BaseObject
 import Escaper
 import StringUtils
+import Decoration
 
 constant int 	TEXTER_ID   = 'n01B'
 constant real 	EVENT_RADIUS	= 32.
@@ -16,7 +17,7 @@ public class Texter extends StaticBaseObject
 	construct( vec2 pos, player owner )
 		super( pos, getUnit(owner, TEXTER_ID, pos, angle(0), this), EVENT_RADIUS, function Texter.onStep, CODE_NULL) 
 		text..setColor( col.red,col.green,col.blue, 0 )..setPos( actor.getX(),actor.getY(), 0 )..setVisibility( false )..setPermanent( true )
-		
+
 	static function onStep()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
@@ -24,51 +25,59 @@ public class Texter extends StaticBaseObject
 		if e instanceof Escaper
 			obj.text.setVisibility( true )
 			obj.hidden = false
+			print("ja man  " + ('I03F').toInt().toString())
 			
 	static function show()
-		for u in getSelectedTexters(GetTriggerPlayer())
-			thistype obj = u.getUserData() castTo thistype
-			obj.text.setVisibility( true )
-			obj.text.setPos(obj.pos - vec3(obj.xoffset,0,0))
-			obj.hidden = false
-			createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
+		for u from getSelected(GetTriggerPlayer())
+			let ent = u.getEntity()
+			if ent instanceof Texter
+				thistype obj = u.getUserData() castTo thistype
+				obj.text.setVisibility( true )
+				obj.text.setPos(obj.pos - vec3(obj.xoffset,0,0))
+				obj.hidden = false
+				createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function hide()
-		for u in getSelectedTexters(GetTriggerPlayer())
-			thistype obj = u.getUserData() castTo thistype
-			obj.text.setVisibility( false )
-			obj.hidden = true
-			createTTEx(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), obj.owner  )
+		for u from getSelected(GetTriggerPlayer())
+			let ent = u.getEntity()
+			if ent instanceof Texter
+				thistype obj = u.getUserData() castTo thistype
+				obj.text.setVisibility( false )
+				obj.hidden = true
+				createTTEx(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function setText()
 		string chatmsg = GetEventPlayerChatString()
 		string ttext = ""
 		if SubString(chatmsg, 0, 4) == "-st "
 			ttext = SubString(chatmsg, 4, StringLength(chatmsg))
-		else if SubString(chatmsg, 0, 9) == "-settext "
-			ttext = SubString(chatmsg, 9, StringLength(chatmsg))
-		for unit u in getSelectedTexters(GetTriggerPlayer())
-			thistype obj = u.getUserData() castTo thistype
-			obj.text.setText(ttext, 10)
-			obj.clearQuestionmark()
-			obj.xoffset = ttext.length() / 2. * 6
-			if obj.hidden
-				createTTEx(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
-			obj.text.center(obj.getPos(), ttext, 10)
+		for u from getSelected(GetTriggerPlayer())
+			let ent = u.getEntity()
+			if ent instanceof Texter
+				thistype obj = u.getUserData() castTo thistype
+				obj.text.setText(ttext, 10)
+				obj.clearQuestionmark()
+				obj.xoffset = ttext.length() / 2. * 6
+				if obj.hidden
+					createTTEx(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
+				obj.text.center(obj.getPos(), ttext, 10)
 	
 	static function setColor()
 		string chatmsg = GetEventPlayerChatString()
 		color textcolor = color(255,255,255)
 		if SubString(chatmsg, 0, 4) == "-sc "
 			textcolor = getColorFromString(SubString(chatmsg, 4, StringLength(chatmsg)) + " ")
-		else if SubString(chatmsg, 0, 10) == "-setcolor "
-			textcolor = getColorFromString(SubString(chatmsg, 10, StringLength(chatmsg))+ " ")
-		for u from getSelectedTexters(GetTriggerPlayer())
-			thistype obj = u.getUserData() castTo thistype
-			if obj.col != textcolor
-				obj.col = textcolor
-				obj.text.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
-				createTTEx(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
+		for u from getSelected(GetTriggerPlayer())
+			let ent = u.getEntity()
+			if ent instanceof Texter
+				let obj = u.getUserData() castTo Texter
+				if obj.col != textcolor
+					obj.col = textcolor
+					obj.text.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
+					createTTEx(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
+			else if ent instanceof Decoration
+				let obj = u.getUserData() castTo Decoration
+				obj.actor.setVertexColor(textcolor)
 
 	ondestroy
 		if text != null
@@ -80,10 +89,10 @@ public class Texter extends StaticBaseObject
 		return json
 		
 	
-function getSelectedTexters(player p) returns group
-	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(TEXTER_ID), null)
+function getSelected(player p) returns group
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, p, null)
 	for u in ENUM_GROUP
-		if not IsUnitSelected( u, p) or not GetOwningPlayer(u) == p
+		if not IsUnitSelected( u, p)
 			ENUM_GROUP.removeUnit(u)
 	return ENUM_GROUP
 
@@ -120,13 +129,9 @@ function getColorFromString(string s) returns color
 	trigger hidtrig = CreateTrigger()
 	for int i = 0 to 11
 		TriggerRegisterPlayerChatEvent(textrig,Player(i), "-st ", false)
-		TriggerRegisterPlayerChatEvent(textrig,Player(i), "-settext ", false)
 		TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-sc ", false)
-		TriggerRegisterPlayerChatEvent(coltrig,Player(i), "-setcolor ", false)
-		TriggerRegisterPlayerChatEvent(shotrig,Player(i), "-showtext", true)
 		TriggerRegisterPlayerChatEvent(shotrig,Player(i), "-sht", true)
 		TriggerRegisterPlayerChatEvent(hidtrig,Player(i), "-ht", true)
-		TriggerRegisterPlayerChatEvent(hidtrig,Player(i), "-hidetext",true)
 	TriggerAddAction(hidtrig, function Texter.hide)
 	TriggerAddAction(shotrig, function Texter.show)
 	TriggerAddAction(coltrig, function Texter.setColor)

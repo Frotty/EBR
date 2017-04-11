@@ -1,7 +1,101 @@
 package Decoration
 import BaseObject
+import ChannelAbilityPreset
+import initlater InstantBuild
+
+public int CHANGE_FACE_ID
+public int INC_SCALE
+public int DEC_SCALE
+
+constant KEY_SCALE = "d"
+constant KEY_ANGLE = "e"
 
 public class Decoration extends StaticSetupObject
-	
-	construct(vec2 pos, player owner, int ID, real a)
-		super(CreateUnit(owner, ID, pos.x, pos.y, a ),CreateUnit(owner, ID, pos.x, pos.y, a ), 0., CODE_NULL )
+	private ConfigValue scale = new ConfigValue(1.0, 0.1, "Scale")
+	int tid = 0
+	boolean hasBeenChanged = false
+
+	construct(vec2 pos, player owner, real a, int tid)
+		super(CreateUnit(owner, buildorders[tid], pos.x, pos.y, a ), CreateUnit(owner, buildorders[tid], pos.x, pos.y, a ), 0., CODE_NULL )
+		this.tid = tid
+		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
+	function onCast()
+		let id = GetSpellAbilityId()
+		
+		switch id
+			case CHANGE_FACE_ID
+				let tg = getSpellTargetPos()
+				changeAngle(pos.angleTo2d(tg))
+			case INC_SCALE
+				scale.increment(this, 2.5)
+			case DEC_SCALE
+				scale.decrement(this, 0.1)
+		actor.setScale(scale.get())
+		setup.setScale(scale.get())
+
+	function changeAngle(angle a)
+		boolean select = IsUnitSelected(setup, owner)
+		setNewActor(createUnit(owner, actor.getTypeId(), pos, a))
+		setNewSetup(createUnit(owner, setup.getTypeId(), pos, a))
+		actor.addAbility(LOCUST_ID)
+		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)
+		if select
+			owner.select(setup)
+		hasBeenChanged = true
+
+	override function deserialize(Json json)
+		changeAngle((json.getReal(KEY_ANGLE).fromDeg()))
+		let sc = json.getInt(KEY_SCALE)
+		if sc > 0.
+			scale.setVal(sc / 100.)
+			actor.setScale(scale.get())
+			setup.setScale(scale.get())
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, tid.toString()))
+		if hasBeenChanged
+			json..addProperty(new Property(KEY_ANGLE, actor.getFacing().toInt().toString()))
+		if scale.get() != 1.0
+			json..addProperty(new Property(KEY_SCALE, (scale.get() * 100.).toInt().toString()))
+		return json
+
+@objectgen function genDeco()
+	CHANGE_FACE_ID = ABIL_ID_GEN.next()
+	INC_SCALE = ABIL_ID_GEN.next()
+	DEC_SCALE = ABIL_ID_GEN.next()
+
+	if compiletime
+		new ChannelAbilityPreset(CHANGE_FACE_ID, 1, true)
+			..setName("Set facing")
+			..presetTargetTypes(Targettype.POINT)
+			..presetCastRange((int lvl) -> 500)
+			..presetCooldown((int lvl) -> 0)
+			..presetManaCost((int lvl) -> 0)
+			..presetTooltipNormal((int lvl) -> "Set the facing of this decoration [Q]")
+			..presetTooltipNormalExtended((int lvl) -> "Makes this object point at the target direction")
+			..presetButtonPosNormal(0, 0)
+			..presetIcon("ReplaceableTextures\\CommandButtons\\BTNLoad.blp")
+			..presetHotkey("Q")
+
+		new ChannelAbilityPreset(INC_SCALE, 1, true)
+			..setName("Increase Scale")
+			..presetTargetTypes(Targettype.NONE)
+			..makeUnitSpell(0, 0)
+			..presetTooltipNormal((int lvl) -> "Increase the scale of this decoration [W]")
+			..presetTooltipNormalExtended((int lvl) -> "+0.1")
+			..presetButtonPosNormal(1, 0)
+			..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+			..presetHotkey("W")
+
+		new ChannelAbilityPreset(DEC_SCALE, 1, true)
+			..setName("Decrease Scale")
+			..presetTargetTypes(Targettype.NONE)
+			..makeUnitSpell(0, 0)
+			..presetTooltipNormal((int lvl) -> "Decrease the scale of this decoration [S]")
+			..presetTooltipNormalExtended((int lvl) -> "-0.1")
+			..presetButtonPosNormal(1, 1)
+			..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+			..presetHotkey("S")

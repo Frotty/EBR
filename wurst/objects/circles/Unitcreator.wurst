@@ -24,13 +24,12 @@ public class UnitCreator extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, 0., CODE_NULL , CODE_NULL)
-		deactivate()
+		setEnabled(false)
 
 	construct( vec2 pos, player owner)
 		super( pos, getUnit(owner, UNITCREATOR_ID, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
 		actor.addAbility(FIXED_ID)
-		deactivate()
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		setEnabled(false)
 	
 	override function update()
 		if timerreal <= 0.0
@@ -66,11 +65,12 @@ public class UnitCreator extends StaticBaseObject
 				ek = new Knockbacker(cpos, obj.owner, obj.getRallyAngle())
 		ek.setup.issuePointOrder("move", rPos)
 		
-	function onCast()
+	override function onCast()
+		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id 
 			case INCREASE_INTERVAL_ABIL
-				if interval >= 10
+				if interval >= 15
 					createTTEx(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					interval += 0.25
@@ -82,15 +82,6 @@ public class UnitCreator extends StaticBaseObject
 					interval -= 0.25
 					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 					//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
-			case START_ABIL
-				activate()
-				timerreal = interval
-				UnitAddAbility(actor,PAUSE_ABIL)
-				UnitRemoveAbility(actor,START_ABIL)
-			case PAUSE_ABIL
-				UnitRemoveAbility(actor,PAUSE_ABIL)
-				UnitAddAbility(actor,START_ABIL)
-				deactivate()
 			case 'A045' // Big killer
 				spawnUnitType = 'BIGK'
 			case 'A046' // Small killer
@@ -121,8 +112,6 @@ public class UnitCreator extends StaticBaseObject
 	
 int INCREASE_INTERVAL_ABIL = 'A01P'
 int DECREASE_INTERVAL_ABIL = 'A01R'
-int START_ABIL = 'A00A'
-int PAUSE_ABIL = 'Tank'
 HashMap<int, int> SPAWN_TYPE_ABIL = new HashMap<int, int>()
 
 init

@@ -1,8 +1,14 @@
 package Wall
 import BaseObject
-
+import initlater InstantBuild
 
 public class Wall extends StaticBaseObject
-	
-	construct(vec2 pos, player owner, int ID)
-		super(pos, getUnit(owner, ID, pos, angle(270), this), 0., CODE_NULL, CODE_NULL)
+	int tId = 0
+	construct(vec2 pos, player owner, real angle, int tId)
+		super(pos, getUnit(owner, buildorders[tId], pos, angle(angle), this), 0., CODE_NULL, CODE_NULL)
+		this.tId = tId
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, tId.toString()))
+		return json

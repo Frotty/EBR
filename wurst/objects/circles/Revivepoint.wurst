@@ -26,6 +26,7 @@ public class RevivePoint extends StaticSetupObject
 			currentRevivepoint = pos.toVec2()
 			rescueSound.play()
 			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
+			reacher.onCPReach()
 			this.setCurrentRegion()
 			if this.getCurrentRegion().getPermission(STAFF_PLAYER) == Permission.OWNER
 				// Is Startmaze

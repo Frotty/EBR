@@ -30,11 +30,11 @@ public class Waypoint extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor..addAbility(PAUSE_ABIL)
 
 	construct(unit existing)
 		super( existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		actor..addAbility(PAUSE_ABIL)
 
 	function orderLogicMove()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
@@ -47,7 +47,7 @@ public class Waypoint extends StaticBaseObject
 					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
 				else
 					data.actor.issuePointOrder("move", rallyPos.toVec2())
-		
+
 	function onEnter(unit entry)
 		Entity e = entry.getEntity()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
@@ -75,7 +75,8 @@ public class Waypoint extends StaticBaseObject
 			else
 				getTimer()..start(delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
 
-	function onCast()
+	override function onCast()
+		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id
 			case INC_ID

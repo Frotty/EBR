@@ -5,14 +5,15 @@ constant BOOSTER_ID = 'n00J'
 constant EVENT_RADIUS = 32.
 constant INCREASE_SPEED_ABIL = 'A04O'
 constant DECREASE_SPEED_ABIL = 'A04Q'
+constant BOOST_SPEED_KEY = "b"
 
 public class Booster extends StaticBaseObject
-	ConfigValue boostspeed = new ConfigValue(200, 20, "Boostspeed")
+	ConfigValue boostspeed = new ConfigValue(200, 25, "Boostspeed")
 	
 	construct( vec2 pos, player owner )
 		super( pos, getUnit(owner, BOOSTER_ID, pos, angle(0), this), EVENT_RADIUS, function Booster.orderMove, CODE_NULL ) 
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		clearQuestionmark()
+		actor.addAbility(PAUSE_ABIL)
 		
 	static function orderMove()
 		let source = GetTriggeringTrigger().getSource()
@@ -24,17 +25,24 @@ public class Booster extends StaticBaseObject
 			ek.actor.setMoveSpeed(obj.boostspeed.get())
 			ek.setup.setMoveSpeed(obj.boostspeed.get())
 
-	function onCast()
+	override function onCast()
+		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id 
 			case INCREASE_SPEED_ABIL
-				boostspeed.increment(this, 520)
+				boostspeed.increment(this, 525)
 			case DECREASE_SPEED_ABIL
-				boostspeed.decrement(this, 20)
+				boostspeed.decrement(this, 25)
 
-	
+	override function deserialize(Json json)
+		let speed = json.getInt(BOOST_SPEED_KEY)
+		if speed > 0
+			boostspeed.setVal(speed * 1.) 
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, BOOSTER_INDEX.toString()))
+		if boostspeed.getInt() != 200
+			json..addProperty(new Property(BOOST_SPEED_KEY, boostspeed.getInt().toString()))
 		return json
 

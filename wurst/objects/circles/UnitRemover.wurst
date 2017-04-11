@@ -10,10 +10,12 @@ public class UnitRemover extends StaticBaseObject
 	construct(unit existing)
 		super(existing.getPos(), existing, 64., function UnitRemover.removeUnit, CODE_NULL )
 		clearQuestionmark()
+		actor.addAbility(PAUSE_ABIL)
 
 	construct( vec2 pos, player owner)
 		super(pos, getUnit(owner, ID, pos, angle(0), this), 64., function UnitRemover.removeUnit, CODE_NULL)
 		clearQuestionmark()
+		actor.addAbility(PAUSE_ABIL)
 
 	static function removeUnit()
 		var u = GetTriggerUnit()

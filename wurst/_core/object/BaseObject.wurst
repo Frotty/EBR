@@ -16,12 +16,16 @@ import Assets
 public code CODE_NULL = null
 public constant KEY_RALLY_X = "r"
 public constant KEY_RALLY_Y = "s"
+public constant START_ABIL = 'A00A'
+public constant PAUSE_ABIL = 'Tank'
 
 public class StaticBaseObject extends UnitEntity
 	private vec3 rallyPoint
 	private unit rallyUnit = null
 	private angle rallyAngle = angle(0)
 	effect noRally
+	effect disFx = null
+	boolean enabled = true
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
@@ -44,14 +48,47 @@ public class StaticBaseObject extends UnitEntity
 			inRangeTrig.addAction(action)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> adjustRallypoint())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> adjustRallypoint())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
+	function setEnabled(boolean flag)
+		if flag and not enabled
+			enabled = true
+			activate()
+			actor..removeAbility(START_ABIL)..addAbility(PAUSE_ABIL)
+			flashEffect(Other.ancestralspiritcaster, pos)
+			if disFx != null
+				disFx.destr()
+		else if enabled
+			enabled = false
+			deactivate()
+			actor..removeAbility(PAUSE_ABIL)..addAbility(START_ABIL)
+			if disFx != null
+				disFx.destr()
+
+			var path = Other.sleeptarget
+			if actor.hasAbility(GHOST_INVIS_ID)
+				if GetLocalPlayer() != owner
+					path = ""
+			disFx = addEffect(path, pos)
+
+	function onCast()
+		let id = GetSpellAbilityId()
+		switch id
+			case START_ABIL
+				setEnabled(true)
+			case PAUSE_ABIL
+				setEnabled(false)
 
 	function clearQuestionmark()
 		if noRally != null
 			noRally.destr()
 			noRally = null
 
+	function isActive() returns boolean
+		return active
+
 	static function isProper() returns boolean
-		return GetTriggerUnit().getFlyHeight() < 22
+		return GetTriggerUnit().getFlyHeight() < 22 and (GetTriggeringTrigger().getSource().getUserData() castTo thistype).enabled
 
 	static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
 		let u			= GetOrderedUnit()
@@ -106,6 +143,9 @@ public class StaticBaseObject extends UnitEntity
 		actor.clearRegister()
 		inRangeTrig.destr()
 		clearQuestionmark()
+		if disFx != null
+			disFx.destr()
+			disFx = null
 
 	override function serialize() returns Json
 		let json = super.serialize()
