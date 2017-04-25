@@ -149,10 +149,10 @@ public function allow()
 		pd.escaper = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 	end)
 	new EscaperDefinition('H00T')
-	..setName("|cff6B6BCECute Escaper|r\nHas resistance to lava.")
+	..setName("|cff6B6BCEBlind Escaper|r\nHas cool footsteps and resistance to lava.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNJaina.blp")
 	..setCallback((PlayerData pd) -> begin 
-		pd.escaper = new CuteEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = new BlindEscaper(currentRevivepoint.toVec3(), pd.p)
 	end)
 	
 	for pd from allPlayers.staticItr()

@@ -155,7 +155,7 @@ public class IceEscaper extends Escaper
 				speedFactor = 0.9 + lvl
 				addEffect(Other.impaletargetdust, pos).destr()
 
-public class CuteEscaper extends Escaper
+public class BlindEscaper extends Escaper
 	
 	construct(vec3 pos, player owner)
 		super(pos, owner, 'H00T')

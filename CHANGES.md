@@ -1,3 +1,8 @@
+[0.89c]
+[*] KNOWN ISSUE: save/load is broken with patch 1.28
+[*] slightly reduced bomb tower explosion radius
+[*] fix teleporter only teleporting dummy
+
 [0.89b]
 [*] increased unit creator maximum spawn interval
 [*] added on/off mechanic for every circle object
