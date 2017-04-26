@@ -24,8 +24,21 @@ enum JumpMode
 function filter() returns boolean
 	return GetFilterUnit().getTypeId() == JUMPER_ID
 
+public class Goo
+	image img
+	int x
+	int y
+
+	construct(image img, int x, int y)
+		this.img = img
+		this.x = x
+		this.y = y
+
+	ondestroy
+		img.remove()
+
 public class Jumper extends StaticBaseObject
-	private image array[5] goos
+	private Goo array[5] goos
 	private int goocounter = 0
 	JumpMode mode = JumpMode.FORCED
 	ConfigValue jumpForce = new ConfigValue(12., 0.5, "Jump Force")
@@ -82,7 +95,7 @@ public class Jumper extends StaticBaseObject
 					let y = (GetSpellTargetY()/128).round()
 					let goo = createImage("textures\\blugoo.blp", vec2(x*128., y*128.), 128, 128)
 					..show()
-					goos[goocounter] = goo
+					goos[goocounter] = new Goo(goo, x, y)
 					goocounter++
 					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.BLUGOO castTo int).val )
 
@@ -99,4 +112,8 @@ public class Jumper extends StaticBaseObject
 	ondestroy
 		for i = 0 to 4
 			if goos[i] != null
-				goos[i].remove()
+				let x = goos[i].x
+				let y = goos[i].y
+				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).remove(TileModifiers.BLUGOO castTo int).val)
+				destroy goos[i]
+				

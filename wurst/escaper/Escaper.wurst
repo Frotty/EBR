@@ -64,6 +64,8 @@ public abstract class Escaper extends UnitEntity
 		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		updateRegionData()
 		escapers.add(this)
+		if this.getCurrentRegion().specialAbil > 0
+			actor.addAbility(this.getCurrentRegion().specialAbil)
 
 	function onCPReach()
 		if revivetomb != null
@@ -321,6 +323,11 @@ public abstract class Escaper extends UnitEntity
 						PanCameraToTimed(pos.x, pos.y, 0)
 				revivetomb.remove()
 				revivetomb = null
+			if this.getCurrentRegion().specialAbil > 0
+				actor.addAbility(this.getCurrentRegion().specialAbil)
+			else 
+				actor.removeAbility(JUMP_SPELL)
+				actor.removeAbility(ORB_SPELL)
 	
 	override function setTarget(vec3 tpos, real speed)
 		var t = pos.distanceTo2d(tpos) / speed
@@ -344,6 +351,7 @@ public abstract class Escaper extends UnitEntity
 					printTimedToPlayer("|cffFFCC00>> |rYou were granted a |cff0884BDspecial ability |rin this region |r(use with hotkey |cffFFCC00T|r)", 10, actor.getOwner())
 			else 
 				actor.removeAbility(JUMP_SPELL)
+				actor.removeAbility(ORB_SPELL)
 			actor.setTurnSpeed(newReg.turnSpeed)
 
 	function changeAngle()

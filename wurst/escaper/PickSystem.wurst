@@ -150,7 +150,7 @@ public function allow()
 	end)
 	new EscaperDefinition('H00T')
 	..setName("|cff6B6BCEBlind Escaper|r\nHas cool footsteps and resistance to lava.")
-	..setIcon("ReplaceableTextures\\CommandButtons\\BTNJaina.blp")
+	..setIcon("ReplaceableTextures\\CommandButtons\\BTNEvilIllidan.blp")
 	..setCallback((PlayerData pd) -> begin 
 		pd.escaper = new BlindEscaper(currentRevivepoint.toVec3(), pd.p)
 	end)

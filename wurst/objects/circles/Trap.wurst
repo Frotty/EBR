@@ -4,6 +4,7 @@ import Escaper
 import InstantDummyCaster
 import Camerashakes
 import TerrainBlocker
+import Jumper
 
 constant int TRAP_ID = 'n00I'
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
@@ -18,7 +19,7 @@ enum ABIL
 	SPEED
 	KNOCK
 	SHAKE
-	
+
 public class Trap extends StaticBaseObject
 	int sfxid = 3
 	real interval = 2.
@@ -30,7 +31,7 @@ public class Trap extends StaticBaseObject
 	boolean pull = false
 	int uptimes = 0
 	int goocounter = 0
-	private image array[5] goos
+	private Goo array[5] goos
 	construct( vec2 pos, player owner )
 		super(pos, getUnit(owner, TRAP_ID, pos, angle(0), this) , EVENT_RADIUS, function onStep, CODE_NULL)
 		deactivate()
@@ -50,7 +51,10 @@ public class Trap extends StaticBaseObject
 	ondestroy 
 		for i = 0 to 4
 			if goos[i] != null
-				goos[i].remove()
+				let x = goos[i].x
+				let y = goos[i].y
+				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).remove(TileModifiers.BLUGOO castTo int).val)
+				destroy goos[i]
 				
 	override function update()
 		if timerreal <= 0.0
@@ -303,7 +307,7 @@ public class Trap extends StaticBaseObject
 					let y = (GetSpellTargetY()/128).round()
 					let goo = createImage("textures\\orangegoo.blp", vec2(x*128., y*128.), 128, 128)
 					..show()
-					goos[goocounter] = goo
+					goos[goocounter] = new Goo(goo, x, y)
 					goocounter++
 					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.ORANGEGOO castTo int).val )
 		return false

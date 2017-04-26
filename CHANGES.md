@@ -2,9 +2,11 @@
 [*] fixed walls being skewed and having questionmarks
 [*] fixed executer tunron being available before action chosen
 [*] fixed some cases of wrong knockback from tauren when escaper and knockbacker are moving
+[*] fixed escapers not having region spell when picking late and keeping spell too long in some cases
+[*] fixed blind escaper multiboard icon
+[*] fixed blue and orange goos not being removed properly
 [*] slightly increased max decoration size
 [*] slightly reduced firekiller burn range
-
 
 [0.89c]
 [*] KNOWN ISSUE: save/load is broken with patch 1.28
