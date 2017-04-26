@@ -5,8 +5,9 @@ import initlater InstantBuild
 public class Wall extends StaticBaseObject
 	int tId = 0
 	construct(vec2 pos, player owner, real angle, int tId)
-		super(pos, getUnit(owner, buildorders[tId], pos, angle(angle), this), 0., CODE_NULL, CODE_NULL)
+		super(pos, getUnit(owner, buildorders[tId], pos, (angle).fromDeg(), this), 0., CODE_NULL, CODE_NULL)
 		this.tId = tId
+		clearQuestionmark()
 
 	override function serialize() returns Json
 		let json = super.serialize()

@@ -29,7 +29,7 @@ public class Decoration extends StaticSetupObject
 				let tg = getSpellTargetPos()
 				changeAngle(pos.angleTo2d(tg))
 			case INC_SCALE
-				scale.increment(this, 2.5)
+				scale.increment(this, 3.0)
 			case DEC_SCALE
 				scale.decrement(this, 0.1)
 		actor.setScale(scale.get())

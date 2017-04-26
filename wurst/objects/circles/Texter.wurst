@@ -25,7 +25,6 @@ public class Texter extends StaticBaseObject
 		if e instanceof Escaper
 			obj.text.setVisibility( true )
 			obj.hidden = false
-			print("ja man  " + ('I03F').toInt().toString())
 			
 	static function show()
 		for u from getSelected(GetTriggerPlayer())

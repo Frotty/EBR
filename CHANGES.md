@@ -1,3 +1,11 @@
+[0.89d]
+[*] fixed walls being skewed and having questionmarks
+[*] fixed executer tunron being available before action chosen
+[*] fixed some cases of wrong knockback from tauren when escaper and knockbacker are moving
+[*] slightly increased max decoration size
+[*] slightly reduced firekiller burn range
+
+
 [0.89c]
 [*] KNOWN ISSUE: save/load is broken with patch 1.28
 [*] slightly reduced bomb tower explosion radius

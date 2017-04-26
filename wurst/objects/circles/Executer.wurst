@@ -65,7 +65,6 @@ public class Executer extends StaticBaseObject
 	construct( vec2 pos, player owner)
 		super( pos, getUnit(owner, EXECUTER_ID, pos, angle(0), this), EVENT_RADIUS, function Executer.onEvent, CODE_NULL )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		actor..addAbility(PAUSE_ABIL)
 
 	static function onEvent()
 		unit source = GetTriggeringTrigger().getSource()
@@ -298,6 +297,7 @@ public class Executer extends StaticBaseObject
 		UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitRemoveAbility(actor,SPAWN_UNIT_ID)
+		actor..addAbility(PAUSE_ABIL)
 		
 	function addTerrainAdjuster()
 		UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
