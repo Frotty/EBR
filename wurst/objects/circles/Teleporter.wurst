@@ -17,7 +17,6 @@ enum TeleportMode
 
 public class Teleporter extends StaticBaseObject
 	boolean teleportWisps = false
-	texttag tag = null
 	TeleportMode mode = TeleportMode.ESCAPER
 	
 	construct( vec2 pos, player owner )
@@ -83,7 +82,3 @@ public class Teleporter extends StaticBaseObject
 		let json = super.serialize()
 		json.addProperty(new Property("t", TELEPORTER_INDEX.toString()))
 		return json
-
-	ondestroy
-		if tag != null
-			tag.destr()

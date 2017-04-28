@@ -1,6 +1,7 @@
 package TerrainModder
 //The Terrainers appear as heroes, and which with the builders change tiles.
 import ChannelAbilityPreset
+import TerrainBlocker
 import PlayerData
 
 public constant int ICECONTROL = 'H007'
@@ -51,7 +52,7 @@ public class TerrainModder extends UnitEntity
 			return
 		let owner = actor.getOwner()
 		let id = GetUnitTypeId(actor)
-		if rdata.canBuild(owner)
+		if rdata.canBuild(owner) and not bitset(tileModifierMap.loadInt(orderPos.x.round(),orderPos.y.round())).contains(TileModifiers.PERMAPATH castTo int)
 			idleSeconds = 0
 			if id == ICECONTROL
 				if modification == 1

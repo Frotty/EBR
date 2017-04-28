@@ -114,7 +114,7 @@ public class Builder extends UnitEntity
 
 		let rdata = getRegionData(orderPos)
 
-		if rdata != RegionData.EMPTY_REGION and (rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or rdata.canBuild(owner))
+		if rdata != RegionData.EMPTY_REGION and (rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or rdata.canBuild(owner) or rdata.theRect == gg_rct_Start)
 			if i != null and rdata.canBuild(owner)
 				if i.getEntity() != null
 					i.getEntity().terminate()

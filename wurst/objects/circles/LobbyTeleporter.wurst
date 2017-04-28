@@ -1,0 +1,62 @@
+package LobbyTeleporter
+import BaseObject
+import PlayerData
+import StringUtils
+import Invisible
+
+constant TELEPORTER_ID   = 'n00C'
+constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+constant ESC_ID = 'A009'
+constant KILL_ID = 'A012'
+constant BOTH_ID = 'A014'
+
+constant EVENT_RADIUS	= 38.
+
+public class LobbyTeleporter extends StaticBaseObject
+	boolean teleportWisps = false
+	texttag tag = null
+
+	construct(unit existing, boolean builder)
+		super(existing.getPos(), existing, EVENT_RADIUS, function LobbyTeleporter.teleport, CODE_NULL )
+		actor..removeAbility(REMOVE_ID)
+		..removeAbility(INVIS_ID)
+		..removeAbility(ESC_ID)
+		if builder
+			tag = createCenteredTexttag(existing.getPos().toVec3(), pData[existing.getOwner().getId()].mbname + " - |cffffcc00building", 11)
+		
+	static function teleport()
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getEntity()
+		LobbyTeleporter obj = source.getUserData() castTo LobbyTeleporter
+		let rallyPos = obj.getRallyPoint()
+		if e instanceof Escaper
+			e.setPos(rallyPos)
+			addEffect(EFFECT_STRING, obj.pos).destr()
+			addEffect(EFFECT_STRING, rallyPos).destr()
+			if not pData[GetOwningPlayer(u).getId()].escaper.camlock
+				PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
+			if isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_ID) 
+					obj.terminate()
+			else
+				obj.addQuestionmark()
+				obj.setRallyPoint(obj.pos.toVec2())
+				if obj.tag != null
+					obj.tag.destr()
+					obj.tag = createCenteredTexttag(obj.getPos(), pData[obj.owner.getId()].mbname + " - |cffffcc00building", 11)
+
+	override function clearQuestionmark()
+		super.clearQuestionmark()
+		if owner != STAFF_PLAYER
+			if tag != null
+				tag.destr()
+			tag = createCenteredTexttag(getPos(), pData[owner.getId()].mbname + " - |cff11cc00ready", 11)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json.addProperty(new Property("t", TELEPORTER_INDEX.toString()))
+		return json
+
+	ondestroy
+		if tag != null
+			tag.destr()

@@ -8,6 +8,7 @@ import TerrainModder
 import UnitProducer
 import DummyRecycler
 import PickSystem
+import initlater TerrainBlocker
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 
@@ -191,7 +192,8 @@ function rect.changeTerrain( integer ttype )
 	real y = ymin
 	while y <= ymax
 		while x <= xmax
-			SetTerrainType( x, y, ttype, -1, 1, 1 )
+			if not bitset(tileModifierMap.loadInt(x.round(),y.round())).contains(TileModifiers.PERMAPATH castTo int)
+				SetTerrainType( x, y, ttype, -1, 1, 1 )
 			x = x + 128
 
 		x = xmin

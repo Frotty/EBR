@@ -1,12 +1,21 @@
+[0.89e]
+[*] fix ankh item giving ankh ability to user when used invalidly
+[*] add permanent tile under revivepoint to prevent death loops
+[*] currently active revivepoint may no longer be removed
+[*] prevent orbs from travelling across regions
+
 [0.89d]
 [*] fixed walls being skewed and having questionmarks
-[*] fixed executer tunron being available before action chosen
+[*] fixed executer turnon being available before action chosen
 [*] fixed some cases of wrong knockback from tauren when escaper and knockbacker are moving
 [*] fixed escapers not having region spell when picking late and keeping spell too long in some cases
 [*] fixed blind escaper multiboard icon
 [*] fixed blue and orange goos not being removed properly
+[*] allow builders to move in lobby
 [*] slightly increased max decoration size
 [*] slightly reduced firekiller burn range
+[*] slightly reduce jump cooldown
+[*] improved lobby teleporters
 
 [0.89c]
 [*] KNOWN ISSUE: save/load is broken with patch 1.28

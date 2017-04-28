@@ -12,6 +12,7 @@ public enum TileModifiers
 	BLOCK
 	BLUGOO
 	ORANGEGOO
+	PERMAPATH
 
 public class TerrainBlocker extends StaticBaseObject
 	matrixpos m

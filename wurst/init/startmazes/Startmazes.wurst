@@ -11,6 +11,7 @@ import ClosureTimers
 import Door
 import Obstacle
 import Ball
+import LobbyTeleporter
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -88,7 +89,7 @@ public function initStartmazes()
 		startmazes[1] = new SecondDesertMaze(regions[1])
 		startmazes[2] = new ThirdForestMaze(regions[2])
 		startmazes[3] = new FourthCitadelleMaze(regions[3])
-		let tp = new Teleporter(gg_unit_n00C_0150)
+		let tp = new LobbyTeleporter(gg_unit_n00C_0150, false)
 		tp.tag = createCenteredTexttag(tp.getPos(), "|cffFFCC00Vote for minigame |cffADADAD(soon)", 9.5)
 
 		createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
@@ -128,43 +129,35 @@ function addStartTexttag(texttag tt)
 
 function setBuilderTeleporter()
 	if pData[8] != null
-		let tp = new Teleporter(gg_unit_n00C_0058)
-		tp.actor.removeAbility(REMOVE_ID)
-		tp.tag = createCenteredTexttag(gg_unit_n00C_0058.getPos().toVec3(), pData[8].mbname, 11)
+		let tp = new LobbyTeleporter(gg_unit_n00C_0058, true)
 	else
 		gg_unit_n00C_0058.remove()
 	
 	if pData[9] != null
-		let tp = new Teleporter(gg_unit_n00C_0063)
-		tp.actor.removeAbility(REMOVE_ID)
-		tp.tag = createCenteredTexttag(gg_unit_n00C_0063.getPos().toVec3(), pData[9].mbname, 11)
+		let tp = new LobbyTeleporter(gg_unit_n00C_0063, true)
 	else
 		gg_unit_n00C_0063.remove()
 
 	if pData[10] != null
-		let tp = new Teleporter(gg_unit_n00C_0115)
-		tp.actor.removeAbility(REMOVE_ID)
-		createCenteredTexttag(gg_unit_n00C_0115.getPos().toVec3(), pData[10].mbname, 11)
+		let tp = new LobbyTeleporter(gg_unit_n00C_0115, true)
 	else
 		gg_unit_n00C_0115.remove()
 
 	if pData[11] != null
-		let tp = new Teleporter(gg_unit_n00C_0143)
-		tp.actor.removeAbility(REMOVE_ID)
-		createCenteredTexttag(gg_unit_n00C_0143.getPos().toVec3(), pData[11].mbname, 11)
+		let tp = new LobbyTeleporter(gg_unit_n00C_0143, true)
 	else
 		gg_unit_n00C_0143.remove()
 
 	
 public function setStartTeleport(int tpid, int locid)
-	Teleporter t = null
+	LobbyTeleporter t = null
 	switch tpid
 		case 0
-			t = new Teleporter(gg_unit_n00C_0061)
+			t = new LobbyTeleporter(gg_unit_n00C_0061, false)
 		case 1
-			t = new Teleporter(gg_unit_n00C_0324)
+			t = new LobbyTeleporter(gg_unit_n00C_0324, false)
 		case 2
-			t = new Teleporter(gg_unit_n00C_0323)
+			t = new LobbyTeleporter(gg_unit_n00C_0323, false)
 	
 	t.actor.removeAbility(REMOVE_ID)
 	switch locid

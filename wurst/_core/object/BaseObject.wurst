@@ -84,6 +84,10 @@ public class StaticBaseObject extends UnitEntity
 			noRally.destr()
 			noRally = null
 
+	function addQuestionmark()
+		if noRally == null
+			noRally = addEffect(Other.questionmark, pos)
+
 	function isActive() returns boolean
 		return active
 

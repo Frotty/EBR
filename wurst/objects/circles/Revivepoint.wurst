@@ -4,26 +4,39 @@ import PlayerData
 import Startmazes
 import ClosureTimers
 import SoundUtils
+import TerrainBlocker
 
 constant real EVENT_RADIUS = 90.
 constant int REVIVEPOINT_ID = 'n000'
 constant SoundDefinition rescueSound = new SoundDefinition("Sound\\Interface\\Rescue.wav", false)
 
+RevivePoint currentRevive = null
 public class RevivePoint extends StaticSetupObject
 	boolean reached = false
 	int startmaze = -1
 
 	construct(unit existing)
-		super(existing, getUnit(existing.getOwner(), REVIVEPOINT_ID, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach ) 
+		super(existing, getUnit(existing.getOwner(), REVIVEPOINT_ID, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
+		this.pos.toVec2().setTerrainType(this.getCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
+		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
+			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
 
 	construct(vec3 pos, player owner)
-		super(getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach ) 
+		super(getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
+		this.pos.toVec2().setTerrainType(this.getCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
+		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
+			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
+		
 
 	function reach(Escaper reacher)
 		if not reached
 			reached = true
 			actor.setColor(reacher.owner.getColor())
 			currentRevivepoint = pos.toVec2()
+			if currentRevive != null
+				currentRevive.actor.addAbility(REMOVE_ID)
+			currentRevive = this
+			this.actor.removeAbility(REMOVE_ID)
 			rescueSound.play()
 			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
 			reacher.onCPReach()
@@ -75,3 +88,11 @@ public class RevivePoint extends StaticSetupObject
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, REVIVE_INDEX.toString()))
 		return json
+
+	override function terminate()
+		if currentRevive != this
+			super.terminate()
+
+	ondestroy
+		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
+			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).remove(TileModifiers.PERMAPATH castTo int).val)
