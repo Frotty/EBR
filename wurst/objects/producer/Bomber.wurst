@@ -1,6 +1,7 @@
 package Bomber
 import SetupObject
 import Attackspeed
+import ClosureTimers
 
 constant int BOMBER_ID = 'h00Y'
 constant int AUTOATTACK_ID = 'A03B'
@@ -37,12 +38,14 @@ public class Bomber extends UnitEntity
 				setup.setPropWindow(0)
 				actor.setPropWindow(0)
 				createTTEx(getPos(), vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner)
+				doAfter(0.1, () -> actor.issueImmediateOrder("stop"))
 			else
 				UnitAddType(actor, UNIT_TYPE_PEON)
 				setup.setPropWindow(60)
 				actor.setPropWindow(60)
 				createTTEx(getPos(), vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner)
-		
+				doAfter(0.1, () -> actor.issueImmediateOrder("stop"))
+						
 	static function orderSetup()
 		var obj = GetExpiredTimer().getData() castTo Bomber
 		obj.realorder = false

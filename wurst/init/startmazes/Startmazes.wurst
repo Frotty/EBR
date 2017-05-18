@@ -12,6 +12,7 @@ import Door
 import Obstacle
 import Ball
 import LobbyTeleporter
+import MinigameTeleporter
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -89,8 +90,7 @@ public function initStartmazes()
 		startmazes[1] = new SecondDesertMaze(regions[1])
 		startmazes[2] = new ThirdForestMaze(regions[2])
 		startmazes[3] = new FourthCitadelleMaze(regions[3])
-		let tp = new LobbyTeleporter(gg_unit_n00C_0150, false)
-		tp.tag = createCenteredTexttag(tp.getPos(), "|cffFFCC00Vote for minigame |cffADADAD(soon)", 9.5)
+		let tp = new MinigameTeleporter(gg_unit_n00C_0150, false)
 
 		createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
 		new BallItem(vec2(-5780,-6687), DUMMY_PLAYER)

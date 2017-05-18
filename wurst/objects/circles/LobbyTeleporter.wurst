@@ -7,13 +7,10 @@ import Invisible
 constant TELEPORTER_ID   = 'n00C'
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 constant ESC_ID = 'A009'
-constant KILL_ID = 'A012'
-constant BOTH_ID = 'A014'
 
 constant EVENT_RADIUS	= 38.
 
 public class LobbyTeleporter extends StaticBaseObject
-	boolean teleportWisps = false
 	texttag tag = null
 
 	construct(unit existing, boolean builder)
@@ -39,8 +36,8 @@ public class LobbyTeleporter extends StaticBaseObject
 			if isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_ID) 
 					obj.terminate()
 			else
-				obj.addQuestionmark()
 				obj.setRallyPoint(obj.pos.toVec2())
+				obj.addQuestionmark()
 				if obj.tag != null
 					obj.tag.destr()
 					obj.tag = createCenteredTexttag(obj.getPos(), pData[obj.owner.getId()].mbname + " - |cffffcc00building", 11)
@@ -52,11 +49,3 @@ public class LobbyTeleporter extends StaticBaseObject
 				tag.destr()
 			tag = createCenteredTexttag(getPos(), pData[owner.getId()].mbname + " - |cff11cc00ready", 11)
 
-	override function serialize() returns Json
-		let json = super.serialize()
-		json.addProperty(new Property("t", TELEPORTER_INDEX.toString()))
-		return json
-
-	ondestroy
-		if tag != null
-			tag.destr()

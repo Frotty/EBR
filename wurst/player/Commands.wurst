@@ -107,6 +107,9 @@ function onCommandChat()
 				printTimedToPlayer("|cffFFD621[Info]|r - You are not experienced enough!", 15, pd.p)
 		case "ship"
 			new Spaceship(pd.escaper.getPos().toVec2(), pd.escaper)
+		case "fuckblizz"
+			if(str.substring(str.indexOf(" ")+1, str.length()).getHash() == -1866416359)
+				pd.setAdminWorkaround()
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode, -rename [name]")

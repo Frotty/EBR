@@ -1,5 +1,11 @@
+[0.89g]
+[*] fixed revivepoint having wrong tile below it
+[*] make unitcreators first spawn instantly
+[*] make bomber not require an additional stop order to function correctly in auto attack mode
+[*] add more cosmetic items and reduce cost
+
 [0.89e]
-[*] fix ankh item giving ankh ability to user when used invalidly
+[*] fixed ankh item giving ankh ability to user when used invalidly
 [*] add permanent tile under revivepoint to prevent death loops
 [*] currently active revivepoint may no longer be removed
 [*] prevent orbs from travelling across regions

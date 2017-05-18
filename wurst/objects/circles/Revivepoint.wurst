@@ -17,13 +17,13 @@ public class RevivePoint extends StaticSetupObject
 
 	construct(unit existing)
 		super(existing, getUnit(existing.getOwner(), REVIVEPOINT_ID, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
-		this.pos.toVec2().setTerrainType(this.getCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
+		this.pos.toVec2().setTerrainType(this.setCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
 		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
 			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
 
 	construct(vec3 pos, player owner)
 		super(getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
-		this.pos.toVec2().setTerrainType(this.getCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
+		this.pos.toVec2().setTerrainType(this.setCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
 		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
 			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
 		

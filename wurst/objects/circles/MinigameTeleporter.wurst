@@ -1,0 +1,66 @@
+package MinigameTeleporter
+import BaseObject
+import PlayerData
+import StringUtils
+import Invisible
+import Assets
+
+constant TELEPORTER_ID   = 'n00C'
+constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+constant ESC_ID = 'A009'
+
+constant EVENT_RADIUS	= 38.
+
+public class MinigameTeleporter extends StaticBaseObject
+	texttag tag = null
+	boolean array[12] votes
+	int currentPlus
+
+	construct(unit existing, boolean builder)
+		super(existing.getPos(), existing, EVENT_RADIUS, function MinigameTeleporter.checkVote, CODE_NULL )
+		actor..removeAbility(REMOVE_ID)
+		..removeAbility(INVIS_ID)
+		..removeAbility(ESC_ID)
+		clearQuestionmark()
+		tag = createCenteredTexttag(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 11)
+		
+	static function checkVote()
+		unit source = GetTriggeringTrigger().getSource()
+		unit u = GetTriggerUnit()
+		Entity e = u.getEntity()
+		MinigameTeleporter obj = source.getUserData() castTo MinigameTeleporter
+		if e instanceof Escaper
+			obj.check(e castTo Escaper)
+
+	function check(Escaper e)
+		let rallyPos = getRallyPoint()
+		votes[e.owner.getId()] = not votes[e.owner.getId()] 
+		if votes[e.owner.getId()]
+			currentPlus++
+			let votesNeeded = (escaperPlayers.getSize() * 0.65).round()
+			if currentPlus >= votesNeeded
+				tag.destr()
+				tag = createCenteredTexttag(getPos(), "Starting minigame...", 11)
+			else
+				tag.destr()
+				flashEffect(Other.confirmation, pos)
+				tag = createCenteredTexttag(getPos(), "Votes - [" + currentPlus.toString() + "/|cffffcc00" + votesNeeded.toString() + "|r]", 11)
+		else
+			currentPlus--
+
+	function startMinigame()
+		// e.setPos(rallyPos)
+		// addEffect(EFFECT_STRING, pos).destr()
+		// addEffect(EFFECT_STRING, rallyPos).destr()
+		// if not pData[e.owner.getId()].escaper.camlock
+		// 	PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03 )
+		// if isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_ID) 
+		// 	terminate()
+		// else
+		// 	addQuestionmark()
+		// 	setRallyPoint(pos.toVec2())
+		// 	if tag != null
+		// 		tag.destr()
+		// 		tag = createCenteredTexttag(getPos(), pData[owner.getId()].mbname + " - |cffffcc00building", 11)
+
+

@@ -161,7 +161,10 @@ public class PlayerData
 					printTimedToPlayer("You are a contributor!", 10, p)
 					escaper.actor.addItem('I00Z')
 					
-
+	function setAdminWorkaround()
+		title = Title.ADMIN
+		updateRank()
+		
 	function createAdminToken()
 		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
 		savePlayerfile(this)

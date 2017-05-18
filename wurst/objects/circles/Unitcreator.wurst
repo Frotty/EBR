@@ -18,7 +18,7 @@ public enum TimerMode
 
 public class UnitCreator extends StaticBaseObject
 	real interval = 5.
-	real timerreal = 5.
+	real timerreal = .5
 	int spawnUnitType = 'h001'
 	TimerMode tmode = TimerMode.FIXED
 
