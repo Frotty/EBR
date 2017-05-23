@@ -255,6 +255,8 @@ function setTime()
 	if seconds >= 60
 		seconds = 0
 		minutes++
+		if minutes % 10 == 0
+			printTimed("|cffFFCC00Visit our discord server |r- |cff217BD6discord.gg/yr3ZyYQ", 45.)
 		if minutes % 5 == 0
 			for pd in allPlayers
 				pd.addXp(10, true)

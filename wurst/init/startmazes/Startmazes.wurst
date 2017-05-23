@@ -90,7 +90,7 @@ public function initStartmazes()
 		startmazes[1] = new SecondDesertMaze(regions[1])
 		startmazes[2] = new ThirdForestMaze(regions[2])
 		startmazes[3] = new FourthCitadelleMaze(regions[3])
-		let tp = new MinigameTeleporter(gg_unit_n00C_0150, false)
+		new MinigameTeleporter(gg_unit_n00C_0150, false)
 
 		createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
 		new BallItem(vec2(-5780,-6687), DUMMY_PLAYER)
@@ -98,11 +98,6 @@ public function initStartmazes()
 		
 		EnumItemsInRect(playableMapRect, null, function correctKeys)
 	end)
-	
-	
-
-	
-	
 
 public function correctKeys()
 	item itm = GetEnumItem()
@@ -120,31 +115,24 @@ public function correctKeys()
 		k.recolor()
 		itm.remove()
 	
-texttag array texttags
-int size = 0
-
-function addStartTexttag(texttag tt)
-	texttags[size] = tt
-	size++
-
 function setBuilderTeleporter()
 	if pData[8] != null
-		let tp = new LobbyTeleporter(gg_unit_n00C_0058, true)
+		new LobbyTeleporter(gg_unit_n00C_0058, true)
 	else
 		gg_unit_n00C_0058.remove()
 	
 	if pData[9] != null
-		let tp = new LobbyTeleporter(gg_unit_n00C_0063, true)
+		new LobbyTeleporter(gg_unit_n00C_0063, true)
 	else
 		gg_unit_n00C_0063.remove()
 
 	if pData[10] != null
-		let tp = new LobbyTeleporter(gg_unit_n00C_0115, true)
+		new LobbyTeleporter(gg_unit_n00C_0115, true)
 	else
 		gg_unit_n00C_0115.remove()
 
 	if pData[11] != null
-		let tp = new LobbyTeleporter(gg_unit_n00C_0143, true)
+		new LobbyTeleporter(gg_unit_n00C_0143, true)
 	else
 		gg_unit_n00C_0143.remove()
 
