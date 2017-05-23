@@ -23,18 +23,18 @@ public enum RegionType
 public function RegionType.getTypeSet() returns regionTypeSet
 	switch this
 		case UNKNOWN
-			return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+			return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 		case CITADEL
-			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', 'n018', 'n019', 'h00G', 'u00K')
+			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', 'n018', 'n019', 'h00G', 'u00K', 'n01V')
 		case SAND
-			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', 'n01F', 'n01G', 'h00M', 'u00N')
+			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', 'n01F', 'n01G', 'h00M', 'u00N', 'n01W')
 		case CITY
-			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H', 'h00L', 'u00M')
+			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H', 'h00L', 'u00M', 'n01X')
 		case SNOW
-			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'h00O', 'u00L')
+			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'h00O', 'u00L', 'n01J')
 		case SUNKEN
-			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005', 'h00N', 'u00O')
-	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005', 'h00N', 'u00O', 'n01Y')
+	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 	
 public function getRegionTypeFromItem(int itemId) returns RegionType
 	for i = 1 to 5
@@ -45,7 +45,7 @@ public function getRegionTypeFromItem(int itemId) returns RegionType
 
 public tuple regionTypeSet(int regionItemId, int walkableId, int unwalkableId,
 						   int smallKillerId, int bigKillerId, int treeId,
-						   int smallObstacleId, int bigObstacleId, int bossId, int minionId)
+						   int smallObstacleId, int bigObstacleId, int bossId, int minionId, int highObstacleId)
 
 public enum Permission
 	GUEST
@@ -170,8 +170,11 @@ public class RegionData
 
 		if data instanceof Escaper
 			var edata = data castTo Escaper
-			if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet()
+			if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or edata.getPos().z > 10
+				edata.setPos(edata.getPos()-edata.getRealVel())
+				edata.stop()
 				edata.kill(null)
+				edata.setCurrentRegion()
 			else if isEscaper(data.owner)
 				rdata.revealRegion(data.owner)
 				edata.updateRegionData()

@@ -402,6 +402,9 @@ public abstract class Escaper extends UnitEntity
 	OrbProjectile orb = null
 		
 	function onCast(int id)
+		if(this.getCurrentRegion() == regions[21])
+			createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+			return
 		actor.setAnimation("spell")
 		if id == JUMP_SPELL
 			if not flying

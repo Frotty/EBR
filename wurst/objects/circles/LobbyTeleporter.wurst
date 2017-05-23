@@ -3,6 +3,7 @@ import BaseObject
 import PlayerData
 import StringUtils
 import Invisible
+import Assets
 
 constant TELEPORTER_ID   = 'n00C'
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
@@ -12,40 +13,71 @@ constant EVENT_RADIUS	= 38.
 
 public class LobbyTeleporter extends StaticBaseObject
 	texttag tag = null
+	boolean array[12] votes
+	int currentPlus = 0
+
+	ondestroy
+		tag.destr()
 
 	construct(unit existing, boolean builder)
-		super(existing.getPos(), existing, EVENT_RADIUS, function LobbyTeleporter.teleport, CODE_NULL )
+		super(existing.getPos(), existing, EVENT_RADIUS, function LobbyTeleporter.checkVote, CODE_NULL )
 		actor..removeAbility(REMOVE_ID)
 		..removeAbility(INVIS_ID)
 		..removeAbility(ESC_ID)
 		if builder
-			tag = createCenteredTexttag(existing.getPos().toVec3(), pData[existing.getOwner().getId()].mbname + " - |cffffcc00building", 11)
+			tag = createCenteredTexttag(existing.getPos().toVec3(), "|cffffcc00building", 10)
 		
-	static function teleport()
+	static function checkVote()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		LobbyTeleporter obj = source.getUserData() castTo LobbyTeleporter
-		let rallyPos = obj.getRallyPoint()
-		if e instanceof Escaper
-			e.setPos(rallyPos)
-			addEffect(EFFECT_STRING, obj.pos).destr()
-			addEffect(EFFECT_STRING, rallyPos).destr()
-			if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-				PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
-			if isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_ID) 
-					obj.terminate()
+		if e instanceof Escaper and isEscaper(e.owner)
+			obj.check(e castTo Escaper)
+
+	function check(Escaper e)
+		votes[e.owner.getId()] = not votes[e.owner.getId()] 
+		if votes[e.owner.getId()]
+			currentPlus++
+			let votesNeeded = (escaperPlayers.getSize() * 0.65).round()
+			if currentPlus >= votesNeeded
+				tag.destr()
+				tag = createCenteredTexttag(getPos(), "|cffffcc00building", 9)
+				teleport(e)
+				for i = 0 to 11
+					votes[i] = false
 			else
-				obj.setRallyPoint(obj.pos.toVec2())
-				obj.addQuestionmark()
-				if obj.tag != null
-					obj.tag.destr()
-					obj.tag = createCenteredTexttag(obj.getPos(), pData[obj.owner.getId()].mbname + " - |cffffcc00building", 11)
+				tag.destr()
+				flashEffect(Other.confirmation, pos)
+				tag = createCenteredTexttag(getPos(), "Votes - [" + currentPlus.toString() + "/|cffffcc00" + votesNeeded.toString() + "|r]", 9)
+		else
+			currentPlus--
+
+	function teleport(Escaper e)
+		let rallyPos = getRallyPoint()
+		if noRally == null
+			e.setPos(rallyPos)
+			addEffect(EFFECT_STRING, pos).destr()
+			addEffect(EFFECT_STRING, rallyPos).destr()
+			if not pData[e.owner.getId()].escaper.camlock
+				PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03 )
+			if isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_ID) 
+				terminate()
+			else
+				setRallyPoint(pos.toVec2())
+				addQuestionmark()
+				if tag != null
+					tag.destr()
+					tag = createCenteredTexttag(getPos(), "|cffffcc00building", 9)
 
 	override function clearQuestionmark()
 		super.clearQuestionmark()
 		if owner != STAFF_PLAYER
 			if tag != null
 				tag.destr()
-			tag = createCenteredTexttag(getPos(), pData[owner.getId()].mbname + " - |cff11cc00ready", 11)
+			let votesNeeded = (escaperPlayers.getSize() * 0.65).round()
+			currentPlus = 0
+			for i = 0 to 11
+				votes[i] = false
+			tag = createCenteredTexttag(getPos(), "Votes - [0" + "/|cffffcc00" + votesNeeded.toString() + "|r] - |cff11cc00ready", 9)
 

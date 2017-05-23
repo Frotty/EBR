@@ -18,7 +18,7 @@ public class Decoration extends StaticSetupObject
 	construct(vec2 pos, player owner, real a, int tid)
 		super(CreateUnit(owner, buildorders[tid], pos.x, pos.y, a ), CreateUnit(owner, buildorders[tid], pos.x, pos.y, a ), 0., CODE_NULL )
 		this.tid = tid
-		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)
+		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)..addAbility(GHOST_INVIS_ID)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function onCast()
@@ -40,7 +40,7 @@ public class Decoration extends StaticSetupObject
 		setNewActor(createUnit(owner, actor.getTypeId(), pos, a))
 		setNewSetup(createUnit(owner, setup.getTypeId(), pos, a))
 		actor.addAbility(LOCUST_ID)
-		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)
+		setup..addAbility(GHOST_INVIS_ID)..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)
 		if select
 			owner.select(setup)
 		hasBeenChanged = true

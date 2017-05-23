@@ -3,25 +3,40 @@ import EscaperKillers
 
 constant EVENT_RADIUS_SMALL	= 32.
 constant EVENT_RADIUS_BIG	= 64.
+constant EVENT_RADIUS_HIGH	= 48.
+constant EVENT_HEIGHT_HIGH	= 256.
 constant EVENT_RADIUS_V	= 256.
 constant VOLCANO_ID = 'n00K'
 
 public class Obstacle extends EscaperSensorSetup
-	construct(unit existing, real radius )
-		super(existing, radius, radius)
+	construct(unit existing, real radius, real height  )
+		super(existing, radius, height)
 		setup.addAbility(REMOVE_ID)
 
-	construct(vec2 pos, player owner, int id, real radius )
-		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, radius)
+	construct(vec2 pos, player owner, int id, real radius, real height )
+		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, height)
 		setup.addAbility(REMOVE_ID)
+
+public class HighObstacle extends Obstacle
+	
+	construct(unit existing)
+		super(existing, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
+
+	construct(vec2 pos, player owner )
+		super(pos, owner, getRegionData(pos).getTypeSet().highObstacleId, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
+
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, HIGH_OBS_INDEX.toString()))
+		return json
 
 public class SmallObstacle extends Obstacle
 	
 	construct(unit existing)
-		super(existing, EVENT_RADIUS_SMALL)
+		super(existing, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
 	construct(vec2 pos, player owner )
-		super(pos, owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL)
+		super(pos, owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -30,10 +45,10 @@ public class SmallObstacle extends Obstacle
 
 public class BigObstacle extends Obstacle
 	construct(unit existing)
-		super(existing, EVENT_RADIUS_BIG)
+		super(existing, EVENT_RADIUS_BIG, EVENT_RADIUS_BIG)
 
 	construct(vec2 pos, player owner)
-		super(pos, owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG)
+		super(pos, owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG, EVENT_RADIUS_BIG)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -42,10 +57,10 @@ public class BigObstacle extends Obstacle
 
 public class VolcanoObstacle extends Obstacle
 	construct(unit existing)
-		super(existing, EVENT_RADIUS_V)
+		super(existing, EVENT_RADIUS_V, EVENT_RADIUS_V)
 
 	construct( vec2 pos, player owner )
-		super(pos, owner, VOLCANO_ID, EVENT_RADIUS_V)
+		super(pos, owner, VOLCANO_ID, EVENT_RADIUS_V, EVENT_RADIUS_V)
 
 	override function serialize() returns Json
 		let json = super.serialize()

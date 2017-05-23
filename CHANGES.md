@@ -1,8 +1,14 @@
-[0.89g]
+[0.89i]
 [*] fixed revivepoint having wrong tile below it
-[*] make unitcreators first spawn instantly
-[*] make bomber not require an additional stop order to function correctly in auto attack mode
-[*] add more cosmetic items and reduce cost
+[*] fixed decorations becoming clickable
+[*] made unitcreators first spawn instantly
+[*] made bomber not require an additional stop order to function correctly in auto attack mode
+[*] added more cosmetic items and reduce cost
+[*] prevent jumping between regions
+[*] prevent casting spells in lobby
+[*] made lobby teleporters vote based
+[*] added "High Obstacle" for easier jump blocking
+[*] added three sizes for vortex and changed effect color
 
 [0.89e]
 [*] fixed ankh item giving ankh ability to user when used invalidly

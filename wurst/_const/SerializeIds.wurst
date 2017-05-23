@@ -44,7 +44,7 @@ public constant KNOCKBACKER_INDEX = 40
 public constant POINTER_INDEX = 41
 public constant TP_TARGET_INDEX = 42
 public constant TC_INDEX = 43
-public constant SMALL_LIGHT_INDEX = 44
-public constant MEDIUM_LIGHT_INDEX = 44
-public constant LARGE_LIGHT_INDEX = 45
-
+public constant HIGH_OBS_INDEX = 44
+public constant SMALL_LIGHT_INDEX = 45
+public constant MEDIUM_LIGHT_INDEX = 46
+public constant LARGE_LIGHT_INDEX = 47

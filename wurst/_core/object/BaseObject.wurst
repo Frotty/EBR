@@ -96,7 +96,8 @@ public class StaticBaseObject extends UnitEntity
 
 	static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
 		let u			= GetOrderedUnit()
-		let target		= GetOrderTargetUnit()
+		let target		= GetOrderTarget()
+		let utarget 	= GetOrderTargetUnit()
 		let itm			= GetOrderTargetItem()
 		let targetPoint = vec2(GetOrderPointX(), GetOrderPointY())
 		let orderid		= GetIssuedOrderId()
@@ -108,14 +109,15 @@ public class StaticBaseObject extends UnitEntity
 				if itm == null
 					obj.setRallyPoint(targetPoint)
 				else
-					obj.rallyPoint = itm.getPos().toVec3()
+					obj.setRallyPoint(itm.getPos())
 			else
-				let data = target.getEntity()
-				if data != null and data instanceof SetupObject
-					obj.rallyUnit = (data castTo SetupObject).actor
-				else
-					obj.rallyUnit = target
-				obj.rallyPoint = obj.rallyUnit.getPos().toVec3()
+				if utarget != null
+					let data = utarget.getEntity()
+					if data != null and data instanceof SetupObject
+						obj.rallyUnit = (data castTo SetupObject).actor
+					else
+						obj.rallyUnit = utarget
+				obj.setRallyPoint(target.getPos())
 			if obj.noRally != null
 				obj.noRally.destr()
 				obj.noRally = null

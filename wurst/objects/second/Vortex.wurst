@@ -1,16 +1,22 @@
 package Vortex
 import Escaper
 import ChannelAbilityPreset
+import Fx
 
 constant VORTEX_ID 		= 'n013'
 constant INC_GRAV_ID 	= 'A04J'
 constant DEC_GRAV_ID 	= 'A04K'
 
-constant real GRAV_RADIUS_SQ = 415.*415. //415
+constant real GRAV_RADIUS_BIG = 415.*415.
+constant real GRAV_RADIUS_MEDIUM = 207.*207.
+constant real GRAV_RADIUS_SMALL = 103.*103.
 
 int ZMODE_NONE
 int ZMODE_CYLI
 int ZMODE_HEMI
+int SIZE_SMALL
+int SIZE_MED
+int SIZE_BIG
 
 enum ZMode
 	NONE
@@ -20,26 +26,30 @@ enum ZMode
 public class Vortex extends UnitEntity
 	real gravity = 2.
 	ZMode zMode = ZMode.NONE
+	real radiusSq = GRAV_RADIUS_MEDIUM
+	Fx vortexFx
 	
 	construct(vec2 pos, player owner)
 		super(CreateUnit(owner, VORTEX_ID, pos.x, pos.y, 0) )
 		this.setCurrentRegion()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		actor..addAbility(ZMODE_NONE)..addAbility(ZMODE_CYLI)..addAbility(ZMODE_HEMI)
+		actor..addAbility(ZMODE_NONE)..addAbility(ZMODE_CYLI)..addAbility(ZMODE_HEMI)..setVertexColor(colorA(255,255,255,155))
+		..addAbility(SIZE_SMALL)..addAbility(SIZE_MED)..addAbility(SIZE_BIG)
+		vortexFx = new Fx(pos.withZ(12), "models\\vortex256.mdx")
 		
 	override function update()
 		for e from this.getCurrentRegion().getEscapers()
 			switch zMode
 				case ZMode.NONE
-					if pos.toVec2().distanceToSq(e.pos.toVec2()) < GRAV_RADIUS_SQ and not e.flying
+					if pos.toVec2().distanceToSq(e.pos.toVec2()) < radiusSq and not e.flying
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
 						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
 				case ZMode.CYLINDER
-					if pos.toVec2().distanceToSq(e.pos.toVec2()) < GRAV_RADIUS_SQ
+					if pos.toVec2().distanceToSq(e.pos.toVec2()) < radiusSq
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
 						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
 				case ZMode.HEMISPHERE
-					if pos.distanceToSq(e.pos) < GRAV_RADIUS_SQ
+					if pos.distanceToSq(e.pos) < radiusSq
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
 						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
 		
@@ -63,16 +73,34 @@ public class Vortex extends UnitEntity
 			case ZMODE_HEMI
 				zMode = ZMode.HEMISPHERE
 				createTTEx(pos, vec2(0,0.06), "Z Mode: Hemisphere", 12,  2., colorA(255,255,255,0), owner)
+			case SIZE_SMALL
+				radiusSq = GRAV_RADIUS_SMALL
+				vortexFx.hiddenDestroy()
+				vortexFx = new Fx(pos + vec3(0,0,12), "models\\vortex128.mdx")
+			case SIZE_MED
+				radiusSq = GRAV_RADIUS_MEDIUM
+				vortexFx.hiddenDestroy()
+				vortexFx = new Fx(pos + vec3(0,0,12), "models\\vortex256.mdx")
+			case SIZE_BIG
+				radiusSq = GRAV_RADIUS_BIG
+				vortexFx.hiddenDestroy()
+				vortexFx = new Fx(pos + vec3(0,0,12), "models\\vortex512.mdx")
 
 	override function serialize() returns Json
 		let json = super.serialize()
 		json.addProperty(new Property(KEY_TYPE, VORTEX_INDEX.toString()))
 		return json
 
+	ondestroy
+		vortexFx.hiddenDestroy()
+
 @objectgen function genAbils()
 	ZMODE_NONE = ABIL_ID_GEN.next()
 	ZMODE_CYLI = ABIL_ID_GEN.next()
 	ZMODE_HEMI = ABIL_ID_GEN.next()
+	SIZE_SMALL = ABIL_ID_GEN.next()
+	SIZE_MED = ABIL_ID_GEN.next()
+	SIZE_BIG = ABIL_ID_GEN.next()
 
 	if compiletime
 		new ChannelAbilityPreset(ZMODE_NONE, 1, true)
@@ -98,3 +126,27 @@ public class Vortex extends UnitEntity
 		..presetIcon("BTNShockWave.blp")
 		..presetButtonPosNormal(2, 1)
 		..presetHotkey("D")
+
+		new ChannelAbilityPreset(SIZE_SMALL, 1, true)
+		..setName("Size small")
+		..presetTooltipNormal((int levle) -> "Set size to small [Q]")
+		..presetTooltipNormalExtended((int levle) -> "128")
+		..presetIcon("BTN1x1inactive.blp")
+		..presetButtonPosNormal(0, 0)
+		..presetHotkey("Q")
+
+		new ChannelAbilityPreset(SIZE_MED, 1, true)
+		..setName("Size medium")
+		..presetTooltipNormal((int levle) -> "Set size to medium [W]")
+		..presetTooltipNormalExtended((int levle) -> "256")
+		..presetIcon("BTN3x3inactive.blp")
+		..presetButtonPosNormal(1, 0)
+		..presetHotkey("W")
+
+		new ChannelAbilityPreset(SIZE_BIG, 1, true)
+		..setName("Size big")
+		..presetTooltipNormal((int levle) -> "Set size to big [E]")
+		..presetTooltipNormalExtended((int levle) -> "128")
+		..presetIcon("BTN5x5inactive.blp")
+		..presetButtonPosNormal(2, 0)
+		..presetHotkey("E")
