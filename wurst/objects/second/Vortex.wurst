@@ -34,7 +34,7 @@ public class Vortex extends UnitEntity
 		this.setCurrentRegion()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		actor..addAbility(ZMODE_NONE)..addAbility(ZMODE_CYLI)..addAbility(ZMODE_HEMI)..setVertexColor(colorA(255,255,255,155))
-		..addAbility(SIZE_SMALL)..addAbility(SIZE_MED)..addAbility(SIZE_BIG)
+		..addAbility(SIZE_SMALL)..addAbility(SIZE_MED)..addAbility(SIZE_BIG)..addAbility(GHOST_INVIS_ID)
 		vortexFx = new Fx(pos.withZ(12), "models\\vortex256.mdx")
 		
 	override function update()

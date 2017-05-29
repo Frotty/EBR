@@ -26,7 +26,7 @@ public class HolyEscaper extends Escaper
 	override function onCast(int id)
 		super.onCast(id)
 		if id == REINCARNATION_ID
-			if poisoned or onLava or sliding
+			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				actor.resetAbilityCooldown(REINCARNATION_ID)
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
@@ -34,7 +34,7 @@ public class HolyEscaper extends Escaper
 					revivetomb.remove()
 				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
 		else if id == TEMP_REV_ID
-			if poisoned or onLava or sliding
+			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				actor.resetAbilityCooldown(TEMP_REV_ID)
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				
@@ -121,7 +121,7 @@ public class FastEscaper extends Escaper
 	override function onCast(int id)
 		super.onCast(id)
 		if id == PORTAL_CREATE_ID
-			if sliding or poisoned or onLava or flying
+			if sliding or poisoned or onLava or flying or this.getCurrentRegion() == regions[21]
 				actor.resetAbilityCooldown(PORTAL_CREATE_ID)
 				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				return
@@ -197,7 +197,7 @@ public class StrongEscaper extends Escaper
 		super.update()
 		if invulnerable
 			shieldtimer -= ANIMATION_PERIOD
-			if pos.distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0
+			if pos.distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0 
 				if shieldtimer > 0
 					createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				shieldtimer = 0

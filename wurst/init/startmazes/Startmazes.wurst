@@ -158,6 +158,8 @@ public function setStartTeleport(int tpid, int locid)
 		case 3
 			t.setRallyPoint(vec2(-2433,-6148))
 			t.tag = createCenteredTexttag(t.getPos(), "|cffA5084ACitadel Startmaze", 12.5)
-		
+
+	t.currentPlus = 8
+	t.ready = true
 
 	

@@ -15,6 +15,7 @@ public class LobbyTeleporter extends StaticBaseObject
 	texttag tag = null
 	boolean array[12] votes
 	int currentPlus = 0
+	boolean ready = false
 
 	ondestroy
 		tag.destr()
@@ -32,7 +33,7 @@ public class LobbyTeleporter extends StaticBaseObject
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		LobbyTeleporter obj = source.getUserData() castTo LobbyTeleporter
-		if e instanceof Escaper and isEscaper(e.owner)
+		if obj.ready and e instanceof Escaper and isEscaper(e.owner)
 			obj.check(e castTo Escaper)
 
 	function check(Escaper e)
@@ -56,6 +57,7 @@ public class LobbyTeleporter extends StaticBaseObject
 	function teleport(Escaper e)
 		let rallyPos = getRallyPoint()
 		if noRally == null
+			ready = false
 			e.setPos(rallyPos)
 			addEffect(EFFECT_STRING, pos).destr()
 			addEffect(EFFECT_STRING, rallyPos).destr()
@@ -76,6 +78,7 @@ public class LobbyTeleporter extends StaticBaseObject
 			if tag != null
 				tag.destr()
 			let votesNeeded = (escaperPlayers.getSize() * 0.65).round()
+			ready = true
 			currentPlus = 0
 			for i = 0 to 11
 				votes[i] = false

@@ -1,11 +1,12 @@
-[0.89i]
+[0.89k]
 [*] fixed revivepoint having wrong tile below it
 [*] fixed decorations becoming clickable
 [*] made unitcreators first spawn instantly
+[*] made forest maze slightly easier
 [*] made bomber not require an additional stop order to function correctly in auto attack mode
 [*] added more cosmetic items and reduce cost
 [*] prevent jumping between regions
-[*] prevent casting spells in lobby
+[*] prevent casting most spells in lobby
 [*] made lobby teleporters vote based
 [*] added "High Obstacle" for easier jump blocking
 [*] added three sizes for vortex and changed effect color

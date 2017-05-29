@@ -45,6 +45,7 @@ public class SecondDesertMaze extends Startmaze
 		j.jumpForce.setVal(6)
 
 		new Fountain(gg_unit_h00H_0067)
+		new Fountain(gg_unit_h00H_0206)
 	
 	
 	override function getStart() returns vec2
