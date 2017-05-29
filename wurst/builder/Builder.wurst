@@ -13,6 +13,7 @@ import initlater Boss
 import Boots
 import initlater BossDamager
 import Coin
+import ChannelAbilityPreset
 
 public class Builder extends UnitEntity
 	int regionCount = 0
@@ -47,17 +48,17 @@ public class Builder extends UnitEntity
 			return
 		switch id
 			case MENU_1
-				setNewActor(getUnit(owner, BUILDER_1, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
+				actor.addAbility(CHAOS_BUILDER_1)
 			case MENU_2
-				setNewActor(getUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
+				actor.addAbility(CHAOS_BUILDER_2)
 			case MENU_3
-				setNewActor(getUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
+				actor.addAbility(CHAOS_BUILDER_3)
 			case MENU_4
-				setNewActor(getUnit(owner, BUILDER_4, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
+				actor.addAbility(CHAOS_BUILDER_4)
 			case MENU_5
-				setNewActor(getUnit(owner, BUILDER_2, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
+				actor.addAbility(CHAOS_BUILDER_2)
 			case MENU_6
-				setNewActor(getUnit(owner, BUILDER_3, getPos(), GetUnitFacing(GetTriggerUnit()).asAngleDegrees(), this))
+				actor.addAbility(CHAOS_BUILDER_3)
 			case KEY_SPELL_ID
 				if rdata.canBuild(owner)
 					new Key(tpos, owner)
@@ -138,4 +139,30 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
-	
+int CHAOS_BUILDER_1
+int CHAOS_BUILDER_2
+int CHAOS_BUILDER_3
+int CHAOS_BUILDER_4
+
+@objectgen function genBuilder()
+	CHAOS_BUILDER_1 = ABIL_ID_GEN.next()
+	CHAOS_BUILDER_2 = ABIL_ID_GEN.next()
+	CHAOS_BUILDER_3 = ABIL_ID_GEN.next()
+	CHAOS_BUILDER_4 = ABIL_ID_GEN.next()
+
+	if compiletime
+		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)
+		..setRequirements("")
+		..setNewUnitType(1, int2fourchar(BUILDER_1))
+
+		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
+		..setRequirements("")
+		..setNewUnitType(1, int2fourchar(BUILDER_2))
+
+		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
+		..setRequirements("")
+		..setNewUnitType(1, int2fourchar(BUILDER_3))
+
+		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_4)
+		..setRequirements("")
+		..setNewUnitType(1, int2fourchar(BUILDER_4))

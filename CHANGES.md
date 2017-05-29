@@ -1,3 +1,8 @@
+[0.89m]
+[*] changed builder menus so they don't change position
+[*] made it possible to add builder to a control group (ctrl+1 now permanently binds it)
+[*]
+
 [0.89k]
 [*] fixed revivepoint having wrong tile below it
 [*] fixed decorations becoming clickable
