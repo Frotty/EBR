@@ -126,7 +126,27 @@ public class Executer extends StaticBaseObject
 				obj.ON = true
 				if obj.dummy != null
 					SetDestructableAnimation(obj.dummy, "death")
-		
+
+	override function slowUpdate()
+		if eventMode != Emode.PRESSUREPLATE and actionMode != Amode.NONE
+			boolean reset = false
+			if canEscaperTrigger
+				GroupEnumUnitsInRect(ENUM_GROUP, eventRect, Filter(() -> GetFilterUnit().isAliveTrick() and GetFilterUnit().getEntity() instanceof Escaper))
+				if ENUM_GROUP.hasNext()
+					ENUM_GROUP.clear()
+					reset = true
+			if canKillerTrigger
+				GroupEnumUnitsInRect(ENUM_GROUP, eventRect, Filter(() -> GetFilterUnit().isAliveTrick() and GetFilterUnit().getEntity() instanceof SetupObject))
+				if ENUM_GROUP.hasNext()
+					ENUM_GROUP.clear()
+					reset = true
+			if reset
+				negativeAction()
+				ON = false
+				if dummy != null
+					SetDestructableAnimation(dummy, "stand alternate")
+
+
 
 	function findAction()
 		let target = getRallyUnit().getEntity()

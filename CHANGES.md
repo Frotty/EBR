@@ -1,7 +1,9 @@
 [0.89m]
 [*] changed builder menus so they don't change position
 [*] made it possible to add builder to a control group (ctrl+1 now permanently binds it)
-[*]
+[*] fixed executer pressure plate staying activated when the activator dies on the plate
+[*] fixed slow wave tooltip and learn button position
+[*] fix typos for kane
 
 [0.89k]
 [*] fixed revivepoint having wrong tile below it
