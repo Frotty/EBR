@@ -117,6 +117,7 @@ public class StaticBaseObject extends UnitEntity
 						obj.rallyUnit = (data castTo SetupObject).actor
 					else
 						obj.rallyUnit = utarget
+					obj.clearQuestionmark()
 				obj.rallyPoint = target.getPos().toVec3()
 			if obj.noRally != null
 				obj.noRally.destr()
