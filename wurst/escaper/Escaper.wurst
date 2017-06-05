@@ -442,7 +442,7 @@ public abstract class Escaper extends UnitEntity
 		else if id == ANK_ITEM_ID 
 			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				actor.addItem('I00L')
-				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
 				if revivetomb != null
 					revivetomb.remove()
@@ -455,7 +455,7 @@ public abstract class Escaper extends UnitEntity
 					teleport = false
 					break
 			if not teleport or poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
-				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
 				let pos = getSpellTargetPos()
 				var smallestDist = 9999999.

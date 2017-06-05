@@ -30,14 +30,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	private LinkedList<TileData> tiles = new LinkedList<TileData>()
 	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
 	private boolean syncingDone = true
-	private texttag ttag = createTTEx(pos, "", 12)
+	private FText ttag = createFText(pos, "", 12)
 	let parser = new JsonParser()
 	let listparser = new JsonParser()
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
 		setPos(pos.toTile().toVec3())
-		ttag.center(pos.toVec3(), "|cff4AA542ready", 10)
+		ttag.tt.center(pos.toVec3(), "|cff4AA542ready", 10)
 		actor..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)
 		..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
 		..addAbility(LOAD3_ID)..addAbility(REMOVE_ID)..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
@@ -82,7 +82,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	function loadSlot(int slotId)
 		actor.pause()
-		ttag..center(pos, "|cff0884CEloading...", 10)
+		ttag.tt..center(pos, "|cff0884CEloading...", 10)
 		lastRef[owner.getId()] = this
 		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString(), Filter(() -> onLoadSlotSynced()))
 
@@ -115,7 +115,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	function loadEntities(LinkedList<BigSubString> list)
 		// load entities
-		ttag..center(pos, "|cff0884CEloading Entities...", 10)
+		ttag.tt..center(pos, "|cff0884CEloading Entities...", 10)
 		let bs = new BigString()
 		var itr = list.staticItr()
 		doSeq((SeqCallback cb) -> begin
@@ -136,7 +136,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				destroy cb
 				destroy bs
-				ttag..center(pos, "|cff0884CEEntites loaded!", 10)
+				ttag.tt..center(pos, "|cff0884CEEntites loaded!", 10)
 				actor.unpause()
 				printLog(Loglevel.DEBUG, "entities loaded")
 				// Load tiles
@@ -148,7 +148,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	function loadTiles(LinkedList<BigSubString> list)
 		printLog(Loglevel.DEBUG, "load tiles2")
-		ttag..center(pos, "|cff0884CEloading Tiles...", 10)
+		ttag.tt..center(pos, "|cff0884CEloading Tiles...", 10)
 		let td = new TileData()
 		let bs = new BigString()
 		td.owner = owner
@@ -171,7 +171,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			else
 				destroy cb1
 				printLog(Loglevel.DEBUG, "load finished")
-				ttag..center(pos, "|cffFFBD21load finished!", 10)
+				ttag.tt..center(pos, "|cffFFBD21load finished!", 10)
 				destroy td
 		end)
 		
@@ -183,7 +183,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	int currentSlotId
 	function saveSlot(int slotId)
 		actor.pause()
-		ttag..center(pos, "|cff0884CEsaving...", 10)
+		ttag.tt..center(pos, "|cff0884CEsaving...", 10)
 		serializeOrigin = pos.toVec2().toTile().toVec3()
 		let itr = entities.staticItr()
 		currentSlotId = slotId
@@ -241,7 +241,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					compressedData.startoffset += BIG_SUBSTRING_LEN
 				f.write(compressedData.getString(0))
 				f.close()
-			ttag..center(pos, "|cffFFBD21save finished!", 10)
+			ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
 			destroy big
 			actor.unpause()
 		end)
@@ -294,7 +294,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		destroy effects
 		destroy entities
 		destroy tiles
-		ttag.destr()
+		ttag.recycle()
 		destroy parser
 		destroy listparser
 

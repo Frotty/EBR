@@ -34,7 +34,7 @@ public class Texter extends StaticBaseObject
 				obj.text.setVisibility( true )
 				obj.text.setPos(obj.pos - vec3(obj.xoffset,0,0))
 				obj.hidden = false
-				createTTEx(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
+				createFText(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function hide()
 		for u from getSelected(GetTriggerPlayer())
@@ -43,7 +43,7 @@ public class Texter extends StaticBaseObject
 				thistype obj = u.getUserData() castTo thistype
 				obj.text.setVisibility( false )
 				obj.hidden = true
-				createTTEx(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), obj.owner  )
+				createFText(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
 	static function setText()
 		string chatmsg = GetEventPlayerChatString()
@@ -58,7 +58,7 @@ public class Texter extends StaticBaseObject
 				obj.clearQuestionmark()
 				obj.xoffset = ttext.length() / 2. * 6
 				if obj.hidden
-					createTTEx(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
+					createFText(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
 				obj.text.center(obj.getPos(), ttext, 10)
 	
 	static function setColor()
@@ -73,7 +73,7 @@ public class Texter extends StaticBaseObject
 				if obj.col != textcolor
 					obj.col = textcolor
 					obj.text.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
-					createTTEx(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
+					createFText(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
 			else if ent instanceof Decoration
 				let obj = u.getUserData() castTo Decoration
 				obj.actor.setVertexColor(textcolor)

@@ -28,7 +28,7 @@ public class HolyEscaper extends Escaper
 		if id == REINCARNATION_ID
 			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				actor.resetAbilityCooldown(REINCARNATION_ID)
-				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
 				if revivetomb != null
 					revivetomb.remove()
@@ -36,7 +36,7 @@ public class HolyEscaper extends Escaper
 		else if id == TEMP_REV_ID
 			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				actor.resetAbilityCooldown(TEMP_REV_ID)
-				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				
 			
 
@@ -123,7 +123,7 @@ public class FastEscaper extends Escaper
 		if id == PORTAL_CREATE_ID
 			if sliding or poisoned or onLava or flying or this.getCurrentRegion() == regions[21]
 				actor.resetAbilityCooldown(PORTAL_CREATE_ID)
-				createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				return
 			if portal == null
 				portal = new Portal(this, 20 + actor.getAbilityLevel(PORTAL_CREATE_ID) * 7)
@@ -199,7 +199,7 @@ public class StrongEscaper extends Escaper
 			shieldtimer -= ANIMATION_PERIOD
 			if pos.distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0 
 				if shieldtimer > 0
-					createTTEx(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
+					createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				shieldtimer = 0
 				actor.removeAbility('Avul')
 				invulnerable = false

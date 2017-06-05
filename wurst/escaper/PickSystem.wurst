@@ -6,6 +6,7 @@ import RevivePointModifier
 import ChannelAbilityPreset
 import CodeManager
 import ClosureTimers
+import FText
 
 EscaperDefinition array currentView
 
@@ -20,14 +21,14 @@ interface EscaperClsr
 class EscaperDefinition
 	use LinkedListModule
 
-	private texttag nameTt
+	private FText nameTt
 	private string mbicon
 	unit escaper
 	EscaperClsr cb
 
 	construct(int escaperId)
-		nameTt = createTTEx(PICK-vec2(64,64), "", 12)
-		nameTt.setVisibility(false)
+		nameTt = createFText(PICK-vec2(64,64), "", 12)
+		nameTt.tt.setVisibility(false)
 		escaper = createUnit(DUMMY_PLAYER, escaperId, PICK, (315).fromDeg())
 		escaper..addAbility(LOCUST_ID)..setVertexColor(COLOR_BLACK)
 
@@ -35,16 +36,16 @@ class EscaperDefinition
 		mbicon = path
 
 	function setName(string name)
-		nameTt.setText(name, 12)
+		nameTt.tt..setText(name, 12)
 
 	function showTo(PlayerData pd)
 		if GetLocalPlayer() == pd.p
-			nameTt.setVisibility(true)
+			nameTt.tt..setVisibility(true)
 			escaper.setVertexColor(COLOR_WHITE)
 
 	function hide(PlayerData pd)
 		if GetLocalPlayer() == pd.p
-			nameTt.setVisibility(false)
+			nameTt.tt..setVisibility(false)
 			escaper.setVertexColor(COLOR_BLACK)
 
 	function createFor(PlayerData pd)

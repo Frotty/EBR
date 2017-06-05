@@ -36,15 +36,15 @@ public class Pointer extends EscaperSensorSetup
 			case INC_ID
 				if turnspeed < 6.
 					turnspeed += 0.5
-					createTTEx(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
-					createTTEx(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner  )
 			case DEC_ID
 				if turnspeed > -6.
 					turnspeed -= 0.5
-					createTTEx(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
 				else
-					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
 			case START_ID
 				turning = true
 				angl = actor.getFacingAngle()
@@ -75,7 +75,7 @@ public class Pointer extends EscaperSensorSetup
 			obj.angl = facing.asAngleDegrees()
 			obj.setup.setFacing(obj.angl)
 			obj.actor.setFacing(obj.angl)
-			createTTEx(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
+			createFText(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
 
 	override function serialize() returns Json
 		let json = super.serialize()

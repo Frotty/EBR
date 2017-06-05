@@ -62,7 +62,7 @@ public class Boss extends SetupObject
 							SetUnitAbilityLevel(actor,REAL_HP_BIG_ID, bighp+1)
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 0)
 					else
-						createTTEx(pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), owner)
+						createFText(pos, vec2(0,0.05), "|cffC51019Max HP", 10,  2., colorA(255,255,255,0), owner)
 				else
 					if smallhp == 0
 						actor.addAbility(REAL_HP_SMALL_ID)
@@ -76,7 +76,7 @@ public class Boss extends SetupObject
 						SetUnitAbilityLevel(actor,REAL_HP_BIG_ID, bighp-1)
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, 4)
 					else
-						createTTEx(pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), owner  )
+						createFText(pos, vec2(0,0.05), "|cffC51019Min HP", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp-1)
 			case AOE_SPELL_ID

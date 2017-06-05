@@ -59,20 +59,20 @@ public class Vortex extends UnitEntity
 			case INC_GRAV_ID
 				if gravity < 25.
 					gravity += .5
-					createTTEx(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
 			case DEC_GRAV_ID
 				if gravity > -25.
 					gravity -= .5
-					createTTEx(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
 			case ZMODE_NONE
 				zMode = ZMode.NONE
-				createTTEx(pos, vec2(0,0.06), "Z Mode: None", 12,  2., colorA(255,255,255,0), owner)
+				createFText(pos, vec2(0,0.06), "Z Mode: None", 12,  2., colorA(255,255,255,0), owner)
 			case ZMODE_CYLI
 				zMode = ZMode.CYLINDER
-				createTTEx(pos, vec2(0,0.06), "Z Mode: Cylinder", 12,  2., colorA(255,255,255,0), owner)
+				createFText(pos, vec2(0,0.06), "Z Mode: Cylinder", 12,  2., colorA(255,255,255,0), owner)
 			case ZMODE_HEMI
 				zMode = ZMode.HEMISPHERE
-				createTTEx(pos, vec2(0,0.06), "Z Mode: Hemisphere", 12,  2., colorA(255,255,255,0), owner)
+				createFText(pos, vec2(0,0.06), "Z Mode: Hemisphere", 12,  2., colorA(255,255,255,0), owner)
 			case SIZE_SMALL
 				radiusSq = GRAV_RADIUS_SMALL
 				vortexFx.hiddenDestroy()

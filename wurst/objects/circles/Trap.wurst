@@ -137,7 +137,7 @@ public class Trap extends StaticBaseObject
 				if sfxid < SFX_COUNT
 					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				else
-					createTTEx(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
 			case PREV_SFX_ABIL
 				if sfxid <= 0
 					sfxid = SFX_COUNT
@@ -146,7 +146,7 @@ public class Trap extends StaticBaseObject
 				if sfxid < SFX_COUNT
 					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				else
-					createTTEx(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
 			
 			case KILL_ABIL
 				a = ABIL.KILL
@@ -156,7 +156,6 @@ public class Trap extends StaticBaseObject
 				duration = 1.
 				addConfiger(true, false)
 			case SPEED_ABIL
-				//createTTEx(pos, vec2(0,0.05), "|cffC51019Not implemented yet", 10,  2., colorA(255,255,255,0), owner  )
 				a = ABIL.SPEED
 				value = 120.
 				duration = 1.
@@ -178,38 +177,38 @@ public class Trap extends StaticBaseObject
 					
 			case INCREASE_INTERVAL_ABIL
 				if interval >= 10
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					interval += 0.25
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 			case DECREASE_INTERVAL_ABIL
 				if interval < 0.75
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					interval -= 0.25
-					createTTEx(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 			
 			case INCREASE_VALUE_ABIL
 				switch a
 					case ABIL.KNOCK
 						if value >= 200
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value += 5
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
 						if value >= 1500
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value += 100
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
 						if value >= 180
 							uptimes++
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value += 20
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(value,1,0)+"%", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(value,1,0)+"%", 10,  2., colorA(255,255,255,0), owner  )
 						if uptimes > 10
 							uptimes = -99999999
 							printTimedToPlayer("|cff08C5E6Relax|r, it's already |cffCE2919max|r... |cffFF7B29But maybe this will help you!", 20, owner)
@@ -220,22 +219,22 @@ public class Trap extends StaticBaseObject
 				switch a
 					case ABIL.KNOCK
 						if value <= 5
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value -= 5
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Force "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Force "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
 						if value <= 100
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value -= 100
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Intensity "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Intensity "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
 						if value <= 20
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							value -= 20
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
 			
@@ -243,44 +242,44 @@ public class Trap extends StaticBaseObject
 				switch a
 					case ABIL.STUN
 						if duration >= 4
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							duration += 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
 						if duration >= 5
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							duration += 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
 						if duration >= 20
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							duration += 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip	
 			case DECREASE_DURATION_ABIL
 				switch a
 					case ABIL.STUN
 						if duration <= 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							duration -= 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SHAKE
 						if duration <= 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							duration -= 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					case ABIL.SPEED
 						if duration <= 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
 						else
 							duration -= 1
-							createTTEx(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
 			

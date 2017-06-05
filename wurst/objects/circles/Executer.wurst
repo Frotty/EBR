@@ -368,7 +368,7 @@ public class Executer extends StaticBaseObject
 		SetUnitVertexColor(actor, 44,44,44,255)
 		disabled = true
 		UnitAddAbility(actor, REACTIVATE_ABIL)
-		createTTEx(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
+		createFText(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
 	
 	ondestroy
 		if eventRect != null

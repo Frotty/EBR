@@ -107,15 +107,15 @@ public class CongaLineHead extends SetupObject
 			case INC_ID
 				if segLength < 500.
 					segLength += 25
-					createTTEx(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
 				else
-					createTTEx(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner)
 			case DEC_ID
 				if segLength > 25
 					segLength -= 25
-					createTTEx(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
 				else
-					createTTEx(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner)
 			case CONGA_STRICT_ID
 				cmode = CongaMode.STRICT
 			case CONGA_LOOSE_ID
