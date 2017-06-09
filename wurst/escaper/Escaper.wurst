@@ -80,7 +80,7 @@ public abstract class Escaper extends UnitEntity
 		let id = GetManipulatedItem().getTypeId()
 		if id == 'I010'
 			flashEffect(Other.goldcredit, pos)
-			owner.addGold(10)
+			owner.addGold(15)
 			for pd in escaperPlayers
 				pd.p.addGold(5)
 
@@ -190,7 +190,7 @@ public abstract class Escaper extends UnitEntity
 			if ttype2 == rdata.getTypeSet().unwalkableId
 				ttype = rdata.getTypeSet().unwalkableId
 			else
-				ttype = ttype2
+				ttype = GetTerrainType(pos.x, pos.y)
 				newval = 2
 		else
 			if ttype2 == rdata.getTypeSet().unwalkableId

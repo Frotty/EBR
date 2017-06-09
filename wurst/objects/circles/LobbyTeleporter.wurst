@@ -37,14 +37,18 @@ public class LobbyTeleporter extends StaticBaseObject
 			obj.check(e castTo Escaper)
 
 	function check(Escaper e)
-		votes[e.owner.getId()] = not votes[e.owner.getId()] 
 		let votesNeeded = (escaperPlayers.getSize() * 0.55).round()
+
+		votes[e.owner.getId()] = not votes[e.owner.getId()] 
+
 		if votes[e.owner.getId()]
 			currentPlus++
 			if currentPlus >= votesNeeded
 				ftext.tt.center(getPos(), "|cffffcc00building", 9)
-				for ep in escaperPlayers
+				for ep from escaperPlayers.staticItr()
 					teleport(ep.escaper)
+				setRallyPoint(pos.toVec2())
+				addQuestionmark()
 				for i = 0 to 11
 					votes[i] = false
 		else
@@ -64,10 +68,6 @@ public class LobbyTeleporter extends StaticBaseObject
 			if isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_ID) 
 				terminate()
 			else
-				setRallyPoint(pos.toVec2())
-				addQuestionmark()
-				if ftext != null
-					ftext.tt.center(getPos(), "|cffffcc00building", 9)
 
 	override function clearQuestionmark()
 		super.clearQuestionmark()

@@ -5,6 +5,7 @@
 [*] lobby teleporters now show retracted votes and teleport all escapers upon success
 [*] added sliding areas to lobby
 [*] increase default speed and increment of tracks
+[*] added info message about minigames not working yet
 
 [0.89n]
 [*] changed builder menus so they don't change position
