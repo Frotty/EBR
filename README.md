@@ -1,8 +1,15 @@
-Escape Builder Reloaded
+[![Build Status](http://peeeq.de/hudson/job/EBR/badge/icon)](http://peeeq.de/hudson/job/EBR/) 
+# Escape Builder Reloaded
+Escape Builder Reloaded is a warcraft 3 custom map.
 
-This is the Wurst Code Repository of the wc3 map Escape Builder.
+[**Info and Download**](https://www.hiveworkshop.com/threads/escape-builder-r-0-89n.184964/)
 
-Everything is open-source, though I would like it if you didn't just steal my work but either 
-suggest changes and additions or ask for permission.
+Visit the link above for more information and download of the latest public build.
 
-As is - this source is for educationaly purposes - for example if you want to know how I did spedific things.
+## Source notice
+
+This is the Wurst Code Repository. If you want to build it, you will need the latest version of the wurst compiler.
+
+Feel free to create Issues to point out mistakes or suggest additions.
+
+Pull Requests are always welcome.
