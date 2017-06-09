@@ -81,15 +81,9 @@ public class Tracks extends UnitEntity
 		
 	function updateTrack()
 		if dir == UP or dir == DOWN
-			rct.min.x = pos.x - 64
-			rct.max.y = pos.x + 64
-			rct.min.y = pos.y - tsize * 128 - 64
-			rct.max.y = pos.y + tsize * 128 + 64
+			rct = rectangle(pos.x - 64,pos.y - tsize * 128 - 64, pos.x + 64, pos.y + tsize * 128 + 64)
 		else
-			rct.min.x = pos.x - tsize * 128 - 64
-			rct.max.y = pos.x + tsize * 128 + 64
-			rct.min.y = pos.y - 64
-			rct.max.y = pos.y + 64
+			rct = rectangle(pos.x - tsize * 128 - 64,pos.y - 64, pos.x + tsize * 128 + 64, pos.y + 64)
 		recreateDummy()
 
 	override function serialize() returns Json

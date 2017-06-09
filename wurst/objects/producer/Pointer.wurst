@@ -63,7 +63,6 @@ public class Pointer extends EscaperSensorSetup
 			es.actor.setFacing(data.angl)
 	
 	static function setfacing()
-		print("set facing")
 		string chatmsg = GetEventPlayerChatString()
 		real facing = 0
 		if SubString(chatmsg, 0, 4) == "-sa "
