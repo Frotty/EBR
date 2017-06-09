@@ -26,24 +26,24 @@ constant integer SyncInteger_DUMMY_COUNT= SyncInteger_BASE + 2
             // endconfig
 constant integer EVENT_SYNC_INTEGER= 1
      
-trigger SyncInteger__OnSelectTrigger= CreateTrigger()
-trigger SyncInteger__EventTrig= CreateTrigger()
-trigger SyncInteger__NotifyTrig= CreateTrigger()
-real SyncInteger__FireEvent= 0
+trigger SyncInteger___OnSelectTrigger= CreateTrigger()
+trigger SyncInteger___EventTrig= CreateTrigger()
+trigger SyncInteger___NotifyTrig= CreateTrigger()
+real SyncInteger___FireEvent= 0
      
-group SyncInteger__SelectionGroup
+group SyncInteger___SelectionGroup
 
-integer array SyncInteger__SyncedInt
-integer SyncInteger__LastPlayer
-integer SyncInteger__LastSync
-unit array SyncInteger__SyncIntegerDummy
-integer array SyncInteger__AttachedInteger
-player SyncInteger__LocalPlayer
-unit array SyncInteger__NotifyUnit
-integer SyncInteger__NotifyCount= 0
-integer array SyncInteger__NotifyIndex
-real SyncInteger__DUMMY_X= 0
-real SyncInteger__DUMMY_Y= 0
+integer array SyncInteger___SyncedInt
+integer SyncInteger___LastPlayer
+integer SyncInteger___LastSync
+unit array SyncInteger___SyncIntegerDummy
+integer array SyncInteger___AttachedInteger
+player SyncInteger___LocalPlayer
+unit array SyncInteger___NotifyUnit
+integer SyncInteger___NotifyCount= 0
+integer array SyncInteger___NotifyIndex
+real SyncInteger___DUMMY_X= 0
+real SyncInteger___DUMMY_Y= 0
 //endglobals from SyncInteger
 //globals from Table:
 constant boolean LIBRARY_Table=true
@@ -387,55 +387,55 @@ endfunction
 
  
         function GetSyncedInteger takes nothing returns integer
-            return SyncInteger__LastSync
+            return SyncInteger___LastSync
         endfunction
  
         function GetSyncedPlayer takes nothing returns player
-            return Player(SyncInteger__LastPlayer)
+            return Player(SyncInteger___LastPlayer)
         endfunction
        
         function GetSyncedPlayerId takes nothing returns integer
-            return SyncInteger__LastPlayer
+            return SyncInteger___LastPlayer
         endfunction
  
         function IsPlayerSyncing takes player p returns boolean
-            return ( SyncInteger__SyncedInt[GetPlayerId(p)] != - 1 )
+            return ( SyncInteger___SyncedInt[GetPlayerId(p)] != - 1 )
         endfunction
  
         function IsPlayerIdSyncing takes integer pid returns boolean
-            return ( SyncInteger__SyncedInt[pid] != - 1 )
+            return ( SyncInteger___SyncedInt[pid] != - 1 )
         endfunction
 
         function IsSyncEnabled takes nothing returns boolean
-            return IsTriggerEnabled(SyncInteger__OnSelectTrigger)
+            return IsTriggerEnabled(SyncInteger___OnSelectTrigger)
         endfunction
  
         function SyncIntegerEnable takes nothing returns nothing
-            call EnableTrigger(SyncInteger__OnSelectTrigger)
+            call EnableTrigger(SyncInteger___OnSelectTrigger)
         endfunction
  
         function SyncIntegerDisable takes nothing returns nothing
-            call DisableTrigger(SyncInteger__OnSelectTrigger)
+            call DisableTrigger(SyncInteger___OnSelectTrigger)
         endfunction
  
         function SyncIntegerToggle takes boolean flag returns nothing
             if ( flag ) then
-                call EnableTrigger(SyncInteger__OnSelectTrigger)
+                call EnableTrigger(SyncInteger___OnSelectTrigger)
             else
-                call DisableTrigger(SyncInteger__OnSelectTrigger)
+                call DisableTrigger(SyncInteger___OnSelectTrigger)
             endif
         endfunction
  
         function OnSyncInteger takes filterfunc func returns triggercondition
-            return TriggerAddCondition(SyncInteger__EventTrig, func)
+            return TriggerAddCondition(SyncInteger___EventTrig, func)
         endfunction
  
         function OnSyncNotify takes filterfunc func returns nothing
-            call TriggerAddCondition(SyncInteger__NotifyTrig, func)
+            call TriggerAddCondition(SyncInteger___NotifyTrig, func)
         endfunction
        
         function RemoveNotifyEvent takes triggercondition action returns nothing
-           call TriggerRemoveCondition(SyncInteger__NotifyTrig, action)
+           call TriggerRemoveCondition(SyncInteger___NotifyTrig, action)
         endfunction
        
         function SyncNotify takes player p,integer notifyId returns nothing
@@ -448,17 +448,17 @@ endfunction
 
            
             if ( p == p2 ) then
-                call SelectUnit(SyncInteger__NotifyUnit[notifyId], true)
-                call SelectUnit(SyncInteger__NotifyUnit[notifyId], false)
+                call SelectUnit(SyncInteger___NotifyUnit[notifyId], true)
+                call SelectUnit(SyncInteger___NotifyUnit[notifyId], false)
             endif
         endfunction
        
         function SyncInteger_FireEvents takes real eventtype returns nothing
-            set SyncInteger__FireEvent=eventtype
-            set SyncInteger__FireEvent=0
+            set SyncInteger___FireEvent=eventtype
+            set SyncInteger___FireEvent=0
         endfunction
        
-        function SyncInteger__Debug takes boolean b,string s returns nothing
+        function SyncInteger___Debug takes boolean b,string s returns nothing
 
 
 
@@ -467,22 +467,22 @@ endfunction
         endfunction
        
         function SyncNotifyCreate takes nothing returns integer
-            local unit u= CreateUnit(SyncInteger_DUMMY_PLAYER, SyncInteger_DUMMY_ID, SyncInteger__DUMMY_X, SyncInteger__DUMMY_Y, 270)
+            local unit u= CreateUnit(SyncInteger_DUMMY_PLAYER, SyncInteger_DUMMY_ID, SyncInteger___DUMMY_X, SyncInteger___DUMMY_Y, 270)
             local integer uid= GetUnitUserData(u)
            
-            set SyncInteger__NotifyCount=SyncInteger__NotifyCount + 1
+            set SyncInteger___NotifyCount=SyncInteger___NotifyCount + 1
            
             if ( uid == 0 ) then
-                call SetUnitUserData(u, SyncInteger__NotifyCount)
-                set uid=SyncInteger__NotifyCount
+                call SetUnitUserData(u, SyncInteger___NotifyCount)
+                set uid=SyncInteger___NotifyCount
             endif
            
-            call SyncInteger__Debug(uid == 0 , "No unit indexer found.")
+            call SyncInteger___Debug(uid == 0 , "No unit indexer found.")
            
-            set SyncInteger__NotifyUnit[SyncInteger__NotifyCount]=u
-            set SyncInteger__NotifyIndex[uid]=SyncInteger__NotifyCount
+            set SyncInteger___NotifyUnit[SyncInteger___NotifyCount]=u
+            set SyncInteger___NotifyIndex[uid]=SyncInteger___NotifyCount
            
-            return SyncInteger__NotifyCount
+            return SyncInteger___NotifyCount
         endfunction
        
         function SyncInteger takes player p,integer number returns boolean
@@ -496,10 +496,10 @@ endfunction
             local unit u
             local unit last
 
-            call SyncInteger__Debug(SyncInteger__OnSelectTrigger == null , "SyncInteger: OnSelectTrigger is destroyed.")
-            call SyncInteger__Debug((IsTriggerEnabled(SyncInteger__OnSelectTrigger)) == false , "SyncInteger: OnSelectTrigger is disabled.") // INLINED!!
+            call SyncInteger___Debug(SyncInteger___OnSelectTrigger == null , "SyncInteger: OnSelectTrigger is destroyed.")
+            call SyncInteger___Debug((IsTriggerEnabled(SyncInteger___OnSelectTrigger)) == false , "SyncInteger: OnSelectTrigger is disabled.") // INLINED!!
      
-            if ( not (IsTriggerEnabled(SyncInteger__OnSelectTrigger)) ) then // INLINED!!
+            if ( not (IsTriggerEnabled(SyncInteger___OnSelectTrigger)) ) then // INLINED!!
                 return false
             endif
      
@@ -516,22 +516,22 @@ endfunction
             endloop
      
             // Count how many units are selected
-            call GroupEnumUnitsSelected(SyncInteger__SelectionGroup, p, null)
+            call GroupEnumUnitsSelected(SyncInteger___SelectionGroup, p, null)
             set bj_groupCountUnits=0
 
-            set u=FirstOfGroup(SyncInteger__SelectionGroup)
+            set u=FirstOfGroup(SyncInteger___SelectionGroup)
             loop
                 exitwhen u == null
                 set last=u
-                call GroupRemoveUnit(SyncInteger__SelectionGroup, u)
+                call GroupRemoveUnit(SyncInteger___SelectionGroup, u)
                 set bj_groupCountUnits=bj_groupCountUnits + 1
-                set u=FirstOfGroup(SyncInteger__SelectionGroup)
+                set u=FirstOfGroup(SyncInteger___SelectionGroup)
             endloop
          
             // If the queue is full, de-select the last unit which
             // will allow us to select a dummy, and hopefully
             // avoid a flickering effect.
-            if ( bj_groupCountUnits >= 12 and SyncInteger__LocalPlayer == p ) then
+            if ( bj_groupCountUnits >= 12 and SyncInteger___LocalPlayer == p ) then
                 call SelectUnit(last, false)
             endif
 
@@ -542,9 +542,9 @@ endfunction
                 set x=number / n
                 set j=j / SyncInteger_BASE
              
-                if ( SyncInteger__LocalPlayer == p ) then
-                    call SelectUnit(SyncInteger__SyncIntegerDummy[x], true)
-                    call SelectUnit(SyncInteger__SyncIntegerDummy[x], false)
+                if ( SyncInteger___LocalPlayer == p ) then
+                    call SelectUnit(SyncInteger___SyncIntegerDummy[x], true)
+                    call SelectUnit(SyncInteger___SyncIntegerDummy[x], false)
                 endif
          
                 set number=number - x * n
@@ -554,9 +554,9 @@ endfunction
                 set i=i - 1
             endloop
  
-            if ( SyncInteger__LocalPlayer == p ) then
-                call SelectUnit(SyncInteger__SyncIntegerDummy[d], true)
-                call SelectUnit(SyncInteger__SyncIntegerDummy[d], false)
+            if ( SyncInteger___LocalPlayer == p ) then
+                call SelectUnit(SyncInteger___SyncIntegerDummy[d], true)
+                call SelectUnit(SyncInteger___SyncIntegerDummy[d], false)
                
                 if ( bj_groupCountUnits >= 12 ) then
                     call SelectUnit(last, true)
@@ -574,34 +574,34 @@ endfunction
             local integer i= 0
      
             if ( destroyEvents ) then
-                call DestroyTrigger(SyncInteger__OnSelectTrigger)
-                call DestroyTrigger(SyncInteger__EventTrig)
-                call DestroyTrigger(SyncInteger__NotifyTrig)
-                set SyncInteger__OnSelectTrigger=null
-                set SyncInteger__EventTrig=null
-                set SyncInteger__NotifyTrig=null
+                call DestroyTrigger(SyncInteger___OnSelectTrigger)
+                call DestroyTrigger(SyncInteger___EventTrig)
+                call DestroyTrigger(SyncInteger___NotifyTrig)
+                set SyncInteger___OnSelectTrigger=null
+                set SyncInteger___EventTrig=null
+                set SyncInteger___NotifyTrig=null
                
 
-                    call DestroyGroup(SyncInteger__SelectionGroup)
-                    set SyncInteger__SelectionGroup=null
+                    call DestroyGroup(SyncInteger___SelectionGroup)
+                    set SyncInteger___SelectionGroup=null
 
             else
-                call DisableTrigger(SyncInteger__OnSelectTrigger) // INLINED!!
+                call DisableTrigger(SyncInteger___OnSelectTrigger) // INLINED!!
             endif
      
             loop
                 exitwhen i >= SyncInteger_DUMMY_COUNT
-                call RemoveUnit(SyncInteger__SyncIntegerDummy[i])
-                set SyncInteger__SyncIntegerDummy[i]=null
+                call RemoveUnit(SyncInteger___SyncIntegerDummy[i])
+                set SyncInteger___SyncIntegerDummy[i]=null
                 set i=i + 1
             endloop
            
             set i=0
            
             loop
-                exitwhen i >= SyncInteger__NotifyCount
-                call RemoveUnit(SyncInteger__NotifyUnit[i])
-                set SyncInteger__NotifyUnit[i]=null
+                exitwhen i >= SyncInteger___NotifyCount
+                call RemoveUnit(SyncInteger___NotifyUnit[i])
+                set SyncInteger___NotifyUnit[i]=null
                 set i=i + 1
             endloop
         endfunction
@@ -610,80 +610,80 @@ endfunction
             local integer i= 0
             local integer uid
            
-            call SyncInteger__Debug(SyncInteger__OnSelectTrigger == null , "SyncInitialize: OnSelectTrigger is null and has no events attached to it.")
-            call SyncInteger__Debug(SyncInteger__SyncIntegerDummy[i] != null , "SyncInitialize: Already initialized.")
+            call SyncInteger___Debug(SyncInteger___OnSelectTrigger == null , "SyncInitialize: OnSelectTrigger is null and has no events attached to it.")
+            call SyncInteger___Debug(SyncInteger___SyncIntegerDummy[i] != null , "SyncInitialize: Already initialized.")
 
             loop
                 exitwhen i >= SyncInteger_DUMMY_COUNT
-                set SyncInteger__SyncIntegerDummy[i]=CreateUnit(SyncInteger_DUMMY_PLAYER, SyncInteger_DUMMY_ID, SyncInteger__DUMMY_X, SyncInteger__DUMMY_Y, i)
+                set SyncInteger___SyncIntegerDummy[i]=CreateUnit(SyncInteger_DUMMY_PLAYER, SyncInteger_DUMMY_ID, SyncInteger___DUMMY_X, SyncInteger___DUMMY_Y, i)
          
-                set uid=GetUnitUserData(SyncInteger__SyncIntegerDummy[i])
+                set uid=GetUnitUserData(SyncInteger___SyncIntegerDummy[i])
                
                 if ( uid == 0 ) then
-                    call SetUnitUserData(SyncInteger__SyncIntegerDummy[i], i + 1)
+                    call SetUnitUserData(SyncInteger___SyncIntegerDummy[i], i + 1)
                     set uid=i + 1
                 endif
                
-                call SyncInteger__Debug(( i == 0 ) and ( SyncInteger__SyncIntegerDummy[i] == null ) , "SyncInitialize: Dummy unit is null (check DUMMY_ID).")
-                call SyncInteger__Debug(( i == 0 ) and ( GetUnitAbilityLevel(SyncInteger__SyncIntegerDummy[i], 'Aloc') > 0 ) , "SyncInitialize: Dummy units must be selectable (detected locust).")
-                call SyncInteger__Debug(( i == 0 ) and ( uid == 0 ) , "No unit indexer found.")
+                call SyncInteger___Debug(( i == 0 ) and ( SyncInteger___SyncIntegerDummy[i] == null ) , "SyncInitialize: Dummy unit is null (check DUMMY_ID).")
+                call SyncInteger___Debug(( i == 0 ) and ( GetUnitAbilityLevel(SyncInteger___SyncIntegerDummy[i], 'Aloc') > 0 ) , "SyncInitialize: Dummy units must be selectable (detected locust).")
+                call SyncInteger___Debug(( i == 0 ) and ( uid == 0 ) , "No unit indexer found.")
                
                 //call BJDebugMsg(I2S(uid))
                
-                set SyncInteger__AttachedInteger[uid]=i + 1
+                set SyncInteger___AttachedInteger[uid]=i + 1
 
-                call UnitAddAbility(SyncInteger__SyncIntegerDummy[i], SyncInteger_DUMMY_ABILITY)
-                call PauseUnit(SyncInteger__SyncIntegerDummy[i], true)
+                call UnitAddAbility(SyncInteger___SyncIntegerDummy[i], SyncInteger_DUMMY_ABILITY)
+                call PauseUnit(SyncInteger___SyncIntegerDummy[i], true)
                
                 set i=i + 1
             endloop
         endfunction
 
-        function SyncInteger__OnSelect takes nothing returns boolean
+        function SyncInteger___OnSelect takes nothing returns boolean
             local unit u= GetTriggerUnit()
             local player p= GetTriggerPlayer()
             local integer id= GetPlayerId(p)
-            local boolean isNeg= ( SyncInteger__SyncIntegerDummy[SyncInteger_DUMMY_COUNT - 1] == u )
+            local boolean isNeg= ( SyncInteger___SyncIntegerDummy[SyncInteger_DUMMY_COUNT - 1] == u )
             local integer udata= GetUnitUserData(u)
-            local integer index= SyncInteger__AttachedInteger[udata] - 1
+            local integer index= SyncInteger___AttachedInteger[udata] - 1
 
             // check for notifications
-            if ( SyncInteger__NotifyUnit[SyncInteger__NotifyIndex[udata]] == u ) then
+            if ( SyncInteger___NotifyUnit[SyncInteger___NotifyIndex[udata]] == u ) then
                
-                set SyncInteger__LastPlayer=id
-                set SyncInteger__LastSync=SyncInteger__NotifyIndex[udata]
+                set SyncInteger___LastPlayer=id
+                set SyncInteger___LastSync=SyncInteger___NotifyIndex[udata]
            
-                call TriggerEvaluate(SyncInteger__NotifyTrig)
+                call TriggerEvaluate(SyncInteger___NotifyTrig)
                
                 return false
             endif
            
-            if ( index == - 1 or SyncInteger__SyncIntegerDummy[index] != u ) then
+            if ( index == - 1 or SyncInteger___SyncIntegerDummy[index] != u ) then
                 set u=null
                 return false
             endif
            
-            call SyncInteger__Debug(SyncInteger__OnSelectTrigger == null , "SyncInteger: OnSelectTrigger is null.")
+            call SyncInteger___Debug(SyncInteger___OnSelectTrigger == null , "SyncInteger: OnSelectTrigger is null.")
      
             if ( isNeg ) then
-                set SyncInteger__SyncedInt[id]=SyncInteger__SyncedInt[id] * - 1
+                set SyncInteger___SyncedInt[id]=SyncInteger___SyncedInt[id] * - 1
             endif
 
-            if ( isNeg or SyncInteger__SyncIntegerDummy[SyncInteger_DUMMY_COUNT - 2] == u ) then
+            if ( isNeg or SyncInteger___SyncIntegerDummy[SyncInteger_DUMMY_COUNT - 2] == u ) then
                 // fire events
-                set SyncInteger__LastPlayer=id
-                set SyncInteger__LastSync=SyncInteger__SyncedInt[id]
+                set SyncInteger___LastPlayer=id
+                set SyncInteger___LastSync=SyncInteger___SyncedInt[id]
 
-                set SyncInteger__FireEvent=EVENT_SYNC_INTEGER
-                call TriggerEvaluate(SyncInteger__EventTrig)
-                set SyncInteger__FireEvent=0
+                set SyncInteger___FireEvent=EVENT_SYNC_INTEGER
+                call TriggerEvaluate(SyncInteger___EventTrig)
+                set SyncInteger___FireEvent=0
            
-                set SyncInteger__SyncedInt[id]=- 1
+                set SyncInteger___SyncedInt[id]=- 1
             else
-                if ( SyncInteger__SyncedInt[id] == - 1 ) then
-                    set SyncInteger__SyncedInt[id]=0
+                if ( SyncInteger___SyncedInt[id] == - 1 ) then
+                    set SyncInteger___SyncedInt[id]=0
                 endif
-                set SyncInteger__SyncedInt[id]=SyncInteger__SyncedInt[id] * SyncInteger_BASE + index
+                set SyncInteger___SyncedInt[id]=SyncInteger___SyncedInt[id] * SyncInteger_BASE + index
             endif
      
             set u=null
@@ -691,45 +691,45 @@ endfunction
             return false
         endfunction
        
-        function SyncInteger__OnMapStart takes nothing returns nothing
+        function SyncInteger___OnMapStart takes nothing returns nothing
             call DestroyTimer(GetExpiredTimer())
             call SyncInitialize()
         endfunction
 
         //===========================================================================
-        function SyncInteger__Init takes nothing returns nothing
+        function SyncInteger___Init takes nothing returns nothing
             local integer i= 0
             local integer j
      
             loop
-                call TriggerRegisterPlayerUnitEvent(SyncInteger__OnSelectTrigger, Player(i), EVENT_PLAYER_UNIT_SELECTED, null)
+                call TriggerRegisterPlayerUnitEvent(SyncInteger___OnSelectTrigger, Player(i), EVENT_PLAYER_UNIT_SELECTED, null)
          
-                set SyncInteger__SyncedInt[i]=- 1
+                set SyncInteger___SyncedInt[i]=- 1
          
                 set i=i + 1
                 exitwhen i == bj_MAX_PLAYER_SLOTS
             endloop
 
-            call TriggerAddCondition(SyncInteger__OnSelectTrigger, Filter(function SyncInteger__OnSelect))
+            call TriggerAddCondition(SyncInteger___OnSelectTrigger, Filter(function SyncInteger___OnSelect))
      
 
-                call TimerStart(CreateTimer(), 0., false, function SyncInteger__OnMapStart)
+                call TimerStart(CreateTimer(), 0., false, function SyncInteger___OnMapStart)
 
      
 
 
 
-                set SyncInteger__SelectionGroup=CreateGroup()
+                set SyncInteger___SelectionGroup=CreateGroup()
 
 
 
 
 
-                set SyncInteger__LocalPlayer=GetLocalPlayer()
+                set SyncInteger___LocalPlayer=GetLocalPlayer()
 
            
-            set SyncInteger__DUMMY_X=GetCameraBoundMaxX() + 500
-            set SyncInteger__DUMMY_Y=GetCameraBoundMaxY() + 500
+            set SyncInteger___DUMMY_X=GetCameraBoundMaxX() + 500
+            set SyncInteger___DUMMY_Y=GetCameraBoundMaxY() + 500
         endfunction
 
 
@@ -2271,10 +2271,10 @@ endfunction
 
         function s__SyncData_updateStatus takes nothing returns boolean
             local integer i= 0
-            local integer p= (SyncInteger__LastPlayer) // INLINED!!
+            local integer p= (SyncInteger___LastPlayer) // INLINED!!
             local boolean b= true
             local boolean c= true
-            local integer data= (SyncInteger__LastSync) // INLINED!!
+            local integer data= (SyncInteger___LastSync) // INLINED!!
             local triggercondition tc
 
             if ( not s__SyncData_buffering[data] ) then
@@ -2366,7 +2366,7 @@ endfunction
                 set s__SyncData_LocalPlayerID=GetPlayerId(s__SyncData_LocalPlayer)
 
 
-call TriggerAddCondition(SyncInteger__EventTrig, (Filter(function s__SyncData_updateStatus))) // INLINED!!
+call TriggerAddCondition(SyncInteger___EventTrig, (Filter(function s__SyncData_updateStatus))) // INLINED!!
             call TimerStart(s__SyncData_Elapsed, 10., true, function s__SyncData_trackTime)
    
 
@@ -2388,11 +2388,11 @@ call TriggerAddCondition(SyncInteger__EventTrig, (Filter(function s__SyncData_up
 //library Sync ends
 //===========================================================================
 // 
-// |cff217199Escape Builder |r[R] 0.89n
+// |cff217199Escape Builder |r[R] 0.89o
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Sun Jun 04 18:24:58 2017
+//   Date: Thu Jun 08 20:57:53 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -2421,31 +2421,45 @@ function CreateAllItems takes nothing returns nothing
     call CreateItem('I009', - 1799.0, - 6347.4)
     call CreateItem('I009', 3502.6, - 7042.6)
     call CreateItem('I009', - 4731.9, - 6904.0)
-    call CreateItem('I009', 1264.1, - 6134.2)
     call CreateItem('I009', - 3332.3, - 5889.3)
+    call CreateItem('I009', 1264.1, - 6134.2)
+    call CreateItem('I00A', 2181.3, - 6914.0)
     call CreateItem('I00A', 2421.6, - 5123.5)
-    call CreateItem('I00A', 4413.5, - 4294.3)
     call CreateItem('I00A', 3832.8, - 6648.4)
     call CreateItem('I00A', - 1280.7, - 4227.1)
-    call CreateItem('I00A', 4416.8, - 6159.0)
-    call CreateItem('I00A', - 1926.5, - 6347.4)
-    call CreateItem('I00A', - 2560.2, - 5762.8)
+    call CreateItem('I00A', 4413.5, - 4294.3)
     call CreateItem('I00A', 755.2, - 5499.9)
+    call CreateItem('I00A', 4416.8, - 6159.0)
+    call CreateItem('I00A', - 2560.2, - 5762.8)
     call CreateItem('I00A', - 3837.0, - 4998.9)
-    call CreateItem('I00A', 2181.3, - 6914.0)
     call CreateItem('I00A', - 3458.5, - 6785.1)
+    call CreateItem('I00A', - 1926.5, - 6347.4)
     call CreateItem('I00J', 6735.7, - 7105.2)
     call CreateItem('I010', - 3310.4, - 6268.8)
     call CreateItem('I010', 4424.0, - 6796.8)
     call CreateItem('I010', 4387.1, - 4166.0)
     call CreateItem('I010', 1155.9, - 6146.7)
-    call CreateItem('I010', - 1110.1, - 6852.5)
+    call CreateItem('I010', - 1876.8, - 6287.3)
     call CreateItem('I010', - 4218.0, - 5127.8)
     call CreateItem('I010', 4351.9, - 4737.4)
     call CreateItem('I010', 2551.1, - 7173.8)
     call CreateItem('I010', 2748.9, - 4658.5)
     call CreateItem('I010', - 1923.8, - 3974.1)
     call CreateItem('I010', - 2302.7, - 4229.0)
+    call CreateItem('I010', 2456.0, - 5168.5)
+    call CreateItem('I010', 2395.7, - 5173.7)
+    call CreateItem('I010', 3578.3, - 7050.6)
+    call CreateItem('I010', 3816.7, - 6031.5)
+    call CreateItem('I010', 2587.9, - 7198.0)
+    call CreateItem('I010', - 147.9, - 3929.0)
+    call CreateItem('I010', - 1302.0, - 4284.5)
+    call CreateItem('I010', - 1245.9, - 4207.5)
+    call CreateItem('I010', - 1928.3, - 4006.1)
+    call CreateItem('I010', - 1884.6, - 6401.1)
+    call CreateItem('I010', 777.4, - 5551.7)
+    call CreateItem('I010', 726.9, - 5479.6)
+    call CreateItem('I010', 4345.7, - 4779.4)
+    call CreateItem('I010', 6710.3, - 7178.4)
 endfunction
 
 //***************************************************************************
@@ -2462,7 +2476,7 @@ function CreateBuildingsForPlayer8 takes nothing returns nothing
     local trigger t
     local real life
 
-    set gg_unit_n00C_0058=CreateUnit(p, 'n00C', - 6400.0, - 6400.0, 270.000)
+    set gg_unit_n00C_0058=CreateUnit(p, 'n00C', - 6400.0, - 5760.0, 270.000)
 endfunction
 
 //===========================================================================
@@ -2473,7 +2487,7 @@ function CreateBuildingsForPlayer9 takes nothing returns nothing
     local trigger t
     local real life
 
-    set gg_unit_n00C_0063=CreateUnit(p, 'n00C', - 6144.0, - 6400.0, 270.000)
+    set gg_unit_n00C_0063=CreateUnit(p, 'n00C', - 6144.0, - 5760.0, 270.000)
 endfunction
 
 //===========================================================================
@@ -2484,7 +2498,7 @@ function CreateBuildingsForPlayer10 takes nothing returns nothing
     local trigger t
     local real life
 
-    set gg_unit_n00C_0115=CreateUnit(p, 'n00C', - 5888.0, - 6400.0, 270.000)
+    set gg_unit_n00C_0115=CreateUnit(p, 'n00C', - 5888.0, - 5760.0, 270.000)
 endfunction
 
 //===========================================================================
@@ -2495,7 +2509,7 @@ function CreateBuildingsForPlayer11 takes nothing returns nothing
     local trigger t
     local real life
 
-    set gg_unit_n00C_0143=CreateUnit(p, 'n00C', - 5632.0, - 6400.0, 270.000)
+    set gg_unit_n00C_0143=CreateUnit(p, 'n00C', - 5632.0, - 5760.0, 270.000)
 endfunction
 
 //===========================================================================
@@ -2610,7 +2624,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n01I', - 896.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'n000', 0.0, - 4480.0, 270.000)
     set u=CreateUnit(p, 'n01I', - 960.0, - 4416.0, 270.000)
-    set gg_unit_n00C_0150=CreateUnit(p, 'n00C', - 6656.0, - 6784.0, 270.000)
+    set gg_unit_n00C_0150=CreateUnit(p, 'n00C', - 6656.0, - 6144.0, 270.000)
     set gg_unit_n00B_0151=CreateUnit(p, 'n00B', 3328.0, - 6272.0, 270.000)
     set gg_unit_n00B_0152=CreateUnit(p, 'n00B', 3456.0, - 6592.0, 270.000)
     set u=CreateUnit(p, 'n00S', 2048.0, - 4480.0, 270.000)
@@ -2685,9 +2699,9 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n018', - 4160.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n00S', 6016.0, - 6272.0, 270.000)
     set u=CreateUnit(p, 'n00S', 4480.0, - 5440.0, 270.000)
-    set gg_unit_n000_0322=CreateUnit(p, 'n000', - 6016.0, - 6912.0, 270.000)
-    set gg_unit_n00C_0323=CreateUnit(p, 'n00C', - 5248.0, - 6784.0, 270.000)
-    set gg_unit_n00C_0324=CreateUnit(p, 'n00C', - 5248.0, - 7040.0, 270.000)
+    set gg_unit_n000_0322=CreateUnit(p, 'n000', - 6016.0, - 6272.0, 270.000)
+    set gg_unit_n00C_0323=CreateUnit(p, 'n00C', - 5248.0, - 6144.0, 270.000)
+    set gg_unit_n00C_0324=CreateUnit(p, 'n00C', - 5248.0, - 6400.0, 270.000)
     set u=CreateUnit(p, 'n018', - 4608.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'n00R', 4288.0, - 6912.0, 270.000)
     set u=CreateUnit(p, 'n00S', 1600.0, - 4736.0, 270.000)
@@ -2832,7 +2846,7 @@ function CreateRegions takes nothing returns nothing
     set gg_rct_Choose=Rect(- 7488.0, 5856.0, - 5856.0, 7488.0)
     set we=AddWeatherEffect(gg_rct_Choose, 'SNhs')
     call EnableWeatherEffect(we, true)
-    set gg_rct_Region_002=Rect(- 6976.0, - 6176.0, - 5056.0, - 1856.0)
+    set gg_rct_Region_002=Rect(- 6976.0, - 5568.0, - 5056.0, - 1856.0)
     set gg_rct_Region_014=Rect(928.0, 5184.0, 4160.0, 7104.0)
     set gg_rct_Region_015=Rect(4160.0, 5184.0, 6976.0, 7104.0)
     set gg_rct_Region_000=Rect(- 2112.0, - 7328.0, 960.0, - 3648.0)
@@ -2853,7 +2867,7 @@ function CreateRegions takes nothing returns nothing
     set gg_rct_Region_018=Rect(960.0, - 7328.0, 4160.0, - 3648.0)
     set gg_rct_Region_024=Rect(4160.0, - 7328.0, 7040.0, - 3648.0)
     set gg_rct_Region_026=Rect(- 832.0, - 1472.0, 1472.0, 704.0)
-    set gg_rct_Start=Rect(- 6976.0, - 7328.0, - 5056.0, - 6176.0)
+    set gg_rct_Start=Rect(- 6976.0, - 7328.0, - 5056.0, - 5568.0)
     set gg_rct_Region_023=Rect(- 8192.0, - 7680.0, 7648.0, 8192.0)
     set gg_rct_Region_025=Rect(- 4928.0, 7104.0, - 3680.0, 8000.0)
     set gg_rct_Region_027=Rect(- 3680.0, 7104.0, - 1856.0, 8000.0)
@@ -3046,6 +3060,7 @@ endfunction
 //===========================================================================
 function Trig_Untitled_Trigger_005_Actions takes nothing returns nothing
     call ShowUnitHide(gg_unit_h00H_0206)
+    call ShowUnitHide(gg_unit_n000_0322)
     call MoveRectToLoc(gg_rct_Region_024, GetRectCenter(GetPlayableMapRect()))
     call MoveRectToLoc(gg_rct_Start, GetRectCenter(GetPlayableMapRect()))
 endfunction
@@ -3662,8 +3677,8 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs59787781")
-call ExecuteFunc("SyncInteger__Init")
+call ExecuteFunc("jasshelper__initstructs95407546")
+call ExecuteFunc("SyncInteger___Init")
 
     call InitGlobals()
     call InitCustomTriggers()
@@ -3707,7 +3722,7 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs59787781 takes nothing returns nothing
+function jasshelper__initstructs95407546 takes nothing returns nothing
 
 
 

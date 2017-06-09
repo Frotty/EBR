@@ -92,8 +92,8 @@ public function initStartmazes()
 		startmazes[3] = new FourthCitadelleMaze(regions[3])
 		new MinigameTeleporter(gg_unit_n00C_0150, false)
 
-		createCenteredTexttag(vec3(-5980,-6687,0), "|cff0884D6Lounge", 13.5)
-		new BallItem(vec2(-5780,-6687), DUMMY_PLAYER)
+		createCenterFText(gg_unit_n000_0322.getPos().toVec3(), "|cff0884D6Lounge", 13.5)
+		new BallItem(vec2(-5780,-6287), DUMMY_PLAYER)
 		setBuilderTeleporter()
 		
 		EnumItemsInRect(playableMapRect, null, function correctKeys)
@@ -151,15 +151,15 @@ public function setStartTeleport(int tpid, int locid)
 	switch locid
 		case 1
 			t.setRallyPoint(vec2(3456,-4160))
-			t.tag = createCenteredTexttag(t.getPos(), "|cffE68C19Desert Startmaze", 12.5)
+			t.ftext.tt.center(t.getPos(), "|cffE68C19Desert Startmaze", 12.5)
 		case 2
 			t.setRallyPoint(vec2(500,-6900))
-			t.tag = createCenteredTexttag(t.getPos(), "|cff3A9C3AForest Startmaze", 12.5)
+			t.ftext.tt.center(t.getPos(), "|cff3A9C3AForest Startmaze", 12.5)
 		case 3
 			t.setRallyPoint(vec2(-2433,-6148))
-			t.tag = createCenteredTexttag(t.getPos(), "|cffA5084ACitadel Startmaze", 12.5)
+			t.ftext.tt.center(t.getPos(), "|cffA5084ACitadel Startmaze", 12.5)
 
-	t.currentPlus = 8
+	t.currentPlus = 999
 	t.ready = true
 
 	

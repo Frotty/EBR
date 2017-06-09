@@ -5,7 +5,7 @@ import public Revivepoint
 import public EscaperKillers
 import public GameConstants
 
-public constant vec2 LOUNGE = vec2(-6000,-7000)
+public constant vec2 LOUNGE = gg_unit_n000_0322.getPos()
 public constant boolexpr pickFilter = Condition(() -> GetFilterUnit().getOwner() == STAFF_PLAYER)
 
 public abstract class Startmaze

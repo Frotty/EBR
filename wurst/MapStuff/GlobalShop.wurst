@@ -15,5 +15,5 @@ public class GlobalShop
 
 
 @init2 function init_GlobalShop()
-	shop = new GlobalShop(-6530,-7050,Player(12))
+	shop = new GlobalShop(-6530,-6450,Player(12))
 

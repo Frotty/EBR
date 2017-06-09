@@ -1,3 +1,11 @@
+[0.89o]
+[*] fixed item descriptions
+[*] texttags are now managed so they behave the same for all players
+[*] added more coins to the startmazes
+[*] lobby teleporters now show retracted votes and teleport all escapers upon success
+[*] added sliding areas to lobby
+[*] increase default speed and increment of tracks
+
 [0.89n]
 [*] changed builder menus so they don't change position
 [*] made it possible to add builder to a control group (ctrl+1 now permanently binds it)

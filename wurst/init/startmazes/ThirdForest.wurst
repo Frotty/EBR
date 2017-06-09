@@ -22,7 +22,7 @@ public class ThirdForestMaze extends Startmaze
 		data.setOwner(STAFF_PLAYER)
 
 		let t = new Teleporter(gg_unit_n00C_0044)
-		t.setRallyPoint(vec2(-6000,-6900))
+		t.setRallyPoint(LOUNGE)
 
 		let sk1 = new SmallKiller(gg_unit_n009_0038)
 		sk1.setup.issuePointOrder("patrol", vec2(-122.01,-5897))

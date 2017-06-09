@@ -9,21 +9,22 @@ constant real 	EVENT_RADIUS	= 32.
 string array stdcolors
 
 public class Texter extends StaticBaseObject
-	texttag text = CreateTextTag()
+	FText text
 	real xoffset = 0
 	boolean hidden = true
 	color col = color(255,255,255)
 	
-	construct( vec2 pos, player owner )
-		super( pos, getUnit(owner, TEXTER_ID, pos, angle(0), this), EVENT_RADIUS, function Texter.onStep, CODE_NULL) 
-		text..setColor( col.red,col.green,col.blue, 0 )..setPos( actor.getX(),actor.getY(), 0 )..setVisibility( false )..setPermanent( true )
+	construct(vec2 pos, player owner)
+		super(pos, getUnit(owner, TEXTER_ID, pos, angle(0), this), EVENT_RADIUS, function Texter.onStep, CODE_NULL) 
+		text = createFText(actor.getPos3Zero(), "", 12)
+		text.tt..setColor(col.red,col.green,col.blue, 0 )..setVisibility(false)
 
 	static function onStep()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		thistype obj = GetTriggeringTrigger().getSource().getUserData() castTo thistype
 		if e instanceof Escaper
-			obj.text.setVisibility( true )
+			obj.text.tt.setVisibility(true)
 			obj.hidden = false
 			
 	static function show()
@@ -31,8 +32,8 @@ public class Texter extends StaticBaseObject
 			let ent = u.getEntity()
 			if ent instanceof Texter
 				thistype obj = u.getUserData() castTo thistype
-				obj.text.setVisibility( true )
-				obj.text.setPos(obj.pos - vec3(obj.xoffset,0,0))
+				obj.text.tt.setVisibility(true)
+				obj.text.tt.setPos(obj.pos - vec3(obj.xoffset,0,0))
 				obj.hidden = false
 				createFText(obj.pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
@@ -41,7 +42,7 @@ public class Texter extends StaticBaseObject
 			let ent = u.getEntity()
 			if ent instanceof Texter
 				thistype obj = u.getUserData() castTo thistype
-				obj.text.setVisibility( false )
+				obj.text.tt.setVisibility(false)
 				obj.hidden = true
 				createFText(obj.pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), obj.owner  )
 	
@@ -54,12 +55,11 @@ public class Texter extends StaticBaseObject
 			let ent = u.getEntity()
 			if ent instanceof Texter
 				thistype obj = u.getUserData() castTo thistype
-				obj.text.setText(ttext, 10)
 				obj.clearQuestionmark()
 				obj.xoffset = ttext.length() / 2. * 6
 				if obj.hidden
-					createFText(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner  )
-				obj.text.center(obj.getPos(), ttext, 10)
+					createFText(obj.pos - vec2(obj.xoffset,0), vec2(0,0.05), ttext, 10,  2., colorA(255,255,255,0), obj.owner)
+				obj.text.tt.center(obj.getPos(), ttext, 10)
 	
 	static function setColor()
 		string chatmsg = GetEventPlayerChatString()
@@ -72,7 +72,7 @@ public class Texter extends StaticBaseObject
 				let obj = u.getUserData() castTo Texter
 				if obj.col != textcolor
 					obj.col = textcolor
-					obj.text.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
+					obj.text.tt.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
 					createFText(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
 			else if ent instanceof Decoration
 				let obj = u.getUserData() castTo Decoration
@@ -83,8 +83,7 @@ public class Texter extends StaticBaseObject
 				obj.setup.setVertexColor(textcolor)
 
 	ondestroy
-		if text != null
-			text.destr()
+		destroy text
 
 	override function serialize() returns Json
 		let json = super.serialize()

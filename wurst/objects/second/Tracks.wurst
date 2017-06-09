@@ -2,6 +2,7 @@ package Tracks
 import Escaper
 import ConfigValue
 import Json
+import Collision
 
 int array TRACKS
 
@@ -14,12 +15,11 @@ constant int INCLENGTH_ID   	= 'A04H'
 constant int DECLENGTH_ID		= 'A050'
 
 public class Tracks extends UnitEntity
+	ConfigValue trackSpeed = new ConfigValue(4, 0.50, "Trackspeed")
+
 	unit setup
-	
-	ConfigValue trackSpeed = new ConfigValue(2, 0.25, "Trackspeed")
 	int tsize = 0
-	int height = 0
-	int width  = 0
+	rectangle rct
 	vec2 dir = UP
 	
 	construct(vec2 pos, player owner)
@@ -31,9 +31,7 @@ public class Tracks extends UnitEntity
 		
 	override function update()
 		for escaper from this.getCurrentRegion().getEscapers()
-			if escaper.pos.z < 22 and ( escaper.pos.x > pos.x - width * 128 - 64 and escaper.pos.x < pos.x + width * 128 + 64 
-				and escaper.pos.y > pos.y - height * 128 - 64 and escaper.pos.y < pos.y + height * 128 + 64 )
-				
+			if escaper.pos.z < 22 and rct.contains(escaper.pos.toVec2())
 				escaper.otherVel += dir * trackSpeed.get()
 		
 				
@@ -83,11 +81,15 @@ public class Tracks extends UnitEntity
 		
 	function updateTrack()
 		if dir == UP or dir == DOWN
-			width = 0
-			height = tsize
+			rct.min.x = pos.x - 64
+			rct.max.y = pos.x + 64
+			rct.min.y = pos.y - tsize * 128 - 64
+			rct.max.y = pos.y + tsize * 128 + 64
 		else
-			height = 0
-			width = tsize
+			rct.min.x = pos.x - tsize * 128 - 64
+			rct.max.y = pos.x + tsize * 128 + 64
+			rct.min.y = pos.y - 64
+			rct.max.y = pos.y + 64
 		recreateDummy()
 
 	override function serialize() returns Json

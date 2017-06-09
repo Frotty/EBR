@@ -12,7 +12,7 @@ constant ESC_ID = 'A009'
 constant EVENT_RADIUS	= 38.
 
 public class MinigameTeleporter extends StaticBaseObject
-	texttag tag = null
+	FText text
 	boolean array[12] votes
 	int currentPlus
 
@@ -22,7 +22,7 @@ public class MinigameTeleporter extends StaticBaseObject
 		..removeAbility(INVIS_ID)
 		..removeAbility(ESC_ID)
 		clearQuestionmark()
-		tag = createCenteredTexttag(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 11)
+		text = createCenterFText(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 11)
 		
 	static function checkVote()
 		unit source = GetTriggeringTrigger().getSource()

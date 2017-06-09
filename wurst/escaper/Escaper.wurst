@@ -80,7 +80,6 @@ public abstract class Escaper extends UnitEntity
 		let id = GetManipulatedItem().getTypeId()
 		if id == 'I010'
 			flashEffect(Other.goldcredit, pos)
-			createGoldBountyTextTag(actor, 15, owner)
 			owner.addGold(10)
 			for pd in escaperPlayers
 				pd.p.addGold(5)
