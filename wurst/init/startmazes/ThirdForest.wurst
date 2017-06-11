@@ -49,7 +49,7 @@ public class ThirdForestMaze extends Startmaze
 		let uk = new UnitCreator(gg_unit_n001_0117)
 		uk.setRallyPoint(gg_unit_n004_0116.getPos())
 		uk.tmode = TimerMode.RANDOM
-		uk.activate()
+		uk.setEnabled(true)
 
 		var wp = new Waypoint(gg_unit_n004_0116)
 		wp.setRallyPoint(gg_unit_n004_0101.getPos())

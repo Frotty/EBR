@@ -1,6 +1,5 @@
 package Boots
 import ItemObject
-import Escaper
 
 public class Boots extends ItemObject
 	boolean picked = false

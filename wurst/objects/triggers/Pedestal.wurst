@@ -1,5 +1,4 @@
 package Pedestal
-import ErrorHandling
 import initlater InstantBuild
 import public PedestalObjects
 import Assets
@@ -16,7 +15,6 @@ import TerrainBlocker
 import TileData
 import LZW
 import StringUtils
-import Door
 import ItemObject
 
 constant CHAR_STEPSIZE = 180

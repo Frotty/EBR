@@ -65,10 +65,12 @@ public class StaticBaseObject extends UnitEntity
 			if disFx != null
 				disFx.destr()
 
-			var path = Other.sleeptarget
+			var path = ""
 			if actor.hasAbility(GHOST_INVIS_ID)
 				if GetLocalPlayer() != owner
 					path = ""
+			if GetLocalPlayer() == owner
+				path = Other.sleeptarget
 			disFx = addEffect(path, pos)
 
 	function onCast()

@@ -1,6 +1,5 @@
 package Weapon
 import ItemObject
-import Escaper
 import ClosureTimers
 import public WeaponTypes
 

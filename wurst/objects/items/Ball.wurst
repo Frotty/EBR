@@ -1,6 +1,5 @@
 package Ball
 import ItemObject
-import Escaper
 import BasicSpells
 import ClosureTimers
 

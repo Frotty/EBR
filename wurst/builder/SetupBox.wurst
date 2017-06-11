@@ -224,25 +224,28 @@ function claimRegion()
 	var buyer = GetBuyingUnit()
 	let itm = GetSoldItem()
 	var id = GetItemTypeId(itm)
-	var builder = buyer.getUserData() castTo Builder
+	var entity = buyer.getEntity()
 	var rdata = getRegionData(seller.getPos())
 	let rtype = getRegionTypeFromItem(id)
-	if rdata.rtype == RegionType.UNKNOWN and rtype != RegionType.UNKNOWN
+	if entity instanceof Builder
 		itm.remove()
-		if builder.regionCount > 0
-			builder.regionCount--
-			rdata.setType(rtype, true)
-			rdata.setOwner(builder.owner)
-			GetManipulatedItem().remove()
-			addEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", seller.getPos()).destr()
-			seller.remove()		
-			
-			DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
-			new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
-			if GetLocalPlayer() == builder.owner
-				SelectUnit(builder.actor, true)
-		else
-			printTimedToPlayer("|cff3187CBYou have used up all your regions. Leave some for the other builders", 15, builder.owner)
+		if rdata.rtype == RegionType.UNKNOWN and rtype != RegionType.UNKNOWN
+			var builder = entity castTo Builder
+			if builder.regionCount > 0
+				builder.regionCount--
+				rdata.setType(rtype, true)
+				rdata.setOwner(builder.owner)
+				GetManipulatedItem().remove()
+				addEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", seller.getPos()).destr()
+				seller.remove()		
+				
+				DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
+				new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
+				if GetLocalPlayer() == builder.owner
+					SelectUnit(builder.actor, true)
+			else
+				printTimedToPlayer("|cff3187CBYou have used up all your regions. Leave some for the other builders", 15, builder.owner)
+
 
 init	
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())

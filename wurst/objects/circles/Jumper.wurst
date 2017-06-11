@@ -4,7 +4,6 @@ import BaseObject
 import SoundUtils
 import TerrainBlocker
 import ClosureForGroups
-import initlater InstantBuild
 
 constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"

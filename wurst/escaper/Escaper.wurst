@@ -1,6 +1,5 @@
 package Escaper
 import public Json
-import StandardTextTags
 import PhysicsEntity
 import Assets
 import public Entity

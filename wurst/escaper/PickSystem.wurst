@@ -6,7 +6,6 @@ import RevivePointModifier
 import ChannelAbilityPreset
 import CodeManager
 import ClosureTimers
-import FText
 
 EscaperDefinition array currentView
 

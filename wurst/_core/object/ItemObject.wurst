@@ -13,6 +13,7 @@ public abstract class ItemObject extends Entity
 		actorItem = i
 		actorItem..setEntity(this)
 		..setPos(pos)
+		setup..setPos(actorItem.getPos())..setXY(actorItem.getPos())
 		
 	ondestroy
 		setup.recycle()
