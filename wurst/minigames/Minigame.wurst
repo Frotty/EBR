@@ -1,0 +1,8 @@
+package Minigame
+import public SeqWorker
+import LinkedList
+
+public LinkedList<Minigame> minigames = new LinkedList<Minigame>()
+
+public abstract class Minigame
+	abstract function onBegin(SeqCallback onEnd)

@@ -1,0 +1,24 @@
+package MGCoins
+import Minigame
+import PlayerData
+import SoundUtils
+
+constant ARENA_POS = vec2(-4200, 7500)
+constant BEGIN_SOUND = new SoundDefinition("Sound\\Interface\\ArrangedTeamInvitation.wav", false)
+
+public class MGCoins extends Minigame
+
+	override function onBegin(SeqCallback onEnd)
+		// Teleport escapers
+		for pd from escaperPlayers.staticItr()
+			if not pd.escaper.alive
+				pd.escaper.revive()
+			pd.escaper.setPos(ARENA_POS.withZ(0))
+			pd.escaper.setCurrentRegion()
+			pd.p.panCamToTimed(pd.escaper.actor, 0)
+			BEGIN_SOUND.playForPlayer(pd.p)
+			printTimedToPlayer("Minigame started: |cffccaaddCoin Carambolage", 20, pd.p)
+			SetCameraBoundsToRectForPlayerBJ(pd.p, gg_rct_coingamebounds)
+
+init
+	minigames.add(new MGCoins())

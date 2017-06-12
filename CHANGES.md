@@ -1,18 +1,18 @@
 [0.89o]
 [*] fixed item descriptions
 [*] fixed builders buying shop items
-[*] texttags are now managed so they behave the same for all players
+[*] fixed teleport staff
 [*] added more coins to the startmazes
 [*] lobby teleporters fixed, show retracted votes and teleport all escapers upon success
 [*] added sliding areas to lobby
 [*] increase default speed and increment of tracks
+[*] decreased bomber missile speed
 [*] added info message about minigames not working yet
-[*] texters can now be activated by spell and executer
-[*] sleep effect of disabled objects now only visible to owner
-[*] set cooldown of all items from the shop to 2
-[*] fix item setups not being under items when stacked
+[*] texters can now be de/activated by spell and executer
+[*] sleep effect of disabled objects is now only visible to owner
+[*] set cooldown of all items in the shop to 2 seconds
+[*] texttags are now managed in order to behave the same for all players
 [*] improved performance by using latest wurst compiler
-
 
 [0.89n]
 [*] changed builder menus so they don't change position

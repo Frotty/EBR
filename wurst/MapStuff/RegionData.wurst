@@ -261,7 +261,11 @@ public RegionData array regions
 	regions[21].setType(getRegionTypeFromItem('I00D'), false)
 	regions[22] = new RegionData(gg_rct_Choose)
 	regions[22].setType(getRegionTypeFromItem('I00D'), false)
-	regions[22].setOwner(STAFF_PLAYER) 
+	regions[22].setOwner(STAFF_PLAYER)
+	regions[23] = new RegionData(gg_rct_Region_025)
+	regions[23].setType(getRegionTypeFromItem('I00G'), false)
+	regions[23].setOwner(STAFF_PLAYER)
+	regions[23].easyMode = true
 	
 	let t = CreateTrigger()
 	t.registerRectLeaveEventSource(gg_rct_Region_023)

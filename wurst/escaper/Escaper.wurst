@@ -447,20 +447,27 @@ public abstract class Escaper extends UnitEntity
 				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
 		else if id == TELEPORT_ITEM_ID 
 			var teleport = true
+			let itm = GetManipulatedItem()
 			for i = 0 to 5
 				let ie = UnitItemInSlot(actor, i).getEntity()
 				if ie != null and ie instanceof Key
 					teleport = false
 					break
+			if GetItemCharges(itm) > 1
+				SetItemCharges(itm, GetItemCharges(itm)-1)
+			else
+				itm.remove()
+
+				
 			if not teleport or poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
-				let pos = getSpellTargetPos()
+				let tpos = getSpellTargetPos()
 				var smallestDist = 9999999.
 				Escaper target = null
 				for e in escapers
 					if e != this
-						let dist = getPos().distanceToSq(e.getPos())
+						let dist = tpos.distanceToSq(e.getPos().toVec2())
 						if dist < smallestDist
 							smallestDist = dist
 							target = e
@@ -469,6 +476,7 @@ public abstract class Escaper extends UnitEntity
 				flashEffect(Other.blinkcaster, this.getPos())
 				setPos(target.getPos())
 				flashEffect(Other.blinkcaster, target.getPos())
+
 		else
 			jukeBox.checkSpell(id)
 			
