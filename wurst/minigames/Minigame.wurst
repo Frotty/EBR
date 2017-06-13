@@ -1,8 +1,32 @@
 package Minigame
 import public SeqWorker
 import LinkedList
+import PlayerData
+import SoundUtils
+import Collision
 
 public LinkedList<Minigame> minigames = new LinkedList<Minigame>()
 
+constant BEGIN_SOUND = new SoundDefinition("Sound\\Interface\\ArrangedTeamInvitation.wav", false)
+
 public abstract class Minigame
+
+	function start()
+		for pd from escaperPlayers.staticItr()
+			if not pd.escaper.alive
+				pd.escaper.revive()
+			pd.escaper.setPos(getStartPosition().withZ(0))
+			pd.escaper.setCurrentRegion()
+			pd.p.panCamToTimed(pd.escaper.actor, 0)
+			
+			printTimedToPlayer("Minigame started: |cffccaaddCoin Carambolage", 20, pd.p)
+			let rct = getGameRect()
+			if GetLocalPlayer() == pd.p
+				// SetCameraBounds(rct.min.x, rct.min.y, rct.min.x, rct.max.y, rct.max.x, rct.max.y, rct.max.x, rct.min.y)
+				SetCameraBoundsToRect(getGameRect())
+
 	abstract function onBegin(SeqCallback onEnd)
+
+	abstract function getStartPosition() returns vec2
+
+	abstract function getGameRect() returns rect
