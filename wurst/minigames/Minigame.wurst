@@ -19,10 +19,8 @@ public abstract class Minigame
 			pd.escaper.setCurrentRegion()
 			pd.p.panCamToTimed(pd.escaper.actor, 0)
 			
-			printTimedToPlayer("Minigame started: |cffccaaddCoin Carambolage", 20, pd.p)
-			let rct = getGameRect()
+			printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
 			if GetLocalPlayer() == pd.p
-				// SetCameraBounds(rct.min.x, rct.min.y, rct.min.x, rct.max.y, rct.max.x, rct.max.y, rct.max.x, rct.min.y)
 				SetCameraBoundsToRect(getGameRect())
 
 	abstract function onBegin(SeqCallback onEnd)
@@ -30,3 +28,5 @@ public abstract class Minigame
 	abstract function getStartPosition() returns vec2
 
 	abstract function getGameRect() returns rect
+
+	abstract function getName() returns string

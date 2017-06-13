@@ -9,11 +9,15 @@ constant ARENA_POS = vec2(-4200, 7500)
 public class MGRandKill extends Minigame
 
 	override function getGameRect() returns rect
+		return gg_rct_coingamebounds
 
 	override function onBegin(SeqCallback onEnd)
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()
+
+	override function getName() returns string
+		return "|cffccaaddRandom Rumble"
 
 
 init
