@@ -68,15 +68,15 @@ public class ThirdForestMaze extends Startmaze
 		let fk = new AirKiller(gg_unit_u00J_0149)
 		fk.setup.issuePointOrder("patrol", vec2(-1025,-4565))
 
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01I", pickFilter)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01I'))
 		for u from ENUM_GROUP
 			new SmallObstacle(u)
 
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01H", pickFilter)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01H'))
 		for u from ENUM_GROUP
 			new BigObstacle(u)
 			
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n01X", pickFilter)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01X'))
 		for u from ENUM_GROUP
 			new HighObstacle(u)
 

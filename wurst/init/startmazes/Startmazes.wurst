@@ -23,7 +23,7 @@ public function initStartmazes()
 	for vicu from ENUM_GROUP
 		vicu.setOwner(STAFF_PLAYER, true)
 
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n000", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n000'))
 	for u from ENUM_GROUP
 		if u.isAlive()
 			var r = new RevivePoint(u)
@@ -39,35 +39,34 @@ public function initStartmazes()
 				r.startmaze = 4
 				svRev = r
 
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_h00C", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'h00C'))
 	for u2 from ENUM_GROUP
 		if u2 != gg_unit_h00C_0023 and u2 != gg_unit_h00C_0011
 			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
 			u2.remove()
 		
-	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00S", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00S'))
 	for u3 from ENUM_GROUP
 		new BigObstacle(vec2(u3.getX(), u3.getY()), STAFF_PLAYER)
 		u3.remove()
 		
 	
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00R", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00R'))
 	for u4 from ENUM_GROUP
 		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n018", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n018'))
 	for u4 from ENUM_GROUP
 		new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n019", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n019'))
 	for u4 from ENUM_GROUP
 		new BigObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
 		u4.remove()
 		
-	GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00X", pickFilter)
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00X'))
 	for u6 from ENUM_GROUP
 		new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)
 		u6.remove()

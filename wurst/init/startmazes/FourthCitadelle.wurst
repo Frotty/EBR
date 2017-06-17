@@ -11,15 +11,15 @@ public class FourthCitadelleMaze extends Startmaze
 		
 	override function initMaze()
 		inited = true
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_h01I", pickFilter)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'h01I'))
 		for u from ENUM_GROUP
 			new BigKiller(u) 
 		
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_n00E", pickFilter)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00E'))
 		for u from ENUM_GROUP
 			new SmallKiller(u)
 
-		GroupEnumUnitsOfType(ENUM_GROUP, "custom_u00A", pickFilter)
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'u00A'))
 		for u from ENUM_GROUP
 			new GlaiveKiller(u)
 

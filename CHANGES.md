@@ -2,13 +2,13 @@
 [*] fixed item descriptions
 [*] fixed builders buying shop items
 [*] fixed teleport staff
+[*] fixed time display
 [*] added more coins to the startmazes
 [*] lobby teleporters fixed, show retracted votes and teleport all escapers upon success
 [*] added sliding areas to lobby
 [*] added the first minigame, Random Rumble
 [*] increase default speed and increment of tracks
 [*] decreased bomber missile speed
-[*] added info message about minigames not working yet
 [*] texters can now be de/activated by spell and executer
 [*] sleep effect of disabled objects is now only visible to owner
 [*] set cooldown of all items in the shop to 2 seconds
