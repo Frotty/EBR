@@ -1,31 +1,93 @@
 package ReviveManager
 import Escaper
-import ErrorHandling
-tuple RevivePod(Escaper escaper, real time)
+import UnitObjEditing
+import ObjectIdGenerator
+import Assets
+import PlayerData
+
+interface ReviveListener
+	function onAllDead()
+
+public ReviveListener waitForListener
+
+public enum ReviveMode
+	TIMED
+	CIRCLE
+	WAIT_FOR_ALL
+
+public ReviveMode revMode = ReviveMode.TIMED
+
+class RevivePod
+	PlayerData owner
+	real time
+	boolean wait
+
+	construct(PlayerData owner, real time, boolean wait)
+		this.owner = owner
+		this.time = time
+		this.wait = wait
 
 RevivePod array pods
+int waitForCount = 0
+
+public function changeRevMode(ReviveMode rMode)
+	for i = 0 to 11
+		pods[i].time = 0
+	update()
+	revMode = rMode
 
 public function manageRevive(Escaper e)
-	if e == null
-		error("bug")
+	if isBuilder(e.owner)
+		manageTimedRevive(e, TIMER_PERIOD)
+	switch revMode
+		case TIMED
+			manageTimedRevive(e, 3.0)
+		case CIRCLE
+			// TODO
+		case WAIT_FOR_ALL
+			manageWaitForRevive(e)
+
+function manageTimedRevive(Escaper e, real time)
 	let id = e.owner.getId()
-	if pods[id].time <= 0
-		pods[id] = RevivePod(e, 3.0)
-		if isBuilder(e.owner) 
-			pods[id].time = TIMER_PERIOD
+	if pods[id] == null
+		pods[id] = new RevivePod(pData[id], time, false)
+
+function manageWaitForRevive(Escaper e)
+	let id = e.owner.getId()
+	if pods[id] == null 
+		pods[id] = new RevivePod(pData[id], 0, true)
+		if waitForListener != null
+			waitForCount++
+			if waitForCount >= escaperPlayers.getSize()
+				waitForListener.onAllDead()
+				waitForListener = null
+				for i = 0 to 11
+					pods[i].wait = false
 
 function update()
 	for i = 0 to 11
-		if pods[i].escaper != null
-			pods[i].time -= TIMER_PERIOD
-			if pods[i].time <= 0
-				if pods[i].escaper == null
-					printLog(Loglevel.ERROR, "THis neither")
-				else	
-					pods[i].escaper.revive()
-				pods[i] = RevivePod(null, 0)
+		let pod = pods[i]
+		if pod != null
+			if not pod.wait
+				pod.time -= TIMER_PERIOD
+				if pod.time <= 0
+					if pod.owner.escaper == null
+						printLog(Loglevel.ERROR, "THis neither")
+					else	
+						pod.owner.escaper.revive()
+					destroy pod
+					pods[i] = null
 
 constant TIMER_PERIOD = 0.1
 
 @init2 function init_Revive()
 	CreateTimer().startPeriodic(TIMER_PERIOD, () -> update())
+
+@objectgen function genObjects()
+	new UnitDefinition(UNIT_ID_GEN.next(), 'hfoo')
+	..setName("Personal Revivecircle")
+	..setCollisionSize(0)
+	..setAttacksEnabled(0)
+	..setModelFile(Units.circleofPower)
+	..setScalingValue(0.5)
+	..setNormalAbilities("")

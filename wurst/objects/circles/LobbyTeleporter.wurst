@@ -27,6 +27,8 @@ public class LobbyTeleporter extends StaticBaseObject
 		..removeAbility(ESC_ID)
 		if builder
 			ftext = createCenterFText(existing.getPos().toVec3(), "|cffffcc00building", 10)
+		else
+			ftext = createFText(pos, "", 10)
 		
 	static function checkVote()
 		unit source = GetTriggeringTrigger().getSource()

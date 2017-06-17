@@ -1,17 +1,18 @@
-[0.89o]
+[0.89q]
 [*] fixed item descriptions
 [*] fixed builders buying shop items
 [*] fixed teleport staff
 [*] added more coins to the startmazes
 [*] lobby teleporters fixed, show retracted votes and teleport all escapers upon success
 [*] added sliding areas to lobby
+[*] added the first minigame, Random Rumble
 [*] increase default speed and increment of tracks
 [*] decreased bomber missile speed
 [*] added info message about minigames not working yet
 [*] texters can now be de/activated by spell and executer
 [*] sleep effect of disabled objects is now only visible to owner
 [*] set cooldown of all items in the shop to 2 seconds
-[*] texttags are now managed in order to behave the same for all players
+[*] texttags are now managed. this fixes texttags disappearing when they shouldn't and everyone sees the same
 [*] improved performance by using latest wurst compiler
 
 [0.89n]

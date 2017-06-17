@@ -11,6 +11,7 @@ import PickSystem
 import initlater TerrainBlocker
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
+public constant vec2 LOUNGE = gg_unit_n000_0322.getPos()
 
 public enum RegionType
 	UNKNOWN
@@ -262,7 +263,7 @@ public RegionData array regions
 	regions[22] = new RegionData(gg_rct_Choose)
 	regions[22].setType(getRegionTypeFromItem('I00D'), false)
 	regions[22].setOwner(STAFF_PLAYER)
-	regions[23] = new RegionData(gg_rct_Region_025)
+	regions[23] = new RegionData(gg_rct_coingamearea)
 	regions[23].setType(getRegionTypeFromItem('I00G'), false)
 	regions[23].setOwner(STAFF_PLAYER)
 	regions[23].easyMode = true

@@ -1,17 +1,54 @@
 package MGRandKill
 import Minigame
-import PlayerData
-import SoundUtils
+import EscaperKillers
+import Assets
+import Fx
+import Coin
+import ClosureTimers
 
 constant ARENA_POS = vec2(-4200, 7500)
 
-
 public class MGRandKill extends Minigame
+	CallbackPeriodic cb
+	CallbackPeriodic cb2
+	LinkedList<Entity> objects = new LinkedList<Entity>()
+	vec2 spawn
+	Fx fx
 
 	override function getGameRect() returns rect
+		return gg_rct_coingamearea
+
+	override function getCamBounds() returns rect
 		return gg_rct_coingamebounds
 
-	override function onBegin(SeqCallback onEnd)
+	override function onBegin()
+		spawn = getGameRect().randomPoint()
+		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
+		fx.setScale(0.5)
+		doAfter(10., () -> begin
+			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+		end)
+		cb = doPeriodically(10, (CallbackPeriodic cb) -> begin 
+			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+		end)
+		cb = doPeriodically(30, (CallbackPeriodic cb) -> begin 
+			objects.add(new BigRandomKiller(spawn, STAFF_PLAYER))
+		end)
+		cb2 = doPeriodically(25, (CallbackPeriodic cb) -> begin 
+			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
+			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
+			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
+		end)
+
+	override function onEnd()
+		destroy cb
+		destroy cb2
+		for object from objects.staticItr()
+			object.terminate()
+		destroy objects
+		destroy fx
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()

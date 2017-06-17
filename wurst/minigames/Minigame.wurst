@@ -1,32 +1,78 @@
 package Minigame
 import public SeqWorker
-import LinkedList
 import PlayerData
 import SoundUtils
-import Collision
+import ReviveManager
+import initlater MinigameTeleporter
 
 public LinkedList<Minigame> minigames = new LinkedList<Minigame>()
 
 constant BEGIN_SOUND = new SoundDefinition("Sound\\Interface\\ArrangedTeamInvitation.wav", false)
 
 public abstract class Minigame
+	timer tim
+	timerdialog window
 
 	function start()
-		for pd from escaperPlayers.staticItr()
-			if not pd.escaper.alive
-				pd.escaper.revive()
-			pd.escaper.setPos(getStartPosition().withZ(0))
-			pd.escaper.setCurrentRegion()
-			pd.p.panCamToTimed(pd.escaper.actor, 0)
+		if tim == null
+			tim = getTimer()
+			tim..setData(this castTo int)
+			..start(2.5 * 60., () -> onEndEvt())
+			window = CreateTimerDialog(tim) //maximum time
+			TimerDialogSetTitle(window, "Minigame")
+			TimerDialogDisplay(window, true)
+			changeRevMode(ReviveMode.WAIT_FOR_ALL)
+			waitForListener = () -> begin
+				if waitForListener != null
+					for pd from escaperPlayers.staticItr()
+						printTimedToPlayer("All Escapers have died!", 10, pd.p)
+					doAfter(2., () -> reset())
+					waitForListener = null
+			end
+			for pd from escaperPlayers.staticItr()
+				if not pd.escaper.alive
+					pd.escaper.revive()
+				pd.escaper.setPos(getStartPosition().withZ(0))
+				pd.escaper.setCurrentRegion()
+				pd.p.panCamToTimed(pd.escaper.actor, 0)
+				
+				printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
+				
+				if GetLocalPlayer() == pd.p
+					SetCameraBoundsToRect(getCamBounds())
+				BEGIN_SOUND.playForPlayer(pd.p)
 			
-			printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
-			if GetLocalPlayer() == pd.p
-				SetCameraBoundsToRect(getGameRect())
+			onBegin()
+			
 
-	abstract function onBegin(SeqCallback onEnd)
+	abstract function onBegin()
+
+	abstract function onEnd()
 
 	abstract function getStartPosition() returns vec2
 
 	abstract function getGameRect() returns rect
 
+	abstract function getCamBounds() returns rect
+
 	abstract function getName() returns string
+
+	function reset()
+		if tim != null
+			tim.release()
+			tim = null
+			DestroyTimerDialog(window)
+			changeRevMode(ReviveMode.TIMED)
+			for pd from escaperPlayers.staticItr()
+				if not pd.escaper.alive
+					pd.escaper.revive()
+				pd.escaper.setPos(LOUNGE.toVec3())
+				pd.escaper.setCurrentRegion()
+				SetCameraBoundsToRectForPlayerBJ(pd.p, gg_rct_Region_023)
+				pd.p.panCamToTimed(pd.escaper.actor, 0)
+				printTimedToPlayer("Minigame ended!", 10, pd.p)
+			onEnd()
+			MINI_TP.reset()
+
+	static function onEndEvt()
+		(GetExpiredTimer().getData() castTo Minigame).reset()

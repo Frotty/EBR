@@ -90,7 +90,7 @@ public function initStartmazes()
 		startmazes[1] = new SecondDesertMaze(regions[1])
 		startmazes[2] = new ThirdForestMaze(regions[2])
 		startmazes[3] = new FourthCitadelleMaze(regions[3])
-		new MinigameTeleporter(gg_unit_n00C_0150)
+		MINI_TP = new MinigameTeleporter(gg_unit_n00C_0150)
 
 		createCenterFText(gg_unit_n000_0322.getPos().toVec3(), "|cff0884D6Lounge", 13.5)
 		new BallItem(vec2(-5780,-6287), DUMMY_PLAYER)
