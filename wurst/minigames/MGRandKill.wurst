@@ -4,13 +4,13 @@ import EscaperKillers
 import Assets
 import Fx
 import Coin
-import ClosureTimers
 
 constant ARENA_POS = vec2(-4200, 7500)
 
 public class MGRandKill extends Minigame
-	CallbackPeriodic cb
-	CallbackPeriodic cb2
+	CallbackPeriodic chickenTimer = null
+	CallbackPeriodic bunnyTimer = null
+	CallbackPeriodic coinTimer = null
 	LinkedList<Entity> objects = new LinkedList<Entity>()
 	vec2 spawn
 	Fx fx
@@ -26,29 +26,34 @@ public class MGRandKill extends Minigame
 		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
 		fx.setScale(0.5)
 		doAfter(10., () -> begin
-			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
-			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+			if fx != null
+				objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+				objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+				objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+		end)
+		chickenTimer = doPeriodically(10, (CallbackPeriodic cb) -> begin 
 			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
 		end)
-		cb = doPeriodically(10, (CallbackPeriodic cb) -> begin 
-			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
-		end)
-		cb = doPeriodically(30, (CallbackPeriodic cb) -> begin 
+		bunnyTimer = doPeriodically(30, (CallbackPeriodic cb) -> begin 
 			objects.add(new BigRandomKiller(spawn, STAFF_PLAYER))
 		end)
-		cb2 = doPeriodically(25, (CallbackPeriodic cb) -> begin 
+		coinTimer = doPeriodically(25, (CallbackPeriodic cb) -> begin 
 			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
 			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
 			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
 		end)
 
 	override function onEnd()
-		destroy cb
-		destroy cb2
-		for object from objects.staticItr()
-			object.terminate()
-		destroy objects
-		destroy fx
+		if fx != null
+			destroy chickenTimer
+			destroy bunnyTimer
+			destroy coinTimer
+			for obj from objects.staticItr()
+				obj.terminate()
+			objects.clear()
+			destroy fx
+			fx = null
+
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()

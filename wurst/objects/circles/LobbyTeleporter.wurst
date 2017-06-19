@@ -48,11 +48,12 @@ public class LobbyTeleporter extends StaticBaseObject
 			if currentPlus >= votesNeeded
 				for ep from escaperPlayers.staticItr()
 					teleport(ep.escaper)
-				ftext.tt.center(getPos(), "|cffffcc00building", 9)
 				setRallyPoint(pos.toVec2())
 				addQuestionmark()
 				for i = 0 to 11
 					votes[i] = false
+				ftext.tt.center(getPos(), "|cffffcc00building", 9)
+				ready = false
 				return
 		else
 			currentPlus--

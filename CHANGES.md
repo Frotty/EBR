@@ -1,10 +1,16 @@
+[0.89s]
+[*] fix minigame leaks
+
+[0.89r]
+[*] Walls unclickable
+
 [0.89q]
 [*] fixed item descriptions
 [*] fixed builders buying shop items
 [*] fixed teleport staff
 [*] fixed time display
 [*] added more coins to the startmazes
-[*] lobby teleporters fixed, show retracted votes and teleport all escapers upon success
+[*] fixed and improved lobby teleporters
 [*] added sliding areas to lobby
 [*] added the first minigame, Random Rumble
 [*] increase default speed and increment of tracks

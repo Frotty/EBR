@@ -1,13 +1,12 @@
 package Wall
-import BaseObject
+import SetupObject
 import initlater InstantBuild
 
-public class Wall extends StaticBaseObject
+public class Wall extends StaticSetupObject
 	int tId = 0
 	construct(vec2 pos, player owner, real angle, int tId)
-		super(pos, getUnit(owner, buildorders[tId], pos, (angle).fromDeg(), this), 0., CODE_NULL, CODE_NULL)
+		super(getUnit(owner, buildorders[tId], pos, (angle).fromDeg(), this), getUnit(owner, buildorders[tId], pos, (angle).fromDeg(), this), 0., null)
 		this.tId = tId
-		clearQuestionmark()
 
 	override function serialize() returns Json
 		let json = super.serialize()

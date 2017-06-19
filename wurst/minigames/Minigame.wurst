@@ -6,7 +6,7 @@ import ReviveManager
 import initlater MinigameTeleporter
 
 public LinkedList<Minigame> minigames = new LinkedList<Minigame>()
-
+public constant MAX_TIME = 2.5 * 60.
 constant BEGIN_SOUND = new SoundDefinition("Sound\\Interface\\ArrangedTeamInvitation.wav", false)
 
 public abstract class Minigame
@@ -17,7 +17,7 @@ public abstract class Minigame
 		if tim == null
 			tim = getTimer()
 			tim..setData(this castTo int)
-			..start(2.5 * 60., () -> onEndEvt())
+			..start(MAX_TIME, () -> onEndEvt())
 			window = CreateTimerDialog(tim) //maximum time
 			TimerDialogSetTitle(window, "Minigame")
 			TimerDialogDisplay(window, true)
