@@ -7,7 +7,6 @@ constant int 	BOMBERTOWER_ID   = 'h019'
 constant int	ATTACK_ORDER = 851983
 constant int	ATTACK_GROUND_ORDER = 851984
 constant int	STOP_ORDER = 851972
-trigger orderTrigger
 
 public class Bombertower extends StaticBaseObject
 	unit dummy
@@ -18,9 +17,9 @@ public class Bombertower extends StaticBaseObject
 		actor..addAbility(GHOST_VIS_ID)..addAbility(LOCUST_ID)
 		dummy = getUnit(owner, BOMBERTOWER_ID, pos, angle(0), this)
 		dummy..addAbility(GHOST_INVIS_ID)..setEntity(this)..setScale(0.5)
-		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_POINT_ORDER)
-		TriggerRegisterUnitEvent(orderTrigger, dummy, EVENT_UNIT_ISSUED_TARGET_ORDER)
+		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> checkOrder())
+		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> checkOrder())
+		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> checkOrder())
 		SetUnitPathing(dummy, true)
 
 		
@@ -38,31 +37,30 @@ public class Bombertower extends StaticBaseObject
 		..addProperty(new Property(KEY_TYPE, BOMBTOWER_INDEX.toString()))
 		return json	
 
-function checkAttackOrder()
-	var i = GetIssuedOrderId()
-	var e = GetOrderedUnit().getEntity()
-	if e instanceof Bombertower 
-		var obj = e castTo Bombertower
-		if obj.skipOrder
-			obj.skipOrder = false
+	function checkOrder()
+		var i = GetIssuedOrderId()
+		var e = GetOrderedUnit().getEntity()
+		var tpos = getSpellTargetPos()
+		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
+			GetOrderedUnit().abortOrder()
 			return
-		if GetOrderedUnit() == obj.dummy
-			obj.clearQuestionmark()
-			if i == ATTACK_GROUND_ORDER
-				IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
-				obj.skipOrder = true
-				nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
-			else if i == ATTACK_ORDER
-				obj.skipOrder = true
-				IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
-				nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
-			else if i == STOP_ORDER 
-				IssueImmediateOrderById(obj.actor, STOP_ORDER)
+		if e instanceof Bombertower 
+			var obj = e castTo Bombertower
+			if obj.skipOrder
+				obj.skipOrder = false
+				return
+			if GetOrderedUnit() == obj.dummy
+				obj.clearQuestionmark()
+				if i == ATTACK_GROUND_ORDER
+					IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
+					obj.skipOrder = true
+					nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
+				else if i == ATTACK_ORDER
+					obj.skipOrder = true
+					IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
+					nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
+				else if i == STOP_ORDER 
+					IssueImmediateOrderById(obj.actor, STOP_ORDER)
 			
 			
-			
-
-@init1 function init_Bombertower()
-	orderTrigger = CreateTrigger()
-	orderTrigger.addAction(function checkAttackOrder)
 		
