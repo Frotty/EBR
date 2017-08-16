@@ -1,0 +1,4 @@
+dependencies: ['https://github.com/wurstscript/WurstStdlib2', 'https://github.com/Frotty/Frentity']
+releaseName: EscapeBuilder_R$version$.w3x
+
+

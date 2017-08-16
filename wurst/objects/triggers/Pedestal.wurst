@@ -233,7 +233,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		compress(big, (PayloadCallback cb) -> begin
 			let compressedData = cb.customData castTo BigString
 			if GetLocalPlayer() == owner
-				let f = File.open(FOLDER_NAME, "dataSlot" + currentSlotId.toString(), Mode.WRITE)
+				let f = File.open("dataSlot" + currentSlotId.toString() + ".pld", Mode.WRITE)
 				while compressedData.getLength() > BIG_SUBSTRING_LEN
 					f.write(compressedData.getString(0, BIG_SUBSTRING_LEN))
 					compressedData.startoffset += BIG_SUBSTRING_LEN

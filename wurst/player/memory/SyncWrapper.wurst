@@ -78,7 +78,7 @@ public function getSyncedFile(PlayerData pd, string filename, filterfunc listene
 	var lineCount = -1
 	if GetLocalPlayer() == pd.p
 		lineCount++
-		let file = File.open(FOLDER_NAME, filename, Mode.READ)
+		let file = File.open(filename, Mode.READ)
 		printLog(Loglevel.DEBUG, "Start Sync1.1")
 		var line = file.read()
 		printLog(Loglevel.DEBUG, "Start Sync1.2")
@@ -109,7 +109,7 @@ function onLinecountSynced()
 	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
 	if lineCount > 0
 		if GetLocalPlayer() == pd.p
-			let file = File.open(FOLDER_NAME, payload.fileName, Mode.READ)
+			let file = File.open(payload.fileName, Mode.READ)
 			// Remove verify hash
 			for i = 0 to lineCount-1
 				sync_lines[i] = file.read()

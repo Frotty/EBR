@@ -16,6 +16,7 @@ import JukeBox
 import public SerializeIds
 import initlater PlayerData
 import initlater Key
+import ClosureTimers
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
@@ -448,34 +449,35 @@ public abstract class Escaper extends UnitEntity
 		else if id == TELEPORT_ITEM_ID 
 			var teleport = true
 			let itm = GetManipulatedItem()
+			if GetItemCharges(itm) <= 1
+				itm.remove()
 			for i = 0 to 5
 				let ie = UnitItemInSlot(actor, i).getEntity()
 				if ie != null and ie instanceof Key
 					teleport = false
 					break
-			if GetItemCharges(itm) > 1
-				SetItemCharges(itm, GetItemCharges(itm)-1)
-			else
-				itm.remove()
 
 				
 			if not teleport or poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
 				let tpos = getSpellTargetPos()
-				var smallestDist = 9999999.
-				Escaper target = null
-				for e in escapers
-					if e != this
-						let dist = tpos.distanceToSq(e.getPos().toVec2())
-						if dist < smallestDist
-							smallestDist = dist
-							target = e
-				if target == null
-					target = this
-				flashEffect(Other.blinkcaster, this.getPos())
-				setPos(target.getPos())
-				flashEffect(Other.blinkcaster, target.getPos())
+				doAfter(0.15, () -> begin
+					var smallestDist = 9999999.
+					Escaper target = null
+					for e in escapers
+						if e != this
+							let dist = tpos.distanceToSq(e.getPos().toVec2())
+							if dist < smallestDist
+								smallestDist = dist
+								target = e
+					if target == null
+						target = this
+					flashEffect(Other.blinkcaster, this.getPos())
+					setPos(target.getPos())
+					flashEffect(Other.blinkcaster, target.getPos())
+				end)
+				
 
 		else
 			jukeBox.checkSpell(id)
