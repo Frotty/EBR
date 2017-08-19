@@ -42,7 +42,7 @@ public function manageRevive(Escaper e)
 		manageTimedRevive(e, TIMER_PERIOD)
 	switch revMode
 		case TIMED
-			manageTimedRevive(e, 3.0)
+			manageTimedRevive(e, 2.75)
 		case CIRCLE
 			// TODO
 		case WAIT_FOR_ALL

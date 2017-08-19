@@ -82,13 +82,17 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		actor.pause()
 		ttag.tt..center(pos, "|cff0884CEloading...", 10)
 		lastRef[owner.getId()] = this
-		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString(), Filter(() -> onLoadSlotSynced()))
+		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString() + ".pld", Filter(() -> onLoadSlotSynced()))
 
 	static function onLoadSlotSynced()
 		printLog(Loglevel.DEBUG, "synced")
 		let pd = pData[getSyncedData().p.getId()]
 		let ref = lastRef[pd.id]
 		ref.syncingDone = true
+		if pd.syncPayload.syncedFile.size <= 0
+			destroy pd.syncPayload
+			pd.syncPayload = null
+			return
 		var compressedString = new BigString()
 		var buildString = pd.syncPayload.syncedFile.read()
 		while buildString != null

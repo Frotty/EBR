@@ -1,3 +1,12 @@
+[0.89v]
+[*] restore save/load functionality for patch 1.28.5
+[*] fix M.A.P. loading empty file
+[*] fix teleport staff not using charges
+[*] fix Slow Wave tooltip
+[*] fix Bomber Tower not being able to attack Bomb Targets
+[*] fix Bomber autoattack mode first attack
+[*] slightly reduce jump cooldown and revive time
+
 [0.89s]
 [*] fix minigame leaks
 

@@ -40,8 +40,9 @@ public class Bombertower extends StaticBaseObject
 	function checkOrder()
 		var i = GetIssuedOrderId()
 		var e = GetOrderedUnit().getEntity()
-		var tpos = getSpellTargetPos()
+		var tpos = getOrderPos()
 		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
+			print("abort")
 			GetOrderedUnit().abortOrder()
 			return
 		if e instanceof Bombertower 
@@ -54,11 +55,11 @@ public class Bombertower extends StaticBaseObject
 				if i == ATTACK_GROUND_ORDER
 					IssuePointOrderById(obj.actor,i, GetOrderPointX(),GetOrderPointY())
 					obj.skipOrder = true
-					nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
+					doAfter(0.1,() -> obj.dummy.issueImmediateOrder("stop"))
 				else if i == ATTACK_ORDER
-					obj.skipOrder = true
 					IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
-					nullTimer(() -> obj.dummy.issueImmediateOrder("stop"))
+					obj.skipOrder = true
+					doAfter(0.1,() -> obj.dummy.issueImmediateOrder("stop"))
 				else if i == STOP_ORDER 
 					IssueImmediateOrderById(obj.actor, STOP_ORDER)
 			

@@ -50,7 +50,7 @@ public function initStartmazes()
 		new BigObstacle(vec2(u3.getX(), u3.getY()), STAFF_PLAYER)
 		u3.remove()
 	
-	doAfter(1., () -> begin
+	doAfter(.25, () -> begin
 		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00R'))
 		for u4 from ENUM_GROUP
 			new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
@@ -84,20 +84,21 @@ public function initStartmazes()
 			setStartTeleport(1,3)
 			setStartTeleport(2,1)
 		
-		doAfter(1., () -> begin
-			startmazes[0] = new FirstSnowMaze(regions[0])
-			startmazes[1] = new SecondDesertMaze(regions[1])
-			startmazes[2] = new ThirdForestMaze(regions[2])
-			startmazes[3] = new FourthCitadelleMaze(regions[3])
-			MINI_TP = new MinigameTeleporter(gg_unit_n00C_0150)
-
-			createCenterFText(gg_unit_n000_0322.getPos().toVec3(), "|cff0884D6Lounge", 13.5)
-			new BallItem(vec2(-5780,-6287), DUMMY_PLAYER)
-			setBuilderTeleporter()
-			
-			EnumItemsInRect(playableMapRect, null, function correctKeys)
-		end)
 	end)
+	doAfter(.75, () -> begin
+		startmazes[0] = new FirstSnowMaze(regions[0])
+		startmazes[1] = new SecondDesertMaze(regions[1])
+		startmazes[2] = new ThirdForestMaze(regions[2])
+		startmazes[3] = new FourthCitadelleMaze(regions[3])
+		MINI_TP = new MinigameTeleporter(gg_unit_n00C_0150)
+
+		createCenterFText(gg_unit_n000_0322.getPos().toVec3(), "|cff0884D6Lounge", 13.5)
+		new BallItem(vec2(-5780,-6287), DUMMY_PLAYER)
+		setBuilderTeleporter()
+		
+		EnumItemsInRect(playableMapRect, null, function correctKeys)
+	end)
+	
 
 
 public function correctKeys()

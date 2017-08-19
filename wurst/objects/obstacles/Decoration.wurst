@@ -46,7 +46,7 @@ public class Decoration extends StaticSetupObject
 		hasBeenChanged = true
 
 	override function deserialize(Json json)
-		changeAngle((json.getReal(KEY_ANGLE).fromDeg()))
+		changeAngle((json.getInt(KEY_ANGLE).toReal().fromDeg()))
 		let sc = json.getInt(KEY_SCALE)
 		if sc > 0.
 			scale.setVal(sc / 100.)
@@ -57,7 +57,7 @@ public class Decoration extends StaticSetupObject
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, tid.toString()))
 		if hasBeenChanged
-			json..addProperty(new Property(KEY_ANGLE, actor.getFacing().toInt().toString()))
+			json..addProperty(new Property(KEY_ANGLE, actor.getFacingAngle().degrees().toInt().toString()))
 		if scale.get() != 1.0
 			json..addProperty(new Property(KEY_SCALE, (scale.get() * 100.).toInt().toString()))
 		return json
