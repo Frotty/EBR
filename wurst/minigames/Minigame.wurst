@@ -6,7 +6,7 @@ import ReviveManager
 import initlater MinigameTeleporter
 
 public LinkedList<Minigame> minigames = new LinkedList<Minigame>()
-public constant MAX_TIME = 2.5 * 60.
+public constant MAX_TIME = 2.0 * 60.
 constant BEGIN_SOUND = new SoundDefinition("Sound\\Interface\\ArrangedTeamInvitation.wav", false)
 
 public abstract class Minigame

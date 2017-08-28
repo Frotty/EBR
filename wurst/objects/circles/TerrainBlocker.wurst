@@ -5,7 +5,7 @@ import public BitSet
 public hashtable tileModifierMap = InitHashtable()
 
 constant int BLOCKER_ID = 'h009'
-public tuple matrixpos (int x, int y)
+public tuple matrixpos(int x, int y)
 
 public enum TileModifiers
 	NORMAL

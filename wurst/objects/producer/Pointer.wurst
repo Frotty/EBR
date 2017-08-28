@@ -2,6 +2,7 @@ package Pointer
 import EscaperSensor
 import Escaper
 import Preloader
+import ClosureTimers
 
 constant int POINTER_ID = 'h01Q'
 constant POINTER_RADIUS = 64.
@@ -60,6 +61,8 @@ public class Pointer extends EscaperSensorSetup
 		var data = source castTo Pointer
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
+			if not data.active
+				data.angl = data.actor.getFacingAngle()	
 			es.actor.setFacing(data.angl)
 	
 	static function setfacing()

@@ -1,3 +1,9 @@
+[0.89x]
+[*] fix not being able to activate executer in terrain mode
+[*] fix non-turning arrow not being updated properly
+[*] more fixes and improvements to save/load
+[*] reduce wall pathing to more accurately fit the model
+
 [0.89v]
 [*] restore save/load functionality for patch 1.28.5
 [*] fix M.A.P. loading empty file

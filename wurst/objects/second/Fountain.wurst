@@ -55,3 +55,4 @@ public class Fountain extends StaticSetupObject
 		json.addProperty(new Property(KEY_TYPE, FOUNTAIN_INDEX.toString()))
 		return json
 
+		SetTerra
