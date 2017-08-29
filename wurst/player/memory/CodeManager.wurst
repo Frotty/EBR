@@ -6,7 +6,7 @@ import SyncWrapper
 import PlayerMemoryData
 import Playerfile
 import initlater PickSystem
-import Assets
+import ClosureTimers
 
 constant XPMAX = 500000
 constant FILE_NAME = "ebrprofile.pld"
@@ -75,6 +75,11 @@ function onFileSynced()
 	let token = file.read()
 	printLog(Loglevel.DEBUG, "on PFCodeManager 2 <" + token + ">")
 	if token == null
+		if not pdc.syncPayload.fileName.startsWith("Logs\\")
+			destroy pdc.syncPayload	
+			pdc.syncPayload = null
+			nullTimer(() -> getSyncedFile(pdc, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
+			return
 		printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
 		// A new file was created
 		printLog(Loglevel.DEBUG, "New Playerfile1")
