@@ -1,6 +1,11 @@
 package ConfigValue
 import Entity
 
+/**
+	Represents a condifurable value of an object.
+	Automatically limits upper and lower bounds as well
+	as displaying a nice text.
+*/
 public class ConfigValue
 	private real value
 	private real increment

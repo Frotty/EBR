@@ -1,6 +1,10 @@
 package ItemObject
 import public Escaper
 
+/**
+	Abstract class for Entities that are items
+	like Keys, Coins, etc.
+*/
 public abstract class ItemObject extends Entity
 	unit setup
 	item actorItem

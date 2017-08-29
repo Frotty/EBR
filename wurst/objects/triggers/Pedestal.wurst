@@ -84,7 +84,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			actor.pause()
 			ttag.tt..center(pos, "|cff0884CEloading...", 10)
 			lastRef[owner.getId()] = this
-			getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString() + ".pld", Filter(() -> onLoadSlotSynced()))
+			getSyncedFile(pData[owner.getId()],  "dataSlot" + slotId.toString() + ".pld", Filter(() -> onLoadSlotSynced()))
 		end)
 
 	static function onLoadSlotSynced()
@@ -94,8 +94,11 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
 		ref.syncingDone = true
 		if pd.syncPayload.syncedFile.size <= 0
+			// file empty
 			destroy pd.syncPayload
 			pd.syncPayload = null
+			if not pd.syncPayload.fileName.startsWith("Logs\\")
+				nullTimer(() -> getSyncedFile(pd, "Logs\\" + pd.syncPayload.fileName, Filter(() -> onLoadSlotSynced())))
 			return
 		var compressedString = new BigString()
 		var buildString = pd.syncPayload.syncedFile.read()

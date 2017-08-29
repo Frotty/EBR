@@ -1,6 +1,9 @@
 package SerializeIds
 
-// Ids to map between int -> WurstClass
+/**
+	Ids to map between saved object and the respective class.
+	Used for maze save/load
+*/
 public constant JUMPER_INDEX = 1
 public constant REVIVE_INDEX = 2
 public constant TEXTER_INDEX = 3

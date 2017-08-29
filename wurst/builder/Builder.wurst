@@ -15,6 +15,10 @@ import initlater BossDamager
 import Coin
 import ChannelAbilityPreset
 
+/**
+	The builder (banshee) class. Handles switching between builders,
+	auto teleport and all other builder functions.
+*/
 public class Builder extends UnitEntity
 	int regionCount = 0
 	boolean hasBossMenu = false
@@ -23,16 +27,6 @@ public class Builder extends UnitEntity
 		super(getUnit(p, BUILDER_1, vec2(-6000, -7160), angle(0), this))
 		registerListeners()
 		this.setCurrentRegion()
-
-	override function setNewActor(unit u)
-		super.setNewActor(u)
-		if UnitItemInSlot(actor, 0) == null
-			UnitAddItemById(actor,'I001')
-			UnitAddItemById(actor,'I002')
-			UnitAddItemById(actor,'I003')				
-		SelectUnitForPlayerSingle(actor, owner)
-		if hasBossMenu
-			setBossMenu()
 
 	function registerListeners()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrder())

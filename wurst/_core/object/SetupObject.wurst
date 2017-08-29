@@ -8,8 +8,9 @@ import public initlater RegionData
 import ErrorHandling
 
 /**
-	Objects which are unclickable for escapers,
-	but clickable for builders.	 
+	Objects which are unclickable for escapers,	but clickable for builders.
+	They have a dummy unit that is invisible to escapers but clickable by builder,	 
+	and the actor unit is locusted so it cannot be clicked by escaper, but seen.
 */
 timer fixPos = CreateTimer()
 
