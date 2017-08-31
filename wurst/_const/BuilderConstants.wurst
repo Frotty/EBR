@@ -1,6 +1,7 @@
 package BuilderConstants
 import Preloader
 import public SerializeIds
+import _Builder
 
 public constant vec2 hidden = vec2(-6000,6000)
 public constant REMOVE_ID = 'A00K'

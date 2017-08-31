@@ -1,0 +1,40 @@
+/* package units
+import UnitObjEditing
+import ObjectIdGenerator
+import ObjectIds
+import spells
+
+public int unitProducer
+public int slideAbleIce
+public int slideAbleIceUncontrolled
+public int walkable
+public int unwalkable
+//
+public int vortex
+public int fountainHeal
+public int fountainReg
+public int fountainBoth
+public int m_a_p
+public int bombTower
+public int regionAdmin
+public int garage
+public int switch_
+public int goodsStore
+public int bossDamager
+public int setup
+public int fireTrap
+public int dummyCasterBasics
+public int effectDummyUnitBasics
+public int spinner
+public int powerNode
+public int congaLineHead
+public int selectEscaper
+public int personalReviveCircle
+public int dummyLever
+public int dummyReincarnation
+public int dummyRevivemodifier
+public int keyDummy
+public int coinDummy
+public int tomeDummy
+public int weaponDummy
+ */
