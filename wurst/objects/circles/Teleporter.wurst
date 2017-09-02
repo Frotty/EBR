@@ -1,7 +1,6 @@
 package Teleporter
 import BaseObject
 import PlayerData
-import _Circles
 
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 constant ESC_ID = 'A009'

@@ -1,8 +1,41 @@
 package BuilderConstants
 import Preloader
+import ObjectIdGenerator
 import public SerializeIds
-import _Builder
 
+//Spells
+public int infoBooster
+public int infoExecuter
+public int infoJumper
+public int infoPointer
+public int infoRevivePoint
+public int infoSounder
+public int infoTCBlocker
+public int infoTeleporter
+public int infoTexter
+public int infoUnitCreator
+public int infoUnitRemover
+public int infoWaypoint
+//Circles
+public int teleporter
+public int waypoint
+public int arcanery
+public int executer
+public int tcBlocker
+public int unitCreator
+public int unitCreatorDummy
+public int unitRemover
+public int revivePoint
+public int jumper
+public int texter
+public int booster
+public int trap
+//Builder 
+public int BUILDER_1
+public int builder2_Objects2
+public int builder3_Enviromental3
+public int builder4_Decorations4
+//
 public constant vec2 hidden = vec2(-6000,6000)
 public constant REMOVE_ID = 'A00K'
 public constant int CONTROLLABLEICE = 'Nice'
@@ -12,8 +45,6 @@ public constant int LAVA = 'Glvc'
 public constant int POISON = 'Cpos'
 public constant int RUNES = 'Irbk'
 
-
-public constant int BUILDER_1 = 'u001'
 public constant int BUILDER_2 = 'u005'
 public constant int BUILDER_3 = 'u007'
 public constant int BUILDER_4 = 'u00C'
@@ -45,6 +76,41 @@ public constant int BOOTS_ID = 'I00M'
 public constant int ANKH_ID = 'I00L'
 
 public int array colorSpells
+
+public function genIds()
+	//Abilities
+	infoBooster = ABIL_ID_GEN.next()
+	infoExecuter = ABIL_ID_GEN.next()
+	infoJumper = ABIL_ID_GEN.next()
+	infoPointer = ABIL_ID_GEN.next()
+	infoRevivePoint = ABIL_ID_GEN.next()
+	infoSounder = ABIL_ID_GEN.next()
+	infoTCBlocker = ABIL_ID_GEN.next()
+	infoTeleporter = ABIL_ID_GEN.next()
+	infoTexter = ABIL_ID_GEN.next()
+	infoUnitCreator = ABIL_ID_GEN.next()
+	infoUnitRemover = ABIL_ID_GEN.next()
+	infoWaypoint = ABIL_ID_GEN.next()
+	//Circles
+	teleporter = UNIT_ID_GEN.next()
+	waypoint = UNIT_ID_GEN.next()
+	arcanery = UNIT_ID_GEN.next()
+	executer = UNIT_ID_GEN.next()
+	tcBlocker = UNIT_ID_GEN.next()
+	unitCreator = UNIT_ID_GEN.next()
+	unitCreatorDummy = UNIT_ID_GEN.next()
+	unitRemover = UNIT_ID_GEN.next()
+	revivePoint = UNIT_ID_GEN.next()
+	jumper = UNIT_ID_GEN.next()
+	texter = UNIT_ID_GEN.next()
+	booster = UNIT_ID_GEN.next()
+	trap = UNIT_ID_GEN.next()
+	//Builder
+	BUILDER_1 = UNIT_ID_GEN.next()
+	builder2_Objects2 = UNIT_ID_GEN.next()
+	builder3_Enviromental3 = UNIT_ID_GEN.next()
+	builder4_Decorations4 = UNIT_ID_GEN.next()
+	//
 
 init
 	colorSpells[0] = 'A05T'
