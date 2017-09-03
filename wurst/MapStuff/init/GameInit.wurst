@@ -10,7 +10,6 @@ init
 	getTimer().start(0.01, () -> initGame())
 	
 @compiletime function callGen()
-	genIds()
 	callFunctionsWithAnnotation("@objectgen")
 
 function initGame()

@@ -3,100 +3,55 @@ import Preloader
 import ObjectIdGenerator
 import public SerializeIds
 
-//General Abilities
-public int turnOn 
-public int turnOff
-public int makeUnitInvisible
-public int makeUnitVisible
-public int removeObject
-//Jumper Abilities
-public int jumperDecreaseForce
-public int jumperIncreaseForce
-public int jumperModeForced
-public int jumperModeUnforced
-//Booster Abilities
-public int boosterSpeedUp
-public int boosterSpeedDown
-//Info Abilities
-public int infoBooster
-public int infoExecuter
-public int infoJumper
-public int infoPointer
-public int infoRevivePoint
-public int infoSounder
-public int infoTCBlocker
-public int infoTeleporter
-public int infoTexter
-public int infoUnitCreator
-public int infoUnitRemover
-public int infoWaypoint
-//Circles
-public int teleporter
-public int waypoint
-public int arcanery
-public int executer
-public int tcBlocker
-public int unitCreator
-public int unitCreatorDummy
-public int unitRemover
-public int revivePoint
-public int jumper
-public int texter
-public int booster
-public int trap
-//Builders
-public int builderCircles
-public int builderObjects
-public int builderEnviromental
-public int builderDecorations
+constant IDGEN = new IdGenerator('0A00')
 
-public function genIds()
-	//General Abilities
-	turnOff = ABIL_ID_GEN.next()
-	turnOn = ABIL_ID_GEN.next()
-	makeUnitInvisible = ABIL_ID_GEN.next()
-	makeUnitVisible = ABIL_ID_GEN.next()
-	removeObject = ABIL_ID_GEN.next()
-	//Jumper Abilities
-	jumperDecreaseForce = ABIL_ID_GEN.next()
-	jumperIncreaseForce = ABIL_ID_GEN.next()
-	jumperModeForced = ABIL_ID_GEN.next()
-	jumperModeUnforced = ABIL_ID_GEN.next()
-	//Booster Abilities
-	boosterSpeedUp = ABIL_ID_GEN.next()
-	boosterSpeedDown = ABIL_ID_GEN.next()
-	//Info Abilities
-	infoBooster = ABIL_ID_GEN.next()
-	infoExecuter = ABIL_ID_GEN.next()
-	infoJumper = ABIL_ID_GEN.next()
-	infoPointer = ABIL_ID_GEN.next()
-	infoRevivePoint = ABIL_ID_GEN.next()
-	infoSounder = ABIL_ID_GEN.next()
-	infoTCBlocker = ABIL_ID_GEN.next()
-	infoTeleporter = ABIL_ID_GEN.next()
-	infoTexter = ABIL_ID_GEN.next()
-	infoUnitCreator = ABIL_ID_GEN.next()
-	infoUnitRemover = ABIL_ID_GEN.next()
-	infoWaypoint = ABIL_ID_GEN.next()
-	//Circles
-	teleporter = UNIT_ID_GEN.next()
-	waypoint = UNIT_ID_GEN.next()
-	arcanery = UNIT_ID_GEN.next()
-	executer = UNIT_ID_GEN.next()
-	tcBlocker = UNIT_ID_GEN.next()
-	unitCreator = UNIT_ID_GEN.next()
-	unitCreatorDummy = UNIT_ID_GEN.next()
-	unitRemover = UNIT_ID_GEN.next()
-	revivePoint = UNIT_ID_GEN.next()
-	jumper = UNIT_ID_GEN.next()
-	texter = UNIT_ID_GEN.next()
-	booster = UNIT_ID_GEN.next()
-	trap = UNIT_ID_GEN.next()
-	//Builders
-	builderCircles = UNIT_ID_GEN.next()
-	builderObjects = UNIT_ID_GEN.next()
-	builderEnviromental = UNIT_ID_GEN.next()
-	builderDecorations = UNIT_ID_GEN.next()
+//General Abilities
+public constant turnOn = compiletime(IDGEN.next())
+public constant turnOff = compiletime(IDGEN.next())
+public constant makeUnitInvisible = compiletime(IDGEN.next())
+public constant makeUnitVisible = compiletime(IDGEN.next())
+public constant removeObject = compiletime(IDGEN.next())
+//Jumper Abilities
+public constant jumperDecreaseForce = compiletime(IDGEN.next())
+public constant jumperIncreaseForce = compiletime(IDGEN.next())
+public constant jumperModeForced = compiletime(IDGEN.next())
+public constant jumperModeUnforced = compiletime(IDGEN.next())
+//Booster Abilities
+public constant boosterSpeedUp = compiletime(IDGEN.next())
+public constant boosterSpeedDown = compiletime(IDGEN.next())
+//Info Abilities
+public constant infoBooster = compiletime(IDGEN.next())
+public constant infoExecuter = compiletime(IDGEN.next())
+public constant infoJumper = compiletime(IDGEN.next())
+public constant infoPointer = compiletime(IDGEN.next())
+public constant infoRevivePoint = compiletime(IDGEN.next())
+public constant infoSounder = compiletime(IDGEN.next())
+public constant infoTCBlocker = compiletime(IDGEN.next())
+public constant infoTeleporter = compiletime(IDGEN.next())
+public constant infoTexter = compiletime(IDGEN.next())
+public constant infoUnitCreator = compiletime(IDGEN.next())
+public constant infoUnitRemover = compiletime(IDGEN.next())
+public constant infoWaypoint = compiletime(IDGEN.next())
+//Circles
+public constant teleporter = compiletime(IDGEN.next())
+public constant waypoint = compiletime(IDGEN.next())
+public constant arcanery = compiletime(IDGEN.next())
+public constant executer = compiletime(IDGEN.next())
+public constant tcBlocker = compiletime(IDGEN.next())
+public constant unitCreator = compiletime(IDGEN.next())
+public constant unitCreatorDummy = compiletime(IDGEN.next())
+public constant unitRemover = compiletime(IDGEN.next())
+public constant revivePoint = compiletime(IDGEN.next())
+public constant jumper = compiletime(IDGEN.next())
+public constant texter = compiletime(IDGEN.next())
+public constant booster = compiletime(IDGEN.next())
+public constant trap = compiletime(IDGEN.next())
+//Builders
+public constant builderCircles = compiletime(IDGEN.next())
+public constant builderObjects = compiletime(IDGEN.next())
+public constant builderEnviromental = compiletime(IDGEN.next())
+public constant builderDecorations = compiletime(IDGEN.next())
+
 /**
 	Holds constant values and object IDs for the builder side
 */
