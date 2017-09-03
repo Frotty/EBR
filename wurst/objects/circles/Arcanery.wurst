@@ -9,8 +9,8 @@ import PresetBuffs
 
 constant ARCANERY_ID = 'n002'
 constant SILENCE_BUFF_ID = 'BNsi'
-int SILENCE_ID
-buffTuple SILENCE_BUFF
+constant SILENCE_ID = compiletime(ABIL_ID_GEN.next())
+constant SILENCE_BUFF = compiletime(createBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp"))
 
 class SilenceBufff extends NormalBuff
 	Arcanery arcanery
@@ -105,20 +105,16 @@ public class Arcanery extends StaticBaseObject
 
 
 @objectgen function genAbils()
-	SILENCE_ID = ABIL_ID_GEN.next()
-
-	SILENCE_BUFF = createBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp")
-	if compiletime
-		new AbilityDefinitionFirelordSoulBurn(SILENCE_ID)
-		..setLevels(1)
-		..setManaCost(1, 0)
-		..setCastRange(1, 92083)
-		..setCooldown(1, 0)
-		..setTargetsAllowed(1, "ground")
-		..setTooltipNormal(1, "Silence")
-		..setTooltipNormalExtended(1, "This escaper cannot cast spells")
-		..setName("Silence")
-		..setDurationHero(1, 99999)
-		..setDurationNormal(1, 99999)
-		..setHeroAbility(false)
-		..setDamageAmount(1, 0)
+	new AbilityDefinitionFirelordSoulBurn(SILENCE_ID)
+	..setLevels(1)
+	..setManaCost(1, 0)
+	..setCastRange(1, 92083)
+	..setCooldown(1, 0)
+	..setTargetsAllowed(1, "ground")
+	..setTooltipNormal(1, "Silence")
+	..setTooltipNormalExtended(1, "This escaper cannot cast spells")
+	..setName("Silence")
+	..setDurationHero(1, 99999)
+	..setDurationNormal(1, 99999)
+	..setHeroAbility(false)
+	..setDamageAmount(1, 0)

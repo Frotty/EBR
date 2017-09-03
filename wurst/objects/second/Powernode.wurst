@@ -17,8 +17,8 @@ constant EFFECT_ORB_STRING = "LORB"
 constant KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant NODE_ID = 'h0nn'
 constant ACTIVATION_DIST = 22.
-public int INCREASE_BOUNCE_ID
-public int DECREASE_BOUNCE_ID
+public constant INCREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
+public constant DECREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
 
 enum LinkType
 	KILL
@@ -204,27 +204,24 @@ public class Powernode extends SetupObject
 		return json
 
 @objectgen function genSpells()
-	INCREASE_BOUNCE_ID = ABIL_ID_GEN.next()
-	DECREASE_BOUNCE_ID = ABIL_ID_GEN.next()
-	if compiletime
-		let inc_spell = new ChannelAbilityPreset(INCREASE_BOUNCE_ID, 1, true)
-		inc_spell..presetManaCost((int lvl) -> 0)
-		..setHeroAbility(false)
-		..presetCooldown((int lvl) -> 0)
-		..setName("Increase Bounciness")
-		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
-		..presetHotkey("C")
-		..presetTooltipNormal((int lvl) -> "Increase Bounciness [|cffFFCC00C|r]")
-		..presetTooltipNormalExtended((int lvl) -> "")
-		..presetButtonPosNormal(2, 2)
+	let inc_spell = new ChannelAbilityPreset(INCREASE_BOUNCE_ID, 1, true)
+	inc_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Increase Bounciness")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetHotkey("C")
+	..presetTooltipNormal((int lvl) -> "Increase Bounciness [|cffFFCC00C|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(2, 2)
 
-		let dec_spell = new ChannelAbilityPreset(DECREASE_BOUNCE_ID, 1, true)
-		dec_spell..presetManaCost((int lvl) -> 0)
-		..setHeroAbility(false)
-		..presetCooldown((int lvl) -> 0)
-		..setName("Decrease Bounciness")
-		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
-		..presetHotkey("D")
-		..presetTooltipNormal((int lvl) -> "Decrease Bounciness [|cffFFCC00D|r]")
-		..presetTooltipNormalExtended((int lvl) -> "")
-		..presetButtonPosNormal(2, 1)
+	let dec_spell = new ChannelAbilityPreset(DECREASE_BOUNCE_ID, 1, true)
+	dec_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Decrease Bounciness")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetHotkey("D")
+	..presetTooltipNormal((int lvl) -> "Decrease Bounciness [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..presetButtonPosNormal(2, 1)

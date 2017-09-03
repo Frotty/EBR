@@ -1,5 +1,5 @@
 -runcompiletimefunctions
 -injectobjects
--opt
--inline
+opt
+inline
 -uncheckedDispatch

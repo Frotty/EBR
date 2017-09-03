@@ -84,12 +84,3 @@ constant TIMER_PERIOD = 0.1
 
 @init2 function init_Revive()
 	CreateTimer().startPeriodic(TIMER_PERIOD, () -> update())
-
-@objectgen function genObjects()
-	new UnitDefinition(UNIT_ID_GEN.next(), 'hfoo')
-	..setName("Personal Revivecircle")
-	..setCollisionSize(0)
-	..setAttacksEnabled(0)
-	..setModelFile(Units.circleofPower)
-	..setScalingValue(0.5)
-	..setNormalAbilities("")

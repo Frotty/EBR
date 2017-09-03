@@ -37,18 +37,21 @@ function onAllLocalSynced()
 		startChoose()
 
 /** Checks if the player's localfiles are enabled
-	If they are enabled, searches for a profile */
+	*/
 public function checkLocalFiles(PlayerData pd)
 	if pdCount < 0
 		pdCount = allPlayers.getSize()
 	printTimed("Checking localfiles for: " + pd.name, 25)
-	if not pd.localFilesEnabled
+	if not pd.localFilesChecked
 		let sd = new SyncData(pd.p)
 		sd.addBool(File.isEnabled())
 		sd.addEventListener(Filter(() -> onLocalFilesSynced()))
 		sd.start()
+	else
+		onPlayerSynced()
 
 function onLocalFilesSynced()
+	doAfter(0.1, () -> onPlayerSynced())
 	let pdc = pData[getSyncedData().p.getId()]
 	pdc.localFilesEnabled = getSyncedData().readBool(0)
 	destroy getSyncedData()
@@ -59,7 +62,6 @@ function onLocalFilesSynced()
 		printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pdc.p)
 
 	pdc.localFilesChecked = true
-	onPlayerSynced()
 
 
 /** Load and sync playerfile */
