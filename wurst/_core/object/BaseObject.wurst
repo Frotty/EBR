@@ -11,6 +11,8 @@ import Assets
 	the unit u: in whichs Userdata the struct is saved
 	the radius: The Range of the InrangeDetection
 	the code c: name of the static method that is being called upon inRangeEvent
+
+	A Baseobject is usually a circle. A unit that doesn't move and has an onRange trigger.
 */
 
 public code CODE_NULL = null

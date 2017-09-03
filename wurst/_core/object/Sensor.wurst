@@ -4,6 +4,10 @@ import HashMap
 import ErrorHandling
 import FxEntity
 
+/**
+	Sensor module that adds onInRange closure capabilities to the class
+*/
+
 public abstract class SensorListener
 	abstract function onSensor(UnitEntity source, UnitEntity target)
 	

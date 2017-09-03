@@ -54,4 +54,3 @@ public class Fountain extends StaticSetupObject
 		let json = super.serialize()
 		json.addProperty(new Property(KEY_TYPE, FOUNTAIN_INDEX.toString()))
 		return json
-

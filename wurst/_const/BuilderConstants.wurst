@@ -97,6 +97,9 @@ public function genIds()
 	builderObjects = UNIT_ID_GEN.next()
 	builderEnviromental = UNIT_ID_GEN.next()
 	builderDecorations = UNIT_ID_GEN.next()
+/**
+	Holds constant values and object IDs for the builder side
+*/
 
 public constant vec2 hidden = vec2(-6000,6000)
 public constant int CONTROLLABLEICE = 'Nice'

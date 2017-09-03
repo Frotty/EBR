@@ -29,6 +29,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
 	private boolean syncingDone = true
 	private FText ttag = createFText(pos, "", 12)
+	let bs = new BigString()
 	let parser = new JsonParser()
 	let listparser = new JsonParser()
 	
@@ -79,19 +80,25 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				tiles.add(new TileData(targPos, mpos, owner))
 
 	function loadSlot(int slotId)
-		actor.pause()
-		ttag.tt..center(pos, "|cff0884CEloading...", 10)
-		lastRef[owner.getId()] = this
-		getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString() + ".pld", Filter(() -> onLoadSlotSynced()))
+		nullTimer(() -> begin
+			actor.pause()
+			ttag.tt..center(pos, "|cff0884CEloading...", 10)
+			lastRef[owner.getId()] = this
+			getSyncedFile(pData[owner.getId()],  "dataSlot" + slotId.toString() + ".pld", Filter(() -> onLoadSlotSynced()))
+		end)
 
 	static function onLoadSlotSynced()
 		printLog(Loglevel.DEBUG, "synced")
 		let pd = pData[getSyncedData().p.getId()]
 		let ref = lastRef[pd.id]
+		ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
 		ref.syncingDone = true
 		if pd.syncPayload.syncedFile.size <= 0
+			// file empty
 			destroy pd.syncPayload
 			pd.syncPayload = null
+			if not pd.syncPayload.fileName.startsWith("Logs\\")
+				nullTimer(() -> getSyncedFile(pd, "Logs\\" + pd.syncPayload.fileName, Filter(() -> onLoadSlotSynced())))
 			return
 		var compressedString = new BigString()
 		var buildString = pd.syncPayload.syncedFile.read()
@@ -114,14 +121,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			end)
 		end)
 
+	
+	LLStaticIterator<BigSubString> itr
 
 	function loadEntities(LinkedList<BigSubString> list)
 		// load entities
 		ttag.tt..center(pos, "|cff0884CEloading Entities...", 10)
-		let bs = new BigString()
-		var itr = list.staticItr()
-		doSeq((SeqCallback cb) -> begin
-			cb.done = true
+		itr = list.staticItr()
+		PayloadCallback pcb = (PayloadCallback cb) -> begin
 			if itr.hasNext()
 				bs.reset()
 				let next = itr.next()
@@ -131,22 +138,26 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					let json = listparser.output
 					let npos = vec2(json.getReal(KEY_X), json.getReal(KEY_Y))
 					let tId = json.getInt(KEY_TYPE)
-					newObjectFromId(owner,	serializeOrigin.toVec2() + npos, tId)..deserialize(listparser.output)
+					let obj = newObjectFromId(owner, serializeOrigin.toVec2() + npos, tId)
+					if obj != null
+						obj.deserialize(listparser.output)
+					else
+						print("invalid data")
 					listparser.output.reset()
 					cb.doStep()
 				end)
 			else
-				destroy cb
-				destroy bs
 				ttag.tt..center(pos, "|cff0884CEEntites loaded!", 10)
-				actor.unpause()
 				printLog(Loglevel.DEBUG, "entities loaded")
-				// Load tiles
-				parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
-					printLog(Loglevel.DEBUG, "load tiles1")
-					loadTiles((cb.customData castTo JsonParser).outputList)
+				doAfter(0.5, () -> begin
+					parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
+						printLog(Loglevel.DEBUG, "load tiles1")
+						loadTiles((cb.customData castTo JsonParser).outputList)
+					end)
 				end)
-		end)
+				
+		end
+		pcb.doStep()
 
 	function loadTiles(LinkedList<BigSubString> list)
 		printLog(Loglevel.DEBUG, "load tiles2")
@@ -155,8 +166,8 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		let bs = new BigString()
 		td.owner = owner
 		var itr = list.staticItr()
-		doSeq((SeqCallback cb1) -> begin
-			cb1.done = true
+		PayloadCallback pcb = (PayloadCallback cb1) -> begin
+			var continue = true
 			printLog(Loglevel.DEBUG, "doSeq loadTiles")
 			if itr.hasNext()
 				bs.reset()
@@ -171,12 +182,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					cb1.doStep()
 				end)
 			else
-				destroy cb1
+				continue = false
 				printLog(Loglevel.DEBUG, "load finished")
 				ttag.tt..center(pos, "|cffFFBD21load finished!", 10)
 				destroy td
-		end)
-		
+				actor.unpause()
+			return continue
+		end
+		pcb.doStep()
 
 
 	BigString tileString = new BigString()
@@ -192,6 +205,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		entString.reset()
 		entString.addString(JSON_OPEN_ARRAY.token)
 		doSeq((SeqCallback cb) -> begin
+			var continue = true
 			if itr.hasNext()
 				let next = itr.next()
 				let json = next.serialize()
@@ -204,29 +218,34 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				effects.remove(next)
 				itr.remove()
 			else
-				cb.terminate()
+				continue = false
 				entString.addString(JSON_CLOSE_ARRAY.token)
 				saveTileSeq()
+			return continue
 		end)
 
 	function saveTileSeq()
+		ttag.tt..center(pos, "|cff0884CEsaving tiles...", 10)
 		tileString.reset()
 		tileString.addString(JSON_OPEN_ARRAY.token)
 		let itr = tiles.staticItr()
 		doSeq((SeqCallback cb) -> begin
+			var continue = true
 			if itr.hasNext()
 				itr.next().serialize().addToBigString(tileString)
 				if itr.hasNext()
 					tileString.addString(JSON_SIGN_COMMA.token)
 				destroy itr.remove()
 			else
-				cb.terminate()
+				continue = false
 				tileString.addString(JSON_CLOSE_ARRAY.token)
 				tileString.debugPrint()
 				saveFile()
+			return continue
 		end)
 
 	function saveFile()
+		ttag.tt..center(pos, "|cff0884CEcompressing...", 10)
 		let json = new Json()
 		let big = new BigString()
 		json.addProperty(new Property(new BigSubString(ENTITIES_KEY), entString.asSubstring()))
@@ -234,6 +253,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		
 		json.addToBigString(big)
 		destroy json
+		printLog(Loglevel.DEBUG, "start compress")
 		compress(big, (PayloadCallback cb) -> begin
 			let compressedData = cb.customData castTo BigString
 			if GetLocalPlayer() == owner
