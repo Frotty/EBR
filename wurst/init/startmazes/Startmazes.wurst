@@ -149,7 +149,7 @@ public function setStartTeleport(int tpid, int locid)
 		case 2
 			t = new LobbyTeleporter(gg_unit_n00C_0323, false)
 	
-	t.actor.removeAbility(REMOVE_ID)
+	t.actor.removeAbility(removeObject)
 	switch locid
 		case 1
 			t.setRallyPoint(vec2(3456,-4160))

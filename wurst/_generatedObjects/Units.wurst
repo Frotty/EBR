@@ -1,0 +1,436 @@
+package Units
+import UnitObjEditing
+import ObjectIds
+import BuilderConstants
+
+@objectgen function genUnits()
+    new BuildingDefinition(teleporter, 'ncop')  
+        ..setName("|cffFFFF08Teleporter")
+        ..setHotkey("A")
+        ..setTooltipBasic("|cffFFCC00Build |cffFFFF08Teleporter [A]")
+        ..setTooltipExtended("Teleports Escaperkillers/Escapers to the selected destination.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTeleporter.blp")
+        ..setNormalAbilities(int2fourchar('ARal') + "," +
+        int2fourchar('A00U') + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar('A009') + "," +
+        int2fourchar(makeUnitInvisible) + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(0)
+        ..setButtonPositionY(1)
+        ..setTintingColorBlue(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(waypoint, 'ncop')
+        ..setName("|cffFF7B29Waypoint")
+        ..setHotkey("R")
+        ..setTooltipBasic("|cffFFCC00Build |cffFF7B29Waypoint [R]")
+        ..setTooltipExtended("Orders Escaperkillers to move to the Rallypoint." +
+        "\nUsefull if you want your units not only to go a straight line.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWaypoint.blp")
+        ..setNormalAbilities(int2fourchar('A08H') + "," +
+        int2fourchar(infoWaypoint) + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar('ARal') + "," +
+        int2fourchar('A055') + "," +
+        int2fourchar('A054') + "," +
+        int2fourchar('A027') + "," +
+        int2fourchar('Agho') + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(3)
+        ..setButtonPositionY(0)
+        ..setTintingColorGreen(128)
+        ..setTintingColorBlue(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(arcanery, 'ncop')
+        ..setName("|cffFF0202Arcanery")
+        ..setHotkey("E")
+        ..setTooltipBasic("|cffFFCC00Build |cffFFFF08Arcanery |r[|cffFFCC00E|r]")
+        ..setTooltipExtended("Grants or silences spells for the escapers.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNarcanery.blp")
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(makeUnitInvisible) + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(2)
+        ..setButtonPositionY(0)
+        ..setTintingColorRed(225)
+        ..setTintingColorGreen(25)
+        ..setTintingColorBlue(25)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(executer, 'ncop')
+        ..setName("|cff84C54AExecuter ")
+        ..setHotkey("X")
+        ..setTooltipBasic("|cffFFCC00Build |cff84C54AExecuter [X]")
+        ..setTooltipExtended("Executes specified actions on other units or positions like opening and closing gates," +
+        "creating units and changing terrain when an escaper and/or killer walks over it." +
+        "\nIt has 3 available modes: Pressure Plate, Standard and Lever.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNExecuter.blp")
+        ..setNormalAbilities(int2fourchar('ARal') + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar('A009') + "," +
+        int2fourchar('A066') + "," +
+        int2fourchar('A068') + "," +
+        int2fourchar('A069') + "," +
+        int2fourchar('A067') + "," +
+        int2fourchar(makeUnitInvisible) + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(1)
+        ..setButtonPositionY(2)
+        ..setTintingColorRed(0)
+        ..setTintingColorGreen(128)
+        ..setTintingColorBlue(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(unitCreator, 'ncop')
+        ..setName("|cff4A943AUnitcreator")
+        ..setHotkey("W")
+        ..setTooltipBasic("|cffFFCC00Build |cff4A943AUnitcreator [W]")
+        ..setTooltipExtended("Periodically creates a unit of the selected type." +
+        "\nThe created unit walks to the rallypoint.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Creator.blp")
+        ..setNormalAbilities(int2fourchar('ARal') + "," +
+        int2fourchar(infoUnitCreator) + "," +
+        int2fourchar('Agho') + "," +
+        int2fourchar('A01R') + "," +
+        int2fourchar('A01P') + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar(turnOn) + "," +
+        int2fourchar('A042') + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(1)
+        ..setButtonPositionY(0)
+        ..setTintingColorRed(0)
+        ..setTintingColorGreen(100)
+        ..setTintingColorBlue(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)       
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(unitRemover, 'ncop')
+        ..setName("|cffFF0000UnitRemover")
+        ..setHotkey("E")
+        ..setTooltipBasic("|cffFFCC00Build |cffFF0000UnitRemover [E]")
+        ..setTooltipExtended("Removes units that were created by a Unitcreator")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Remover.blp")
+        ..setNormalAbilities(int2fourchar('Agho') + "," +
+        int2fourchar(infoUnitRemover) + "," +
+        int2fourchar(removeObject) + "," +  
+        int2fourchar('Avul'))
+        ..setButtonPositionX(2)
+        ..setButtonPositionY(0)
+        ..setTintingColorRed(100)
+        ..setTintingColorGreen(0)
+        ..setTintingColorBlue(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(revivePoint, 'ncop')
+        ..setName("|cff087BB5Revivepoint")
+        ..setHotkey("Q")
+        ..setTooltipBasic("|cffFFCC00Build |cff087BB5Revivepoint [Q]")
+        ..setTooltipExtended("Escapers get revived here when they die." +
+        "\nThe Revivepoint is activated when an escaper steps on it.|nIt cannot be triggered by builders.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNReviver.blp")
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(infoRevivePoint) + "," +
+        int2fourchar('Avul'))  
+        ..setButtonPositionX(0)
+        ..setButtonPositionY(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(2)
+        ..setSelectionScale(4)
+        ..setUnitClassification("ancient,standon")        
+
+    new BuildingDefinition(jumper, 'ncop')
+        ..setName("|cff085294Jumper")
+        ..setHotkey("C")
+        ..setTooltipBasic("|cffFFCC00Build |cff085294Jumper [C]")
+        ..setTooltipExtended("Fires the Escaper through the air to the rallypoint." +
+        "\nWhile the Escaper flys, he cant be harmed by Escapekillers, Obstacles or unwalkable Terrain.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNJumper.blp")
+        ..setNormalAbilities(int2fourchar('ARal') + "," +
+        int2fourchar(infoJumper) + "," +
+        int2fourchar(jumperIncreaseForce) + "," +
+        int2fourchar(jumperDecreaseForce) + "," +
+        int2fourchar(jumperModeForced) + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar(makeUnitInvisible) + "," +
+        int2fourchar('Aeth') + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(2)
+        ..setButtonPositionY(2)
+        ..setTintingColorRed(50)
+        ..setTintingColorGreen(50)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")    
+
+    new BuildingDefinition(texter, 'ncop')
+        ..setName("|cff08DEFFTexter ")
+        ..setHotkey("F")
+        ..setTooltipBasic("|cffFFCC00Build |cff08DEFFTexter [F]")
+        ..setTooltipExtended("Creates floating textes that are shown by command or when an Escaper walks over it." +
+        "\nFloating texts can be colored.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTexter.blp")
+        ..setNormalAbilities(int2fourchar('ARal') + "," +
+        int2fourchar(infoTeleporter) + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar('A009') + "," +
+        int2fourchar(makeUnitInvisible) + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(3)
+        ..setButtonPositionY(1)
+        ..setTintingColorRed(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")    
+
+    new BuildingDefinition(booster, 'ncop')
+        ..setName("|cffCE086BBooster ")
+        ..setHotkey("S")
+        ..setTooltipBasic("|cffFFCC00Build |cffCE086BBooster [S]")
+        ..setTooltipExtended("Sets the Movementspeed of a Unit(non-Escaper) that walkes over.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNBooster.blp")
+        ..setNormalAbilities(int2fourchar('Agho') + "," +
+        int2fourchar(infoBooster) + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar(boosterSpeedUp) + "," +
+        int2fourchar(boosterSpeedDown) + "," +
+        int2fourchar('Avul')) 
+        ..setButtonPositionX(1)
+        ..setButtonPositionY(1)
+        ..setTintingColorGreen(100)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new BuildingDefinition(trap, 'ncop')
+        ..setName("|cffA55A08Trap")
+        ..setHotkey("Y")
+        ..setTooltipBasic("|cffFFCC00Build |cffA55A08Trap [Y]")
+        ..setTooltipExtended("Trap that can perform various actions on an entering Escaper, like poison, stun, knockback and kill." +
+        "\nThe trapeffect can be customized and made invisible.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTrap.blp")
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(makeUnitInvisible) + "," +
+        int2fourchar('A033') + "," +
+        int2fourchar('A06D') + "," +
+        int2fourchar('A06C') + "," +
+        int2fourchar('A06F') + "," +
+        int2fourchar('A06I') + "," +
+        int2fourchar('A06G') + "," +
+        int2fourchar('A06E') + "," +
+        int2fourchar('A06H') + "," +
+        int2fourchar('Avul')) 
+        ..setButtonPositionX(0)
+        ..setButtonPositionY(2)
+        ..setTintingColorRed(96)
+        ..setTintingColorGreen(32)
+        ..setTintingColorBlue(8)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.8)
+        ..setSelectionScale(2.2)
+        ..setUnitClassification("ancient,standon")
+
+    new UnitDefinition(tcBlocker, 'hpea') //info doesn't appear
+        ..setName("|cff7B299CTC-Blocker")
+        ..setHotkey("D")
+        ..setTooltipBasic("|cffFFCC00Build |cff7B299CTC-Blocker [D]")
+        ..setTooltipExtended("Prevents Terrainchangers from changing the groundtexture below it.")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTCBlocker.blp")
+        ..setModelFile("buildings\\other\\CircleOfPower\\CircleOfPower.mdl")
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(infoTCBlocker) + "," +
+        int2fourchar('Agho') + "," +
+        int2fourchar('Avul'))
+        ..setButtonPositionX(2)
+        ..setButtonPositionY(1)
+        ..setTintingColorRed(128)
+        ..setTintingColorGreen(0)
+        ..setSightRadiusDay(0)
+        ..setSightRadiusNight(0)
+        ..setBuildTime(1)
+        ..setCollisionSize(0)        
+        ..setScalingValue(0.7)
+        ..setSelectionScale(2)
+        ..setAttacksEnabled(0)
+        ..setSpeedBase(0)
+        ..setMovementType(MovementType.None)
+        ..setUnitSoundSet("CircleOfPower")
+        ..setUpgradesUsed("")
+        ..setGoldCost(0)
+        ..setFoodCost(0)
+        ..setIsaBuilding(TRUE)
+        ..setStructuresBuilt("")
+        ..setUnitClassification("ancient,standon")  
+
+//Builder 
+    new UnitDefinition(builderCircles, 'uaco')  
+        ..setName("|cFF0080FFBuilder 1|r |cffFFAD29Circles")
+        ..setHotkey("")
+        ..setTooltipBasic("")
+        ..setTooltipExtended("")
+        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
+        ..setNormalAbilities(int2fourchar('Aeth') + "," +
+        int2fourchar('A03C') + "," +
+        int2fourchar('Avul') + "," +
+        int2fourchar('A05C') + "," +
+        int2fourchar('A000') + "," +
+        int2fourchar('A05D') + "," +
+        int2fourchar('A05E'))
+        ..setStructuresBuilt(int2fourchar(booster) + "," +
+        int2fourchar(teleporter) + "," +
+        int2fourchar(jumper) + "," +
+        int2fourchar(revivePoint) + "," +
+        int2fourchar(unitCreator) + "," +
+        int2fourchar(tcBlocker) + "," +
+        int2fourchar(unitRemover) + "," +
+        int2fourchar(waypoint) + "," +
+        int2fourchar(texter) + "," +
+        int2fourchar(trap) + "," +
+        int2fourchar(executer))
+        ..setButtonPositionX(0)
+        ..setButtonPositionY(0)
+        ..setSightRadiusDay(300)
+        ..setSightRadiusNight(300)
+        ..setBuildTime(1)
+        ..setAttacksEnabled(0)
+        ..setTargetedAs("air")
+        ..setDefenseUpgradeBonus(0)
+        ..setDeathType(0)
+        ..setAnimationBlendTimeseconds(0)
+        ..setAnimationCastBackswing(0)
+        ..setAnimationCastPoint(0)
+        ..setModelFile("units\\undead\\Banshee\\Banshee.mdl")
+        ..setSpeedBase(1000)
+        ..setTurnRate(1)
+        ..setMovementType(MovementType.Fly)
+        ..setUnitSoundSet("Sorceress")
+        ..setCanDropItemsOnDeath(FALSE)
+        ..setUpgradesUsed("")
+        ..setBuildTime(1)
+        ..setRepairTime(1)
+        ..setUnitClassification("peon")
+        ..setHitPointsMaximumBase(100000000)
+        ..setHitPointsRegenerationRate(0)
+        ..setHitPointsRegenerationType("none")
+        ..setGoldCost(0)
+        ..setRepairGoldCost(0)
+
+//Under Construction
+/*     new UnitDefinition(builder2_Objects2, 'uaco')  
+            ..setName("|cffFFFF08Teleporter")
+            ..setHotkey("A")
+            ..setTooltipBasic("|cffFFCC00Build |cffFFFF08Teleporter [A]")
+            ..setTooltipExtended("Teleports Escaperkillers/Escapers to the selected destination.")
+            ..setIconGameInterface("BTNTeleporter.blp")
+            ..setNormalAbilities(int2fourchar('ARal') + "," +
+            int2fourchar('A00U') + "," +
+            int2fourchar(removeObject) + "," +
+            int2fourchar('A009') + "," +
+            int2fourchar(makeUnitInvisible) + "," +
+            int2fourchar('Avul'))
+            ..setButtonPositionX(0)
+            ..setButtonPositionY(1)
+            ..setTintingColorBlue(0)
+            ..setSightRadiusDay(0)
+            ..setSightRadiusNight(0)
+            ..setBuildTime(1)
+            ..setCollisionSize(0)
+            ..setUnitClassification("ancient,standon")
+
+        new UnitDefinition(builder3_Enviromental3, 'uaco')  
+            ..setName("|cffFFFF08Teleporter")
+            ..setHotkey("A")
+            ..setTooltipBasic("|cffFFCC00Build |cffFFFF08Teleporter [A]")
+            ..setTooltipExtended("Teleports Escaperkillers/Escapers to the selected destination.")
+            ..setIconGameInterface("BTNTeleporter.blp")
+            ..setNormalAbilities(int2fourchar('ARal') + "," +
+            int2fourchar('A00U') + "," +
+            int2fourchar(removeObject) + "," +
+            int2fourchar('A009') + "," +
+            int2fourchar(makeUnitInvisible) + "," +
+            int2fourchar('Avul'))
+            ..setButtonPositionX(0)
+            ..setButtonPositionY(1)
+            ..setTintingColorBlue(0)
+            ..setSightRadiusDay(0)
+            ..setSightRadiusNight(0)
+            ..setBuildTime(1)
+            ..setCollisionSize(0)
+            ..setUnitClassification("ancient,standon")
+
+        new UnitDefinition(builder4_Decorations4, 'uaco')  
+            ..setName("|cffFFFF08Teleporter")
+            ..setHotkey("A")
+            ..setTooltipBasic("|cffFFCC00Build |cffFFFF08Teleporter [A]")
+            ..setTooltipExtended("Teleports Escaperkillers/Escapers to the selected destination.")
+            ..setIconGameInterface("BTNTeleporter.blp")
+            ..setNormalAbilities(int2fourchar('ARal') + "," +
+            int2fourchar('A00U') + "," +
+            int2fourchar(removeObject) + "," +
+            int2fourchar('A009') + "," +
+            int2fourchar(makeUnitInvisible) + "," +
+            int2fourchar('Avul'))
+            ..setButtonPositionX(0)
+            ..setButtonPositionY(1)
+            ..setTintingColorBlue(0)
+            ..setSightRadiusDay(0)
+            ..setSightRadiusNight(0)
+            ..setBuildTime(1)
+            ..setCollisionSize(0)
+            ..setUnitClassification("ancient,standon")
+*/

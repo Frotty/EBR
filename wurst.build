@@ -1,4 +1,4 @@
+!!file.WurstProjectConfig
 dependencies: ['https://github.com/wurstscript/WurstStdlib2', 'https://github.com/Frotty/Frentity']
+projectName: EBR
 releaseName: EscapeBuilder_R$version$.w3x
-
-

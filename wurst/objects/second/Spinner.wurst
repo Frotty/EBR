@@ -31,7 +31,7 @@ class SpinNode
 		if prev != null
 			prev.next = next
 		if not obj.done and obj.actor != null
-			obj.setup.addAbility(REMOVE_ID)
+			obj.setup.addAbility(removeObject)
 
 public class Spinner extends SetupObject
 	SpinNode firstNode = null
@@ -76,8 +76,8 @@ public class Spinner extends SetupObject
 					destroy node
 					break
 				node = node.next
-			if isNew and (dobj.setup.hasAbility(REMOVE_ID) or dobj.owner == STAFF_PLAYER)
-				dobj.setup.removeAbility(REMOVE_ID)
+			if isNew and (dobj.setup.hasAbility(removeObject) or dobj.owner == STAFF_PLAYER)
+				dobj.setup.removeAbility(removeObject)
 				let newnode = new SpinNode(dobj, getPos().angleTo2d(dobj.getPos()).radians(), getPos().distanceTo(dobj.getPos()))
 				if firstNode != null
 					firstNode.prev = newnode

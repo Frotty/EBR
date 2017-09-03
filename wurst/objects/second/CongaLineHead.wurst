@@ -30,7 +30,7 @@ class CongaSegment
 	construct(CongaLineHead head, SetupObject target)
 		this.target = target
 		this.head = head
-		target.setup.removeAbility(REMOVE_ID)
+		target.setup.removeAbility(removeObject)
 		phi = head.getPos().angleTo2d(target.getPos())
 
 	function calcPos()
@@ -55,7 +55,7 @@ class CongaSegment
 		if head.firstSegment == this
 			head.firstSegment = next
 		if not target.done and target.actor != null
-			target.setup.addAbility(REMOVE_ID)
+			target.setup.addAbility(removeObject)
 
 public class CongaLineHead extends SetupObject
 	CongaSegment firstSegment = null

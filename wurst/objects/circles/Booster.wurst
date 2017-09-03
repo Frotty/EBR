@@ -1,19 +1,16 @@
 package Booster
 import BaseObject
 
-constant BOOSTER_ID = 'n00J'
 constant EVENT_RADIUS = 32.
-constant INCREASE_SPEED_ABIL = 'A04O'
-constant DECREASE_SPEED_ABIL = 'A04Q'
 constant BOOST_SPEED_KEY = "b"
 
 public class Booster extends StaticBaseObject
 	ConfigValue boostspeed = new ConfigValue(200, 25, "Boostspeed")
 	
 	construct( vec2 pos, player owner )
-		super( pos, getUnit(owner, BOOSTER_ID, pos, angle(0), this), EVENT_RADIUS, function Booster.orderMove, CODE_NULL ) 
+		super( pos, getUnit(owner, booster, pos, angle(0), this), EVENT_RADIUS, function Booster.orderMove, CODE_NULL ) 
 		clearQuestionmark()
-		actor.addAbility(PAUSE_ABIL)
+		actor.addAbility(turnOff)
 		
 	static function orderMove()
 		let source = GetTriggeringTrigger().getSource()
@@ -29,9 +26,9 @@ public class Booster extends StaticBaseObject
 		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id 
-			case INCREASE_SPEED_ABIL
+			case boosterSpeedUp
 				boostspeed.increment(this, 525)
-			case DECREASE_SPEED_ABIL
+			case boosterSpeedDown
 				boostspeed.decrement(this, 25)
 
 	override function deserialize(Json json)
