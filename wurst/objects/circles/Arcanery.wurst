@@ -7,7 +7,6 @@ import ChannelAbilityPreset
 import Fx
 import PresetBuffs
 
-constant ARCANERY_ID = 'n002'
 constant SILENCE_BUFF_ID = 'BNsi'
 constant SILENCE_ID = compiletime(ABIL_ID_GEN.next())
 constant SILENCE_BUFF = compiletime(createBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp"))
@@ -57,7 +56,7 @@ public class Arcanery extends StaticBaseObject
 
 
 	construct(vec2 position, player owner)
-		super(position, getUnit(owner, ARCANERY_ID, position, angle(0), this), 96., function onEnterEv, function is)
+		super(position, getUnit(owner, arcanery, position, angle(0), this), 96., function onEnterEv, function is)
 		clearQuestionmark()
 		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
 		recreateEffect()

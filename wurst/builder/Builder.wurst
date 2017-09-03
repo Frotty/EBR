@@ -24,7 +24,7 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super(getUnit(p, BUILDER_1, vec2(-6000, -7160), angle(0), this))
+		super(getUnit(p, builderCircles, vec2(-6000, -7160), angle(0), this))
 		registerListeners()
 		this.setCurrentRegion()
 
@@ -131,7 +131,7 @@ function filter() returns boolean
 	
 function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
-	return id == BUILDER_1 or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
+	return id == builderCircles or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
 constant CHAOS_BUILDER_1 = compiletime(ABIL_ID_GEN.next())
 constant CHAOS_BUILDER_2 = compiletime(ABIL_ID_GEN.next())
@@ -141,11 +141,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 @objectgen function genBuilder()
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_1))
-
-	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
-	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_2))
+	..setNewUnitType(1, int2fourchar(builderCircles))
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
 	..setRequirements("")

@@ -7,7 +7,6 @@ import SoundUtils
 import TerrainBlocker
 
 constant real EVENT_RADIUS = 90.
-constant int REVIVEPOINT_ID = 'n000'
 constant SoundDefinition rescueSound = new SoundDefinition("Sound\\Interface\\Rescue.wav", false)
 
 RevivePoint currentRevive = null
@@ -16,13 +15,13 @@ public class RevivePoint extends StaticSetupObject
 	int startmaze = -1
 
 	construct(unit existing)
-		super(existing, getUnit(existing.getOwner(), REVIVEPOINT_ID, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
+		super(existing, getUnit(existing.getOwner(), revivePoint, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
 		this.pos.toVec2().setTerrainType(this.setCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
 		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
 			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
 
 	construct(vec3 pos, player owner)
-		super(getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), getUnit(owner, REVIVEPOINT_ID, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
+		super(getUnit(owner, revivePoint, pos.toVec2(), angle(0), this), getUnit(owner, revivePoint, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
 		this.pos.toVec2().setTerrainType(this.setCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
 		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
 			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
@@ -34,9 +33,9 @@ public class RevivePoint extends StaticSetupObject
 			actor.setColor(reacher.owner.getColor())
 			currentRevivepoint = pos.toVec2()
 			if currentRevive != null
-				currentRevive.actor.addAbility(REMOVE_ID)
+				currentRevive.actor.addAbility(removeObject)
 			currentRevive = this
-			this.actor.removeAbility(REMOVE_ID)
+			this.actor.removeAbility(removeObject)
 			rescueSound.play()
 			printTimed(reacher.owner.getNameColored() + " advanced to the next |cff086BB5Checkpoint", 15)
 			reacher.onCPReach()
@@ -82,7 +81,7 @@ public class RevivePoint extends StaticSetupObject
 			(source.getEntity() castTo RevivePoint).reach(target.getEntity() castTo Escaper)
 				
 	static function filter() returns boolean
-		return GetUnitTypeId(GetFilterUnit()) == REVIVEPOINT_ID
+		return GetUnitTypeId(GetFilterUnit()) == revivePoint
 
 	override function serialize() returns Json
 		let json = super.serialize()

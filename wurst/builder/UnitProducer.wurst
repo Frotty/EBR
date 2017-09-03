@@ -34,7 +34,7 @@ public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
 		super(pos, getUnit( owner, PRODUCER_ID, pos, angle(0), this) , 0., CODE_NULL, CODE_NULL)
-		actor..removeAbility(REMOVE_ID)..addAbility(AIR_KILLER)
+		actor..removeAbility(removeObject)..addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		clearQuestionmark()
 

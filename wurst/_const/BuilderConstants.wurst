@@ -1,12 +1,61 @@
 package BuilderConstants
 import Preloader
-import public SerializeIds
 import ObjectIdGenerator
+import public SerializeIds
+
 /**
 	Holds constant values and object IDs for the builder side
 */
+constant IDGEN = new IdGenerator('0A00')
+
+//General Abilities
+public constant turnOn = compiletime(IDGEN.next())
+public constant turnOff = compiletime(IDGEN.next())
+public constant makeUnitInvisible = compiletime(IDGEN.next())
+public constant makeUnitVisible = compiletime(IDGEN.next())
+public constant removeObject = compiletime(IDGEN.next())
+//Jumper Abilities
+public constant jumperDecreaseForce = compiletime(IDGEN.next())
+public constant jumperIncreaseForce = compiletime(IDGEN.next())
+public constant jumperModeForced = compiletime(IDGEN.next())
+public constant jumperModeUnforced = compiletime(IDGEN.next())
+//Booster Abilities
+public constant boosterSpeedUp = compiletime(IDGEN.next())
+public constant boosterSpeedDown = compiletime(IDGEN.next())
+//Info Abilities
+public constant infoBooster = compiletime(IDGEN.next())
+public constant infoExecuter = compiletime(IDGEN.next())
+public constant infoJumper = compiletime(IDGEN.next())
+public constant infoPointer = compiletime(IDGEN.next())
+public constant infoRevivePoint = compiletime(IDGEN.next())
+public constant infoSounder = compiletime(IDGEN.next())
+public constant infoTCBlocker = compiletime(IDGEN.next())
+public constant infoTeleporter = compiletime(IDGEN.next())
+public constant infoTexter = compiletime(IDGEN.next())
+public constant infoUnitCreator = compiletime(IDGEN.next())
+public constant infoUnitRemover = compiletime(IDGEN.next())
+public constant infoWaypoint = compiletime(IDGEN.next())
+//Circles
+public constant teleporter = compiletime(IDGEN.next())
+public constant waypoint = compiletime(IDGEN.next())
+public constant arcanery = compiletime(IDGEN.next())
+public constant executer = compiletime(IDGEN.next())
+public constant tcBlocker = compiletime(IDGEN.next())
+public constant unitCreator = compiletime(IDGEN.next())
+public constant unitCreatorDummy = compiletime(IDGEN.next())
+public constant unitRemover = compiletime(IDGEN.next())
+public constant revivePoint = compiletime(IDGEN.next())
+public constant jumper = compiletime(IDGEN.next())
+public constant texter = compiletime(IDGEN.next())
+public constant booster = compiletime(IDGEN.next())
+public constant trap = compiletime(IDGEN.next())
+//Builders
+public constant builderCircles = compiletime(IDGEN.next())
+public constant builderObjects = compiletime(IDGEN.next())
+public constant builderEnviromental = compiletime(IDGEN.next())
+public constant builderDecorations = compiletime(IDGEN.next())
+
 public constant vec2 hidden = vec2(-6000,6000)
-public constant REMOVE_ID = 'A00K'
 public constant int CONTROLLABLEICE = 'Nice'
 public constant int UNCONTROLLABLEICE = 'Idki'
 public constant int REVICE = 'Glav'
@@ -14,8 +63,6 @@ public constant int LAVA = 'Glvc'
 public constant int POISON = 'Cpos'
 public constant int RUNES = 'Irbk'
 
-
-public constant int BUILDER_1 = 'u001'
 public constant int BUILDER_2 = 'u005'
 public constant int BUILDER_3 = 'u007'
 public constant int BUILDER_4 = 'u00C'

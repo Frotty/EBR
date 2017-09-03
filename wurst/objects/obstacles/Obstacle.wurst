@@ -11,11 +11,11 @@ constant VOLCANO_ID = 'n00K'
 public class Obstacle extends EscaperSensorSetup
 	construct(unit existing, real radius, real height  )
 		super(existing, radius, height)
-		setup..addAbility(REMOVE_ID)..addAbility(GHOST_INVIS_ID)
+		setup..addAbility(removeObject)..addAbility(GHOST_INVIS_ID)
 
 	construct(vec2 pos, player owner, int id, real radius, real height )
 		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, height)
-		setup..addAbility(REMOVE_ID)..addAbility(GHOST_INVIS_ID)
+		setup..addAbility(removeObject)..addAbility(GHOST_INVIS_ID)
 
 public class HighObstacle extends Obstacle
 	

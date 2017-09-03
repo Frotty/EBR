@@ -4,7 +4,6 @@ import Escaper
 import TeleporterTarget
 import Builder
 
-constant int 	WAYPOINT_ID   = 'n004'
 constant int INC_ID = 'A054'
 constant int DEC_ID = 'A055'
 constant int WISP_ID = 'A027'
@@ -29,12 +28,12 @@ public class Waypoint extends StaticBaseObject
 	boolean ready = false
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		actor..addAbility(PAUSE_ABIL)
+		super( pos, CreateUnit(owner, waypoint, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
+		actor..addAbility(turnOff)
 
 	construct(unit existing)
 		super( existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		actor..addAbility(PAUSE_ABIL)
+		actor..addAbility(turnOff)
 
 	function orderLogicMove()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
@@ -53,7 +52,7 @@ public class Waypoint extends StaticBaseObject
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
 		if owner == e.owner and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 			if e instanceof SetupObject
-				if not (e castTo SetupObject).setup.hasAbility(REMOVE_ID)
+				if not (e castTo SetupObject).setup.hasAbility(removeObject)
 					return
 			var data = e castTo UnitEntity
 			if not wisps and data instanceof TeleporterTarget
