@@ -145,7 +145,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(builderObjects))
+	..setNewUnitType(1, int2fourchar(BUILDER_2))
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
 	..setRequirements("")
