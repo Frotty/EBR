@@ -16,8 +16,6 @@ import Assets
 public code CODE_NULL = null
 public constant KEY_RALLY_X = "r"
 public constant KEY_RALLY_Y = "s"
-public constant START_ABIL = 'A00A'
-public constant PAUSE_ABIL = 'Tank'
 
 public class StaticBaseObject extends UnitEntity
 	private vec3 rallyPoint
@@ -34,7 +32,7 @@ public class StaticBaseObject extends UnitEntity
 		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)
 		actor..addAbility(GHOST_VIS_ID)
-		..addAbility(REMOVE_ID)
+		..addAbility(removeObject)
 		this.setCurrentRegion()
 		rallyPoint = this.pos
 
@@ -54,14 +52,14 @@ public class StaticBaseObject extends UnitEntity
 		if flag and not enabled
 			enabled = true
 			activate()
-			actor..removeAbility(START_ABIL)..addAbility(PAUSE_ABIL)
+			actor..removeAbility(turnOn)..addAbility(turnOff)
 			flashEffect(Other.ancestralspiritcaster, pos)
 			if disFx != null
 				disFx.destr()
 		else if enabled
 			enabled = false
 			deactivate()
-			actor..removeAbility(PAUSE_ABIL)..addAbility(START_ABIL)
+			actor..removeAbility(turnOff)..addAbility(turnOn)
 			if disFx != null
 				disFx.destr()
 
@@ -76,9 +74,9 @@ public class StaticBaseObject extends UnitEntity
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case START_ABIL
+			case turnOn
 				setEnabled(true)
-			case PAUSE_ABIL
+			case turnOff
 				setEnabled(false)
 
 	function clearQuestionmark()

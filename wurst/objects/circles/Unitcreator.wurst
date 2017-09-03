@@ -7,8 +7,6 @@ import ChannelAbilityPreset
 import HashMap
 import Preloader
 
-constant int 	UNITCREATOR_ID   = 'n006'
-
 int FIXED_ID
 int RANDOM_ID
 
@@ -27,7 +25,7 @@ public class UnitCreator extends StaticBaseObject
 		setEnabled(false)
 
 	construct( vec2 pos, player owner)
-		super( pos, getUnit(owner, UNITCREATOR_ID, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
+		super( pos, getUnit(owner, unitCreator, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
 		actor.addAbility(FIXED_ID)
 		setEnabled(false)
 	
@@ -123,8 +121,8 @@ init
 	preloadAbility('A04C')
 	preloadAbility('A04B')
 	preloadAbility('A07R')
-	preloadAbility(PAUSE_ABIL)
-	preloadAbility(START_ABIL)
+	preloadAbility(turnOff)
+	preloadAbility(turnOn)
 	preloadAbility(INCREASE_INTERVAL_ABIL)
 	preloadAbility(DECREASE_INTERVAL_ABIL)
 	preloadAbility(FIXED_ID)

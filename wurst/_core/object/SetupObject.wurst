@@ -22,11 +22,11 @@ public abstract class SetupObject extends UnitEntity
 		super(u)
 		this.setup = setup
 		this.radius = radius
-		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(REMOVE_ID)
+		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(removeObject)
 		..setPathing(true)
 		setup..setEntity(this)
 		..setXY(actor.getPos())
-		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_ID)
+		..addAbility(GHOST_INVIS_ID)..addAbility(removeObject)
 		this.setCurrentRegion()
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrderEvent())

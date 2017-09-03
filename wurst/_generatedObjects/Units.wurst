@@ -4,7 +4,6 @@ import ObjectIds
 import BuilderConstants
 
 @objectgen function genUnits()
-//Circles
     new BuildingDefinition(teleporter, 'ncop')  
         ..setName("|cffFFFF08Teleporter")
         ..setHotkey("A")
@@ -13,9 +12,9 @@ import BuilderConstants
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTeleporter.blp")
         ..setNormalAbilities(int2fourchar('ARal') + "," +
         int2fourchar('A00U') + "," +
-        int2fourchar('A00K') + "," +
+        int2fourchar(removeObject) + "," +
         int2fourchar('A009') + "," +
-        int2fourchar('A005') + "," +
+        int2fourchar(makeUnitInvisible) + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(0)
         ..setButtonPositionY(1)
@@ -37,7 +36,7 @@ import BuilderConstants
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWaypoint.blp")
         ..setNormalAbilities(int2fourchar('A08H') + "," +
         int2fourchar(infoWaypoint) + "," +
-        int2fourchar('A00K') + "," +
+        int2fourchar(removeObject) + "," +
         int2fourchar('ARal') + "," +
         int2fourchar('A055') + "," +
         int2fourchar('A054') + "," +
@@ -62,8 +61,8 @@ import BuilderConstants
         ..setTooltipBasic("|cffFFCC00Build |cffFFFF08Arcanery |r[|cffFFCC00E|r]")
         ..setTooltipExtended("Grants or silences spells for the escapers.")
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNarcanery.blp")
-        ..setNormalAbilities(int2fourchar('A00K') + "," +
-        int2fourchar('A005') + "," +
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(makeUnitInvisible) + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(2)
         ..setButtonPositionY(0)
@@ -87,12 +86,13 @@ import BuilderConstants
         "\nIt has 3 available modes: Pressure Plate, Standard and Lever.")
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNExecuter.blp")
         ..setNormalAbilities(int2fourchar('ARal') + "," +
-        int2fourchar('A00K') + "," +
+        int2fourchar(removeObject) + "," +
         int2fourchar('A009') + "," +
         int2fourchar('A066') + "," +
         int2fourchar('A068') + "," +
         int2fourchar('A069') + "," +
-        int2fourchar('A005') + "," +
+        int2fourchar('A067') + "," +
+        int2fourchar(makeUnitInvisible) + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(1)
         ..setButtonPositionY(2)
@@ -119,8 +119,8 @@ import BuilderConstants
         int2fourchar('Agho') + "," +
         int2fourchar('A01R') + "," +
         int2fourchar('A01P') + "," +
-        int2fourchar('A00K') + "," +
-        int2fourchar('A00A') + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar(turnOn) + "," +
         int2fourchar('A042') + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(1)
@@ -135,27 +135,6 @@ import BuilderConstants
         ..setScalingValue(0.8)
         ..setSelectionScale(2.2)
         ..setUnitClassification("ancient,standon")
-            
-    new BuildingDefinition(unitCreatorDummy, 'ncop')
-        ..setName("|cff4A943AUnitcreator")
-        ..setHotkey("W")
-        ..setTooltipBasic("|cffFFCC00Build |cff4A943AUnitcreator [W]")
-        ..setTooltipExtended("HOW CAN YOU SEE THIS??")
-        ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Creator.blp")
-        ..setNormalAbilities(int2fourchar('Apiv') + "," +
-        int2fourchar('Avul'))
-        ..setButtonPositionX(1)
-        ..setButtonPositionY(0)
-        ..setTintingColorRed(0)
-        ..setTintingColorGreen(100)
-        ..setTintingColorBlue(0)
-        ..setSightRadiusDay(0)
-        ..setSightRadiusNight(0)
-        ..setBuildTime(1)
-        ..setCollisionSize(0)
-        ..setScalingValue(0.8)
-        ..setSelectionScale(2.2)
-        ..setUnitClassification("ancient,standon")
 
     new BuildingDefinition(unitRemover, 'ncop')
         ..setName("|cffFF0000UnitRemover")
@@ -165,7 +144,7 @@ import BuilderConstants
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Remover.blp")
         ..setNormalAbilities(int2fourchar('Agho') + "," +
         int2fourchar(infoUnitRemover) + "," +
-        int2fourchar('A00K') + "," +  
+        int2fourchar(removeObject) + "," +  
         int2fourchar('Avul'))
         ..setButtonPositionX(2)
         ..setButtonPositionY(0)
@@ -187,7 +166,7 @@ import BuilderConstants
         ..setTooltipExtended("Escapers get revived here when they die." +
         "\nThe Revivepoint is activated when an escaper steps on it.|nIt cannot be triggered by builders.")
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNReviver.blp")
-        ..setNormalAbilities(int2fourchar('A00K') + "," +
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
         int2fourchar(infoRevivePoint) + "," +
         int2fourchar('Avul'))  
         ..setButtonPositionX(0)
@@ -209,11 +188,11 @@ import BuilderConstants
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNJumper.blp")
         ..setNormalAbilities(int2fourchar('ARal') + "," +
         int2fourchar(infoJumper) + "," +
-        int2fourchar('A073') + "," +
-        int2fourchar('A072') + "," +
-        int2fourchar('A070') + "," +
-        int2fourchar('A00K') + "," +
-        int2fourchar('A005') + "," +
+        int2fourchar(jumperIncreaseForce) + "," +
+        int2fourchar(jumperDecreaseForce) + "," +
+        int2fourchar(jumperModeForced) + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar(makeUnitInvisible) + "," +
         int2fourchar('Aeth') + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(2)
@@ -237,9 +216,9 @@ import BuilderConstants
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTexter.blp")
         ..setNormalAbilities(int2fourchar('ARal') + "," +
         int2fourchar(infoTeleporter) + "," +
-        int2fourchar('A00K') + "," +
+        int2fourchar(removeObject) + "," +
         int2fourchar('A009') + "," +
-        int2fourchar('A005') + "," +
+        int2fourchar(makeUnitInvisible) + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(3)
         ..setButtonPositionY(1)
@@ -260,9 +239,9 @@ import BuilderConstants
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNBooster.blp")
         ..setNormalAbilities(int2fourchar('Agho') + "," +
         int2fourchar(infoBooster) + "," +
-        int2fourchar('A00K') + "," +
-        int2fourchar('A04O') + "," +
-        int2fourchar('A04Q') + "," +
+        int2fourchar(removeObject) + "," +
+        int2fourchar(boosterSpeedUp) + "," +
+        int2fourchar(boosterSpeedDown) + "," +
         int2fourchar('Avul')) 
         ..setButtonPositionX(1)
         ..setButtonPositionY(1)
@@ -282,8 +261,8 @@ import BuilderConstants
         ..setTooltipExtended("Trap that can perform various actions on an entering Escaper, like poison, stun, knockback and kill." +
         "\nThe trapeffect can be customized and made invisible.")
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTrap.blp")
-        ..setNormalAbilities(int2fourchar('A00K') + "," +
-        int2fourchar('A005') + "," +
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(makeUnitInvisible) + "," +
         int2fourchar('A033') + "," +
         int2fourchar('A06D') + "," +
         int2fourchar('A06C') + "," +
@@ -306,15 +285,15 @@ import BuilderConstants
         ..setSelectionScale(2.2)
         ..setUnitClassification("ancient,standon")
 
-    new UnitDefinition(tcBlocker, 'hpea')
+    new UnitDefinition(tcBlocker, 'hpea') //info doesn't appear
         ..setName("|cff7B299CTC-Blocker")
         ..setHotkey("D")
         ..setTooltipBasic("|cffFFCC00Build |cff7B299CTC-Blocker [D]")
         ..setTooltipExtended("Prevents Terrainchangers from changing the groundtexture below it.")
         ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTCBlocker.blp")
         ..setModelFile("buildings\\other\\CircleOfPower\\CircleOfPower.mdl")
-        ..setNormalAbilities(int2fourchar(infoTCBlocker) + "," +
-        int2fourchar('A00K') + "," +
+        ..setNormalAbilities(int2fourchar(removeObject) + "," +
+        int2fourchar(infoTCBlocker) + "," +
         int2fourchar('Agho') + "," +
         int2fourchar('Avul'))
         ..setButtonPositionX(2)
@@ -339,7 +318,7 @@ import BuilderConstants
         ..setUnitClassification("ancient,standon")  
 
 //Builder 
-    new UnitDefinition(BUILDER_1, 'uaco')  
+    new UnitDefinition(builderCircles, 'uaco')  
         ..setName("|cFF0080FFBuilder 1|r |cffFFAD29Circles")
         ..setHotkey("")
         ..setTooltipBasic("")
@@ -400,9 +379,9 @@ import BuilderConstants
             ..setIconGameInterface("BTNTeleporter.blp")
             ..setNormalAbilities(int2fourchar('ARal') + "," +
             int2fourchar('A00U') + "," +
-            int2fourchar('A00K') + "," +
+            int2fourchar(removeObject) + "," +
             int2fourchar('A009') + "," +
-            int2fourchar('A005') + "," +
+            int2fourchar(makeUnitInvisible) + "," +
             int2fourchar('Avul'))
             ..setButtonPositionX(0)
             ..setButtonPositionY(1)
@@ -421,9 +400,9 @@ import BuilderConstants
             ..setIconGameInterface("BTNTeleporter.blp")
             ..setNormalAbilities(int2fourchar('ARal') + "," +
             int2fourchar('A00U') + "," +
-            int2fourchar('A00K') + "," +
+            int2fourchar(removeObject) + "," +
             int2fourchar('A009') + "," +
-            int2fourchar('A005') + "," +
+            int2fourchar(makeUnitInvisible) + "," +
             int2fourchar('Avul'))
             ..setButtonPositionX(0)
             ..setButtonPositionY(1)
@@ -442,9 +421,9 @@ import BuilderConstants
             ..setIconGameInterface("BTNTeleporter.blp")
             ..setNormalAbilities(int2fourchar('ARal') + "," +
             int2fourchar('A00U') + "," +
-            int2fourchar('A00K') + "," +
+            int2fourchar(removeObject) + "," +
             int2fourchar('A009') + "," +
-            int2fourchar('A005') + "," +
+            int2fourchar(makeUnitInvisible) + "," +
             int2fourchar('Avul'))
             ..setButtonPositionX(0)
             ..setButtonPositionY(1)

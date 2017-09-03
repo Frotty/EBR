@@ -186,33 +186,33 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 public int array buildorders
 
 @init1 function init_InstantBuild()
-	buildorders[JUMPER_INDEX] = 'n00B' // Jumper
-	buildorders[REVIVE_INDEX] = 'n000' // Revivepoint
-	buildorders[TEXTER_INDEX] = 'n01B' // Texter
+	buildorders[JUMPER_INDEX] = jumper // Jumper
+	buildorders[REVIVE_INDEX] = revivePoint // Revivepoint
+	buildorders[TEXTER_INDEX] = texter // Texter
 	buildorders[BOMBTOWER_INDEX] = 'h019' // BomberTower
 	buildorders[VORTEX_INDEX] = 'n013' // Vortex
-	buildorders[EXECUTER_INDEX] = 'n01D'  // Executer
-	buildorders[BOOSTER_INDEX] = 'n00J' // Booster
-	buildorders[UNITREMOVER_INDEX] = 'n003' // UnitRemover
-	buildorders[WAYPOINT_INDEX] = 'n004' // Waypoint
-	buildorders[TELEPORTER_INDEX] = 'n00C' // Teleporter
+	buildorders[EXECUTER_INDEX] = executer  // Executer
+	buildorders[BOOSTER_INDEX] = booster // Booster
+	buildorders[UNITREMOVER_INDEX] = unitRemover // UnitRemover
+	buildorders[WAYPOINT_INDEX] = waypoint // Waypoint
+	buildorders[TELEPORTER_INDEX] = teleporter // Teleporter
 	buildorders[DOOR_INDEX] = 'h002' // Door
 	buildorders[SMALLOBS_INDEX] = 'obSD' // Small Obstacle
 	buildorders[BIGOBS_INDEX] = 'obBD' // Big Obstacle
 	buildorders[TREE_INDEX] = 'n010' // Tree
 	buildorders[SPINNER_INDEX] = 'h01M' // Spinner
-	buildorders[UNITCREATOR_INDEX] = 'n006' // Unitcreator
+	buildorders[UNITCREATOR_INDEX] = unitCreator // Unitcreator
 	buildorders[TRACKS_INDEX] = 'n01C' // Tracks
 	buildorders[FOUNTAIN_INDEX] = 'h00H' // Fountain
 	buildorders[POWERNODE_INDEX] = 'h0nn' // Powernode
-	buildorders[TRAP_INDEX] = 'n00I' // Trap
+	buildorders[TRAP_INDEX] = trap // Trap
 	buildorders[CONGA_INDEX] = 'h000' // Conga Line
-	buildorders[TBLOCKER_INDEX] = 'h009' // TerrainBlocker
+	buildorders[TBLOCKER_INDEX] = tcBlocker // TerrainBlocker
 	buildorders[VOLCANO_INDEX] = 'n00K' // Volcano
 	buildorders[WALL_INDEX] = 'n00P' // Wall
 	buildorders[HWALL_INDEX] = 'n00Q' // Horizontal Wall
 	buildorders[VWALL_INDEX] = 'n011' // Vertical Wall
-	buildorders[ARCANERY_INDEX] = 'n002' // Arcanery
+	buildorders[ARCANERY_INDEX] = arcanery // Arcanery
 	buildorders[SMALLKILL_INDEX] = 'A05K' // Arcanery
 	buildorders[BIGKILL_INDEX] = 'A05F' // Arcanery
 	buildorders[BOMBER_INDEX] = 'A05O' // Arcanery

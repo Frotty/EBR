@@ -1,32 +1,29 @@
 package Invisible
 import SetupObject
 
-public constant VIS_ID = 'A04F'
-public constant INVIS_ID = 'A005'
-
 function onChangeVisibility()
 	var id = GetSpellAbilityId()
-	if id == VIS_ID or id == INVIS_ID
+	if id == makeUnitVisible or id == makeUnitInvisible
 		var caster = GetSpellAbilityUnit()
 		var dta = caster.getUserData() castTo UnitEntity
 		if dta instanceof SetupObject
 			let data = dta castTo SetupObject
-			if id == VIS_ID
+			if id == makeUnitVisible
 				data.actor..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
-				data.setup..removeAbility(VIS_ID)..addAbility(INVIS_ID)
-			else if id == INVIS_ID
+				data.setup..removeAbility(makeUnitVisible)..addAbility(makeUnitInvisible)
+			else if id == makeUnitInvisible
 				data.actor..removeAbility(GHOST_VIS_ID)..addAbility(GHOST_INVIS_ID)
-				data.setup..removeAbility(INVIS_ID)..addAbility(VIS_ID)	
+				data.setup..removeAbility(makeUnitInvisible)..addAbility(makeUnitVisible)	
 		else
-			if id == VIS_ID
+			if id == makeUnitVisible
 				caster..removeAbility(GHOST_INVIS_ID)..addAbility(GHOST_VIS_ID)
-				caster..removeAbility(VIS_ID)..addAbility(INVIS_ID)
-			else if id == INVIS_ID
+				caster..removeAbility(makeUnitVisible)..addAbility(makeUnitInvisible)
+			else if id == makeUnitInvisible
 				if caster.hasAbility(GHOST_VIS_ID)
 					caster.removeAbility(GHOST_VIS_ID)
 				caster..addAbility(GHOST_INVIS_ID)
-				..removeAbility(INVIS_ID)
-				..addAbility(VIS_ID)
+				..removeAbility(makeUnitInvisible)
+				..addAbility(makeUnitVisible)
 	
 @init1 function invis_init()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChangeVisibility())

@@ -20,11 +20,11 @@ public class Teleporter extends StaticBaseObject
 	
 	construct( vec2 pos, player owner )
 		super( pos, getUnit(owner, teleporter, pos, angle(0), this), EVENT_RADIUS, function Teleporter.teleport, CODE_NULL ) 
-		actor.addAbility(PAUSE_ABIL)
+		actor.addAbility(turnOff)
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS, function Teleporter.teleport, CODE_NULL )
-		actor.addAbility(PAUSE_ABIL)
+		actor.addAbility(turnOff)
 		
 	static function teleport()
 		unit source = GetTriggeringTrigger().getSource()
@@ -60,7 +60,7 @@ public class Teleporter extends StaticBaseObject
 					addEffect(EFFECT_STRING, rallyPos).destr()
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
-		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_ID) 
+		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(removeObject) 
 			obj.terminate()
 
 	override function onCast()

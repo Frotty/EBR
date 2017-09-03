@@ -4,7 +4,6 @@ import public BitSet
 
 public hashtable tileModifierMap = InitHashtable()
 
-constant int BLOCKER_ID = 'h009'
 public tuple matrixpos (int x, int y)
 
 public enum TileModifiers
@@ -19,7 +18,7 @@ public class TerrainBlocker extends StaticBaseObject
 	boolean silent = false
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, BLOCKER_ID, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0), this), 0, CODE_NULL, CODE_NULL)
+		super(pos, getUnit(owner, tcBlocker, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0), this), 0, CODE_NULL, CODE_NULL)
 		m = matrixpos((pos.x/128.0).round(), (pos.y/128.0).round())
 		clearQuestionmark()
 		if tileModifierMap.hasInt(m.x, m.y)

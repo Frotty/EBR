@@ -6,7 +6,6 @@ import Invisible
 import Assets
 import Minigame
 
-constant TELEPORTER_ID   = 'n00C'
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 constant ESC_ID = 'A009'
 
@@ -21,8 +20,8 @@ public class MinigameTeleporter extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS, function MinigameTeleporter.checkVote, CODE_NULL )
-		actor..removeAbility(REMOVE_ID)
-		..removeAbility(INVIS_ID)
+		actor..removeAbility(removeObject)
+		..removeAbility(makeUnitInvisible)
 		..removeAbility(ESC_ID)
 		clearQuestionmark()
 		text = createCenterFText(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 10)

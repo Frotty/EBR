@@ -5,13 +5,8 @@ import SoundUtils
 import TerrainBlocker
 import ClosureForGroups
 
-constant int JUMPER_ID = 'n00B'
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
 
-constant int FORCED_ID = 'A070'
-constant int UNFORCED_ID = 'A071'
-constant int INCREASE_ID = 'A072'
-constant int DECREASE_ID = 'A073'
 constant SPECIAL_ID = 'A07O'
 
 SoundDefinition snd = new SoundDefinition("Units\\Human\\Priest\\PriestPissed3.wav", false)
@@ -21,7 +16,7 @@ enum JumpMode
 	UNFORCED
 
 function filter() returns boolean
-	return GetFilterUnit().getTypeId() == JUMPER_ID
+	return GetFilterUnit().getTypeId() == jumper
 
 public class Goo
 	image img
@@ -44,13 +39,13 @@ public class Jumper extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, 40., function Jumper.inRange, CODE_NULL)
-		actor.addAbility(PAUSE_ABIL)
+		actor.addAbility(turnOff)
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, JUMPER_ID, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
-		actor.addAbility(PAUSE_ABIL)
+		super(pos, getUnit(owner, jumper, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
+		actor.addAbility(turnOff)
 		forUnitsInRange(pos, 8, (unit u) -> begin
-			if u != actor and u.getTypeId() == JUMPER_ID
+			if u != actor and u.getTypeId() == jumper
 				snd.play()
 				u.addAbility(SPECIAL_ID)
 				this.terminate()
@@ -77,16 +72,16 @@ public class Jumper extends StaticBaseObject
 		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case FORCED_ID
-				actor..removeAbility(FORCED_ID)..addAbility(UNFORCED_ID)..setVertexColor(color(75,95,205))
+			case jumperModeForced
+				actor..removeAbility(jumperModeForced)..addAbility(jumperModeUnforced)..setVertexColor(color(75,95,205))
 				mode = JumpMode.UNFORCED
 				clearQuestionmark()
-			case UNFORCED_ID
-				actor..removeAbility(UNFORCED_ID)..addAbility(FORCED_ID)..setVertexColor(color(50,50,255))
+			case jumperModeUnforced
+				actor..removeAbility(jumperModeUnforced)..addAbility(jumperModeForced)..setVertexColor(color(50,50,255))
 				mode = JumpMode.FORCED
-			case DECREASE_ID
+			case jumperDecreaseForce
 				jumpForce.decrement(this, 6)
-			case INCREASE_ID
+			case jumperIncreaseForce
 				jumpForce.increment(this, 30)
 			case SPECIAL_ID
 				if goocounter < 5

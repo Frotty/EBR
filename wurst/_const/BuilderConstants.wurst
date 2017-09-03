@@ -3,7 +3,21 @@ import Preloader
 import ObjectIdGenerator
 import public SerializeIds
 
-//Spells
+//General Abilities
+public int turnOn 
+public int turnOff
+public int makeUnitInvisible
+public int makeUnitVisible
+public int removeObject
+//Jumper Abilities
+public int jumperDecreaseForce
+public int jumperIncreaseForce
+public int jumperModeForced
+public int jumperModeUnforced
+//Booster Abilities
+public int boosterSpeedUp
+public int boosterSpeedDown
+//Info Abilities
 public int infoBooster
 public int infoExecuter
 public int infoJumper
@@ -30,14 +44,61 @@ public int jumper
 public int texter
 public int booster
 public int trap
-//Builder 
-public int BUILDER_1
-public int builder2_Objects2
-public int builder3_Enviromental3
-public int builder4_Decorations4
-//
+//Builders
+public int builderCircles
+public int builderObjects
+public int builderEnviromental
+public int builderDecorations
+
+public function genIds()
+	//General Abilities
+	turnOff = ABIL_ID_GEN.next()
+	turnOn = ABIL_ID_GEN.next()
+	makeUnitInvisible = ABIL_ID_GEN.next()
+	makeUnitVisible = ABIL_ID_GEN.next()
+	removeObject = ABIL_ID_GEN.next()
+	//Jumper Abilities
+	jumperDecreaseForce = ABIL_ID_GEN.next()
+	jumperIncreaseForce = ABIL_ID_GEN.next()
+	jumperModeForced = ABIL_ID_GEN.next()
+	jumperModeUnforced = ABIL_ID_GEN.next()
+	//Booster Abilities
+	boosterSpeedUp = ABIL_ID_GEN.next()
+	boosterSpeedDown = ABIL_ID_GEN.next()
+	//Info Abilities
+	infoBooster = ABIL_ID_GEN.next()
+	infoExecuter = ABIL_ID_GEN.next()
+	infoJumper = ABIL_ID_GEN.next()
+	infoPointer = ABIL_ID_GEN.next()
+	infoRevivePoint = ABIL_ID_GEN.next()
+	infoSounder = ABIL_ID_GEN.next()
+	infoTCBlocker = ABIL_ID_GEN.next()
+	infoTeleporter = ABIL_ID_GEN.next()
+	infoTexter = ABIL_ID_GEN.next()
+	infoUnitCreator = ABIL_ID_GEN.next()
+	infoUnitRemover = ABIL_ID_GEN.next()
+	infoWaypoint = ABIL_ID_GEN.next()
+	//Circles
+	teleporter = UNIT_ID_GEN.next()
+	waypoint = UNIT_ID_GEN.next()
+	arcanery = UNIT_ID_GEN.next()
+	executer = UNIT_ID_GEN.next()
+	tcBlocker = UNIT_ID_GEN.next()
+	unitCreator = UNIT_ID_GEN.next()
+	unitCreatorDummy = UNIT_ID_GEN.next()
+	unitRemover = UNIT_ID_GEN.next()
+	revivePoint = UNIT_ID_GEN.next()
+	jumper = UNIT_ID_GEN.next()
+	texter = UNIT_ID_GEN.next()
+	booster = UNIT_ID_GEN.next()
+	trap = UNIT_ID_GEN.next()
+	//Builders
+	builderCircles = UNIT_ID_GEN.next()
+	builderObjects = UNIT_ID_GEN.next()
+	builderEnviromental = UNIT_ID_GEN.next()
+	builderDecorations = UNIT_ID_GEN.next()
+
 public constant vec2 hidden = vec2(-6000,6000)
-public constant REMOVE_ID = 'A00K'
 public constant int CONTROLLABLEICE = 'Nice'
 public constant int UNCONTROLLABLEICE = 'Idki'
 public constant int REVICE = 'Glav'
@@ -76,41 +137,6 @@ public constant int BOOTS_ID = 'I00M'
 public constant int ANKH_ID = 'I00L'
 
 public int array colorSpells
-
-public function genIds()
-	//Abilities
-	infoBooster = ABIL_ID_GEN.next()
-	infoExecuter = ABIL_ID_GEN.next()
-	infoJumper = ABIL_ID_GEN.next()
-	infoPointer = ABIL_ID_GEN.next()
-	infoRevivePoint = ABIL_ID_GEN.next()
-	infoSounder = ABIL_ID_GEN.next()
-	infoTCBlocker = ABIL_ID_GEN.next()
-	infoTeleporter = ABIL_ID_GEN.next()
-	infoTexter = ABIL_ID_GEN.next()
-	infoUnitCreator = ABIL_ID_GEN.next()
-	infoUnitRemover = ABIL_ID_GEN.next()
-	infoWaypoint = ABIL_ID_GEN.next()
-	//Circles
-	teleporter = UNIT_ID_GEN.next()
-	waypoint = UNIT_ID_GEN.next()
-	arcanery = UNIT_ID_GEN.next()
-	executer = UNIT_ID_GEN.next()
-	tcBlocker = UNIT_ID_GEN.next()
-	unitCreator = UNIT_ID_GEN.next()
-	unitCreatorDummy = UNIT_ID_GEN.next()
-	unitRemover = UNIT_ID_GEN.next()
-	revivePoint = UNIT_ID_GEN.next()
-	jumper = UNIT_ID_GEN.next()
-	texter = UNIT_ID_GEN.next()
-	booster = UNIT_ID_GEN.next()
-	trap = UNIT_ID_GEN.next()
-	//Builder
-	BUILDER_1 = UNIT_ID_GEN.next()
-	builder2_Objects2 = UNIT_ID_GEN.next()
-	builder3_Enviromental3 = UNIT_ID_GEN.next()
-	builder4_Decorations4 = UNIT_ID_GEN.next()
-	//
 
 init
 	colorSpells[0] = 'A05T'
