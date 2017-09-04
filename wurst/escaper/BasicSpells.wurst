@@ -4,8 +4,8 @@ import ChannelAbilityPreset
 import ItemObjEditing
 import initlater Ball
 
-public int BALL_SPELL_ID
-public int BALL_ITEM_ID
+public constant BALL_SPELL_ID = compiletime(ABIL_ID_GEN.next())
+public constant BALL_ITEM_ID = compiletime(ABIL_ID_GEN.next())
 
 public class BallProjectile extends AirPhysicsProjectile
 	BallItem ballitem
@@ -48,23 +48,20 @@ function onCast()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 @objectgen function genAbils()
-	BALL_SPELL_ID = ABIL_ID_GEN.next()
-	BALL_ITEM_ID = ITEM_ID_GEN.next()
-	if compiletime
-		new ChannelAbilityPreset(BALL_SPELL_ID, 1, true)
-		..setHeroAbility(false)
-		..setName("Throw a ball")
-		..presetTooltipNormal((int lvl) -> "Throw Ball")
-		..presetTargetTypes(Targettype.POINT)
-		..presetCastRange((int lvl) -> 300.)
-		..presetManaCost((int lvl) -> 0)
-		..presetButtonPosNormal(1,1)
-		..presetIcon("BTNGolemStormBolt")
-		
-		new ItemDefinition(BALL_ITEM_ID, 'rst1')
-		..setGoldCost(0)..setLumberCost(0)
-		..setAbilities("")..setName("Ball")..setDescription("Throwable.")
-		..setTooltipExtended("It is round")
-		..setDroppedWhenCarrierDies(false)
-		..setTooltipBasic("Do eet")..setModelUsed("Cannonball.mdx")
-		..setInterfaceIcon("ReplaceableTextures\\CommandButtons\\BTNGolemStormBolt.blp")
+	new ChannelAbilityPreset(BALL_SPELL_ID, 1, true)
+	..setHeroAbility(false)
+	..setName("Throw a ball")
+	..presetTooltipNormal((int lvl) -> "Throw Ball")
+	..presetTargetTypes(Targettype.POINT)
+	..presetCastRange((int lvl) -> 300.)
+	..presetManaCost((int lvl) -> 0)
+	..presetButtonPosNormal(1,1)
+	..presetIcon("BTNGolemStormBolt")
+	
+	new ItemDefinition(BALL_ITEM_ID, 'rst1')
+	..setGoldCost(0)..setLumberCost(0)
+	..setAbilities("")..setName("Ball")..setDescription("Throwable.")
+	..setTooltipExtended("It is round")
+	..setDroppedWhenCarrierDies(false)
+	..setTooltipBasic("Do eet")..setModelUsed("Cannonball.mdx")
+	..setInterfaceIcon("ReplaceableTextures\\CommandButtons\\BTNGolemStormBolt.blp")

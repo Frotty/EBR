@@ -7,8 +7,8 @@ import ChannelAbilityPreset
 import HashMap
 import Preloader
 
-int FIXED_ID
-int RANDOM_ID
+constant FIXED_ID = compiletime(ABIL_ID_GEN.next())
+constant RANDOM_ID = compiletime(ABIL_ID_GEN.next())
 
 public enum TimerMode
 	FIXED
@@ -129,29 +129,26 @@ init
 	preloadAbility(RANDOM_ID)
 
 @objectgen function genAbils()
-	FIXED_ID = ABIL_ID_GEN.next()
-	RANDOM_ID = ABIL_ID_GEN.next()
-	if compiletime
-		let inc_spell = new ChannelAbilityPreset(FIXED_ID, 1, true)
-		inc_spell..presetManaCost((int lvl) -> 0)
-		..setHeroAbility(false)
-		..presetCooldown((int lvl) -> 0)
-		..setName("Fixed Timer")
-		..presetIcon("BTNUCModeFixed")
-		..presetHotkey("D")
-		..presetTooltipNormal((int lvl) -> "Fixed Timer [|cffFFCC00D|r]")
-		..presetTooltipNormalExtended((int lvl) -> "At fixed mode, the monsters will always be spawned in the fixed interval you set."
-		+ "|nClick to change to random mode.")
-		..presetButtonPosNormal(1, 1)
-		
-		let dec_spell = new ChannelAbilityPreset(RANDOM_ID, 1, true)
-		dec_spell..presetManaCost((int lvl) -> 0)
-		..setHeroAbility(false)
-		..presetCooldown((int lvl) -> 0)
-		..setName("Random Timer")
-		..presetIcon("BTNUCModeRandom")
-		..presetHotkey("D")
-		..presetTooltipNormal((int lvl) -> "Random Timer [|cffFFCC00D|r]")
-		..presetTooltipNormalExtended((int lvl) -> "Chooses a random interval between all monsters spawned. The configured interval is the highest possible interval."
-		+ "|nClick to change to fixed mode.")
-		..presetButtonPosNormal(1, 1)
+	let inc_spell = new ChannelAbilityPreset(FIXED_ID, 1, true)
+	inc_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Fixed Timer")
+	..presetIcon("BTNUCModeFixed")
+	..presetHotkey("D")
+	..presetTooltipNormal((int lvl) -> "Fixed Timer [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended((int lvl) -> "At fixed mode, the monsters will always be spawned in the fixed interval you set."
+	+ "|nClick to change to random mode.")
+	..presetButtonPosNormal(1, 1)
+	
+	let dec_spell = new ChannelAbilityPreset(RANDOM_ID, 1, true)
+	dec_spell..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Random Timer")
+	..presetIcon("BTNUCModeRandom")
+	..presetHotkey("D")
+	..presetTooltipNormal((int lvl) -> "Random Timer [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Chooses a random interval between all monsters spawned. The configured interval is the highest possible interval."
+	+ "|nClick to change to fixed mode.")
+	..presetButtonPosNormal(1, 1)

@@ -133,30 +133,24 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == builderCircles or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
 	
-int CHAOS_BUILDER_1
-int CHAOS_BUILDER_2
-int CHAOS_BUILDER_3
-int CHAOS_BUILDER_4
+constant CHAOS_BUILDER_1 = compiletime(ABIL_ID_GEN.next())
+constant CHAOS_BUILDER_2 = compiletime(ABIL_ID_GEN.next())
+constant CHAOS_BUILDER_3 = compiletime(ABIL_ID_GEN.next())
+constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 
 @objectgen function genBuilder()
-	CHAOS_BUILDER_1 = ABIL_ID_GEN.next()
-	CHAOS_BUILDER_2 = ABIL_ID_GEN.next()
-	CHAOS_BUILDER_3 = ABIL_ID_GEN.next()
-	CHAOS_BUILDER_4 = ABIL_ID_GEN.next()
+	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)
+	..setRequirements("")
+	..setNewUnitType(1, int2fourchar(builderCircles))
 
-	if compiletime
-		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)
-		..setRequirements("")
-		..setNewUnitType(1, int2fourchar(builderCircles))
+	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
+	..setRequirements("")
+	..setNewUnitType(1, int2fourchar(BUILDER_2))
 
-		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
-		..setRequirements("")
-		..setNewUnitType(1, int2fourchar(BUILDER_2))
+	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
+	..setRequirements("")
+	..setNewUnitType(1, int2fourchar(BUILDER_3))
 
-		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
-		..setRequirements("")
-		..setNewUnitType(1, int2fourchar(BUILDER_3))
-
-		new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_4)
-		..setRequirements("")
-		..setNewUnitType(1, int2fourchar(BUILDER_4))
+	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_4)
+	..setRequirements("")
+	..setNewUnitType(1, int2fourchar(BUILDER_4))

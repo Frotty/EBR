@@ -3,6 +3,9 @@ import Preloader
 import ObjectIdGenerator
 import public SerializeIds
 
+/**
+	Holds constant values and object IDs for the builder side
+*/
 constant IDGEN = new IdGenerator('0A00')
 
 //General Abilities
@@ -51,10 +54,6 @@ public constant builderCircles = compiletime(IDGEN.next())
 public constant builderObjects = compiletime(IDGEN.next())
 public constant builderEnviromental = compiletime(IDGEN.next())
 public constant builderDecorations = compiletime(IDGEN.next())
-
-/**
-	Holds constant values and object IDs for the builder side
-*/
 
 public constant vec2 hidden = vec2(-6000,6000)
 public constant int CONTROLLABLEICE = 'Nice'

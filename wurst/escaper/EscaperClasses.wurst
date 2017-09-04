@@ -14,9 +14,9 @@ constant SLOWWAVE_ID = 'A088'
 constant TEMP_REV_ID = 'A07Z'
 constant INNER_STRENGTH_ID = 'A08L'
 constant FIRE_RESISTANCE = 'A08Q'
-int HP_GAIN_50
-int HP_GAIN_75
-int HP_GAIN_100
+constant HP_GAIN_50 = compiletime(ABIL_ID_GEN.next())
+constant HP_GAIN_75 = compiletime(ABIL_ID_GEN.next())
+constant HP_GAIN_100 = compiletime(ABIL_ID_GEN.next())
 
 public class HolyEscaper extends Escaper
 
@@ -227,16 +227,11 @@ public class StrongEscaper extends Escaper
 	
 
 @objectgen function gen()
-	HP_GAIN_50 = ABIL_ID_GEN.next()
-	HP_GAIN_75 = ABIL_ID_GEN.next()
-	HP_GAIN_100 = ABIL_ID_GEN.next()
+	new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_50)
+	..setMaxLifeGained(1, 50)
 
-	if compiletime
-		new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_50)
-		..setMaxLifeGained(1, 50)
+	new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_75)
+	..setMaxLifeGained(1, 75)
 
-		new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_75)
-		..setMaxLifeGained(1, 75)
-
-		new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_100)
-		..setMaxLifeGained(1, 100)
+	new AbilityDefinitionMaxLifeBonusLeast(HP_GAIN_100)
+	..setMaxLifeGained(1, 100)

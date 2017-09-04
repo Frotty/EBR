@@ -5,7 +5,6 @@ import PlayerData
 import JukeBox
 
 init
-	callGen()
 	startEntityLoop()
 	getTimer().start(0.01, () -> initGame())
 	

@@ -3,7 +3,7 @@ import Escaper
 import KeyUtils
 import ChannelAbilityPreset
 
-int SHIP_ID
+constant SHIP_ID = compiletime(ABIL_ID_GEN.next())
 
 public class Spaceship extends UnitEntity
 	real maxSpeed = 12
@@ -33,16 +33,13 @@ public class Spaceship extends UnitEntity
 
 
 @objectgen function genObjs()
-	SHIP_ID = UNIT_ID_GEN.next()
-
-	if compiletime
-		new UnitDefinition(SHIP_ID, 'hgry')
-			..setName("Spaceship")
-			..setModelFile("Onslaught.mdx")
-			..setMovementHeight(64)
-			..setMovementHeightMinimum(16)
-			..setNormalAbilities("")
-			..setHitPointsMaximumBase(100000000)
-			..setManaMaximum(0)
-			..setCollisionSize(0)
-			..setScalingValue(0.25)
+	new UnitDefinition(SHIP_ID, 'hgry')
+		..setName("Spaceship")
+		..setModelFile("Onslaught.mdx")
+		..setMovementHeight(64)
+		..setMovementHeightMinimum(16)
+		..setNormalAbilities("")
+		..setHitPointsMaximumBase(100000000)
+		..setManaMaximum(0)
+		..setCollisionSize(0)
+		..setScalingValue(0.25)

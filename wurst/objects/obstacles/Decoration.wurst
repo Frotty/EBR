@@ -3,9 +3,9 @@ import BaseObject
 import ChannelAbilityPreset
 import initlater InstantBuild
 
-public int CHANGE_FACE_ID
-public int INC_SCALE
-public int DEC_SCALE
+public constant CHANGE_FACE_ID = compiletime(ABIL_ID_GEN.next())
+public constant INC_SCALE = compiletime(ABIL_ID_GEN.next())
+public constant DEC_SCALE = compiletime(ABIL_ID_GEN.next())
 
 constant KEY_SCALE = "d"
 constant KEY_ANGLE = "e"
@@ -63,39 +63,34 @@ public class Decoration extends StaticSetupObject
 		return json
 
 @objectgen function genDeco()
-	CHANGE_FACE_ID = ABIL_ID_GEN.next()
-	INC_SCALE = ABIL_ID_GEN.next()
-	DEC_SCALE = ABIL_ID_GEN.next()
+	new ChannelAbilityPreset(CHANGE_FACE_ID, 1, true)
+		..setName("Set facing")
+		..presetTargetTypes(Targettype.POINT)
+		..presetCastRange((int lvl) -> 500)
+		..presetCooldown((int lvl) -> 0)
+		..presetManaCost((int lvl) -> 0)
+		..presetTooltipNormal((int lvl) -> "Set the facing of this decoration [Q]")
+		..presetTooltipNormalExtended((int lvl) -> "Makes this object point at the target direction")
+		..presetButtonPosNormal(0, 0)
+		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNLoad.blp")
+		..presetHotkey("Q")
 
-	if compiletime
-		new ChannelAbilityPreset(CHANGE_FACE_ID, 1, true)
-			..setName("Set facing")
-			..presetTargetTypes(Targettype.POINT)
-			..presetCastRange((int lvl) -> 500)
-			..presetCooldown((int lvl) -> 0)
-			..presetManaCost((int lvl) -> 0)
-			..presetTooltipNormal((int lvl) -> "Set the facing of this decoration [Q]")
-			..presetTooltipNormalExtended((int lvl) -> "Makes this object point at the target direction")
-			..presetButtonPosNormal(0, 0)
-			..presetIcon("ReplaceableTextures\\CommandButtons\\BTNLoad.blp")
-			..presetHotkey("Q")
+	new ChannelAbilityPreset(INC_SCALE, 1, true)
+		..setName("Increase Scale")
+		..presetTargetTypes(Targettype.NONE)
+		..makeUnitSpell(0, 0)
+		..presetTooltipNormal((int lvl) -> "Increase the scale of this decoration [W]")
+		..presetTooltipNormalExtended((int lvl) -> "+0.1")
+		..presetButtonPosNormal(1, 0)
+		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+		..presetHotkey("W")
 
-		new ChannelAbilityPreset(INC_SCALE, 1, true)
-			..setName("Increase Scale")
-			..presetTargetTypes(Targettype.NONE)
-			..makeUnitSpell(0, 0)
-			..presetTooltipNormal((int lvl) -> "Increase the scale of this decoration [W]")
-			..presetTooltipNormalExtended((int lvl) -> "+0.1")
-			..presetButtonPosNormal(1, 0)
-			..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
-			..presetHotkey("W")
-
-		new ChannelAbilityPreset(DEC_SCALE, 1, true)
-			..setName("Decrease Scale")
-			..presetTargetTypes(Targettype.NONE)
-			..makeUnitSpell(0, 0)
-			..presetTooltipNormal((int lvl) -> "Decrease the scale of this decoration [S]")
-			..presetTooltipNormalExtended((int lvl) -> "-0.1")
-			..presetButtonPosNormal(1, 1)
-			..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
-			..presetHotkey("S")
+	new ChannelAbilityPreset(DEC_SCALE, 1, true)
+		..setName("Decrease Scale")
+		..presetTargetTypes(Targettype.NONE)
+		..makeUnitSpell(0, 0)
+		..presetTooltipNormal((int lvl) -> "Decrease the scale of this decoration [S]")
+		..presetTooltipNormalExtended((int lvl) -> "-0.1")
+		..presetButtonPosNormal(1, 1)
+		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+		..presetHotkey("S")

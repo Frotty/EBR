@@ -30,8 +30,8 @@ public constant ORB_SPELL_ID = 'A08A'
 constant CANCEL_TOGGLE_ID 	= 'A08C'
 constant CUT_ALLOW 			= 'A08F'
 constant CUT_DISABLE 		= 'A08G'
-int EASY_ENABLE
-int EASY_DISABLE
+constant EASY_ENABLE = compiletime(ABIL_ID_GEN.next())
+constant EASY_DISABLE = compiletime(ABIL_ID_GEN.next())
 
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
@@ -275,22 +275,18 @@ init
 	preloadAbility(CUT_DISABLE)
 
 @objectgen function genAbils()
-	EASY_ENABLE = ABIL_ID_GEN.next()
-	EASY_DISABLE = ABIL_ID_GEN.next()
+	new ChannelAbilityPreset(EASY_ENABLE, 1, true)
+	..setName("Enable Easy Mode")
+	..presetTooltipNormal((int levle) -> "Currently in |cffFF9C29normal |rmode.")
+	..presetTooltipNormalExtended((int levle) -> "Click to enable easy mode.\nIn Easy mode escapers don't instantly die when they normally would but instead receive damage and knockback.")
+	..presetIcon("BTNSacrifice.blp")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("W")
 
-	if compiletime
-		new ChannelAbilityPreset(EASY_ENABLE, 1, true)
-		..setName("Enable Easy Mode")
-		..presetTooltipNormal((int levle) -> "Currently in |cffFF9C29normal |rmode.")
-		..presetTooltipNormalExtended((int levle) -> "Click to enable easy mode.\nIn Easy mode escapers don't instantly die when they normally would but instead receive damage and knockback.")
-		..presetIcon("BTNSacrifice.blp")
-		..presetButtonPosNormal(1, 0)
-		..presetHotkey("W")
-
-		new ChannelAbilityPreset(EASY_DISABLE, 1, true)
-		..setName("Disable Easy Mode")
-		..presetTooltipNormal((int levle) -> "Currently in |cff0884BDeasy |rmode.")
-		..presetTooltipNormalExtended((int levle) -> "Click to disable easy mode.\nEscapers will die normally again.")
-		..presetIcon("BTNShockWave.blp")
-		..presetButtonPosNormal(1, 0)
-		..presetHotkey("W")
+	new ChannelAbilityPreset(EASY_DISABLE, 1, true)
+	..setName("Disable Easy Mode")
+	..presetTooltipNormal((int levle) -> "Currently in |cff0884BDeasy |rmode.")
+	..presetTooltipNormalExtended((int levle) -> "Click to disable easy mode.\nEscapers will die normally again.")
+	..presetIcon("BTNShockWave.blp")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("W")
