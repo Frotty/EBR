@@ -1,3 +1,7 @@
+[0.89y]
+[*] added configuration options to smode command
+
+
 [0.89x]
 [*] more fixes and improvements to save/load (1.26 patch compatability)
 [*] fix not being able to activate executer in terrain mode

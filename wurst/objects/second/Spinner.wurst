@@ -3,15 +3,15 @@ import SetupObject
 import Preloader
 import Obstacle
 
-constant int SPINNER_ID      = 'h01M'
-constant int SPELL_ID        = 'A01B'
-constant int SPELL2_ID       = 'A04M'
-constant int INC_ID          = 'A01F'
-constant int DEC_ID          = 'A01G'	
-constant int CINC_ID          = 'A06K'
-constant int CDEC_ID          = 'A06L'	
-constant int SINC_ID          = 'A06M'
-constant int SDEC_ID          = 'A06N'	
+constant SPINNER_ID      = 'h01M'
+constant SPELL_ID        = 'A01B'
+constant SPELL2_ID       = 'A04M'
+constant INC_ID          = 'A01F'
+constant DEC_ID          = 'A01G'	
+constant CINC_ID          = 'A06K'
+constant CDEC_ID          = 'A06L'	
+constant SINC_ID          = 'A06M'
+constant SDEC_ID          = 'A06N'	
 
 class SpinNode
 	SpinNode next = null
@@ -42,26 +42,29 @@ public class Spinner extends SetupObject
 	construct(unit existing)
 		super(getUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0), this), existing, 0)
 		sleeps = false
+		setup.addAbility(turnOff)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, SPINNER_ID, pos, angle(0), this), getUnit(owner, SPINNER_ID, pos, angle(0), this), 0)
 		sleeps = false
+		setup.addAbility(turnOff)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
 		super.update()
-		let speed = spinSpeed.get()
-		var node = firstNode
-		while node != null
-			if not node.obj.done and node.obj.actor != null
-				node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
-				node.angl += speed
-			else
-				destroy node
-				if node == firstNode
-					firstNode = node.next
-			node = node.next
+		if enabled
+			let speed = spinSpeed.get()
+			var node = firstNode
+			while node != null
+				if not node.obj.done and node.obj.actor != null
+					node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
+					node.angl += speed
+				else
+					destroy node
+					if node == firstNode
+						firstNode = node.next
+				node = node.next
 			
 	function checkObj(Entity e)
 		if e instanceof SetupObject and not e instanceof Obstacle
@@ -95,6 +98,10 @@ public class Spinner extends SetupObject
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
+			case turnOn
+				setEnabled(true)
+			case turnOff
+				setEnabled(false)
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo UnitEntity
@@ -123,6 +130,8 @@ public class Spinner extends SetupObject
 				sinFactor.increment(this, 1)
 			case SDEC_ID
 				sinFactor.decrement(this, 0)
+			
+			
 
 	override function serialize() returns Json
 		let json = super.serialize()

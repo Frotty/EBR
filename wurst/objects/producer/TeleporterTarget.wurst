@@ -13,3 +13,5 @@ public class TeleporterTarget extends SetupObject
 		json
 		..addProperty(new Property(KEY_TYPE, TP_TARGET_INDEX.toString()))
 		return json
+
+	override function setEnabled(boolean b)

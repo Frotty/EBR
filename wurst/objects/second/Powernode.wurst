@@ -63,7 +63,7 @@ public class Powernode extends SetupObject
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, NODE_ID, pos, angle(0), this), getUnit(owner, NODE_ID, pos, angle(0), this), 0.)
 		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
-		..addAbility(INCREASE_BOUNCE_ID).addAbility(DECREASE_BOUNCE_ID)
+		..addAbility(INCREASE_BOUNCE_ID)..addAbility(DECREASE_BOUNCE_ID)..addAbility(turnOff)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -109,6 +109,14 @@ public class Powernode extends SetupObject
 									calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
 								case LinkType.ORBTETHER
 									
+			l = l.next
+
+	override function setEnabled(boolean b)
+		super.setEnabled(b)
+		let v = b.toInt().toReal()
+		var l = firstLink
+		while l != null
+			SetLightningColor(l.sfx, v, v, v, v)
 			l = l.next
 			
 				
@@ -197,6 +205,10 @@ public class Powernode extends SetupObject
 				if link.target != this
 					link.target.bounciness.setVal(node.bounciness.get())
 				link = link.next
+		else if id == turnOn
+			setEnabled(true)
+		else if id == turnOff
+			setEnabled(false)
 
 	override function serialize() returns Json
 		let json = super.serialize()
