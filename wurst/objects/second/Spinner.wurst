@@ -53,18 +53,18 @@ public class Spinner extends SetupObject
 		
 	override function update()
 		super.update()
-		if enabled
-			let speed = spinSpeed.get()
-			var node = firstNode
-			while node != null
-				if not node.obj.done and node.obj.actor != null
-					node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
+		let speed = spinSpeed.get()
+		var node = firstNode
+		while node != null
+			if not node.obj.done and node.obj.actor != null
+				node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
+				if enabled
 					node.angl += speed
-				else
-					destroy node
-					if node == firstNode
-						firstNode = node.next
-				node = node.next
+			else
+				destroy node
+				if node == firstNode
+					firstNode = node.next
+			node = node.next
 			
 	function checkObj(Entity e)
 		if e instanceof SetupObject and not e instanceof Obstacle

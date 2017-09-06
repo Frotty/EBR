@@ -1,5 +1,8 @@
-[0.89y]
+[0.89z]
 [*] added configuration options to smode command
+[*] added turnOn/Off functionality to spinner and powernode
+[*] fixed duplicate executer procs
+[*] 
 
 
 [0.89x]
