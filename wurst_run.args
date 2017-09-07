@@ -3,3 +3,4 @@
 opt
 inline
 -uncheckedDispatch
+-stacktraces

@@ -3,7 +3,6 @@ import Escaper
 import ChannelAbilityPreset
 import Fx
 
-constant VORTEX_ID 		= 'n013'
 constant INC_GRAV_ID 	= 'A04J'
 constant DEC_GRAV_ID 	= 'A04K'
 
@@ -94,7 +93,7 @@ public class Vortex extends UnitEntity
 	ondestroy
 		vortexFx.hiddenDestroy()
 
-@objectgen function genAbils()
+@objectgen function genVortex()
 	new ChannelAbilityPreset(ZMODE_NONE, 1, true)
 	..setName("Set no Z Mode")
 	..presetTooltipNormal((int levle) -> "Set to |cffFF9C29normal |rmode.")
@@ -142,3 +141,29 @@ public class Vortex extends UnitEntity
 	..presetIcon("BTN5x5inactive.blp")
 	..presetButtonPosNormal(2, 0)
 	..presetHotkey("E")
+
+	new BuildingDefinition(VORTEX_ID, 'ncop')
+	..setName("|cff636363Vortex ")
+	..setHotkey("W")
+	..setTooltipBasic("Build |cff636363Vortex [W]")
+	..setTooltipExtended("Build a vortex that attracts escapers to it's center.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNStun.blp")
+	..setNormalAbilities(int2fourchar('A04K') + "," +
+	int2fourchar('A04J') + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setModelFile("models\\tcBox.mdl")
+	..setTintingColorBlue(225)
+	..setTintingColorGreen(25)
+	..setTintingColorRed(205)
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setButtonPositionX(1)
+	..setButtonPositionY(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(1)        
+	..setScalingValue(0.55)
+	..setSelectionScale(1)
+	..setUnitClassification("ancient,standon")

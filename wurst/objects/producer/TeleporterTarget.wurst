@@ -1,12 +1,13 @@
 package TeleporterTarget
 import SetupObject
-constant int ID = 'u00B'
+import ChannelAbilityPreset
 
+public constant TELEPORTER_TARGET_ID = 'wisp'
 
 public class TeleporterTarget extends SetupObject
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, ID, pos, angle(0), this), getUnit(owner, ID, pos, angle(0), this), 0.)
+		super(getUnit(owner, TELEPORTER_TARGET_ID, pos, angle(0), this), getUnit(owner, TELEPORTER_TARGET_ID, pos, angle(0), this), 0.)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -15,3 +16,39 @@ public class TeleporterTarget extends SetupObject
 		return json
 
 	override function setEnabled(boolean b)
+
+@objectgen function genTarget()
+	new UnitDefinition(TELEPORTER_TARGET_ID, 'ushd')
+	..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWisp.blp")
+	..setModelFile("units\\nightelf\\Wisp\\Wisp.mdl")
+	..setSelectionScale(1.5)
+	..setTintingColorRed(0)
+	..setTintingColorGreen(0)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setMovementHeight(0)
+	..setTurnRate(999)
+	..setMovementType(MovementType.Fly)
+	..setNormalAbilities(int2fourchar('A031') + "," +
+	int2fourchar('A01F') + "," +
+	int2fourchar('A01G') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("Y")
+	..setName("|cff0894E6Teleporter Target")
+	..setTooltipBasic("|cffFFCC00Train |cff0894E6Teleporter Target [Y]")
+	..setTooltipExtended("Spawns a Teleportertarget at|cffFFCC00 Rallypoint|r.|nSet the Rallypoint of a " +
+	"Teleporter to this unit to get a moving Target.|n|n|cff5ABD4ADoes not kill Escapers")
+	..setUpgradesUsed("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)
+

@@ -1,7 +1,8 @@
 package Tome
 import ItemObject
+import ChannelAbilityPreset
 
-constant TOME_DUMMY_ID = 'h00R'
+public constant TOME_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 
 public class Tome extends ItemObject
 	
@@ -16,3 +17,33 @@ public class Tome extends ItemObject
 	override function onDrop(Escaper e)
 		
 	
+@objectgen function genTome()
+    new UnitDefinition(TOME_DUMMY_ID, 'hfoo')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("structure")
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setScalingValue(0.35)
+    ..setShadowImageUnit("")
+    ..setShadowImageCenterX(0)
+    ..setShadowImageCenterY(0)
+    ..setShadowImageWidth(0)
+    ..setShadowImageHeight(0)
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTomeRed.blp")
+    ..setModelFile("models\\tcBox.mdl")
+    ..setSelectionScale(0.4)
+    ..setSpeedBase(0)
+    ..setTurnRate(0)
+    ..setMovementType(MovementType.None)
+    ..setUnitSoundSet("")
+    ..setCollisionSize(0)
+    ..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+    ..setName("Tome Dummy")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setUnitClassification("mechanical")
+    ..setHitPointsMaximumBase(100000000)
+    ..setIsaBuilding(true)

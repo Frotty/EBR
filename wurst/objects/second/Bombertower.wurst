@@ -3,7 +3,6 @@ import BaseObject
 import Attackspeed
 import ClosureTimers
 
-constant int 	BOMBERTOWER_ID   = 'h019'
 constant int	ATTACK_ORDER = 851983
 constant int	ATTACK_GROUND_ORDER = 851984
 constant int	STOP_ORDER = 851972
@@ -13,9 +12,9 @@ public class Bombertower extends StaticBaseObject
 	boolean skipOrder = false
 
 	construct( vec2 pos, player owner )
-		super( pos, getUnit(owner, BOMBERTOWER_ID, pos, angle(0), this), 0., CODE_NULL, CODE_NULL )
+		super( pos, getUnit(owner, BOMB_TOWER_ID, pos, angle(0), this), 0., CODE_NULL, CODE_NULL )
 		actor..addAbility(GHOST_VIS_ID)..addAbility(LOCUST_ID)
-		dummy = getUnit(owner, BOMBERTOWER_ID, pos, angle(0), this)
+		dummy = getUnit(owner, BOMB_TOWER_ID, pos, angle(0), this)
 		dummy..addAbility(GHOST_INVIS_ID)..setEntity(this)..setScale(0.5)
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> checkOrder())
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> checkOrder())
@@ -64,4 +63,45 @@ public class Bombertower extends StaticBaseObject
 					IssueImmediateOrderById(obj.actor, STOP_ORDER)
 			
 			
-		
+@objectgen function genBombTower()
+	new BuildingDefinition(BOMB_TOWER_ID, 'hctw')
+	..setName("|cff5A3108Bomb Tower")
+	..setHotkey("W")
+	..setTooltipBasic("|cffFFCC00Build |cff5A3108Bomb Tower [W]")
+	..setTooltipExtended("Can only attack \"Bomb Tower attack target\"" +
+	"\nAttackspeed can be modified.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp")
+	..setNormalAbilities(int2fourchar('A043') + "," +
+	int2fourchar('A044') + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setAttack1DamageBase(1000)
+	..setAttack1CooldownTime(0.2)
+	..setAttack1Range(3500)
+	..setAttack1TargetsAllowed("air")
+	..setAttack1AreaofEffectFullDamage(92)
+	..setAttack1AreaofEffectMediumDamage(0)
+	..setAttack1AreaofEffectSmallDamage(0)
+	..setAttack1AreaofEffectTargets("air,alive,allies,debris,enemies,friend,ground,hero,notself,vulnerable")
+	..setAttack1DamageFactorMedium(0)
+	..setAttack1DamageFactorSmall(0)
+	..setAttack1DamageSidesperDie(1)
+	..setAttacksEnabled(1)
+	..setAcquisitionRange(3500)
+	..setDefenseBase(0)
+	..setDefenseUpgradeBonus(0)
+	..setButtonPositionX(1)
+	..setButtonPositionY(0)
+	..setGroundTexture("")
+	..setPlacementRequires("")
+	..setCollisionSize(0)
+	..setRequirements("")
+	..setUpgradesUsed("")
+	..setBuildTime(2)
+	..setHitPointsMaximumBase(1000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setLumberCost(0)
+	..setGoldCost(0)
+	..setUnitClassification("ancient,standon")

@@ -2,8 +2,9 @@ package Weapon
 import ItemObject
 import ClosureTimers
 import public WeaponTypes
+import ChannelAbilityPreset
 
-constant WEAPON_DUMMY = 'h00K'
+public constant WEAPON_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 public constant ATTACK_MELEE = 'A07G'
 public constant ATTACK_RANGED = 'A07H'
 
@@ -12,7 +13,7 @@ public class WeaponObject extends ItemObject
 	int weaponId = 0
 
 	construct(vec2 pos, player owner)
-		super(pos, createItem(weapontypes[weaponId].itemId, pos), createUnit(owner, WEAPON_DUMMY, pos, angle(0)))
+		super(pos, createItem(weapontypes[weaponId].itemId, pos), createUnit(owner, WEAPON_DUMMY_ID, pos, angle(0)))
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function onPickup(Escaper e)
@@ -84,4 +85,35 @@ public class WeaponObject extends ItemObject
 		
 	// 	ENUM_GROUP.clear()
 		
-	
+
+@objectgen function genWeapon()
+	new UnitDefinition(WEAPON_DUMMY_ID, 'hfoo')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("structure")
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setScalingValue(0.35)
+    ..setShadowImageUnit("")
+    ..setShadowImageCenterX(0)
+    ..setShadowImageCenterY(0)
+    ..setShadowImageWidth(0)
+    ..setShadowImageHeight(0)
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNSteelMelee.blp")
+    ..setModelFile("war3mapImported\\sd.mdl")
+    ..setSelectionScale(0.4)
+    ..setSpeedBase(0)
+    ..setTurnRate(0)
+    ..setMovementType(MovementType.None)
+    ..setUnitSoundSet("")
+    ..setCollisionSize(0)
+    ..setNormalAbilities(int2fourchar('A080') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+    ..setName("Coin Dummy")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setUnitClassification("mechanical")
+    ..setHitPointsMaximumBase(100000000)
+    ..setIsaBuilding(true)

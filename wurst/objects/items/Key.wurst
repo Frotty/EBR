@@ -2,8 +2,11 @@ package Key
 import ItemObject
 import ClosureTimers
 import Fx
+import ChannelAbilityPreset
+
 public int array keyIds
 
+public constant KEY_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 constant int DYN_ID = 'A00M'
 constant int STATIC_ID = 'A01O'
 constant KEY_COLOR = "c"
@@ -17,7 +20,7 @@ public class Key extends ItemObject
 	Fx fx
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
+		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0 ) )
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function recolor()
@@ -130,4 +133,36 @@ public class Key extends ItemObject
 	keyIds[7] = 'I00B'
 	keyIds[8] = 'I006'
 	
-	
+
+@objectgen public function genKey()
+	new UnitDefinition(KEY_DUMMY_ID, 'hfoo')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("structure")
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setScalingValue(0.55)
+    ..setShadowImageUnit("")
+    ..setShadowImageCenterX(0)
+    ..setShadowImageCenterY(0)
+    ..setShadowImageWidth(0)
+    ..setShadowImageHeight(0)
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNGhostKey.blp")
+    ..setModelFile("models\\tcBox.mdl")
+    ..setSelectionScale(0.55)
+    ..setSpeedBase(0)
+    ..setTurnRate(0)
+    ..setMovementType(MovementType.None)
+    ..setUnitSoundSet("")
+    ..setCollisionSize(0)
+    ..setNormalAbilities(int2fourchar('A00M') + "," +
+    int2fourchar('A05R') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+    ..setName("Key Dummy")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setUnitClassification("mechanical")
+    ..setHitPointsMaximumBase(100000000)
+    ..setIsaBuilding(true)

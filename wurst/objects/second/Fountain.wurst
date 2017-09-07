@@ -1,10 +1,7 @@
 package Fountain
 import SetupObject
 import Escaper
-
-constant 	FOUNTAIN_BOTH_ID   = 'h00H'
-constant 	FOUNTAIN_HEAL_ID   = 'h00I'
-constant  	FOUNTAIN_CURE_ID   = 'h00J'
+import ChannelAbilityPreset
 
 constant BOTH_ID = 'A077'
 constant HEAL_ID = 'A078'
@@ -54,3 +51,114 @@ public class Fountain extends StaticSetupObject
 		let json = super.serialize()
 		json.addProperty(new Property(KEY_TYPE, FOUNTAIN_INDEX.toString()))
 		return json
+
+
+@objectgen function genFountain()
+	new BuildingDefinition(FOUNTAIN_BOTH_ID, 'hctw')
+	..setName("|cff2994EFFountain")
+	..setHotkey("R")
+	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [R]")
+	..setTooltipExtended("Heals nearby Escapers." +
+	"\nAlso cures infections.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
+	..setNormalAbilities(int2fourchar('A077') + "," +
+	int2fourchar('A00H') + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setAttacksEnabled(0)
+	..setScalingValue(0.4)
+	..setAcquisitionRange(3500)
+	..setDefenseBase(0)
+	..setDefenseUpgradeBonus(0)
+	..setButtonPositionX(3)
+	..setButtonPositionY(0)
+	..setGroundTexture("")
+	..setShadowTextureBuilding("ShadowTrollBurrow")
+	..setModelFile("buildings\\other\\FountainOfLife\\FountainOfHealth.mdl")
+	..setUnitSoundSet("FountainOfLife")
+	..setSelectionScale(2)
+	..setPlacementRequires("")
+	..setCollisionSize(0)
+	..setRequirements("")
+	..setUpgradesUsed("")
+	..setBuildTime(2)
+	..setHitPointsMaximumBase(1000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setLumberCost(0)
+	..setGoldCost(0)
+	..setUnitClassification("ancient,standon")
+
+	new BuildingDefinition(FOUNTAIN_HEAL_ID, 'hctw')
+	..setName("|cff2994EFFountain")
+	..setHotkey("R")
+	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [R]")
+	..setTooltipExtended("Heals nearby Escapers." +
+	"\nAlso cures infections.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLifeBlood.blp")
+	..setNormalAbilities(int2fourchar('A078') + "," +
+	int2fourchar('A00H') + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setAttacksEnabled(0)
+	..setScalingValue(0.4)
+	..setAcquisitionRange(3500)
+	..setDefenseBase(0)
+	..setDefenseUpgradeBonus(0)
+	..setButtonPositionX(3)
+	..setButtonPositionY(0)
+	..setGroundTexture("")
+	..setShadowTextureBuilding("ShadowTrollBurrow")
+	..setModelFile("buildings\\other\\FountainOfLife\\FountainOfLifeBlood.mdl")
+	..setUnitSoundSet("FountainOfLife")
+	..setSelectionScale(2)
+	..setPlacementRequires("")
+	..setCollisionSize(0)
+	..setRequirements("")
+	..setUpgradesUsed("")
+	..setBuildTime(2)
+	..setHitPointsMaximumBase(1000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setLumberCost(0)
+	..setGoldCost(0)
+	..setUnitClassification("ancient,standon")
+
+	new BuildingDefinition(FOUNTAIN_CURE_ID, 'hctw')
+	..setName("|cff2994EFFountain")
+	..setHotkey("R")
+	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [R]")
+	..setTooltipExtended("Heals nearby Escapers." +
+	"\nAlso cures infections.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
+	..setNormalAbilities(int2fourchar('A079') + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setAttacksEnabled(0)
+	..setScalingValue(0.4)
+	..setAcquisitionRange(3500)
+	..setDefenseBase(0)
+	..setDefenseUpgradeBonus(0)
+	..setButtonPositionX(3)
+	..setButtonPositionY(0)
+	..setGroundTexture("")
+	..setTintingColorRed(150)
+	..setTintingColorBlue(150)
+	..setShadowTextureBuilding("ShadowTrollBurrow")
+	..setModelFile("buildings\\other\\FountainOfLife\\FountainOfMana.mdl")
+	..setUnitSoundSet("FountainOfLife")
+	..setSelectionScale(2)
+	..setPlacementRequires("")
+	..setCollisionSize(0)
+	..setRequirements("")
+	..setUpgradesUsed("")
+	..setBuildTime(2)
+	..setHitPointsMaximumBase(1000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setLumberCost(0)
+	..setGoldCost(0)
+	..setUnitClassification("ancient,standon")

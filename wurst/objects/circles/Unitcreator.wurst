@@ -3,10 +3,13 @@ import BaseObject
 import EscaperKillers
 import Pointer
 import Knockbacker
-import ChannelAbilityPreset
 import HashMap
 import Preloader
 
+
+constant INFO_UNIT_CREATOR_ID = compiletime(ABIL_ID_GEN.next())
+constant INCREASE_INTERVAL_ID = compiletime(ABIL_ID_GEN.next())
+constant DECREASE_INTERVAL_ID = compiletime(ABIL_ID_GEN.next())
 constant FIXED_ID = compiletime(ABIL_ID_GEN.next())
 constant RANDOM_ID = compiletime(ABIL_ID_GEN.next())
 
@@ -25,7 +28,7 @@ public class UnitCreator extends StaticBaseObject
 		setEnabled(false)
 
 	construct( vec2 pos, player owner)
-		super( pos, getUnit(owner, unitCreator, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
+		super( pos, getUnit(owner, UNIT_CREATOR_ID, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
 		actor.addAbility(FIXED_ID)
 		setEnabled(false)
 	
@@ -49,17 +52,17 @@ public class UnitCreator extends StaticBaseObject
 				ek = new BigKiller(cpos, obj.owner, obj.getRallyAngle())
 			case 'SMAL'
 				ek = new SmallKiller(cpos, obj.owner, obj.getRallyAngle())
-			case 'u00A'
+			case GLAIVE_KILLER_ID
 				ek = new GlaiveKiller(cpos, obj.owner, obj.getRallyAngle())
-			case 'h001'
+			case TANK_KILLER_ID
 				ek = new TankKiller(cpos, obj.owner, obj.getRallyAngle())
-			case 'u008'
+			case BIG_RANDOM_KILLER_ID
 				ek = new BigRandomKiller(cpos, obj.owner, obj.getRallyAngle())
-			case 'u006'
+			case SMALL_RANDOM_KILLER_ID
 				ek = new SmallRandomKiller(cpos, obj.owner, obj.getRallyAngle())
-			case 'h01Q'
+			case POINTER_ID
 				ek = new Pointer(cpos, obj.owner, obj.getRallyAngle())
-			case KNOCKER_ID
+			case KNOCKBACKER_ID
 				ek = new Knockbacker(cpos, obj.owner, obj.getRallyAngle())
 		ek.setup.issuePointOrder("move", rPos)
 		
@@ -67,13 +70,13 @@ public class UnitCreator extends StaticBaseObject
 		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id 
-			case INCREASE_INTERVAL_ABIL
+			case INCREASE_INTERVAL_ID
 				if interval >= 15
 					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					interval += 0.25
 					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
-			case DECREASE_INTERVAL_ABIL
+			case DECREASE_INTERVAL_ID
 				if interval < 0.75
 					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
 				else
@@ -85,17 +88,17 @@ public class UnitCreator extends StaticBaseObject
 			case 'A046' // Small killer
 				spawnUnitType = 'SMAL'
 			case 'A048' // Big Random killer
-				spawnUnitType = 'u008'
+				spawnUnitType = BIG_RANDOM_KILLER_ID
 			case 'A04D' // Pointer
-				spawnUnitType = 'h01Q'
+				spawnUnitType = POINTER_ID
 			case 'A04W' // Glaive
-				spawnUnitType = 'u00A'
+				spawnUnitType = GLAIVE_KILLER_ID
 			case 'A04C' // Tank
-				spawnUnitType = 'h001'
+				spawnUnitType = TANK_KILLER_ID
 			case 'A04B' // Chicken
-				spawnUnitType = 'u006'
+				spawnUnitType = SMALL_RANDOM_KILLER_ID
 			case 'A07R'
-				spawnUnitType = KNOCKER_ID
+				spawnUnitType = KNOCKBACKER_ID
 			case FIXED_ID
 				actor..removeAbility(FIXED_ID)..addAbility(RANDOM_ID)
 				tmode = TimerMode.RANDOM
@@ -108,8 +111,6 @@ public class UnitCreator extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
 		return json
 	
-int INCREASE_INTERVAL_ABIL = 'A01P'
-int DECREASE_INTERVAL_ABIL = 'A01R'
 HashMap<int, int> SPAWN_TYPE_ABIL = new HashMap<int, int>()
 
 init
@@ -121,16 +122,46 @@ init
 	preloadAbility('A04C')
 	preloadAbility('A04B')
 	preloadAbility('A07R')
-	preloadAbility(turnOff)
-	preloadAbility(turnOn)
-	preloadAbility(INCREASE_INTERVAL_ABIL)
-	preloadAbility(DECREASE_INTERVAL_ABIL)
+	preloadAbility(TURN_OFF_ID)
+	preloadAbility(TURN_ON_ID)
+	preloadAbility(INCREASE_INTERVAL_ID)
+	preloadAbility(DECREASE_INTERVAL_ID)
 	preloadAbility(FIXED_ID)
 	preloadAbility(RANDOM_ID)
 
-@objectgen function genAbils()
-	let inc_spell = new ChannelAbilityPreset(FIXED_ID, 1, true)
-	inc_spell..presetManaCost((int lvl) -> 0)
+
+@objectgen function genUnitCreator()
+	new ChannelAbilityPreset(INFO_UNIT_CREATOR_ID, 1, TRUE)
+	..setName("Information: Unit Creator")
+	..presetTooltipNormal((int lvl) -> "|cff7B94E6Information: |rUnit Creator")
+	..presetTooltipNormalExtended((int lvl) -> "If you activcate the creator (Play Button) units of the selected type will be created periodically and walk to the rallypoint.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(DECREASE_INTERVAL_ID, 1, TRUE)
+	..setName("UC: Decrease Interval")
+	..presetTooltipNormal((int lvl) -> "|cffFF8421Decrease|r the Spawninterval by 0.25 [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended((int lvl) -> "(more units)")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetButtonPosNormal(1, 2)
+	..presetHotkey("X")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INCREASE_INTERVAL_ID, 1, TRUE)
+	..setName("UC: Increase Interval")
+	..presetTooltipNormal((int lvl) -> "|cff3ABD52Increase|r the Spawninterval by 0.25 [|cffFFCC00C|r]")
+	..presetTooltipNormalExtended((int lvl) -> "(less units)")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetButtonPosNormal(2, 2)
+	..presetHotkey("C")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+		
+	new ChannelAbilityPreset(FIXED_ID, 1, true)
+	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
 	..presetCooldown((int lvl) -> 0)
 	..setName("Fixed Timer")
@@ -141,8 +172,8 @@ init
 	+ "|nClick to change to random mode.")
 	..presetButtonPosNormal(1, 1)
 	
-	let dec_spell = new ChannelAbilityPreset(RANDOM_ID, 1, true)
-	dec_spell..presetManaCost((int lvl) -> 0)
+	new ChannelAbilityPreset(RANDOM_ID, 1, true)
+	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
 	..presetCooldown((int lvl) -> 0)
 	..setName("Random Timer")
@@ -152,3 +183,32 @@ init
 	..presetTooltipNormalExtended((int lvl) -> "Chooses a random interval between all monsters spawned. The configured interval is the highest possible interval."
 	+ "|nClick to change to fixed mode.")
 	..presetButtonPosNormal(1, 1)
+
+	new BuildingDefinition(UNIT_CREATOR_ID, 'ncop')
+	..setName("|cff4A943AUnitcreator")
+	..setHotkey("W")
+	..setTooltipBasic("|cffFFCC00Build |cff4A943AUnitcreator [W]")
+	..setTooltipExtended("Periodically creates a unit of the selected type." +
+	"\nThe created unit walks to the rallypoint.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Creator.blp")
+	..setNormalAbilities(int2fourchar(INFO_UNIT_CREATOR_ID) + "," +
+	int2fourchar(DECREASE_INTERVAL_ID) + "," +
+	int2fourchar(INCREASE_INTERVAL_ID) + "," +
+	int2fourchar('A042') + "," +
+	int2fourchar(TURN_ON_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(RALLY_POINT) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(1)
+	..setButtonPositionY(0)
+	..setTintingColorRed(0)
+	..setTintingColorGreen(100)
+	..setTintingColorBlue(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)       
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")

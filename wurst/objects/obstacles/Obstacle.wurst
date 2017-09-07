@@ -1,21 +1,21 @@
 package Obstacle
 import EscaperKillers
+import ChannelAbilityPreset
 
 constant EVENT_RADIUS_SMALL	= 32.
 constant EVENT_RADIUS_BIG	= 64.
 constant EVENT_RADIUS_HIGH	= 52.
 constant EVENT_HEIGHT_HIGH	= 256.
 constant EVENT_RADIUS_V	= 256.
-constant VOLCANO_ID = 'n00K'
 
 public class Obstacle extends EscaperSensorSetup
 	construct(unit existing, real radius, real height  )
 		super(existing, radius, height)
-		setup..addAbility(removeObject)..addAbility(GHOST_INVIS_ID)
+		setup..addAbility(REMOVE_OBJECT_ID)..addAbility(GHOST_INVIS_ID)
 
 	construct(vec2 pos, player owner, int id, real radius, real height )
 		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, height)
-		setup..addAbility(removeObject)..addAbility(GHOST_INVIS_ID)
+		setup..addAbility(REMOVE_OBJECT_ID)..addAbility(GHOST_INVIS_ID)
 
 public class HighObstacle extends Obstacle
 	
@@ -66,3 +66,24 @@ public class VolcanoObstacle extends Obstacle
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, VOLCANO_INDEX.toString()))
 		return json
+
+
+@objectgen function genObst()
+	new BuildingDefinition(VOLCANO_ID, 'ncop')  
+	..setName("|cFF00FF00Volcano|r ")
+	..setHotkey("F")
+	..setTooltipBasic("Build |cffCE4219Volcano |r[|cffFFCC00F|r]")
+	..setTooltipExtended("A very big|cffFFCC00 firey |robstacle.|n|n|cffFF0000Kills Escapers")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNVolcano.blp")
+	..setModelFile("Abilities\\Spells\\Other\\Volcano\\Volcano.mdl")
+	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setSelectionScale(7)
+	..setMovementHeight(-15)
+	..setPathingMap("PathTextures\\16x16Simple.tga")
+	..setButtonPositionX(3)
+	..setButtonPositionY(1)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(190)

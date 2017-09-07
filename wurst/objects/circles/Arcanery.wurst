@@ -3,7 +3,6 @@ import BaseObject
 import Escaper
 import Assets
 import InstantDummyCaster
-import ChannelAbilityPreset
 import Fx
 import PresetBuffs
 
@@ -56,7 +55,7 @@ public class Arcanery extends StaticBaseObject
 
 
 	construct(vec2 position, player owner)
-		super(position, getUnit(owner, arcanery, position, angle(0), this), 96., function onEnterEv, function is)
+		super(position, getUnit(owner, ARCANERY_ID, position, angle(0), this), 96., function onEnterEv, function is)
 		clearQuestionmark()
 		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
 		recreateEffect()
@@ -103,7 +102,7 @@ public class Arcanery extends StaticBaseObject
 		return json
 
 
-@objectgen function genAbils()
+@objectgen function genArcanery()
 	new AbilityDefinitionFirelordSoulBurn(SILENCE_ID)
 	..setLevels(1)
 	..setManaCost(1, 0)
@@ -117,3 +116,25 @@ public class Arcanery extends StaticBaseObject
 	..setDurationNormal(1, 99999)
 	..setHeroAbility(false)
 	..setDamageAmount(1, 0)
+
+	new BuildingDefinition(ARCANERY_ID, 'ncop')
+	..setName("|cffFF0202Arcanery")
+	..setHotkey("E")
+	..setTooltipBasic("|cffFFCC00Build |cffFFFF08Arcanery |r[|cffFFCC00E|r]")
+	..setTooltipExtended("Grants or silences spells for the escapers.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNarcanery.blp")
+	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(2)
+	..setButtonPositionY(0)
+	..setTintingColorRed(225)
+	..setTintingColorGreen(25)
+	..setTintingColorBlue(25)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")

@@ -16,7 +16,6 @@ constant EFFECT_TETHER_BOTH_STRING = "LBOT"
 constant EFFECT_TETHER_AIR_STRING = "BAIR"
 constant EFFECT_ORB_STRING = "LORB"
 constant KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
-constant NODE_ID = 'h0nn'
 constant ACTIVATION_DIST = 22.
 public constant INCREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
 public constant DECREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
@@ -64,9 +63,9 @@ public class Powernode extends SetupObject
 	protected Link firstLink = null
 
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, NODE_ID, pos, angle(0), this), getUnit(owner, NODE_ID, pos, angle(0), this), 0.)
+		super(getUnit(owner, POWER_NODE_ID, pos, angle(0), this), getUnit(owner, POWER_NODE_ID, pos, angle(0), this), 0.)
 		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
-		..addAbility(INCREASE_BOUNCE_ID)..addAbility(DECREASE_BOUNCE_ID)..addAbility(turnOff)
+		..addAbility(INCREASE_BOUNCE_ID)..addAbility(DECREASE_BOUNCE_ID)..addAbility(TURN_OFF_ID)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -214,9 +213,9 @@ public class Powernode extends SetupObject
 				if link.target != this
 					link.target.bounciness.setVal(node.bounciness.get())
 				link = link.next
-		else if id == turnOn
+		else if id == TURN_ON_ID
 			setEnabled(true)
-		else if id == turnOff
+		else if id == TURN_OFF_ID
 			setEnabled(false)
 
 	override function serialize() returns Json
@@ -224,7 +223,7 @@ public class Powernode extends SetupObject
 		json.addProperty(new Property(KEY_TYPE, POWERNODE_INDEX.toString()))
 		return json
 
-@objectgen function genSpells()
+@objectgen function genPowerNode()
 	let inc_spell = new ChannelAbilityPreset(INCREASE_BOUNCE_ID, 1, true)
 	inc_spell..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -247,6 +246,45 @@ public class Powernode extends SetupObject
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(2, 1)
 
+	new UnitDefinition(POWER_NODE_ID, 'hatw')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("ground")
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNLightningShield.blp")
+	..setButtonPositionX(3)
+	..setButtonPositionY(1)
+	..setModelFile("units\\orc\\WatcherWard\\WatcherWard.mdl")
+	..setTintingColorBlue(200)
+	..setTintingColorGreen(100)
+	..setTintingColorRed(100)
+    ..setSelectionScale(0.2)
+	..setSpeedBase(180)
+	..setTurnRate(3)
+    ..setMovementType(MovementType.Foot)
+    ..setUnitSoundSet("")
+    ..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar('A07E') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("F")
+	..setName("|cff9CA5EFPower Node")
+	..setTooltipBasic("|cffFFCC00Build |cff9CA5EFPower Node [F]")
+	..setTooltipExtended("Can be linked to other Powernodes to create an electrical circuit." +
+	"\nThe resulting lightning kills Escapers if they try to pass it.")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setUnitClassification("ancient")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setFoodCost(0)
+	..setGoldCost(0)
+	..setLumberCost(0)
+    ..setIsaBuilding(false)
 	new ChannelAbilityPreset(LINK_AIR_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)

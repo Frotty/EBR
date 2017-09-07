@@ -39,7 +39,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		ttag.tt.center(pos.toVec3(), "|cff4AA542ready", 10)
 		actor..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)
 		..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
-		..addAbility(LOAD3_ID)..addAbility(removeObject)..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
+		..addAbility(LOAD3_ID)..addAbility(REMOVE_OBJECT_ID)..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
 		clearQuestionmark()
 		
 	function addObj(Entity serializable, boolean removeIfExists)

@@ -6,6 +6,25 @@ import Camerashakes
 import TerrainBlocker
 import Jumper
 
+constant DECREASE_DURATION_ID = compiletime(ABIL_ID_GEN.next())
+constant INCREASE_DURATION_ID = compiletime(ABIL_ID_GEN.next())
+constant DECREASE_INTERVAL_ID = compiletime(ABIL_ID_GEN.next())
+constant INCREASE_INTERVAL_ID = compiletime(ABIL_ID_GEN.next())
+constant DECREASE_VALUE_ID = compiletime(ABIL_ID_GEN.next())
+constant INCREASE_VALUE_ID = compiletime(ABIL_ID_GEN.next())
+constant POISON_ID = compiletime(ABIL_ID_GEN.next())
+constant SHAKE_ID = compiletime(ABIL_ID_GEN.next())
+constant SPEED_ID = compiletime(ABIL_ID_GEN.next())
+constant INSTANT_KILL_ID = compiletime(ABIL_ID_GEN.next())
+constant STUN_ID = compiletime(ABIL_ID_GEN.next())
+constant KNOCKBACK_ID = compiletime(ABIL_ID_GEN.next())
+constant KNOCKBACK_PULL_ID = compiletime(ABIL_ID_GEN.next())
+constant KNOCKBACK_PUSH_ID = compiletime(ABIL_ID_GEN.next())
+constant NEXT_EFFECT_ID = compiletime(ABIL_ID_GEN.next())
+constant PREVIOUS_EFFECT_ID = compiletime(ABIL_ID_GEN.next())
+constant START_ID = compiletime(ABIL_ID_GEN.next())
+constant STOP_ID = compiletime(ABIL_ID_GEN.next())
+
 constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
 constant real EVENT_RADIUS = 65.
 constant SPECIAL_ID = 'A07V'
@@ -32,7 +51,7 @@ public class Trap extends StaticBaseObject
 	int goocounter = 0
 	private Goo array[5] goos
 	construct( vec2 pos, player owner )
-		super(pos, getUnit(owner, trap, pos, angle(0), this) , EVENT_RADIUS, function onStep, CODE_NULL)
+		super(pos, getUnit(owner, TRAP_ID, pos, angle(0), this) , EVENT_RADIUS, function onStep, CODE_NULL)
 		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 			
@@ -104,23 +123,23 @@ public class Trap extends StaticBaseObject
 		
 		
 	function addConfiger(boolean dur, boolean val)
-		UnitRemoveAbility(actor,KILL_ABIL)
-		UnitRemoveAbility(actor,STUN_ABIL)
-		UnitRemoveAbility(actor,SHAKE_ABIL)
-		UnitRemoveAbility(actor,SPEED_ABIL)
-		UnitRemoveAbility(actor,KNOCK_ABIL)
-		UnitRemoveAbility(actor,POISON_ABIL)
-		UnitAddAbility(actor,INCREASE_INTERVAL_ABIL)
-		UnitAddAbility(actor,DECREASE_INTERVAL_ABIL)
-		UnitAddAbility(actor,START_ABIL)
-		UnitAddAbility(actor,NEXT_SFX_ABIL)
-		UnitAddAbility(actor,PREV_SFX_ABIL)
+		UnitRemoveAbility(actor,INSTANT_KILL_ID)
+		UnitRemoveAbility(actor,STUN_ID)
+		UnitRemoveAbility(actor,SHAKE_ID)
+		UnitRemoveAbility(actor,SPEED_ID)
+		UnitRemoveAbility(actor,KNOCKBACK_ID)
+		UnitRemoveAbility(actor,POISON_ID)
+		UnitAddAbility(actor,INCREASE_INTERVAL_ID)
+		UnitAddAbility(actor,DECREASE_INTERVAL_ID)
+		UnitAddAbility(actor,START_ID)
+		UnitAddAbility(actor,NEXT_EFFECT_ID)
+		UnitAddAbility(actor,PREVIOUS_EFFECT_ID)
 		if dur
-			UnitAddAbility(actor,INCREASE_DURATION_ABIL)
-			UnitAddAbility(actor,DECREASE_DURATION_ABIL)
+			UnitAddAbility(actor,INCREASE_DURATION_ID)
+			UnitAddAbility(actor,DECREASE_DURATION_ID)
 		if val
-			UnitAddAbility(actor,INCREASE_VALUE_ABIL)
-			UnitAddAbility(actor,DECREASE_VALUE_ABIL)
+			UnitAddAbility(actor,INCREASE_VALUE_ID)
+			UnitAddAbility(actor,DECREASE_VALUE_ID)
 		if noRally != null
 			noRally.destr()
 			noRally = null
@@ -128,7 +147,7 @@ public class Trap extends StaticBaseObject
 	function onCast() returns boolean
 		let spell_id = GetSpellAbilityId()
 		switch spell_id
-			case NEXT_SFX_ABIL
+			case NEXT_EFFECT_ID
 				if sfxid >= SFX_COUNT
 					sfxid = 0
 				else
@@ -137,7 +156,7 @@ public class Trap extends StaticBaseObject
 					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				else
 					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
-			case PREV_SFX_ABIL
+			case PREVIOUS_EFFECT_ID
 				if sfxid <= 0
 					sfxid = SFX_COUNT
 				else
@@ -147,47 +166,47 @@ public class Trap extends StaticBaseObject
 				else
 					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
 			
-			case KILL_ABIL
+			case INSTANT_KILL_ID
 				a = ABIL.KILL
 				addConfiger(false, false)
-			case STUN_ABIL
+			case STUN_ID
 				a = ABIL.STUN
 				duration = 1.
 				addConfiger(true, false)
-			case SPEED_ABIL
+			case SPEED_ID
 				a = ABIL.SPEED
 				value = 120.
 				duration = 1.
 				addConfiger(false, true)
-			case SHAKE_ABIL
+			case SHAKE_ID
 				a = ABIL.SHAKE
 				value = 500
 				duration = 3.
 				addConfiger(true, true)
-			case KNOCK_ABIL
+			case KNOCKBACK_ID
 				a = ABIL.KNOCK
 				value = 10.
 				actor.addAbility('ARal')
-				actor.addAbility(PULL_ID)
+				actor.addAbility(KNOCKBACK_PULL_ID)
 				addConfiger(false, true)
-			case POISON_ABIL
+			case POISON_ID
 				a = ABIL.POISON
 				addConfiger(false, false)
 					
-			case INCREASE_INTERVAL_ABIL
+			case INCREASE_INTERVAL_ID
 				if interval >= 10
 					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					interval += 0.25
 					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
-			case DECREASE_INTERVAL_ABIL
+			case DECREASE_INTERVAL_ID
 				if interval < 0.75
 					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					interval -= 0.25
 					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
 			
-			case INCREASE_VALUE_ABIL
+			case INCREASE_VALUE_ID
 				switch a
 					case ABIL.KNOCK
 						if value >= 200
@@ -214,7 +233,7 @@ public class Trap extends StaticBaseObject
 							actor.addAbility(SPECIAL_ID)
 					default
 						skip
-			case DECREASE_VALUE_ABIL
+			case DECREASE_VALUE_ID
 				switch a
 					case ABIL.KNOCK
 						if value <= 5
@@ -237,7 +256,7 @@ public class Trap extends StaticBaseObject
 					default
 						skip
 			
-			case INCREASE_DURATION_ABIL
+			case INCREASE_DURATION_ID
 				switch a
 					case ABIL.STUN
 						if duration >= 4
@@ -259,7 +278,7 @@ public class Trap extends StaticBaseObject
 							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip	
-			case DECREASE_DURATION_ABIL
+			case DECREASE_DURATION_ID
 				switch a
 					case ABIL.STUN
 						if duration <= 1
@@ -282,23 +301,23 @@ public class Trap extends StaticBaseObject
 					default
 						skip
 			
-			case START_ABIL
+			case START_ID
 				activate()
-				UnitRemoveAbility(actor,START_ABIL)
-				UnitAddAbility(actor,STOP_ABIL)
-			case STOP_ABIL
+				UnitRemoveAbility(actor,START_ID)
+				UnitAddAbility(actor,STOP_ID)
+			case STOP_ID
 				deactivate()
 				timerreal = 0.
-				UnitRemoveAbility(actor,STOP_ABIL)
-				UnitAddAbility(actor,START_ABIL)
-			case PULL_ID
+				UnitRemoveAbility(actor,STOP_ID)
+				UnitAddAbility(actor,START_ID)
+			case KNOCKBACK_PULL_ID
 				pull = true
-				actor.removeAbility(PULL_ID)
-				actor.addAbility(PUSH_ID)
-			case PUSH_ID
+				actor.removeAbility(KNOCKBACK_PULL_ID)
+				actor.addAbility(KNOCKBACK_PUSH_ID)
+			case KNOCKBACK_PUSH_ID
 				pull = false
-				actor.removeAbility(PUSH_ID)
-				actor.addAbility(PULL_ID)
+				actor.removeAbility(KNOCKBACK_PUSH_ID)
+				actor.addAbility(KNOCKBACK_PULL_ID)
 			case SPECIAL_ID
 				if goocounter < 5
 					let x = (GetSpellTargetX()/128).round()
@@ -315,32 +334,9 @@ public class Trap extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, TRAP_INDEX.toString()))
 		return json
 		
-constant int NEXT_SFX_ABIL = 'A06D'
-constant int PREV_SFX_ABIL = 'A06C'
-
-constant int INCREASE_DURATION_ABIL = 'A026'
-constant int DECREASE_DURATION_ABIL = 'A025'
-constant int INCREASE_VALUE_ABIL = 'A023'
-constant int DECREASE_VALUE_ABIL = 'A01S'
-
-constant int KILL_ABIL = 'A06E'
-constant int STUN_ABIL = 'A06G'
-constant int SPEED_ABIL = 'A06I'
-constant int SHAKE_ABIL = 'A033'
-constant int KNOCK_ABIL = 'A06H'
-constant int POISON_ABIL = 'A06F'
-
 constant int STUN_BUFF = 'A06J'
 constant int SPEED_BUFF_NEG = 'A03J'
 constant int SPEED_BUFF_POS = 'A03I'
-
-constant int INCREASE_INTERVAL_ABIL = 'A02O'
-constant int DECREASE_INTERVAL_ABIL = 'A02Q'
-constant int START_ABIL = 'A02T'
-constant int STOP_ABIL = 'A02U'
-
-constant int PULL_ID = 'A074'
-constant int PUSH_ID = 'A075'
 
 constant SFX_COUNT = 9
 
@@ -356,3 +352,228 @@ constant SFX_COUNT = 9
 	SFX_STRINGS[8] = "Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl"
 	SFX_STRINGS[9] = ""
 	
+
+@objectgen function genTrap()
+	new ChannelAbilityPreset(DECREASE_DURATION_ID, 1, TRUE)
+	..setName("Trap: Decrease Duration")
+	..presetTooltipNormal((int lvl) -> "|cffFF5229Decrease |rDuration [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Decreases the duration of the trap effect, in other words: the amount of time it lasts.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNDurationMinus.blp")
+	..presetButtonPosNormal(2, 1)
+	..presetHotkey("D")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INCREASE_DURATION_ID, 1, TRUE)
+	..setName("Trap: Increase Duration")
+	..presetTooltipNormal((int lvl) -> "|cff73C54AIncrease |rDuration [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Increases the duration of the trap effect, in other words: the amount of time it lasts.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNDurationPlus.blp")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("E")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(DECREASE_INTERVAL_ID, 1, TRUE)
+	..setName("Trap: Decrease Interval")
+	..presetTooltipNormal((int lvl) -> "|cffFF5229Decrease |rInterval [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Decreases the traps periodic activation interval." +
+	"|nTo turn the trap periodic, click the Start button.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNIntervalMinus.blp")
+	..presetButtonPosNormal(3, 1)
+	..presetHotkey("F")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INCREASE_INTERVAL_ID, 1, TRUE)
+	..setName("Trap: Increase Interval")
+	..presetTooltipNormal((int lvl) -> "|cff73C54AIncrease |rInterval [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Increases the traps periodic activation interval." + 
+	"|nTo turn the trap periodic, click the Start button.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNIntervalPlus.blp")
+	..presetButtonPosNormal(3, 0)
+	..presetHotkey("R")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(DECREASE_VALUE_ID, 1, TRUE)
+	..setName("Trap: Decrease Value")
+	..presetTooltipNormal((int lvl) -> "|cffFF5229Decrease |rValue [|cffFFCC00S|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Decreases the value of the current trap event." +
+	"\nValue always describes the strength or intensity of an effect, for example:" +
+	"\n-Intensity of Camera Shake" +
+	"\n-Strength of Knockback")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNValueMinus.blp")
+	..presetButtonPosNormal(1, 1)
+	..presetHotkey("S")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INCREASE_VALUE_ID, 1, TRUE)
+	..setName("Trap: Increase Value")
+	..presetTooltipNormal((int lvl) -> "Increases the value of the current trap event." +
+	"\nValue always describes the strength or intensity of an effect, for example:" +
+	"\n-Intensity of Camera Shake" +
+	"\n-Strength of Knockback")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNValuePlus.blp")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("W")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(POISON_ID, 1, TRUE)
+	..setName("Trap: Poison")
+	..presetTooltipNormal((int lvl) -> "Set event to '|cff08C55APoison|r' [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended((int lvl) -> "The entering escaper will be poisoned and can only be cured at a fountain.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNEnvenomedSpear.blp")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("E")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(SHAKE_ID, 1, TRUE)
+	..setName("Trap: Shake")
+	..presetTooltipNormal((int lvl) -> "Set event to '|cff088CD6Shake Camera|r' [|cffFFCC00W|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Shakes the camera of the entering escaper for a given amount and intensity.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNTornado.blp")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("W")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(SPEED_ID, 1, TRUE)
+	..setName("Trap: Speed")
+	..presetTooltipNormal((int lvl) -> "Set event to '|cffBDBDBDSpeed Bonus|r' [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Temporarely adds a movespeed bonus to the entering escaper.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp")
+	..presetButtonPosNormal(3, 0)
+	..presetHotkey("R")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(STUN_ID, 1, TRUE)
+	..setName("Trap: Stun")
+	..presetTooltipNormal((int lvl) -> "Set event to '|cff086B9CStun|r' [|cffFFCC00S|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Stuns the entering escaper for a given duration.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNStun.blp")
+	..presetButtonPosNormal(1, 1)
+	..presetHotkey("S")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(KNOCKBACK_ID, 1, TRUE)
+	..setName("Trap: Knockback")
+	..presetTooltipNormal((int lvl) -> "Set event to '|cffF77B21Knockback|r' [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Knockbacks the entering escaper." +
+	"\nWhen no rallypoint is set, the escaper will be pushed into the same direction he is coming from." +
+	"\nIf the rallypoint is set, he will be pushed to the rallypoints direction.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNShockWave.blp")
+	..presetButtonPosNormal(3, 1)
+	..presetHotkey("F")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(KNOCKBACK_PUSH_ID, 1, TRUE)
+	..setName("Trap: Knockback Push")
+	..presetTooltipNormal((int lvl) -> "Set |cffFFCC00knockback |rto |cffCE6319Push |r[|cffFFCC00E|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Reset the trap to the normal, pushing mode.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNPull.blp")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("F")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(KNOCKBACK_PULL_ID, 1, TRUE)
+	..setName("Trap: Knockback Pull")
+	..presetTooltipNormal((int lvl) -> "Set |cffFFCC00knockback |rto |cffCE6319Pull |r[|cffFFCC00E|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Instead of pushing the escaper when entering the trap without rallypoint, " +
+	"the escaper gets pulled. \nThis makes the trap function like a speed boost.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNPush.blp")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("F")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INSTANT_KILL_ID, 1, TRUE)
+	..setName("Trap: Instant Kill ")
+	..presetTooltipNormal((int lvl) -> "Set event to '|cffBD1910Instant Kill|r' [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Instantly kills the entering escaper.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
+	..presetButtonPosNormal(2, 1)
+	..presetHotkey("D")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(START_ID, 1, TRUE)
+	..setName("Trap: Start")
+	..presetTooltipNormal((int lvl) -> "|cff21A54AStart |rPeriodic Evaluation [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended((int lvl) -> "By starting periodic evaluation, the trap will only affect escapers " +
+	"that are near the circle when the event fires." +
+	"\nWalking into the circle doesn't fire an event anymore.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNstart.blp")
+	..presetButtonPosNormal(1, 2)
+	..presetHotkey("X")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(STOP_ID, 1, TRUE)
+	..setName("Trap: Stop")
+	..presetTooltipNormal((int lvl) -> "|cffC54A10Stop |rPeriodic Evaluation [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended((int lvl) -> "By stupping periodic evaluation, the trap will only affect escapers " +
+	"that walk into the trap. \nThere will be no more periodic event.")
+		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNstop.blp")
+	..presetButtonPosNormal(1, 2)
+	..presetHotkey("X")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(NEXT_EFFECT_ID, 1, TRUE)
+	..setName("Trap: Next Effect")
+	..presetTooltipNormal((int lvl) -> "Set to next special effect [|cffFFCC00Q|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Sets the spawned effect to the next one.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNnextEffect.blp")
+	..presetButtonPosNormal(0, 1)
+	..presetHotkey("Q")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(PREVIOUS_EFFECT_ID, 1, TRUE)
+	..setName("Trap: Previous Effect")
+	..presetTooltipNormal((int lvl) -> "Set to previous special effect [|cffFFCC00A|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Sets the spawned effect to the previous one.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNprevEffect.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetHotkey("A")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+   	new BuildingDefinition(TRAP_ID, 'ncop')
+	..setName("|cffA55A08Trap")
+	..setHotkey("Y")
+	..setTooltipBasic("|cffFFCC00Build |cffA55A08Trap [Y]")
+	..setTooltipExtended("Trap that can perform various actions on an entering Escaper, like poison, stun, knockback and kill." +
+	"\nThe trapeffect can be customized and made invisible.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTrap.blp")
+	..setNormalAbilities(int2fourchar(KNOCKBACK_ID) + "," +
+	int2fourchar(POISON_ID) + "," +
+	int2fourchar(INSTANT_KILL_ID) + "," +
+	int2fourchar(SHAKE_ID) + "," +
+	int2fourchar(SPEED_ID) + "," +
+	int2fourchar(STUN_ID) + "," +
+	int2fourchar(PREVIOUS_EFFECT_ID) + "," +
+	int2fourchar(NEXT_EFFECT_ID) + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setButtonPositionX(0)
+	..setButtonPositionY(2)
+	..setTintingColorRed(96)
+	..setTintingColorGreen(32)
+	..setTintingColorBlue(8)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")

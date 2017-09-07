@@ -2,16 +2,16 @@ package Spinner
 import SetupObject
 import Preloader
 import Obstacle
+import ChannelAbilityPreset
 
-constant SPINNER_ID      = 'h01M'
-constant SPELL_ID        = 'A01B'
-constant SPELL2_ID       = 'A04M'
-constant INC_ID          = 'A01F'
-constant DEC_ID          = 'A01G'	
-constant CINC_ID          = 'A06K'
-constant CDEC_ID          = 'A06L'	
-constant SINC_ID          = 'A06M'
-constant SDEC_ID          = 'A06N'	
+constant int SPELL_ID        = 'A01B'
+constant int SPELL2_ID       = 'A04M'
+constant int INC_ID          = 'A01F'
+constant int DEC_ID          = 'A01G'	
+constant int CINC_ID          = 'A06K'
+constant int CDEC_ID          = 'A06L'	
+constant int SINC_ID          = 'A06M'
+constant int SDEC_ID          = 'A06N'	
 
 class SpinNode
 	SpinNode next = null
@@ -31,7 +31,7 @@ class SpinNode
 		if prev != null
 			prev.next = next
 		if not obj.done and obj.actor != null
-			obj.setup.addAbility(removeObject)
+			obj.setup.addAbility(REMOVE_OBJECT_ID)
 
 public class Spinner extends SetupObject
 	SpinNode firstNode = null
@@ -42,13 +42,13 @@ public class Spinner extends SetupObject
 	construct(unit existing)
 		super(getUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0), this), existing, 0)
 		sleeps = false
-		setup.addAbility(turnOff)
+		setup.addAbility(TURN_OFF_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, SPINNER_ID, pos, angle(0), this), getUnit(owner, SPINNER_ID, pos, angle(0), this), 0)
 		sleeps = false
-		setup.addAbility(turnOff)
+		setup.addAbility(TURN_OFF_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
@@ -79,8 +79,8 @@ public class Spinner extends SetupObject
 					destroy node
 					break
 				node = node.next
-			if isNew and (dobj.setup.hasAbility(removeObject) or dobj.owner == STAFF_PLAYER)
-				dobj.setup.removeAbility(removeObject)
+			if isNew and (dobj.setup.hasAbility(REMOVE_OBJECT_ID) or dobj.owner == STAFF_PLAYER)
+				dobj.setup.removeAbility(REMOVE_OBJECT_ID)
 				let newnode = new SpinNode(dobj, getPos().angleTo2d(dobj.getPos()).radians(), getPos().distanceTo(dobj.getPos()))
 				if firstNode != null
 					firstNode.prev = newnode
@@ -98,9 +98,9 @@ public class Spinner extends SetupObject
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case turnOn
+			case TURN_ON_ID
 				setEnabled(true)
-			case turnOff
+			case TURN_OFF_ID
 				setEnabled(false)
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
@@ -143,4 +143,45 @@ init
 	preloadAbility(SPELL2_ID)
 	preloadAbility(INC_ID)
 	preloadAbility(DEC_ID)
-		
+
+@objectgen function genSpinner()		
+	new UnitDefinition(SPINNER_ID, 'hatw')  
+    ..setAttacksEnabled(0)
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setDeathTimeseconds(0.1)
+	..setScalingValue(0.8)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNspinner.blp")
+	..setButtonPositionX(1)
+	..setButtonPositionY(1)
+	..setModelFile("units\\undead\\Acolyte\\Acolyte.mdl")
+    ..setSelectionScale(1)
+	..setSpeedBase(180)
+	..setTurnRate(3)
+    ..setMovementType(MovementType.Foot)
+    ..setUnitSoundSet("")
+    ..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar('A03H') + "," +
+	int2fourchar('A04M') + "," +
+	int2fourchar('A01B') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("S")
+	..setName("|cff949494Spinner ")
+	..setTooltipBasic("|cffFFCC00Build |cff949494Spinner [S]")
+	..setTooltipExtended("Spins the selected units around itself in a circular motion." +
+	"\nThe spinner itself can also be moved and controlled while spinning units.")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setUnitClassification("ancient")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setFoodCost(0)
+	..setGoldCost(0)
+	..setLumberCost(0)
+    ..setIsaBuilding(false)

@@ -4,6 +4,7 @@ import Escaper
 import StringUtils
 import Decoration
 
+constant INFO_TEXTER_ID = compiletime(ABIL_ID_GEN.next())
 constant EVENT_RADIUS 	= 32.
 
 string array stdcolors
@@ -14,7 +15,7 @@ public class Texter extends StaticBaseObject
 	color col = color(255,255,255)
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, texter, pos, angle(0), this), EVENT_RADIUS, function Texter.onStep, CODE_NULL) 
+		super(pos, getUnit(owner, TEXTER_ID, pos, angle(0), this), EVENT_RADIUS, function Texter.onStep, CODE_NULL) 
 		setEnabled(false)
 		text = createCenterFText(actor.getPos3Zero(), "", 12)
 		text.tt..setColor(col.red,col.green,col.blue, 0)..setVisibility(false)
@@ -162,3 +163,45 @@ function getColorFromString(string s) returns color
 	stdcolors[11] = "darkgreen"
 	stdcolors[12] = "brown"
 		
+
+@objectgen function genTexter()
+	new ChannelAbilityPreset(INFO_TEXTER_ID, 1, TRUE)
+	..setName("Information: Texter")
+	..presetTooltipNormal((int lvl) -> "Information: Texter")
+	..presetTooltipNormalExtended((int lvl) -> "Use these commands while having the texter selected." +
+	"\nAll Commands:" + 
+	"\n-sht (shows the currently set text)" +
+	"\n-ht (hides the currently set text)" +
+	"\n-sc (set the color of the text)" +
+	"\nExamples:" + 
+	"\n-st Some Text" +
+	"\n-sc red/green/orange" +
+	"\n-sc 125 125 255" +
+	"\nThe text gets automatically displayed if an Escaper walks over the texter.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+
+	new BuildingDefinition(TEXTER_ID, 'ncop')
+	..setName("|cff08DEFFTexter ")
+	..setHotkey("F")
+	..setTooltipBasic("|cffFFCC00Build |cff08DEFFTexter [F]")
+	..setTooltipExtended("Creates floating textes that are shown by command or when an Escaper walks over it." +
+	"\nFloating texts can be colored.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTexter.blp")
+	..setNormalAbilities(int2fourchar(INFO_TEXTER_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(3)
+	..setButtonPositionY(1)
+	..setTintingColorRed(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")   

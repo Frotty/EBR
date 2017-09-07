@@ -2,8 +2,9 @@ package Bomber
 import SetupObject
 import Attackspeed
 import ClosureTimers
+import ChannelAbilityPreset
 
-constant int BOMBER_ID = 'h00Y'
+constant BOMBER_ID = 'bmbr'
 constant int AUTOATTACK_ID = 'A03B'
 constant int ATTACK_ORDER = 851983
 constant int ATTACK_GROUND_ORDER = 851984
@@ -85,3 +86,45 @@ public class Bomber extends UnitEntity
 		..addProperty(new Property(KEY_TYPE, BOMBER_INDEX.toString()))
 		return json	
 						
+
+@objectgen function genBomber()
+	new UnitDefinition(BOMBER_ID, 'hmtm')  
+	..setAttack1DamageBase(1000)
+	..setAttack1CooldownTime(2)
+	..setAttack1Range(1750)
+	..setAttack1TargetsAllowed("air,allies,ground,notself,vulnerable")
+	..setAttack1AreaofEffectFullDamage(100)
+	..setAttack1AreaofEffectMediumDamage(0)
+	..setAttack1AreaofEffectSmallDamage(0)
+	..setAttack1AreaofEffectTargets("air,alive,allies,debris,enemies,friend,ground,hero,notself,vulnerable")
+	..setAttack1ProjectileSpeed(1150)
+	..setAttack1DamageFactorSmall(0)
+	..setAttack1DamageFactorMedium(0)
+	..setAttack1DamageSidesperDie(1)
+	..setAcquisitionRange(850)
+	..setMinimumAttackRange(50)
+    ..setAttacksEnabled(1)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+    ..setSelectionScale(1)
+	..setUnitSoundSet("")	
+	..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar('A03B') + "," +
+	int2fourchar('A043') + "," +
+	int2fourchar('A044') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("E")
+	..setName("|cFFFFFF00Bomber|r")
+	..setTooltipBasic("|cFFFF8000B|r|cFFFFFF00o|r|cFFFF8000mber|r [E]")
+	..setTooltipExtended("")
+	..setUpgradesUsed("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
+	..setLumberCost(0)

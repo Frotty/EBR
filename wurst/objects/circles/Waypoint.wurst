@@ -4,10 +4,11 @@ import Escaper
 import TeleporterTarget
 import Builder
 
-constant int INC_ID = 'A054'
-constant int DEC_ID = 'A055'
-constant int WISP_ID = 'A027'
-constant AND_ID = 'A08H'
+constant INFO_WAYPOINT_ID = compiletime(ABIL_ID_GEN.next())
+constant AND_CONNECTION_ID = compiletime(ABIL_ID_GEN.next())
+constant DECREASE_DELAY_ID = compiletime(ABIL_ID_GEN.next())
+constant INCREASE_DELAY_ID = compiletime(ABIL_ID_GEN.next())
+constant NO_WISPS_ID = compiletime(ABIL_ID_GEN.next())
 constant INTERVAL = .25
 constant real 	EVENT_RADIUS	= 32.
 
@@ -28,12 +29,12 @@ public class Waypoint extends StaticBaseObject
 	boolean ready = false
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, waypoint, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		actor..addAbility(turnOff)
+		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
+		actor..addAbility(TURN_OFF_ID)
 
 	construct(unit existing)
 		super( existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		actor..addAbility(turnOff)
+		actor..addAbility(TURN_OFF_ID)
 
 	function orderLogicMove()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
@@ -52,7 +53,7 @@ public class Waypoint extends StaticBaseObject
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
 		if owner == e.owner and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
 			if e instanceof SetupObject
-				if not (e castTo SetupObject).setup.hasAbility(removeObject)
+				if not (e castTo SetupObject).setup.hasAbility(REMOVE_OBJECT_ID)
 					return
 			var data = e castTo UnitEntity
 			if not wisps and data instanceof TeleporterTarget
@@ -78,26 +79,26 @@ public class Waypoint extends StaticBaseObject
 		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case INC_ID
+			case INCREASE_DELAY_ID
 				if delay < 5.
 					delay += INTERVAL
 					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., colorA(255,255,255,0), owner  )
 				else
 					createFText(pos, vec2(0,0.05), "Maximum Delay", 10,  2., colorA(255,255,255,0), owner  )
-			case DEC_ID
+			case DECREASE_DELAY_ID
 				if delay >= INTERVAL
 					delay -= INTERVAL
 					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., colorA(255,255,255,0), owner  )
 				else
 					createFText(pos, vec2(0,0.05), "Minimum Delay", 10,  2., colorA(255,255,255,0), owner  )
-			case WISP_ID
+			case NO_WISPS_ID
 				if wisps
 					wisps = false
 					createFText(pos, vec2(0,0.05), "Wisps |cffAD0821inactive", 10,  2., colorA(255,255,255,0), owner  )
 				else
 					wisps = true
 					createFText(pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., colorA(255,255,255,0), owner  )
-			case AND_ID
+			case AND_CONNECTION_ID
 				let target = GetSpellTargetUnit().getEntity()
 				if target != null and target instanceof Waypoint
 					andPartner = target castTo Waypoint
@@ -128,3 +129,86 @@ public class Waypoint extends StaticBaseObject
 		return json
 
 
+@objectgen function genWaypoint()
+	new ChannelAbilityPreset(INFO_WAYPOINT_ID, 1, TRUE)
+	..setName("Information: Waypoint")
+	..presetTooltipNormal((int lvl) -> "Information: Waypoint")
+	..presetTooltipNormalExtended((int lvl) -> "Orders an Escape Killer to go to the Rallypoint when entering")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(AND_CONNECTION_ID, 1, TRUE)
+	..setName("Waypoint: And Connection")
+	..presetTooltipNormal((int lvl) -> "|cffFFCC00And |rconnection [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Links this waypoint to another one." +
+	"This waypoint will only trigger when the linked one has been triggered as well")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNAnd.blp")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("E")
+	..presetTargetTypes(Targettype.UNIT)
+	..presetTargetsAllowed((int lvl) -> "allies,invulnerable,notself")
+	..presetCastRange((int lvl) -> 2500)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(DECREASE_DELAY_ID, 1, TRUE)
+	..setName("Waypoint: Decrease Delay")
+	..presetTooltipNormal((int lvl) -> "Decreases the Orderdelay [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Decreasing the orderdelay makes the waypoint delay the walkorder." +
+	"\nThis means the unit waits the given time before walking to the selected position(rallypoint)." +
+	"\n0 Delay means instant.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetButtonPosNormal(1, 1)
+	..presetHotkey("F")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INCREASE_DELAY_ID, 1, TRUE)
+	..setName("Waypoint: Increase Delay")
+	..presetTooltipNormal((int lvl) -> "Increases the Orderdelay [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Increasing the orderdelay makes the waypoint delay the walkorder." +
+	"\nThis means the unit waits the given time before walking to the selected position(rallypoint).")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("R")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(NO_WISPS_ID, 1, TRUE)
+	..setName("Waypoint: No Wisps")
+	..presetTooltipNormal((int lvl) -> "|cffffcc00Wisps|r [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Changes the mode wether to move Wisps or not.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNWisp.blp")
+	..presetButtonPosNormal(0, 2)
+	..presetHotkey("X")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+		
+	new BuildingDefinition(WAYPOINT_ID, 'ncop')
+	..setName("|cffFF7B29Waypoint")
+	..setHotkey("R")
+	..setTooltipBasic("|cffFFCC00Build |cffFF7B29Waypoint [R]")
+	..setTooltipExtended("Orders Escaperkillers to move to the Rallypoint." +
+	"\nUsefull if you want your units not only to go a straight line.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWaypoint.blp")
+	..setNormalAbilities(int2fourchar(INFO_WAYPOINT_ID) + "," +
+	int2fourchar(AND_CONNECTION_ID) + "," +
+	int2fourchar(DECREASE_DELAY_ID) + "," +
+	int2fourchar(INCREASE_DELAY_ID) + "," +
+	int2fourchar(NO_WISPS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(RALLY_POINT) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(3)
+	..setButtonPositionY(0)
+	..setTintingColorGreen(128)
+	..setTintingColorBlue(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")

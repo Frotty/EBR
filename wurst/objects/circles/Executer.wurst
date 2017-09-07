@@ -10,6 +10,7 @@ import Assets
 import Knockbacker
 import Builder
 
+constant INFO_EXECUTER_ID = compiletime(ABIL_ID_GEN.next())
 constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
 constant int 	LEVER_DUMMY_ID = 'DTlv'
 constant int 	PLATE_DUMMY_ID = 'B001'
@@ -62,7 +63,7 @@ public class Executer extends StaticBaseObject
 	destructable dummy // model for pressure plate, and lever
 	
 	construct( vec2 pos, player owner)
-		super( pos, getUnit(owner, executer, pos, angle(0), this), EVENT_RADIUS, function Executer.onEvent, CODE_NULL )
+		super( pos, getUnit(owner, EXECUTER_ID, pos, angle(0), this), EVENT_RADIUS, function Executer.onEvent, CODE_NULL )
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	static function onEvent()
@@ -328,7 +329,7 @@ public class Executer extends StaticBaseObject
 		UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitRemoveAbility(actor,SPAWN_UNIT_ID)
-		actor..addAbility(turnOff)
+		actor..addAbility(TURN_OFF_ID)
 		
 	function addTerrainAdjuster()
 		UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
@@ -426,25 +427,25 @@ public class Executer extends StaticBaseObject
 				disabled = false
 				SetUnitVertexColor(actor, 0,128,0,255)
 				UnitRemoveAbility(actor, REACTIVATE_ABIL)
-			case VIS_ID
+			case MAKE_UNIT_VISIBLE_ID
 				changeVis(false)
-			case INVIS_ID
+			case MAKE_UNIT_INVISIBLE_ID
 				changeVis(true)
-			case KILLER_TRIGGER_ABIL
+			case MODE_KILLERS_ID
 				canKillerTrigger = true
 				canEscaperTrigger = true
-				UnitRemoveAbility(actor, KILLER_TRIGGER_ABIL)
-				UnitAddAbility(actor, BOTH_TRIGGER_ABIL)
-			case ESCAPER_TRIGGER_ABIL
+				UnitRemoveAbility(actor, MODE_KILLERS_ID)
+				UnitAddAbility(actor, MODE_BOTH_ID)
+			case MODE_ESCAPERS_ID
 				canKillerTrigger = true
 				canEscaperTrigger = false
-				UnitRemoveAbility(actor, ESCAPER_TRIGGER_ABIL)
-				UnitAddAbility(actor, KILLER_TRIGGER_ABIL)
-			case BOTH_TRIGGER_ABIL
+				UnitRemoveAbility(actor, MODE_ESCAPERS_ID)
+				UnitAddAbility(actor, MODE_KILLERS_ID)
+			case MODE_BOTH_ID
 				canKillerTrigger = false
 				canEscaperTrigger = true
-				UnitRemoveAbility(actor, BOTH_TRIGGER_ABIL)
-				UnitAddAbility(actor, ESCAPER_TRIGGER_ABIL)
+				UnitRemoveAbility(actor, MODE_BOTH_ID)
+				UnitAddAbility(actor, MODE_ESCAPERS_ID)
 			case DOOR_OPEN_ABIL
 				actionMode = Amode.ENABLEOBJ
 				removeActionAbils()
@@ -543,10 +544,6 @@ constant int PRESSURE_ABIL = 'A066'
 
 constant int REACTIVATE_ABIL = 'A06Z'
 
-constant int KILLER_TRIGGER_ABIL = 'A012'
-constant int ESCAPER_TRIGGER_ABIL = 'A009'
-constant int BOTH_TRIGGER_ABIL = 'A014'
-
 constant int TERRAIN_CHANGE_ABIL = 'A036'
 constant int TERRAIN_WALKABLE_ABIL = 'A015'
 constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
@@ -572,9 +569,6 @@ constant int MOVE_UNIT_PATROL_ABIL = 'A064'
 constant int MOVE_UNIT_STOP_ABIL = 'A065'
 constant int MOVE_UNIT_SELECT_ABIL = 'A06A'
 
-constant int VIS_ID = 'A04F'
-constant int INVIS_ID = 'A005'
-
 constant int TRAIN_BOOK_ABIL = 'A042'
 
 constant int SPAWN_UNIT_ID = 'A06S'
@@ -590,3 +584,46 @@ constant int TRAIN_KNOCK_ABIL = 'A07R'
 trigger executerUnitLeave = CreateTrigger()
 trigger executerUnitEnter = CreateTrigger()
 	
+
+@objectgen function genExecuter()
+	new ChannelAbilityPreset(INFO_EXECUTER_ID, 1, TRUE)
+	..setName("Information: Executer")
+	..presetTooltipNormal((int lvl) -> "Information: Executer")
+	..presetTooltipNormalExtended((int lvl) -> "The Executer does some advanced actions when an Escaper walks in." +
+	"\nYou define the Action by using the Spell once." +
+	"\nThe Action will be executed at the RallyPoint or RallyUnit." +
+	"\nYou can change the executer to loop or be a one-shot")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+		
+	new BuildingDefinition(EXECUTER_ID, 'ncop')
+	..setName("|cff84C54AExecuter ")
+	..setHotkey("X")
+	..setTooltipBasic("|cffFFCC00Build |cff84C54AExecuter [X]")
+	..setTooltipExtended("Executes specified actions on other units or positions like opening and closing gates," +
+	"creating units and changing terrain when an escaper and/or killer walks over it." +
+	"\nIt has 3 available modes: Pressure Plate, Standard and Lever.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNExecuter.blp")
+	..setNormalAbilities(int2fourchar('A066') + "," +
+	int2fourchar('A068') + "," +
+	int2fourchar('A069') + "," +
+	int2fourchar('A067') + "," +
+	int2fourchar(MODE_ESCAPERS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(RALLY_POINT) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(1)
+	..setButtonPositionY(2)
+	..setTintingColorRed(0)
+	..setTintingColorGreen(128)
+	..setTintingColorBlue(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")

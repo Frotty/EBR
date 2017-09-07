@@ -1,6 +1,7 @@
 package Wall
 import SetupObject
 import initlater InstantBuild
+import ChannelAbilityPreset
 
 public class Wall extends StaticSetupObject
 	int tId = 0
@@ -12,3 +13,54 @@ public class Wall extends StaticSetupObject
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, tId.toString()))
 		return json
+
+
+@objectgen function genWalls()
+	new BuildingDefinition(WALL_ID, 'ncop')  
+	..setScalingValue(0.8)
+	..setButtonPositionX(0)
+	..setButtonPositionY(2)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
+	..setModelFile("Doodads\\Cityscape\\Structures\\City_LowWall_ShortEndCap\\City_LowWall_ShortEndCap.mdl")
+	..setSelectionScale(1)
+	..setUnitSoundSet("")
+	..setPathingMap("PathTextures\\2x2Unflyable.tga")
+	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF00FF00Wall|r")
+	..setHotkey("Y")
+	..setTooltipBasic("Wall End [|cffFFCC00Y|r]")
+	..setTooltipExtended("Blocks Escapers and Killers.")
+	..setUnitClassification("ancient,standon")
+
+	new BuildingDefinition(HOR_WALL_ID, 'ncop')  
+	..setButtonPositionX(1)
+	..setButtonPositionY(2)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
+	..setModelFile("Doodads\\LordaeronSummer\\Terrain\\StoneWall0\\StoneWall02.mdl")
+	..setSelectionScale(1)
+	..setUnitSoundSet("")
+	..setPathingMap("war3mapImported\\12x2pathing.tga")
+	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF00FF00Horizontal Wall|r ")
+	..setHotkey("C")
+	..setTooltipBasic("Horizontal Wall [|cffFFCC00C|r]")
+	..setTooltipExtended("Blocks Escapers and Killers.")
+	..setUnitClassification("ancient,standon")
+
+	new BuildingDefinition(VER_WALL_ID, 'ncop')  
+	..setButtonPositionX(2)
+	..setButtonPositionY(2)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
+	..setModelFile("Doodads\\LordaeronSummer\\Terrain\\StoneWall90\\StoneWall902.mdl")
+	..setSelectionScale(1)
+	..setUnitSoundSet("")
+	..setPathingMap("war3mapImported\\2x12pathing.tga")
+	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("Vertical Wall")
+	..setHotkey("X")
+	..setTooltipBasic("Vertical Wall [|cffFFCC00X|r]")
+	..setTooltipExtended("Blocks Escapers and Killers.")
+	..setUnitClassification("ancient,standon")

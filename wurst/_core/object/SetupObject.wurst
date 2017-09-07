@@ -23,11 +23,11 @@ public abstract class SetupObject extends UnitEntity
 		super(u)
 		this.setup = setup
 		this.radius = radius
-		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(removeObject)
+		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(REMOVE_OBJECT_ID)
 		..setPathing(true)
 		setup..setEntity(this)
 		..setXY(actor.getPos())
-		..addAbility(GHOST_INVIS_ID)..addAbility(removeObject)
+		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_OBJECT_ID)
 		this.setCurrentRegion()
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrderEvent())
@@ -36,10 +36,10 @@ public abstract class SetupObject extends UnitEntity
 	function setEnabled(boolean flag)
 		if flag and not enabled
 			enabled = true
-			setup..removeAbility(turnOn)..addAbility(turnOff)
+			setup..removeAbility(TURN_ON_ID)..addAbility(TURN_OFF_ID)
 		else if enabled
 			enabled = false
-			setup..removeAbility(turnOff)..addAbility(turnOn)
+			setup..removeAbility(TURN_OFF_ID)..addAbility(TURN_ON_ID)
 		
 	override function setPos(vec3 pos)
 		this.pos = pos
