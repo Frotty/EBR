@@ -1,9 +1,9 @@
 package Faceless
 import EscaperSensor
 import ChannelAbilityPreset
-constant UNIT_ID = 'u00I'
-constant KILL_RADIUS = 64.
 
+constant KILL_RADIUS = 64.
+constant DIMENSION_SHIFTER_ID = 'dims'
 constant UP_VIS_ID = compiletime(ABIL_ID_GEN.next())
 constant DOWN_VIS_ID = compiletime(ABIL_ID_GEN.next())
 constant UP_INVIS_ID = compiletime(ABIL_ID_GEN.next())
@@ -24,11 +24,11 @@ public class Faceless extends EscaperSensorSetup
 	private real dur = visibleDur.get()
 
 	construct(vec2 pos, player owner, angle facing)
-		super(pos.toVec3(), owner, UNIT_ID, facing, KILL_RADIUS, KILL_RADIUS)
+		super(pos.toVec3(), owner, DIMENSION_SHIFTER_ID, facing, KILL_RADIUS, KILL_RADIUS)
 		setup()
 	
 	construct(vec2 pos, player owner)
-		super(pos.toVec3(), owner, UNIT_ID, KILL_RADIUS, KILL_RADIUS)
+		super(pos.toVec3(), owner, DIMENSION_SHIFTER_ID, KILL_RADIUS, KILL_RADIUS)
 		setup()
 	
 	construct(unit existing)
@@ -134,3 +134,38 @@ public class Faceless extends EscaperSensorSetup
 	..presetTooltipNormal((int lvl) -> "Decrease Invisible Duration [|cffFFCC00F|r]")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(3, 1)
+
+
+@objectgen function genShifter()
+	new UnitDefinition(DIMENSION_SHIFTER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+	..setAnimationCastBackswing(0)			
+	..setShadowImageUnit("")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFacelessOne.blp")
+	..setButtonPositionX(3)
+	..setButtonPositionY(2)
+	..setModelFile("Units\\Creeps\\FacelessOne\\FacelessOne.mdl")
+    ..setSelectionScale(0.7)
+    ..setUnitSoundSet("")
+	..setCollisionSize(1)
+	..setSpeedBase(180)
+	..setMovementHeight(20)
+	..setMovementHeightMinimum(20)
+	..setMovementType(MovementType.Fly)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("I")
+	..setName("Dimension Shifter")
+	..setTooltipBasic("Dimension Shifter [I]")
+	..setTooltipExtended("Spawns a Dimension Shifter at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)

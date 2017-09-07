@@ -5,14 +5,14 @@ import BuilderConstants
 
 function onRemoveObject()
 	var id = GetSpellAbilityId()
-	if id == removeObject
+	if id == REMOVE_OBJECT_ID
 		var u = GetTriggerUnit()
 		var data = u.getUserData()
 		if data > 0
 			var e = data castTo Entity
 			addEffect(Other.aiamtarget, u.getPos()).destr()
 			e.terminate()
-		u..removeAbility(removeObject)
+		u..removeAbility(REMOVE_OBJECT_ID)
 	
 @init1 function init_remove()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onRemoveObject())

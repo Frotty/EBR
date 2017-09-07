@@ -11,7 +11,7 @@ import Pointer
 import Knockbacker
 import Faceless
 
-constant PRODUCER_ID 	= 'H00A'
+public constant UNIT_PRODUCER_ID = compiletime(HERO_ID_GEN.next())
 constant FIRST_PAGE 	= 'A07B'
 constant SECOND_PAGE	= 'A07A'
 constant AIR_KILLER 	= 'A07Y'
@@ -33,8 +33,8 @@ constant FIRE	 		= 'Afre'
 public class UnitProducer extends StaticBaseObject
 
 	construct( vec2 pos, player owner )
-		super(pos, getUnit( owner, PRODUCER_ID, pos, angle(0), this) , 0., CODE_NULL, CODE_NULL)
-		actor..removeAbility(removeObject)..addAbility(AIR_KILLER)
+		super(pos, getUnit( owner, UNIT_PRODUCER_ID, pos, angle(0), this) , 0., CODE_NULL, CODE_NULL)
+		actor..removeAbility(REMOVE_OBJECT_ID)..addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		clearQuestionmark()
 
@@ -109,7 +109,6 @@ public class UnitProducer extends StaticBaseObject
 		return false
 
 init
-	preloadAbility(PRODUCER_ID)
 	preloadAbility(FIRST_PAGE)
 	preloadAbility(SECOND_PAGE)
 	preloadAbility(AIR_KILLER)
@@ -131,3 +130,49 @@ init
 	for pd from builderPlayers.staticItr()
 		new UnitProducer(hidden, pd.p)
 
+
+@objectgen function genUnitProducer()
+	new HeroDefinition(UNIT_PRODUCER_ID, 'Hamg')
+	..setName("|cffFF8000Unit Producer")
+	..setHotkey("A")
+	..setTooltipExtended("You shouldn't see this...")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleUnits.blp")
+	..setNormalAbilities(int2fourchar('A07U') + "," +
+	int2fourchar('A07C') + "," +
+	int2fourchar('A05F') + "," +
+	int2fourchar('A05G') + "," +
+	int2fourchar('A05H') + "," +
+	int2fourchar('A05J') + "," +
+	int2fourchar('A05K') + "," +
+	int2fourchar('A05M') + "," +
+	int2fourchar('A07A') + "," +
+	int2fourchar('Afre') + "," +
+	int2fourchar(GHOST_ID) + "," +
+	int2fourchar(RALLY_POINT) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setProperNames("|cFFFF8000Unit Producer|r")
+	..setProperNamesUsed(0)
+	..setHeroAbilities("")
+	..setAttacksEnabled(0)
+	..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(0)
+	..setAnimationWalkSpeed(0)
+	..setAnimationCastPoint(0)
+	..setScalingValue(0.1)
+	..setShadowImageUnit("")
+	..setSelectionScale(-0.03)
+	..setSpeedBase(0)
+	..setTurnRate(0)
+	..setMovementType(MovementType.None)
+	..setModelFile("war3mapImported\\dummy.mdl")
+	..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setHitPointsMaximumBase(10000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setStartingAgility(0)
+	..setStartingIntelligence(0)
+	..setStartingStrength(0)
+	..setPriority(0)
+	..setHeroRevivalLocations("1")

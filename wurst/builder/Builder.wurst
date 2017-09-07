@@ -15,6 +15,16 @@ import initlater BossDamager
 import Coin
 import ChannelAbilityPreset
 
+public constant BUILDER_CIRCLES_ID = compiletime(UNIT_ID_GEN.next())
+public constant BUILDER_OBJECTS_ID = compiletime(UNIT_ID_GEN.next())
+public constant BUILDER_ENVIROMENTAL_ID = compiletime(UNIT_ID_GEN.next())
+public constant BUILDER_DECORATIONS_ID = compiletime(UNIT_ID_GEN.next())
+
+public constant MENU_CIRCLES_ID = compiletime(ABIL_ID_GEN.next())
+public constant MENU_OBJECTS_ID = compiletime(ABIL_ID_GEN.next())
+public constant MENU_ENVIROMENTALS_ID = compiletime(ABIL_ID_GEN.next())
+public constant MENU_DECORATIONS_ID = compiletime(ABIL_ID_GEN.next())
+
 /**
 	The builder (banshee) class. Handles switching between builders,
 	auto teleport and all other builder functions.
@@ -24,7 +34,7 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super(getUnit(p, builderCircles, vec2(-6000, -7160), angle(0), this))
+		super(getUnit(p, BUILDER_CIRCLES_ID, vec2(-6000, -7160), angle(0), this))
 		registerListeners()
 		this.setCurrentRegion()
 
@@ -41,17 +51,17 @@ public class Builder extends UnitEntity
 		if rdata == null
 			return
 		switch id
-			case MENU_1
+			case MENU_CIRCLES_ID
 				actor.addAbility(CHAOS_BUILDER_1)
 			case MENU_2
 				actor.addAbility(CHAOS_BUILDER_2)
 			case MENU_3
 				actor.addAbility(CHAOS_BUILDER_3)
-			case MENU_4
+			case MENU_DECORATIONS_ID
 				actor.addAbility(CHAOS_BUILDER_4)
-			case MENU_5
+			case MENU_OBJECTS_ID
 				actor.addAbility(CHAOS_BUILDER_2)
-			case MENU_6
+			case MENU_ENVIROMENTALS_ID
 				actor.addAbility(CHAOS_BUILDER_3)
 			case KEY_SPELL_ID
 				if rdata.canBuild(owner)
@@ -127,11 +137,11 @@ public class Builder extends UnitEntity
 			actor.abortOrder()
 		
 function filter() returns boolean
-	return GetUnitTypeId(GetFilterUnit()) == 'n008'
+	return GetUnitTypeId(GetFilterUnit()) == REGION_ADMIN_ID
 	
 function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
-	return id == builderCircles or id == BUILDER_2 or id == BUILDER_3 or id == BUILDER_4
+	return id == BUILDER_CIRCLES_ID or id == BUILDER_OBJECTS_ID or id == BUILDER_ENVIROMENTAL_ID or id == BUILDER_DECORATIONS_ID
 	
 constant CHAOS_BUILDER_1 = compiletime(ABIL_ID_GEN.next())
 constant CHAOS_BUILDER_2 = compiletime(ABIL_ID_GEN.next())
@@ -141,16 +151,263 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 @objectgen function genBuilder()
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(builderCircles))
+	..setNewUnitType(1, int2fourchar(BUILDER_CIRCLES_ID))
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_2))
+	..setNewUnitType(1, int2fourchar(BUILDER_OBJECTS_ID))
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_3))
+	..setNewUnitType(1, int2fourchar(BUILDER_ENVIROMENTAL_ID))
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_4)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_4))
+	..setNewUnitType(1, int2fourchar(BUILDER_DECORATIONS_ID))
+
+	new ChannelAbilityPreset(MENU_CIRCLES_ID, 1, TRUE)
+        ..setName("Builder: Menu: Circles")
+        ..presetTooltipNormal((int lvl) -> "Menu: Circles [|cffFFCC00W|r]")
+        ..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for circles.")
+        ..presetIcon("ReplaceableTextures\\CommandButtons\\BTNCOP.blp")
+        ..presetButtonPosNormal(1, 2)
+        ..presetHotkey("W")
+        ..presetTargetTypes(Targettype.NONE)
+        ..setHeroAbility(FALSE)
+
+    new ChannelAbilityPreset(MENU_OBJECTS_ID, 1, TRUE)
+        ..setName("Builder: Menu: Objects")
+        ..presetTooltipNormal((int lvl) -> "Menu: Objects [|cffFFCC00E|r]")
+        ..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for objects.")
+        ..presetIcon("ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp")
+        ..presetButtonPosNormal(2, 2)
+        ..presetHotkey("E")
+        ..presetTargetTypes(Targettype.NONE)
+        ..setHeroAbility(FALSE)
+
+    new ChannelAbilityPreset(MENU_ENVIROMENTALS_ID, 1, TRUE)
+        ..setName("Builder: Menu: Enviromental")
+        ..presetTooltipNormal((int lvl) -> "Menu: Enviromental [|cffFFCC00R|r]")
+        ..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for enviromental stuff.")
+        ..presetIcon("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
+        ..presetButtonPosNormal(3, 2)
+        ..presetHotkey("R")
+        ..presetTargetTypes(Targettype.NONE)
+        ..setHeroAbility(FALSE)
+
+    new ChannelAbilityPreset(MENU_DECORATIONS_ID, 1, TRUE)
+        ..setName("Builder: Menu: Decorations")
+        ..presetTooltipNormal((int lvl) -> "Menu: Decorations [|cffFFCC00F|r]")
+        ..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for decorations.")
+        ..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBrilliance.blp")
+        ..presetButtonPosNormal(2, 1)
+        ..presetHotkey("F")
+        ..presetTargetTypes(Targettype.NONE)
+		..setHeroAbility(FALSE)
+		
+	new UnitDefinition(BUILDER_CIRCLES_ID, 'uaco')  
+    ..setName("|cFF0080FFBuilder 1|r |cffFFAD29Circles")
+    ..setHotkey("")
+    ..setTooltipBasic("")
+    ..setTooltipExtended("")
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
+    ..setNormalAbilities(int2fourchar('A03C') + "," +
+    int2fourchar(MENU_CIRCLES_ID) + "," +
+    int2fourchar(MENU_OBJECTS_ID) + "," +
+    int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
+    int2fourchar(MENU_DECORATIONS_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+    ..setStructuresBuilt(int2fourchar(BOOSTER_ID) + "," +
+    int2fourchar(TELEPORTER_ID) + "," +
+    int2fourchar(JUMPER_ID) + "," +
+    int2fourchar(REVIVE_POINT_ID) + "," +
+    int2fourchar(UNIT_CREATOR_ID) + "," +
+    int2fourchar(TC_BLOCKER_ID) + "," +
+    int2fourchar(UNIT_REMOVER_ID) + "," +
+    int2fourchar(WAYPOINT_ID) + "," +
+    int2fourchar(TEXTER_ID) + "," +
+    int2fourchar(TRAP_ID) + "," +
+    int2fourchar(EXECUTER_ID))
+    ..setButtonPositionX(0)
+    ..setButtonPositionY(0)
+    ..setSightRadiusDay(300)
+    ..setSightRadiusNight(300)
+    ..setBuildTime(1)
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setDefenseUpgradeBonus(0)
+    ..setDeathType(0)
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setModelFile("units\\undead\\Banshee\\Banshee.mdl")
+    ..setSpeedBase(1000)
+    ..setTurnRate(1)
+    ..setMovementType(MovementType.Fly)
+    ..setUnitSoundSet("Sorceress")
+    ..setCanDropItemsOnDeath(FALSE)
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setRepairTime(1)
+    ..setUnitClassification("peon")
+    ..setHitPointsMaximumBase(100000000)
+    ..setHitPointsRegenerationRate(0)
+    ..setHitPointsRegenerationType("none")
+    ..setGoldCost(0)
+    ..setRepairGoldCost(0)
+
+    new UnitDefinition(BUILDER_OBJECTS_ID, 'uaco')  
+    ..setName("|cFF0080FFBuilder 2|r |cffFFAD29Objects")
+    ..setHotkey("")
+    ..setTooltipBasic("")
+    ..setTooltipExtended("")
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
+    ..setNormalAbilities(int2fourchar('A03C') + "," +
+    int2fourchar(MENU_CIRCLES_ID) + "," +
+    int2fourchar(MENU_OBJECTS_ID) + "," +
+    int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
+    int2fourchar(MENU_DECORATIONS_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+    ..setStructuresBuilt(int2fourchar(ARCANERY_ID) + "," +
+    int2fourchar(BOMB_TOWER_ID) + "," +
+    int2fourchar(VORTEX_ID) + "," +
+    int2fourchar(CONGA_LINE_HEAD_ID) + "," +
+    int2fourchar(POWER_NODE_ID) + "," +
+    int2fourchar(FOUNTAIN_BOTH_ID) + "," + 
+    //int2fourchar(TRACKS_ID) + "," +
+    int2fourchar(SPINNER_ID) + "," + //PEDESTAL
+    int2fourchar(DOORDUMMY_ID))
+    ..setButtonPositionX(0)
+    ..setButtonPositionY(0)
+    ..setSightRadiusDay(300)
+    ..setSightRadiusNight(300)
+    ..setBuildTime(1)
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setDefenseUpgradeBonus(0)
+    ..setDeathType(0)
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setModelFile("units\\undead\\Banshee\\Banshee.mdl")
+    ..setSpeedBase(1000)
+    ..setTurnRate(1)
+    ..setMovementType(MovementType.Fly)
+    ..setUnitSoundSet("Sorceress")
+    ..setCanDropItemsOnDeath(FALSE)
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setRepairTime(1)
+    ..setUnitClassification("peon")
+    ..setHitPointsMaximumBase(100000000)
+    ..setHitPointsRegenerationRate(0)
+    ..setHitPointsRegenerationType("none")
+    ..setGoldCost(0)
+    ..setRepairGoldCost(0)
+
+    new UnitDefinition(BUILDER_ENVIROMENTAL_ID, 'uaco')  
+    ..setName("|cFF0080FFBuilder 3|r |cffFFAD29Enviromental")
+    ..setHotkey("")
+    ..setTooltipBasic("")
+    ..setTooltipExtended("")
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
+    ..setNormalAbilities(int2fourchar('A03C') + "," +
+    int2fourchar(MENU_CIRCLES_ID) + "," +
+    int2fourchar(MENU_OBJECTS_ID) + "," +
+    int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
+    int2fourchar(MENU_DECORATIONS_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+     ..setStructuresBuilt(int2fourchar(VOLCANO_ID) + "," +
+    int2fourchar(WALL_ID) + "," +
+    int2fourchar(VER_WALL_ID) + "," +
+    int2fourchar(HOR_WALL_ID))
+    //int2fourchar(SMALL_OBST_ID) + "," +
+    //int2fourchar(MEDIUM_OBST_ID) + "," +
+    //int2fourchar(HIGH_OBST_ID) + "," +
+    //int2fourchar(TREE_ID)) */
+    ..setButtonPositionX(0)
+    ..setButtonPositionY(0)
+    ..setSightRadiusDay(300)
+    ..setSightRadiusNight(300)
+    ..setBuildTime(1)
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setDefenseUpgradeBonus(0)
+    ..setDeathType(0)
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setModelFile("units\\undead\\Banshee\\Banshee.mdl")
+    ..setSpeedBase(1000)
+    ..setTurnRate(1)
+    ..setMovementType(MovementType.Fly)
+    ..setUnitSoundSet("Sorceress")
+    ..setCanDropItemsOnDeath(FALSE)
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setRepairTime(1)
+    ..setUnitClassification("peon")
+    ..setHitPointsMaximumBase(100000000)
+    ..setHitPointsRegenerationRate(0)
+    ..setHitPointsRegenerationType("none")
+    ..setGoldCost(0)
+    ..setRepairGoldCost(0)
+
+    new UnitDefinition(BUILDER_DECORATIONS_ID, 'uaco')  
+    ..setName("|cFF0080FFBuilder 4|r |cffFFAD29Decorations")
+    ..setHotkey("")
+    ..setTooltipBasic("")
+    ..setTooltipExtended("")
+    ..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
+    ..setNormalAbilities(int2fourchar('A03C') + "," +
+    int2fourchar(MENU_CIRCLES_ID) + "," +
+    int2fourchar(MENU_OBJECTS_ID) + "," +
+    int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
+    int2fourchar(MENU_DECORATIONS_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(INVULNERABILITY_ID))
+/*     ..setStructuresBuilt(int2fourchar(REMAINS_ID) + "," +
+    int2fourchar(FARM_ID) + "," +
+    int2fourchar(ICE_CRYSTAL_ID) + "," +
+    int2fourchar(OBELISK_ID) + "," +
+    int2fourchar(POISON_EGGS_ID) + "," +
+    int2fourchar(LANTERN_ID) + "," +
+    int2fourchar(MUSHROOM_ID) + "," +
+    int2fourchar(POST_LANTERN_ID) + "," +
+    int2fourchar(RUNE_ID) + "," +
+    int2fourchar(TORCH_ID) + "," +
+    int2fourchar(SUPERLIGHT_ID)) */
+    ..setButtonPositionX(0)
+    ..setButtonPositionY(0)
+    ..setSightRadiusDay(300)
+    ..setSightRadiusNight(300)
+    ..setBuildTime(1)
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setDefenseUpgradeBonus(0)
+    ..setDeathType(0)
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setAnimationCastPoint(0)
+    ..setModelFile("units\\undead\\Banshee\\Banshee.mdl")
+    ..setSpeedBase(1000)
+    ..setTurnRate(1)
+    ..setMovementType(MovementType.Fly)
+    ..setUnitSoundSet("Sorceress")
+    ..setCanDropItemsOnDeath(FALSE)
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setRepairTime(1)
+    ..setUnitClassification("peon")
+    ..setHitPointsMaximumBase(100000000)
+    ..setHitPointsRegenerationRate(0)
+    ..setHitPointsRegenerationType("none")
+    ..setGoldCost(0)
+    ..setRepairGoldCost(0)
+
+
+
+

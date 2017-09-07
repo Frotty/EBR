@@ -2,8 +2,9 @@ package TerrainChanger
 import SetupObject
 import TerrainBlocker
 import Preloader
+import ChannelAbilityPreset
 
-constant TEXTURECHANGER_ID	= 'n01E'
+constant TERRAIN_CHANGER_ID = 'trrc'
 constant TERRAIN_O_WALKABLE_ID = 'A02G'
 constant TERRAIN_O_UNWALKABLE_ID = 'A02C'
 constant TERRAIN_O_ICE_ID = 'A02B'
@@ -26,7 +27,7 @@ public class TerrainChanger extends SetupObject
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, TEXTURECHANGER_ID, pos, angle(0), this), getUnit(owner, TEXTURECHANGER_ID, pos, angle(0), this), 0)
+		super(getUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0), this), getUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0), this), 0)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		innerTile = this.getCurrentRegion().getTypeSet().walkableId
 		outerTile = this.getCurrentRegion().getTypeSet().unwalkableId
@@ -148,3 +149,39 @@ init
 	preloadAbility(TERRAIN_DEC_H_ID)
 	preloadAbility(TERRAIN_DEC_V_ID)
 
+
+@objectgen function genTerrainChanger()
+	new UnitDefinition(TERRAIN_CHANGER_ID, 'nlv1')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setScalingValue(0.6)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNDragonHawk.blp")
+	..setModelFile("units\\human\\BloodElfDragonHawk\\BloodElfDragonHawk.mdl")
+	..setTintingColorBlue(185)
+	..setTintingColorGreen(95)
+	..setTintingColorRed(125)
+    ..setSelectionScale(0.6)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setMovementHeight(16)
+	..setMovementHeightMinimum(16)
+	..setTurnRate(0.2)
+	..setNormalAbilities(int2fourchar('A029') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A08J') + "," +
+	int2fourchar('A01E') + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cff0894E6TerrainChanger")
+	..setTooltipBasic("Spawns a Terrainchanger at |cffFFCC00Rallypoint|r.|nIt is a fully configureable, " +
+	"mobile unit which changes the regionspecific terrain below it.|nUse TC-Blockers (First Builder menu) to " +
+	"create protected tiles.|n|n|cff5ABD4ADoes not kill Escapers")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	

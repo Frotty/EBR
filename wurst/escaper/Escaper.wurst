@@ -17,18 +17,20 @@ import public SerializeIds
 import initlater PlayerData
 import initlater Key
 import ClosureTimers
+import ChannelAbilityPreset
 
 constant real COLL_RADIUS = 32.
 constant real SLIDE_ADD = 3.3
 constant ANK_ITEM_ID = 'A091'
 constant TELEPORT_ITEM_ID = 'A08S'
 
+public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
-public constant TOMB_DUMMY_ID = 'u00D'
+
 real time = 0.
 
 public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
@@ -510,7 +512,7 @@ class OrbProjectile extends Projectile
 			e.kill(null)
 			terminate()
 
-public vec2 currentRevivepoint = gg_unit_n000_0002.getPos()
+public vec2 currentRevivepoint = gg_unit_x009_0002.getPos()
 		
 trigger neutralDeathTrig
 trigger spellTrig
@@ -526,3 +528,30 @@ function correctRegion()
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)
+
+
+@objectgen function genEscaperThings()
+	new UnitDefinition(TOMB_DUMMY_ID, 'ushd')
+	..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setScalingValue(0.7)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
+	..setModelFile("Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl")
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(0)
+	..setMovementHeight(0)
+	..setTurnRate(0.1)
+	..setMovementType(MovementType.None)
+	..setNormalAbilities(int2fourchar('Aloc'))
+	..setHotkey("Y")
+	..setName("Dummy - Reincarnation")
+	..setTooltipBasic("Dummy - Reincarnation")
+	..setTooltipExtended("Dummy - Reincarnation")
+	..setUpgradesUsed("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)

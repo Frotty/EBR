@@ -3,7 +3,7 @@ import Escaper
 import EscaperKillers
 import ChannelAbilityPreset
 
-public constant KNOCKER_ID = 'u00G'
+public constant KNOCKBACKER_ID = 'knck'
 public constant KNOCK_INC_ID = compiletime(ABIL_ID_GEN.next())
 public constant KNOCK_DEC_ID = compiletime(ABIL_ID_GEN.next())
 public constant DMG_INC_ID = compiletime(ABIL_ID_GEN.next())
@@ -14,7 +14,7 @@ public class Knockbacker extends EscaperSensorSetup
 	ConfigValue damage = new ConfigValue(50, 25, "Damage")
 
 	construct(vec2 pos, player owner, angle facing)
-		super(pos.toVec3(), owner, KNOCKER_ID, facing, 64., 160.)
+		super(pos.toVec3(), owner, KNOCKBACKER_ID, facing, 64., 160.)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
 		..addAbility(DMG_INC_ID)..addAbility(DMG_DEC_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -95,4 +95,34 @@ public class Knockbacker extends EscaperSensorSetup
 	..presetTooltipNormal((int lvl) -> "Decrease Damage [|cffFFCC00F|r]")
 	..presetTooltipNormalExtended((int lvl) -> "Less strength to the tauren")
 	..presetButtonPosNormal(3, 1)
+
+	new UnitDefinition(KNOCKBACKER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+	..setAnimationCastBackswing(0)	
+	..setScalingValue(0.8)		
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTauren.blp")
+	..setButtonPositionX(3)
+	..setButtonPositionY(2)
+	..setModelFile("units\\orc\\Tauren\\Tauren.mdl")
+    ..setSelectionScale(0.5)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("C")
+	..setName("|cffA56308Knockbacker")
+	..setTooltipBasic("Train Knockbacker [C]")
+	..setTooltipExtended("Spawns a Glaive at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
 	

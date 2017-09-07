@@ -5,6 +5,11 @@ import SoundUtils
 import TerrainBlocker
 import ClosureForGroups
 
+constant INFO_JUMPER_ID = compiletime(ABIL_ID_GEN.next())
+constant DECREASE_FORCE_ID = compiletime(ABIL_ID_GEN.next())
+constant INCREASE_FORCE_ID = compiletime(ABIL_ID_GEN.next())
+constant MODE_FORCED_ID = compiletime(ABIL_ID_GEN.next())
+constant MODE_UNFORCED_ID = compiletime(ABIL_ID_GEN.next())
 constant string EFFECT_STRING = "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl"
 
 constant SPECIAL_ID = 'A07O'
@@ -16,7 +21,7 @@ enum JumpMode
 	UNFORCED
 
 function filter() returns boolean
-	return GetFilterUnit().getTypeId() == jumper
+	return GetFilterUnit().getTypeId() == JUMPER_ID
 
 public class Goo
 	image img
@@ -39,13 +44,13 @@ public class Jumper extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, 40., function Jumper.inRange, CODE_NULL)
-		actor.addAbility(turnOff)
+		actor.addAbility(TURN_OFF_ID)
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, jumper, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
-		actor.addAbility(turnOff)
+		super(pos, getUnit(owner, JUMPER_ID, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
+		actor.addAbility(TURN_OFF_ID)
 		forUnitsInRange(pos, 8, (unit u) -> begin
-			if u != actor and u.getTypeId() == jumper
+			if u != actor and u.getTypeId() == JUMPER_ID
 				snd.play()
 				u.addAbility(SPECIAL_ID)
 				this.terminate()
@@ -72,16 +77,16 @@ public class Jumper extends StaticBaseObject
 		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case jumperModeForced
-				actor..removeAbility(jumperModeForced)..addAbility(jumperModeUnforced)..setVertexColor(color(75,95,205))
+			case MODE_FORCED_ID
+				actor..removeAbility(MODE_FORCED_ID)..addAbility(MODE_UNFORCED_ID)..setVertexColor(color(75,95,205))
 				mode = JumpMode.UNFORCED
 				clearQuestionmark()
-			case jumperModeUnforced
-				actor..removeAbility(jumperModeUnforced)..addAbility(jumperModeForced)..setVertexColor(color(50,50,255))
+			case MODE_UNFORCED_ID
+				actor..removeAbility(MODE_UNFORCED_ID)..addAbility(MODE_FORCED_ID)..setVertexColor(color(50,50,255))
 				mode = JumpMode.FORCED
-			case jumperDecreaseForce
+			case DECREASE_FORCE_ID
 				jumpForce.decrement(this, 6)
-			case jumperIncreaseForce
+			case INCREASE_FORCE_ID
 				jumpForce.increment(this, 30)
 			case SPECIAL_ID
 				if goocounter < 5
@@ -111,3 +116,84 @@ public class Jumper extends StaticBaseObject
 				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).remove(TileModifiers.BLUGOO castTo int).val)
 				destroy goos[i]
 				
+
+@objectgen function genJumper()
+	new ChannelAbilityPreset(INFO_JUMPER_ID, 1, TRUE)
+	..setName("Information: Jumper")
+	..presetTooltipNormal((int lvl) -> "Information: Jumper")
+	..presetTooltipNormalExtended((int lvl) -> "The Jumper lets an entering Escaper fly to Rallypoint." +
+	"\nThe Escaper cant be harmed in midair.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(INCREASE_FORCE_ID, 1, TRUE)
+	..setName("Jumper: Increase Force")
+	..presetTooltipNormal((int lvl) -> "Increase Force [|cffFFCC00W|r]")
+	..presetTooltipNormalExtended((int lvl) -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00faster|r," + 
+	"and |cffFFCC00lower|n|cff0884BDIn unforced mode|r: Makes the escaper jump |cffFFCC00higher")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("W")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(DECREASE_FORCE_ID, 1, TRUE)
+	..setName("Jumper: Decrease Force")
+	..presetTooltipNormal((int lvl) -> "Decrease Force [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended((int lvl) -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00slower|r," +
+	"but |cffFFCC00higher|n|cff0884BDIn unforced mode|r: Makes the escaper jump |cffFFCC00lower")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("E")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new ChannelAbilityPreset(MODE_FORCED_ID, 1, TRUE)
+	..setName("Jumper: Mode Forced")
+	..presetTooltipNormal((int lvl) -> "Change Jumper Mode [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "The Jump corrently happens onto the Rallypoint.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNJumperModeForced.blp")
+	..presetButtonPosNormal(3, 0)
+	..presetHotkey("R")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+	
+	new ChannelAbilityPreset(MODE_UNFORCED_ID, 1, TRUE)
+	..setName("Jumper: Mode Unforced")
+	..presetTooltipNormal((int lvl) -> "Change Jumper Mode [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Only vertical momentum is applied.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNJumperModeUnforced.blp")
+	..presetButtonPosNormal(3, 0)
+	..presetHotkey("R")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new BuildingDefinition(JUMPER_ID, 'ncop')	
+	..setName("|cff085294Jumper")
+	..setHotkey("C")
+	..setTooltipBasic("|cffFFCC00Build |cff085294Jumper [C]")
+	..setTooltipExtended("Fires the Escaper through the air to the rallypoint." +
+	"\nWhile the Escaper flys, he cant be harmed by Escapekillers, Obstacles or unwalkable Terrain.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNJumper.blp")
+	..setNormalAbilities(int2fourchar(INFO_JUMPER_ID) + "," +
+	int2fourchar(INCREASE_FORCE_ID) + "," +
+	int2fourchar(DECREASE_FORCE_ID) + "," +
+	int2fourchar(MODE_FORCED_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(RALLY_POINT) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(2)
+	..setButtonPositionY(2)
+	..setTintingColorRed(50)
+	..setTintingColorGreen(50)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon") 

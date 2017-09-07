@@ -2,6 +2,8 @@ package TerrainBlocker
 import BaseObject
 import public BitSet
 
+constant INFO_TC_BLOCKER_ID = compiletime(ABIL_ID_GEN.next())
+
 public hashtable tileModifierMap = InitHashtable()
 
 public tuple matrixpos (int x, int y)
@@ -18,7 +20,7 @@ public class TerrainBlocker extends StaticBaseObject
 	boolean silent = false
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, tcBlocker, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0), this), 0, CODE_NULL, CODE_NULL)
+		super(pos, getUnit(owner, TC_BLOCKER_ID, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0), this), 0, CODE_NULL, CODE_NULL)
 		m = matrixpos((pos.x/128.0).round(), (pos.y/128.0).round())
 		clearQuestionmark()
 		if tileModifierMap.hasInt(m.x, m.y)
@@ -44,3 +46,44 @@ public class TerrainBlocker extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, TBLOCKER_INDEX.toString()))
 		return json
 		
+@objectgen function genTC_Blocker()
+	new ChannelAbilityPreset(INFO_TC_BLOCKER_ID, 1, TRUE)
+	..setName("Information: TC Blocker")
+	..presetTooltipNormal((int lvl) -> "Information: TC Blocker")
+	..presetTooltipNormalExtended((int lvl) -> "The TC Blocker keeps the current Terrain beneath it from being changed by a Terrain Changer (bought at the Unit Producer)")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+		
+	new UnitDefinition(TC_BLOCKER_ID, 'hpea') //info doesn't appear
+	..setName("|cff7B299CTC-Blocker")
+	..setHotkey("D")
+	..setTooltipBasic("|cffFFCC00Build |cff7B299CTC-Blocker [D]")
+	..setTooltipExtended("Prevents Terrainchangers from changing the groundtexture below it.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTCBlocker.blp")
+	..setModelFile("buildings\\other\\CircleOfPower\\CircleOfPower.mdl")
+	..setNormalAbilities(int2fourchar(INFO_TC_BLOCKER_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(2)
+	..setButtonPositionY(1)
+	..setTintingColorRed(128)
+	..setTintingColorGreen(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.7)
+	..setSelectionScale(2)
+	..setAttacksEnabled(0)
+	..setSpeedBase(0)
+	..setMovementType(MovementType.None)
+	..setUnitSoundSet("CircleOfPower")
+	..setUpgradesUsed("")
+	..setGoldCost(0)
+	..setFoodCost(0)
+	..setIsaBuilding(TRUE)
+	..setStructuresBuilt("")
+	..setUnitClassification("ancient,standon") 

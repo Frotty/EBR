@@ -1,6 +1,7 @@
 package EscaperKillers
 import public EscaperSensor
 import Escaper
+import ChannelAbilityPreset
 
 public constant COLL_SIZE_SK = 72.
 public constant COLL_SIZE_BK = 92.
@@ -13,12 +14,12 @@ public constant COLL_SIZE_AIR_XY = 52.
 public constant COLL_SIZE_FIRE = 8.
 public constant AIR_HEIGHT = 200.
 
-public constant SMALL_RANDOM_KILLER_ID = 'u006'
-public constant BIG_RANDOM_KILLER_ID = 'u008'
-public constant TANK_KILLER_ID = 'h001'
-public constant GLAIVE_KILLER_ID = 'u00A'
-public constant AIR_KILLER_ID = 'u00J'
-public constant FIRE_KILLER_ID = 'u00P'
+public constant SMALL_RANDOM_KILLER_ID = 'srkr'
+public constant BIG_RANDOM_KILLER_ID = 'brkr'
+public constant GLAIVE_KILLER_ID = 'glve'
+public constant TANK_KILLER_ID = 'tank'
+public constant FIRE_KILLER_ID = 'fire'
+public constant AIR_KILLER_ID = 'airk'
 
 public class SmallKiller extends EscaperSensorSetup
 
@@ -168,3 +169,200 @@ public class FireKiller extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, FIREKILL_INDEX.toString()))
 		return json
+
+
+@objectgen function genKillers()
+	new UnitDefinition(SMALL_RANDOM_KILLER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)			
+	..setScalingValue(2)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCritterChicken.blp")
+	..setModelFile("units\\critters\\EasterChicken\\EasterChicken.mdl")
+    ..setSelectionScale(1)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setMovementType(MovementType.Fly)
+	..setNormalAbilities(int2fourchar('Awan') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("S")
+	..setName("|cff0894E6Small Random Escaper Killer")
+	..setTooltipBasic("|cffFFCC00Train |cff0894E6Small Random Escaper Killer [S]")
+	..setTooltipExtended("Spawns a Small Randomwalking Escaperkiller at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
+
+	new UnitDefinition(BIG_RANDOM_KILLER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)	
+	..setAnimationRunSpeed(100)
+	..setAnimationWalkSpeed(100)		
+	..setScalingValue(4)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCritterRabbit.blp")
+	..setModelFile("units\\critters\\EasterRabbit\\EasterRabbit.mdl")
+    ..setSelectionScale(1.5)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setMovementType(MovementType.Fly)
+	..setNormalAbilities(int2fourchar('Awan') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("D")
+	..setName("|cff0894E6Big Random Escaper Killer")
+	..setTooltipBasic("|cffFFCC00Train |cff0894E6Big Random Escaper Killer [D]")
+	..setTooltipExtended("Spawns a Big Randomwalking Escaperkiller at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
+
+	new UnitDefinition(GLAIVE_KILLER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+	..setAnimationCastBackswing(0)			
+	..setScalingValue(1.3)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNHowlOfTerror.blp")
+	..setButtonPositionX(3)
+	..setButtonPositionY(2)
+	..setModelFile("Abilities\\Weapons\\SentinelMissile\\SentinelMissile.mdl")
+    ..setSelectionScale(0.7)
+    ..setUnitSoundSet("")
+	..setCollisionSize(1)
+	..setSpeedBase(180)
+	..setMovementHeight(20)
+	..setMovementHeightMinimum(20)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("C")
+	..setName("Glaive")
+	..setTooltipBasic("Train Glaive [C]")
+	..setTooltipExtended("Spawns a Glaive at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
+
+	new UnitDefinition(TANK_KILLER_ID, 'hmtt')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setDeathTimeseconds(0.1)			
+    ..setSelectionScale(1.5)
+    ..setUnitSoundSet("")
+	..setCollisionSize(1)
+	..setSpeedBase(180)
+	..setTurnRate(3)
+	..setMovementType(MovementType.Hover)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("R")
+	..setName("|cff0894E6Tank")
+	..setTooltipBasic("|cffFFCC00Train |cff0894E6Tank [R]")
+	..setTooltipExtended("Spawns a Tank at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers")
+	..setUpgradesUsed("")
+	..setRequirements("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
+
+	new UnitDefinition(FIRE_KILLER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+	..setAnimationCastBackswing(0)			
+	..setScalingValue(0.9)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNLavaSpawn.blp")
+	..setButtonPositionX(3)
+	..setButtonPositionY(2)
+	..setModelFile("Units\\Creeps\\LavaSpawn\\LavaSpawn.mdl")
+    ..setSelectionScale(0.7)
+    ..setUnitSoundSet("")
+	..setCollisionSize(1)
+	..setSpeedBase(180)
+	..setMovementHeight(20)
+	..setMovementHeightMinimum(20)
+	..setNormalAbilities(int2fourchar('A08I') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("C")
+	..setName("Fire Killer")
+	..setTooltipBasic("Train Fire Killer [C]")
+	..setTooltipExtended("Spawns a Firekiller that does damage over time.")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)
+
+	new UnitDefinition(AIR_KILLER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+	..setTargetedAs("air")
+	..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)			
+	..setScalingValue(0.8)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNNetherDragon.blp")
+	..setButtonPositionX(3)
+	..setButtonPositionY(2)
+	..setModelFile("units\\creeps\\NetherDragon\\NetherDragon.mdl")
+	..setTintingColorGreen(50)
+	..setTintingColorBlue(50)
+    ..setSelectionScale(0.8)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setMovementType(MovementType.Fly)
+	..setMovementHeight(200)
+	..setMovementHeightMinimum(200)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("S")
+	..setName("Flying Killer")
+	..setTooltipBasic("Train flying Escaper Killer [S]")
+	..setTooltipExtended("Spawns a flying Escaperkiller at|cffFFCC00 Rallypoint|n|n|cffD64219Kills Escapers in air")
+	..setUpgradesUsed("")
+	..setCanFlee(false)
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)

@@ -21,8 +21,8 @@ public class LobbyTeleporter extends StaticBaseObject
 
 	construct(unit existing, boolean builder)
 		super(existing.getPos(), existing, EVENT_RADIUS, function LobbyTeleporter.checkVote, CODE_NULL)
-		actor..removeAbility(removeObject)
-		..removeAbility(makeUnitInvisible)
+		actor..removeAbility(REMOVE_OBJECT_ID)
+		..removeAbility(MAKE_UNIT_INVISIBLE_ID)
 		..removeAbility(ESC_ID)
 		if builder
 			ftext = createCenterFText(existing.getPos().toVec3(), "|cffffcc00building", 10)
@@ -68,7 +68,7 @@ public class LobbyTeleporter extends StaticBaseObject
 			addEffect(EFFECT_STRING, rallyPos).destr()
 			if not pData[e.owner.getId()].escaper.camlock
 				PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03 )
-			if isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(removeObject) 
+			if isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_OBJECT_ID) 
 				terminate()
 			else
 

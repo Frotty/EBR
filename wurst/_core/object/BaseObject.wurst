@@ -4,6 +4,7 @@ import public TerrainUtils
 import public ConfigValue
 import public SetupObject
 import public SerializeIds
+import public ChannelAbilityPreset
 import Assets
 
 /*  ---Creating a new Baseobject---
@@ -14,10 +15,10 @@ import Assets
 
 	A Baseobject is usually a circle. A unit that doesn't move and has an onRange trigger.
 */
-
 public code CODE_NULL = null
 public constant KEY_RALLY_X = "r"
 public constant KEY_RALLY_Y = "s"
+
 
 public class StaticBaseObject extends UnitEntity
 	private vec3 rallyPoint
@@ -34,7 +35,7 @@ public class StaticBaseObject extends UnitEntity
 		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)
 		actor..addAbility(GHOST_VIS_ID)
-		..addAbility(removeObject)
+		..addAbility(REMOVE_OBJECT_ID)
 		this.setCurrentRegion()
 		rallyPoint = this.pos
 
@@ -54,14 +55,14 @@ public class StaticBaseObject extends UnitEntity
 		if flag and not enabled
 			enabled = true
 			activate()
-			actor..removeAbility(turnOn)..addAbility(turnOff)
+			actor..removeAbility(TURN_ON_ID)..addAbility(TURN_OFF_ID)
 			flashEffect(Other.ancestralspiritcaster, pos)
 			if disFx != null
 				disFx.destr()
 		else if enabled
 			enabled = false
 			deactivate()
-			actor..removeAbility(turnOff)..addAbility(turnOn)
+			actor..removeAbility(TURN_OFF_ID)..addAbility(TURN_ON_ID)
 			if disFx != null
 				disFx.destr()
 
@@ -76,9 +77,9 @@ public class StaticBaseObject extends UnitEntity
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case turnOn
+			case TURN_ON_ID
 				setEnabled(true)
-			case turnOff
+			case TURN_OFF_ID
 				setEnabled(false)
 
 	function clearQuestionmark()

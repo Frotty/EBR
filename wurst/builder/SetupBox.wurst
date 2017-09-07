@@ -6,7 +6,11 @@ import RegisterEvents
 import SoundUtils
 import Preloader
 
-public constant SETUP_BOX 	= 'n00A'
+public constant SETUP_BOX_ID = compiletime(UNIT_ID_GEN.next())
+constant HM = compiletime(ABIL_ID_GEN.next())
+constant EASY_ENABLE = compiletime(ABIL_ID_GEN.next())
+constant EASY_DISABLE = compiletime(ABIL_ID_GEN.next())
+
 constant ICEI_ID 			= 'A057'
 constant ICED_ID 			= 'A006'
 constant PI_ID 				= 'A011'
@@ -30,8 +34,6 @@ public constant ORB_SPELL_ID = 'A08A'
 constant CANCEL_TOGGLE_ID 	= 'A08C'
 constant CUT_ALLOW 			= 'A08F'
 constant CUT_DISABLE 		= 'A08G'
-constant EASY_ENABLE = compiletime(ABIL_ID_GEN.next())
-constant EASY_DISABLE = compiletime(ABIL_ID_GEN.next())
 
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
@@ -41,7 +43,7 @@ public class SetupBox extends UnitEntity
 	private RegionData rdata
 	
 	construct( vec2 pos, player owner, RegionData data )
-		super(getUnit(owner, SETUP_BOX, pos, angle(0), this))
+		super(getUnit(owner, SETUP_BOX_ID, pos, angle(0), this))
 		this.setCurrentRegion()
 		rdata = data
 		actor..addAbility(ALLOW_ID)..addAbility(CLEAR_ID)..addAbility(SECOND_PAGE)
@@ -249,7 +251,6 @@ function claimRegion()
 
 init	
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
-	preloadAbility(SETUP_BOX)
 	preloadAbility(ICEI_ID)
 	preloadAbility(ICED_ID)
 	preloadAbility(PI_ID)
@@ -274,7 +275,7 @@ init
 	preloadAbility(CUT_ALLOW)
 	preloadAbility(CUT_DISABLE)
 
-@objectgen function genAbils()
+@objectgen function genSetupBox()
 	new ChannelAbilityPreset(EASY_ENABLE, 1, true)
 	..setName("Enable Easy Mode")
 	..presetTooltipNormal((int levle) -> "Currently in |cffFF9C29normal |rmode.")
@@ -282,6 +283,8 @@ init
 	..presetIcon("BTNSacrifice.blp")
 	..presetButtonPosNormal(1, 0)
 	..presetHotkey("W")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
 
 	new ChannelAbilityPreset(EASY_DISABLE, 1, true)
 	..setName("Disable Easy Mode")
@@ -290,3 +293,20 @@ init
 	..presetIcon("BTNShockWave.blp")
 	..presetButtonPosNormal(1, 0)
 	..presetHotkey("W")
+	..presetTargetTypes(Targettype.NONE)
+	..setHeroAbility(FALSE)
+
+	new BuildingDefinition(SETUP_BOX_ID, 'nbse')
+	..setName("|cffFFCC00Setup")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNMagicVault.blp")
+	..setNormalAbilities(
+	int2fourchar(GHOST_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID)) 
+	..setGroundTexture("")
+	..setShadowTextureBuilding("") 
+	..setModelFile("buildings\\other\\MagicVault\\MagicVault.mdl")  
+	..setScalingValue(0.4)
+	..setSelectionScale(1.6)
+	..setPathingMap("")
+	..setCollisionSize(0)
+	..setUnitClassification("Mechanical")

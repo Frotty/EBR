@@ -2,9 +2,10 @@ package Pointer
 import EscaperSensor
 import Escaper
 import Preloader
-import ClosureTimers
+import ChannelAbilityPreset
 
-constant int POINTER_ID = 'h01Q'
+public constant POINTER_ID = 'pntr'
+constant INFO_POINTER_ID = compiletime(ABIL_ID_GEN.next())
 constant POINTER_RADIUS = 64.
 constant int INC_ID = 'A01F'
 constant int DEC_ID = 'A01G'
@@ -104,3 +105,56 @@ init
 	preloadAbility(STOP_ID)
 	preloadAbility(INC_ID)
 	preloadAbility(DEC_ID)
+
+@objectgen function genPointer()
+	new ChannelAbilityPreset(INFO_POINTER_ID, 1, TRUE)
+	..setName("Information: Pointer")
+	..presetTooltipNormal((int lvl) -> "Information: Pointer")
+	..presetTooltipNormalExtended((int lvl) -> "Only on Ice!" +
+	"\nFaces and Escaper in the direction the Pointer is facing." +
+	"\nYou can set facing by moving pointer or by the command: -setangle 0-360" +
+	"\nTo let it autorotate click the Ability once.")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+
+	new UnitDefinition(POINTER_ID, 'hmtt')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setDeathTimeseconds(0.1)	
+	..setElevationSamplePoints(0)
+	..setElevationSampleRadius(0)
+	..setShadowImageCenterX(0)
+	..setShadowImageCenterY(0)
+	..setShadowImageHeight(0)
+	..setShadowImageUnit("")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFlamingArrows.blp")
+	..setModelFile("Abilities\\Weapons\\BallistaMissile\\BallistaMissile.mdl")
+    ..setSelectionScale(1.5)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setMovementHeight(10)
+	..setTurnRate(99)
+	..setMovementType(MovementType.Fly)
+	..setNormalAbilities(int2fourchar('A031') + "," +
+	int2fourchar('A01F') + "," +
+	int2fourchar('A01G') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("X")
+	..setName("|cff0894E6Pointer")
+	..setTooltipBasic("|cffFFCC00Train |cff0894E6Pointer [X]")
+	..setTooltipExtended("Changes the Angle of a escaper where it points to")
+	..setUpgradesUsed("")
+	..setRequirements("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setGoldCost(0)
+	..setFoodCost(0)

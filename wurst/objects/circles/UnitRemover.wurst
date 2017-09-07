@@ -3,23 +3,25 @@ import BaseObject
 import Obstacle
 import Decoration
 
+constant INFO_UNIT_REMOVER_ID = compiletime(ABIL_ID_GEN.next())
+
 public class UnitRemover extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, 64., function UnitRemover.removeUnit, CODE_NULL )
 		clearQuestionmark()
-		actor.addAbility(turnOff)
+		actor.addAbility(TURN_OFF_ID)
 
 	construct( vec2 pos, player owner)
-		super(pos, getUnit(owner, unitRemover, pos, angle(0), this), 64., function UnitRemover.removeUnit, CODE_NULL)
+		super(pos, getUnit(owner, UNIT_REMOVER_ID, pos, angle(0), this), 64., function UnitRemover.removeUnit, CODE_NULL)
 		clearQuestionmark()
-		actor.addAbility(turnOff)
+		actor.addAbility(TURN_OFF_ID)
 
 	static function removeUnit()
 		var u = GetTriggerUnit()
 		var data = u.getUserData()
 		var sdata = GetTriggeringTrigger().getSource().getUserData() castTo UnitRemover
-		if data > 0 and (data castTo Entity).owner == sdata.owner and u.hasAbility(removeObject)
+		if data > 0 and (data castTo Entity).owner == sdata.owner and u.hasAbility(REMOVE_OBJECT_ID)
 			var edata = data castTo Entity
 			if edata instanceof SetupObject and not edata instanceof Obstacle and not edata instanceof Decoration
 				edata.terminate()
@@ -28,3 +30,37 @@ public class UnitRemover extends StaticBaseObject
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITREMOVER_INDEX.toString()))
 		return json
+
+
+@objectgen function genUnitRemover()
+	new ChannelAbilityPreset(INFO_UNIT_REMOVER_ID, 1, TRUE)
+	..setName("Information: Unit Remover")
+	..presetTooltipNormal((int lvl) -> "Information: Unit Remover")
+	..presetTooltipNormalExtended((int lvl) -> "The Unit Remover removes any Unit that drives over it from the game")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
+	..presetButtonPosNormal(0, 0)
+	..presetTargetTypes(Targettype.PASSIVE)
+	..setHeroAbility(FALSE)
+		
+	new BuildingDefinition(UNIT_REMOVER_ID, 'ncop')
+	..setName("|cffFF0000UnitRemover")
+	..setHotkey("E")
+	..setTooltipBasic("|cffFFCC00Build |cffFF0000UnitRemover [E]")
+	..setTooltipExtended("Removes units that were created by a Unitcreator")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Remover.blp")
+	..setNormalAbilities(int2fourchar(INFO_UNIT_REMOVER_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +  
+	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(2)
+	..setButtonPositionY(0)
+	..setTintingColorRed(100)
+	..setTintingColorGreen(0)
+	..setTintingColorBlue(0)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.8)
+	..setSelectionScale(2.2)
+	..setUnitClassification("ancient,standon")

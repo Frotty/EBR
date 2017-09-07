@@ -20,8 +20,8 @@ public class MinigameTeleporter extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS, function MinigameTeleporter.checkVote, CODE_NULL )
-		actor..removeAbility(removeObject)
-		..removeAbility(makeUnitInvisible)
+		actor..removeAbility(REMOVE_OBJECT_ID)
+		..removeAbility(MAKE_UNIT_INVISIBLE_ID)
 		..removeAbility(ESC_ID)
 		clearQuestionmark()
 		text = createCenterFText(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 10)

@@ -9,9 +9,22 @@ import UnitProducer
 import DummyRecycler
 import PickSystem
 import initlater TerrainBlocker
+import ChannelAbilityPreset
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
-public constant vec2 LOUNGE = gg_unit_n000_0322.getPos()
+public constant vec2 LOUNGE = gg_unit_x009_0322.getPos()
+
+public constant REGION_ADMIN_ID = 'radm'
+constant SMALL_GRASS_KILLER_ID = 'sgrk'
+constant SMALL_ICE_KILLER_ID = 'sick'
+constant SMALL_CITADEL_KILLER_ID = 'scik'
+constant SMALL_SAND_KILLER_ID = 'ssak'
+constant SMALL_SUNKEN_KILLER_ID = 'ssuk'
+constant BIG_GRASS_KILLER_ID = 'bgrk'
+constant BIG_ICE_KILLER_ID = 'bisk'
+constant BIG_CITADEL_KILLER_ID = 'bcik'
+constant BIG_SAND_KILLER_ID = 'bsak'
+constant BIG_SUNKEN_KILLER_ID = 'bsuk'
 
 public enum RegionType
 	UNKNOWN
@@ -26,15 +39,15 @@ public function RegionType.getTypeSet() returns regionTypeSet
 		case UNKNOWN
 			return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 		case CITADEL
-			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', 'n018', 'n019', 'h00G', 'u00K', 'n01V')
+			return regionTypeSet('I00H', 'Idtr', 'Ibkb', SMALL_CITADEL_KILLER_ID, BIG_CITADEL_KILLER_ID, 'KTtw', 'n018', 'n019', 'h00G', 'u00K', 'n01V')
 		case SAND
-			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', 'n01F', 'n01G', 'h00M', 'u00N', 'n01W')
+			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), SMALL_SAND_KILLER_ID, BIG_SAND_KILLER_ID, 'BTtw', 'n01F', 'n01G', 'h00M', 'u00N', 'n01W')
 		case CITY
-			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H', 'h00L', 'u00M', 'n01X')
+			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', SMALL_GRASS_KILLER_ID, BIG_GRASS_KILLER_ID, 'LTlt', 'n01I', 'n01H', 'h00L', 'u00M', 'n01X')
 		case SNOW
-			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'h00O', 'u00L', 'n01J')
+			return regionTypeSet('I00D', 'Itbk', 'Isnw', SMALL_ICE_KILLER_ID, BIG_ICE_KILLER_ID, 'WTst', 'n00R', 'n00S', 'h00O', 'u00L', 'n01J')
 		case SUNKEN
-			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005', 'h00N', 'u00O', 'n01Y')
+			return regionTypeSet('I00N', 'Zbks', 'Zdrg', SMALL_SUNKEN_KILLER_ID, BIG_SUNKEN_KILLER_ID, 'ZTtw', 'n055', 'n005', 'h00N', 'u00O', 'n01Y')
 	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 	
 public function getRegionTypeFromItem(int itemId) returns RegionType
@@ -158,7 +171,7 @@ public class RegionData
 		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or pData[p.getId()].title == Title.ADMIN
 
 	function createSetup()
-		createUnit(STAFF_PLAYER, 'n008', theRect.getCenter(), (270).asAngleDegrees())
+		createUnit(STAFF_PLAYER, REGION_ADMIN_ID, theRect.getCenter(), (270).asAngleDegrees())
 
 	function revealRegion(player p)
 		let id = p.getId()
@@ -279,3 +292,308 @@ public RegionData array regions
 			entity.terminate()
 	end)
 
+
+@objectgen function genRegionKillers()
+	new UnitDefinition(SMALL_CITADEL_KILLER_ID, 'nlv1')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(280)
+	..setAnimationWalkSpeed(280)
+	..setAnimationCastPoint(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFelGuard.blp")
+	..setModelFile("units\\demon\\Felgaurd\\Felgaurd.mdl")
+    ..setSelectionScale(0.8)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF0080FFSmall|r Escaper Killer")
+	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+
+	new UnitDefinition(SMALL_ICE_KILLER_ID, 'nlv1')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(200)
+	..setAnimationWalkSpeed(200)
+	..setAnimationCastPoint(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWendigo.blp")
+	..setModelFile("units\\creeps\\Wendigo\\Wendigo.mdl")
+    ..setSelectionScale(0.8)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF0080FFSmall|r Escaper Killer")
+	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+
+	new UnitDefinition(SMALL_SUNKEN_KILLER_ID, 'ugho')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNSpiderCrab.blp")
+	..setModelFile("units\\creeps\\SpiderCrabCreep\\SpiderCrabCreep.mdl")
+    ..setSelectionScale(0.8)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF0080FFSmall|r Escaper Killer")
+	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+
+	new UnitDefinition(SMALL_SAND_KILLER_ID, 'nlv1')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(200)
+	..setAnimationWalkSpeed(200)
+	..setAnimationCastPoint(0)
+	..setScalingValue(1.3)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNDuneWorm.blp")
+	..setModelFile("units\\critters\\DuneWorm\\DuneWorm.mdl")
+    ..setSelectionScale(0.8)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF0080FFSmall|r Escaper Killer")
+	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+
+	new UnitDefinition(SMALL_GRASS_KILLER_ID, 'nlv1')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(200)
+	..setAnimationWalkSpeed(200)
+	..setAnimationCastPoint(0)
+	..setScalingValue(1.3)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNQuillBeast.blp")
+	..setModelFile("units\\creeps\\SpiritPig\\SpiritPig.mdl")
+    ..setSelectionScale(0.8)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFF0080FFSmall|r Escaper Killer")
+	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+
+	new UnitDefinition(BIG_CITADEL_KILLER_ID, 'hpea')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(300)
+	..setAnimationWalkSpeed(90)
+	..setAnimationCastPoint(0)
+	..setScalingValue(1.15)
+	..setSpecial("units\\undead\\CryptFiend\\CryptFiend.mdl")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNSpiderBlack.blp")
+	..setModelFile("units\\creeps\\SpiderBlack\\SpiderBlack.mdl")
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFFFF0000Big|r Escaper Killer")
+	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setStructuresBuilt("")
+	..setUpgradesUsed("")
+	..setUnitClassification("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)
+	..setGoldCost(0)
+
+	new UnitDefinition(BIG_ICE_KILLER_ID, 'hpea')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(250)
+	..setAnimationWalkSpeed(250)
+	..setAnimationCastPoint(0)
+	..setScalingValue(1.15)
+	..setSpecial("units\\undead\\CryptFiend\\CryptFiend.mdl")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFrostBear.blp")
+	..setModelFile("units\\creeps\\PolarBear\\PolarBear.mdl")
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFFFF0000Big|r Escaper Killer")
+	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setStructuresBuilt("")
+	..setUpgradesUsed("")
+	..setUnitClassification("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)
+	..setGoldCost(0)
+
+	new UnitDefinition(BIG_SAND_KILLER_ID, 'hpea')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(250)
+	..setAnimationWalkSpeed(250)
+	..setAnimationCastPoint(0)
+	..setScalingValue(1.15)
+	..setSpecial("units\\undead\\CryptFiend\\CryptFiend.mdl")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNArachnathidGreen.blp")
+	..setModelFile("Units\\Creeps\\ArchnathidGreen\\ArchnathidGreen.mdl")
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFFFF0000Big|r Escaper Killer")
+	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setStructuresBuilt("")
+	..setUpgradesUsed("")
+	..setUnitClassification("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)
+	..setGoldCost(0)
+
+	new UnitDefinition(BIG_SUNKEN_KILLER_ID, 'uabo')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNLobstrokkBlue.blp")
+	..setModelFile("Units\\Creeps\\Lobstrokkgreen\\Lobstrokkgreen.mdl")
+	..setSelectionScale(1)
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFFFF0000Big|r Escaper Killer")
+	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setStructuresBuilt("")
+	..setUpgradesUsed("")
+	..setUnitClassification("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)
+	..setGoldCost(0)
+
+	new UnitDefinition(BIG_GRASS_KILLER_ID, 'hpea')  
+    ..setAttacksEnabled(0)
+    ..setTargetedAs("air")
+    ..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(250)
+	..setAnimationWalkSpeed(250)
+	..setAnimationCastPoint(0)
+	..setScalingValue(0.8)
+	..setSpecial("units\\undead\\CryptFiend\\CryptFiend.mdl")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNSeaTurtleRed.blp")
+	..setModelFile("Units\\Creeps\\DragonSeaTurtleRange\\DragonSeaTurtleRange.mdl")
+    ..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setSpeedBase(180)
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("|cFFFF0000Big|r Escaper Killer")
+	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
+	..setTooltipExtended("Kills escapers which comes too near")
+	..setStructuresBuilt("")
+	..setUpgradesUsed("")
+	..setUnitClassification("")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)	
+	..setFoodCost(0)
+	..setGoldCost(0)
+
+	new BuildingDefinition(REGION_ADMIN_ID, 'ngme')
+    ..setName("|cFF00FF00Administrator|r of |cFFFFFF00this region|r")
+    ..setItemsSold(int2fourchar('I011') + "," +
+    int2fourchar('I00T') + "," +
+    int2fourchar('I00Q') + "," +
+    int2fourchar('I00L') + "," +
+    int2fourchar('I00P'))
+    ..setGroundTexture("USMA")
+    ..setModelFile("Units\\Creeps\\HeroTinkerFactory\\HeroTinkerFactory.mdl")
+    ..setPathingMap("")
+    ..setCollisionSize(0)
+    ..setItemsSold(int2fourchar('I00N') + "," +
+    int2fourchar('I00D') + "," +
+    int2fourchar('I00G') + "," +
+    int2fourchar('I00H') + "," +
+    int2fourchar('I00E'))
+    ..setNeutralBuildingShowsMinimapIcon(false)

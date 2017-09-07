@@ -9,10 +9,10 @@ import ClosureTimers
 
 EscaperDefinition array currentView
 
-constant START = gg_unit_n000_0002.getPos3Real()
+constant START = gg_unit_x009_0002.getPos3Real()
 constant PICK = vec3(-6743, 6616,100)
 constant BLINK_ID = 'A001'
-constant PICK_DUMMY_ID = 'h00P'
+public constant PICK_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 
 interface EscaperClsr
 	function create(PlayerData pd)
@@ -165,7 +165,7 @@ constant PREV_ID = compiletime(ABIL_ID_GEN.next())
 constant NEXT_ID = compiletime(ABIL_ID_GEN.next())
 constant PICK_ID = compiletime(ABIL_ID_GEN.next())
 
-@objectgen function getSelectorAbils()
+@objectgen function getSelector()
 	new ChannelAbilityPreset(PREV_ID, 1, true)..presetIcon("BTNprevEffect.blp")..presetButtonPosNormal(0, 2)
 	..setName("Go to previous Escaper")
 	..presetHotkey("Y")
@@ -183,3 +183,19 @@ constant PICK_ID = compiletime(ABIL_ID_GEN.next())
 	..presetTooltipNormal((int lvl) -> "Pick Escaper [|cffFFCC00Q|r]")
 	..presetHotkey("Q")
 	..presetTooltipNormalExtended((int lvl) -> "This will start your game as escaper.\nIf you have local files enabled your rank will be loaded and saved automatically.")
+
+	new UnitDefinition(PICK_DUMMY_ID, 'hpea')  
+    ..setAttacksEnabled(0)
+    ..setShadowImageUnit("")
+    ..setModelFile("Objects\\RandomObject\\RandomObject.mdl")
+    ..setSpeedBase(0)
+    ..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar(GHOST_VISIBLE_ID))
+	..setHotkey("")
+	..setName("Select Escaper")
+	..setTooltipBasic("")
+	..setTooltipExtended("")
+	..setStructuresBuilt("")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setHitPointsMaximumBase(100000000)

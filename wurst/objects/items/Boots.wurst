@@ -1,5 +1,6 @@
 package Boots
 import ItemObject
+import Key
 
 public class Boots extends ItemObject
 	boolean picked = false
@@ -7,7 +8,7 @@ public class Boots extends ItemObject
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, 'h10K', pos.x, pos.y, 0 ) )
+		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0 ) )
 		
 	override function onUse(Escaper user)
 		

@@ -4,8 +4,6 @@ import Spinner
 import ChannelAbilityPreset
 import Interpolation
 
-constant int UNIT_ID = 'h000'
-
 constant int ADD_ID = 'A02Y'
 constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
@@ -30,7 +28,7 @@ class CongaSegment
 	construct(CongaLineHead head, SetupObject target)
 		this.target = target
 		this.head = head
-		target.setup.removeAbility(removeObject)
+		target.setup.removeAbility(REMOVE_OBJECT_ID)
 		phi = head.getPos().angleTo2d(target.getPos())
 
 	function calcPos()
@@ -55,7 +53,7 @@ class CongaSegment
 		if head.firstSegment == this
 			head.firstSegment = next
 		if not target.done and target.actor != null
-			target.setup.addAbility(removeObject)
+			target.setup.addAbility(REMOVE_OBJECT_ID)
 
 public class CongaLineHead extends SetupObject
 	CongaSegment firstSegment = null
@@ -63,7 +61,7 @@ public class CongaLineHead extends SetupObject
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, UNIT_ID, pos, angle(0), this), getUnit(owner, UNIT_ID, pos, angle(0), this), 0.)
+		super(getUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0), this), getUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0), this), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		sleeps = false
 		setup.addAbility(CONGA_CONFIG_ID)
@@ -155,7 +153,7 @@ public constant CONGA_LOOSE_ID = compiletime(ABIL_ID_GEN.next())
 public constant CONGA_PENDULUM_ID = compiletime(ABIL_ID_GEN.next())
 public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 
-@objectgen function genObj()
+@objectgen function genCongaLineHead()
 	new ChannelAbilityPreset(CONGA_STRICT_ID, 1, true)
 	..setName("Strict mode")
 	..setHeroAbility(false)
@@ -180,3 +178,42 @@ public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 	..setItemAbility(false)
 	..setMaximumSpells(1, 10)
 	..setSpellList(1, int2fourchar(CONGA_LOOSE_ID)  + "," + int2fourchar(CONGA_STRICT_ID) + ",A02Z,A030")
+
+	new UnitDefinition(CONGA_LINE_HEAD_ID, 'hatw')  
+    ..setAttacksEnabled(0)
+    ..setAnimationBlendTimeseconds(0)
+    ..setAnimationCastBackswing(0)
+    ..setDeathTimeseconds(0.1)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNconga.blp")
+	..setButtonPositionX(0)
+	..setModelFile("Units\\Creeps\\HeroTinkerRobot\\HeroTinkerRobot.mdl")
+	..setTintingColorBlue(200)
+	..setTintingColorGreen(200)
+	..setTintingColorRed(200)
+    ..setSelectionScale(1)
+	..setSpeedBase(180)
+	..setTurnRate(3)
+    ..setMovementType(MovementType.Foot)
+    ..setUnitSoundSet("Acolyte")
+    ..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar('A02Y') + "," +
+	int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+    int2fourchar(REMOVE_OBJECT_ID) + "," +
+    int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("Y")
+	..setName("|cffA5A5A5Conga Line Head")
+	..setTooltipBasic("|cffFFCC00Build |cffA5A5A5Conga Line Head [Y]")
+	..setTooltipExtended("The head unit pulls selected units behind itself like a conga line.")
+    ..setUpgradesUsed("")
+    ..setBuildTime(1)
+    ..setUnitClassification("ancient")
+	..setHitPointsMaximumBase(100000000)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setFoodCost(0)
+	..setGoldCost(0)
+	..setLumberCost(0)
+    ..setIsaBuilding(false)

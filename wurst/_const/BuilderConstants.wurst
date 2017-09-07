@@ -6,54 +6,76 @@ import public SerializeIds
 /**
 	Holds constant values and object IDs for the builder side
 */
-constant IDGEN = new IdGenerator('0A00')
 
 //General Abilities
-public constant turnOn = compiletime(IDGEN.next())
-public constant turnOff = compiletime(IDGEN.next())
-public constant makeUnitInvisible = compiletime(IDGEN.next())
-public constant makeUnitVisible = compiletime(IDGEN.next())
-public constant removeObject = compiletime(IDGEN.next())
-//Jumper Abilities
-public constant jumperDecreaseForce = compiletime(IDGEN.next())
-public constant jumperIncreaseForce = compiletime(IDGEN.next())
-public constant jumperModeForced = compiletime(IDGEN.next())
-public constant jumperModeUnforced = compiletime(IDGEN.next())
-//Booster Abilities
-public constant boosterSpeedUp = compiletime(IDGEN.next())
-public constant boosterSpeedDown = compiletime(IDGEN.next())
+public constant TURN_ON_ID = compiletime(ABIL_ID_GEN.next())
+public constant TURN_OFF_ID = compiletime(ABIL_ID_GEN.next())
+public constant MAKE_UNIT_INVISIBLE_ID = compiletime(ABIL_ID_GEN.next())
+public constant MAKE_UNIT_VISIBLE_ID = compiletime(ABIL_ID_GEN.next())
+public constant REMOVE_OBJECT_ID = compiletime(ABIL_ID_GEN.next())
+public constant MODE_ESCAPERS_ID = compiletime(ABIL_ID_GEN.next())
+public constant MODE_KILLERS_ID = compiletime(ABIL_ID_GEN.next())
+public constant MODE_BOTH_ID = compiletime(ABIL_ID_GEN.next())
 //Info Abilities
-public constant infoBooster = compiletime(IDGEN.next())
-public constant infoExecuter = compiletime(IDGEN.next())
-public constant infoJumper = compiletime(IDGEN.next())
-public constant infoPointer = compiletime(IDGEN.next())
-public constant infoRevivePoint = compiletime(IDGEN.next())
-public constant infoSounder = compiletime(IDGEN.next())
-public constant infoTCBlocker = compiletime(IDGEN.next())
-public constant infoTeleporter = compiletime(IDGEN.next())
-public constant infoTexter = compiletime(IDGEN.next())
-public constant infoUnitCreator = compiletime(IDGEN.next())
-public constant infoUnitRemover = compiletime(IDGEN.next())
-public constant infoWaypoint = compiletime(IDGEN.next())
+public constant INFO_SOUNDER_ID = compiletime(ABIL_ID_GEN.next())
 //Circles
-public constant teleporter = compiletime(IDGEN.next())
-public constant waypoint = compiletime(IDGEN.next())
-public constant arcanery = compiletime(IDGEN.next())
-public constant executer = compiletime(IDGEN.next())
-public constant tcBlocker = compiletime(IDGEN.next())
-public constant unitCreator = compiletime(IDGEN.next())
-public constant unitCreatorDummy = compiletime(IDGEN.next())
-public constant unitRemover = compiletime(IDGEN.next())
-public constant revivePoint = compiletime(IDGEN.next())
-public constant jumper = compiletime(IDGEN.next())
-public constant texter = compiletime(IDGEN.next())
-public constant booster = compiletime(IDGEN.next())
-public constant trap = compiletime(IDGEN.next())
-//Builders
-public constant builderCircles = compiletime(IDGEN.next())
-public constant builderObjects = compiletime(IDGEN.next())
-public constant builderEnviromental = compiletime(IDGEN.next())
-public constant builderDecorations = compiletime(IDGEN.next())
+public constant TELEPORTER_ID = 'tele'
+public constant WAYPOINT_ID = 'wayp'
+public constant ARCANERY_ID = 'arca'
+public constant EXECUTER_ID = 'exec'
+public constant TC_BLOCKER_ID = 'tcbl'
+public constant UNIT_CREATOR_ID = 'uncr'
+public constant UNIT_REMOVER_ID  = 'unre'
+public constant REVIVE_POINT_ID = 'revp'
+public constant JUMPER_ID = 'jump'
+public constant TEXTER_ID = 'text'
+public constant BOOSTER_ID = 'bstr'
+public constant TRAP_ID = 'trap'
+//Second Objects
+public constant BOMB_TOWER_ID = 'bmbt'
+public constant CONGA_LINE_HEAD_ID = 'clhd'
+public constant DOORDUMMY_ID = 'dor1'
+public constant FOUNTAIN_BOTH_ID = 'fnt1'
+public constant FOUNTAIN_HEAL_ID = 'fnt2'
+public constant FOUNTAIN_CURE_ID = 'fnt3'
+public constant POWER_NODE_ID = 'pwnd'
+public constant SPINNER_ID = 'spnr'
+//public constant TRACKS_ID = compiletime(UNIT_ID_GEN.next())
+public constant VORTEX_ID = 'vrtx'
+//public constant M_A_P_ID = compiletime(UNIT_ID_GEN.next())
+//Enviromental
+public constant VOLCANO_ID = 'volc' 
+public constant HOR_WALL_ID = 'hwal'
+public constant VER_WALL_ID = 'vwal'
+public constant WALL_ID = 'wall'
+/*
+public constant TREE_ID = compiletime(UNIT_ID_GEN.next())
+public constant SMALL_OBST_ID = compiletime(UNIT_ID_GEN.next())
+public constant MEDIUM_OBST_ID = compiletime(UNIT_ID_GEN.next())
+public constant HIGH_OBST_ID = compiletime(UNIT_ID_GEN.next()) */
+//Decorations
+/* public constant REMAINS_ID = compiletime(UNIT_ID_GEN.next())
+public constant FARM_ID = compiletime(UNIT_ID_GEN.next())
+public constant ICE_CRYSTAL_ID = compiletime(UNIT_ID_GEN.next())
+public constant OBELISK_ID = compiletime(UNIT_ID_GEN.next())
+public constant POISON_EGGS_ID = compiletime(UNIT_ID_GEN.next())
+public constant LANTERN_ID = compiletime(UNIT_ID_GEN.next())
+public constant MUSHROOM_ID = compiletime(UNIT_ID_GEN.next())
+public constant POST_LANTERN_ID = compiletime(UNIT_ID_GEN.next())
+public constant RUNE_ID = compiletime(UNIT_ID_GEN.next())
+public constant TORCH_ID = compiletime(UNIT_ID_GEN.next())
+public constant SUPERLIGHT_ID = compiletime(UNIT_ID_GEN.next()) */
+//Escapers
+/* public constant ESC_STRONG_ID = compiletime(HERO_ID_GEN.next())
+public constant ESC_ICE_ID = compiletime(HERO_ID_GEN.next())
+public constant ESC_FAST_ID = compiletime(HERO_ID_GEN.next())
+public constant ESC_HOLY_ID = compiletime(HERO_ID_GEN.next())
+public constant ESC_BLIND_ID = compiletime(HERO_ID_GEN.next()) */
+
+public constant INVULNERABILITY_ID = 'Avul'
+public constant GHOST_VISIBLE_ID = 'Aeth'
+public constant GHOST_ID = 'Agho'
+public constant RALLY_POINT = 'ARal'
 
 public constant vec2 hidden = vec2(-6000,6000)
 public constant int CONTROLLABLEICE = 'Nice'
@@ -63,16 +85,8 @@ public constant int LAVA = 'Glvc'
 public constant int POISON = 'Cpos'
 public constant int RUNES = 'Irbk'
 
-public constant int BUILDER_2 = 'u005'
-public constant int BUILDER_3 = 'u007'
-public constant int BUILDER_4 = 'u00C'
-
-public constant int MENU_1 = 'A000'
 public constant int MENU_2 = 'A00O'
 public constant int MENU_3 = 'A05B'
-public constant int MENU_4 = 'A05C'
-public constant int MENU_5 = 'A05D'
-public constant int MENU_6 = 'A05E'
 public constant int MENU_BOSS = 'A03D'
 
 public constant int KEY_SPELL_ID = 'A03Z'
