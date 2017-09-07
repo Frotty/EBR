@@ -42,11 +42,13 @@ public class Spinner extends SetupObject
 	construct(unit existing)
 		super(getUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0), this), existing, 0)
 		sleeps = false
+		setup.addAbility(TURN_OFF_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, SPINNER_ID, pos, angle(0), this), getUnit(owner, SPINNER_ID, pos, angle(0), this), 0)
 		sleeps = false
+		setup.addAbility(TURN_OFF_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
@@ -56,7 +58,8 @@ public class Spinner extends SetupObject
 		while node != null
 			if not node.obj.done and node.obj.actor != null
 				node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
-				node.angl += speed
+				if enabled
+					node.angl += speed
 			else
 				destroy node
 				if node == firstNode
@@ -95,6 +98,10 @@ public class Spinner extends SetupObject
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
+			case TURN_ON_ID
+				setEnabled(true)
+			case TURN_OFF_ID
+				setEnabled(false)
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo UnitEntity
@@ -123,6 +130,8 @@ public class Spinner extends SetupObject
 				sinFactor.increment(this, 1)
 			case SDEC_ID
 				sinFactor.decrement(this, 0)
+			
+			
 
 	override function serialize() returns Json
 		let json = super.serialize()

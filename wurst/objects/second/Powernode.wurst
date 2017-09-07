@@ -12,18 +12,21 @@ constant LINK_ORB_ID = 'A08E'
 constant EFFECT_STRING = "DRAM"
 constant EFFECT_BOUNCE_STRING = "LGRO"
 constant EFFECT_DIODE_STRING = "LONE"
-constant EFFECT_TETHER_STRING = "LBOT"
+constant EFFECT_TETHER_BOTH_STRING = "LBOT"
+constant EFFECT_TETHER_AIR_STRING = "BAIR"
 constant EFFECT_ORB_STRING = "LORB"
 constant KILL_EFFECT = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
 constant ACTIVATION_DIST = 22.
 public constant INCREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
 public constant DECREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
+public constant LINK_AIR_ID = compiletime(ABIL_ID_GEN.next())
 
 enum LinkType
 	KILL
 	BOUNCE
 	BOUNCE_DIODE
 	AIRTETHER
+	BOTHTETHER
 	ORBTETHER
 
 class Link
@@ -62,7 +65,7 @@ public class Powernode extends SetupObject
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, POWER_NODE_ID, pos, angle(0), this), getUnit(owner, POWER_NODE_ID, pos, angle(0), this), 0.)
 		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
-		..addAbility(INCREASE_BOUNCE_ID).addAbility(DECREASE_BOUNCE_ID)
+		..addAbility(INCREASE_BOUNCE_ID)..addAbility(DECREASE_BOUNCE_ID)..addAbility(TURN_OFF_ID)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -74,8 +77,10 @@ public class Powernode extends SetupObject
 				new Link(this, p, AddLightning(EFFECT_BOUNCE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case LinkType.BOUNCE_DIODE
 				new Link(this, p, AddLightning(EFFECT_DIODE_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
+			case BOTHTETHER
+				new Link(this, p, AddLightning(EFFECT_TETHER_BOTH_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case AIRTETHER
-				new Link(this, p, AddLightning(EFFECT_TETHER_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
+				new Link(this, p, AddLightning(EFFECT_TETHER_AIR_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case ORBTETHER
 				new Link(this, p, AddLightning(EFFECT_ORB_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 		
@@ -103,11 +108,23 @@ public class Powernode extends SetupObject
 								case LinkType.BOUNCE_DIODE
 									calBounceD(l.target.pos,e, (1.00 + bounciness.get()))	
 								case LinkType.AIRTETHER
+									if e.pos.z > 10
+										addEffect(Other.dispelmagictarget, e.getPos()).destr()
+										calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
+								case BOTHTETHER
 									if e.pos.z > 20
 										addEffect(Other.dispelmagictarget, e.getPos()).destr()
 									calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
 								case LinkType.ORBTETHER
 									
+			l = l.next
+
+	override function setEnabled(boolean b)
+		super.setEnabled(b)
+		let v = b.toInt().toReal()
+		var l = firstLink
+		while l != null
+			SetLightningColor(l.sfx, v, v, v, v)
 			l = l.next
 			
 				
@@ -196,6 +213,10 @@ public class Powernode extends SetupObject
 				if link.target != this
 					link.target.bounciness.setVal(node.bounciness.get())
 				link = link.next
+		else if id == TURN_ON_ID
+			setEnabled(true)
+		else if id == TURN_OFF_ID
+			setEnabled(false)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -264,3 +285,14 @@ public class Powernode extends SetupObject
 	..setGoldCost(0)
 	..setLumberCost(0)
     ..setIsaBuilding(false)
+	new ChannelAbilityPreset(LINK_AIR_ID, 1, true)
+	..presetManaCost((int lvl) -> 0)
+	..setHeroAbility(false)
+	..presetCooldown((int lvl) -> 0)
+	..setName("Link Air")
+	..presetIcon("BTNStasisTrap.blp")
+	..presetHotkey("S")
+	..presetTooltipNormal((int lvl) -> "Add/Remove Link [|cffFFCC00S|r]")
+	..presetTooltipNormalExtended((int lvl) -> "Add or remove this type of link from another powernode.\n"
+		+ "Blocks escapers only when they are in air.")
+	..presetButtonPosNormal(2, 1)

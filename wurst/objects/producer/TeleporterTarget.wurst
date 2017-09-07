@@ -15,6 +15,7 @@ public class TeleporterTarget extends SetupObject
 		..addProperty(new Property(KEY_TYPE, TP_TARGET_INDEX.toString()))
 		return json
 
+	override function setEnabled(boolean b)
 
 @objectgen function genTarget()
 	new UnitDefinition(TELEPORTER_TARGET_ID, 'ushd')
@@ -50,3 +51,4 @@ public class TeleporterTarget extends SetupObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)	
 	..setFoodCost(0)
+

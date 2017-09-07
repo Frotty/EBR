@@ -133,7 +133,8 @@ public class TerrainChanger extends SetupObject
 		json
 		..addProperty(new Property(KEY_TYPE, TC_INDEX.toString()))
 		return json
-					
+				
+	override function setEnabled(boolean b)
 			
 init
 	preloadAbility(TERRAIN_O_WALKABLE_ID)

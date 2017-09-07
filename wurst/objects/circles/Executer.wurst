@@ -152,12 +152,14 @@ public class Executer extends StaticBaseObject
 		let target = getRallyUnit().getEntity()
 		switch actionMode
 			case Amode.NONE
-					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
+				DisplayTextToPlayer(owner, 0, 0, "|cffC51019Please select an Action Mode for the Executer")
 			case Amode.DISABLEOBJ
 				if target == null
 					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
-				if target instanceof StaticBaseObject
+				else if target instanceof StaticBaseObject
 					(target castTo StaticBaseObject).setEnabled(false)
+				else if target instanceof SetupObject
+					(target castTo SetupObject).setEnabled(true)
 				else if target instanceof Door
 					(target castTo Door).closeDoor()
 				else
@@ -165,8 +167,10 @@ public class Executer extends StaticBaseObject
 			case Amode.TOGGLEOBJ
 				if target == null
 					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
-				if target instanceof StaticBaseObject
+				else if target instanceof StaticBaseObject
 					(target castTo StaticBaseObject).setEnabled(not (target castTo StaticBaseObject).enabled)
+				else if target instanceof SetupObject
+					(target castTo SetupObject).setEnabled(not (target castTo SetupObject).enabled)
 				else if target instanceof Door
 					let door = target castTo Door
 					if door.opened
@@ -178,8 +182,10 @@ public class Executer extends StaticBaseObject
 			case Amode.ENABLEOBJ
 				if target == null
 					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
-				if target instanceof StaticBaseObject
+				else if target instanceof StaticBaseObject
 					(target castTo StaticBaseObject).setEnabled(true)
+				else if target instanceof SetupObject
+					(target castTo SetupObject).setEnabled(true)
 				else if target instanceof Door
 					(target castTo Door).openDoor()
 				else
@@ -201,6 +207,8 @@ public class Executer extends StaticBaseObject
 					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
 				if target instanceof StaticBaseObject
 					(target castTo StaticBaseObject).setEnabled(true)
+				else if target instanceof SetupObject
+					(target castTo SetupObject).setEnabled(true)
 				else if target instanceof Door
 					(target castTo Door).openDoor()
 				else
@@ -210,6 +218,8 @@ public class Executer extends StaticBaseObject
 					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
 				if target instanceof StaticBaseObject
 					(target castTo StaticBaseObject).setEnabled(not (target castTo StaticBaseObject).enabled)
+				else if target instanceof SetupObject
+					(target castTo SetupObject).setEnabled(not (target castTo SetupObject).enabled)
 				else if target instanceof Door
 					let door = target castTo Door
 					if door.opened
@@ -223,6 +233,8 @@ public class Executer extends StaticBaseObject
 					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Must select an object with the Executer")
 				if target instanceof StaticBaseObject
 					(target castTo StaticBaseObject).setEnabled(false)
+				else if target instanceof SetupObject
+					(target castTo SetupObject).setEnabled(false)
 				else if target instanceof Door
 					(target castTo Door).closeDoor()
 				else
@@ -350,9 +362,8 @@ public class Executer extends StaticBaseObject
 	
 	function registerRect(real centerx, real centery, real offset)
 		//note: with movable circles, itll be necessarallyPos.y to move the rect too.
-		inRangeTrig.clearConditions()
-		TriggerClearActions(inRangeTrig)
-		DestroyTrigger(inRangeTrig)
+		actor.clearRegister()
+		inRangeTrig..clearConditions()..clearActions()..destr()
 		
 		eventRegion = CreateRegion()
 		eventRect = Rect(centerx-offset, centery-offset, centerx+offset, centery+offset)
@@ -367,7 +378,7 @@ public class Executer extends StaticBaseObject
 	function disable()
 		SetUnitVertexColor(actor, 44,44,44,255)
 		disabled = true
-		UnitAddAbility(actor, REACTIVATE_ABIL)
+		actor.addAbility(REACTIVATE_ABIL)
 		createFText(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
 	
 	ondestroy

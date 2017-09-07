@@ -16,7 +16,7 @@ timer fixPos = CreateTimer()
 
 public abstract class SetupObject extends UnitEntity
 	private real time = GetRandomReal(30,45)
-	
+	boolean enabled = true
 	unit setup 
 					
 	construct(unit u, unit setup, real radius)
@@ -32,6 +32,14 @@ public abstract class SetupObject extends UnitEntity
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrderEvent())
+
+	function setEnabled(boolean flag)
+		if flag and not enabled
+			enabled = true
+			setup..removeAbility(TURN_ON_ID)..addAbility(TURN_OFF_ID)
+		else if enabled
+			enabled = false
+			setup..removeAbility(TURN_OFF_ID)..addAbility(TURN_ON_ID)
 		
 	override function setPos(vec3 pos)
 		this.pos = pos

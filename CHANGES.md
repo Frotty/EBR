@@ -1,3 +1,10 @@
+[0.89z]
+[*] added configuration options to smode command
+[*] added turnOn/Off functionality to spinner and powernode
+[*] fixed duplicate executer procs
+[*] 
+
+
 [0.89x]
 [*] more fixes and improvements to save/load (1.26 patch compatability)
 [*] fix not being able to activate executer in terrain mode

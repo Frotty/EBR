@@ -125,6 +125,8 @@ public class CongaLineHead extends SetupObject
 		..addProperty(new Property(KEY_TYPE, CONGA_INDEX.toString()))
 		return json	
 
+	override function setEnabled(boolean b)
+
 	ondestroy
 		var l = firstSegment
 		while l != null

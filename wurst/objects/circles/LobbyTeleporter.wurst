@@ -15,6 +15,7 @@ public class LobbyTeleporter extends StaticBaseObject
 	boolean array[12] votes
 	int currentPlus = 0
 	boolean ready = false
+	boolean startmaze = false
 
 	ondestroy
 		ftext.recycle()
@@ -27,6 +28,7 @@ public class LobbyTeleporter extends StaticBaseObject
 		if builder
 			ftext = createCenterFText(existing.getPos().toVec3(), "|cffffcc00building", 10)
 		else
+			startmaze = true
 			ftext = createFText(pos, "", 10)
 		
 	static function checkVote()
@@ -48,12 +50,15 @@ public class LobbyTeleporter extends StaticBaseObject
 				for ep from escaperPlayers.staticItr()
 					teleport(ep.escaper)
 				setRallyPoint(pos.toVec2())
-				addQuestionmark()
-				for i = 0 to 11
-					votes[i] = false
-				ftext.tt.center(getPos(), "|cffffcc00building", 9)
-				ready = false
-				return
+				if startmaze
+					terminate()
+				else
+					addQuestionmark()
+					for i = 0 to 11
+						votes[i] = false
+					ftext.tt.center(getPos(), "|cffffcc00building", 9)
+					ready = false
+					return
 		else
 			currentPlus--
 		flashEffect(Other.confirmation, pos)
