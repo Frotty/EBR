@@ -9,6 +9,7 @@ import UnitProducer
 import DummyRecycler
 import PickSystem
 import initlater TerrainBlocker
+import ObstacleObjects
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 public constant vec2 LOUNGE = gg_unit_n000_0322.getPos()
@@ -26,15 +27,15 @@ public function RegionType.getTypeSet() returns regionTypeSet
 		case UNKNOWN
 			return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 		case CITADEL
-			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', 'n018', 'n019', 'h00G', 'u00K', 'n01V')
+			return regionTypeSet('I00H', 'Idtr', 'Ibkb','n00E', 'h01I', 'KTtw', SOBS_CITADEL_ID, BOBS_CITADEL_ID, 'h00G', 'u00K', HOBS_CITADEL_ID)
 		case SAND
-			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', 'n01F', 'n01G', 'h00M', 'u00N', 'n01W')
+			return regionTypeSet('I00G', 'Bdsd', GetTerrainType(2670,-7090), 'n00D', 'h01H', 'BTtw', SOBS_DESERT_ID, BOBS_DESERT_ID, 'h00M', 'u00N', HOBS_DESERT_ID)
 		case CITY
-			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', 'n01I', 'n01H', 'h00L', 'u00M', 'n01X')
+			return regionTypeSet('I00E', 'Ywmb', 'Ygsb', 'n009', 'h018', 'LTlt', SOBS_GRASS_ID, BOBS_GRASS_ID, 'h00L', 'u00M', HOBS_GRASS_ID)
 		case SNOW
-			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', 'n00R', 'n00S', 'h00O', 'u00L', 'n01J')
+			return regionTypeSet('I00D', 'Itbk', 'Isnw', 'n007', 'h015', 'WTst', SOBS_ICE_ID, BOBS_ICE_ID, 'h00O', 'u00L', HOBS_ICE_ID)
 		case SUNKEN
-			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', 'n055', 'n005', 'h00N', 'u00O', 'n01Y')
+			return regionTypeSet('I00N', 'Zbks', 'Zdrg', 'u002', 'u009', 'ZTtw', SOBS_SUNKEN_ID, BOBS_SUNKEN_ID, 'h00N', 'u00O', HOBS_SUNKEN_ID)
 	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 	
 public function getRegionTypeFromItem(int itemId) returns RegionType
