@@ -9,25 +9,25 @@ public constant SOBS_DUMMY_ID = 'sobs'
 public constant BOBS_DUMMY_ID = 'bobs'
 public constant HOBS_DUMMY_ID = 'hobs'
 
-public constant SOBS_CITADEL_ID = 'soci'
-public constant BOBS_CITADEL_ID = 'boci'
-public constant HOBS_CITADEL_ID = 'hoci'
+public constant SOBS_CITADEL_ID = 'soct'
+public constant BOBS_CITADEL_ID = 'boct'
+public constant HOBS_CITADEL_ID = 'hoct'
 
-public constant SOBS_ICE_ID = 'sobs'
-public constant BOBS_ICE_ID = 'bobs'
-public constant HOBS_ICE_ID = 'hobs'
+public constant SOBS_ICE_ID = 'soic'
+public constant BOBS_ICE_ID = 'boic'
+public constant HOBS_ICE_ID = 'hoic'
 
-public constant SOBS_GRASS_ID = 'sobs'
-public constant BOBS_GRASS_ID = 'bobs'
-public constant HOBS_GRASS_ID = 'hobs'
+public constant SOBS_GRASS_ID = 'sogr'
+public constant BOBS_GRASS_ID = 'bogr'
+public constant HOBS_GRASS_ID = 'hogr'
 
-public constant SOBS_DESERT_ID = 'sobs'
-public constant BOBS_DESERT_ID = 'bobs'
-public constant HOBS_DESERT_ID = 'hobs'
+public constant SOBS_DESERT_ID = 'sode'
+public constant BOBS_DESERT_ID = 'bode'
+public constant HOBS_DESERT_ID = 'hode'
 
-public constant SOBS_SUNKEN_ID = 'sobs'
-public constant BOBS_SUNKEN_ID = 'bobs'
-public constant HOBS_SUNKEN_ID = 'hobs'
+public constant SOBS_SUNKEN_ID = 'sosu'
+public constant BOBS_SUNKEN_ID = 'bosu'
+public constant HOBS_SUNKEN_ID = 'hosu'
 
 @compiletime function genObjects()
 	new BuildingDefinition(TREE_ID, 'ncop')
