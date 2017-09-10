@@ -3,9 +3,9 @@ import SetupObject
 import Escaper
 import ChannelAbilityPreset
 
-constant BOTH_ID = 'A077'
-constant HEAL_ID = 'A078'
-constant CURE_ID = 'A079'
+constant BOTH_ID = 'fbot'
+constant HEAL_ID = 'fhea'
+constant CURE_ID = 'fcur'
 constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
 
 public class Fountain extends StaticSetupObject
@@ -111,7 +111,7 @@ public class Fountain extends StaticSetupObject
 	..setButtonPositionY(0)
 	..setGroundTexture("")
 	..setShadowTextureBuilding("ShadowTrollBurrow")
-	..setModelFile("buildings\\other\\FountainOfLife\\FountainOfLifeBlood.mdl")
+	..setModelFile("buildings\\other\\FountainOfLifeBlood\\FountainOfLifeBlood.mdl")
 	..setUnitSoundSet("FountainOfLife")
 	..setSelectionScale(2)
 	..setPlacementRequires("")

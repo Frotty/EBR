@@ -23,25 +23,25 @@ public function initStartmazes()
 	for vicu from ENUM_GROUP
 		vicu.setOwner(STAFF_PLAYER, true)
 
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'x009'))
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'revp'))
 	for u from ENUM_GROUP
 		if u.isAlive()
 			var r = new RevivePoint(u)
-			if u == gg_unit_x009_0002
+			if u == gg_unit_revp_0002
 				r.startmaze = 0
-			else if u == gg_unit_x009_0085
+			else if u == gg_unit_revp_0085
 				r.startmaze = 1
-			else if u == gg_unit_x009_0022
+			else if u == gg_unit_revp_0022
 				r.startmaze = 2
-			else if u == gg_unit_x009_0226
+			else if u == gg_unit_revp_0226
 				r.startmaze = 3
-			else if u == gg_unit_x009_0322
+			else if u == gg_unit_revp_0322
 				r.startmaze = 4
 				svRev = r
 
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'h00C'))
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'dor2'))
 	for u2 from ENUM_GROUP
-		if u2 != gg_unit_h00C_0023 and u2 != gg_unit_h00C_0011
+		if u2 != gg_unit_dor2_0023 and u2 != gg_unit_dor2_0011
 			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
 			u2.remove()
 		
@@ -90,9 +90,9 @@ public function initStartmazes()
 		startmazes[1] = new SecondDesertMaze(regions[1])
 		startmazes[2] = new ThirdForestMaze(regions[2])
 		startmazes[3] = new FourthCitadelleMaze(regions[3])
-		MINI_TP = new MinigameTeleporter(gg_unit_x002_0150)
+		MINI_TP = new MinigameTeleporter(gg_unit_tele_0150)
 
-		createCenterFText(gg_unit_x009_0322.getPos().toVec3(), "|cff0884D6Lounge", 13.5)
+		createCenterFText(gg_unit_revp_0322.getPos().toVec3(), "|cff0884D6Lounge", 13.5)
 		new BallItem(vec2(-5780,-6287), DUMMY_PLAYER)
 		setBuilderTeleporter()
 		
@@ -119,35 +119,35 @@ public function correctKeys()
 	
 function setBuilderTeleporter()
 	if pData[8] != null
-		new LobbyTeleporter(gg_unit_x002_0058, true)
+		new LobbyTeleporter(gg_unit_tele_0058, true)
 	else
-		gg_unit_x002_0058.remove()
+		gg_unit_tele_0058.remove()
 	
 	if pData[9] != null
-		new LobbyTeleporter(gg_unit_x002_0063, true)
+		new LobbyTeleporter(gg_unit_tele_0063, true)
 	else
-		gg_unit_x002_0063.remove()
+		gg_unit_tele_0063.remove()
 
 	if pData[10] != null
-		new LobbyTeleporter(gg_unit_x002_0115, true)
+		new LobbyTeleporter(gg_unit_tele_0115, true)
 	else
-		gg_unit_x002_0115.remove()
+		gg_unit_tele_0115.remove()
 
 	if pData[11] != null
-		new LobbyTeleporter(gg_unit_x002_0143, true)
+		new LobbyTeleporter(gg_unit_tele_0143, true)
 	else
-		gg_unit_x002_0143.remove()
+		gg_unit_tele_0143.remove()
 
 	
 public function setStartTeleport(int tpid, int locid)
 	LobbyTeleporter t = null
 	switch tpid
 		case 0
-			t = new LobbyTeleporter(gg_unit_x002_0061, false)
+			t = new LobbyTeleporter(gg_unit_tele_0061, false)
 		case 1
-			t = new LobbyTeleporter(gg_unit_x002_0324, false)
+			t = new LobbyTeleporter(gg_unit_tele_0324, false)
 		case 2
-			t = new LobbyTeleporter(gg_unit_x002_0323, false)
+			t = new LobbyTeleporter(gg_unit_tele_0323, false)
 	
 	t.actor.removeAbility(REMOVE_OBJECT_ID)
 	switch locid
