@@ -514,7 +514,7 @@ class OrbProjectile extends Projectile
 			e.kill(null)
 			terminate()
 
-public vec2 currentRevivepoint = gg_unit_x009_0002.getPos()
+public vec2 currentRevivepoint = gg_unit_revp_0002.getPos()
 		
 trigger neutralDeathTrig
 trigger spellTrig

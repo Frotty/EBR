@@ -9,7 +9,7 @@ import ClosureTimers
 
 EscaperDefinition array currentView
 
-constant START = gg_unit_x009_0002.getPos3Real()
+constant START = gg_unit_revp_0002.getPos3Real()
 constant PICK = vec3(-6743, 6616,100)
 constant BLINK_ID = 'A001'
 public constant PICK_DUMMY_ID = compiletime(UNIT_ID_GEN.next())

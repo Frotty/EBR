@@ -21,7 +21,7 @@ public class ThirdForestMaze extends Startmaze
 		RegionData data = getRegionData(vec2(368, -6647))
 		data.setOwner(STAFF_PLAYER)
 
-		let t = new Teleporter(gg_unit_x002_0044)
+		let t = new Teleporter(gg_unit_tele_0044)
 		t.setRallyPoint(LOUNGE)
 
 		let sk1 = new SmallKiller(gg_unit_n009_0038)
@@ -47,20 +47,20 @@ public class ThirdForestMaze extends Startmaze
 		bk1.setup.issuePointOrder("patrol", vec2(635.001,-3835))
 
 		let uk = new UnitCreator(gg_unit_n001_0117)
-		uk.setRallyPoint(gg_unit_x003_0116.getPos())
+		uk.setRallyPoint(gg_unit_n004_0116.getPos())
 		uk.tmode = TimerMode.RANDOM
 		uk.setEnabled(true)
 
-		var wp = new Waypoint(gg_unit_x003_0116)
-		wp.setRallyPoint(gg_unit_x003_0101.getPos())
+		var wp = new Waypoint(gg_unit_n004_0116)
+		wp.setRallyPoint(gg_unit_n004_0101.getPos())
 
-		wp = new Waypoint(gg_unit_x003_0101)
-		wp.setRallyPoint(gg_unit_x003_0102.getPos())
+		wp = new Waypoint(gg_unit_n004_0101)
+		wp.setRallyPoint(gg_unit_n004_0102.getPos())
 
-		wp = new Waypoint(gg_unit_x003_0102)
-		wp.setRallyPoint(gg_unit_x003_0114.getPos())
+		wp = new Waypoint(gg_unit_n004_0102)
+		wp.setRallyPoint(gg_unit_n004_0114.getPos())
 
-		wp = new Waypoint(gg_unit_x003_0114)
+		wp = new Waypoint(gg_unit_n004_0114)
 		wp.setRallyPoint(gg_unit_n003_0118.getPos())
 
 		new UnitRemover(gg_unit_n003_0118)
@@ -80,13 +80,13 @@ public class ThirdForestMaze extends Startmaze
 		for u from ENUM_GROUP
 			new HighObstacle(u)
 
-		new Waypoint(gg_unit_x003_0068)..setRallyPoint(gg_unit_x003_0066.getPos()).delay = 1
-		new Waypoint(gg_unit_x003_0066)..setRallyPoint(gg_unit_x003_0099.getPos()).delay = 1
-		new Waypoint(gg_unit_x003_0078)..setRallyPoint(gg_unit_x003_0068.getPos()).delay = 1
-		new Waypoint(gg_unit_x003_0099)..setRallyPoint(gg_unit_x003_0078.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0068)..setRallyPoint(gg_unit_n004_0066.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0066)..setRallyPoint(gg_unit_n004_0099.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0078)..setRallyPoint(gg_unit_n004_0068.getPos()).delay = 1
+		new Waypoint(gg_unit_n004_0099)..setRallyPoint(gg_unit_n004_0078.getPos()).delay = 1
 
 		let vw = new Faceless(gg_unit_u00I_0100)
-		vw.setup.issuePointOrder("move", gg_unit_x003_0068.getPos())
+		vw.setup.issuePointOrder("move", gg_unit_n004_0068.getPos())
 		vw.invisDur.setVal(2)
 
 	override function getStart() returns vec2
