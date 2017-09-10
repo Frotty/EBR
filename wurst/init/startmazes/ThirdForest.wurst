@@ -24,48 +24,48 @@ public class ThirdForestMaze extends Startmaze
 		let t = new Teleporter(gg_unit_tele_0044)
 		t.setRallyPoint(LOUNGE)
 
-		let sk1 = new SmallKiller(gg_unit_n009_0038)
+		let sk1 = new SmallKiller(gg_unit_sgrk_0038)
 		sk1.setup.issuePointOrder("patrol", vec2(-122.01,-5897))
-		let sk2 = new SmallKiller(gg_unit_n009_0039)
+		let sk2 = new SmallKiller(gg_unit_sgrk_0039)
 		sk2.setup.issuePointOrder("patrol", vec2(122.01,-5888))
-		let sk3 = new SmallKiller(gg_unit_n009_0050)
+		let sk3 = new SmallKiller(gg_unit_sgrk_0050)
 		sk3.setup.issuePointOrder("patrol", vec2(0.01,-5690))
 		sk3.setup.setMoveSpeed(315)
 		sk3.actor.setMoveSpeed(315)
-		let sk4 = new SmallKiller(gg_unit_n009_0153)
+		let sk4 = new SmallKiller(gg_unit_sgrk_0153)
 		sk4.setup.issuePointOrder("patrol", vec2(640.01,-5500.01))
 
-		let k1 = new Knockbacker(gg_unit_u00G_0053.getPos(), gg_unit_u00G_0053.getOwner(), angle(0))
-		gg_unit_u00G_0053.remove()
-		let k2 = new Knockbacker(gg_unit_u00G_0054.getPos(), gg_unit_u00G_0054.getOwner(), angle(0))
-		gg_unit_u00G_0054.remove()
+		let k1 = new Knockbacker(gg_unit_knck_0053.getPos(), gg_unit_knck_0053.getOwner(), angle(0))
+		gg_unit_knck_0053.remove()
+		let k2 = new Knockbacker(gg_unit_knck_0054.getPos(), gg_unit_knck_0054.getOwner(), angle(0))
+		gg_unit_knck_0054.remove()
 
 		k1.setup.issuePointOrder("patrol", vec2(-1000.01,-6150))
 		k2.setup.issuePointOrder("patrol", vec2(-900.01,-7200))
 
-		let bk1 = new BigKiller(gg_unit_h018_0145)
+		let bk1 = new BigKiller(gg_unit_bgrk_0145)
 		bk1.setup.issuePointOrder("patrol", vec2(635.001,-3835))
 
-		let uk = new UnitCreator(gg_unit_n001_0117)
-		uk.setRallyPoint(gg_unit_n004_0116.getPos())
+		let uk = new UnitCreator(gg_unit_uncr_0117)
+		uk.setRallyPoint(gg_unit_wayp_0116.getPos())
 		uk.tmode = TimerMode.RANDOM
 		uk.setEnabled(true)
 
-		var wp = new Waypoint(gg_unit_n004_0116)
-		wp.setRallyPoint(gg_unit_n004_0101.getPos())
+		var wp = new Waypoint(gg_unit_wayp_0116)
+		wp.setRallyPoint(gg_unit_wayp_0101.getPos())
 
-		wp = new Waypoint(gg_unit_n004_0101)
-		wp.setRallyPoint(gg_unit_n004_0102.getPos())
+		wp = new Waypoint(gg_unit_wayp_0101)
+		wp.setRallyPoint(gg_unit_wayp_0102.getPos())
 
-		wp = new Waypoint(gg_unit_n004_0102)
-		wp.setRallyPoint(gg_unit_n004_0114.getPos())
+		wp = new Waypoint(gg_unit_wayp_0102)
+		wp.setRallyPoint(gg_unit_wayp_0114.getPos())
 
-		wp = new Waypoint(gg_unit_n004_0114)
-		wp.setRallyPoint(gg_unit_n003_0118.getPos())
+		wp = new Waypoint(gg_unit_wayp_0114)
+		wp.setRallyPoint(gg_unit_unre_0118.getPos())
 
-		new UnitRemover(gg_unit_n003_0118)
+		new UnitRemover(gg_unit_unre_0118)
 
-		let fk = new AirKiller(gg_unit_u00J_0149)
+		let fk = new AirKiller(gg_unit_airk_0149)
 		fk.setup.issuePointOrder("patrol", vec2(-1025,-4565))
 
 		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01I'))
@@ -80,13 +80,13 @@ public class ThirdForestMaze extends Startmaze
 		for u from ENUM_GROUP
 			new HighObstacle(u)
 
-		new Waypoint(gg_unit_n004_0068)..setRallyPoint(gg_unit_n004_0066.getPos()).delay = 1
-		new Waypoint(gg_unit_n004_0066)..setRallyPoint(gg_unit_n004_0099.getPos()).delay = 1
-		new Waypoint(gg_unit_n004_0078)..setRallyPoint(gg_unit_n004_0068.getPos()).delay = 1
-		new Waypoint(gg_unit_n004_0099)..setRallyPoint(gg_unit_n004_0078.getPos()).delay = 1
+		new Waypoint(gg_unit_wayp_0068)..setRallyPoint(gg_unit_wayp_0066.getPos()).delay = 1
+		new Waypoint(gg_unit_wayp_0066)..setRallyPoint(gg_unit_wayp_0099.getPos()).delay = 1
+		new Waypoint(gg_unit_wayp_0078)..setRallyPoint(gg_unit_wayp_0068.getPos()).delay = 1
+		new Waypoint(gg_unit_wayp_0099)..setRallyPoint(gg_unit_wayp_0078.getPos()).delay = 1
 
-		let vw = new Faceless(gg_unit_u00I_0100)
-		vw.setup.issuePointOrder("move", gg_unit_n004_0068.getPos())
+		let vw = new Faceless(gg_unit_dims_0100)
+		vw.setup.issuePointOrder("move", gg_unit_wayp_0068.getPos())
 		vw.invisDur.setVal(2)
 
 	override function getStart() returns vec2

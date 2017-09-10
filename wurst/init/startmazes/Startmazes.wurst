@@ -39,9 +39,9 @@ public function initStartmazes()
 				r.startmaze = 4
 				svRev = r
 
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'h00C'))
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'dor2'))
 	for u2 from ENUM_GROUP
-		if u2 != gg_unit_h00C_0023 and u2 != gg_unit_h00C_0011
+		if u2 != gg_unit_dor2_0023 and u2 != gg_unit_dor2_0011
 			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
 			u2.remove()
 		
