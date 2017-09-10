@@ -13,7 +13,6 @@ import Teleporter
 import Waypoint
 import Spinner
 import Unitcreator
-import BomberTarget
 import Trap
 import Tree
 import Texter
@@ -28,7 +27,7 @@ import Decoration
 import Pedestal
 import Knockbacker
 import Pointer
-import TeleporterTarget
+import ObjectTarget
 import Key
 import TerrainChanger
 import Faceless
@@ -173,14 +172,12 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new Faceless(tpos, owner)
 		case POINTER_INDEX
 			return new Pointer(tpos, owner, angle(0))
-		case TP_TARGET_INDEX
-			return new TeleporterTarget(tpos, owner)
+		case OBJ_TARGET_INDEX
+			return new ObjectTarget(tpos, owner)
 		case TC_INDEX
 			return new TerrainChanger(tpos, owner)
 		case TC_INDEX
 			return new TerrainChanger(tpos, owner)
-		case BOMBTARGET_INDEX
-			return new BomberTarget(tpos, owner)
 	return null
 
 public int array buildorders
@@ -217,7 +214,7 @@ public int array buildorders
 	buildorders[BIGKILL_INDEX] = 'A05F' // Arcanery
 	buildorders[BOMBER_INDEX] = 'A05O' // Arcanery
 	buildorders[KEY_INDEX] = 'n002' // Arcanery
-	buildorders[BOMBTARGET_INDEX] = 'A05P' // Arcanery
+	// buildorders[BOMBTARGET_INDEX] = 'A05P' // Arcanery
 	buildorders[BIGRANDKILL_INDEX] = 'A05G' // Arcanery
 	buildorders[SMALLRANDKILL_INDEX] = 'A05J' // Arcanery
 	buildorders[TANKKILL_INDEX] = 'A05M' // Arcanery
@@ -227,7 +224,7 @@ public int array buildorders
 	buildorders[FACELESS_INDEX] = 'A07U' // Arcanery
 	buildorders[KNOCKBACKER_INDEX] = 'A07C' // Arcanery
 	buildorders[POINTER_INDEX] = 'A05I' // Arcanery
-	buildorders[TP_TARGET_INDEX] = 'A05N' // Arcanery
+	buildorders[OBJ_TARGET_INDEX] = 'A05N' // Arcanery
 	buildorders[TC_INDEX] = 'A05L' // Arcanery
 	buildorders[HIGH_OBS_INDEX] = 'n01U' // High Obstacle
 	buildorders[139] = 'fuck' // Lantern
