@@ -1,7 +1,7 @@
 package Waypoint
 import BaseObject
 import Escaper
-import TeleporterTarget
+import ObjectTarget
 import Builder
 
 constant INFO_WAYPOINT_ID = compiletime(ABIL_ID_GEN.next())
@@ -56,7 +56,7 @@ public class Waypoint extends StaticBaseObject
 				if not (e castTo SetupObject).setup.hasAbility(REMOVE_OBJECT_ID)
 					return
 			var data = e castTo UnitEntity
-			if not wisps and data instanceof TeleporterTarget
+			if not wisps and data instanceof ObjectTarget
 				return
 			if andPartner != null
 				if not ready

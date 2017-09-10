@@ -4,8 +4,7 @@ import EscaperKillers
 import initlater PlayerData
 import initlater InstantBuild
 import Preloader
-import TeleporterTarget
-import BomberTarget
+import ObjectTarget
 import TerrainChanger
 import Pointer
 import Knockbacker
@@ -20,9 +19,8 @@ constant SMALL_KILLER 	= 'A05K'
 constant BR_KILLER 		= 'A05G'
 constant SR_KILLER 		= 'A05J'
 constant TANK_KILLER 	= 'A05M'
-constant TP_TARGET 		= 'A05N'
+constant OBJ_TARGET 	= 'A05N'
 constant GLAIVE_KILLER 	= 'A05H'
-constant BOMB_TARGET 	= 'A05P'
 constant T_CHANGER 		= 'A05L'
 constant POINTER	 	= 'A05I'
 constant BOMBER	 		= 'A05O'
@@ -51,7 +49,7 @@ public class UnitProducer extends StaticBaseObject
 			..removeAbility(GLAIVE_KILLER)..removeAbility(SECOND_PAGE)
 			..removeAbility(KNOCKBACK)
 			..removeAbility(FACELESS)..removeAbility(AIR_KILLER)..removeAbility(FIRE)
-			..addAbility(TP_TARGET)..addAbility(BOMB_TARGET)
+			..addAbility(OBJ_TARGET)
 			..addAbility(T_CHANGER)..addAbility(POINTER)
 			..addAbility(FIRST_PAGE)..addAbility(BOMBER)
 			return false
@@ -62,7 +60,7 @@ public class UnitProducer extends StaticBaseObject
 			..addAbility(GLAIVE_KILLER)..addAbility(SECOND_PAGE)
 			..addAbility(KNOCKBACK)
 			..addAbility(FACELESS)..addAbility(AIR_KILLER)
-			..removeAbility(TP_TARGET)..removeAbility(BOMB_TARGET)
+			..removeAbility(OBJ_TARGET)
 			..removeAbility(T_CHANGER)..removeAbility(POINTER)
 			..removeAbility(FIRST_PAGE)..removeAbility(BOMBER)
 			return false
@@ -81,12 +79,10 @@ public class UnitProducer extends StaticBaseObject
 					new SmallRandomKiller(rallyPos,obj.owner)
 				case TANK_KILLER // Tank
 					new TankKiller(rallyPos,obj.owner)
-				case TP_TARGET
-					new TeleporterTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
+				case OBJ_TARGET
+					new ObjectTarget(vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case GLAIVE_KILLER
 					new GlaiveKiller(rallyPos,obj.owner)
-				case BOMB_TARGET
-					new BomberTarget( vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case T_CHANGER
 					new TerrainChanger( vec2(rallyPos.x,rallyPos.y), obj.owner )
 				case POINTER
@@ -117,9 +113,8 @@ init
 	preloadAbility(BR_KILLER)
 	preloadAbility(SR_KILLER)
 	preloadAbility(TANK_KILLER)
-	preloadAbility(TP_TARGET)
+	preloadAbility(OBJ_TARGET)
 	preloadAbility(GLAIVE_KILLER)
-	preloadAbility(BOMB_TARGET)
 	preloadAbility(T_CHANGER)
 	preloadAbility(POINTER)
 	preloadAbility(BOMBER)

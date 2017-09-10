@@ -1,24 +1,24 @@
-package TeleporterTarget
+package ObjectTarget
 import SetupObject
 import ChannelAbilityPreset
 
-public constant TELEPORTER_TARGET_ID = 'wisp'
+public constant OBJECT_TARGET_ID = 'wisp'
 
-public class TeleporterTarget extends SetupObject
+public class ObjectTarget extends SetupObject
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, TELEPORTER_TARGET_ID, pos, angle(0), this), getUnit(owner, TELEPORTER_TARGET_ID, pos, angle(0), this), 0.)
+		super(getUnit(owner, OBJECT_TARGET_ID, pos, angle(0), this), getUnit(owner, OBJECT_TARGET_ID, pos, angle(0), this), 0.)
 
 	override function serialize() returns Json
 		let json = super.serialize()
 		json
-		..addProperty(new Property(KEY_TYPE, TP_TARGET_INDEX.toString()))
+		..addProperty(new Property(KEY_TYPE, OBJ_TARGET_INDEX.toString()))
 		return json
 
 	override function setEnabled(boolean b)
 
 @objectgen function genTarget()
-	new UnitDefinition(TELEPORTER_TARGET_ID, 'ushd')
+	new UnitDefinition(OBJECT_TARGET_ID, 'ushd')
 	..setAttacksEnabled(0)
     ..setTargetedAs("air")
     ..setAnimationBlendTimeseconds(0)
