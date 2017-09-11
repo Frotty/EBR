@@ -2,6 +2,7 @@ package Fountain
 import SetupObject
 import Escaper
 import ChannelAbilityPreset
+import Assets
 
 constant BOTH_ID = 'fbot'
 constant HEAL_ID = 'fhea'
@@ -75,7 +76,7 @@ public class Fountain extends StaticSetupObject
 	..setButtonPositionY(0)
 	..setGroundTexture("")
 	..setShadowTextureBuilding("ShadowTrollBurrow")
-	..setModelFile("buildings\\other\\FountainOfLife\\FountainOfHealth.mdl")
+	..setModelFile(Units.fountainofHealth)
 	..setUnitSoundSet("FountainOfLife")
 	..setSelectionScale(2)
 	..setPlacementRequires("")
@@ -148,7 +149,7 @@ public class Fountain extends StaticSetupObject
 	..setTintingColorRed(150)
 	..setTintingColorBlue(150)
 	..setShadowTextureBuilding("ShadowTrollBurrow")
-	..setModelFile("buildings\\other\\FountainOfLife\\FountainOfMana.mdl")
+	..setModelFile(Units.fountainofMana)
 	..setUnitSoundSet("FountainOfLife")
 	..setSelectionScale(2)
 	..setPlacementRequires("")

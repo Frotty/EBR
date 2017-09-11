@@ -145,7 +145,7 @@ init
 	preloadAbility(DEC_ID)
 
 @objectgen function genSpinner()		
-	new UnitDefinition(SPINNER_ID, 'hatw')  
+	new UnitDefinition(SPINNER_ID, 'hfoo')  
     ..setAttacksEnabled(0)
     ..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
@@ -175,7 +175,7 @@ init
 	..setTooltipBasic("|cffFFCC00Build |cff949494Spinner [S]")
 	..setTooltipExtended("Spins the selected units around itself in a circular motion." +
 	"\nThe spinner itself can also be moved and controlled while spinning units.")
-    ..setUpgradesUsed("")
+	..setUpgradesUsed("")
     ..setBuildTime(1)
     ..setUnitClassification("ancient")
 	..setHitPointsMaximumBase(100000000)
@@ -184,4 +184,4 @@ init
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
-    ..setIsaBuilding(false)
+	..setIsaBuilding(false)

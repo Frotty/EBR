@@ -54,13 +54,13 @@ integer Table__more= 8190
     //Configure it if you use more than 8190 "key" variables in your map (this will never happen though).
     
 hashtable Table__ht= InitHashtable()
-constant integer Table__sizeK=9
-constant integer Table__listK=11
+constant integer Table__sizeK=3
+constant integer Table__listK=5
 //endglobals from Table
 //globals from StringHashEx:
 constant boolean LIBRARY_StringHashEx=true
 constant integer StringHashEx__REHASH= 1222483
-constant integer StringHashEx__tbKey=13
+constant integer StringHashEx__tbKey=7
 integer StringHashEx__t= StringHashEx__tbKey
 //endglobals from StringHashEx
 //globals from Sync:
@@ -152,114 +152,114 @@ trigger gg_trg_StringHashEx= null
 trigger gg_trg_Sync= null
 trigger gg_trg_SyncInteger= null
 unit gg_unit_revp_0002= null
-unit gg_unit_u00J_0149= null
+unit gg_unit_airk_0149= null
 unit gg_unit_tele_0150= null
-unit gg_unit_h00C_0011= null
-unit gg_unit_n007_0014= null
-unit gg_unit_h015_0018= null
-unit gg_unit_h015_0020= null
+unit gg_unit_dor2_0011= null
+unit gg_unit_sick_0014= null
+unit gg_unit_bisk_0018= null
+unit gg_unit_bisk_0020= null
 unit gg_unit_tele_0324= null
 unit gg_unit_tele_0323= null
 unit gg_unit_revp_0322= null
 unit gg_unit_unre_0118= null
+unit gg_unit_revp_0059= null
 unit gg_unit_tele_0061= null
-unit gg_unit_h01M_0163= null
-unit gg_unit_h01M_0162= null
-unit gg_unit_h01M_0161= null
-unit gg_unit_u00A_0160= null
-unit gg_unit_h01H_0080= null
-unit gg_unit_h01H_0081= null
+unit gg_unit_spnr_0163= null
+unit gg_unit_spnr_0162= null
+unit gg_unit_spnr_0161= null
+unit gg_unit_glve_0160= null
+unit gg_unit_bsak_0080= null
+unit gg_unit_bsak_0081= null
 unit gg_unit_revp_0085= null
-unit gg_unit_u00A_0159= null
-unit gg_unit_u00A_0158= null
-unit gg_unit_u00A_0157= null
-unit gg_unit_u00A_0156= null
-unit gg_unit_h01H_0104= null
-unit gg_unit_n009_0153= null
+unit gg_unit_dor2_0087= null
+unit gg_unit_glve_0159= null
+unit gg_unit_glve_0158= null
+unit gg_unit_glve_0157= null
+unit gg_unit_glve_0156= null
+unit gg_unit_bsak_0104= null
+unit gg_unit_sgrk_0153= null
 unit gg_unit_jump_0152= null
 unit gg_unit_jump_0151= null
-unit gg_unit_n00D_0120= null
-unit gg_unit_n00D_0121= null
-unit gg_unit_n00D_0122= null
-unit gg_unit_n00D_0123= null
-unit gg_unit_n00D_0124= null
-unit gg_unit_n00D_0125= null
-unit gg_unit_h01H_0127= null
-unit gg_unit_h01H_0128= null
-unit gg_unit_h01M_0147= null
-unit gg_unit_h018_0145= null
+unit gg_unit_ssak_0120= null
+unit gg_unit_ssak_0121= null
+unit gg_unit_ssak_0122= null
+unit gg_unit_ssak_0123= null
+unit gg_unit_ssak_0124= null
+unit gg_unit_ssak_0125= null
+unit gg_unit_bsak_0127= null
+unit gg_unit_bsak_0128= null
+unit gg_unit_spnr_0147= null
+unit gg_unit_bgrk_0145= null
+unit gg_unit_dor2_0136= null
 unit gg_unit_tele_0141= null
-unit gg_unit_n007_0012= null
-unit gg_unit_n007_0013= null
-unit gg_unit_h01I_0280= null
-unit gg_unit_n00E_0278= null
-unit gg_unit_n00E_0277= null
-unit gg_unit_n00E_0276= null
-unit gg_unit_n00E_0275= null
-unit gg_unit_n00E_0274= null
-unit gg_unit_n00E_0273= null
-unit gg_unit_n00E_0272= null
-unit gg_unit_n00E_0271= null
-unit gg_unit_n00E_0270= null
-unit gg_unit_n00E_0269= null
-unit gg_unit_n00E_0268= null
-unit gg_unit_n00E_0267= null
-unit gg_unit_h01I_0266= null
-unit gg_unit_n00E_0265= null
-unit gg_unit_n00E_0264= null
-unit gg_unit_n00E_0263= null
-unit gg_unit_h01I_0262= null
-unit gg_unit_n00E_0261= null
-unit gg_unit_n00E_0260= null
-unit gg_unit_u00I_0100= null
-unit gg_unit_h01M_0258= null
-unit gg_unit_h01M_0257= null
-unit gg_unit_n001_0117= null
+unit gg_unit_sick_0012= null
+unit gg_unit_sick_0013= null
+unit gg_unit_bcik_0280= null
+unit gg_unit_scik_0278= null
+unit gg_unit_scik_0277= null
+unit gg_unit_scik_0276= null
+unit gg_unit_scik_0275= null
+unit gg_unit_scik_0274= null
+unit gg_unit_scik_0273= null
+unit gg_unit_scik_0272= null
+unit gg_unit_scik_0271= null
+unit gg_unit_scik_0270= null
+unit gg_unit_scik_0269= null
+unit gg_unit_scik_0268= null
+unit gg_unit_scik_0267= null
+unit gg_unit_bcik_0266= null
+unit gg_unit_scik_0265= null
+unit gg_unit_scik_0264= null
+unit gg_unit_scik_0263= null
+unit gg_unit_bcik_0262= null
+unit gg_unit_scik_0261= null
+unit gg_unit_scik_0260= null
+unit gg_unit_dims_0100= null
+unit gg_unit_spnr_0258= null
+unit gg_unit_spnr_0257= null
+unit gg_unit_uncr_0117= null
 unit gg_unit_wayp_0116= null
 unit gg_unit_tele_0234= null
-unit gg_unit_h00C_0023= null
-unit gg_unit_n00E_0210= null
-unit gg_unit_n00E_0211= null
-unit gg_unit_h01M_0212= null
-unit gg_unit_n00E_0213= null
-unit gg_unit_n00E_0214= null
-unit gg_unit_n00E_0215= null
-unit gg_unit_n00E_0216= null
-unit gg_unit_n00E_0217= null
-unit gg_unit_n00E_0218= null
-unit gg_unit_n00E_0219= null
-unit gg_unit_h01I_0220= null
-unit gg_unit_n00E_0221= null
-unit gg_unit_n00E_0222= null
-unit gg_unit_h01I_0225= null
+unit gg_unit_dor2_0023= null
+unit gg_unit_scik_0210= null
+unit gg_unit_scik_0211= null
+unit gg_unit_spnr_0212= null
+unit gg_unit_scik_0213= null
+unit gg_unit_scik_0214= null
+unit gg_unit_scik_0215= null
+unit gg_unit_scik_0216= null
+unit gg_unit_scik_0217= null
+unit gg_unit_scik_0218= null
+unit gg_unit_scik_0219= null
+unit gg_unit_bcik_0220= null
+unit gg_unit_scik_0221= null
+unit gg_unit_scik_0222= null
+unit gg_unit_bcik_0225= null
 unit gg_unit_revp_0226= null
 unit gg_unit_revp_0022= null
-unit gg_unit_n007_0036= null
+unit gg_unit_sick_0036= null
 unit gg_unit_wayp_0114= null
-unit gg_unit_u00G_0033= null
-unit gg_unit_u00G_0034= null
+unit gg_unit_knck_0033= null
+unit gg_unit_knck_0034= null
 unit gg_unit_tele_0044= null
-unit gg_unit_n009_0038= null
-unit gg_unit_n009_0039= null
-unit gg_unit_n009_0050= null
-unit gg_unit_u00G_0053= null
-unit gg_unit_u00G_0054= null
+unit gg_unit_sgrk_0038= null
+unit gg_unit_sgrk_0039= null
+unit gg_unit_fnt3_0065= null
+unit gg_unit_sgrk_0050= null
+unit gg_unit_knck_0053= null
+unit gg_unit_knck_0054= null
 unit gg_unit_tele_0058= null
 unit gg_unit_tele_0063= null
 unit gg_unit_tele_0115= null
 unit gg_unit_tele_0143= null
-unit gg_unit_h00J_0067= null
+unit gg_unit_fnt3_0074= null
 unit gg_unit_wayp_0066= null
 unit gg_unit_wayp_0068= null
 unit gg_unit_wayp_0078= null
 unit gg_unit_wayp_0099= null
 unit gg_unit_wayp_0101= null
 unit gg_unit_wayp_0102= null
-unit gg_unit_h00J_0206= null
-unit gg_unit_revp_0059= null
-unit gg_unit_h00J_0299= null
-unit gg_unit_h00C_0087= null
-unit gg_unit_h00C_0136= null
+unit gg_unit_fnt3_0067= null
 
 
 //JASSHelper struct globals:
@@ -677,7 +677,7 @@ endfunction
             endfunction
            
 //Implemented from module SyncInteger__SyncIntegerInit:
-            function s__SelectionSync_SyncInteger__SyncIntegerInit__onInit takes nothing returns nothing
+            function s__SelectionSync_SyncInteger__SyncIntegerInit___onInit takes nothing returns nothing
                 local integer i= 0
                 local integer j
                
@@ -2407,7 +2407,7 @@ call TriggerAddCondition(SyncInteger__EventTrig, (Filter(function s__SyncData_up
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Mon Sep 11 01:06:24 2017
+//   Date: Mon Sep 11 13:00:45 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -2560,15 +2560,15 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'soic', 6144.0, - 5824.0, 270.000)
     set u=CreateUnit(p, 'soic', 6784.0, - 5504.0, 270.000)
     set u=CreateUnit(p, 'soic', 6720.0, - 6912.0, 270.000)
-    set gg_unit_h00C_0011=CreateUnit(p, 'h00C', 5312.0, - 5568.0, 270.000)
+    set gg_unit_dor2_0011=CreateUnit(p, 'dor2', 5312.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'soic', 5376.0, - 4736.0, 270.000)
     set u=CreateUnit(p, 'boic', 2304.0, - 4160.0, 270.000)
     set u=CreateUnit(p, 'boic', 1536.0, - 3776.0, 270.000)
     set u=CreateUnit(p, 'soic', 2240.0, - 3776.0, 270.000)
     set u=CreateUnit(p, 'boic', 6656.0, - 6912.0, 270.000)
     set gg_unit_revp_0022=CreateUnit(p, 'revp', 512.0, - 6912.0, 270.000)
-    set gg_unit_h00C_0023=CreateUnit(p, 'h00C', 6656.0, - 6656.0, 270.000)
-    set u=CreateUnit(p, 'h00C', 0.0, - 4992.0, 270.000)
+    set gg_unit_dor2_0023=CreateUnit(p, 'dor2', 6656.0, - 6656.0, 270.000)
+    set u=CreateUnit(p, 'dor2', 0.0, - 4992.0, 270.000)
     set u=CreateUnit(p, 'boic', 5376.0, - 4608.0, 270.000)
     set u=CreateUnit(p, 'boic', 5760.0, - 4864.0, 270.000)
     set u=CreateUnit(p, 'soct', - 2688.0, - 6272.0, 270.000)
@@ -2593,21 +2593,23 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'boic', 1984.0, - 4096.0, 270.000)
     set gg_unit_revp_0059=CreateUnit(p, 'revp', 4864.0, - 4736.0, 270.000)
     set gg_unit_tele_0061=CreateUnit(p, 'tele', 4352.0, - 3968.0, 270.000)
+    set gg_unit_fnt3_0065=CreateUnit(p, 'fnt3', 3456.0, - 3968.0, 270.000)
     set gg_unit_wayp_0066=CreateUnit(p, 'wayp', 128.0, - 6016.0, 270.000)
-    set gg_unit_h00J_0067=CreateUnit(p, 'h00J', 3456.0, - 7168.0, 270.000)
+    set gg_unit_fnt3_0067=CreateUnit(p, 'fnt3', 3456.0, - 7168.0, 270.000)
     set gg_unit_wayp_0068=CreateUnit(p, 'wayp', 128.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'boic', 2176.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'soic', 1920.0, - 5248.0, 270.000)
     set u=CreateUnit(p, 'soic', 1600.0, - 5056.0, 270.000)
     set u=CreateUnit(p, 'boic', 2112.0, - 5696.0, 270.000)
     set u=CreateUnit(p, 'boic', 1600.0, - 5504.0, 270.000)
+    set gg_unit_fnt3_0074=CreateUnit(p, 'fnt3', 3456.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2624.0, - 6016.0, 270.000)
     set gg_unit_wayp_0078=CreateUnit(p, 'wayp', 0.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2560.0, - 5952.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2112.0, - 6336.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2048.0, - 6272.0, 270.000)
     set gg_unit_revp_0085=CreateUnit(p, 'revp', 3456.0, - 4160.0, 270.000)
-    set gg_unit_h00C_0087=CreateUnit(p, 'h00C', 2752.0, - 4288.0, 270.000)
+    set gg_unit_dor2_0087=CreateUnit(p, 'dor2', 2752.0, - 4288.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2368.0, - 6016.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2304.0, - 5952.0, 270.000)
     set gg_unit_wayp_0099=CreateUnit(p, 'wayp', 0.0, - 6016.0, 270.000)
@@ -2619,7 +2621,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'n00X', 2304.0, - 6208.0, 270.000)
     set gg_unit_wayp_0114=CreateUnit(p, 'wayp', - 512.0, - 3840.0, 270.000)
     set gg_unit_wayp_0116=CreateUnit(p, 'wayp', - 320.0, - 4224.0, 270.000)
-    set gg_unit_n001_0117=CreateUnit(p, 'n001', - 320.0, - 4416.0, 270.000)
+    set gg_unit_uncr_0117=CreateUnit(p, 'uncr', - 320.0, - 4416.0, 270.000)
     set gg_unit_unre_0118=CreateUnit(p, 'unre', - 512.0, - 4096.0, 270.000)
     set u=CreateUnit(p, 'sogr', - 768.0, - 3776.0, 270.000)
     set u=CreateUnit(p, 'boic', 1728.0, - 5120.0, 270.000)
@@ -2627,7 +2629,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'sogr', - 704.0, - 4352.0, 270.000)
     set u=CreateUnit(p, 'sogr', - 768.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'sogr', - 832.0, - 4352.0, 270.000)
-    set gg_unit_h00C_0136=CreateUnit(p, 'h00C', 2752.0, - 4416.0, 270.000)
+    set gg_unit_dor2_0136=CreateUnit(p, 'dor2', 2752.0, - 4416.0, 270.000)
     set u=CreateUnit(p, 'boic', 2560.0, - 4096.0, 270.000)
     set u=CreateUnit(p, 'boic', 1856.0, - 4096.0, 270.000)
     set u=CreateUnit(p, 'boic', 1728.0, - 4160.0, 270.000)
@@ -2649,7 +2651,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'soct', - 3328.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3328.0, - 6720.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3136.0, - 6848.0, 270.000)
-    set u=CreateUnit(p, 'h00C', - 2496.0, - 4864.0, 270.000)
+    set u=CreateUnit(p, 'dor2', - 2496.0, - 4864.0, 270.000)
     set u=CreateUnit(p, 'bogr', - 576.0, - 6784.0, 270.000)
     set u=CreateUnit(p, 'sogr', - 576.0, - 6464.0, 270.000)
     set u=CreateUnit(p, 'sogr', - 512.0, - 6784.0, 270.000)
@@ -2670,14 +2672,13 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'hogr', - 704.0, - 6016.0, 270.000)
     set u=CreateUnit(p, 'hogr', - 1856.0, - 5824.0, 270.000)
     set u=CreateUnit(p, 'hogr', - 1920.0, - 5760.0, 270.000)
-    set gg_unit_h00J_0206=CreateUnit(p, 'h00J', 3456.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3968.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'soct', - 4096.0, - 4352.0, 270.000)
     set u=CreateUnit(p, 'soct', - 4800.0, - 4096.0, 270.000)
     set gg_unit_revp_0226=CreateUnit(p, 'revp', - 2432.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'revp', - 4416.0, - 6400.0, 270.000)
     set u=CreateUnit(p, 'revp', - 2624.0, - 4672.0, 270.000)
-    set u=CreateUnit(p, 'h00C', - 4736.0, - 4608.0, 270.000)
+    set u=CreateUnit(p, 'dor2', - 4736.0, - 4608.0, 270.000)
     set gg_unit_tele_0234=CreateUnit(p, 'tele', - 4736.0, - 5632.0, 270.000)
     set u=CreateUnit(p, 'boct', - 4032.0, - 6080.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3648.0, - 6336.0, 270.000)
@@ -2699,7 +2700,7 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'soct', - 4608.0, - 6912.0, 270.000)
     set u=CreateUnit(p, 'soct', - 4608.0, - 6976.0, 270.000)
     set u=CreateUnit(p, 'soct', - 4608.0, - 7040.0, 270.000)
-    set u=CreateUnit(p, 'h00C', - 4032.0, - 5824.0, 270.000)
+    set u=CreateUnit(p, 'dor2', - 4032.0, - 5824.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3840.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'soct', - 2240.0, - 6848.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3264.0, - 7104.0, 270.000)
@@ -2709,7 +2710,6 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'soct', - 2688.0, - 6336.0, 270.000)
     set u=CreateUnit(p, 'soct', - 3648.0, - 5568.0, 270.000)
     set u=CreateUnit(p, 'soct', - 4160.0, - 6144.0, 270.000)
-    set gg_unit_h00J_0299=CreateUnit(p, 'h00J', 3456.0, - 3968.0, 270.000)
     set u=CreateUnit(p, 'sogr', - 1088.0, - 4288.0, 270.000)
     set u=CreateUnit(p, 'boic', 6016.0, - 6272.0, 270.000)
     set u=CreateUnit(p, 'boic', 4480.0, - 5440.0, 270.000)
@@ -2732,98 +2732,98 @@ function CreateNeutralPassive takes nothing returns nothing
     local trigger t
     local real life
 
-    set gg_unit_n007_0012=CreateUnit(p, 'n007', 6982.1, - 4352.8, 214.330)
-    set gg_unit_n007_0013=CreateUnit(p, 'n007', 5358.6, - 6339.4, 214.330)
-    set gg_unit_n007_0014=CreateUnit(p, 'n007', 5359.4, - 6555.1, 214.330)
-    set gg_unit_h015_0018=CreateUnit(p, 'h015', 6654.4, - 6060.8, 151.979)
-    set gg_unit_h015_0020=CreateUnit(p, 'h015', 5671.2, - 5156.0, 232.972)
-    set gg_unit_u00G_0033=CreateUnit(p, 'u00G', 6229.0, - 3870.0, 167.030)
-    set gg_unit_u00G_0034=CreateUnit(p, 'u00G', 5102.9, - 4542.4, 106.560)
-    set gg_unit_n007_0036=CreateUnit(p, 'n007', 4363.1, - 6030.3, 214.330)
-    set gg_unit_n009_0038=CreateUnit(p, 'n009', - 114.8, - 5065.0, 138.740)
-    set gg_unit_n009_0039=CreateUnit(p, 'n009', 127.7, - 5055.0, 313.988)
-    set gg_unit_n009_0050=CreateUnit(p, 'n009', - 6.2, - 5046.5, 313.988)
-    set gg_unit_u00G_0053=CreateUnit(p, 'u00G', - 1779.1, - 6157.4, 106.560)
-    set gg_unit_u00G_0054=CreateUnit(p, 'u00G', - 897.4, - 6648.0, 106.560)
-    set gg_unit_h01H_0080=CreateUnit(p, 'h01H', 1322.0, - 7034.5, 294.629)
-    set gg_unit_h01H_0081=CreateUnit(p, 'h01H', 2670.4, - 5776.1, 78.346)
-    set gg_unit_u00I_0100=CreateUnit(p, 'u00I', - 93.7, - 6155.5, 213.890)
-    set gg_unit_h01H_0104=CreateUnit(p, 'h01H', 1653.8, - 7047.1, 258.461)
-    set gg_unit_n00D_0120=CreateUnit(p, 'n00D', 2936.1, - 5378.4, 11.701)
-    set gg_unit_n00D_0121=CreateUnit(p, 'n00D', 3192.2, - 4959.9, 37.530)
-    set gg_unit_n00D_0122=CreateUnit(p, 'n00D', 3888.3, - 4974.1, 20.248)
-    set gg_unit_n00D_0123=CreateUnit(p, 'n00D', 2816.7, - 6021.1, 345.267)
-    set gg_unit_n00D_0124=CreateUnit(p, 'n00D', 3702.9, - 6561.8, 11.701)
-    set gg_unit_n00D_0125=CreateUnit(p, 'n00D', 3074.3, - 6143.2, 11.701)
-    set gg_unit_h01H_0127=CreateUnit(p, 'h01H', 3610.2, - 6376.1, 15.293)
-    set gg_unit_h01H_0128=CreateUnit(p, 'h01H', 3498.3, - 6883.5, 221.118)
-    set gg_unit_h018_0145=CreateUnit(p, 'h018', 622.4, - 4978.6, 177.990)
-    set gg_unit_h01M_0147=CreateUnit(p, 'h01M', - 3155.8, - 4606.2, 115.415)
-    call SetUnitState(gg_unit_h01M_0147, UNIT_STATE_MANA, 0)
-    set gg_unit_u00J_0149=CreateUnit(p, 'u00J', - 1024.0, - 4331.4, 201.480)
-    set gg_unit_n009_0153=CreateUnit(p, 'n009', 266.1, - 5511.2, 356.673)
-    set gg_unit_u00A_0156=CreateUnit(p, 'u00A', - 2552.2, - 6514.2, 305.445)
-    set gg_unit_u00A_0157=CreateUnit(p, 'u00A', - 2618.9, - 6820.0, 319.656)
-    set gg_unit_u00A_0158=CreateUnit(p, 'u00A', - 2494.4, - 7288.2, 160.548)
-    set gg_unit_u00A_0159=CreateUnit(p, 'u00A', - 2364.4, - 6969.1, 160.548)
-    set gg_unit_u00A_0160=CreateUnit(p, 'u00A', - 2490.9, - 7111.2, 160.548)
-    set gg_unit_h01M_0161=CreateUnit(p, 'h01M', - 2495.7, - 7046.3, 115.415)
-    call SetUnitState(gg_unit_h01M_0161, UNIT_STATE_MANA, 0)
-    set gg_unit_h01M_0162=CreateUnit(p, 'h01M', - 2806.4, - 6516.7, 115.415)
-    call SetUnitState(gg_unit_h01M_0162, UNIT_STATE_MANA, 0)
-    set gg_unit_h01M_0163=CreateUnit(p, 'h01M', - 2809.3, - 6647.6, 115.415)
-    call SetUnitState(gg_unit_h01M_0163, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0210=CreateUnit(p, 'n00E', - 4232.8, - 6890.6, 228.358)
-    set gg_unit_n00E_0211=CreateUnit(p, 'n00E', - 4233.5, - 7041.8, 228.358)
-    set gg_unit_h01M_0212=CreateUnit(p, 'h01M', - 2687.4, - 3967.1, 181.040)
-    call SetUnitState(gg_unit_h01M_0212, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0213=CreateUnit(p, 'n00E', - 2290.5, - 5088.0, 136.430)
-    set gg_unit_n00E_0214=CreateUnit(p, 'n00E', - 2291.0, - 5374.2, 136.430)
-    set gg_unit_n00E_0215=CreateUnit(p, 'n00E', - 3162.4, - 4425.0, 88.805)
-    call SetUnitState(gg_unit_n00E_0215, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0216=CreateUnit(p, 'n00E', - 3345.6, - 4730.4, 176.970)
-    call SetUnitState(gg_unit_n00E_0216, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0217=CreateUnit(p, 'n00E', - 2999.4, - 4723.9, 11.117)
-    call SetUnitState(gg_unit_n00E_0217, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0218=CreateUnit(p, 'n00E', - 4730.5, - 6657.7, 228.358)
-    set gg_unit_n00E_0219=CreateUnit(p, 'n00E', - 4228.1, - 7197.2, 228.358)
-    set gg_unit_h01I_0220=CreateUnit(p, 'h01I', - 2690.1, - 4116.1, 173.698)
-    call SetUnitState(gg_unit_h01I_0220, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0221=CreateUnit(p, 'n00E', - 4779.7, - 5046.5, 214.220)
-    set gg_unit_n00E_0222=CreateUnit(p, 'n00E', - 4614.0, - 5513.9, 214.220)
-    set gg_unit_h01I_0225=CreateUnit(p, 'h01I', - 4066.5, - 4607.0, 117.546)
-    set gg_unit_h01M_0257=CreateUnit(p, 'h01M', - 3017.1, - 5359.0, 115.415)
-    call SetUnitState(gg_unit_h01M_0257, UNIT_STATE_MANA, 0)
-    set gg_unit_h01M_0258=CreateUnit(p, 'h01M', - 3843.7, - 6843.6, 272.472)
-    call SetUnitState(gg_unit_h01M_0258, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0260=CreateUnit(p, 'n00E', - 3844.4, - 6908.3, 275.361)
-    set gg_unit_n00E_0261=CreateUnit(p, 'n00E', - 3853.0, - 6677.5, 93.847)
-    set gg_unit_h01I_0262=CreateUnit(p, 'h01I', - 3586.0, - 6653.9, 73.303)
-    set gg_unit_n00E_0263=CreateUnit(p, 'n00E', - 3013.2, - 6283.2, 0.670)
-    set gg_unit_n00E_0264=CreateUnit(p, 'n00E', - 3324.8, - 6784.8, 240.992)
-    set gg_unit_n00E_0265=CreateUnit(p, 'n00E', - 3063.1, - 6948.1, 127.775)
-    set gg_unit_h01I_0266=CreateUnit(p, 'h01I', - 3693.4, - 7180.5, 49.209)
-    set gg_unit_n00E_0267=CreateUnit(p, 'n00E', - 4409.7, - 6029.0, 114.569)
-    set gg_unit_n00E_0268=CreateUnit(p, 'n00E', - 3654.3, - 6038.5, 315.779)
-    set gg_unit_n00E_0269=CreateUnit(p, 'n00E', - 3822.9, - 5904.0, 128.445)
-    set gg_unit_n00E_0270=CreateUnit(p, 'n00E', - 4418.6, - 6654.2, 228.358)
-    set gg_unit_n00E_0271=CreateUnit(p, 'n00E', - 3073.2, - 5425.8, 41.036)
-    call SetUnitState(gg_unit_n00E_0271, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0272=CreateUnit(p, 'n00E', - 2978.4, - 5409.7, 42.306)
-    call SetUnitState(gg_unit_n00E_0272, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0273=CreateUnit(p, 'n00E', - 3232.0, - 5586.6, 44.570)
-    call SetUnitState(gg_unit_n00E_0273, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0274=CreateUnit(p, 'n00E', - 3062.8, - 5320.3, 324.033)
-    call SetUnitState(gg_unit_n00E_0274, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0275=CreateUnit(p, 'n00E', - 3254.9, - 5146.0, 319.182)
-    call SetUnitState(gg_unit_n00E_0275, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0276=CreateUnit(p, 'n00E', - 2895.7, - 5473.7, 133.355)
-    call SetUnitState(gg_unit_n00E_0276, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0277=CreateUnit(p, 'n00E', - 2760.2, - 5125.9, 224.828)
-    call SetUnitState(gg_unit_n00E_0277, UNIT_STATE_MANA, 0)
-    set gg_unit_n00E_0278=CreateUnit(p, 'n00E', - 2817.4, - 5195.1, 222.822)
-    call SetUnitState(gg_unit_n00E_0278, UNIT_STATE_MANA, 0)
-    set gg_unit_h01I_0280=CreateUnit(p, 'h01I', - 3411.0, - 5226.2, 117.546)
+    set gg_unit_sick_0012=CreateUnit(p, 'sick', 6982.1, - 4352.8, 214.330)
+    set gg_unit_sick_0013=CreateUnit(p, 'sick', 5358.6, - 6339.4, 214.330)
+    set gg_unit_sick_0014=CreateUnit(p, 'sick', 5359.4, - 6555.1, 214.330)
+    set gg_unit_bisk_0018=CreateUnit(p, 'bisk', 6654.4, - 6060.8, 151.979)
+    set gg_unit_bisk_0020=CreateUnit(p, 'bisk', 5671.2, - 5156.0, 232.972)
+    set gg_unit_knck_0033=CreateUnit(p, 'knck', 6229.0, - 3870.0, 167.030)
+    set gg_unit_knck_0034=CreateUnit(p, 'knck', 5102.9, - 4542.4, 106.560)
+    set gg_unit_sick_0036=CreateUnit(p, 'sick', 4363.1, - 6030.3, 214.330)
+    set gg_unit_sgrk_0038=CreateUnit(p, 'sgrk', - 114.8, - 5065.0, 138.740)
+    set gg_unit_sgrk_0039=CreateUnit(p, 'sgrk', 127.7, - 5055.0, 313.988)
+    set gg_unit_sgrk_0050=CreateUnit(p, 'sgrk', - 6.2, - 5046.5, 313.988)
+    set gg_unit_knck_0053=CreateUnit(p, 'knck', - 1779.1, - 6157.4, 106.560)
+    set gg_unit_knck_0054=CreateUnit(p, 'knck', - 897.4, - 6648.0, 106.560)
+    set gg_unit_bsak_0080=CreateUnit(p, 'bsak', 1322.0, - 7034.5, 294.629)
+    set gg_unit_bsak_0081=CreateUnit(p, 'bsak', 2670.4, - 5776.1, 78.346)
+    set gg_unit_dims_0100=CreateUnit(p, 'dims', - 93.7, - 6155.5, 213.890)
+    set gg_unit_bsak_0104=CreateUnit(p, 'bsak', 1653.8, - 7047.1, 258.461)
+    set gg_unit_ssak_0120=CreateUnit(p, 'ssak', 2936.1, - 5378.4, 11.701)
+    set gg_unit_ssak_0121=CreateUnit(p, 'ssak', 3192.2, - 4959.9, 37.530)
+    set gg_unit_ssak_0122=CreateUnit(p, 'ssak', 3888.3, - 4974.1, 20.248)
+    set gg_unit_ssak_0123=CreateUnit(p, 'ssak', 2816.7, - 6021.1, 345.267)
+    set gg_unit_ssak_0124=CreateUnit(p, 'ssak', 3702.9, - 6561.8, 11.701)
+    set gg_unit_ssak_0125=CreateUnit(p, 'ssak', 3074.3, - 6143.2, 11.701)
+    set gg_unit_bsak_0127=CreateUnit(p, 'bsak', 3610.2, - 6376.1, 15.293)
+    set gg_unit_bsak_0128=CreateUnit(p, 'bsak', 3498.3, - 6883.5, 221.118)
+    set gg_unit_bgrk_0145=CreateUnit(p, 'bgrk', 622.4, - 4978.6, 177.990)
+    set gg_unit_spnr_0147=CreateUnit(p, 'spnr', - 3155.8, - 4606.2, 115.415)
+    call SetUnitState(gg_unit_spnr_0147, UNIT_STATE_MANA, 0)
+    set gg_unit_airk_0149=CreateUnit(p, 'airk', - 1024.0, - 4331.4, 201.480)
+    set gg_unit_sgrk_0153=CreateUnit(p, 'sgrk', 266.1, - 5511.2, 356.673)
+    set gg_unit_glve_0156=CreateUnit(p, 'glve', - 2552.2, - 6514.2, 305.445)
+    set gg_unit_glve_0157=CreateUnit(p, 'glve', - 2618.9, - 6820.0, 319.656)
+    set gg_unit_glve_0158=CreateUnit(p, 'glve', - 2494.4, - 7288.2, 160.548)
+    set gg_unit_glve_0159=CreateUnit(p, 'glve', - 2364.4, - 6969.1, 160.548)
+    set gg_unit_glve_0160=CreateUnit(p, 'glve', - 2490.9, - 7111.2, 160.548)
+    set gg_unit_spnr_0161=CreateUnit(p, 'spnr', - 2495.7, - 7046.3, 115.415)
+    call SetUnitState(gg_unit_spnr_0161, UNIT_STATE_MANA, 0)
+    set gg_unit_spnr_0162=CreateUnit(p, 'spnr', - 2806.4, - 6516.7, 115.415)
+    call SetUnitState(gg_unit_spnr_0162, UNIT_STATE_MANA, 0)
+    set gg_unit_spnr_0163=CreateUnit(p, 'spnr', - 2809.3, - 6647.6, 115.415)
+    call SetUnitState(gg_unit_spnr_0163, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0210=CreateUnit(p, 'scik', - 4232.8, - 6890.6, 228.358)
+    set gg_unit_scik_0211=CreateUnit(p, 'scik', - 4233.5, - 7041.8, 228.358)
+    set gg_unit_spnr_0212=CreateUnit(p, 'spnr', - 2687.4, - 3967.1, 181.040)
+    call SetUnitState(gg_unit_spnr_0212, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0213=CreateUnit(p, 'scik', - 2290.5, - 5088.0, 136.430)
+    set gg_unit_scik_0214=CreateUnit(p, 'scik', - 2291.0, - 5374.2, 136.430)
+    set gg_unit_scik_0215=CreateUnit(p, 'scik', - 3162.4, - 4425.0, 88.805)
+    call SetUnitState(gg_unit_scik_0215, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0216=CreateUnit(p, 'scik', - 3345.6, - 4730.4, 176.970)
+    call SetUnitState(gg_unit_scik_0216, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0217=CreateUnit(p, 'scik', - 2999.4, - 4723.9, 11.117)
+    call SetUnitState(gg_unit_scik_0217, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0218=CreateUnit(p, 'scik', - 4730.5, - 6657.7, 228.358)
+    set gg_unit_scik_0219=CreateUnit(p, 'scik', - 4228.1, - 7197.2, 228.358)
+    set gg_unit_bcik_0220=CreateUnit(p, 'bcik', - 2690.1, - 4116.1, 173.698)
+    call SetUnitState(gg_unit_bcik_0220, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0221=CreateUnit(p, 'scik', - 4779.7, - 5046.5, 214.220)
+    set gg_unit_scik_0222=CreateUnit(p, 'scik', - 4614.0, - 5513.9, 214.220)
+    set gg_unit_bcik_0225=CreateUnit(p, 'bcik', - 4066.5, - 4607.0, 117.546)
+    set gg_unit_spnr_0257=CreateUnit(p, 'spnr', - 3017.1, - 5359.0, 115.415)
+    call SetUnitState(gg_unit_spnr_0257, UNIT_STATE_MANA, 0)
+    set gg_unit_spnr_0258=CreateUnit(p, 'spnr', - 3843.7, - 6843.6, 272.472)
+    call SetUnitState(gg_unit_spnr_0258, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0260=CreateUnit(p, 'scik', - 3844.4, - 6908.3, 275.361)
+    set gg_unit_scik_0261=CreateUnit(p, 'scik', - 3853.0, - 6677.5, 93.847)
+    set gg_unit_bcik_0262=CreateUnit(p, 'bcik', - 3586.0, - 6653.9, 73.303)
+    set gg_unit_scik_0263=CreateUnit(p, 'scik', - 3013.2, - 6283.2, 0.670)
+    set gg_unit_scik_0264=CreateUnit(p, 'scik', - 3324.8, - 6784.8, 240.992)
+    set gg_unit_scik_0265=CreateUnit(p, 'scik', - 3063.1, - 6948.1, 127.775)
+    set gg_unit_bcik_0266=CreateUnit(p, 'bcik', - 3693.4, - 7180.5, 49.209)
+    set gg_unit_scik_0267=CreateUnit(p, 'scik', - 4409.7, - 6029.0, 114.569)
+    set gg_unit_scik_0268=CreateUnit(p, 'scik', - 3654.3, - 6038.5, 315.779)
+    set gg_unit_scik_0269=CreateUnit(p, 'scik', - 3822.9, - 5904.0, 128.445)
+    set gg_unit_scik_0270=CreateUnit(p, 'scik', - 4418.6, - 6654.2, 228.358)
+    set gg_unit_scik_0271=CreateUnit(p, 'scik', - 3073.2, - 5425.8, 41.036)
+    call SetUnitState(gg_unit_scik_0271, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0272=CreateUnit(p, 'scik', - 2978.4, - 5409.7, 42.306)
+    call SetUnitState(gg_unit_scik_0272, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0273=CreateUnit(p, 'scik', - 3232.0, - 5586.6, 44.570)
+    call SetUnitState(gg_unit_scik_0273, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0274=CreateUnit(p, 'scik', - 3062.8, - 5320.3, 324.033)
+    call SetUnitState(gg_unit_scik_0274, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0275=CreateUnit(p, 'scik', - 3254.9, - 5146.0, 319.182)
+    call SetUnitState(gg_unit_scik_0275, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0276=CreateUnit(p, 'scik', - 2895.7, - 5473.7, 133.355)
+    call SetUnitState(gg_unit_scik_0276, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0277=CreateUnit(p, 'scik', - 2760.2, - 5125.9, 224.828)
+    call SetUnitState(gg_unit_scik_0277, UNIT_STATE_MANA, 0)
+    set gg_unit_scik_0278=CreateUnit(p, 'scik', - 2817.4, - 5195.1, 222.822)
+    call SetUnitState(gg_unit_scik_0278, UNIT_STATE_MANA, 0)
+    set gg_unit_bcik_0280=CreateUnit(p, 'bcik', - 3411.0, - 5226.2, 117.546)
 endfunction
 
 //===========================================================================
@@ -2978,43 +2978,42 @@ function Trig_Untitled_Trigger_005_Actions takes nothing returns nothing
     call MoveRectToLoc(gg_rct_coingamearea, GetRectCenter(GetPlayableMapRect()))
     call MoveRectToLoc(gg_rct_Region_026, GetRectCenter(GetPlayableMapRect()))
     call MoveRectToLoc(gg_rct_Region_027, GetRectCenter(GetPlayableMapRect()))
-    call ShowUnitHide(gg_unit_h00J_0206)
+    call ShowUnitHide(gg_unit_fnt3_0074)
     call ShowUnitHide(gg_unit_revp_0322)
-    call ShowUnitHide(gg_unit_h01M_0257)
+    call ShowUnitHide(gg_unit_spnr_0257)
     call ShowUnitHide(gg_unit_revp_0002)
-    call ShowUnitHide(gg_unit_n007_0014)
-    call ShowUnitHide(gg_unit_n007_0013)
-    call ShowUnitHide(gg_unit_h00C_0023)
-    call ShowUnitHide(gg_unit_h00C_0011)
-    call ShowUnitHide(gg_unit_h015_0018)
-    call ShowUnitHide(gg_unit_n007_0036)
+    call ShowUnitHide(gg_unit_sick_0014)
+    call ShowUnitHide(gg_unit_sick_0013)
+    call ShowUnitHide(gg_unit_dor2_0023)
+    call ShowUnitHide(gg_unit_dor2_0011)
+    call ShowUnitHide(gg_unit_bisk_0018)
+    call ShowUnitHide(gg_unit_sick_0036)
     call ShowUnitHide(gg_unit_revp_0059)
-    call ShowUnitHide(gg_unit_h015_0020)
-    call ShowUnitHide(gg_unit_n007_0012)
+    call ShowUnitHide(gg_unit_bisk_0020)
+    call ShowUnitHide(gg_unit_sick_0012)
     call ShowUnitHide(gg_unit_tele_0061)
     call ShowUnitHide(gg_unit_revp_0085)
-    call ShowUnitHide(gg_unit_h00J_0299)
-    call ShowUnitHide(gg_unit_h00C_0087)
-    call ShowUnitHide(gg_unit_h00C_0136)
+    call ShowUnitHide(gg_unit_fnt3_0067)
+    call ShowUnitHide(gg_unit_dor2_0087)
+    call ShowUnitHide(gg_unit_dor2_0136)
     call ShowUnitHide(gg_unit_jump_0151)
     call ShowUnitHide(gg_unit_jump_0152)
     call ShowUnitHide(gg_unit_tele_0141)
-    call ShowUnitHide(gg_unit_h01H_0080)
-    call ShowUnitHide(gg_unit_h01H_0104)
-    call ShowUnitHide(gg_unit_h01H_0081)
-    call ShowUnitHide(gg_unit_n00D_0123)
-    call ShowUnitHide(gg_unit_n00D_0125)
-    call ShowUnitHide(gg_unit_n00D_0120)
-    call ShowUnitHide(gg_unit_n00D_0122)
-    call ShowUnitHide(gg_unit_n00D_0121)
-    call ShowUnitHide(gg_unit_h01H_0127)
-    call ShowUnitHide(gg_unit_n00D_0124)
-    call ShowUnitHide(gg_unit_h01H_0128)
-    call ShowUnitHide(gg_unit_h01H_0127)
-    call ShowUnitHide(gg_unit_h01H_0127)
-    call ShowUnitHide(gg_unit_h01H_0127)
-    call ShowUnitHide(gg_unit_h01H_0127)
-    call ShowUnitHide(gg_unit_h01H_0127)
+    call ShowUnitHide(gg_unit_bsak_0080)
+    call ShowUnitHide(gg_unit_bsak_0104)
+    call ShowUnitHide(gg_unit_bsak_0081)
+    call ShowUnitHide(gg_unit_ssak_0123)
+    call ShowUnitHide(gg_unit_ssak_0125)
+    call ShowUnitHide(gg_unit_ssak_0120)
+    call ShowUnitHide(gg_unit_ssak_0122)
+    call ShowUnitHide(gg_unit_ssak_0121)
+    call ShowUnitHide(gg_unit_bsak_0127)
+    call ShowUnitHide(gg_unit_ssak_0124)
+    call ShowUnitHide(gg_unit_bsak_0128)
+    call ShowUnitHide(gg_unit_knck_0034)
+    call ShowUnitHide(gg_unit_knck_0033)
+    call ShowUnitHide(gg_unit_fnt3_0065)
+    call ShowUnitHide(gg_unit_bsak_0127)
 endfunction
 
 //===========================================================================
@@ -3026,99 +3025,98 @@ endfunction
 //===========================================================================
 // Trigger: UnitVariables
 //===========================================================================
-//TESH.scrollpos=0
+//TESH.scrollpos=9
 //TESH.alwaysfold=0
 function Trig_UnitVariables_Actions takes nothing returns nothing
     call MoveRectToLoc(gg_rct_coingamebounds, GetRectCenter(GetPlayableMapRect()))
     call MoveRectToLoc(gg_rct_Choose, GetRectCenter(GetPlayableMapRect()))
     // Maze0
-    call ShowUnitShow(gg_unit_h015_0018)
-    call ShowUnitShow(gg_unit_h015_0020)
-    call ShowUnitShow(gg_unit_n007_0013)
-    call ShowUnitShow(gg_unit_n007_0014)
-    call ShowUnitShow(gg_unit_h00C_0023)
-    call ShowUnitShow(gg_unit_h00C_0011)
-    call ShowUnitShow(gg_unit_n007_0012)
-    call ShowUnitShow(gg_unit_u00G_0033)
-    call ShowUnitShow(gg_unit_u00G_0034)
-    call ShowUnitShow(gg_unit_n007_0036)
+    call ShowUnitShow(gg_unit_bisk_0018)
+    call ShowUnitShow(gg_unit_bisk_0020)
+    call ShowUnitShow(gg_unit_sick_0013)
+    call ShowUnitShow(gg_unit_sick_0014)
+    call ShowUnitShow(gg_unit_dor2_0023)
+    call ShowUnitShow(gg_unit_dor2_0011)
+    call ShowUnitShow(gg_unit_sick_0012)
+    call ShowUnitShow(gg_unit_knck_0033)
+    call ShowUnitShow(gg_unit_knck_0034)
+    call ShowUnitShow(gg_unit_sick_0036)
     // Maze1
-    call ShowUnitShow(gg_unit_h00J_0067)
-    call ShowUnitShow(gg_unit_n00D_0121)
-    call ShowUnitShow(gg_unit_n00D_0122)
-    call ShowUnitShow(gg_unit_n00D_0120)
-    call ShowUnitShow(gg_unit_n00D_0125)
-    call ShowUnitShow(gg_unit_n00D_0123)
-    call ShowUnitShow(gg_unit_n00D_0124)
-    call ShowUnitShow(gg_unit_h01H_0127)
-    call ShowUnitShow(gg_unit_h01H_0128)
-    call ShowUnitShow(gg_unit_h01H_0081)
-    call ShowUnitShow(gg_unit_h01H_0080)
-    call ShowUnitShow(gg_unit_h01H_0104)
+    call ShowUnitShow(gg_unit_ssak_0121)
+    call ShowUnitShow(gg_unit_ssak_0122)
+    call ShowUnitShow(gg_unit_ssak_0120)
+    call ShowUnitShow(gg_unit_ssak_0125)
+    call ShowUnitShow(gg_unit_ssak_0123)
+    call ShowUnitShow(gg_unit_ssak_0124)
+    call ShowUnitShow(gg_unit_bsak_0127)
+    call ShowUnitShow(gg_unit_bsak_0128)
+    call ShowUnitShow(gg_unit_bsak_0081)
+    call ShowUnitShow(gg_unit_bsak_0080)
+    call ShowUnitShow(gg_unit_bsak_0104)
     call ShowUnitShow(gg_unit_tele_0141)
     // Maze2
     call ShowUnitShow(gg_unit_tele_0044)
-    call ShowUnitShow(gg_unit_n009_0038)
-    call ShowUnitShow(gg_unit_n009_0039)
-    call ShowUnitShow(gg_unit_n009_0050)
-    call ShowUnitShow(gg_unit_u00G_0053)
-    call ShowUnitShow(gg_unit_u00G_0054)
+    call ShowUnitShow(gg_unit_sgrk_0038)
+    call ShowUnitShow(gg_unit_sgrk_0039)
+    call ShowUnitShow(gg_unit_sgrk_0050)
+    call ShowUnitShow(gg_unit_knck_0053)
+    call ShowUnitShow(gg_unit_knck_0054)
     call ShowUnitShow(gg_unit_jump_0151)
     call ShowUnitShow(gg_unit_jump_0152)
     call ShowUnitShow(gg_unit_wayp_0068)
     call ShowUnitShow(gg_unit_wayp_0078)
     call ShowUnitShow(gg_unit_wayp_0066)
     call ShowUnitShow(gg_unit_wayp_0099)
-    call ShowUnitShow(gg_unit_u00I_0100)
+    call ShowUnitShow(gg_unit_dims_0100)
     // Maze3
-    call ShowUnitShow(gg_unit_n00E_0263)
-    call ShowUnitShow(gg_unit_n00E_0265)
-    call ShowUnitShow(gg_unit_n00E_0264)
-    call ShowUnitShow(gg_unit_h01I_0266)
-    call ShowUnitShow(gg_unit_n00E_0260)
-    call ShowUnitShow(gg_unit_n00E_0261)
-    call ShowUnitShow(gg_unit_n00E_0268)
-    call ShowUnitShow(gg_unit_h01I_0262)
-    call ShowUnitShow(gg_unit_n00E_0270)
-    call ShowUnitShow(gg_unit_n00E_0218)
-    call ShowUnitShow(gg_unit_n00E_0210)
-    call ShowUnitShow(gg_unit_n00E_0211)
-    call ShowUnitShow(gg_unit_n00E_0219)
-    call ShowUnitShow(gg_unit_n00E_0267)
-    call ShowUnitShow(gg_unit_n00E_0269)
-    call ShowUnitShow(gg_unit_h01I_0280)
-    call ShowUnitShow(gg_unit_n00E_0275)
-    call ShowUnitShow(gg_unit_n00E_0274)
-    call ShowUnitShow(gg_unit_n00E_0271)
-    call ShowUnitShow(gg_unit_n00E_0272)
-    call ShowUnitShow(gg_unit_n00E_0273)
-    call ShowUnitShow(gg_unit_n00E_0276)
-    call ShowUnitShow(gg_unit_n00E_0278)
-    call ShowUnitShow(gg_unit_n00E_0277)
-    call ShowUnitShow(gg_unit_n00E_0214)
-    call ShowUnitShow(gg_unit_n00E_0213)
-    call ShowUnitShow(gg_unit_n00E_0217)
-    call ShowUnitShow(gg_unit_n00E_0216)
-    call ShowUnitShow(gg_unit_n00E_0215)
-    call ShowUnitShow(gg_unit_h01I_0220)
-    call ShowUnitShow(gg_unit_h01I_0225)
-    call ShowUnitShow(gg_unit_n00E_0221)
-    call ShowUnitShow(gg_unit_n00E_0222)
-    call ShowUnitShow(gg_unit_h01M_0258)
-    call ShowUnitShow(gg_unit_h01M_0257)
-    call ShowUnitShow(gg_unit_h01M_0147)
-    call ShowUnitShow(gg_unit_h01M_0212)
+    call ShowUnitShow(gg_unit_scik_0263)
+    call ShowUnitShow(gg_unit_scik_0265)
+    call ShowUnitShow(gg_unit_scik_0264)
+    call ShowUnitShow(gg_unit_bcik_0266)
+    call ShowUnitShow(gg_unit_scik_0260)
+    call ShowUnitShow(gg_unit_scik_0261)
+    call ShowUnitShow(gg_unit_scik_0268)
+    call ShowUnitShow(gg_unit_bcik_0262)
+    call ShowUnitShow(gg_unit_scik_0270)
+    call ShowUnitShow(gg_unit_scik_0218)
+    call ShowUnitShow(gg_unit_scik_0210)
+    call ShowUnitShow(gg_unit_scik_0211)
+    call ShowUnitShow(gg_unit_scik_0219)
+    call ShowUnitShow(gg_unit_scik_0267)
+    call ShowUnitShow(gg_unit_scik_0269)
+    call ShowUnitShow(gg_unit_bcik_0280)
+    call ShowUnitShow(gg_unit_scik_0275)
+    call ShowUnitShow(gg_unit_scik_0274)
+    call ShowUnitShow(gg_unit_scik_0271)
+    call ShowUnitShow(gg_unit_scik_0272)
+    call ShowUnitShow(gg_unit_scik_0273)
+    call ShowUnitShow(gg_unit_scik_0276)
+    call ShowUnitShow(gg_unit_scik_0278)
+    call ShowUnitShow(gg_unit_scik_0277)
+    call ShowUnitShow(gg_unit_scik_0214)
+    call ShowUnitShow(gg_unit_scik_0213)
+    call ShowUnitShow(gg_unit_scik_0217)
+    call ShowUnitShow(gg_unit_scik_0216)
+    call ShowUnitShow(gg_unit_scik_0215)
+    call ShowUnitShow(gg_unit_bcik_0220)
+    call ShowUnitShow(gg_unit_bcik_0225)
+    call ShowUnitShow(gg_unit_scik_0221)
+    call ShowUnitShow(gg_unit_scik_0222)
+    call ShowUnitShow(gg_unit_spnr_0258)
+    call ShowUnitShow(gg_unit_spnr_0257)
+    call ShowUnitShow(gg_unit_spnr_0147)
+    call ShowUnitShow(gg_unit_spnr_0212)
     call ShowUnitShow(gg_unit_tele_0234)
-    call ShowUnitShow(gg_unit_u00J_0149)
-    call ShowUnitShow(gg_unit_n009_0153)
-    call ShowUnitShow(gg_unit_u00A_0156)
-    call ShowUnitShow(gg_unit_u00A_0157)
-    call ShowUnitShow(gg_unit_u00A_0158)
-    call ShowUnitShow(gg_unit_u00A_0159)
-    call ShowUnitShow(gg_unit_u00A_0160)
-    call ShowUnitShow(gg_unit_h01M_0162)
-    call ShowUnitShow(gg_unit_h01M_0163)
-    call ShowUnitShow(gg_unit_h01M_0161)
+    call ShowUnitShow(gg_unit_airk_0149)
+    call ShowUnitShow(gg_unit_sgrk_0153)
+    call ShowUnitShow(gg_unit_glve_0156)
+    call ShowUnitShow(gg_unit_glve_0157)
+    call ShowUnitShow(gg_unit_glve_0158)
+    call ShowUnitShow(gg_unit_glve_0159)
+    call ShowUnitShow(gg_unit_glve_0160)
+    call ShowUnitShow(gg_unit_spnr_0162)
+    call ShowUnitShow(gg_unit_spnr_0163)
+    call ShowUnitShow(gg_unit_spnr_0161)
     // Fin
     call ShowUnitShow(gg_unit_tele_0323)
     call ShowUnitShow(gg_unit_tele_0324)
@@ -3129,14 +3127,14 @@ function Trig_UnitVariables_Actions takes nothing returns nothing
     call ShowUnitShow(gg_unit_tele_0150)
     call ShowUnitHide(gg_unit_tele_0061)
     call RemoveUnit(gg_unit_revp_0002)
-    call KillUnit(gg_unit_h018_0145)
+    call KillUnit(gg_unit_bgrk_0145)
     call RemoveUnit(gg_unit_revp_0002)
     call RemoveUnit(gg_unit_revp_0085)
     call RemoveUnit(gg_unit_revp_0022)
     call RemoveUnit(gg_unit_revp_0226)
     call RemoveUnit(gg_unit_revp_0322)
     
-    call RemoveUnit(gg_unit_n001_0117)
+    call RemoveUnit(gg_unit_uncr_0117)
     call RemoveUnit(gg_unit_wayp_0116)
     call RemoveUnit(gg_unit_wayp_0101)
     call RemoveUnit(gg_unit_wayp_0102)
@@ -3620,7 +3618,7 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs2340258875")
+call ExecuteFunc("jasshelper__initstructs2383120593")
 
     call InitGlobals()
     call InitTrig_Untitled_Trigger_005() // INLINED!!
@@ -3664,9 +3662,9 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs2340258875 takes nothing returns nothing
+function jasshelper__initstructs2383120593 takes nothing returns nothing
 
-call ExecuteFunc("s__SelectionSync_SyncInteger__SyncIntegerInit__onInit")
+call ExecuteFunc("s__SelectionSync_SyncInteger__SyncIntegerInit___onInit")
 
 
 

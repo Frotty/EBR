@@ -246,7 +246,7 @@ public class Powernode extends SetupObject
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(2, 1)
 
-	new UnitDefinition(POWER_NODE_ID, 'hatw')  
+	new UnitDefinition(POWER_NODE_ID, 'hfoo')  
     ..setAttacksEnabled(0)
     ..setTargetedAs("ground")
     ..setAnimationBlendTimeseconds(0)

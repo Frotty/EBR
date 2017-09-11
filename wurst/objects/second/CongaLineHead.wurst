@@ -181,7 +181,7 @@ public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 	..setMaximumSpells(1, 10)
 	..setSpellList(1, int2fourchar(CONGA_LOOSE_ID)  + "," + int2fourchar(CONGA_STRICT_ID) + ",A02Z,A030")
 
-	new UnitDefinition(CONGA_LINE_HEAD_ID, 'hatw')  
+	new UnitDefinition(CONGA_LINE_HEAD_ID, 'hfoo')  
     ..setAttacksEnabled(0)
     ..setAnimationBlendTimeseconds(0)
     ..setAnimationCastBackswing(0)
