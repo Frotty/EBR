@@ -85,7 +85,7 @@ public class Booster extends StaticBaseObject
 	int2fourchar(SPEED_UP_ID) + "," +
 	int2fourchar(SPEED_DOWN_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID)) 
 	..setButtonPositionX(1)
 	..setButtonPositionY(1)

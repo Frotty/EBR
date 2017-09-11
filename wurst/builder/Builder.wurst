@@ -216,7 +216,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
     int2fourchar(MENU_OBJECTS_ID) + "," +
     int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
     int2fourchar(MENU_DECORATIONS_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
     int2fourchar(INVULNERABILITY_ID))
     ..setStructuresBuilt(int2fourchar(BOOSTER_ID) + "," +
     int2fourchar(TELEPORTER_ID) + "," +
@@ -268,7 +268,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
     int2fourchar(MENU_OBJECTS_ID) + "," +
     int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
     int2fourchar(MENU_DECORATIONS_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
     int2fourchar(INVULNERABILITY_ID))
     ..setStructuresBuilt(int2fourchar(ARCANERY_ID) + "," +
     int2fourchar(BOMB_TOWER_ID) + "," +
@@ -318,7 +318,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
     int2fourchar(MENU_OBJECTS_ID) + "," +
     int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
     int2fourchar(MENU_DECORATIONS_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
     int2fourchar(INVULNERABILITY_ID))
      ..setStructuresBuilt(int2fourchar(VOLCANO_ID) + "," +
     int2fourchar(WALL_ID) + "," +
@@ -367,7 +367,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
     int2fourchar(MENU_OBJECTS_ID) + "," +
     int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
     int2fourchar(MENU_DECORATIONS_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
     int2fourchar(INVULNERABILITY_ID))
 /*     ..setStructuresBuilt(int2fourchar(REMAINS_ID) + "," +
     int2fourchar(FARM_ID) + "," +

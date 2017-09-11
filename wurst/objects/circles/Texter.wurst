@@ -193,7 +193,7 @@ function getColorFromString(string s) returns color
 	..setNormalAbilities(int2fourchar(INFO_TEXTER_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setButtonPositionX(3)
 	..setButtonPositionY(1)

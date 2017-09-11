@@ -42,7 +42,7 @@ public class RevivePointModifier
 	..setTurnRate(999)
 	..setMovementType(MovementType.Fly)
 	..setNormalAbilities(int2fourchar('Aloc') + "," +
-	int2fourchar(GHOST_ID))
+	int2fourchar(GHOST_INVIS_ID))
 	..setName("Dummy - Revive Modifier")
 	..setTooltipBasic("Dummy - Revive Modifier")
 	..setTooltipExtended("Dummy - Revive Modifier")

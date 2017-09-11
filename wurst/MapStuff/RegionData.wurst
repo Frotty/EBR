@@ -2,6 +2,7 @@ package RegionData
 import initlater Builder
 import initlater Boss
 import public GameConstants
+import public BuilderConstants
 import HashMap
 import PlayerData
 import TerrainModder
@@ -16,16 +17,7 @@ HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 public constant vec2 LOUNGE = gg_unit_revp_0322.getPos()
 
 public constant REGION_ADMIN_ID = 'radm'
-constant SMALL_GRASS_KILLER_ID = 'sgrk'
-constant SMALL_ICE_KILLER_ID = 'sick'
-constant SMALL_CITADEL_KILLER_ID = 'scik'
-constant SMALL_SAND_KILLER_ID = 'ssak'
-constant SMALL_SUNKEN_KILLER_ID = 'ssuk'
-constant BIG_GRASS_KILLER_ID = 'bgrk'
-constant BIG_ICE_KILLER_ID = 'bisk'
-constant BIG_CITADEL_KILLER_ID = 'bcik'
-constant BIG_SAND_KILLER_ID = 'bsak'
-constant BIG_SUNKEN_KILLER_ID = 'bsuk'
+
 
 public enum RegionType
 	UNKNOWN
@@ -312,7 +304,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
@@ -340,7 +332,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
@@ -365,7 +357,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
@@ -394,7 +386,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
@@ -423,7 +415,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
@@ -452,7 +444,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
@@ -485,7 +477,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
@@ -518,7 +510,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
@@ -548,7 +540,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
@@ -581,7 +573,7 @@ public RegionData array regions
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")

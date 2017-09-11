@@ -7,6 +7,7 @@ import Faceless
 import Unitcreator
 import Waypoint
 import UnitRemover
+import Executer
 
 public class ThirdForestMaze extends Startmaze
 
@@ -68,15 +69,15 @@ public class ThirdForestMaze extends Startmaze
 		let fk = new AirKiller(gg_unit_airk_0149)
 		fk.setup.issuePointOrder("patrol", vec2(-1025,-4565))
 
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01I'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == SOBS_GRASS_ID))
 		for u from ENUM_GROUP
 			new SmallObstacle(u)
 
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01H'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == BOBS_GRASS_ID))
 		for u from ENUM_GROUP
 			new BigObstacle(u)
 			
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n01X'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == HOBS_GRASS_ID))
 		for u from ENUM_GROUP
 			new HighObstacle(u)
 
@@ -88,6 +89,13 @@ public class ThirdForestMaze extends Startmaze
 		let vw = new Faceless(gg_unit_dims_0100)
 		vw.setup.issuePointOrder("move", gg_unit_wayp_0068.getPos())
 		vw.invisDur.setVal(2)
+
+		let exec = new Executer(gg_unit_exec_0076)
+		exec.eventMode = Emode.ONESHOT
+		exec.actionMode = Amode.CHANGETERRAIN
+		exec.tiletype = '0000'
+		exec.setRallyPoint(vec2(-387, -4600))
+		exec.horizontalTileSize = 1
 
 	override function getStart() returns vec2
 		return vec2(830, -7050)

@@ -39,7 +39,7 @@ public class Tome extends ItemObject
     ..setUnitSoundSet("")
     ..setCollisionSize(0)
     ..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_ID) + "," +
+    int2fourchar(GHOST_INVIS_ID) + "," +
     int2fourchar(INVULNERABILITY_ID))
     ..setName("Tome Dummy")
     ..setUpgradesUsed("")

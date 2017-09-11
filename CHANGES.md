@@ -1,8 +1,9 @@
-[0.89z]
+[0.90a]
 [*] added configuration options to smode command
 [*] added turnOn/Off functionality to spinner and powernode
+[*] added midway-point to forest startmaze because it seems to be the hardest part and a noob trap
 [*] fixed duplicate executer procs
-[*] 
+[*] more objects are generated via code now, thanks to Kane
 
 
 [0.89x]

@@ -4,6 +4,8 @@ import public Teleporter
 import public Revivepoint
 import public EscaperKillers
 import public GameConstants
+import public BuilderConstants
+import public ObstacleObjects
 
 public constant boolexpr pickFilter = Condition(() -> GetFilterUnit().getOwner() == STAFF_PLAYER)
 

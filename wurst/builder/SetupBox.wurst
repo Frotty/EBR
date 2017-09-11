@@ -300,7 +300,7 @@ init
 	..setName("|cffFFCC00Setup")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNMagicVault.blp")
 	..setNormalAbilities(
-	int2fourchar(GHOST_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID)) 
 	..setGroundTexture("")
 	..setShadowTextureBuilding("") 

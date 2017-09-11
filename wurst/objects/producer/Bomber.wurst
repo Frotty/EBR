@@ -115,7 +115,7 @@ public class Bomber extends UnitEntity
 	int2fourchar('A043') + "," +
 	int2fourchar('A044') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("E")
 	..setName("|cFFFFFF00Bomber|r")

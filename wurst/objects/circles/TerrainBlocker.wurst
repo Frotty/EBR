@@ -65,7 +65,7 @@ public class TerrainBlocker extends StaticBaseObject
 	..setModelFile("buildings\\other\\CircleOfPower\\CircleOfPower.mdl")
 	..setNormalAbilities(int2fourchar(INFO_TC_BLOCKER_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(1)

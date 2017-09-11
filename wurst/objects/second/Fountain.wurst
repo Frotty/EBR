@@ -65,7 +65,7 @@ public class Fountain extends StaticSetupObject
 	..setNormalAbilities(int2fourchar('A077') + "," +
 	int2fourchar('A00H') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID)) 
 	..setAttacksEnabled(0)
 	..setScalingValue(0.4)
@@ -101,7 +101,7 @@ public class Fountain extends StaticSetupObject
 	..setNormalAbilities(int2fourchar('A078') + "," +
 	int2fourchar('A00H') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID)) 
 	..setAttacksEnabled(0)
 	..setScalingValue(0.4)
@@ -136,7 +136,7 @@ public class Fountain extends StaticSetupObject
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
 	..setNormalAbilities(int2fourchar('A079') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID)) 
 	..setAttacksEnabled(0)
 	..setScalingValue(0.4)

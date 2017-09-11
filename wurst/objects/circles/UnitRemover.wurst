@@ -50,7 +50,7 @@ public class UnitRemover extends StaticBaseObject
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Remover.blp")
 	..setNormalAbilities(int2fourchar(INFO_UNIT_REMOVER_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +  
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(0)

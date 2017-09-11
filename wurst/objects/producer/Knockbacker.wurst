@@ -112,7 +112,7 @@ public class Knockbacker extends EscaperSensorSetup
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("C")
 	..setName("|cffA56308Knockbacker")

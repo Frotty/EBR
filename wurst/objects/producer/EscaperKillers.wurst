@@ -189,7 +189,7 @@ public class FireKiller extends EscaperSensorSetup
 	int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("S")
 	..setName("|cff0894E6Small Random Escaper Killer")
@@ -222,7 +222,7 @@ public class FireKiller extends EscaperSensorSetup
 	int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("D")
 	..setName("|cff0894E6Big Random Escaper Killer")
@@ -254,7 +254,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("C")
 	..setName("Glaive")
@@ -284,7 +284,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("R")
 	..setName("|cff0894E6Tank")
@@ -317,7 +317,7 @@ public class FireKiller extends EscaperSensorSetup
 	int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("C")
 	..setName("Fire Killer")
@@ -353,7 +353,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("S")
 	..setName("Flying Killer")

@@ -35,6 +35,7 @@ public constant TRAP_ID = 'trap'
 public constant BOMB_TOWER_ID = 'bmbt'
 public constant CONGA_LINE_HEAD_ID = 'clhd'
 public constant DOORDUMMY_ID = 'dor1'
+public constant DOORORDER_ID = 'dor2'
 public constant FOUNTAIN_BOTH_ID = 'fnt1'
 public constant FOUNTAIN_HEAL_ID = 'fnt2'
 public constant FOUNTAIN_CURE_ID = 'fnt3'
@@ -48,6 +49,18 @@ public constant VOLCANO_ID = 'volc'
 public constant HOR_WALL_ID = 'hwal'
 public constant VER_WALL_ID = 'vwal'
 public constant WALL_ID = 'wall'
+
+public constant SMALL_GRASS_KILLER_ID = 'sgrk'
+public constant SMALL_ICE_KILLER_ID = 'sick'
+public constant SMALL_CITADEL_KILLER_ID = 'scik'
+public constant SMALL_SAND_KILLER_ID = 'ssak'
+public constant SMALL_SUNKEN_KILLER_ID = 'ssuk'
+public constant BIG_GRASS_KILLER_ID = 'bgrk'
+public constant BIG_ICE_KILLER_ID = 'bisk'
+public constant BIG_CITADEL_KILLER_ID = 'bcik'
+public constant BIG_SAND_KILLER_ID = 'bsak'
+public constant BIG_SUNKEN_KILLER_ID = 'bsuk'
+
 /*
 public constant TREE_ID = compiletime(UNIT_ID_GEN.next())
 public constant SMALL_OBST_ID = compiletime(UNIT_ID_GEN.next())
@@ -73,8 +86,6 @@ public constant ESC_HOLY_ID = compiletime(HERO_ID_GEN.next())
 public constant ESC_BLIND_ID = compiletime(HERO_ID_GEN.next()) */
 
 public constant INVULNERABILITY_ID = 'Avul'
-public constant GHOST_VISIBLE_ID = 'Aeth'
-public constant GHOST_ID = 'Agho'
 public constant RALLY_POINT = 'ARal'
 
 public constant vec2 hidden = vec2(-6000,6000)

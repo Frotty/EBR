@@ -2,6 +2,7 @@ package FourthCitadelle
 import Startmaze
 import Spinner
 import ClosureTimers
+import EscaperKillers
 
 public class FourthCitadelleMaze extends Startmaze
 
@@ -11,15 +12,15 @@ public class FourthCitadelleMaze extends Startmaze
 		
 	override function initMaze()
 		inited = true
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'bcik'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == BIG_CITADEL_KILLER_ID))
 		for u from ENUM_GROUP
 			new BigKiller(u) 
 		
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'scik'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == SMALL_CITADEL_KILLER_ID))
 		for u from ENUM_GROUP
 			new SmallKiller(u)
 
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'glve'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == GLAIVE_KILLER_ID))
 		for u from ENUM_GROUP
 			new GlaiveKiller(u)
 
@@ -36,7 +37,7 @@ public class FourthCitadelleMaze extends Startmaze
 		doAfter(0.2,() -> gg_unit_spnr_0147.issuePointOrder("patrol", vec2(-3900, -4604)) )
 		
 
-		s = new Spinner(gg_unit_spnr_0258)
+		s = new Spinner(gg_unit_spnr_0257)
 		s.checkObj( gg_unit_scik_0271.getEntity())
 		s.checkObj( gg_unit_scik_0272.getEntity())
 		s.checkObj( gg_unit_scik_0273.getEntity())
@@ -52,17 +53,17 @@ public class FourthCitadelleMaze extends Startmaze
 		s.checkObj( gg_unit_bcik_0220.getEntity())
 		s.spinSpeed.setVal(7.5 *DEGTORAD)
 
-		s = new Spinner(gg_unit_spnr_0163)
+		s = new Spinner(gg_unit_spnr_0162)
 		s.sinFactor.setVal(0)
 		s.checkObj( gg_unit_glve_0156.getEntity())
 		s.setup.issueImmediateOrder("fingerofdeath")
-		s.spinSpeed.setVal(4 *DEGTORAD)
+		s.spinSpeed.setVal(4. *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0163)
 		s.sinFactor.setVal(0)
 		s.checkObj( gg_unit_glve_0157.getEntity())
 		s.setup.issueImmediateOrder("fingerofdeath")
-		s.spinSpeed.setVal(4 *DEGTORAD)
+		s.spinSpeed.setVal(4. *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0161)
 		s.checkObj( gg_unit_glve_0158.getEntity())

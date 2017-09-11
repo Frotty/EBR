@@ -168,7 +168,7 @@ init
 	int2fourchar('A01E') + "," +
 	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("S")
 	..setName("|cff949494Spinner ")

@@ -142,7 +142,7 @@ init
 	int2fourchar('A05M') + "," +
 	int2fourchar('A07A') + "," +
 	int2fourchar('Afre') + "," +
-	int2fourchar(GHOST_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
 	int2fourchar(RALLY_POINT) + "," +
 	int2fourchar(INVULNERABILITY_ID)) 
 	..setProperNames("|cFFFF8000Unit Producer|r")

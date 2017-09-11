@@ -158,7 +158,7 @@ public class Key extends ItemObject
     ..setNormalAbilities(int2fourchar('A00M') + "," +
     int2fourchar('A05R') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_ID) + "," +
+    int2fourchar(GHOST_INVIS_ID) + "," +
     int2fourchar(INVULNERABILITY_ID))
     ..setName("Key Dummy")
     ..setUpgradesUsed("")

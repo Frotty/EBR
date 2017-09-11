@@ -198,7 +198,7 @@ init
 	int2fourchar(TURN_ON_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setButtonPositionX(1)
 	..setButtonPositionY(0)

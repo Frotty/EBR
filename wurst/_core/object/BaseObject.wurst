@@ -30,7 +30,7 @@ public class StaticBaseObject extends UnitEntity
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
-	construct( vec2 pos, unit u, real radius, code action, code cond )
+	construct(vec2 pos, unit u, real radius, code action, code cond )
 		super(u)
 		this.setCurrentRegion()
 		noRally = addEffect(Other.questionmark, pos)

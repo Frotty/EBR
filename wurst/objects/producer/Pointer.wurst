@@ -145,7 +145,7 @@ init
 	int2fourchar('A01F') + "," +
 	int2fourchar('A01G') + "," +
     int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VISIBLE_ID) + "," +
+    int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("X")
 	..setName("|cff0894E6Pointer")

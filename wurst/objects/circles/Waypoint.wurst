@@ -199,7 +199,7 @@ public class Waypoint extends StaticBaseObject
 	int2fourchar(NO_WISPS_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(GHOST_VISIBLE_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setButtonPositionX(3)
 	..setButtonPositionY(0)

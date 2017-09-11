@@ -4,13 +4,12 @@ import Key
 import PlayerData
 import ChannelAbilityPreset
 
-constant int DOORORDER_ID = 'dor2'
-constant int DOORPATH = compiletime(UNIT_ID_GEN.next())
-constant int DOORPATH_O = compiletime(UNIT_ID_GEN.next())
-constant int DOOROPEN_ABILITY_ID = 'A00J'
-constant int DOORTURN_ABILITY_ID = 'A01W'
-constant int DOORPLACEKEY_ABILITY_ID = 'Av42'
-constant real EVENT_RADIUS = 192
+public constant DOORPATH = compiletime(UNIT_ID_GEN.next())
+constant DOORPATH_O = compiletime(UNIT_ID_GEN.next())
+constant DOOROPEN_ABILITY_ID = 'A00J'
+constant DOORTURN_ABILITY_ID = 'A01W'
+constant DOORPLACEKEY_ABILITY_ID = 'Av42'
+constant EVENT_RADIUS = 192.
 //Item type ids
 
 int array KEY_COLOR_ID
@@ -267,7 +266,7 @@ public class Door extends StaticSetupObject
 	int2fourchar('A00J') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID) + "," +
-	int2fourchar(GHOST_ID))
+	int2fourchar(GHOST_INVIS_ID))
 	..setName("|cFFFF8000Door|r ")
 	..setHotkey("D")
 	..setTooltipBasic("Dummy")

@@ -13,6 +13,8 @@ import Obstacle
 import Ball
 import LobbyTeleporter
 import MinigameTeleporter
+import ObstacleObjects
+
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -23,7 +25,7 @@ public function initStartmazes()
 	for vicu from ENUM_GROUP
 		vicu.setOwner(STAFF_PLAYER, true)
 
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'revp'))
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == REVIVE_POINT_ID))
 	for u from ENUM_GROUP
 		if u.isAlive()
 			var r = new RevivePoint(u)
@@ -39,37 +41,35 @@ public function initStartmazes()
 				r.startmaze = 4
 				svRev = r
 
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'dor2'))
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == DOORORDER_ID))
 	for u2 from ENUM_GROUP
 		if u2 != gg_unit_dor2_0023 and u2 != gg_unit_dor2_0011
-			new Door(vec2(u2.getX(), u2.getY()), STAFF_PLAYER)
-			u2.remove()
+			new Door(u2)
 		
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00S'))
+	GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == BOBS_ICE_ID))
 	for u3 from ENUM_GROUP
-		new BigObstacle(vec2(u3.getX(), u3.getY()), STAFF_PLAYER)
-		u3.remove()
+		new BigObstacle(u3)
 	
 	doAfter(.25, () -> begin
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00R'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == SOBS_DESERT_ID))
 		for u4 from ENUM_GROUP
-			new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
-			u4.remove()
-			
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n018'))
+			new SmallObstacle(u4)
+
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == BOBS_CITADEL_ID))
 		for u4 from ENUM_GROUP
-			new SmallObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
-			u4.remove()
+			new BigObstacle(u4)
 			
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n019'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == SOBS_CITADEL_ID))
 		for u4 from ENUM_GROUP
-			new BigObstacle(vec2(u4.getX(), u4.getY()), STAFF_PLAYER)
-			u4.remove()
+			new SmallObstacle(u4)
 			
-		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == 'n00X'))
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == BOBS_DESERT_ID))
+		for u4 from ENUM_GROUP
+			new BigObstacle(u4)
+			
+		GroupEnumUnitsOfPlayer(ENUM_GROUP, STAFF_PLAYER, Filter(() -> GetFilterUnit().getTypeId() == SOBS_ICE_ID))
 		for u6 from ENUM_GROUP
-			new SmallObstacle(vec2(u6.getX(), u6.getY()), STAFF_PLAYER)
-			u6.remove()
+			new SmallObstacle(u6)
 		var rand = GetRandomInt(0,7)
 		if rand < 2
 			setStartTeleport(0,3)
