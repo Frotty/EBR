@@ -211,4 +211,5 @@ public class Waypoint extends StaticBaseObject
 	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
+	..setPathingMap("none")
 	..setUnitClassification("ancient,standon")

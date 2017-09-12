@@ -29,22 +29,22 @@ constant integer EVENT_SYNC_INTEGER= 1
            
 integer SyncInteger_DefaultInstance= 0
            
-trigger SyncInteger__OnSelectTrigger= CreateTrigger()
-trigger SyncInteger__EventTrig= CreateTrigger()
-real SyncInteger__FireEvent= 0
+trigger SyncInteger___OnSelectTrigger= CreateTrigger()
+trigger SyncInteger___EventTrig= CreateTrigger()
+real SyncInteger___FireEvent= 0
  
-group SyncInteger__SelectionGroup
+group SyncInteger___SelectionGroup
 
-integer SyncInteger__LastPlayer
-integer SyncInteger__LastSync
-integer SyncInteger__LastInstance
-player SyncInteger__LocalPlayer
-integer array SyncInteger__ActiveSyncs
+integer SyncInteger___LastPlayer
+integer SyncInteger___LastSync
+integer SyncInteger___LastInstance
+player SyncInteger___LocalPlayer
+integer array SyncInteger___ActiveSyncs
            
-real SyncInteger__DUMMY_X= 0
-real SyncInteger__DUMMY_Y= 0
+real SyncInteger___DUMMY_X= 0
+real SyncInteger___DUMMY_Y= 0
            
-integer array SyncInteger__DummyInstance
+integer array SyncInteger___DummyInstance
 
 //endglobals from SyncInteger
 //globals from Table:
@@ -54,61 +54,61 @@ integer Table___more= 8190
     //Configure it if you use more than 8190 "key" variables in your map (this will never happen though).
     
 hashtable Table___ht= InitHashtable()
-constant integer Table___sizeK=7
-constant integer Table___listK=8
+constant integer Table___sizeK=3
+constant integer Table___listK=4
 //endglobals from Table
 //globals from StringHashEx:
 constant boolean LIBRARY_StringHashEx=true
-constant integer StringHashEx__REHASH= 1222483
-constant integer StringHashEx__tbKey=9
-integer StringHashEx__t= StringHashEx__tbKey
+constant integer StringHashEx___REHASH= 1222483
+constant integer StringHashEx___tbKey=5
+integer StringHashEx___t= StringHashEx___tbKey
 //endglobals from StringHashEx
 //globals from Sync:
 constant boolean LIBRARY_Sync=true
         // characters that can be synced (ascii)
-constant string Sync__ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+constant string Sync___ALPHABET= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
         // safe characters for use in game cache keys
         // (case sensitive)
-constant string Sync__SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~"
+constant string Sync___SAFE_KEYS= " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~"
 
         // how fast the buffer updates
-constant real Sync__UPDATE_PERIOD= 0.03125
+constant real Sync___UPDATE_PERIOD= 0.03125
 
         // automatically recycle indices when the syncing player leaves
-constant boolean Sync__AUTO_DESTROY_ON_LEAVE= true
+constant boolean Sync___AUTO_DESTROY_ON_LEAVE= true
 
         // automatically stop buffering when an error occurs
-constant boolean Sync__STOP_BUFFERING_ON_ERROR= true
+constant boolean Sync___STOP_BUFFERING_ON_ERROR= true
 
         // preload game cache key strings on init
-constant boolean Sync__PRELOAD_STR_CACHE= true
+constant boolean Sync___PRELOAD_STR_CACHE= true
 
         // size of the alphabet
-constant integer Sync__ALPHABET_BASE= StringLength(Sync__ALPHABET)
+constant integer Sync___ALPHABET_BASE= StringLength(Sync___ALPHABET)
 
         // stop reading the string buffer when reaching this char
-constant string Sync__TERM_CHAR= "`"
+constant string Sync___TERM_CHAR= "`"
 
         // maximum number of strings *per instance*
-constant integer Sync__MAX_STRINGS= 8192
+constant integer Sync___MAX_STRINGS= 8192
 
         // filenames for gc (short names have faster sync time)
-constant string Sync__CACHE_FILE= "i.w3v"
-constant string Sync__CACHE_FILE_STR= "s.w3v"
+constant string Sync___CACHE_FILE= "i.w3v"
+constant string Sync___CACHE_FILE_STR= "s.w3v"
 
         // don't edit below this line
 constant integer EVENT_SYNC_CACHE= 3
 constant integer SYNC_ERROR_TIMEOUT= 1
 constant integer SYNC_ERROR_PLAYERLEFT= 2
        
-integer Sync__Synchronizer
+integer Sync___Synchronizer
         // string table keys
-constant integer Sync__KEY_STR_POS= ( 0 * Sync__MAX_STRINGS )
-constant integer Sync__KEY_STR_LEN= ( 1 * Sync__MAX_STRINGS )
+constant integer Sync___KEY_STR_POS= ( 0 * Sync___MAX_STRINGS )
+constant integer Sync___KEY_STR_LEN= ( 1 * Sync___MAX_STRINGS )
 
         // pending data storage space
-constant integer Sync__KEY_STR_CACHE= ( 2 * Sync__MAX_STRINGS )
+constant integer Sync___KEY_STR_CACHE= ( 2 * Sync___MAX_STRINGS )
 //endglobals from Sync
     // Generated
 rect gg_rct_Choose= null
@@ -165,6 +165,7 @@ unit gg_unit_unre_0118= null
 unit gg_unit_revp_0059= null
 unit gg_unit_tele_0061= null
 unit gg_unit_spnr_0163= null
+unit gg_unit_fnt2_0067= null
 unit gg_unit_spnr_0161= null
 unit gg_unit_glve_0160= null
 unit gg_unit_bsak_0080= null
@@ -243,7 +244,7 @@ unit gg_unit_knck_0034= null
 unit gg_unit_tele_0044= null
 unit gg_unit_sgrk_0038= null
 unit gg_unit_sgrk_0039= null
-unit gg_unit_fnt3_0065= null
+unit gg_unit_fnt2_0065= null
 unit gg_unit_sgrk_0050= null
 unit gg_unit_knck_0053= null
 unit gg_unit_knck_0054= null
@@ -251,14 +252,13 @@ unit gg_unit_tele_0058= null
 unit gg_unit_tele_0063= null
 unit gg_unit_tele_0115= null
 unit gg_unit_tele_0143= null
-unit gg_unit_fnt3_0074= null
+unit gg_unit_fnt2_0074= null
 unit gg_unit_wayp_0066= null
 unit gg_unit_wayp_0068= null
 unit gg_unit_wayp_0078= null
 unit gg_unit_wayp_0099= null
 unit gg_unit_wayp_0101= null
 unit gg_unit_wayp_0102= null
-unit gg_unit_fnt3_0067= null
 unit gg_unit_spnr_0162= null
 unit gg_unit_exec_0076= null
 
@@ -434,69 +434,69 @@ endfunction
 
 
         function GetSyncedInteger takes nothing returns integer
-            return SyncInteger__LastSync
+            return SyncInteger___LastSync
         endfunction
 
         function GetSyncedPlayer takes nothing returns player
-            return Player(SyncInteger__LastPlayer)
+            return Player(SyncInteger___LastPlayer)
         endfunction
        
         function GetSyncedInstance takes nothing returns integer
-            return SyncInteger__LastInstance
+            return SyncInteger___LastInstance
         endfunction
    
         function GetSyncedPlayerId takes nothing returns integer
-            return SyncInteger__LastPlayer
+            return SyncInteger___LastPlayer
         endfunction
        
         function IsPlayerIdSyncing takes integer pid returns boolean
-            return SyncInteger__ActiveSyncs[pid] > 0
+            return SyncInteger___ActiveSyncs[pid] > 0
         endfunction
        
         function IsPlayerSyncing takes player p returns boolean
-            return SyncInteger__ActiveSyncs[GetPlayerId(p)] > 0
+            return SyncInteger___ActiveSyncs[GetPlayerId(p)] > 0
         endfunction
        
         function IsSyncEnabled takes nothing returns boolean
-            return IsTriggerEnabled(SyncInteger__OnSelectTrigger)
+            return IsTriggerEnabled(SyncInteger___OnSelectTrigger)
         endfunction
 
         function SyncIntegerEnable takes nothing returns nothing
-            call EnableTrigger(SyncInteger__OnSelectTrigger)
+            call EnableTrigger(SyncInteger___OnSelectTrigger)
         endfunction
 
         function SyncIntegerDisable takes nothing returns nothing
-            call DisableTrigger(SyncInteger__OnSelectTrigger)
+            call DisableTrigger(SyncInteger___OnSelectTrigger)
         endfunction
 
         function SyncIntegerToggle takes boolean flag returns nothing
             if ( flag ) then
-                call EnableTrigger(SyncInteger__OnSelectTrigger)
+                call EnableTrigger(SyncInteger___OnSelectTrigger)
             else
-                call DisableTrigger(SyncInteger__OnSelectTrigger)
+                call DisableTrigger(SyncInteger___OnSelectTrigger)
             endif
         endfunction
 
         function OnSyncInteger takes filterfunc func returns triggercondition
-            return TriggerAddCondition(SyncInteger__EventTrig, func)
+            return TriggerAddCondition(SyncInteger___EventTrig, func)
         endfunction
 
         function RemoveSyncEvent takes triggercondition action returns nothing
-           call TriggerRemoveCondition(SyncInteger__EventTrig, action)
+           call TriggerRemoveCondition(SyncInteger___EventTrig, action)
         endfunction
    
         function SyncInteger_FireEvents takes real eventtype returns nothing
-            set SyncInteger__FireEvent=eventtype
-            set SyncInteger__FireEvent=0
+            set SyncInteger___FireEvent=eventtype
+            set SyncInteger___FireEvent=0
         endfunction
        
         // This function is called when a unit is selected.
-        function SyncInteger__OnSelect takes nothing returns boolean
+        function SyncInteger___OnSelect takes nothing returns boolean
             local unit u= GetTriggerUnit()
             local player p= GetTriggerPlayer()
             local integer id= GetPlayerId(p)
             local integer udata= GetUnitUserData(u)
-            local integer this= SyncInteger__DummyInstance[udata]
+            local integer this= SyncInteger___DummyInstance[udata]
             local boolean isNeg= ( s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+SyncInteger_DUMMY_COUNT - 1] == u )
             local integer index= s___SelectionSync_DummyID[s__SelectionSync_DummyID[this]+udata] - 1
            
@@ -509,18 +509,18 @@ endfunction
             endif
 
             if ( isNeg or s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+SyncInteger_DUMMY_COUNT - 2] == u ) then
-                set SyncInteger__ActiveSyncs[id]=SyncInteger__ActiveSyncs[id] - 1
+                set SyncInteger___ActiveSyncs[id]=SyncInteger___ActiveSyncs[id] - 1
                
                 // The number is finished syncing, fire the events
-                set SyncInteger__LastPlayer=id
-                set SyncInteger__LastSync=s___SelectionSync_SyncingValue[s__SelectionSync_SyncingValue[this]+id]
-                set SyncInteger__LastInstance=this
-                set SyncInteger__FireEvent=EVENT_SYNC_INTEGER
+                set SyncInteger___LastPlayer=id
+                set SyncInteger___LastSync=s___SelectionSync_SyncingValue[s__SelectionSync_SyncingValue[this]+id]
+                set SyncInteger___LastInstance=this
+                set SyncInteger___FireEvent=EVENT_SYNC_INTEGER
                
-                call TriggerEvaluate(SyncInteger__EventTrig)
+                call TriggerEvaluate(SyncInteger___EventTrig)
                
                 // Reset variables
-                set SyncInteger__FireEvent=0
+                set SyncInteger___FireEvent=0
                 set s___SelectionSync_SyncingValue[s__SelectionSync_SyncingValue[this]+id]=- 1
             else
            
@@ -559,7 +559,7 @@ endfunction
                 loop
                     exitwhen i >= SyncInteger_DUMMY_COUNT
                    
-                    set s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+i]=CreateUnit(SyncInteger_DUMMY_PLAYER, SyncInteger_DUMMY_ID, SyncInteger__DUMMY_X, SyncInteger__DUMMY_Y, i)
+                    set s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+i]=CreateUnit(SyncInteger_DUMMY_PLAYER, SyncInteger_DUMMY_ID, SyncInteger___DUMMY_X, SyncInteger___DUMMY_Y, i)
            
                     set uid=GetUnitUserData(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+i])
                  
@@ -570,7 +570,7 @@ endfunction
                  
                  
                     set s___SelectionSync_DummyID[s__SelectionSync_DummyID[this]+uid]=i + 1
-                    set SyncInteger__DummyInstance[uid]=this
+                    set SyncInteger___DummyInstance[uid]=this
 
                     call UnitAddAbility(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+i], SyncInteger_DUMMY_ABILITY)
                     call PauseUnit(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+i], true)
@@ -594,7 +594,7 @@ endfunction
                 local unit last
 
        
-                if ( not (IsTriggerEnabled(SyncInteger__OnSelectTrigger)) ) then // INLINED!!
+                if ( not (IsTriggerEnabled(SyncInteger___OnSelectTrigger)) ) then // INLINED!!
                     return false
                 endif
        
@@ -611,22 +611,22 @@ endfunction
                 endloop
        
                 // Count how many units are selected
-                call GroupEnumUnitsSelected(SyncInteger__SelectionGroup, p, null)
+                call GroupEnumUnitsSelected(SyncInteger___SelectionGroup, p, null)
                 set bj_groupCountUnits=0
 
-                set u=FirstOfGroup(SyncInteger__SelectionGroup)
+                set u=FirstOfGroup(SyncInteger___SelectionGroup)
                 loop
                     exitwhen u == null
                     set last=u
-                    call GroupRemoveUnit(SyncInteger__SelectionGroup, u)
+                    call GroupRemoveUnit(SyncInteger___SelectionGroup, u)
                     set bj_groupCountUnits=bj_groupCountUnits + 1
-                    set u=FirstOfGroup(SyncInteger__SelectionGroup)
+                    set u=FirstOfGroup(SyncInteger___SelectionGroup)
                 endloop
            
                 // If the queue is full, de-select the last unit which
                 // will allow us to select a dummy, and hopefully
                 // avoid a flickering effect.
-                if ( bj_groupCountUnits >= 12 and SyncInteger__LocalPlayer == p ) then
+                if ( bj_groupCountUnits >= 12 and SyncInteger___LocalPlayer == p ) then
                     call SelectUnit(last, false)
                 endif
 
@@ -637,7 +637,7 @@ endfunction
                     set x=number / n
                     set j=j / SyncInteger_BASE
                
-                    if ( SyncInteger__LocalPlayer == p ) then
+                    if ( SyncInteger___LocalPlayer == p ) then
                         call SelectUnit(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+x], true)
                         call SelectUnit(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+x], false)
                     endif
@@ -649,7 +649,7 @@ endfunction
                     set i=i - 1
                 endloop
      
-                if ( SyncInteger__LocalPlayer == p ) then
+                if ( SyncInteger___LocalPlayer == p ) then
                     call SelectUnit(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+d], true)
                     call SelectUnit(s___SelectionSync_Dummy[s__SelectionSync_Dummy[this]+d], false)
                  
@@ -661,7 +661,7 @@ endfunction
                 set u=null
                 set last=null
                
-                set SyncInteger__ActiveSyncs[playerId]=SyncInteger__ActiveSyncs[playerId] + 1
+                set SyncInteger___ActiveSyncs[playerId]=SyncInteger___ActiveSyncs[playerId] + 1
                
                 return true
             endfunction
@@ -677,34 +677,34 @@ endfunction
                 endloop
             endfunction
            
-//Implemented from module SyncInteger__SyncIntegerInit:
-            function s__SelectionSync_SyncInteger__SyncIntegerInit___onInit takes nothing returns nothing
+//Implemented from module SyncInteger___SyncIntegerInit:
+            function s__SelectionSync_SyncInteger___SyncIntegerInit__onInit takes nothing returns nothing
                 local integer i= 0
                 local integer j
                
                 loop
-                    call TriggerRegisterPlayerUnitEvent(SyncInteger__OnSelectTrigger, Player(i), EVENT_PLAYER_UNIT_SELECTED, null)
+                    call TriggerRegisterPlayerUnitEvent(SyncInteger___OnSelectTrigger, Player(i), EVENT_PLAYER_UNIT_SELECTED, null)
          
                     set i=i + 1
                     exitwhen i == bj_MAX_PLAYER_SLOTS
                 endloop
 
-                call TriggerAddCondition(SyncInteger__OnSelectTrigger, Filter(function SyncInteger__OnSelect))
+                call TriggerAddCondition(SyncInteger___OnSelectTrigger, Filter(function SyncInteger___OnSelect))
      
 
 
 
-                    set SyncInteger__SelectionGroup=CreateGroup()
+                    set SyncInteger___SelectionGroup=CreateGroup()
 
 
 
 
 
-                    set SyncInteger__LocalPlayer=GetLocalPlayer()
+                    set SyncInteger___LocalPlayer=GetLocalPlayer()
 
            
-                set SyncInteger__DUMMY_X=GetCameraBoundMaxX() + 2000
-                set SyncInteger__DUMMY_Y=GetCameraBoundMaxY() + 2000
+                set SyncInteger___DUMMY_X=GetCameraBoundMaxX() + 2000
+                set SyncInteger___DUMMY_Y=GetCameraBoundMaxY() + 2000
                
 
                     set SyncInteger_DefaultInstance=s__SelectionSync_create()
@@ -719,22 +719,22 @@ endfunction
         function SyncTerminate takes boolean destroyEvents returns boolean
             local integer i= 0
            
-            if ( SyncInteger__OnSelectTrigger == null and SyncInteger__EventTrig == null ) then
+            if ( SyncInteger___OnSelectTrigger == null and SyncInteger___EventTrig == null ) then
                 return false
             endif
            
             if ( destroyEvents ) then
-                call DestroyTrigger(SyncInteger__OnSelectTrigger)
-                call DestroyTrigger(SyncInteger__EventTrig)
-                set SyncInteger__OnSelectTrigger=null
-                set SyncInteger__EventTrig=null
+                call DestroyTrigger(SyncInteger___OnSelectTrigger)
+                call DestroyTrigger(SyncInteger___EventTrig)
+                set SyncInteger___OnSelectTrigger=null
+                set SyncInteger___EventTrig=null
            
 
-                    call DestroyGroup(SyncInteger__SelectionGroup)
-                    set SyncInteger__SelectionGroup=null
+                    call DestroyGroup(SyncInteger___SelectionGroup)
+                    set SyncInteger___SelectionGroup=null
 
             else
-                call DisableTrigger(SyncInteger__OnSelectTrigger) // INLINED!!
+                call DisableTrigger(SyncInteger___OnSelectTrigger) // INLINED!!
             endif
            
             if ( SyncInteger_DefaultInstance > 0 ) then
@@ -1749,12 +1749,12 @@ endfunction
     function StringHashEx takes string key returns integer
         local integer sh= StringHash(key)
         loop
-            if not (HaveSavedString(Table___ht, (((StringHashEx__t))), (sh))) then // INLINED!!
-                call SaveStr(Table___ht, (((StringHashEx__t))), (sh), ( key)) // INLINED!!
+            if not (HaveSavedString(Table___ht, (((StringHashEx___t))), (sh))) then // INLINED!!
+                call SaveStr(Table___ht, (((StringHashEx___t))), (sh), ( key)) // INLINED!!
                 exitwhen true
             endif
-            exitwhen (LoadStr(Table___ht, (((StringHashEx__t))), (sh))) == key // INLINED!!
-            set sh=sh + StringHashEx__REHASH
+            exitwhen (LoadStr(Table___ht, (((StringHashEx___t))), (sh))) == key // INLINED!!
+            set sh=sh + StringHashEx___REHASH
         endloop
         return sh
     endfunction
@@ -1815,7 +1815,7 @@ endfunction
         set l=makeLen - l
         loop
             exitwhen i > l
-            set s=s + Sync__TERM_CHAR
+            set s=s + Sync___TERM_CHAR
             set i=i + 1
         endloop
         return s
@@ -1873,12 +1873,12 @@ endfunction
         function s__SyncData_getKey takes integer pos returns string
             local string position=""
    
-            if ( HaveSavedString(s__SyncData_Table, Sync__KEY_STR_CACHE, pos) ) then
-                return LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos)
+            if ( HaveSavedString(s__SyncData_Table, Sync___KEY_STR_CACHE, pos) ) then
+                return LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos)
             endif
    
-            set position=Sync_ConvertBase(Sync__SAFE_KEYS , pos)
-            call SaveStr(s__SyncData_Table, Sync__KEY_STR_CACHE, pos, position)
+            set position=Sync_ConvertBase(Sync___SAFE_KEYS , pos)
+            call SaveStr(s__SyncData_Table, Sync___KEY_STR_CACHE, pos, position)
    
             return position
         endfunction
@@ -1920,8 +1920,8 @@ endfunction
                     set p=i
 
 
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + p)
-                call RemoveSavedInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + p)
+                call RemoveSavedInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + p)
                 call RemoveSavedBoolean(s__SyncData_Table, p, this) // playerdone
 
                 set i=i + 1
@@ -1960,11 +1960,11 @@ endfunction
         endfunction
 
         function s__SyncData_hasString takes integer this,integer index returns boolean
-            local integer i= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
+            local integer i= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
             if ( index > 0 and i == 0 ) then
                 return false
             endif
-            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)))
+            return HaveStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(i + LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)))
         endfunction
 
         function s__SyncData_addInt takes integer this,integer i returns nothing
@@ -2010,12 +2010,12 @@ endfunction
 
             // store the string position in the table
             if ( s__SyncData_strCount[this] == 0 ) then
-                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS, 0)
+                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS, 0)
             else
-                set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
-                set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
+                set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + ( s__SyncData_strCount[this] - 1 )) + 1
+                set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + ( s__SyncData_strCount[this] - 1 )) + strLen
 
-                call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + s__SyncData_strCount[this], strPos)
+                call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + s__SyncData_strCount[this], strPos)
             endif
 
             // convert each character in the string to an integer
@@ -2025,14 +2025,14 @@ endfunction
                 set position=s__SyncData_getKey(strPos + i)
 
                 if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, s__SyncData_char2I(Sync__ALPHABET , SubString(s, i, i + 1)))
+                    call StoreInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position, s__SyncData_char2I(Sync___ALPHABET , SubString(s, i, i + 1)))
                 endif
 
                 set i=i + 1
             endloop
 
             set s__SyncData_strBufferLen[this]=s__SyncData_strBufferLen[this] + length
-            call SaveInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
+            call SaveInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + s__SyncData_strCount[this], length) // store the length as well
             set s__SyncData_strCount[this]=s__SyncData_strCount[this] + 1
         endfunction
 
@@ -2052,22 +2052,22 @@ endfunction
             local string s= ""
             local string c
             local integer i= 0
-            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
+            local integer strLen= LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
             local integer strPos
    
             if ( not s__SyncData_hasString(this,index) ) then
                 return null
             endif
 
-            set strLen=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + index)
-            set strPos=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + index)
+            set strLen=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + index)
+            set strPos=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + index)
    
             loop
                 exitwhen i > strLen
        
-                set c=Sync_I2Char(Sync__ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
+                set c=Sync_I2Char(Sync___ALPHABET , GetStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], s__SyncData_getKey(strPos + i)))
 
-                if ( c == Sync__TERM_CHAR ) then
+                if ( c == Sync___TERM_CHAR ) then
                     return s
                 endif
 
@@ -2142,7 +2142,7 @@ endfunction
                     return
                 endif
 
-                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync__UPDATE_PERIOD
+                set s__SyncData_timeElapsed[data]=s__SyncData_timeElapsed[data] + Sync___UPDATE_PERIOD
 
                 if ( s__SyncData_onUpdate[data] != null ) then
                     call s__SyncData_fireEvent(data,s__SyncData_onUpdate[data])
@@ -2189,7 +2189,7 @@ endfunction
                         set s__SyncData_localFinished[data]=true
 
                         // notify everyone that the local player has recieved all of the data
-                        call s__SelectionSync_syncValue(Sync__Synchronizer,s__SyncData_LocalPlayer , data)
+                        call s__SelectionSync_syncValue(Sync___Synchronizer,s__SyncData_LocalPlayer , data)
                     endif
                
                 endif
@@ -2208,7 +2208,7 @@ endfunction
             loop
                 exitwhen i > end
 
-                set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, i)
+                set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, i)
      
                 if ( i < s__SyncData_intCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                     call SyncStoredInteger(s__SyncData_Cache[0], s__SyncData_mkey[this], position)
@@ -2221,15 +2221,15 @@ endfunction
                 endif
      
                 if ( i < s__SyncData_strCount[this] and s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
-                    set n=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_LEN + i)
-                    set p=LoadInteger(s__SyncData_Table, this, Sync__KEY_STR_POS + i)
+                    set n=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_LEN + i)
+                    set p=LoadInteger(s__SyncData_Table, this, Sync___KEY_STR_POS + i)
          
                     set j=0
          
                     loop
                         exitwhen j > n
              
-                        set position=LoadStr(s__SyncData_Table, Sync__KEY_STR_CACHE, p + j)
+                        set position=LoadStr(s__SyncData_Table, Sync___KEY_STR_CACHE, p + j)
 
                         if ( s__SyncData_LocalPlayer == s__SyncData_from[this] ) then
                             call SyncStoredInteger(s__SyncData_Cache[1], s__SyncData_mkey[this], position)
@@ -2249,10 +2249,10 @@ endfunction
             set s__SyncData_timeStarted[this]=(s__SyncData_timeCounter + TimerGetElapsed(s__SyncData_Elapsed)) // INLINED!!
             set s__SyncData_playersDone[this]=0
             set s__SyncData_buffering[this]=true
-            set s__SyncData_timeElapsed[this]=( Sync__UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
+            set s__SyncData_timeElapsed[this]=( Sync___UPDATE_PERIOD - TimerGetElapsed(s__SyncData_BufferTimer) ) * - 1
    
             if ( s__SyncData_Running == 0 ) then
-                call TimerStart(s__SyncData_BufferTimer, Sync__UPDATE_PERIOD, true, function s__SyncData_readBuffer)
+                call TimerStart(s__SyncData_BufferTimer, Sync___UPDATE_PERIOD, true, function s__SyncData_readBuffer)
             endif
 
             set s__SyncData_Running=s__SyncData_Running + 1
@@ -2285,13 +2285,13 @@ endfunction
 
         function s__SyncData_updateStatus takes nothing returns boolean
             local integer i= 0
-            local integer p= (SyncInteger__LastPlayer) // INLINED!!
+            local integer p= (SyncInteger___LastPlayer) // INLINED!!
             local boolean b= true
             local boolean c= true
-            local integer data= (SyncInteger__LastSync) // INLINED!!
+            local integer data= (SyncInteger___LastSync) // INLINED!!
             local triggercondition tc
            
-            if ( (SyncInteger__LastInstance) != Sync__Synchronizer or not s__SyncData_buffering[data] ) then // INLINED!!
+            if ( (SyncInteger___LastInstance) != Sync___Synchronizer or not s__SyncData_buffering[data] ) then // INLINED!!
                 return false
             endif
      
@@ -2349,27 +2349,27 @@ endfunction
             local integer i= 0
             local string c
          
-            set s__SyncData_AlphaHash=s__SyncData_hashString(Sync__ALPHABET)
+            set s__SyncData_AlphaHash=s__SyncData_hashString(Sync___ALPHABET)
          
             loop
-                exitwhen i >= Sync__ALPHABET_BASE
+                exitwhen i >= Sync___ALPHABET_BASE
 
-                set c=Sync_I2Char(Sync__ALPHABET , i)
+                set c=Sync_I2Char(Sync___ALPHABET , i)
 
-                call SaveInteger(s__SyncData_CharTable, s__SyncData_AlphaHash, s__SyncData_hashString(c), Sync_Char2I(Sync__ALPHABET , c))
+                call SaveInteger(s__SyncData_CharTable, s__SyncData_AlphaHash, s__SyncData_hashString(c), Sync_Char2I(Sync___ALPHABET , c))
 
                 set i=i + 1
             endloop
         endfunction
 
         function s__SyncData_onInit takes nothing returns nothing
-            set Sync__Synchronizer=s__SelectionSync_create()
+            set Sync___Synchronizer=s__SelectionSync_create()
            
             set s__SyncData_Table=InitHashtable()
             set s__SyncData_CharTable=InitHashtable()
          
-            set s__SyncData_Cache[0]=InitGameCache(Sync__CACHE_FILE)
-            set s__SyncData_Cache[1]=InitGameCache(Sync__CACHE_FILE_STR)
+            set s__SyncData_Cache[0]=InitGameCache(Sync___CACHE_FILE)
+            set s__SyncData_Cache[1]=InitGameCache(Sync___CACHE_FILE_STR)
 
             set s__SyncData_Elapsed=CreateTimer()
             set s__SyncData_BufferTimer=CreateTimer()
@@ -2382,12 +2382,12 @@ endfunction
                 set s__SyncData_LocalPlayerID=GetPlayerId(s__SyncData_LocalPlayer)
 
 
-call TriggerAddCondition(SyncInteger__EventTrig, (Filter(function s__SyncData_updateStatus))) // INLINED!!
+call TriggerAddCondition(SyncInteger___EventTrig, (Filter(function s__SyncData_updateStatus))) // INLINED!!
             call TimerStart(s__SyncData_Elapsed, 10., true, function s__SyncData_trackTime)
    
 
                 loop
-                    exitwhen s__SyncData_Last == Sync__ALPHABET_BASE
+                    exitwhen s__SyncData_Last == Sync___ALPHABET_BASE
                     call s__SyncData_getKey(s__SyncData_Last)
                     set s__SyncData_Last=s__SyncData_Last + 1
                 endloop
@@ -2408,7 +2408,7 @@ call TriggerAddCondition(SyncInteger__EventTrig, (Filter(function s__SyncData_up
 // 
 //   Warcraft III map script
 //   Generated by the Warcraft III World Editor
-//   Date: Mon Sep 11 14:03:04 2017
+//   Date: Tue Sep 12 22:22:06 2017
 //   Map Author: Frotty
 // 
 //===========================================================================
@@ -2594,16 +2594,16 @@ function CreateNeutralPassiveBuildings takes nothing returns nothing
     set u=CreateUnit(p, 'boic', 1984.0, - 4096.0, 270.000)
     set gg_unit_revp_0059=CreateUnit(p, 'revp', 4864.0, - 4736.0, 270.000)
     set gg_unit_tele_0061=CreateUnit(p, 'tele', 4352.0, - 3968.0, 270.000)
-    set gg_unit_fnt3_0065=CreateUnit(p, 'fnt3', 3456.0, - 3968.0, 270.000)
+    set gg_unit_fnt2_0065=CreateUnit(p, 'fnt2', 3456.0, - 3968.0, 270.000)
     set gg_unit_wayp_0066=CreateUnit(p, 'wayp', 128.0, - 6016.0, 270.000)
-    set gg_unit_fnt3_0067=CreateUnit(p, 'fnt3', 3456.0, - 7168.0, 270.000)
+    set gg_unit_fnt2_0067=CreateUnit(p, 'fnt2', 3456.0, - 7168.0, 270.000)
     set gg_unit_wayp_0068=CreateUnit(p, 'wayp', 128.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'boic', 2176.0, - 4544.0, 270.000)
     set u=CreateUnit(p, 'soic', 1920.0, - 5248.0, 270.000)
     set u=CreateUnit(p, 'soic', 1600.0, - 5056.0, 270.000)
     set u=CreateUnit(p, 'boic', 2112.0, - 5696.0, 270.000)
     set u=CreateUnit(p, 'boic', 1600.0, - 5504.0, 270.000)
-    set gg_unit_fnt3_0074=CreateUnit(p, 'fnt3', 3456.0, - 6144.0, 270.000)
+    set gg_unit_fnt2_0074=CreateUnit(p, 'fnt2', 3456.0, - 6144.0, 270.000)
     set u=CreateUnit(p, 'n00X', 2624.0, - 6016.0, 270.000)
     set gg_unit_exec_0076=CreateUnit(p, 'exec', - 640.0, - 4608.0, 270.000)
     set gg_unit_wayp_0078=CreateUnit(p, 'wayp', 0.0, - 6144.0, 270.000)
@@ -2980,7 +2980,7 @@ function Trig_Untitled_Trigger_005_Actions takes nothing returns nothing
     call MoveRectToLoc(gg_rct_coingamearea, GetRectCenter(GetPlayableMapRect()))
     call MoveRectToLoc(gg_rct_Region_026, GetRectCenter(GetPlayableMapRect()))
     call MoveRectToLoc(gg_rct_Region_027, GetRectCenter(GetPlayableMapRect()))
-    call ShowUnitHide(gg_unit_fnt3_0074)
+    call ShowUnitHide(gg_unit_fnt2_0074)
     call ShowUnitHide(gg_unit_revp_0322)
     call ShowUnitHide(gg_unit_spnr_0257)
     call ShowUnitHide(gg_unit_revp_0002)
@@ -2995,7 +2995,7 @@ function Trig_Untitled_Trigger_005_Actions takes nothing returns nothing
     call ShowUnitHide(gg_unit_sick_0012)
     call ShowUnitHide(gg_unit_tele_0061)
     call ShowUnitHide(gg_unit_revp_0085)
-    call ShowUnitHide(gg_unit_fnt3_0067)
+    call ShowUnitHide(gg_unit_fnt2_0067)
     call ShowUnitHide(gg_unit_dor2_0087)
     call ShowUnitHide(gg_unit_dor2_0136)
     call ShowUnitHide(gg_unit_jump_0151)
@@ -3014,7 +3014,7 @@ function Trig_Untitled_Trigger_005_Actions takes nothing returns nothing
     call ShowUnitHide(gg_unit_bsak_0128)
     call ShowUnitHide(gg_unit_knck_0034)
     call ShowUnitHide(gg_unit_knck_0033)
-    call ShowUnitHide(gg_unit_fnt3_0065)
+    call ShowUnitHide(gg_unit_fnt2_0065)
     call ShowUnitHide(gg_unit_bsak_0127)
     call ShowUnitHide(gg_unit_exec_0076)
 endfunction
@@ -3621,7 +3621,7 @@ function main takes nothing returns nothing
     call CreateAllUnits()
     call InitBlizzard()
 
-call ExecuteFunc("jasshelper__initstructs2386859078")
+call ExecuteFunc("jasshelper__initstructs2503201484")
 
     call InitGlobals()
     call InitTrig_Untitled_Trigger_005() // INLINED!!
@@ -3665,9 +3665,9 @@ endfunction
 
 //Struct method generated initializers/callers:
 
-function jasshelper__initstructs2386859078 takes nothing returns nothing
+function jasshelper__initstructs2503201484 takes nothing returns nothing
 
-call ExecuteFunc("s__SelectionSync_SyncInteger__SyncIntegerInit___onInit")
+call ExecuteFunc("s__SelectionSync_SyncInteger___SyncIntegerInit__onInit")
 
 
 
