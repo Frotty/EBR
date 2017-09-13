@@ -138,16 +138,16 @@ public class Faceless extends EscaperSensorSetup
 
 @objectgen function genShifter()
 	new UnitDefinition(DIMENSION_SHIFTER_ID, 'ugho')  
-    ..setAttacksEnabled(0)
-    ..setTargetedAs("air")
+	..setAttacksEnabled(0)
+	..setTargetedAs("air")
 	..setAnimationCastBackswing(0)			
 	..setShadowImageUnit("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFacelessOne.blp")
 	..setButtonPositionX(3)
 	..setButtonPositionY(2)
 	..setModelFile("Units\\Creeps\\FacelessOne\\FacelessOne.mdl")
-    ..setSelectionScale(0.7)
-    ..setUnitSoundSet("")
+	..setSelectionScale(0.7)
+	..setUnitSoundSet("")
 	..setCollisionSize(1)
 	..setSpeedBase(180)
 	..setMovementHeight(20)
@@ -155,8 +155,8 @@ public class Faceless extends EscaperSensorSetup
 	..setMovementType(MovementType.Fly)
 	..setNormalAbilities(int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
-    int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("I")
 	..setName("Dimension Shifter")

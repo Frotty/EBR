@@ -55,11 +55,11 @@ class EscaperDefinition
 			pd.escaper.selectatrevive = false
 			PanCameraToTimedForPlayer(pd.p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
 			pd.p.selectSingle(pd.builder.actor)
-			printTimedToPlayer("    You chose the role |cff528CDEBuilder|r!", 20, pd.p)
+			printTimedToPlayer("	You chose the role |cff528CDEBuilder|r!", 20, pd.p)
 		else
 			PanCameraToTimedForPlayer(pd.p,START.x,START.y,0)
 			pd.p.selectSingle(pd.escaper.actor)
-			printTimedToPlayer("    You chose the role |cff528CDEEscaper|r!", 20, pd.p)
+			printTimedToPlayer("	You chose the role |cff528CDEEscaper|r!", 20, pd.p)
 
 		pd.icon = mbicon
 		// Check for savefile#
@@ -94,7 +94,7 @@ public class Selector extends UnitEntity
 				currentView[pd.id].showTo(pd)	
 			case PICK_ID
 				currentView[pd.id].hide(pd)
-				printTimedToPlayer("|cffE68C19Welcome to |cff086BC5Escape Builder Reloaded|cffE68C19!\n    |r", 20, pd.p)
+				printTimedToPlayer("|cffE68C19Welcome to |cff086BC5Escape Builder Reloaded|cffE68C19!\n	|r", 20, pd.p)
 				currentView[pd.id].createFor(pd)
 				destroy this
 
@@ -185,17 +185,17 @@ constant PICK_ID = compiletime(ABIL_ID_GEN.next())
 	..presetTooltipNormalExtended((int lvl) -> "This will start your game as escaper.\nIf you have local files enabled your rank will be loaded and saved automatically.")
 
 	new UnitDefinition(PICK_DUMMY_ID, 'hpea')  
-    ..setAttacksEnabled(0)
-    ..setShadowImageUnit("")
-    ..setModelFile("Objects\\RandomObject\\RandomObject.mdl")
-    ..setSpeedBase(0)
-    ..setCollisionSize(0)
+	..setAttacksEnabled(0)
+	..setShadowImageUnit("")
+	..setModelFile("Objects\\RandomObject\\RandomObject.mdl")
+	..setSpeedBase(0)
+	..setCollisionSize(0)
 	..setNormalAbilities(int2fourchar(GHOST_VIS_ID))
 	..setHotkey("")
 	..setName("Select Escaper")
 	..setTooltipBasic("")
 	..setTooltipExtended("")
 	..setStructuresBuilt("")
-    ..setUpgradesUsed("")
-    ..setBuildTime(1)
-    ..setHitPointsMaximumBase(100000000)
+	..setUpgradesUsed("")
+	..setBuildTime(1)
+	..setHitPointsMaximumBase(100000000)

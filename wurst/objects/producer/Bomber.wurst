@@ -103,19 +103,19 @@ public class Bomber extends UnitEntity
 	..setAttack1DamageSidesperDie(1)
 	..setAcquisitionRange(850)
 	..setMinimumAttackRange(50)
-    ..setAttacksEnabled(1)
-    ..setTargetedAs("air")
-    ..setAnimationBlendTimeseconds(0)
+	..setAttacksEnabled(1)
+	..setTargetedAs("air")
+	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
-    ..setSelectionScale(1)
+	..setSelectionScale(1)
 	..setUnitSoundSet("")	
 	..setCollisionSize(0)
 	..setNormalAbilities(int2fourchar('A03B') + "," +
 	int2fourchar('A043') + "," +
 	int2fourchar('A044') + "," +
-    int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("E")
 	..setName("|cFFFFFF00Bomber|r")

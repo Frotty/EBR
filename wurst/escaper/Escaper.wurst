@@ -26,7 +26,7 @@ constant TELEPORT_ITEM_ID = 'A08S'
 
 public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
-constant string LAVA_EFFECT    = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+constant string LAVA_EFFECT	= "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
@@ -535,13 +535,13 @@ function correctRegion()
 @objectgen function genEscaperThings()
 	new UnitDefinition(TOMB_DUMMY_ID, 'ushd')
 	..setAttacksEnabled(0)
-    ..setTargetedAs("air")
+	..setTargetedAs("air")
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
 	..setScalingValue(0.7)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
 	..setModelFile("Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl")
-    ..setUnitSoundSet("")
+	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(0)
 	..setMovementHeight(0)

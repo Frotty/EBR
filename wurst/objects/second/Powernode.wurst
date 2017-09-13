@@ -247,10 +247,10 @@ public class Powernode extends SetupObject
 	..presetButtonPosNormal(2, 1)
 
 	new UnitDefinition(POWER_NODE_ID, 'hfoo')  
-    ..setAttacksEnabled(0)
-    ..setTargetedAs("ground")
-    ..setAnimationBlendTimeseconds(0)
-    ..setAnimationCastBackswing(0)
+	..setAttacksEnabled(0)
+	..setTargetedAs("ground")
+	..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNLightningShield.blp")
 	..setButtonPositionX(3)
 	..setButtonPositionY(1)
@@ -258,33 +258,33 @@ public class Powernode extends SetupObject
 	..setTintingColorBlue(200)
 	..setTintingColorGreen(100)
 	..setTintingColorRed(100)
-    ..setSelectionScale(0.2)
+	..setSelectionScale(0.2)
 	..setSpeedBase(180)
 	..setTurnRate(3)
-    ..setMovementType(MovementType.Foot)
-    ..setUnitSoundSet("")
-    ..setCollisionSize(0)
+	..setMovementType(MovementType.Foot)
+	..setUnitSoundSet("")
+	..setCollisionSize(0)
 	..setNormalAbilities(int2fourchar('A07E') + "," +
 	int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
-    int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("F")
 	..setName("|cff9CA5EFPower Node")
 	..setTooltipBasic("|cffFFCC00Build |cff9CA5EFPower Node [F]")
 	..setTooltipExtended("Can be linked to other Powernodes to create an electrical circuit." +
 	"\nThe resulting lightning kills Escapers if they try to pass it.")
-    ..setUpgradesUsed("")
-    ..setBuildTime(1)
-    ..setUnitClassification("ancient")
+	..setUpgradesUsed("")
+	..setBuildTime(1)
+	..setUnitClassification("ancient")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
-    ..setIsaBuilding(false)
+	..setIsaBuilding(false)
 	new ChannelAbilityPreset(LINK_AIR_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)

@@ -20,8 +20,8 @@ public class ObjectTarget extends SetupObject
 @objectgen function genTarget()
 	new UnitDefinition(OBJECT_TARGET_ID, 'ushd')
 	..setAttacksEnabled(0)
-    ..setTargetedAs("air")
-    ..setAnimationBlendTimeseconds(0)
+	..setTargetedAs("air")
+	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWisp.blp")
@@ -29,7 +29,7 @@ public class ObjectTarget extends SetupObject
 	..setSelectionScale(1.5)
 	..setTintingColorRed(0)
 	..setTintingColorGreen(0)
-    ..setUnitSoundSet("")
+	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
 	..setMovementHeight(0)
@@ -38,8 +38,8 @@ public class ObjectTarget extends SetupObject
 	..setNormalAbilities(int2fourchar('A031') + "," +
 	int2fourchar('A01F') + "," +
 	int2fourchar('A01G') + "," +
-    int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("Y")
 	..setName("|cff0894E6Teleporter Target")

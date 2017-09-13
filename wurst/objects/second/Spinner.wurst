@@ -4,14 +4,14 @@ import Preloader
 import Obstacle
 import ChannelAbilityPreset
 
-constant int SPELL_ID        = 'A01B'
-constant int SPELL2_ID       = 'A04M'
-constant int INC_ID          = 'A01F'
-constant int DEC_ID          = 'A01G'	
-constant int CINC_ID          = 'A06K'
-constant int CDEC_ID          = 'A06L'	
-constant int SINC_ID          = 'A06M'
-constant int SDEC_ID          = 'A06N'	
+constant int SPELL_ID		= 'A01B'
+constant int SPELL2_ID	   = 'A04M'
+constant int INC_ID		  = 'A01F'
+constant int DEC_ID		  = 'A01G'	
+constant int CINC_ID		  = 'A06K'
+constant int CDEC_ID		  = 'A06L'	
+constant int SINC_ID		  = 'A06M'
+constant int SDEC_ID		  = 'A06N'	
 
 class SpinNode
 	SpinNode next = null
@@ -146,8 +146,8 @@ init
 
 @objectgen function genSpinner()		
 	new UnitDefinition(SPINNER_ID, 'hfoo')  
-    ..setAttacksEnabled(0)
-    ..setAnimationBlendTimeseconds(0)
+	..setAttacksEnabled(0)
+	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
 	..setDeathTimeseconds(0.1)
 	..setScalingValue(0.8)
@@ -155,20 +155,20 @@ init
 	..setButtonPositionX(1)
 	..setButtonPositionY(1)
 	..setModelFile("units\\undead\\Acolyte\\Acolyte.mdl")
-    ..setSelectionScale(1)
+	..setSelectionScale(1)
 	..setSpeedBase(180)
 	..setTurnRate(3)
-    ..setMovementType(MovementType.Foot)
-    ..setUnitSoundSet("")
-    ..setCollisionSize(0)
+	..setMovementType(MovementType.Foot)
+	..setUnitSoundSet("")
+	..setCollisionSize(0)
 	..setNormalAbilities(int2fourchar('A03H') + "," +
 	int2fourchar('A04M') + "," +
 	int2fourchar('A01B') + "," +
 	int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +
 	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-    int2fourchar(REMOVE_OBJECT_ID) + "," +
-    int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("S")
 	..setName("|cff949494Spinner ")
@@ -176,8 +176,8 @@ init
 	..setTooltipExtended("Spins the selected units around itself in a circular motion." +
 	"\nThe spinner itself can also be moved and controlled while spinning units.")
 	..setUpgradesUsed("")
-    ..setBuildTime(1)
-    ..setUnitClassification("ancient")
+	..setBuildTime(1)
+	..setUnitClassification("ancient")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
