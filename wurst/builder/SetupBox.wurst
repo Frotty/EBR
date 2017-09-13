@@ -33,7 +33,7 @@ constant ORB_TOGGLE_ID 		= 'A08B'
 public constant ORB_SPELL_ID = 'A08A'
 constant CANCEL_TOGGLE_ID 	= 'A08C'
 constant CUT_ALLOW 			= 'A08F'
-constant CUT_DISABLE 		= 'A08G'
+constant CUT_DISABLE 		= 'A08G' 
 
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
@@ -310,3 +310,4 @@ init
 	..setPathingMap("")
 	..setCollisionSize(0)
 	..setUnitClassification("Mechanical")
+	..setHideMinimapDisplay(true)
