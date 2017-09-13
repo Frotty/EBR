@@ -170,4 +170,4 @@ init
 	..setStartingIntelligence(0)
 	..setStartingStrength(0)
 	..setPriority(0)
-	..setHeroRevivalLocations("1")
+	..setHideMinimapDisplay(true)

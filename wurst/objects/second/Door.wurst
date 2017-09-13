@@ -259,6 +259,7 @@ public class Door extends StaticSetupObject
 	..setUnitSoundSet("")
 	..setPathingMap("")
 	..setPlacementPreventedBy("")
+	..setPlacementRequires("")
 	..setCollisionSize(0)
 	..setCanDropItemsOnDeath(false)
 	..setNormalAbilities(int2fourchar('A05R') + "," +
@@ -275,4 +276,5 @@ public class Door extends StaticSetupObject
 	..setFoodProduced(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setHideMinimapDisplay(true)
 	..setUnitClassification("ancient,mechanical")
