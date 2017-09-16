@@ -3,7 +3,6 @@ import BaseObject
 import EscaperKillers
 import Pointer
 import Knockbacker
-import HashMap
 import Preloader
 
 
@@ -20,7 +19,7 @@ public enum TimerMode
 public class UnitCreator extends StaticBaseObject
 	real interval = 5.
 	real timerreal = .5
-	int spawnUnitType = 'h001'
+	int spawnUnitType = TANK_KILLER_ID
 	TimerMode tmode = TimerMode.FIXED
 
 	construct(unit existing)
@@ -111,7 +110,6 @@ public class UnitCreator extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
 		return json
 	
-HashMap<int, int> SPAWN_TYPE_ABIL = new HashMap<int, int>()
 
 init
 	preloadAbility('A045')
@@ -198,7 +196,7 @@ init
 	int2fourchar(TURN_ON_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setButtonPositionX(1)
 	..setButtonPositionY(0)

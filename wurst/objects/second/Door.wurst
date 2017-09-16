@@ -190,6 +190,7 @@ public class Door extends StaticSetupObject
 	..setFoodProduced(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setPlacementRequires("")
 
 	new BuildingDefinition(DOORPATH_O, 'hhou')  
 	..setScalingValue(0.55)
@@ -216,6 +217,7 @@ public class Door extends StaticSetupObject
 	..setFoodProduced(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setPlacementRequires("")
 
 	new BuildingDefinition(DOORDUMMY_ID, 'hhou')  
 	..setScalingValue(0.55)
@@ -245,6 +247,7 @@ public class Door extends StaticSetupObject
 	..setGoldCost(0)
 	..setLumberCost(0)
 	..setUnitClassification("ancient,mechanical")
+	..setPlacementRequires("")
 
 	new BuildingDefinition(DOORORDER_ID, 'hhou')  
 	..setScalingValue(0.75)
@@ -270,7 +273,7 @@ public class Door extends StaticSetupObject
 	int2fourchar(GHOST_INVIS_ID))
 	..setName("|cFFFF8000Door|r ")
 	..setHotkey("D")
-	..setTooltipBasic("Dummy")
+	..setNameEditorSuffix("Dummy")
 	..setBuildTime(1)
 	..setHitPointsMaximumBase(1000000)
 	..setFoodProduced(0)

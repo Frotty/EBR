@@ -605,3 +605,4 @@ public RegionData array regions
 	int2fourchar('I00H') + "," +
 	int2fourchar('I00E'))
 	..setNeutralBuildingShowsMinimapIcon(false)
+	..setHideMinimapDisplay(true)
