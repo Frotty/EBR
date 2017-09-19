@@ -2,10 +2,14 @@ package Tracks
 import Escaper
 import ConfigValue
 import Collision
+import ChannelAbilityPreset
 
 int array TRACKS
 
-constant int TRACK_ID 			= 'n01S'
+constant TRACKS_ID = compiletime(UNIT_ID_GEN.next())
+constant TRACKS_1_ID = compiletime(UNIT_ID_GEN.next())
+constant TRACKS_2_ID = compiletime(UNIT_ID_GEN.next())
+constant TRACKS_3_ID = compiletime(UNIT_ID_GEN.next())
 constant int INC_ID		  	= 'A04S'
 constant int DEC_ID		  	= 'A04T'
 constant int LEFT_ID		 	= 'A04L'
@@ -24,7 +28,7 @@ public class Tracks extends UnitEntity
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, TRACKS[0], pos, angle(0), this))
 		this.setCurrentRegion()
-		setup = getUnit(owner, TRACK_ID, pos, angle(0), this)
+		setup = getUnit(owner, TRACKS_ID, pos, angle(0), this)
 		setup.setEntity(this)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
@@ -92,7 +96,140 @@ public class Tracks extends UnitEntity
 		
 
 init
-	TRACKS[0] = 'n01R'
-	TRACKS[1] = 'n01L'
-	TRACKS[2] = 'n01N'
+	TRACKS[0] = TRACKS_1_ID
+	TRACKS[1] = TRACKS_2_ID
+	TRACKS[2] = TRACKS_3_ID
+
+@objectgen function genTracks()
+	new BuildingDefinition(TRACKS_ID, 'ncop')
+	..setName("|cffE63A21Tracks")
+	..setNameEditorSuffix("(Setup)")
+	..setHotkey("B")
+	..setTooltipBasic("|cffFFCC00Build |cffE63A21Tracks")
+	..setTooltipExtended("|cFFFF0000Moves Escaper in a certain directionr|r")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTracks.blp")
+	..setModelFile("models\\tcBox.mdl")
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setNormalAbilities(int2fourchar(INC_ID) + "," +
+	int2fourchar(DEC_ID) + "," +
+	int2fourchar(LEFT_ID) + "," +
+	int2fourchar(RIGHT_ID) + "," +
+	int2fourchar(INCLENGTH_ID) + "," +
+	int2fourchar(DECLENGTH_ID) + "," +
+	int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(0)
+	..setButtonPositionY(0)
+	..setTintingColorRed(210)
+	..setTintingColorGreen(210)
+	..setTintingColorBlue(230)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setScalingValue(0.55)
+	..setSelectionScale(1)
+	..setRace(Race.Nightelf)
+	..setHideMinimapDisplay(true)
+
+	new BuildingDefinition(TRACKS_1_ID, 'ncop')
+	..setName("|cffE63A21Tracks 1")
+	..setHotkey("B")
+	..setTooltipBasic("|cffFFCC00Build |cffE63A21Tracks")
+	..setTooltipExtended("|cFFFF0000Moves Escaper in a certain directionr|r")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTracks.blp")
+	..setModelFile("war3mapImported\\Tracks_1x1.mdl")
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setNormalAbilities(int2fourchar('Aloc') + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(0)
+	..setButtonPositionY(0)
+	..setTintingColorRed(210)
+	..setTintingColorGreen(210)
+	..setTintingColorBlue(230)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setSelectionScale(1)
+	..setRace(Race.Nightelf)
+	..setHideMinimapDisplay(true)
 	
+	new BuildingDefinition(TRACKS_2_ID, 'ncop')
+	..setName("|cffE63A21Tracks 2")
+	..setHotkey("B")
+	..setTooltipBasic("|cffFFCC00Build |cffE63A21Tracks")
+	..setTooltipExtended("|cFFFF0000Moves Escaper in a certain directionr|r")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTracks.blp")
+	..setModelFile("war3mapImported\\Tracks_3x1.mdl")
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setNormalAbilities(int2fourchar('Aloc') + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(0)
+	..setButtonPositionY(0)
+	..setTintingColorRed(210)
+	..setTintingColorGreen(210)
+	..setTintingColorBlue(230)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setSelectionScale(1)
+	..setRace(Race.Nightelf)
+	..setHideMinimapDisplay(true)
+
+	new BuildingDefinition(TRACKS_3_ID, 'ncop')
+	..setName("|cffE63A21Tracks 3")
+	..setHotkey("B")
+	..setTooltipBasic("|cffFFCC00Build |cffE63A21Tracks")
+	..setTooltipExtended("|cFFFF0000Moves Escaper in a certain directionr|r")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTracks.blp")
+	..setModelFile("war3mapImported\\Tracks_5x1.mdl")
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setNormalAbilities(int2fourchar('Aloc') + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(0)
+	..setButtonPositionY(0)
+	..setTintingColorRed(210)
+	..setTintingColorGreen(210)
+	..setTintingColorBlue(230)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setSelectionScale(1)
+	..setRace(Race.Nightelf)
+	..setHideMinimapDisplay(true)
+
+	new BuildingDefinition(BUILD_TRACKS_ID, 'ncop')
+	..setName("|cffE63A21Tracks")
+	..setNameEditorSuffix("(Builddummy)")
+	..setHotkey("D")
+	..setTooltipBasic("|cffFFCC00Build |cffF721ADTracks [D]")
+	..setTooltipExtended("Functions like a conveyor." +
+	"\nIt makes Escapers move in the selected direction as long as they stay ontop of it.")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTracks.blp")
+	..setModelFile("war3mapImported\\Tracks_1x1.mdl")
+	..setUnitSoundSet("")
+	..setPathingMap("PathTextures\\4x4SimpleSolid.tga")
+	..setNormalAbilities(int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setButtonPositionX(2)
+	..setButtonPositionY(1)
+	..setTintingColorRed(210)
+	..setTintingColorGreen(210)
+	..setTintingColorBlue(230)
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setBuildTime(1)
+	..setCollisionSize(0)        
+	..setSelectionScale(1)
+	..setUnitClassification("ancient,standon")
+	..setRace(Race.Nightelf)
+	..setHideMinimapDisplay(true)

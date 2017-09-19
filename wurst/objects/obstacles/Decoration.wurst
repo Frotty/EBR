@@ -1,6 +1,5 @@
 package Decoration
 import BaseObject
-import ChannelAbilityPreset
 import initlater InstantBuild
 
 public constant CHANGE_FACE_ID = compiletime(ABIL_ID_GEN.next())

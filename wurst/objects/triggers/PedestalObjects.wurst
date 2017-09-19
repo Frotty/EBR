@@ -1,10 +1,10 @@
 package PedestalObjects
 import ChannelAbilityPreset
+import BuilderConstants
 import Assets
 
 public constant AOE_PICK_RANGE = 256.
 
-public constant PED_ID = compiletime(UNIT_ID_GEN.next())
 public constant SELECT_SINGLE_ID = compiletime(ABIL_ID_GEN.next())
 public constant SELECT_AOE_ID = compiletime(ABIL_ID_GEN.next())
 public constant SELECT_AOE_TILE_ID = compiletime(ABIL_ID_GEN.next())

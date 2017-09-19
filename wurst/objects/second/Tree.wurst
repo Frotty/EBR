@@ -1,9 +1,9 @@
 package Tree
 import Entity
 import RegionData
+import ChannelAbilityPreset
 
-constant int TREEDUMMY_ID 	= 'n010'
-constant int TREE_ID 		= 'n00H'
+constant TREE_ID = compiletime(UNIT_ID_GEN.next())
 
 public class Tree extends UnitEntity
 	private destructable dummy
@@ -16,3 +16,45 @@ public class Tree extends UnitEntity
 	ondestroy
 		dummy.remove()
 
+@objectgen function genTree()
+	new BuildingDefinition(TREE_DUMMY_ID, 'ncop')
+	..setName("|cFF00FF00Tree|r ")
+	..setTooltipBasic("Build |cFFFFFF00Tree|r [|cffFFCC00Q|r]")
+	..setCategorizationCampaign(false)
+	..setRace(Race.Nightelf)
+	..setSelectionScale(1.0)
+	..setDescription("")
+	..setHotkey("Q")
+	..setBuildTime(1)
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setModelFile("Doodads\\Barrens\\Plants\\Barrens_TreeDoodad\\Barrens_TreeDoodad1.mdl")
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNNightElfBuild.blp")
+	..setTooltipExtended("Does not kill escapers\r\nCreates a Tree fitting to your Regions terrain")
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setNameEditorSuffix("(Dummy)")
+	..setUnitClassification("ancient,standon")
+
+	new BuildingDefinition(TREE_ID, 'ncop')
+	..setScalingValue(0.1)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNNightElfBuild.blp")
+	..setModelFile("models\\tcBox.mdl")
+	..setSelectionScale(1.0)
+	..setUnitSoundSet("")
+	..setPathingMap("none")
+	..setCategorizationCampaign(false)
+	..setNormalAbilities(int2fourchar(GHOST_VIS_ID) + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setHotkey("Q")
+	..setName("|cFF00FF00Tree|r ")
+	..setTooltipBasic("Plant |cff08A54ATree |r[|cffFFCC00Q|r]")
+	..setTooltipExtended("Plants a tree, fitting to the terraintype of your region.|n|n|cff5AB542Does not kill escapers, has no pathing")
+	..setBuildTime(1)
+	..setUnitClassification("ancient,standon")
+	..setSightRadiusDay(0)
+	..setSightRadiusNight(0)
+	..setRace(Race.Nightelf)
+	..setDescription("")
+	..setHideMinimapDisplay(true)

@@ -1,13 +1,6 @@
 package ObstacleObjects
 import ObjEditingNatives
-import UnitObjEditing
-
-
-public constant TREE_ID = 'tree'
-
-public constant SOBS_DUMMY_ID = 'sobs'
-public constant BOBS_DUMMY_ID = 'bobs'
-public constant HOBS_DUMMY_ID = 'hobs'
+import BuilderConstants
 
 public constant SOBS_CITADEL_ID = 'soct'
 public constant BOBS_CITADEL_ID = 'boct'
@@ -29,26 +22,7 @@ public constant SOBS_SUNKEN_ID = 'sosu'
 public constant BOBS_SUNKEN_ID = 'bosu'
 public constant HOBS_SUNKEN_ID = 'hosu'
 
-@compiletime function genObjects()
-	new BuildingDefinition(TREE_ID, 'ncop')
-	..setName("|cFF00FF00Tree|r ")
-	..setTooltipBasic("Build |cFFFFFF00Tree|r [|cffFFCC00Q|r]")
-	..setCategorizationCampaign(false)
-	..setRace(Race.Nightelf)
-	..setSelectionScale(1.0)
-	..setDescription("")
-	..setHotkey("Q")
-	..setBuildTime(1)
-	..setUnitSoundSet("")
-	..setPathingMap("none")
-	..setModelFile("Doodads\\Barrens\\Plants\\Barrens_TreeDoodad\\Barrens_TreeDoodad1.mdl")
-	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNNightElfBuild.blp")
-	..setTooltipExtended("Does not kill escapers\r\nCreates a Tree fitting to your Regions terrain")
-	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)
-	..setNameEditorSuffix("(Dummy)")
-	..setUnitClassification("ancient,standon")
-	
+@objectgen function genObjects()
 	var u = createObjectDefinition("w3u", SOBS_CITADEL_ID, 'ncop')
 	u.setString("unam", "Small |cFF00FF00Obstacle|r: Citadel")
 	u.setString("utip", "Build O|cFFFFFF00b|rstacle")
@@ -214,6 +188,31 @@ public constant HOBS_SUNKEN_ID = 'hosu'
 	u.setInt("ubpx", 1)
 	u.setInt("ubpy", 1)
 
+	u = createObjectDefinition("w3u", HOBS_DUMMY_ID, 'ncop')
+	u.setString("unam", "|cffE63A21High Obstacle ")
+	u.setString("utip", "Build |cffE63A21High Obstacle |r[|cffFFCC00D|r]")
+	u.setInt("ucam", 0)
+	u.setString("urac", "nightelf")
+	u.setReal("ussc", 2.0)
+	u.setString("ides", "")
+	u.setString("uhot", "D")
+	u.setInt("ubld", 1)
+	u.setString("usnd", "")
+	u.setString("upat", "none")
+	u.setString("umdl", "models\\tcBox.mdl")
+	u.setString("uico", "ReplaceableTextures\\CommandButtons\\BTNWeb.blp")
+	u.setString("uabi", "Agho,A00K,Avul")
+	u.setString("utub", "A small, |cffFFCC00terrainspecific |robstacle with big detection height. Useful to block jumpers.|n|n|cffFF0000Kills Escapers")
+	u.setUnreal("ucol", 0.0)
+	u.setInt("uhom", 1)
+	u.setInt("usid", 0)
+	u.setInt("usin", 0)
+	u.setReal("usca", 1.5)
+	u.setString("unsf", "(Dummy)")
+	u.setString("utyp", "ancient,standon")
+	u.setInt("ubpx", 2)
+	u.setInt("ubpy", 1)
+
 	u = createObjectDefinition("w3u", BOBS_SUNKEN_ID, 'ncop')
 	u.setString("unam", "Big Obstacle: Sunken")
 	u.setString("utip", "Build Big Obstacle")
@@ -252,33 +251,8 @@ public constant HOBS_SUNKEN_ID = 'hosu'
 	u.setInt("usin", 0)
 	u.setInt("uhom", 1)
 	u.setReal("usca", 0.8)
-
-	u = createObjectDefinition("w3u", HOBS_DUMMY_ID, 'ncop')
-	u.setString("unam", "|cffE63A21High Obstacle ")
-	u.setString("utip", "Build |cffE63A21High Obstacle |r[|cffFFCC00D|r]")
-	u.setInt("ucam", 0)
-	u.setString("urac", "nightelf")
-	u.setReal("ussc", 2.0)
-	u.setString("ides", "")
-	u.setString("uhot", "D")
-	u.setInt("ubld", 1)
-	u.setString("usnd", "")
-	u.setString("upat", "none")
-	u.setString("umdl", "models\\tcBox.mdl")
-	u.setString("uico", "ReplaceableTextures\\CommandButtons\\BTNWeb.blp")
-	u.setString("uabi", "Agho,A00K,Avul")
-	u.setString("utub", "A small, |cffFFCC00terrainspecific |robstacle with big detection height. Useful to block jumpers.|n|n|cffFF0000Kills Escapers")
-	u.setUnreal("ucol", 0.0)
-	u.setInt("usid", 0)
-	u.setInt("usin", 0)
-	u.setReal("usca", 1.5)
-	u.setString("unsf", "(Dummy)")
-	u.setInt("uhom", 1)
-	u.setString("utyp", "ancient,standon")
-	u.setInt("ubpx", 2)
-	u.setInt("ubpy", 1)
-
-	createObjectDefinition("w3u", HOBS_CITADEL_ID, 'ncop')
+	
+	u = createObjectDefinition("w3u", HOBS_CITADEL_ID, 'ncop')
 	u.setString("unam", "High |cFF00FF00Obstacle|r: Citadel")
 	u.setString("utip", "Build high O|cFFFFFF00b|rstacle")
 	u.setInt("ucam", 0)

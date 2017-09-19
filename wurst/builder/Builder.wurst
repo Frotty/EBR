@@ -277,8 +277,9 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
     int2fourchar(CONGA_LINE_HEAD_ID) + "," +
     int2fourchar(POWER_NODE_ID) + "," +
     int2fourchar(FOUNTAIN_BOTH_ID) + "," + 
-    //int2fourchar(TRACKS_ID) + "," +
-    int2fourchar(SPINNER_ID) + "," + //PEDESTAL
+    int2fourchar(PED_ID) + "," + 
+    int2fourchar(BUILD_TRACKS_ID) + "," +
+    int2fourchar(SPINNER_ID) + "," + 
     int2fourchar(DOORDUMMY_ID))
     ..setButtonPositionX(0)
     ..setButtonPositionY(0)
@@ -325,11 +326,11 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
      ..setStructuresBuilt(int2fourchar(VOLCANO_ID) + "," +
     int2fourchar(WALL_ID) + "," +
     int2fourchar(VER_WALL_ID) + "," +
-    int2fourchar(HOR_WALL_ID))
-    //int2fourchar(SMALL_OBST_ID) + "," +
-    //int2fourchar(MEDIUM_OBST_ID) + "," +
-    //int2fourchar(HIGH_OBST_ID) + "," +
-    //int2fourchar(TREE_ID)) */
+    int2fourchar(HOR_WALL_ID) + "," +
+    int2fourchar(SOBS_DUMMY_ID) + "," +
+    int2fourchar(BOBS_DUMMY_ID) + "," +
+    int2fourchar(HOBS_DUMMY_ID) + "," +
+    int2fourchar(TREE_DUMMY_ID)) 
     ..setButtonPositionX(0)
     ..setButtonPositionY(0)
     ..setSightRadiusDay(300)
