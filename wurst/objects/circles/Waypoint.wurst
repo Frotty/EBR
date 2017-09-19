@@ -213,3 +213,4 @@ public class Waypoint extends StaticBaseObject
 	..setSelectionScale(2.2)
 	..setPathingMap("none")
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)

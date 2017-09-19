@@ -171,3 +171,4 @@ init
 	..setStartingStrength(0)
 	..setPriority(0)
 	..setHideMinimapDisplay(true)
+	..setRace(Race.Commoner)

@@ -165,4 +165,5 @@ public class Key extends ItemObject
 	..setBuildTime(1)
 	..setUnitClassification("mechanical")
 	..setHitPointsMaximumBase(100000000)
+	..setHideMinimapDisplay(true)
 	..setIsaBuilding(true)

@@ -42,13 +42,13 @@ public class ObjectTarget extends SetupObject
 	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("Y")
-	..setName("|cff0894E6Teleporter Target")
+	..setName("|cff0894E6Object Target")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Teleporter Target [Y]")
-	..setTooltipExtended("Spawns a Teleportertarget at|cffFFCC00 Rallypoint|r.|nSet the Rallypoint of a " +
+	..setTooltipExtended("Spawns a Objecttarget at|cffFFCC00 Rallypoint|r.|nSet the Rallypoint of a " +
 	"Teleporter to this unit to get a moving Target.|n|n|cff5ABD4ADoes not kill Escapers")
 	..setUpgradesUsed("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)	
 	..setFoodCost(0)
-
+	..setHideMinimapDisplay(true)

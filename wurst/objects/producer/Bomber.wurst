@@ -128,3 +128,4 @@ public class Bomber extends UnitEntity
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setLumberCost(0)
+	..setHideMinimapDisplay(true)

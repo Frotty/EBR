@@ -264,6 +264,7 @@ public class Powernode extends SetupObject
 	..setMovementType(MovementType.Foot)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
+	..setShadowImageUnit("")
 	..setNormalAbilities(int2fourchar('A07E') + "," +
 	int2fourchar('A01H') + "," +
 	int2fourchar('A01E') + "," +

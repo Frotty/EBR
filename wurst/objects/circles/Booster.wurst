@@ -97,3 +97,4 @@ public class Booster extends StaticBaseObject
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)

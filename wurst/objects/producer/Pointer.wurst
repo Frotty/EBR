@@ -158,3 +158,4 @@ init
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)

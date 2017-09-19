@@ -128,3 +128,4 @@ public class RevivePoint extends StaticSetupObject
 		..setScalingValue(2)
 		..setSelectionScale(4)
 		..setUnitClassification("ancient,standon")  
+		..setHideMinimapDisplay(true)
