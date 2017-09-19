@@ -2,7 +2,6 @@ package LobbyTeleporter
 import BaseObject
 import PlayerData
 import StringUtils
-import Invisible
 import Assets
 
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"

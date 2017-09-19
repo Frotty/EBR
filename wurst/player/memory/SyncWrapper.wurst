@@ -2,7 +2,6 @@ package SyncWrapper
 import FileIO
 import Table
 import ErrorHandling
-import initlater CodeManager
 import initlater PlayerData
 import ClosureTimers
 

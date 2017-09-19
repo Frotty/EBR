@@ -13,8 +13,6 @@ import Obstacle
 import Ball
 import LobbyTeleporter
 import MinigameTeleporter
-import ObstacleObjects
-
 
 public Startmaze array startmazes
 public int currentMaze = -1

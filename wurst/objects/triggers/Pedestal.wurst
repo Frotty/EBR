@@ -9,7 +9,6 @@ import PlayerData
 import FileIO
 import Builder
 import SyncWrapper
-import CodeManager
 import JsonParser
 import TerrainBlocker
 import TileData

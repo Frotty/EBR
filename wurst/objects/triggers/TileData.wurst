@@ -4,7 +4,6 @@ import TerrainBlocker
 import Assets
 import RegionData
 import Json
-import BuilderConstants
 
 public function vec2.toTile() returns vec2
 	return vec2((this.x / 128.).round()*128. ,(this.y / 128.).round()*128.)
