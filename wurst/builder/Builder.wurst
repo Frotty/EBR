@@ -373,7 +373,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 	int2fourchar(MENU_DECORATIONS_ID) + "," +
 	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))
-/*	 ..setStructuresBuilt(int2fourchar(REMAINS_ID) + "," +
+	..setStructuresBuilt(int2fourchar(REMAINS_ID) + "," +
 	int2fourchar(FARM_ID) + "," +
 	int2fourchar(ICE_CRYSTAL_ID) + "," +
 	int2fourchar(OBELISK_ID) + "," +
@@ -383,7 +383,7 @@ constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 	int2fourchar(POST_LANTERN_ID) + "," +
 	int2fourchar(RUNE_ID) + "," +
 	int2fourchar(TORCH_ID) + "," +
-	int2fourchar(SUPERLIGHT_ID)) */
+	int2fourchar(SUPERLIGHT_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setSightRadiusDay(300)
