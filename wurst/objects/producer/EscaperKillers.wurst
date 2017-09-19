@@ -202,6 +202,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)
 
 	new UnitDefinition(BIG_RANDOM_KILLER_ID, 'ugho')  
 	..setAttacksEnabled(0)
@@ -235,6 +236,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)
 
 	new UnitDefinition(GLAIVE_KILLER_ID, 'ugho')  
 	..setAttacksEnabled(0)
@@ -267,6 +269,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)
 
 	new UnitDefinition(TANK_KILLER_ID, 'hmtt')  
 	..setAttacksEnabled(0)
@@ -297,6 +300,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)
 
 	new UnitDefinition(FIRE_KILLER_ID, 'ugho')  
 	..setAttacksEnabled(0)
@@ -330,6 +334,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)
 
 	new UnitDefinition(AIR_KILLER_ID, 'ugho')  
 	..setAttacksEnabled(0)
@@ -366,3 +371,4 @@ public class FireKiller extends EscaperSensorSetup
 	..setSightRadiusNight(0)	
 	..setGoldCost(0)
 	..setFoodCost(0)
+	..setHideMinimapDisplay(true)

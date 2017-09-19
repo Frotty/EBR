@@ -184,4 +184,5 @@ init
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setShadowImageUnit("")
 	..setIsaBuilding(false)

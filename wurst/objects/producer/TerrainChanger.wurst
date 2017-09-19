@@ -186,3 +186,6 @@ init
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)	
+	..setHideMinimapDisplay(true)
+	..setCategorizationSpecial(false)
+	..setRace(Race.Undead)

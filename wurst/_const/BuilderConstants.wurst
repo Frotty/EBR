@@ -53,7 +53,19 @@ public constant TREE_DUMMY_ID = 'tree'
 public constant SOBS_DUMMY_ID = 'sobs'
 public constant BOBS_DUMMY_ID = 'bobs'
 public constant HOBS_DUMMY_ID = 'whyf'
-
+//Decorations
+public constant REMAINS_ID = compiletime(UNIT_ID_GEN.next())
+public constant FARM_ID = compiletime(UNIT_ID_GEN.next())
+public constant ICE_CRYSTAL_ID = compiletime(UNIT_ID_GEN.next())
+public constant OBELISK_ID = compiletime(UNIT_ID_GEN.next())
+public constant POISON_EGGS_ID = compiletime(UNIT_ID_GEN.next())
+public constant LANTERN_ID = compiletime(UNIT_ID_GEN.next())
+public constant MUSHROOM_ID = compiletime(UNIT_ID_GEN.next())
+public constant POST_LANTERN_ID = compiletime(UNIT_ID_GEN.next())
+public constant RUNE_ID = compiletime(UNIT_ID_GEN.next())
+public constant TORCH_ID = compiletime(UNIT_ID_GEN.next())
+public constant SUPERLIGHT_ID = compiletime(UNIT_ID_GEN.next()) 
+//Killers
 public constant SMALL_GRASS_KILLER_ID = 'sgrk'
 public constant SMALL_ICE_KILLER_ID = 'sick'
 public constant SMALL_CITADEL_KILLER_ID = 'scik'
@@ -64,19 +76,6 @@ public constant BIG_ICE_KILLER_ID = 'bisk'
 public constant BIG_CITADEL_KILLER_ID = 'bcik'
 public constant BIG_SAND_KILLER_ID = 'bsak'
 public constant BIG_SUNKEN_KILLER_ID = 'bsuk'
-
-//Decorations
-/* public constant REMAINS_ID = compiletime(UNIT_ID_GEN.next())
-public constant FARM_ID = compiletime(UNIT_ID_GEN.next())
-public constant ICE_CRYSTAL_ID = compiletime(UNIT_ID_GEN.next())
-public constant OBELISK_ID = compiletime(UNIT_ID_GEN.next())
-public constant POISON_EGGS_ID = compiletime(UNIT_ID_GEN.next())
-public constant LANTERN_ID = compiletime(UNIT_ID_GEN.next())
-public constant MUSHROOM_ID = compiletime(UNIT_ID_GEN.next())
-public constant POST_LANTERN_ID = compiletime(UNIT_ID_GEN.next())
-public constant RUNE_ID = compiletime(UNIT_ID_GEN.next())
-public constant TORCH_ID = compiletime(UNIT_ID_GEN.next())
-public constant SUPERLIGHT_ID = compiletime(UNIT_ID_GEN.next()) */
 //Escapers
 /* public constant ESC_STRONG_ID = compiletime(HERO_ID_GEN.next())
 public constant ESC_ICE_ID = compiletime(HERO_ID_GEN.next())
