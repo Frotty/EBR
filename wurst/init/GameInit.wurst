@@ -23,7 +23,6 @@ function initGame()
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), false, false)
 	VolumeGroupReset()
 	EndThematicMusic()
-	SetDayNightModels("", "")
 	GetExpiredTimer().start(0.01, () -> initOne())
 
 function initOne()
