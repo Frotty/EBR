@@ -68,7 +68,7 @@ public class VolcanoObstacle extends Obstacle
 		return json
 
 
-@objectgen function genObst()
+@objectgen function genVolcano()
 	new BuildingDefinition(VOLCANO_ID, 'ncop')  
 	..setName("|cFF00FF00Volcano|r ")
 	..setHotkey("F")

@@ -41,14 +41,18 @@ public constant FOUNTAIN_HEAL_ID = 'fnt2'
 public constant FOUNTAIN_CURE_ID = 'fnt3'
 public constant POWER_NODE_ID = 'pwnd'
 public constant SPINNER_ID = 'spnr'
-//public constant TRACKS_ID = compiletime(UNIT_ID_GEN.next())
+public constant BUILD_TRACKS_ID = 'trac'
 public constant VORTEX_ID = 'vrtx'
-//public constant M_A_P_ID = compiletime(UNIT_ID_GEN.next())
+public constant PED_ID = compiletime(UNIT_ID_GEN.next())
 //Enviromental
 public constant VOLCANO_ID = 'volc' 
 public constant HOR_WALL_ID = 'hwal'
 public constant VER_WALL_ID = 'vwal'
 public constant WALL_ID = 'wall'
+public constant TREE_DUMMY_ID = 'tree'
+public constant SOBS_DUMMY_ID = 'sobs'
+public constant BOBS_DUMMY_ID = 'bobs'
+public constant HOBS_DUMMY_ID = 'whyf'
 
 public constant SMALL_GRASS_KILLER_ID = 'sgrk'
 public constant SMALL_ICE_KILLER_ID = 'sick'
@@ -61,11 +65,6 @@ public constant BIG_CITADEL_KILLER_ID = 'bcik'
 public constant BIG_SAND_KILLER_ID = 'bsak'
 public constant BIG_SUNKEN_KILLER_ID = 'bsuk'
 
-/*
-public constant TREE_ID = compiletime(UNIT_ID_GEN.next())
-public constant SMALL_OBST_ID = compiletime(UNIT_ID_GEN.next())
-public constant MEDIUM_OBST_ID = compiletime(UNIT_ID_GEN.next())
-public constant HIGH_OBST_ID = compiletime(UNIT_ID_GEN.next()) */
 //Decorations
 /* public constant REMAINS_ID = compiletime(UNIT_ID_GEN.next())
 public constant FARM_ID = compiletime(UNIT_ID_GEN.next())

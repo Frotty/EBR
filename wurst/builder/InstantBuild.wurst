@@ -50,7 +50,7 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 	var rdata = getRegionData(tpos)
 	if rdata != null and rdata.canBuild(b.owner)
 		var i = 1
-		while buildorders[i] > 0
+		while buildorders[i] > 0 // by commenting out the line, this loop stops before reaching bottom ids
 			if id == buildorders[i]
 				newObjectFromId(b.owner, tpos, i)
 				break
@@ -176,8 +176,6 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new ObjectTarget(tpos, owner)
 		case TC_INDEX
 			return new TerrainChanger(tpos, owner)
-		case TC_INDEX
-			return new TerrainChanger(tpos, owner)
 	return null
 
 public int array buildorders
@@ -194,12 +192,13 @@ public int array buildorders
 	buildorders[WAYPOINT_INDEX] = WAYPOINT_ID // Waypoint
 	buildorders[TELEPORTER_INDEX] = TELEPORTER_ID // Teleporter
 	buildorders[DOOR_INDEX] = DOORDUMMY_ID // Door
-	buildorders[SMALLOBS_INDEX] = 'obSD' // Small Obstacle
-	buildorders[BIGOBS_INDEX] = 'obBD' // Big Obstacle
-	buildorders[TREE_INDEX] = 'n010' // Tree
+	buildorders[SMALLOBS_INDEX] = SOBS_DUMMY_ID // Small Obstacle
+	buildorders[BIGOBS_INDEX] = BOBS_DUMMY_ID // Big Obstacle
+	buildorders[HIGH_OBS_INDEX] = HOBS_DUMMY_ID // High Obstacle
+	buildorders[TREE_INDEX] = TREE_DUMMY_ID // Tree
 	buildorders[SPINNER_INDEX] = SPINNER_ID // Spinner
 	buildorders[UNITCREATOR_INDEX] = UNIT_CREATOR_ID // Unitcreator
-	buildorders[TRACKS_INDEX] = 'n01C' // Tracks 
+	buildorders[TRACKS_INDEX] = BUILD_TRACKS_ID // Tracks 
 	buildorders[FOUNTAIN_INDEX] = FOUNTAIN_BOTH_ID // Fountain
 	buildorders[POWERNODE_INDEX] = POWER_NODE_ID // Powernode
 	buildorders[TRAP_INDEX] = TRAP_ID // Trap
@@ -214,7 +213,6 @@ public int array buildorders
 	buildorders[BIGKILL_INDEX] = 'A05F' // Arcanery
 	buildorders[BOMBER_INDEX] = 'A05O' // Arcanery
 	buildorders[KEY_INDEX] = 'n002' // Arcanery
-	// buildorders[BOMBTARGET_INDEX] = 'A05P' // Arcanery
 	buildorders[BIGRANDKILL_INDEX] = 'A05G' // Arcanery
 	buildorders[SMALLRANDKILL_INDEX] = 'A05J' // Arcanery
 	buildorders[TANKKILL_INDEX] = 'A05M' // Arcanery
@@ -226,7 +224,6 @@ public int array buildorders
 	buildorders[POINTER_INDEX] = 'A05I' // Arcanery
 	buildorders[OBJ_TARGET_INDEX] = 'A05N' // Arcanery
 	buildorders[TC_INDEX] = 'A05L' // Arcanery
-	buildorders[HIGH_OBS_INDEX] = 'n01U' // High Obstacle
 	buildorders[139] = 'fuck' // Lantern
 	buildorders[140] = 'n00V' // Lantern
 	buildorders[141] = 'n00U' // Mushroom
@@ -240,3 +237,4 @@ public int array buildorders
 	buildorders[149] = 'n015' // Poison eggs
 	buildorders[150] = 'n017' // Remains
 	buildorders[151] = PED_ID // Pedestal
+	buildorders[32] = 1 // FIXME
