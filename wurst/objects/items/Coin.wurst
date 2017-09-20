@@ -48,3 +48,4 @@ public class Coin extends ItemObject
 	..setHitPointsMaximumBase(100000000)
 	..setHideMinimapDisplay(true)
 	..setIsaBuilding(true)
+	..setShadowImageUnit("")

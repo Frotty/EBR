@@ -286,6 +286,7 @@ public class Powernode extends SetupObject
 	..setGoldCost(0)
 	..setLumberCost(0)
 	..setIsaBuilding(false)
+	
 	new ChannelAbilityPreset(LINK_AIR_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
