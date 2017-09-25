@@ -1,8 +1,13 @@
-[0.90a]
+[0.90e]
 [*] added configuration options to smode command
 [*] added turnOn/Off functionality to spinner and powernode
 [*] added midway-point to forest startmaze because it seems to be the hardest part and a noob trap
+[*] added new powernode tether that blocks in air only
 [*] fixed duplicate executer procs
+[*] fixed unitcreator creating units without rallypoint
+[*] fixed powernode ground tether speed glitch
+[*] fixed powernode bounce not working properly when jumping on ice
+[*] made powernodes more stable and less prone to tunneling
 [*] more objects are generated via code now, thanks to Kane
 
 

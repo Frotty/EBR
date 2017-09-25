@@ -33,7 +33,8 @@ public class UnitCreator extends StaticBaseObject
 	
 	override function update()
 		if timerreal <= 0.0
-			create(this)
+			if noRally == null
+				create()
 			if tmode == TimerMode.FIXED
 				timerreal = interval
 			else if tmode == TimerMode.RANDOM
@@ -42,27 +43,27 @@ public class UnitCreator extends StaticBaseObject
 			timerreal -= ANIMATION_PERIOD	
 			
 				
-	static function create(UnitCreator obj)
-		let rPos = obj.getRallyPoint().toVec2() + vec2(0.001,0.001)
-		let cpos = obj.pos.toVec2() + vec2(0.001,0.001)
+	function create()
+		let rPos = getRallyPoint().toVec2() + vec2(0.001,0.001)
+		let cpos = pos.toVec2() + vec2(0.001,0.001)
 		EscaperSensorSetup ek = null
-		switch obj.spawnUnitType
+		switch spawnUnitType
 			case 'BIGK'
-				ek = new BigKiller(cpos, obj.owner, obj.getRallyAngle())
+				ek = new BigKiller(cpos, owner, getRallyAngle())
 			case 'SMAL'
-				ek = new SmallKiller(cpos, obj.owner, obj.getRallyAngle())
+				ek = new SmallKiller(cpos, owner, getRallyAngle())
 			case GLAIVE_KILLER_ID
-				ek = new GlaiveKiller(cpos, obj.owner, obj.getRallyAngle())
+				ek = new GlaiveKiller(cpos, owner, getRallyAngle())
 			case TANK_KILLER_ID
-				ek = new TankKiller(cpos, obj.owner, obj.getRallyAngle())
+				ek = new TankKiller(cpos, owner, getRallyAngle())
 			case BIG_RANDOM_KILLER_ID
-				ek = new BigRandomKiller(cpos, obj.owner, obj.getRallyAngle())
+				ek = new BigRandomKiller(cpos, owner, getRallyAngle())
 			case SMALL_RANDOM_KILLER_ID
-				ek = new SmallRandomKiller(cpos, obj.owner, obj.getRallyAngle())
+				ek = new SmallRandomKiller(cpos, owner, getRallyAngle())
 			case POINTER_ID
-				ek = new Pointer(cpos, obj.owner, obj.getRallyAngle())
+				ek = new Pointer(cpos, owner, getRallyAngle())
 			case KNOCKBACKER_ID
-				ek = new Knockbacker(cpos, obj.owner, obj.getRallyAngle())
+				ek = new Knockbacker(cpos, owner, getRallyAngle())
 		ek.setup.issuePointOrder("move", rPos)
 		
 	override function onCast()

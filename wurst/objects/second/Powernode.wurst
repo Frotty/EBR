@@ -7,7 +7,6 @@ import Assets
 constant LINK_ID = 'A051'
 constant LINK_BOUNCE_ID = 'A07Q'
 constant LINK_DIODE_ID = 'A061'
-constant LINK_TETHER_ID = 'A07D'
 constant LINK_ORB_ID = 'A08E'
 constant EFFECT_STRING = "DRAM"
 constant EFFECT_BOUNCE_STRING = "LGRO"
@@ -20,6 +19,7 @@ constant ACTIVATION_DIST = 22.
 public constant INCREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
 public constant DECREASE_BOUNCE_ID = compiletime(ABIL_ID_GEN.next())
 public constant LINK_AIR_ID = compiletime(ABIL_ID_GEN.next())
+public constant LINK_SPELLBOOK_ID = compiletime(ABIL_ID_GEN.next())
 
 enum LinkType
 	KILL
@@ -64,7 +64,7 @@ public class Powernode extends SetupObject
 
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, POWER_NODE_ID, pos, angle(0), this), getUnit(owner, POWER_NODE_ID, pos, angle(0), this), 0.)
-		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)
+		setup..addAbility(LINK_BOUNCE_ID)..addAbility(LINK_DIODE_ID)..addAbility(LINK_SPELLBOOK_ID)
 		..addAbility(INCREASE_BOUNCE_ID)..addAbility(DECREASE_BOUNCE_ID)..addAbility(TURN_OFF_ID)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -104,17 +104,17 @@ public class Powernode extends SetupObject
 									AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
 									e.kill(this)
 								case LinkType.BOUNCE
-									calBounce(l.target.pos,e, (2.00 + bounciness.get()))
+									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
 								case LinkType.BOUNCE_DIODE
-									calBounceD(l.target.pos,e, (1.00 + bounciness.get()))	
+									calBounceDiode(l.target.pos,e, (1.00 + bounciness.get()))	
 								case LinkType.AIRTETHER
 									if e.pos.z > 10
 										addEffect(Other.dispelmagictarget, e.getPos()).destr()
-										calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
+										calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
 								case BOTHTETHER
 									if e.pos.z > 20
 										addEffect(Other.dispelmagictarget, e.getPos()).destr()
-									calBounceAir(l.target.pos,e, (1.00 + bounciness.get()))	
+									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
 								case LinkType.ORBTETHER
 									
 			l = l.next
@@ -135,27 +135,30 @@ public class Powernode extends SetupObject
 			return vec2(-dy,dx).norm().withZ(0)
 		return vec2(dy,-dx).norm().withZ(0)
 				
-	function calBounce(vec3 lpos, Escaper e, real bounceFactor)
-		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
-		var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
-		if b.lengthSquared() < 75
-			b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setPos(e.pos+b)
-		e.setVel(b)
+	// function calBounce(vec3 lpos, Escaper e, real bounceFactor)
+	// 	let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
+	// 	var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
+	// 	if b.lengthSquared() < 75
+	// 		b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
+	// 	e.setPos(e.pos+b)
+	// 	e.setVel(b)
+	// 	e.slideVelocity = ZERO2
 		
-	function calBounceD(vec3 lpos, Escaper e, real bounceFactor)
+	function calBounceDiode(vec3 lpos, Escaper e, real bounceFactor)
 		let dx = lpos.x - e.pos.x
 		let dy = lpos.y - e.pos.y
 		let normal = vec2(-dy,dx).norm().toVec3()
 		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
 		e.setPos(e.pos+b)
 		e.setVel(b)
+		e.slideVelocity = ZERO2
 
-	function calBounceAir(vec3 lpos, Escaper e, real bounceFactor)
+	function calBounceSimple(vec3 lpos, Escaper e, real bounceFactor)
 		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
 		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
 		e.setPos(e.pos+b)
 		e.setVel(b)
+		e.slideVelocity = ZERO2
 		
 		
 	function getBounceVec(vec3 vel3, vec2 nor2, real bounceFactor) returns vec3
@@ -175,7 +178,7 @@ public class Powernode extends SetupObject
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
 		var node = GetTriggerUnit().getUserData() castTo Powernode
-		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	or id == LINK_TETHER_ID	or id == LINK_ORB_ID
+		if id == LINK_ID or id == LINK_BOUNCE_ID or id == LINK_DIODE_ID	or id == LINK_AIR_ID or id == LINK_ORB_ID
 			var data = target.getEntity()
 			if data instanceof Powernode
 				var pdata = data castTo Powernode
@@ -194,7 +197,7 @@ public class Powernode extends SetupObject
 						node.link(data castTo Powernode, LinkType.BOUNCE)
 					else if id == LINK_DIODE_ID	
 						node.link(data castTo Powernode, LinkType.BOUNCE_DIODE)
-					else if id == LINK_TETHER_ID	
+					else if id == LINK_AIR_ID	
 						node.link(data castTo Powernode, LinkType.AIRTETHER)
 					else if id == LINK_ORB_ID	
 						node.link(data castTo Powernode, LinkType.ORBTETHER)
@@ -298,3 +301,81 @@ public class Powernode extends SetupObject
 	..presetTooltipNormalExtended((int lvl) -> "Add or remove this type of link from another powernode.\n"
 		+ "Blocks escapers only when they are in air.")
 	..presetButtonPosNormal(2, 1)
+	..presetTargetTypes(Targettype.UNIT)
+	..presetCastRange((int lvl) -> 2500)
+	..presetTargetsAllowed((int lvl) -> "allies,friend,invulnerable,notself,vulnerable")
+
+	let u = createObjectDefinition("w3a", 'A07E', 'Aspb')
+	u.setLvlDataInt("spb4", 1, 4, 11)
+	u.setLvlDataInt("spb4", 2, 4, 11)
+	u.setLvlDataInt("spb4", 3, 4, 11)
+	u.setLvlDataInt("spb4", 4, 4, 11)
+	u.setLvlDataInt("spb4", 5, 4, 11)
+	u.setLvlDataInt("spb4", 6, 4, 11)
+	u.setLvlDataInt("spb4", 7, 4, 11)
+	u.setLvlDataInt("spb4", 8, 4, 11)
+	u.setLvlDataInt("spb4", 9, 4, 11)
+	u.setLvlDataInt("spb4", 10, 4, 11)
+	u.setLvlDataInt("spb3", 1, 3, 11)
+	u.setLvlDataInt("spb3", 2, 3, 11)
+	u.setLvlDataInt("spb3", 3, 3, 11)
+	u.setLvlDataInt("spb3", 4, 3, 11)
+	u.setLvlDataInt("spb3", 5, 3, 11)
+	u.setLvlDataInt("spb3", 6, 3, 11)
+	u.setLvlDataInt("spb3", 7, 3, 11)
+	u.setLvlDataInt("spb3", 8, 3, 11)
+	u.setLvlDataInt("spb3", 9, 3, 11)
+	u.setLvlDataInt("spb3", 10, 3, 11)
+	u.setLvlDataString("spb5", 2, 5, "spellbook")
+	u.setLvlDataString("spb5", 3, 5, "spellbook")
+	u.setLvlDataString("spb5", 4, 5, "spellbook")
+	u.setLvlDataString("spb5", 5, 5, "spellbook")
+	u.setLvlDataString("spb5", 6, 5, "spellbook")
+	u.setLvlDataString("spb5", 7, 5, "spellbook")
+	u.setLvlDataString("spb5", 8, 5, "spellbook")
+	u.setLvlDataString("spb5", 9, 5, "spellbook")
+	u.setLvlDataString("spb5", 10, 5, "spellbook")
+	u.setLvlDataString("spb1", 1, 1, "A07Q,A07D,A061,A051,A08E," + int2fourchar(LINK_AIR_ID))
+	u.setLvlDataInt("spb2", 4, 2, 1)
+	u.setLvlDataInt("spb2", 5, 2, 1)
+	u.setLvlDataInt("spb2", 6, 2, 1)
+	u.setLvlDataInt("spb2", 7, 2, 1)
+	u.setLvlDataInt("spb2", 8, 2, 1)
+	u.setLvlDataInt("spb2", 9, 2, 1)
+	u.setLvlDataInt("spb2", 10, 2, 1)
+	u.setLvlDataString("aart", 0, 0, "ReplaceableTextures\\CommandButtons\\BTNEnchantedGemstone.blp")
+	u.setLvlDataString("spb1", 3, 1, "A03F,A02Z,A030,A02W,A02V,A02U,A03B,A03E,A02N,A02O,A02P")
+	u.setLvlDataString("spb1", 6, 1, "A00K,A00C,A004,A00G,A00A,A007,A009,A008")
+	u.setLvlDataString("spb1", 5, 1, "A00F,A006,A005,A007,A009,A008")
+	u.setLvlDataString("spb1", 2, 1, "A03F,A037,A036,A035,A034,A033,A032,A031,A02N,A02O,A02P")
+	u.setLvlDataString("spb1", 4, 1, "A03F,A03I,A03J,A03G,A03H,A02T,,,,A02N,A02O,A02P")
+	u.setLvlDataString("spb1", 7, 1, "A007,A009,A008")
+	u.setLvlDataString("spb1", 8, 1, "A00I,A00H,A007,A009,A008")
+	u.setLvlDataString("spb1", 9, 1, "A007,A009,A008")
+	u.setLvlDataString("spb1", 10, 1, "A00J,A00B,A00E,A007,A009,A008")
+	u.setLvlDataString("atp1", 1, 0, "Set up a |cffFFCC00Tether [|cffFFCC00R|r]")
+	u.setLvlDataString("atp1", 2, 0, "Spell Book |cffffcc50(F|r)")
+	u.setLvlDataString("atp1", 3, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 4, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 5, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 6, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 7, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 8, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 9, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("atp1", 10, 0, "Spell Book |cffffcc50(S|r)")
+	u.setLvlDataString("aub1", 1, 0, "Allows you to link this node with another.")
+	u.setLvlDataString("aub1", 2, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 3, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 4, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 5, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 6, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 7, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 8, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 9, 0, "Countains the heros' spells.")
+	u.setLvlDataString("aub1", 10, 0, "Countains the heros' spells.")
+	u.setLvlDataString("ahky", 0, 0, "R")
+	u.setLvlDataInt("abpx", 0, 0, 3)
+	u.setLvlDataInt("spb2", 1, 2, 0)
+	u.setLvlDataString("ansf", 0, 0, "(Wizard)")
+	u.setLvlDataString("anam", 0, 0, "Powernode: Select Tether")
+	u.setLvlDataInt("aite", 0, 0, 0)
