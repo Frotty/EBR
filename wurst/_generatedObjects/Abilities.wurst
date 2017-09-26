@@ -37,13 +37,14 @@ import BuilderConstants
 
     new ChannelAbilityPreset(TURN_OFF_ID, 1, true)
         ..setName("C: Turn Off")
+        ..setEditorSuffix("[generated]")
         ..presetTooltipNormal((int lvl) -> "|cff52B542Currently turned on [|cffFFCC00F|r]")
         ..presetTooltipNormalExtended((int lvl) -> "|cffADADADClick to turn off")
         ..presetIcon("ReplaceableTextures\\CommandButtons\\BTNstop.blp")
         ..presetButtonPosNormal(3, 1)
         ..presetHotkey("F")
         ..presetTargetTypes(Targettype.NONE)
-        ..setHeroAbility(FALSE)
+        ..makeUnitSpell(0, 0)
 
     new ChannelAbilityPreset(TURN_ON_ID, 1, true)
         ..setName("C: Turn On")
