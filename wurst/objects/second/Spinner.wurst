@@ -100,8 +100,10 @@ public class Spinner extends SetupObject
 		switch id
 			case TURN_ON_ID
 				setEnabled(true)
+				setup.abortOrder()
 			case TURN_OFF_ID
 				setEnabled(false)
+				setup.abortOrder()
 			case SPELL_ID
 				var u = GetSpellTargetUnit()
 				var data = u.getUserData() castTo UnitEntity

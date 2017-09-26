@@ -222,8 +222,10 @@ public class Powernode extends SetupObject
 				link = link.next
 		else if id == TURN_ON_ID
 			setEnabled(true)
+			setup.abortOrder()
 		else if id == TURN_OFF_ID
 			setEnabled(false)
+			setup.abortOrder()
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -250,9 +252,8 @@ public class Powernode extends SetupObject
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setShadowImageUnit("")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(int2fourchar('A01H') + "," + int2fourchar('A01E') + "," +
+	int2fourchar(REMOVE_OBJECT_ID) + "," + int2fourchar(GHOST_VIS_ID) + "," + int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("F")
 	..setName("|cff9CA5EFPower Node")
 	..setTooltipBasic("|cffFFCC00Build |cff9CA5EFPower Node [F]")
