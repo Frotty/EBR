@@ -87,3 +87,4 @@ public class VolcanoObstacle extends Obstacle
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
 	..setCollisionSize(190)
+	..setHideMinimapDisplay(true)

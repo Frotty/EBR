@@ -24,6 +24,8 @@ public class ObjectTarget extends SetupObject
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
+	..setHitPointsMaximumBase(999999999)
+	..setHitPointsRegenerationRate(9999999)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWisp.blp")
 	..setModelFile("units\\nightelf\\Wisp\\Wisp.mdl")
 	..setSelectionScale(1.5)
@@ -35,12 +37,11 @@ public class ObjectTarget extends SetupObject
 	..setMovementHeight(0)
 	..setTurnRate(999)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('A031') + "," +
-	int2fourchar('A01F') + "," +
-	int2fourchar('A01G') + "," +
+	..setNormalAbilities(int2fourchar('A01H') + "," +
+	int2fourchar('A01E') + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	int2fourchar(MAKE_UNIT_INVISIBLE_ID))
 	..setHotkey("Y")
 	..setName("|cff0894E6Object Target")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Teleporter Target [Y]")

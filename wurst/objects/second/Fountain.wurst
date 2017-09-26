@@ -4,9 +4,9 @@ import Escaper
 import ChannelAbilityPreset
 import Assets
 
-constant BOTH_ID = 'fbot'
-constant HEAL_ID = 'fhea'
-constant CURE_ID = 'fcur'
+//constant BOTH_ID = 'fbot'
+//constant HEAL_ID = 'fhea' WIP
+//constant CURE_ID = 'fcur'
 constant string	EFFECT_ID = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
 
 public class Fountain extends StaticSetupObject
@@ -32,21 +32,21 @@ public class Fountain extends StaticSetupObject
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
-			case BOTH_ID
+			case 'A077'
 				setNewActor(CreateUnit(owner, FOUNTAIN_HEAL_ID, pos.x, pos.y, 270. ))
 				actor.addAbility(LOCUST_ID)
 				cure = false
-				setup..removeAbility(BOTH_ID)..addAbility(HEAL_ID)
-			case HEAL_ID
+				setup..removeAbility('A077')..addAbility('A078')
+			case 'A078'
 				setNewActor(CreateUnit(owner, FOUNTAIN_CURE_ID, pos.x, pos.y, 270. ))
 				actor.addAbility(LOCUST_ID)
 				cure = true
-				setup..removeAbility(HEAL_ID)..addAbility(CURE_ID)
-			case CURE_ID
+				setup..removeAbility('A078')..addAbility('A079')
+			case 'A079'
 				setNewActor(CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ))
 				actor.addAbility(LOCUST_ID)
 				cure = true
-				setup..removeAbility(CURE_ID)..addAbility(BOTH_ID)
+				setup..removeAbility('A079')..addAbility('A077')
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -57,8 +57,8 @@ public class Fountain extends StaticSetupObject
 @compiletime function genFountain()
 	new BuildingDefinition(FOUNTAIN_BOTH_ID, 'hctw')
 	..setName("|cff2994EFFountain")
-	..setHotkey("R")
-	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [R]")
+	..setHotkey("A")
+	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [A]")
 	..setTooltipExtended("Heals nearby Escapers." +
 	"\nAlso cures infections.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
@@ -90,11 +90,12 @@ public class Fountain extends StaticSetupObject
 	..setLumberCost(0)
 	..setGoldCost(0)
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)
 
 	new BuildingDefinition(FOUNTAIN_HEAL_ID, 'hctw')
 	..setName("|cff2994EFFountain")
-	..setHotkey("R")
-	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [R]")
+	..setHotkey("A")
+	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [A]")
 	..setTooltipExtended("Heals nearby Escapers." +
 	"\nAlso cures infections.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLifeBlood.blp")
@@ -126,11 +127,12 @@ public class Fountain extends StaticSetupObject
 	..setLumberCost(0)
 	..setGoldCost(0)
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)
 
 	new BuildingDefinition(FOUNTAIN_CURE_ID, 'hctw')
 	..setName("|cff2994EFFountain")
-	..setHotkey("R")
-	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [R]")
+	..setHotkey("A")
+	..setTooltipBasic("|cffFFCC00Build |cff2994EFFountain [A]")
 	..setTooltipExtended("Heals nearby Escapers." +
 	"\nAlso cures infections.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
@@ -163,3 +165,4 @@ public class Fountain extends StaticSetupObject
 	..setLumberCost(0)
 	..setGoldCost(0)
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)

@@ -188,3 +188,4 @@ init
 	..setLumberCost(0)
 	..setShadowImageUnit("")
 	..setIsaBuilding(false)
+	..setHideMinimapDisplay(true)

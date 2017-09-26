@@ -36,7 +36,7 @@ public constant LOAD4_ID = compiletime(ABIL_ID_GEN.next())
 	..setPlacementRequires("")
 	..setCollisionSize(0)
 	..setUpgradesTo("")
-	
+	..setHideMinimapDisplay(true)
 		
 	new ChannelAbilityPreset(SELECT_SINGLE_ID, 1, true)
 	..setHeroAbility(false)

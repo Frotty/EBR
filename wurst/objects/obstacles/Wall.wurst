@@ -32,9 +32,10 @@ public class Wall extends StaticSetupObject
 	..setTooltipBasic("Wall End [|cffFFCC00Y|r]")
 	..setTooltipExtended("Blocks Escapers and Killers.")
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)
 
 	new BuildingDefinition(HOR_WALL_ID, 'ncop')  
-	..setButtonPositionX(1)
+	..setButtonPositionX(2)
 	..setButtonPositionY(2)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
 	..setModelFile("Doodads\\LordaeronSummer\\Terrain\\StoneWall0\\StoneWall02.mdl")
@@ -48,9 +49,10 @@ public class Wall extends StaticSetupObject
 	..setTooltipBasic("Horizontal Wall [|cffFFCC00C|r]")
 	..setTooltipExtended("Blocks Escapers and Killers.")
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)
 
 	new BuildingDefinition(VER_WALL_ID, 'ncop')  
-	..setButtonPositionX(2)
+	..setButtonPositionX(1)
 	..setButtonPositionY(2)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
 	..setModelFile("Doodads\\LordaeronSummer\\Terrain\\StoneWall90\\StoneWall902.mdl")
@@ -64,3 +66,4 @@ public class Wall extends StaticSetupObject
 	..setTooltipBasic("Vertical Wall [|cffFFCC00X|r]")
 	..setTooltipExtended("Blocks Escapers and Killers.")
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)
