@@ -144,8 +144,8 @@ public class Vortex extends UnitEntity
 
 	new BuildingDefinition(VORTEX_ID, 'ncop')
 	..setName("|cff636363Vortex ")
-	..setHotkey("W")
-	..setTooltipBasic("Build |cff636363Vortex [W]")
+	..setHotkey("R")
+	..setTooltipBasic("Build |cff636363Vortex [R]")
 	..setTooltipExtended("Build a vortex that attracts escapers to it's center.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNStun.blp")
 	..setNormalAbilities(int2fourchar('A04K') + "," +
@@ -167,3 +167,4 @@ public class Vortex extends UnitEntity
 	..setScalingValue(0.55)
 	..setSelectionScale(1)
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)

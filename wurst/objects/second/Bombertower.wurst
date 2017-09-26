@@ -105,3 +105,4 @@ public class Bombertower extends StaticBaseObject
 	..setLumberCost(0)
 	..setGoldCost(0)
 	..setUnitClassification("ancient,standon")
+	..setHideMinimapDisplay(true)

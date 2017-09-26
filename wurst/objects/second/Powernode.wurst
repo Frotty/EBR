@@ -268,6 +268,7 @@ public class Powernode extends SetupObject
 	..setGoldCost(0)
 	..setLumberCost(0)
 	..setIsaBuilding(false)
+	..setHideMinimapDisplay(true)
 
 	new ChannelAbilityPreset(INCREASE_BOUNCE_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)

@@ -190,6 +190,7 @@ public class Door extends StaticSetupObject
 	..setFoodProduced(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setHideMinimapDisplay(true)
 	..setPlacementRequires("")
 
 	new BuildingDefinition(DOORPATH_O, 'hhou')  
@@ -217,6 +218,7 @@ public class Door extends StaticSetupObject
 	..setFoodProduced(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setHideMinimapDisplay(true)
 	..setPlacementRequires("")
 
 	new BuildingDefinition(DOORDUMMY_ID, 'hhou')  
@@ -236,8 +238,8 @@ public class Door extends StaticSetupObject
 	..setCanDropItemsOnDeath(false)
 	..setNormalAbilities(int2fourchar('Aloc'))
 	..setName("|cffFF9421Door")
-	..setHotkey("Q")
-	..setTooltipBasic("|cffFFCC00Build |cffFF9421Door [Q]")
+	..setHotkey("Y")
+	..setTooltipBasic("|cffFFCC00Build |cffFF9421Door [Y]")
 	..setTooltipExtended("Doors can be opened by keys and executers." + 
 	"\nThey can be rotated and recolored. Doors of a certain color can only be opened by a key with that same color." +
 	"\nYou can drop keys using the item in your builder's inventory.")
@@ -246,6 +248,7 @@ public class Door extends StaticSetupObject
 	..setFoodProduced(0)
 	..setGoldCost(0)
 	..setLumberCost(0)
+	..setHideMinimapDisplay(true)
 	..setUnitClassification("ancient,mechanical")
 	..setPlacementRequires("")
 

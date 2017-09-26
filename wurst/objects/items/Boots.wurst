@@ -1,6 +1,9 @@
 package Boots
 import ItemObject
 import Key
+import ChannelAbilityPreset
+
+public constant BOOTS_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 
 public class Boots extends ItemObject
 	boolean picked = false
@@ -8,7 +11,7 @@ public class Boots extends ItemObject
 	Escaper holder
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0 ) )
+		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, BOOTS_DUMMY_ID, pos.x, pos.y, 0 ) )
 		
 	override function onUse(Escaper user)
 		
@@ -22,4 +25,35 @@ public class Boots extends ItemObject
 	override function onDrop(Escaper e)
 	override function update()
 	
-	
+@objectgen function genTome()
+	new UnitDefinition(BOOTS_DUMMY_ID, 'hfoo')  
+	..setAttacksEnabled(0)
+	..setTargetedAs("structure")
+	..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationCastPoint(0)
+	..setScalingValue(0.35)
+	..setShadowImageUnit("")
+	..setShadowImageCenterX(0)
+	..setShadowImageCenterY(0)
+	..setShadowImageWidth(0)
+	..setShadowImageHeight(0)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTomeRed.blp") //which icon?
+	..setModelFile("models\\tcBox.mdl")
+	..setSelectionScale(0.4)
+	..setSpeedBase(0)
+	..setTurnRate(0)
+	..setMovementType(MovementType.None)
+	..setUnitSoundSet("")
+	..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
+	int2fourchar(GHOST_INVIS_ID) + "," +
+	int2fourchar(INVULNERABILITY_ID))
+	..setName("Boots Dummy")
+	..setUpgradesUsed("")
+	..setBuildTime(1)
+	..setUnitClassification("mechanical")
+	..setHitPointsMaximumBase(100000000)
+	..setHideMinimapDisplay(true)
+	..setIsaBuilding(true)
+	..setShadowImageUnit("")
