@@ -1,4 +1,4 @@
-[0.90e]
+[0.90f]
 [*] added configuration options to smode command
 [*] added turnOn/Off functionality to spinner and powernode
 [*] added midway-point to forest startmaze because it seems to be the hardest part and a noob trap
@@ -8,8 +8,8 @@
 [*] fixed powernode ground tether speed glitch
 [*] fixed powernode bounce not working properly when jumping on ice
 [*] made powernodes more stable and less prone to tunneling
+[*] further finetune walkable pathing 
 [*] more objects are generated via code now, thanks to Kane
-
 
 [0.89x]
 [*] more fixes and improvements to save/load (1.26 patch compatability)

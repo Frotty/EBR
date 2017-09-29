@@ -70,9 +70,7 @@ function update()
 			if not pod.wait
 				pod.time -= TIMER_PERIOD
 				if pod.time <= 0
-					if pod.owner.escaper == null
-						printLog(Loglevel.ERROR, "THis neither")
-					else	
+					if pod.owner.escaper != null
 						pod.owner.escaper.revive()
 					destroy pod
 					pods[i] = null

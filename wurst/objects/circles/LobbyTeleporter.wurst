@@ -49,8 +49,9 @@ public class LobbyTeleporter extends StaticBaseObject
 				for ep from escaperPlayers.staticItr()
 					teleport(ep.escaper)
 				setRallyPoint(pos.toVec2())
-				if startmaze
+				if startmaze or (isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_OBJECT_ID))
 					terminate()
+					return
 				else
 					addQuestionmark()
 					for i = 0 to 11
@@ -72,9 +73,6 @@ public class LobbyTeleporter extends StaticBaseObject
 			addEffect(EFFECT_STRING, rallyPos).destr()
 			if not pData[e.owner.getId()].escaper.camlock
 				PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03 )
-			if isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_OBJECT_ID) 
-				terminate()
-			else
 
 	override function clearQuestionmark()
 		super.clearQuestionmark()
