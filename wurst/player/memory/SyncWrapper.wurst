@@ -37,8 +37,14 @@ public class SyncData
 	function readInt(int index) returns int
 		return s__SyncData_readInt(vjassId, index)
 
-	function addEventListener(filterfunc listener)
-		s__SyncData_addEventListener(vjassId, listener)
+	function addOnComplete(filterfunc listener)
+		s__SyncData_onComplete[vjassId] = listener
+
+	function addOnError(filterfunc listener)
+		s__SyncData_onError[vjassId] = listener
+
+	function addOnUpdate(filterfunc listener)
+		s__SyncData_onUpdate[vjassId] = listener
 
 	function start()
 		s__SyncData_start(vjassId)
@@ -94,7 +100,7 @@ public function getSyncedFile(PlayerData pd, string filename, filterfunc listene
 		printLog(Loglevel.DEBUG, "Adding int: " + sizes[i].toString())
 		sd.addInt(sizes[i])
 		sizes[i] = 0
-	sd.addEventListener(Filter(() -> onLinecountSynced()))
+	sd.addOnComplete(Filter(() -> onLinecountSynced()))
 	sd.start()
 	printLog(Loglevel.DEBUG, "Start Sync3")
 
@@ -127,8 +133,9 @@ function onLinecountSynced()
 					if i == lineCount-1
 						nullTimer(() -> begin
 							printLog(Loglevel.DEBUG, "OnLCSync2")
-							sd.addEventListener(Filter(() -> onPlayerfileSynced()))
-							sd.addEventListener(pd.syncPayload.finalListener)
+							//FIXME
+							sd.addOnComplete(Filter(() -> onPlayerfileSynced()))
+							sd.addOnComplete(pd.syncPayload.finalListener)
 							sd.start()
 							printLog(Loglevel.DEBUG, "OnLCSync3")
 							destroy getSyncedData()
@@ -139,7 +146,7 @@ function onLinecountSynced()
 	else if lineCount == 0
 		printLog(Loglevel.DEBUG, "No Savefile")
 		let sd = new SyncData(pd.p)
-		sd.addEventListener(payload.finalListener)
+		sd.addOnComplete(payload.finalListener)
 		sd.start()
 
 function onPlayerfileSynced()
