@@ -134,7 +134,7 @@ public abstract class Escaper extends UnitEntity
 			flashEffect(Other.boltimpact, pos)
 			actor.damageTarget(actor, 85)
 		else if alive
-			actor.damageTarget(actor, 105)
+			actor.damageTarget(actor, killer == null ? 105 : 1000)
 			if not actor.isAliveTrick()
 				alive = false
 				actor.kill()

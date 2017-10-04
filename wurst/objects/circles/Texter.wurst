@@ -82,6 +82,7 @@ public class Texter extends StaticBaseObject
 			else if ent instanceof Decoration
 				let obj = u.getUserData() castTo Decoration
 				obj.actor.setVertexColor(textcolor)
+				obj.setup.setVertexColor(textcolor)
 			else if ent instanceof SetupObject
 				let obj = u.getUserData() castTo SetupObject
 				obj.actor.setVertexColor(textcolor)

@@ -86,7 +86,7 @@ public class FourthCitadelleMaze extends Startmaze
 		gg_unit_scik_0213.issuePointOrder("patrol", vec2(-2728, -5100))
 		gg_unit_scik_0221.issuePointOrder("patrol", vec2(-4576, -4748))
 		gg_unit_scik_0222.issuePointOrder("patrol", vec2(-4320, -5164))
-		gg_unit_bcik_0266.issuePointOrder("patrol", vec2(-2533, -7195))
+		gg_unit_bcik_0266.issuePointOrder("patrol", vec2(-2933, -7195))
 		gg_unit_bcik_0262.issuePointOrder("patrol", vec2(-3502, -6077))
 		gg_unit_bcik_0280.issuePointOrder("patrol", vec2(-3953, -5678))
 		gg_unit_bcik_0225.issuePointOrder("patrol", vec2(-4648, -3995))

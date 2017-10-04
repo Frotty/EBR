@@ -11,6 +11,7 @@ public function getSyncedData() returns SyncData
 public class SyncData
 	int vjassId = 0
 	player p
+	filterfunc finalListener
 
 	construct(player p)
 		this.p = p
@@ -134,8 +135,8 @@ function onLinecountSynced()
 						nullTimer(() -> begin
 							printLog(Loglevel.DEBUG, "OnLCSync2")
 							//FIXME
+							sd.finalListener = pd.syncPayload.finalListener
 							sd.addOnComplete(Filter(() -> onPlayerfileSynced()))
-							sd.addOnComplete(pd.syncPayload.finalListener)
 							sd.start()
 							printLog(Loglevel.DEBUG, "OnLCSync3")
 							destroy getSyncedData()
@@ -149,16 +150,22 @@ function onLinecountSynced()
 		sd.addOnComplete(payload.finalListener)
 		sd.start()
 
+trigger trig = CreateTrigger()
 function onPlayerfileSynced()
 	printLog(Loglevel.DEBUG, "OnPFSyncWrapper")
 	let pdc = pData[getSyncedData().p.getId()]
-	// A file was found
+
 	pdc.syncPayload.syncedFile = new SyncedFile(getSyncedData())
 	
 	destroy getSyncedData()
 	printLog(Loglevel.DEBUG, "OnPFSyncWrapper done")
-
-
+	if pdc.syncPayload.finalListener != null
+		doAfter(0.1, () -> begin
+			TriggerAddCondition(trig, pdc.syncPayload.finalListener)
+			TriggerEvaluate(trig)
+			TriggerClearConditions(trig)
+		end)
+		
 public class SyncedFile
 	int size
 	int readpos
@@ -166,14 +173,15 @@ public class SyncedFile
 
 	construct(SyncData content)
 		size = 0
-		var str = content.readString(size)
-		while str != null and str.length() > 0
-			if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
-				str = str.substring(0, str.length()-1)
-			stringTable.saveString(size, str)
-			size++
-			str = content.readString(size)
-		readpos = size+1
+		if content != null
+			var str = content.readString(size)
+			while str != null and str.length() > 0
+				if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
+					str = str.substring(0, str.length()-1)
+				stringTable.saveString(size, str)
+				size++
+				str = content.readString(size)
+			readpos = size+1
 		
 	function hasNext() returns boolean
 		return readpos > 1
