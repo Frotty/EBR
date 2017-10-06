@@ -77,11 +77,11 @@ public constant BIG_CITADEL_KILLER_ID = 'bcik'
 public constant BIG_SAND_KILLER_ID = 'bsak'
 public constant BIG_SUNKEN_KILLER_ID = 'bsuk'
 //Escapers
-/* public constant ESC_STRONG_ID = compiletime(HERO_ID_GEN.next())
+public constant ESC_STRONG_ID = compiletime(HERO_ID_GEN.next())
 public constant ESC_ICE_ID = compiletime(HERO_ID_GEN.next())
 public constant ESC_FAST_ID = compiletime(HERO_ID_GEN.next())
 public constant ESC_HOLY_ID = compiletime(HERO_ID_GEN.next())
-public constant ESC_BLIND_ID = compiletime(HERO_ID_GEN.next()) */
+public constant ESC_BLIND_ID = compiletime(HERO_ID_GEN.next())
 
 public constant INVULNERABILITY_ID = 'Avul'
 public constant RALLY_POINT = 'ARal'
