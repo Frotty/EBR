@@ -20,10 +20,12 @@ public class FirstSnowMaze extends Startmaze
 			new SmallKiller(u)
 		
 		gg_unit_bisk_0020.issuePointOrder("patrol", vec2(6800.01, -5237))
-		gg_unit_bisk_0018.issuePointOrder("patrol", vec2(5325.01, -6000))
+		gg_unit_bisk_0018.issuePointOrder("patrol", vec2(6000.01, -6000))
 
-		gg_unit_sick_0013.issuePointOrder("patrol", vec2(4700.01, -6400))
-		gg_unit_sick_0014.issuePointOrder("patrol", vec2(4700.01, -6550))
+		gg_unit_sick_0013.getEntity()..setPos(vec3(5300.01, -6100, 0))
+		gg_unit_sick_0013..issuePointOrder("patrol", vec2(5300.01, -5700))
+		gg_unit_sick_0014.getEntity()..setPos(vec3(5100.01, -6100, 0))
+		gg_unit_sick_0014..issuePointOrder("patrol", vec2(5100.01, -5700))
 		gg_unit_sick_0012.issuePointOrder("patrol", vec2(6500.01, -4400))
 		gg_unit_sick_0036.issuePointOrder("patrol", vec2(4320.01, -5200))
 		

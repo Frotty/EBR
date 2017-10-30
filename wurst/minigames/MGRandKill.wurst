@@ -4,6 +4,7 @@ import EscaperKillers
 import Assets
 import Fx
 import Coin
+import TerrainUtils
 
 constant ARENA_POS = vec2(-4200, 7500)
 
@@ -22,6 +23,8 @@ public class MGRandKill extends Minigame
 
 	override function onBegin()
 		spawn = getGameRect().randomPoint()
+		while not isTerrainWalkable(spawn.x, spawn.y)
+			spawn = getGameRect().randomPoint()	
 		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
 		fx.setScale(0.5)
 		doAfter(10., () -> begin

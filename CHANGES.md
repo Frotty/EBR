@@ -10,7 +10,9 @@
 [*] fixed spider after glaive-spinner in citadel startmaze
 [*] fixed tracks not working after being constructed without rotating
 [*] fixed localfile check freezing at startup
-[*] fixed wrong objects being removed when a minigame ends
+[*] fixed wrong objects being removed and others left behind when a minigame ends
+[*] fixed builders triggering minigame vote
+[*] bomber in autoattack mode now also attacks builders' escapers (thx to hekko4)
 [*] merged bombertarget and teleportertarget into generic "objecttarget" unit
 [*] made data syncing internals more robust
 [*] made powernodes more stable and less prone to tunneling
