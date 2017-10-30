@@ -326,8 +326,8 @@ public abstract class Escaper extends UnitEntity
 			if revivetomb != null
 				setPos(revivetomb.getPos3Real())
 				if (GetLocalPlayer() == owner)
-				if selectatrevive
-					PanCameraToTimed(rev.x, rev.y, 0)
+					if selectatrevive
+						PanCameraToTimed(rev.x, rev.y, 0)
 				revivetomb.remove()
 				revivetomb = null
 			if this.getCurrentRegion().specialAbil > 0

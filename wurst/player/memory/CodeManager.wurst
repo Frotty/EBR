@@ -6,55 +6,51 @@ import SyncWrapper
 import PlayerMemoryData
 import Playerfile
 import initlater PickSystem
-import ClosureTimers
+import GuardedWorker
 
 constant XPMAX = 500000
 constant FILE_NAME = "ebrprofile.pld"
 public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
 
-int pdPointer = -1
 public function doSequentialSync()
-	pdPointer++
-	if pData[pdPointer] != null
-		checkLocalFiles(pData[pdPointer])
-	else
-		doSequentialSync()
+	for pd in allPlayers
+		postTask(new CheckPlayerLocalFilesTask(pd))
 
+class CheckPlayerLocalFilesTask extends GTask
+	PlayerData pd
+	SyncData sd
 
-int pdCount = -1
-public function onPlayerSynced()
-	pdCount--
-	if pdCount == 0
-		onAllLocalSynced()
-	else
-		doSequentialSync()
+	construct(PlayerData pd)
+		this.pd = pd
+		
+	override function onStart()
+		if not pd.localFilesChecked
+			sd = new SyncData(pd.p)
+			sd.addBool(File.isEnabled())
+			sd.addOnComplete(Filter(() -> getCurrentTask().finish(false)))
+			sd.addOnError(Filter(() -> getCurrentTask().finish(true)))
+			sd.start()
+		else
+			finish(true)
 
-boolean hasAll = false
-function onAllLocalSynced()
-	if not hasAll
-		hasAll = true
-		startChoose()
+	override function onUpdate()
 
-/** Checks if the player's localfiles are enabled
-	*/
-public function checkLocalFiles(PlayerData pd)
-	if pdCount < 0
-		pdCount = allPlayers.getSize()
-	printTimed("Checking localfiles for: " + pd.name, 25)
-	if not pd.localFilesChecked
-		let sd = new SyncData(pd.p)
-		sd.addBool(File.isEnabled())
-		sd.addOnComplete(Filter(() -> onLocalFilesSynced()))
-		sd.start()
-	else
-		onPlayerSynced()
+	override function onFinish()
+		Log.debug("Sync Task Finished")
+		if state == TaskState.TIMEOUT
+			Log.debug("Sync Task Errored")
+		else if state == TaskState.FINISHED
+			Log.debug("Sync Task Finished")
+			onLocalFilesSynced()
+		if taskQueue.getSize() == 0
+			startChoose()
+		destroy sd
 
 function onLocalFilesSynced()
-	doAfter(0.1, () -> onPlayerSynced())
-	let pdc = pData[getSyncedData().p.getId()]
-	pdc.localFilesEnabled = getSyncedData().readBool(0)
-	destroy getSyncedData()
+	let task = (getCurrentTask() castTo CheckPlayerLocalFilesTask)
+	let pdc = task.pd
+	pdc.localFilesEnabled = task.sd.readBool(0)
 	
 	if pdc.localFilesEnabled
 		printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pdc.p)
@@ -71,48 +67,40 @@ public function checkPlayerfile(PlayerData pd)
 		getSyncedFile(pd, FILE_NAME, Filter(() -> onFileSynced()))
 
 function onFileSynced()
-	let pdc = pData[getSyncedData().p.getId()]
-	printLog(Loglevel.DEBUG, "on PFCodeManager " + (pdc.syncPayload.syncedFile == null).toString())
-	let file = pdc.syncPayload.syncedFile
-	let token = file.read()
-	printLog(Loglevel.DEBUG, "on PFCodeManager 2 <" + token + ">")
-	if token == null
-		if not pdc.syncPayload.fileName.startsWith("Logs\\")
-			destroy pdc.syncPayload	
-			pdc.syncPayload = null
-			nullTimer(() -> getSyncedFile(pdc, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
-			return
-		printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
-		// A new file was created
-		printLog(Loglevel.DEBUG, "New Playerfile1")
-		createNewPlayerfile(pdc)
-		destroy pdc.syncPayload	
-		pdc.syncPayload = null
-		printLog(Loglevel.DEBUG, "New Playerfile2")
-		checkPlayerfile(pdc)
-		printLog(Loglevel.DEBUG, "New Playerfile3")
-	else if Playerfile.verify(token)
-		printTimedToPlayer("Found a |cffFFCC00valid savefile.|r", 25, pdc.p)
-		let pf = new Playerfile()
-		pf.load(file)
-		pdc.pfile = pf
-		for pmd in pf.pmDatas
-			printLog(Loglevel.DEBUG, "pdchash: " + pdc.hash + " loaded hash: " + pmd.namehash )
-			if pmd.namehash == pdc.hash
-				printTimedToPlayer("Found a profile for |cffFFCC00" + pdc.name + "|r", 25, pdc.p)
-				loadPlayerMemory(pdc, pmd)
-				destroy pdc.syncPayload	
-				pdc.syncPayload = null
-				return
+	let syncTask = getSyncFileTask()
+	if syncTask.state == TaskState.FINISHED
+		let syncedFile = syncTask.file
+		let token = syncedFile.read()
+		printLog(Loglevel.DEBUG, "on PFCodeManager 2 <" + token + ">")
+		if token == null
+			// if not pdc.syncPayload.fileName.startsWith("Logs\\")
+			// 	destroy pdc.syncPayload	
+			// 	pdc.syncPayload = null
+			// 	nullTimer(() -> getSyncedFile(pdc, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
+			// 	return
+			printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
+			// A new file was created
+			printLog(Loglevel.DEBUG, "New Playerfile1")
+			createNewPlayerfile(syncTask.pd)
+			printLog(Loglevel.DEBUG, "New Playerfile2")
+			checkPlayerfile(syncTask.pd)
+			printLog(Loglevel.DEBUG, "New Playerfile3")
+		else if Playerfile.verify(token)
+			printTimedToPlayer("Found a |cffFFCC00valid savefile.|r", 25, syncTask.pd.p)
+			let pf = new Playerfile()
+			pf.load(syncedFile)
+			syncTask.pd.pfile = pf
+			for pmd in pf.pmDatas
+				printLog(Loglevel.DEBUG, "pdchash: " + syncTask.pd.hash + " loaded hash: " + pmd.namehash )
+				if pmd.namehash == syncTask.pd.hash
+					printTimedToPlayer("Found a profile for |cffFFCC00" + syncTask.pd.name + "|r", 25, syncTask.pd.p)
+					loadPlayerMemory(syncTask.pd, pmd)
+					return
 
 		// Savedata exists, but no profile for that name
-		printTimedToPlayer("Didn't find a profile for |cffFFCC00" + pdc.name + "|r - creating new..", 25, pdc.p)
-		addPlayerProfile(pdc)
-		loadPlayerMemory(pdc, pdc.pmdata)
-		destroy pdc.syncPayload	
-		pdc.syncPayload = null
-
-	
+		printTimedToPlayer("Didn't find a profile for |cffFFCC00" + syncTask.pd.name + "|r - creating new..", 25, syncTask.pd.p)
+		addPlayerProfile(syncTask.pd)
+		loadPlayerMemory(syncTask.pd, syncTask.pd.pmdata)
 	
 
 function loadPlayerMemory(PlayerData pd, PMData pmd)
@@ -165,4 +153,3 @@ function createNewPlayerfile(PlayerData pd)
 	pd.pfile = null
 	printLog(Loglevel.DEBUG, "createNewPlayerfile4")
 	pd.pmdata = null
-

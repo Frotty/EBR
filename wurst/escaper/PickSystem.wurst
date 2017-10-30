@@ -109,15 +109,17 @@ public class Selector extends UnitEntity
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
 		SetCameraFieldForPlayer( pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5 )
 
-
+boolean hastStartedYet = false
 public function startChoose()
-	CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
-	CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
-	for pd from allPlayers.staticItr()
-		regions[22].revealRegion(pd.p)
-		new Selector(pd)
+	if not hastStartedYet
+		hastStartedYet = true
+		CinematicFadeBJ( bj_CINEFADETYPE_FADEIN, 2.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0 )
+		CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.30)
+		for pd from allPlayers.staticItr()
+			regions[22].revealRegion(pd.p)
+			new Selector(pd)
 
-	EnablePreSelect(true, false)
+		EnablePreSelect(true, false)
 	
 public function allow()
 	EnableUserControl(true)

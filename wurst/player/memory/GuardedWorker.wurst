@@ -1,0 +1,84 @@
+package GuardedWorker
+import LinkedList
+
+public function getCurrentTask() returns GTask
+	return currentTask
+
+public enum TaskState
+	WAITING
+	WORKING
+	TIMEOUT
+	FINISHED
+
+public abstract class GTask
+	TaskState state = TaskState.WAITING
+	real progress = 0
+	int noProgressCount = 0
+
+	function start()
+		state = TaskState.WORKING
+		progress = 0.
+		noProgressCount = 0
+		onStart()
+
+	function finish(boolean timeout)
+		if timeout
+			state = TaskState.TIMEOUT
+		else
+			state = TaskState.FINISHED
+
+		onFinish()
+		destroy this
+
+	abstract function onStart()
+
+	abstract function onUpdate()
+
+	abstract function onFinish()
+
+	ondestroy
+		if currentTask == this
+			currentTask = null
+		
+let trig = CreateTrigger()
+
+public LinkedList<GTask> taskQueue = new LinkedList<GTask>()
+GTask currentTask = null
+real lastProgress = -1.
+
+public function forceTask(GTask task)
+	if currentTask != null
+		taskQueue.push(task)
+	else
+		currentTask = task
+		lastProgress = -1.
+		currentTask.start()
+
+public function postTask(GTask task)
+	if currentTask != null
+		taskQueue.add(task)
+	else
+		currentTask = task
+		lastProgress = -1.
+		currentTask.start()
+
+function updateTask()
+	if currentTask == null
+		if taskQueue.getSize() == 0
+			return
+		currentTask = taskQueue.dequeue()
+		lastProgress = -1.
+		currentTask.start()
+	
+	if currentTask.state == TaskState.FINISHED or currentTask.state == TaskState.TIMEOUT
+		currentTask = null
+		currentTask.onUpdate()
+		if lastProgress >= currentTask.progress
+			currentTask.noProgressCount++
+			if currentTask.noProgressCount > 15*5
+				currentTask.finish(true)
+		else
+			lastProgress = currentTask.progress
+
+init
+	CreateTimer().startPeriodic(1./15., () -> updateTask())

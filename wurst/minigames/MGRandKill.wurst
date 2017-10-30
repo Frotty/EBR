@@ -11,7 +11,6 @@ public class MGRandKill extends Minigame
 	CallbackPeriodic chickenTimer = null
 	CallbackPeriodic bunnyTimer = null
 	CallbackPeriodic coinTimer = null
-	LinkedList<Entity> objects = new LinkedList<Entity>()
 	vec2 spawn
 	Fx fx
 
@@ -27,20 +26,19 @@ public class MGRandKill extends Minigame
 		fx.setScale(0.5)
 		doAfter(10., () -> begin
 			if fx != null
-				objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
-				objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
-				objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+				new SmallRandomKiller(spawn, STAFF_PLAYER)
+				new SmallRandomKiller(spawn, STAFF_PLAYER)
+				new SmallRandomKiller(spawn, STAFF_PLAYER)
 		end)
 		chickenTimer = doPeriodically(10, (CallbackPeriodic cb) -> begin 
-			objects.add(new SmallRandomKiller(spawn, STAFF_PLAYER))
+			new SmallRandomKiller(spawn, STAFF_PLAYER)
 		end)
 		bunnyTimer = doPeriodically(30, (CallbackPeriodic cb) -> begin 
-			objects.add(new BigRandomKiller(spawn, STAFF_PLAYER))
+			new BigRandomKiller(spawn, STAFF_PLAYER)
 		end)
-		coinTimer = doPeriodically(25, (CallbackPeriodic cb) -> begin 
-			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
-			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
-			objects.add(new Coin(getGameRect().randomPoint(), STAFF_PLAYER))
+		coinTimer = doPeriodically(25, (CallbackPeriodic cb) -> begin
+			for i = 0 to ((tim.getElapsed() / 20) + 2).toInt()
+				new Coin(getGameRect().randomPoint(), STAFF_PLAYER)
 		end)
 
 	override function onEnd()
@@ -48,19 +46,17 @@ public class MGRandKill extends Minigame
 			destroy chickenTimer
 			destroy bunnyTimer
 			destroy coinTimer
-			for obj from objects.staticItr()
-				obj.terminate()
-			objects.clear()
+			GroupEnumUnitsInRect(ENUM_GROUP, gg_rct_coingamearea, Filter(() -> GetFilterUnit().getOwner() == STAFF_PLAYER))
+			for obj from ENUM_GROUP
+				obj.getEntity().terminate()
 			destroy fx
 			fx = null
-
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()
 
 	override function getName() returns string
 		return "|cffccaaddRandom Rumble"
-
 
 init
 	minigames.add(new MGRandKill())

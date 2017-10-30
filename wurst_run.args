@@ -1,6 +1,7 @@
 -runcompiletimefunctions
 -injectobjects
-opt
-inline
--uncheckedDispatch
+-opt
+-inline
+-localOptimizations
+uncheckedDispatch
 -stacktraces

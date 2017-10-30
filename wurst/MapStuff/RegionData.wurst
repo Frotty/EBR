@@ -99,7 +99,7 @@ public class RegionData
 	real slidespeed = 3.
 	real poisonDmg = 1.
 	real lavaDmg = 1.
-	real turnSpeed = 1.75
+	real turnSpeed = 2.55
 	vec3 gravity = vec3(0,0,-0.8)
 	
 	boolean easyMode = false

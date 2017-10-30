@@ -292,7 +292,7 @@ public class StrongEscaper extends Escaper
 	..setLumberCost(0)
 	..setFoodCost(0)
 	..setLevel(1)
-	..hideHeroDeathMsg(false)
+	..hideHeroDeathMsg(true)
 
 	new HeroDefinition(ESC_HOLY_ID, 'Hpal')
 	..setAttacksEnabled(0)
@@ -350,7 +350,7 @@ public class StrongEscaper extends Escaper
 	..setLumberCost(0)
 	..setFoodCost(0)
 	..setLevel(1)
-	..hideHeroDeathMsg(false)
+	..hideHeroDeathMsg(true)
 
 	new HeroDefinition(ESC_ICE_ID, 'Hpal')
 	..setAttacksEnabled(0)
@@ -408,7 +408,7 @@ public class StrongEscaper extends Escaper
 	..setLumberCost(0)
 	..setFoodCost(0)
 	..setLevel(1)
-	..hideHeroDeathMsg(false)
+	..hideHeroDeathMsg(true)
 
 	new HeroDefinition(ESC_STRONG_ID, 'Hpal')
 	..setAttacksEnabled(0)
@@ -466,7 +466,7 @@ public class StrongEscaper extends Escaper
 	..setLumberCost(0)
 	..setFoodCost(0)
 	..setLevel(1)
-	..hideHeroDeathMsg(false)
+	..hideHeroDeathMsg(true)
 
 	new HeroDefinition(ESC_BLIND_ID, 'Hpal')
 	..setAttacksEnabled(0)
@@ -485,8 +485,9 @@ public class StrongEscaper extends Escaper
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEvilIllidan.blp")
 	..setIconScoreScreen("")
 	..setModelFile("units\\nightelf\\EvilIllidan\\IllidanEvil.mdl")
-	..setSelectionScale(1)
+	..setSelectionScale(0.8)
 	..setTurnRate(1.75)
+	..setScalingValue(0.57)
 	..setUnitSoundSet("Illidan")
 	..setCollisionSize(0)
 	..setNormalAbilities(int2fourchar('Aeth') + "," +
@@ -524,4 +525,4 @@ public class StrongEscaper extends Escaper
 	..setLumberCost(0)
 	..setFoodCost(0)
 	..setLevel(1)
-	..hideHeroDeathMsg(false)
+	..hideHeroDeathMsg(true)

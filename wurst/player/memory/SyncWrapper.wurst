@@ -4,6 +4,7 @@ import Table
 import ErrorHandling
 import initlater PlayerData
 import ClosureTimers
+import GuardedWorker
 
 public function getSyncedData() returns SyncData
 	return GetSyncedData() castTo SyncData
@@ -11,7 +12,6 @@ public function getSyncedData() returns SyncData
 public class SyncData
 	int vjassId = 0
 	player p
-	filterfunc finalListener
 
 	construct(player p)
 		this.p = p
@@ -63,109 +63,141 @@ init
 		sync_lines[i] = ""
 		sizes[i] = 0
 
-public class SyncPayload
-	string fileName
-	filterfunc finalListener
-	SyncedFile syncedFile = null
+class SyncLinecountTask extends GTask
+	PlayerData pd
+	string filename
+	filterfunc userListener
+	SyncData sd
 
-	construct(string name, filterfunc listener)
-		this.fileName = name
-		this.finalListener = listener
-
-	ondestroy
-		if syncedFile != null
-			destroy syncedFile
-
-public function getSyncedFile(PlayerData pd, string filename, filterfunc listener)
-	if pd.syncPayload != null
-		error("trying to sync while other sync in progress")
-	pd.syncPayload = new SyncPayload(filename, listener)
-	printLog(Loglevel.DEBUG, "Start Sync1: " + filename)
-	var lineCount = -1
-	if GetLocalPlayer() == pd.p
-		lineCount++
-		let file = File.open(filename, Mode.READ)
-		printLog(Loglevel.DEBUG, "Start Sync1.1")
-		var line = file.read()
-		printLog(Loglevel.DEBUG, "Start Sync1.2")
-		while line != null
-			printLog(Loglevel.DEBUG, "Start Sync1.3: " + line)
-			lineCount++
-			sizes[lineCount] = line.length()
-			line = file.read()
-		file.close()
-	printLog(Loglevel.DEBUG, "Start Sync2: " + lineCount.toString())
-	let sd = new SyncData(pd.p)
-	sd.addInt(lineCount)
-	for i = 1 to lineCount
-		printLog(Loglevel.DEBUG, "Adding int: " + sizes[i].toString())
-		sd.addInt(sizes[i])
-		sizes[i] = 0
-	sd.addOnComplete(Filter(() -> onLinecountSynced()))
-	sd.start()
-	printLog(Loglevel.DEBUG, "Start Sync3")
-
-function onLinecountSynced()
-	printLog(Loglevel.DEBUG, "OnLCSync")
-	let syncedData = getSyncedData()
-	let pd = pData[syncedData.p.getId()]
-	let payload = pd.syncPayload
-	let lineCount = syncedData.readInt(0)
-	
-	printLog(Loglevel.DEBUG, "OnLCSync: " + lineCount.toString())
-	if lineCount > 0
+	construct(PlayerData pd, string filename, filterfunc userListener)
+		this.pd = pd
+		this.filename = filename
+		this.userListener = userListener
+		
+	override function onStart()
+		Log.debug("Starting Sync Task")
+		var lineCount = -1
 		if GetLocalPlayer() == pd.p
-			let file = File.open(payload.fileName, Mode.READ)
-			// Remove verify hash
-			for i = 0 to lineCount-1
-				sync_lines[i] = file.read()
-				printLog(Loglevel.DEBUG, "sync_lines[i]: " + sync_lines[i])
+			lineCount++
+			let file = File.open(filename, Mode.READ)
+			Log.debug("Start Open")
+			var line = file.read()
+			Log.debug("Start Read")
+			while line != null
+				Log.debug("Sync line " + line)
+				lineCount++
+				sizes[lineCount] = line.length()
+				line = file.read()
 			file.close()
-		printLog(Loglevel.DEBUG, "OnLCSync1")
-		nullTimer(() -> begin
-			let sd = new SyncData(pd.p)
-			for i = 0 to lineCount-1
-				printLog(Loglevel.DEBUG, "read" )
-				let length = getSyncedData().readInt(i+1)
-				printLog(Loglevel.DEBUG, "length: " + length.toString() + " synlinelength: "  + sync_lines[i].length().toString() )
-				printLog(Loglevel.DEBUG, "nullTimer " + i.toString())
-				nullTimer(() -> begin
-					sd.addString(sync_lines[i], length)
-					if i == lineCount-1
-						nullTimer(() -> begin
-							printLog(Loglevel.DEBUG, "OnLCSync2")
-							//FIXME
-							sd.finalListener = pd.syncPayload.finalListener
-							sd.addOnComplete(Filter(() -> onPlayerfileSynced()))
-							sd.start()
-							printLog(Loglevel.DEBUG, "OnLCSync3")
-							destroy getSyncedData()
-						end)				
-					printLog(Loglevel.DEBUG, "string added")
-				end)
-		end)
-	else if lineCount == 0
-		printLog(Loglevel.DEBUG, "No Savefile")
-		let sd = new SyncData(pd.p)
-		sd.addOnComplete(payload.finalListener)
+		Log.debug("Sync linecount: " + lineCount.toString())
+		sd = new SyncData(pd.p)
+		sd.addInt(lineCount)
+		for i = 1 to lineCount
+			Log.debug("Adding int: " + sizes[i].toString())
+			sd.addInt(sizes[i])
+			sizes[i] = 0
+		sd.addOnComplete(Filter(() -> getCurrentTask().finish(false)))
+		sd.addOnError(Filter(() -> getCurrentTask().finish(true)))
+		sd.addOnUpdate(Filter(() -> begin 
+			getCurrentTask().progress += 0.1
+		end))
 		sd.start()
 
-trigger trig = CreateTrigger()
-function onPlayerfileSynced()
-	printLog(Loglevel.DEBUG, "OnPFSyncWrapper")
-	let pdc = pData[getSyncedData().p.getId()]
+	override function onUpdate()
 
-	pdc.syncPayload.syncedFile = new SyncedFile(getSyncedData())
-	
-	destroy getSyncedData()
-	printLog(Loglevel.DEBUG, "OnPFSyncWrapper done")
-	if pdc.syncPayload.finalListener != null
-		doAfter(0.1, () -> begin
-			TriggerAddCondition(trig, pdc.syncPayload.finalListener)
-			TriggerEvaluate(trig)
-			TriggerClearConditions(trig)
-		end)
+	override function onFinish()
+		Log.debug("Sync Task Finished")
+		if state == TaskState.TIMEOUT
+			Log.debug("Sync Task Errored")
+			destroy sd
+		else if state == TaskState.FINISHED
+			onLinecountSynced()
+
+
+class SyncFileTask extends GTask
+	PlayerData pd
+	string filename
+	filterfunc userListener
+	SyncData sd = null
+	int lineCount = -1
+	SyncedFile file = null
+
+	construct(PlayerData pd, string filename, filterfunc userListener, int linecount)
+		this.pd = pd
+		this.userListener = userListener
+		this.filename = filename
+		this.lineCount = linecount
 		
+	override function onStart()
+		if GetLocalPlayer() == pd.p
+			let file = File.open(filename, Mode.READ)
+			for i = 0 to lineCount-1
+				sync_lines[i] = file.read()
+				Log.debug("sync_lines[i]: " + sync_lines[i])
+			file.close()
+		Log.debug("OnLCSync1")
+		sd = new SyncData(pd.p)
+		for i = 0 to lineCount-1
+			Log.debug("read" )
+			let length = getSyncedData().readInt(i+1)
+			Log.debug("length: " + length.toString() + " synlinelength: "  + sync_lines[i].length().toString() )
+			Log.debug("nullTimer " + i.toString())
+			sd.addString(sync_lines[i], length)
+			Log.debug("string added")
+		Log.debug("OnLCSync2")
+		sd.addOnComplete(Filter(() -> getCurrentTask().finish(false)))
+		sd.addOnError(Filter(() -> getCurrentTask().finish(true)))
+		sd.start()
+		Log.debug("OnLCSync3")
+
+	override function onUpdate()
+
+	override function onFinish()
+		Log.debug("Sync Task Finished")
+		if state == TaskState.TIMEOUT
+			Log.debug("Sync Task Errored")
+			destroy sd
+		else if state == TaskState.FINISHED
+			onPlayerfileSynced()
+
+public function getSyncedFile(PlayerData pd, string filename, filterfunc listener)
+	postTask(new SyncLinecountTask(pd, filename, listener))
+
+function onLinecountSynced()
+	let oldtask = getCurrentTask() castTo SyncLinecountTask
+	Log.debug("OnLCSync")
+	let syncedData = oldtask.sd
+	let lineCount = syncedData.readInt(0)
+	
+	Log.debug("OnLCSync: " + lineCount.toString())
+	if lineCount > 0
+		forceTask(new SyncFileTask(oldtask.pd, oldtask.filename, oldtask.userListener, lineCount))
+	else if lineCount == 0
+		Log.debug("No Savefile")
+		oldtask.userListener.evaluate()
+
+trigger trig = CreateTrigger()
+function filterfunc.evaluate()
+	trig..addCondition(this)
+	..evaluate()
+	..clearConditions()
+
+function onPlayerfileSynced()
+	Log.debug("OnPFSyncWrapper")
+	let task = getCurrentTask() castTo SyncFileTask
+
+	task.file = new SyncedFile(task.sd)
+	
+	Log.debug("OnPFSyncWrapper done")
+	task.userListener.evaluate()
+
+public function getSyncFileTask() returns SyncFileTask
+	let task = getCurrentTask()
+	if task instanceof SyncFileTask
+		let stask = task castTo SyncFileTask
+		return stask
+	return null
+				
 public class SyncedFile
 	int size
 	int readpos

@@ -69,7 +69,6 @@ public class PlayerData
 	Playerfile pfile = null
 	PMData pmdata = null
 	Selector selector = null
-	SyncPayload syncPayload = null
 	
 	construct (player p)
 		this.p = p
@@ -199,9 +198,6 @@ public class PlayerData
 			GroupEnumUnitsOfPlayer(ENUM_GROUP, p, Filter(() -> GetFilterUnit().getTypeId() == 'n00A'))
 			for setup from ENUM_GROUP
 				setup.setOwner(builderPlayers.peek().p, true)
-		
-		if not localFilesChecked
-			onPlayerSynced()
 		
 		pData[id] = null
 		rebuildBoard()

@@ -1,4 +1,4 @@
-[0.90i]
+[0.90m]
 [*] added configuration options to smode command
 [*] added turnOn/Off functionality to spinner and powernode
 [*] added midway-point to forest startmaze because it seems to be the hardest part and a noob trap
@@ -9,7 +9,10 @@
 [*] fixed powernode bounce not working properly when jumping on ice
 [*] fixed spider after glaive-spinner in citadel startmaze
 [*] fixed tracks not working after being constructed without rotating
+[*] fixed localfile check freezing at startup
+[*] fixed wrong objects being removed when a minigame ends
 [*] merged bombertarget and teleportertarget into generic "objecttarget" unit
+[*] made data syncing internals more robust
 [*] made powernodes more stable and less prone to tunneling
 [*] further finetune walkable pathing (decreased collision to ground slightly, unwalkable now needs a few ticks to kill)
 [*] more objects are generated via code now, thanks to Kane
