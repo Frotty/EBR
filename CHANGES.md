@@ -3,6 +3,7 @@
 [*] added turnOn/Off functionality to spinner and powernode
 [*] added midway-point to forest startmaze because it seems to be the hardest part and a noob trap
 [*] added new powernode tether that blocks in air only
+[*] added serialization to trees
 [*] fixed duplicate executer procs
 [*] fixed unitcreator creating units without rallypoint
 [*] fixed powernode ground tether speed glitch

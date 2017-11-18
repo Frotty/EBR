@@ -12,7 +12,7 @@ public class Boomerang extends Projectile
 	Escaper caster 
 
 	construct(Escaper caster, vec2 target)
-		super(caster.getPos(), 32, caster.owner, caster.actor.getFacingAngle(), Other.sentinelmissile)
+		super(caster.getPos(), 32, caster.owner, caster.actor.getFacingAngle(), Abilities.sentinelMissile)
 		initialPos = caster.getPos().toVec2()
 		this.caster = caster
 		this.target = target

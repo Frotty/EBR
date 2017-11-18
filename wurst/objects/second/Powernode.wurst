@@ -98,7 +98,7 @@ public class Powernode extends SetupObject
 				for Escaper e from this.getCurrentRegion().getEscapers()
 					if l.ltype == TetherType.BLOCK_ORB
 						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
-							flashEffect(Other.spellbreakerattack, e.orb.pos)
+							flashEffect(Abilities.spellBreakerAttack, e.orb.pos)
 							e.orb.terminate()
 					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
 						if e.pos.z < 24 or l.ltype == TetherType.BOUNCE_AIR or l.ltype == TetherType.BOUNCE_BOTH
@@ -112,11 +112,11 @@ public class Powernode extends SetupObject
 									calBounceDiode(l.target.pos,e, (1.00 + bounciness.get()))	
 								case BOUNCE_AIR
 									if e.pos.z > 10
-										addEffect(Other.dispelmagictarget, e.getPos()).destr()
+										addEffect(Abilities.dispelMagicTarget, e.getPos()).destr()
 										calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
 								case BOUNCE_BOTH
 									if e.pos.z > 20
-										addEffect(Other.dispelmagictarget, e.getPos()).destr()
+										addEffect(Abilities.dispelMagicTarget, e.getPos()).destr()
 									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
 								case BLOCK_ORB
 									

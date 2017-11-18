@@ -13,6 +13,11 @@ public class Tree extends UnitEntity
 		var rdata = this.setCurrentRegion().getTypeSet()
 		dummy = createDestructable(rdata.treeId, pos, GetRandomReal(0,360).fromDeg(), GetRandomReal(0.8,1.2), GetRandomInt(0,2))
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, TREE_INDEX.toString()))
+		return json
+
 	ondestroy
 		dummy.remove()
 

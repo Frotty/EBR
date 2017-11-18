@@ -83,7 +83,7 @@ public class Executer extends StaticBaseObject
 					obj.findAction()
 				case Emode.ONESHOT
 					if not obj.disabled
-						flashEffect(Other.charmtarget, obj.getPos())
+						flashEffect(Abilities.charmTarget, obj.getPos())
 						obj.findAction()
 						obj.disable()
 				case Emode.LEVER

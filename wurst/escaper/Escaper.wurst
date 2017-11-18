@@ -82,7 +82,7 @@ public abstract class Escaper extends UnitEntity
 	function onPick()
 		let id = GetManipulatedItem().getTypeId()
 		if id == 'I010'
-			flashEffect(Other.goldcredit, pos)
+			flashEffect(UI.goldCredit, pos)
 			owner.addGold(15)
 			for pd in escaperPlayers
 				pd.p.addGold(5)
@@ -131,7 +131,7 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
 				else
 					setVel(getRealVel() * -1.75)
-			flashEffect(Other.boltimpact, pos)
+			flashEffect(Abilities.boltImpact, pos)
 			actor.damageTarget(actor, 85)
 		else if alive
 			actor.damageTarget(actor, killer == null ? 105 : 1000)
@@ -414,7 +414,7 @@ public abstract class Escaper extends UnitEntity
 			if not flying
 				addPos(vec3(0,0,1))
 				let angl = pos.angleTo2d(getSpellTargetPos())
-				addEffect(Other.aneucaster, pos).destr()
+				addEffect(Abilities.aneuCaster, pos).destr()
 				if sliding
 					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.5))
 				else
@@ -429,7 +429,7 @@ public abstract class Escaper extends UnitEntity
 				setXY(orb.getPos())
 				slideVelocity = ZERO2
 				setVel(vel * 0.15)
-				flashEffect(Other.polymorphtarget, pos)
+				flashEffect(Abilities.polyMorphTarget, pos)
 				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
@@ -479,9 +479,9 @@ public abstract class Escaper extends UnitEntity
 								target = e
 					if target == null
 						target = this
-					flashEffect(Other.blinkcaster, this.getPos())
+					flashEffect(Abilities.blinkCaster, this.getPos())
 					setPos(target.getPos())
-					flashEffect(Other.blinkcaster, target.getPos())
+					flashEffect(Abilities.blinkCaster, target.getPos())
 				end)
 				
 

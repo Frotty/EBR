@@ -44,7 +44,7 @@ public class MinigameTeleporter extends StaticBaseObject
 				text.tt.center(getPos(), "-|cffffcc00Minigame in progress|r-", 10)
 				inprogress = true
 			else
-				flashEffect(Other.confirmation, pos)
+				flashEffect(UI.confirmation, pos)
 				text.tt.center(getPos(), "Votes - [" + currentPlus.toString() + "/|cffffcc00" + votesNeeded.toString() + "|r]", 10)
 		else
 			currentPlus--

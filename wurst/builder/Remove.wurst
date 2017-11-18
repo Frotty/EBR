@@ -10,7 +10,7 @@ function onRemoveObject()
 		var data = u.getUserData()
 		if data > 0
 			var e = data castTo Entity
-			addEffect(Other.aiamtarget, u.getPos()).destr()
+			addEffect(Abilities.aIamTarget, u.getPos()).destr()
 			e.terminate()
 		u..removeAbility(REMOVE_OBJECT_ID)
 	

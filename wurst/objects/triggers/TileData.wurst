@@ -30,7 +30,7 @@ public class TileData implements Serializable
 		this.pos = realpos
 		this.offset = offset
 		this.owner = owner
-		this.fx = addEffect(Other.vengeancemissile, pos)
+		this.fx = addEffect(Abilities.vengeanceMissile, pos)
 
 	ondestroy
 		if fx != null

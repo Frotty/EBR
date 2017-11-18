@@ -64,7 +64,7 @@ public class Arcanery extends StaticBaseObject
 	function recreateEffect()
 		switch arcMode
 			case SILENCE
-				currentEffect.setFx(Other.silencetarget)
+				currentEffect.setFx(Abilities.silenceTarget)
 			case JUMP
 				currentEffect.setFx("war3mapImported\\BootsofSpeed.mdx")
 			case ORB

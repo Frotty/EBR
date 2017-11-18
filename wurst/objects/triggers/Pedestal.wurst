@@ -54,16 +54,16 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					return
 			// Isnt added yet
 			entities.add(serializable)
-			flashEffect(Other.healtarget, serializable.getPos())
+			flashEffect(Abilities.healTarget, serializable.getPos())
 			if serializable instanceof ItemObject
 				let io = serializable castTo ItemObject
-				effects.put(serializable, io.setup.addEffect(Other.innerfiretarget, "overhead"))
+				effects.put(serializable, io.setup.addEffect(Abilities.innerFireTarget, "overhead"))
 			else if serializable instanceof StaticSetupObject
 				let so = serializable castTo StaticSetupObject
-				effects.put(serializable, so.setup.addEffect(Other.innerfiretarget, "overhead"))
+				effects.put(serializable, so.setup.addEffect(Abilities.innerFireTarget, "overhead"))
 			else if serializable instanceof UnitEntity
 				let ue = serializable castTo UnitEntity
-				effects.put(serializable, ue.actor.addEffect(Other.innerfiretarget, "overhead"))
+				effects.put(serializable, ue.actor.addEffect(Abilities.innerFireTarget, "overhead"))
 
 	function addTile(vec2 tpos, boolean removeIfExists)
 		let targPos = tpos.toTile()

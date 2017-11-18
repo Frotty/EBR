@@ -61,7 +61,7 @@ public class LobbyTeleporter extends StaticBaseObject
 					return
 		else
 			currentPlus--
-		flashEffect(Other.confirmation, pos)
+		flashEffect(UI.confirmation, pos)
 		ftext.tt.center(getPos(), "|cff11cc00Ready|r - [" + currentPlus.toString() + "/|cffffcc00" + votesNeeded.toString() + "|r]", 9)
 
 	function teleport(Escaper e)

@@ -56,7 +56,7 @@ public class Minion extends EscaperSensorSetup
         if targetInvalid
             if (state == MinionState.ATTACK or state == MinionState.FOLLOW)
                 state = MinionState.AFTERTARGET
-                var fearEffect = actor.addEffect(Other.creepsleeptarget, "overhead")
+                var fearEffect = actor.addEffect(Abilities.creepSleepTarget, "overhead")
                 target = null
                 setup.issuePointOrder("move", spawnPoint)
                 doAfter(4., () -> begin
@@ -86,7 +86,7 @@ public class Minion extends EscaperSensorSetup
                     target = escaper
         if not target == null
             state = MinionState.FOLLOW
-            flashEffect(Other.spellbreakerattack, pos)
+            flashEffect(Abilities.spellBreakerAttack, pos)
             setup.issuePointOrder("move", target.pos.toVec2())
 
     function attack()
@@ -96,7 +96,7 @@ public class Minion extends EscaperSensorSetup
             if currentHP > 0
                 let facing = actor.getFacingAngle()
                 let tpos = getPos().toVec2().polarOffset(facing, 80)
-                flashEffect(Other.manaflareboltimpact, tpos)
+                flashEffect(Abilities.manaFlareBoltImpact, tpos)
                 forUnitsInRange(tpos, ATTACK_RANGE, (unit u) -> begin
                     let entity = u.getEntity()
                     if entity != null and entity instanceof Escaper

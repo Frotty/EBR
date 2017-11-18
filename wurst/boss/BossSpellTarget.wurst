@@ -79,7 +79,7 @@ public class BossMissile extends HomingProjectile
 	unit caster = null
 
 	construct(unit caster, Entity target)
-		super(caster.getPos3with(92), MISSILE_RADIUS, owner, pos.angleTo2d(target.getPos()), Other.greendragonmissile)
+		super(caster.getPos3with(92), MISSILE_RADIUS, owner, pos.angleTo2d(target.getPos()), Abilities.greenDragonMissile)
 		this.caster = caster
 		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)

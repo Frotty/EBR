@@ -33,7 +33,7 @@ public class StaticBaseObject extends UnitEntity
 	construct(vec2 pos, unit u, real radius, code action, code cond )
 		super(u)
 		this.setCurrentRegion()
-		noRally = addEffect(Other.questionmark, pos)
+		noRally = addEffect(Objects.questionMark1, pos)
 		actor..addAbility(GHOST_VIS_ID)
 		..addAbility(REMOVE_OBJECT_ID)
 		this.setCurrentRegion()
@@ -56,7 +56,7 @@ public class StaticBaseObject extends UnitEntity
 			enabled = true
 			activate()
 			actor..removeAbility(TURN_ON_ID)..addAbility(TURN_OFF_ID)
-			flashEffect(Other.ancestralspiritcaster, pos)
+			flashEffect(Abilities.ancestralSpiritCaster, pos)
 			if disFx != null
 				disFx.destr()
 		else if enabled
@@ -71,7 +71,7 @@ public class StaticBaseObject extends UnitEntity
 				if GetLocalPlayer() != owner
 					path = ""
 			if GetLocalPlayer() == owner
-				path = Other.sleeptarget
+				path = Abilities.sleepTarget
 			disFx = addEffect(path, pos)
 
 	function onCast()
@@ -89,7 +89,7 @@ public class StaticBaseObject extends UnitEntity
 
 	function addQuestionmark()
 		if noRally == null
-			noRally = addEffect(Other.questionmark, pos)
+			noRally = addEffect(Objects.questionMark1, pos)
 
 	function isActive() returns boolean
 		return active

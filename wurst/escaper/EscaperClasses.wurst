@@ -66,8 +66,8 @@ public class Portal extends FxEntity
 						break
 				if teleport
 					target.setPos(destiny.withZ(target.pos.z))
-					flashEffect(Other.blinkcaster, pos)
-					flashEffect(Other.blinktarget, destiny)
+					flashEffect(Abilities.blinkCaster, pos)
+					flashEffect(Abilities.blinkTarget, destiny)
 					if not es.camlock and es.selectatrevive
 						PanCameraToTimedForPlayer(target.actor.getOwner(), destiny.x, destiny.y, 0.03 )
 
@@ -153,7 +153,7 @@ public class IceEscaper extends Escaper
 			let lvl = actor.getAbilityLevel(id) / 4.
 			if sliding
 				speedFactor = 0.9 + lvl
-				addEffect(Other.impaletargetdust, pos).destr()
+				addEffect(Objects.impaleTargetDust, pos).destr()
 
 public class BlindEscaper extends Escaper
 	
@@ -209,7 +209,7 @@ public class StrongEscaper extends Escaper
 		if not invulnerable
 			super.kill(entity)
 		else
-			addEffect(Other.spellshieldcaster, pos).destr()
+			addEffect(Abilities.spellShieldCaster, pos).destr()
 				
 				
 	override function onCast(int id)
