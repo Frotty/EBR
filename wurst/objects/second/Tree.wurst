@@ -2,6 +2,7 @@ package Tree
 import Entity
 import RegionData
 import ChannelAbilityPreset
+import Json
 
 constant TREE_ID = compiletime(UNIT_ID_GEN.next())
 
