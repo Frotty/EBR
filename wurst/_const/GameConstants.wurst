@@ -1,6 +1,9 @@
 package GameConstants
 import initlater PlayerData
-public string array names
+public string array names = ["Frotty", "FrottyZ", "Feuerblume", "|cff9C94E6[Tester]", "jkkopp", 
+					"fortress_na-f", "Kornblume", "Gamestargamer", "gamestargamer", "mooniii", 
+					"Carlor01",	"Mo0ni[behh]", "metactylic", "nore.abfl", "kleinerhauck",
+					"kari0003", "Kagu", "pockpoong", "waterknight", "sayack" ]
 public string array tags
 public integer array expBounds
 public string array ranks
@@ -9,7 +12,7 @@ public string array ranks
 	Holds constants and IDs related to both Escaper and Builder.
 */
 
-public constant string MAP_VER = "EBR 0.89"
+public constant string MAP_VER = "EBR 0.90"
 
 public constant STAFF_PLAYER = players[14]
 
@@ -43,43 +46,24 @@ public function EBRColor.toColor() returns colorA
 
 
 @init1 function init_GameConstants()
-	names   [0] = "Frotty"
 	tags    [0] = "|cffEF6B21[A]"
-	names   [1] = "FrottyZ"
 	tags    [1] = "|cffEF6B21[A]"
-	names   [2] = "Feuerblume"
 	tags    [2] = "|cff9C94E6[Tester]"
-	names   [3] = "jkkopp"
 	tags    [3] = "|cff9C94E6[Tester]"
-	names   [4] = "fortress_na-f"
 	tags    [4] = "|cff9C94E6[Tester]"
-	names   [5] = "Kornblume"
 	tags    [5] = "|cff9C94E6[Tester]"
-	names   [6] = "Gamestargamer"
 	tags    [6] = "|cff9C94E6[Tester]"
-	names   [7] = "gamestargamer"
 	tags    [7] = "|cff9C94E6[Tester]"
-	names   [8] = "mooniii"
 	tags    [8] = "|cff9C94E6[Tester]"
-	names   [9] = "Carlor01"
 	tags    [9] = "|cff9C94E6[Tester]"
-	names   [10] = "Mo0ni[behh]"
 	tags    [10] = "|cff9C94E6[Tester]"
-	names   [11] = "metactylic"
 	tags    [11] = "|cffB5DE42[Art]"
-	names   [12] = "nore.abfl"
 	tags    [12] = "|cff9C94E6[Tester]"
-	names   [13] = "kleinerhauck"
 	tags    [13] = "|cff9C94E6[Tester]"
-	names	[14] = "kari0003"
 	tags	[14] = "|cffFFE87C[Adept]"
-	names	[15] = "Kagu"
 	tags	[15] = "|cff9C94E6[Tester]"
-	names	[16] = "pockpoong"
 	tags	[16] = "|cff9C94E6[Tester]"
-	names	[17] = "waterknight"
 	tags	[17] = "|cffDE3121[Critter]"
-	names	[18] = "sayack"
 	tags	[18] = "|cff9C94E6[Tester]"
 
 	ranks[0] = "1:Newbie"

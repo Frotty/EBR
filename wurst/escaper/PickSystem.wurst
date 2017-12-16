@@ -13,6 +13,9 @@ constant START = gg_unit_revp_0002.getPos3Real()
 constant PICK = vec3(-6743, 6616,100)
 constant BLINK_ID = 'A001'
 public constant PICK_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
+constant PREV_ID = compiletime(ABIL_ID_GEN.next())
+constant NEXT_ID = compiletime(ABIL_ID_GEN.next())
+constant PICK_ID = compiletime(ABIL_ID_GEN.next())
 
 interface EscaperClsr
 	function create(PlayerData pd)
@@ -162,10 +165,6 @@ public function allow()
 		for i = 0 to GetRandomInt(0, 3)
 			currentView[pd.id] = currentView[pd.id].getNext()
 		currentView[pd.id].showTo(pd)
-
-constant PREV_ID = compiletime(ABIL_ID_GEN.next())
-constant NEXT_ID = compiletime(ABIL_ID_GEN.next())
-constant PICK_ID = compiletime(ABIL_ID_GEN.next())
 
 @objectgen function getSelector()
 	new ChannelAbilityPreset(PREV_ID, 1, true)..presetIcon("BTNprevEffect.blp")..presetButtonPosNormal(0, 2)

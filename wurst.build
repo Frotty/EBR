@@ -1,5 +1,9 @@
-projectName: EBR
-dependencies: ['https://github.com/wurstscript/WurstStdlib2', 'https://github.com/Frotty/Frentity']
-buildMapName: Escape Builder [R] 0.90o
-buildMapFileName: Escape_Builder_R_0.90o
-buildMapAuthor: Frotty
+---
+projectName: "Escape Builder Reloaded"
+dependencies:
+- "https://github.com/wurstscript/wurstStdlib2"
+- "https://github.com/frotty/frentity"
+buildMapData:
+  name: "|cff217199Escape Builder |r[R] 0.90p"
+  fileName: "Escape_Builder_R_0.90p"
+  author: "Frotty"

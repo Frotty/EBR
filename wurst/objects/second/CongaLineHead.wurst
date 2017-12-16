@@ -7,6 +7,10 @@ import Interpolation
 constant int ADD_ID = 'A02Y'
 constant int INC_ID = 'A02Z'
 constant int DEC_ID = 'A030'
+public constant CONGA_STRICT_ID = compiletime(ABIL_ID_GEN.next())
+public constant CONGA_LOOSE_ID = compiletime(ABIL_ID_GEN.next())
+public constant CONGA_PENDULUM_ID = compiletime(ABIL_ID_GEN.next())
+public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 
 public enum CongaMode
 	STRICT
@@ -150,10 +154,6 @@ function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angl = pos2.angleTo(pos1)
 	return vec2(pos1.x - Cos(angl.radians()) * segLength, pos1.y - Sin(angl.radians()) * segLength)
 				
-public constant CONGA_STRICT_ID = compiletime(ABIL_ID_GEN.next())
-public constant CONGA_LOOSE_ID = compiletime(ABIL_ID_GEN.next())
-public constant CONGA_PENDULUM_ID = compiletime(ABIL_ID_GEN.next())
-public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 
 @objectgen function genCongaLineHead()
 	new ChannelAbilityPreset(CONGA_STRICT_ID, 1, true)

@@ -32,8 +32,11 @@ public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
 
 real time = 0.
+trigger neutralDeathTrig
+trigger spellTrig
 
 public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
+public vec2 currentRevivepoint = gg_unit_revp_0002.getPos()
 
 public abstract class Escaper extends UnitEntity	
 	use PhysicsModule
@@ -512,14 +515,9 @@ class OrbProjectile extends Projectile
 	
 	override function update()
 		super.update()
-		if rdata != this.setCurrentRegion()
+		if not done and rdata != this.setCurrentRegion()
 			e.kill(null)
 			terminate()
-
-public vec2 currentRevivepoint = gg_unit_revp_0002.getPos()
-		
-trigger neutralDeathTrig
-trigger spellTrig
 
 function correctRegion()
 	for e from escapers.staticItr()

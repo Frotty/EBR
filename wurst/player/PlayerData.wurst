@@ -14,7 +14,6 @@ import ClosureTimers
 import CodeManager
 import Playerfile
 import PlayerMemoryData
-import SyncWrapper
 import SoundUtils
 
 trigger leaveTrig
@@ -25,6 +24,9 @@ public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 constant questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
+
+public int minutes = 0
+public int seconds = 0
 
 public enum Role
 	BUILDER
@@ -332,6 +334,4 @@ public function checkPlayerLocalFiles()
 		doSequentialSync()
 	end)
 
-public int minutes = 0
-public int seconds = 0
 

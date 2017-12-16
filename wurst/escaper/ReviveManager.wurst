@@ -1,6 +1,8 @@
 package ReviveManager
 import PlayerData
 
+constant TIMER_PERIOD = 0.1
+
 interface ReviveListener
 	function onAllDead()
 
@@ -74,8 +76,6 @@ function update()
 						pod.owner.escaper.revive()
 					destroy pod
 					pods[i] = null
-
-constant TIMER_PERIOD = 0.1
 
 @init2 function init_Revive()
 	CreateTimer().startPeriodic(TIMER_PERIOD, () -> update())

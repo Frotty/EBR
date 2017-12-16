@@ -25,6 +25,11 @@ public constant MENU_OBJECTS_ID = compiletime(ABIL_ID_GEN.next())
 public constant MENU_ENVIROMENTALS_ID = compiletime(ABIL_ID_GEN.next())
 public constant MENU_DECORATIONS_ID = compiletime(ABIL_ID_GEN.next())
 
+constant CHAOS_BUILDER_1 = compiletime(ABIL_ID_GEN.next())
+constant CHAOS_BUILDER_2 = compiletime(ABIL_ID_GEN.next())
+constant CHAOS_BUILDER_3 = compiletime(ABIL_ID_GEN.next())
+constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
+
 /**
 	The builder (banshee) class. Handles switching between builders,
 	auto teleport and all other builder functions.
@@ -143,10 +148,6 @@ function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_CIRCLES_ID or id == BUILDER_OBJECTS_ID or id == BUILDER_ENVIROMENTAL_ID or id == BUILDER_DECORATIONS_ID
 	
-constant CHAOS_BUILDER_1 = compiletime(ABIL_ID_GEN.next())
-constant CHAOS_BUILDER_2 = compiletime(ABIL_ID_GEN.next())
-constant CHAOS_BUILDER_3 = compiletime(ABIL_ID_GEN.next())
-constant CHAOS_BUILDER_4 = compiletime(ABIL_ID_GEN.next())
 
 @objectgen function genBuilder()
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)

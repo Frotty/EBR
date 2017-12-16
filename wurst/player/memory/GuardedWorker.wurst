@@ -1,6 +1,12 @@
 package GuardedWorker
 import LinkedList
 
+let trig = CreateTrigger()
+
+public LinkedList<GTask> taskQueue = new LinkedList<GTask>()
+GTask currentTask = null
+real lastProgress = -1.
+
 public function getCurrentTask() returns GTask
 	return currentTask
 
@@ -40,11 +46,7 @@ public abstract class GTask
 		if currentTask == this
 			currentTask = null
 		
-let trig = CreateTrigger()
 
-public LinkedList<GTask> taskQueue = new LinkedList<GTask>()
-GTask currentTask = null
-real lastProgress = -1.
 
 public function forceTask(GTask task)
 	if currentTask != null

@@ -1,3 +1,8 @@
+[0.90o]
+[*] attempt top fix fog of war vision bug
+[*] fix exceptions for lobby tp
+
+
 [0.90m]
 [*] added configuration options to smode command
 [*] added turnOn/Off functionality to spinner and powernode

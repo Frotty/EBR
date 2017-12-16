@@ -15,6 +15,53 @@ constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlar
 constant int 	LEVER_DUMMY_ID = 'DTlv'
 constant int 	PLATE_DUMMY_ID = 'B001'
 constant real 	EVENT_RADIUS	= 42.
+//ABILITY ID-s
+constant int ONESHOT_ABIL = 'A068'
+constant int REPEATING_ABIL = 'A069'
+constant int LEVER_ABIL = 'A067'
+constant int PRESSURE_ABIL = 'A066'
+
+constant int REACTIVATE_ABIL = 'A06Z'
+
+constant int TERRAIN_CHANGE_ABIL = 'A036'
+constant int TERRAIN_WALKABLE_ABIL = 'A015'
+constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
+constant int TERRAIN_ICE_ABIL = 'A019'
+constant int TERRAIN_UNICE_ABIL = 'A01A'
+constant int TERRAIN_W_O_ABIL = 'A03A'
+constant int TERRAIN_UW_O_ABIL = 'A039'
+constant int TERRAIN_I_O_ABIL = 'A038'
+constant int TERRAIN_UI_O_ABIL = 'A037'
+constant int TERRAIN_INCREASE_H_ABIL = 'A01K'
+constant int TERRAIN_INCREASE_V_ABIL = 'A01M'
+constant int TERRAIN_DECREASE_H_ABIL = 'A01U'
+constant int TERRAIN_DECREASE_V_ABIL = 'A01T'
+constant int TERRAIN_BOOK_ABIL = 'A035'
+constant int TERRAIN_ANTIBOOK_ABIL = 'A06B'
+
+constant int DOOR_OPEN_ABIL = 'A018'
+constant int DOOR_CLOSE_ABIL = 'A01N'
+constant int DOOR_TOGGLE_ABIL = 'A01Q'
+
+constant int MOVE_UNIT_DIRECT_ABIL = 'A04R'
+constant int MOVE_UNIT_PATROL_ABIL = 'A064'
+constant int MOVE_UNIT_STOP_ABIL = 'A065'
+constant int MOVE_UNIT_SELECT_ABIL = 'A06A'
+
+constant int TRAIN_BOOK_ABIL = 'A042'
+
+constant int SPAWN_UNIT_ID = 'A06S'
+constant int TRAIN_BK_ABIL = 'A045'
+constant int TRAIN_SK_ABIL = 'A046'
+constant int TRAIN_BRK_ABIL = 'A048'
+constant int TRAIN_SRK_ABIL = 'A04B'
+constant int TRAIN_TANK_ABIL = 'A04C'
+constant int TRAIN_GLAIVE_ABIL = 'A04W'
+constant int TRAIN_POINTER_ABIL = 'A04D'
+constant int TRAIN_KNOCK_ABIL = 'A07R'
+
+trigger executerUnitLeave = CreateTrigger()
+trigger executerUnitEnter = CreateTrigger()
 
 public enum Emode
 	NONE
@@ -539,54 +586,7 @@ public class Executer extends StaticBaseObject
 
 
 
-//ABILITY ID-s
-constant int ONESHOT_ABIL = 'A068'
-constant int REPEATING_ABIL = 'A069'
-constant int LEVER_ABIL = 'A067'
-constant int PRESSURE_ABIL = 'A066'
 
-constant int REACTIVATE_ABIL = 'A06Z'
-
-constant int TERRAIN_CHANGE_ABIL = 'A036'
-constant int TERRAIN_WALKABLE_ABIL = 'A015'
-constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
-constant int TERRAIN_ICE_ABIL = 'A019'
-constant int TERRAIN_UNICE_ABIL = 'A01A'
-constant int TERRAIN_W_O_ABIL = 'A03A'
-constant int TERRAIN_UW_O_ABIL = 'A039'
-constant int TERRAIN_I_O_ABIL = 'A038'
-constant int TERRAIN_UI_O_ABIL = 'A037'
-constant int TERRAIN_INCREASE_H_ABIL = 'A01K'
-constant int TERRAIN_INCREASE_V_ABIL = 'A01M'
-constant int TERRAIN_DECREASE_H_ABIL = 'A01U'
-constant int TERRAIN_DECREASE_V_ABIL = 'A01T'
-constant int TERRAIN_BOOK_ABIL = 'A035'
-constant int TERRAIN_ANTIBOOK_ABIL = 'A06B'
-
-constant int DOOR_OPEN_ABIL = 'A018'
-constant int DOOR_CLOSE_ABIL = 'A01N'
-constant int DOOR_TOGGLE_ABIL = 'A01Q'
-
-constant int MOVE_UNIT_DIRECT_ABIL = 'A04R'
-constant int MOVE_UNIT_PATROL_ABIL = 'A064'
-constant int MOVE_UNIT_STOP_ABIL = 'A065'
-constant int MOVE_UNIT_SELECT_ABIL = 'A06A'
-
-constant int TRAIN_BOOK_ABIL = 'A042'
-
-constant int SPAWN_UNIT_ID = 'A06S'
-constant int TRAIN_BK_ABIL = 'A045'
-constant int TRAIN_SK_ABIL = 'A046'
-constant int TRAIN_BRK_ABIL = 'A048'
-constant int TRAIN_SRK_ABIL = 'A04B'
-constant int TRAIN_TANK_ABIL = 'A04C'
-constant int TRAIN_GLAIVE_ABIL = 'A04W'
-constant int TRAIN_POINTER_ABIL = 'A04D'
-constant int TRAIN_KNOCK_ABIL = 'A07R'
-
-trigger executerUnitLeave = CreateTrigger()
-trigger executerUnitEnter = CreateTrigger()
-	
 
 @objectgen function genExecuter()
 	new ChannelAbilityPreset(INFO_EXECUTER_ID, 1, TRUE)

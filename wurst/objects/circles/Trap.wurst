@@ -29,6 +29,11 @@ constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTar
 constant real EVENT_RADIUS = 65.
 constant SPECIAL_ID = 'A07V'
 
+constant int STUN_BUFF = 'A06J'
+constant int SPEED_BUFF_NEG = 'A03J'
+constant int SPEED_BUFF_POS = 'A03I'
+constant SFX_COUNT = 9
+
 string array SFX_STRINGS
 enum ABIL
 	KILL
@@ -334,11 +339,6 @@ public class Trap extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, TRAP_INDEX.toString()))
 		return json
 		
-constant int STUN_BUFF = 'A06J'
-constant int SPEED_BUFF_NEG = 'A03J'
-constant int SPEED_BUFF_POS = 'A03I'
-
-constant SFX_COUNT = 9
 
 @init1 function init_Trap()
 	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"

@@ -47,7 +47,8 @@ public class LobbyTeleporter extends StaticBaseObject
 			currentPlus++
 			if currentPlus >= votesNeeded
 				for ep from escaperPlayers.staticItr()
-					teleport(ep.escaper)
+					if ep.escaper != null and ep.escaper.alive
+						teleport(ep.escaper)
 				setRallyPoint(pos.toVec2())
 				if startmaze or (isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_OBJECT_ID))
 					terminate()

@@ -3,6 +3,7 @@ import initlater  PlayerData
 import CodeGenerator
 import FileIO
 import SyncWrapper
+import RegisterEvents
 import PlayerMemoryData
 import Playerfile
 import initlater PickSystem
@@ -19,18 +20,29 @@ public function doSequentialSync()
 
 class CheckPlayerLocalFilesTask extends GTask
 	PlayerData pd
-	SyncData sd
 
 	construct(PlayerData pd)
 		this.pd = pd
 		
 	override function onStart()
 		if not pd.localFilesChecked
-			sd = new SyncData(pd.p)
-			sd.addBool(File.isEnabled())
-			sd.addOnComplete(Filter(() -> getCurrentTask().finish(false)))
-			sd.addOnError(Filter(() -> getCurrentTask().finish(true)))
-			sd.start()
+			let network = new Network(pd.p)
+			Log.info("is Enabled?: " + File.isEnabled().toString())
+			if localPlayer == pd.p
+				let buffer = network.getData()
+				buffer.writeBoolean(File.isEnabled()) // assuming you implement Serializable for your data? easiest way to do it
+
+			network.start((Buffer buffer) -> begin
+				pd.localFilesEnabled = buffer.readBoolean()
+				Log.info("is Enabled Synced?: " + pd.localFilesEnabled.toString())
+				if pd.localFilesEnabled
+					printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pd.p)
+				else
+					printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pd.p)
+
+				pd.localFilesChecked = true
+				getCurrentTask().finish(false)
+			end)
 		else
 			finish(true)
 
@@ -39,25 +51,32 @@ class CheckPlayerLocalFilesTask extends GTask
 	override function onFinish()
 		Log.debug("Sync Task Finished")
 		if state == TaskState.TIMEOUT
-			Log.debug("Sync Task Errored")
+			Log.error("Sync Task Errored")
 		else if state == TaskState.FINISHED
 			Log.debug("Sync Task Finished")
-			onLocalFilesSynced()
 		if taskQueue.getSize() == 0
 			startChoose()
-		destroy sd
 
-function onLocalFilesSynced()
-	let task = (getCurrentTask() castTo CheckPlayerLocalFilesTask)
-	let pdc = task.pd
-	pdc.localFilesEnabled = task.sd.readBool(0)
-	
-	if pdc.localFilesEnabled
-		printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pdc.p)
-	else
-		printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pdc.p)
 
-	pdc.localFilesChecked = true
+init
+	registerPlayerEvent(EVENT_PLAYER_ARROW_DOWN_DOWN, () -> begin
+        let sender = GetTriggerPlayer()
+        let network = new Network(sender)
+
+        if localPlayer == sender
+            let buf = network.getData()
+            buf.writeInt(1)
+            buf.writeReal(3.14)
+            buf.writeBoolean(true)
+            buf.writeString("abcdef")
+
+        network.start((Buffer buffer) -> begin
+            print(buffer.readInt())
+            print(buffer.readReal())
+            print(buffer.readBoolean())
+            print(buffer.readString())
+        end)
+    end)
 
 
 /** Load and sync playerfile */
