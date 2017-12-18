@@ -23,9 +23,6 @@ class SyncFileTask extends GTask
 		let network = new Network(pd.p)
 
 		if localPlayer == pd.p
-			
-
-		if localPlayer == pd.p
 			let buffer = network.getData()
 			let file = File.open(filename, Mode.READ)
 			var e = file.read()
@@ -44,7 +41,6 @@ class SyncFileTask extends GTask
 			task.file = new SyncedFile()..deserialize(buffer)
 			
 			Log.debug("OnPFSyncWrapper done")
-			task.userListener.evaluate()
 			getCurrentTask().finish(false)
 		end)
 
@@ -54,7 +50,9 @@ class SyncFileTask extends GTask
 		Log.debug("Sync Task Finished")
 		if state == TaskState.TIMEOUT
 			Log.error("Sync Task Errored")
-
+		else if state == TaskState.FINISHED
+			userListener.evaluate()
+			
 public function getSyncedFile(PlayerData pd, string filename, filterfunc listener)
 	postTask(new SyncFileTask(pd, filename, listener))
 
@@ -73,7 +71,7 @@ public function getSyncFileTask() returns SyncFileTask
 		return stask
 	return null
 				
-public class SyncedFile implements SyncSerializable
+public class SyncedFile implements BufferSerializable
 	int size
 	int readpos
 	Table stringTable = new Table()
@@ -84,6 +82,7 @@ public class SyncedFile implements SyncSerializable
 		size = 0
 		if buffer != null
 			var str = buffer.readString()
+			Log.debug("buffer.readString(): " + str)
 			while str != null and str.length() > 0
 				if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
 					str = str.substring(0, str.length()-1)

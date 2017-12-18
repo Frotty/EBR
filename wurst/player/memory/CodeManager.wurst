@@ -27,14 +27,12 @@ class CheckPlayerLocalFilesTask extends GTask
 	override function onStart()
 		if not pd.localFilesChecked
 			let network = new Network(pd.p)
-			Log.info("is Enabled?: " + File.isEnabled().toString())
 			if localPlayer == pd.p
 				let buffer = network.getData()
 				buffer.writeBoolean(File.isEnabled()) // assuming you implement Serializable for your data? easiest way to do it
 
 			network.start((Buffer buffer) -> begin
 				pd.localFilesEnabled = buffer.readBoolean()
-				Log.info("is Enabled Synced?: " + pd.localFilesEnabled.toString())
 				if pd.localFilesEnabled
 					printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pd.p)
 				else
@@ -56,27 +54,6 @@ class CheckPlayerLocalFilesTask extends GTask
 			Log.debug("Sync Task Finished")
 		if taskQueue.getSize() == 0
 			startChoose()
-
-
-init
-	registerPlayerEvent(EVENT_PLAYER_ARROW_DOWN_DOWN, () -> begin
-        let sender = GetTriggerPlayer()
-        let network = new Network(sender)
-
-        if localPlayer == sender
-            let buf = network.getData()
-            buf.writeInt(1)
-            buf.writeReal(3.14)
-            buf.writeBoolean(true)
-            buf.writeString("abcdef")
-
-        network.start((Buffer buffer) -> begin
-            print(buffer.readInt())
-            print(buffer.readReal())
-            print(buffer.readBoolean())
-            print(buffer.readString())
-        end)
-    end)
 
 
 /** Load and sync playerfile */

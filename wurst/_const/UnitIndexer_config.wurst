@@ -1,0 +1,4 @@
+package UnitIndexer_config
+
+@config public function shouldIndex(unit u) returns boolean
+	return u.getTypeId() == 'hfoo'

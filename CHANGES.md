@@ -1,7 +1,9 @@
 [0.90o]
-[*] attempt top fix fog of war vision bug
-[*] fix exceptions for lobby tp
-
+[*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)
+[*] fixed exceptions when entering startmaze tp
+[*] fixed desyncs and black screens at start
+[*] fixed escapers not gaining vision of advancing region when their hero is dead
+[*] minor redesign of citadel startmaze to make it more easy and fun
 
 [0.90m]
 [*] added configuration options to smode command

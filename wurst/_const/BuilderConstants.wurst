@@ -116,6 +116,8 @@ public constant COIN_ID = 'I010'
 public constant BOOTS_ID = 'I00M'
 public constant ANKH_ID = 'I00L'
 
+public constant REGION_ADMIN_ID = 'radm'
+
 public int array colorSpells
 
 init

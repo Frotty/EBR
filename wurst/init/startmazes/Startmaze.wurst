@@ -27,7 +27,6 @@ public abstract class Startmaze
 					data.terminate()
 				else
 					vicu.remove()
-		ENUM_GROUP.clear()
 
 		EnumDestructablesInRectAll(rdata.theRect, function killD)
 		EnumItemsInRect(rdata.theRect, null, function deleteKeys)

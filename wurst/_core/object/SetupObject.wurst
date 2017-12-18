@@ -5,6 +5,7 @@ import public ConfigValue
 import public Json
 import public BuilderConstants
 import public initlater RegionData
+import public ClosureForGroups
 import ErrorHandling
 
 /**
