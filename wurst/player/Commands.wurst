@@ -105,10 +105,6 @@ function onCommandChat()
 					pd2.addXp(8965, true)
 				else	
 					pd.addXp(8965, true)
-		case "d"
-			var debuglvl = str.substring(str.indexOf(" ") + 1, str.length()).toInt() castTo Loglevel
-			DEBUG_LEVEL = debuglvl
-			printTimedToPlayer("set debuglvl to: " + (DEBUG_LEVEL castTo int).toString(), 15, p)
 		case "boss"
 			if pd.XP > 2500
 				let units = GetUnitsSelectedAll(p)

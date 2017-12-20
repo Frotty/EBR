@@ -25,7 +25,7 @@ public abstract class SetupObject extends UnitEntity
 		this.setup = setup
 		this.radius = radius
 		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(REMOVE_OBJECT_ID)
-		..setPathing(true)
+		..setPathing(true)..setEntity(this)
 		setup..setEntity(this)
 		..setXY(actor.getPos())
 		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_OBJECT_ID)
@@ -81,6 +81,7 @@ public abstract class SetupObject extends UnitEntity
 		var u = GetOrderTargetUnit()
 		string orderS = OrderId2String(order)
 		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "holdposition" or orderS == "stop"
+			Log.trace("actor mimick move order")
 			if orderS == "smart" and u == null
 				actor.issuePointOrder("move", targetPos+getOffset())
 			else
@@ -93,6 +94,7 @@ public abstract class SetupObject extends UnitEntity
 		else
 			if not orderS == "waterelemental" and not orderS == "roar" and not order == 851974
 				actor.issueImmediateOrder("stop")
+				Log.trace("stopping actor")
 		pos = setup.getPos3Zero()
 		actor..setXY(pos)
 			..setFacing(setup.getFacingAngle())

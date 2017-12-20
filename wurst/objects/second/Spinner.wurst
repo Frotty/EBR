@@ -2,14 +2,7 @@ package Spinner
 import SetupObject
 import Obstacle
 import SpinnerObjects
-
-
-constant INC_ID		  = 'A01F'
-constant DEC_ID		  = 'A01G'	
-constant CINC_ID		  = 'A06K'
-constant CDEC_ID		  = 'A06L'	
-constant SINC_ID		  = 'A06M'
-constant SDEC_ID		  = 'A06N'	
+import LastOrder
 
 class SpinNode
 	SpinNode next = null
@@ -41,13 +34,13 @@ public class Spinner extends SetupObject
 		super(getUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0), this), existing, 0)
 		sleeps = false
 		setup.addAbility(TURN_OFF_ID)
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, SPINNER_ID, pos, angle(0), this), getUnit(owner, SPINNER_ID, pos, angle(0), this), 0)
 		sleeps = false
 		setup.addAbility(TURN_OFF_ID)
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 		
 	override function update()
 		super.update()
@@ -112,17 +105,17 @@ public class Spinner extends SetupObject
 							if ed.owner == owner
 								checkObj(ed)
 				end)
-			case INC_ID
+			case SPIN_INC_SPEED_ID
 				spinSpeed.increment(this, 10 * DEGTORAD)
-			case DEC_ID
+			case SPIN_DEC_SPEED_ID
 				spinSpeed.decrement(this, -10 * DEGTORAD)
-			case CINC_ID
+			case SPIN_COS_INC_ID
 				cosFactor.increment(this, 1)
-			case CDEC_ID
+			case SPIN_COS_DEC_ID
 				cosFactor.decrement(this, 0)
-			case SINC_ID
+			case SPIN_SIN_INC_ID
 				sinFactor.increment(this, 1)
-			case SDEC_ID
+			case SPIN_SIN_DEC_ID
 				sinFactor.decrement(this, 0)
 
 	override function serialize() returns Json

@@ -78,6 +78,10 @@ function checkStaffUnit(unit u)
 			new BigObstacle(u)
 		case SOBS_CITADEL_ID
 			new SmallObstacle(u)
+		case SMALL_GRASS_KILLER_ID
+			new SmallKiller(u)
+		case BIG_GRASS_KILLER_ID
+			new BigKiller(u)
 		case BOBS_DESERT_ID
 			new BigObstacle(u)
 		case SOBS_ICE_ID
@@ -92,6 +96,13 @@ function checkStaffUnit(unit u)
 			new SmallKiller(u)
 		case GLAIVE_KILLER_ID
 			new GlaiveKiller(u)
+		case SOBS_GRASS_ID
+			new SmallObstacle(u)
+		case BOBS_GRASS_ID
+			new BigObstacle(u)
+		case HOBS_GRASS_ID
+			new HighObstacle(u)
+
 
 public function correctKeys()
 	item itm = GetEnumItem()

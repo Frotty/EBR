@@ -13,6 +13,12 @@ public class Knockbacker extends EscaperSensorSetup
 	ConfigValue kforce = new ConfigValue(20, 2.5, "Knockback")
 	ConfigValue damage = new ConfigValue(50, 25, "Damage")
 
+	construct(unit existing)
+		super(existing, 64., 160.)
+		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)
+		..addAbility(DMG_INC_ID)..addAbility(DMG_DEC_ID)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, KNOCKBACKER_ID, facing, 64., 160.)
 		setup..addAbility(KNOCK_INC_ID)..addAbility(KNOCK_DEC_ID)

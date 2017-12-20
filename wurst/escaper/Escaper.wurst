@@ -137,7 +137,7 @@ public abstract class Escaper extends UnitEntity
 			flashEffect(Abilities.boltImpact, pos)
 			actor.damageTarget(actor, 85)
 		else if alive
-			actor.damageTarget(actor, killer == null ? 105 : 1000)
+			actor.damageTarget(actor, killer == null ? 195 : 1000)
 			if not actor.isAliveTrick()
 				alive = false
 				actor.kill()
@@ -419,9 +419,9 @@ public abstract class Escaper extends UnitEntity
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Abilities.aneuCaster, pos).destr()
 				if sliding
-					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.5))
+					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.25))
 				else
-					addVel(vec3(7.75 * angl.cos(), 7.75 * angl.sin(), 11.5))
+					addVel(vec3(7.75 * angl.cos(), 7.75 * angl.sin(), 11.25))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
 			orb.addVel((getRealVel()-walkVel)*0.65)

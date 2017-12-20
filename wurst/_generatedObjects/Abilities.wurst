@@ -23,7 +23,7 @@ import BuilderConstants
         ..presetButtonPosNormal(2, 2)
         ..presetHotkey("C")
         ..presetTargetTypes(Targettype.NONE)
-        ..setHeroAbility(FALSE)
+        ..setHeroAbility(false)
 
     new ChannelAbilityPreset(MAKE_UNIT_VISIBLE_ID, 1, true)
         ..setName("Invisible: Make Unit Visible")
@@ -32,8 +32,7 @@ import BuilderConstants
         ..presetIcon("ReplaceableTextures\\CommandButtons\\BTNScout.blp")
         ..presetButtonPosNormal(2, 2)
         ..presetHotkey("C")
-        ..presetTargetTypes(Targettype.NONE)
-        ..setHeroAbility(FALSE)
+        ..setHeroAbility(false)
 
     new ChannelAbilityPreset(TURN_OFF_ID, 1, true)
         ..setName("C: Turn Off")

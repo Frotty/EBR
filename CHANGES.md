@@ -1,9 +1,11 @@
 [0.90o]
 [*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)
+[*] minor redesign of citadel startmaze to make it easier and more fun
+[*] further increase unwalkable damage and slightly adjust jump height to prevent skipping two tiles with a normal jump
 [*] fixed exceptions when entering startmaze tp
 [*] fixed desyncs and black screens at start
 [*] fixed escapers not gaining vision of advancing region when their hero is dead
-[*] minor redesign of citadel startmaze to make it more easy and fun
+[*] fixed spinner getting stuck when changing visibility
 
 [0.90m]
 [*] added configuration options to smode command

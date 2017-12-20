@@ -53,6 +53,11 @@ public class Arcanery extends StaticBaseObject
 	ExpirationMode expMode = ExpirationMode.RANGE
 	Fx currentEffect 
 
+	construct(unit existing)
+		super(existing.getPos(), existing, 102., function onEnterEv, function is)
+		clearQuestionmark()
+		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
+		recreateEffect()
 
 	construct(vec2 position, player owner)
 		super(position, getUnit(owner, ARCANERY_ID, position, angle(0), this), 102., function onEnterEv, function is)

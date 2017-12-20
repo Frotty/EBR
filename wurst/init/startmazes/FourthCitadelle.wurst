@@ -21,7 +21,7 @@ public class FourthCitadelleMaze extends Startmaze
 		s.checkObj( gg_unit_scik_0216.getEntity())
 		s.checkObj( gg_unit_scik_0217.getEntity())
 		s.spinSpeed.setVal(4. *DEGTORAD)
-		doAfter(0.2,() -> gg_unit_spnr_0147.issuePointOrder("patrol", vec2(-3900, -4604)) )
+		doAfter(0.2,() -> gg_unit_spnr_0161.issuePointOrder("patrol", vec2(-3900, -4604)) )
 		
 
 		s = new Spinner(gg_unit_spnr_0157)
@@ -42,15 +42,13 @@ public class FourthCitadelleMaze extends Startmaze
 
 		s = new Spinner(gg_unit_spnr_0129)
 		s.sinFactor.setVal(0)
-		s.checkObj( gg_unit_glve_0156.getEntity())
-		s.setup.issueImmediateOrder("fingerofdeath")
+		s.checkObj(gg_unit_glve_0156.getEntity())
 		s.spinSpeed.setVal(4. *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0130)
 		s.checkObj( gg_unit_glve_0158.getEntity())
 		s.checkObj( gg_unit_glve_0159.getEntity())
 		s.checkObj( gg_unit_glve_0160.getEntity())
-		s.setup.issueImmediateOrder("fingerofdeath")
 		s.spinSpeed.setVal(1.25 *DEGTORAD)
 			
 		gg_unit_scik_0263.issuePointOrder("patrol", vec2(-2765, -6283))

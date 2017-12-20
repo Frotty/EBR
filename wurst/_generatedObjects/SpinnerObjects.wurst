@@ -2,12 +2,22 @@ package SpinnerObjects
 import BuilderConstants
 import ChannelAbilityPreset
 
+// Frontpage spells
 public constant SPIN_ADD_SINGLE_ID = compiletime(ABIL_ID_GEN.next())
 public constant SPIN_ADD_GROUP_ID = compiletime(ABIL_ID_GEN.next())
 
+// Config Spellbook
+public constant SPIN_CONFIG_SPELLBOOK_ID = compiletime(ABIL_ID_GEN.next())	
+public constant SPIN_INC_SPEED_ID = compiletime(ABIL_ID_GEN.next())
+public constant SPIN_DEC_SPEED_ID = compiletime(ABIL_ID_GEN.next())	
+public constant SPIN_COS_INC_ID = compiletime(ABIL_ID_GEN.next())	
+public constant SPIN_COS_DEC_ID = compiletime(ABIL_ID_GEN.next())	
+public constant SPIN_SIN_INC_ID = compiletime(ABIL_ID_GEN.next())	
+public constant SPIN_SIN_DEC_ID = compiletime(ABIL_ID_GEN.next())		
+
 
 @objectgen function genSpinner()		
-	new UnitDefinition(SPINNER_ID, 'hfoo')  
+	new UnitDefinition(SPINNER_ID, 'ewsp')  
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
@@ -23,23 +33,23 @@ public constant SPIN_ADD_GROUP_ID = compiletime(ABIL_ID_GEN.next())
 	..setMovementType(MovementType.Foot)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar('A03H') + "," +
-	int2fourchar('A04M') + "," +
-	int2fourchar('A01B') + "," +
-	int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setStructuresBuilt("")
+	..setNormalAbilities(int2fourchar('A01H') + "," + 
+		int2fourchar('A01E') + "," +
+		int2fourchar(SPIN_ADD_SINGLE_ID) + "," +
+		int2fourchar(SPIN_ADD_GROUP_ID) + "," +
+		int2fourchar(SPIN_CONFIG_SPELLBOOK_ID) + "," +
+		int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+		int2fourchar(REMOVE_OBJECT_ID) + "," +
+		int2fourchar(GHOST_VIS_ID) + "," +
+		int2fourchar(INVULNERABILITY_ID))
 	..setHotkey("S")
-	..setName("|cff949494Spinner ")
+	..setName("|cff949494Spinner")
 	..setTooltipBasic("|cffFFCC00Build |cff949494Spinner [S]")
 	..setTooltipExtended("Spins the selected units around itself in a circular motion." +
 	"\nThe spinner itself can also be moved and controlled while spinning units.")
 	..setUpgradesUsed("")
 	..setBuildTime(1)
-	..setUnitClassification("ancient")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
@@ -75,3 +85,69 @@ public constant SPIN_ADD_GROUP_ID = compiletime(ABIL_ID_GEN.next())
 	..presetButtonPosNormal(0, 1)
 	..presetAreaofEffect((int lvl) -> 300.0)
 	..presetHotkey("D")
+
+	new ChannelAbilityPreset(SPIN_INC_SPEED_ID, 1, true)
+	..setName("Spinner: Increase Spin Speed")
+	..presetIcon("BTNincreaseAttackSpeed.blp")
+	..setTooltipNormal(1, "|cff3ABD52Increase|r Spin Speed [|cffFFCC00A|r]")
+	..setTooltipNormalExtended(1,  "Increases the speed with which the targets are spun.")
+	..presetButtonPosNormal(0, 0)
+	..presetHotkey("Q")
+
+	new ChannelAbilityPreset(SPIN_DEC_SPEED_ID, 1, true)
+	..setName("Spinner: Decrease Spin Speed")
+	..presetIcon("BTNdecreaseAttackSpeed.blp")
+	..setTooltipNormal(1, "|cff3ABD52Decrease|r Spin Speed [|cffFFCC00W|r]")
+	..setTooltipNormalExtended(1,  "Decreases the speed with which the targets are spun.")
+	..presetButtonPosNormal(1, 0)
+	..presetHotkey("W")
+
+	new ChannelAbilityPreset(SPIN_COS_INC_ID, 1, true)
+	..setName("Spinner: Increase Cos Factor")
+	..presetIcon("BTNIncreaseSin.blp")
+	..setTooltipNormal(1, "|cff3ABD52Increase|r Cos Factor [|cffFFCC00Q|r]")
+	..setTooltipNormalExtended(1, "Increases the factor of cos when calculation the spinning point.\r\nThis allows for elliptical movement.")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("Q")
+
+	new ChannelAbilityPreset(SPIN_COS_DEC_ID, 1, true)
+	..setName("Spinner: Decrease Cos Factor")
+	..presetIcon("BTNDecreaseSin.blp")
+	..setTooltipNormal(1, "|cff3ABD52Decrease|r Cos Factor [|cffFFCC00Q|r]")
+	..setTooltipNormalExtended(1, "Decreases the factor of cos when calculation the spinning point.\r\nThis allows for elliptical movement.")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("Q")
+
+	new ChannelAbilityPreset(SPIN_SIN_INC_ID, 1, true)
+	..setName("Spinner: Increase Sin Factor")
+	..presetIcon("BTNIncreaseCos.blp")
+	..setTooltipNormal(1, "|cff3ABD52Increase|r Sin Factor [|cffFFCC00Q|r]")
+	..setTooltipNormalExtended(1, "Increases the factor of sin when calculation the spinning point.\r\nThis allows for elliptical movement.")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("Q")
+
+	new ChannelAbilityPreset(SPIN_SIN_DEC_ID, 1, true)
+	..setName("Spinner: Decrease Sin Factor")
+	..presetIcon("BTNDecreaseCos.blp")
+	..setTooltipNormal(1, "|cff3ABD52Decrease|r Sin Factor [|cffFFCC00Q|r]")
+	..setTooltipNormalExtended(1, "Decreases the factor of sin when calculation the spinning point.\r\nThis allows for elliptical movement.")
+	..presetButtonPosNormal(2, 0)
+	..presetHotkey("Q")
+
+	new AbilityDefinitionSpellBook(SPIN_CONFIG_SPELLBOOK_ID)
+	..setName("Spinner: Spin Options")
+	..presetIcon("BTNSpinOptions.blp")
+	..setMaximumSpells(1, 6)
+	..setMinimumSpells(1, 6)
+	..setSpellList(1, int2fourchar(SPIN_SIN_INC_ID) + "," +
+		int2fourchar(SPIN_SIN_DEC_ID) + "," +
+		int2fourchar(SPIN_COS_INC_ID) + "," +
+		int2fourchar(SPIN_COS_DEC_ID) + "," +
+		int2fourchar(SPIN_INC_SPEED_ID) + "," +
+		int2fourchar(SPIN_DEC_SPEED_ID))
+	..setItemAbility(false)
+	..presetButtonPosNormal(3, 0)
+	..presetHotkey("R")
+	..setTooltipNormal(1, "Open |cffFFAD29Spin Options |r[|cffFFCC00R|r]")
+	..setTooltipNormalExtended(1, "Lets you change properties of the spinning process like speed and form.")
+	..setSharedSpellCooldown(1, false)
