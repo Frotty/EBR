@@ -3,22 +3,11 @@ import BaseObject
 import Escaper
 import ObjectTarget
 import Builder
+import WaypointObjects
+import ClosureTimers
 
-constant INFO_WAYPOINT_ID = compiletime(ABIL_ID_GEN.next())
-constant AND_CONNECTION_ID = compiletime(ABIL_ID_GEN.next())
-constant DECREASE_DELAY_ID = compiletime(ABIL_ID_GEN.next())
-constant INCREASE_DELAY_ID = compiletime(ABIL_ID_GEN.next())
-constant NO_WISPS_ID = compiletime(ABIL_ID_GEN.next())
 constant INTERVAL = .25
-constant real 	EVENT_RADIUS	= 32.
-
-class DelayData
-	UnitEntity entity
-	vec2 pos
-	
-	construct(UnitEntity k, vec2 t)
-		entity = k
-		pos = t
+constant EVENT_RADIUS = 32.
 
 public class Waypoint extends StaticBaseObject
 	real delay = 0.
@@ -29,22 +18,19 @@ public class Waypoint extends StaticBaseObject
 	boolean ready = false
 	
 	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		actor..addAbility(TURN_OFF_ID)
+		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, null)
 
 	construct(unit existing)
-		super( existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, CODE_NULL )
-		actor..addAbility(TURN_OFF_ID)
+		super( existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, null)
 
 	function orderLogicMove()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius+48., Condition(() -> true))
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius+48., null)
 		for u from ENUM_GROUP
 			let data = u.getEntity() castTo UnitEntity
 			if owner == data.owner and not data instanceof Escaper and not data instanceof Builder and not data instanceof StaticBaseObject
 				if data instanceof SetupObject
 					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
-					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
 				else
 					data.actor.issuePointOrder("move", rallyPos.toVec2())
 
@@ -67,13 +53,12 @@ public class Waypoint extends StaticBaseObject
 						andPartner.ready = false
 						ready = false
 			else if delay < INTERVAL
-				if data instanceof SetupObject
+				if data instanceof SetupObject and (data castTo SetupObject).setup != (data castTo SetupObject).actor
 					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
-					(data castTo SetupObject).actor.issuePointOrder("move", rallyPos.toVec2())
 				else
 					data.actor.issuePointOrder("move", rallyPos.toVec2())
 			else
-				getTimer()..start(delay, function Waypoint.delayMove)..setData(new DelayData(data, vec2(rallyPos.x,rallyPos.y))castTo int)
+				doAfter(delay, () -> delayMove(data, rallyPos.toVec2()))
 
 	override function onCast()
 		super.onCast()
@@ -107,16 +92,13 @@ public class Waypoint extends StaticBaseObject
 				else
 					andPartner = null
 	
-	static function delayMove()
-		var t = GetExpiredTimer()
-		DelayData data = t.getData() castTo DelayData
-		if data.entity instanceof SetupObject
-			(data.entity castTo SetupObject).setup.issuePointOrder("move", data.pos)
-			(data.entity castTo SetupObject).actor.issuePointOrder("move", data.pos)
+	static function delayMove(UnitEntity entity, vec2 pos)
+		Log.info("Delay move")
+		if entity instanceof SetupObject
+			(entity castTo SetupObject).setup.issuePointOrder("move", pos)
+			Log.info("Delay setup moved")
 		else
-			data.entity.actor.issuePointOrder("move", data.pos)
-		destroy data
-		t.release()
+			entity.actor.issuePointOrder("move", pos)
 
 	static function onInRange()
 		unit source = GetTriggeringTrigger().getSource()
@@ -128,89 +110,3 @@ public class Waypoint extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, WAYPOINT_INDEX.toString()))
 		return json
 
-
-@objectgen function genWaypoint()
-	new ChannelAbilityPreset(INFO_WAYPOINT_ID, 1, TRUE)
-	..setName("Information: Waypoint")
-	..presetTooltipNormal((int lvl) -> "Information: Waypoint")
-	..presetTooltipNormalExtended((int lvl) -> "Orders an Escape Killer to go to the Rallypoint when entering")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
-	..presetButtonPosNormal(0, 0)
-	..presetTargetTypes(Targettype.PASSIVE)
-	..setHeroAbility(FALSE)
-
-	new ChannelAbilityPreset(AND_CONNECTION_ID, 1, TRUE)
-	..setName("Waypoint: And Connection")
-	..presetTooltipNormal((int lvl) -> "|cffFFCC00And |rconnection [|cffFFCC00E|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Links this waypoint to another one." +
-	"This waypoint will only trigger when the linked one has been triggered as well")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNAnd.blp")
-	..presetButtonPosNormal(2, 0)
-	..presetHotkey("E")
-	..presetTargetTypes(Targettype.UNIT)
-	..presetTargetsAllowed((int lvl) -> "allies,invulnerable,notself")
-	..presetCastRange((int lvl) -> 2500)
-	..setHeroAbility(FALSE)
-
-	new ChannelAbilityPreset(DECREASE_DELAY_ID, 1, TRUE)
-	..setName("Waypoint: Decrease Delay")
-	..presetTooltipNormal((int lvl) -> "Decreases the Orderdelay [|cffFFCC00F|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Decreasing the orderdelay makes the waypoint delay the walkorder." +
-	"\nThis means the unit waits the given time before walking to the selected position(rallypoint)." +
-	"\n0 Delay means instant.")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
-	..presetButtonPosNormal(1, 1)
-	..presetHotkey("F")
-	..presetTargetTypes(Targettype.NONE)
-	..setHeroAbility(FALSE)
-
-	new ChannelAbilityPreset(INCREASE_DELAY_ID, 1, TRUE)
-	..setName("Waypoint: Increase Delay")
-	..presetTooltipNormal((int lvl) -> "Increases the Orderdelay [|cffFFCC00R|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Increasing the orderdelay makes the waypoint delay the walkorder." +
-	"\nThis means the unit waits the given time before walking to the selected position(rallypoint).")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
-	..presetButtonPosNormal(1, 0)
-	..presetHotkey("R")
-	..presetTargetTypes(Targettype.NONE)
-	..setHeroAbility(FALSE)
-
-	new ChannelAbilityPreset(NO_WISPS_ID, 1, TRUE)
-	..setName("Waypoint: No Wisps")
-	..presetTooltipNormal((int lvl) -> "|cffffcc00Wisps|r [|cffFFCC00X|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Changes the mode wether to move Wisps or not.")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNWisp.blp")
-	..presetButtonPosNormal(0, 2)
-	..presetHotkey("X")
-	..presetTargetTypes(Targettype.NONE)
-	..setHeroAbility(FALSE)
-		
-	new BuildingDefinition(WAYPOINT_ID, 'ncop')
-	..setName("|cffFF7B29Waypoint")
-	..setHotkey("R")
-	..setTooltipBasic("|cffFFCC00Build |cffFF7B29Waypoint [R]")
-	..setTooltipExtended("Orders Escaperkillers to move to the Rallypoint." +
-	"\nUsefull if you want your units not only to go a straight line.")
-	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWaypoint.blp")
-	..setNormalAbilities(int2fourchar(INFO_WAYPOINT_ID) + "," +
-	int2fourchar(AND_CONNECTION_ID) + "," +
-	int2fourchar(DECREASE_DELAY_ID) + "," +
-	int2fourchar(INCREASE_DELAY_ID) + "," +
-	int2fourchar(NO_WISPS_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
-	..setButtonPositionX(3)
-	..setButtonPositionY(0)
-	..setTintingColorGreen(128)
-	..setTintingColorBlue(0)
-	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)
-	..setBuildTime(1)
-	..setCollisionSize(0)
-	..setScalingValue(0.8)
-	..setSelectionScale(2.2)
-	..setPathingMap("none")
-	..setUnitClassification("ancient,standon")
-	..setHideMinimapDisplay(true)

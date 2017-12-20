@@ -33,7 +33,7 @@ public class Spinner extends SetupObject
 	construct(unit existing)
 		super(getUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0), this), existing, 0)
 		sleeps = false
-		setup.addAbility(TURN_OFF_ID)
+		setup..addAbility(TURN_OFF_ID)..addAbility(GHOST_INVIS_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
 
 	construct(vec2 pos, player owner)
