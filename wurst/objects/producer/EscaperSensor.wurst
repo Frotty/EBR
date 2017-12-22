@@ -24,8 +24,7 @@ public class EscaperSensorSetup extends SetupObject
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 		
 	construct(unit pactor, real radius, real sensorHeight)
-		super(pactor..addAbility(LOCUST_ID), pactor, radius)
-		pactor.removeAbility(GHOST_INVIS_ID)
+		super(getLocustUnit(pactor.getOwner(), pactor.getTypeId(), pactor.getPos3Zero(), pactor.getFacingAngle(), this), pactor, radius)
 		this.sensorHeight = sensorHeight
 		setXY(pactor.getPos().toVec3() + vec2(0.01, 0))
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))

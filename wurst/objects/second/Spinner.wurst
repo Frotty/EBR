@@ -2,7 +2,6 @@ package Spinner
 import SetupObject
 import Obstacle
 import SpinnerObjects
-import LastOrder
 
 class SpinNode
 	SpinNode next = null

@@ -16,8 +16,7 @@ public class Playerfile
 
 	function load(SyncedFile file)
 		if pmDatas.getSize() > 0
-			destroy pmDatas
-			pmDatas = new LinkedList<PMData>()
+			pmDatas.clear()
 		
 		while file.hasNext()
 			let pmd = new PMData()

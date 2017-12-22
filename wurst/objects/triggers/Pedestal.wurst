@@ -144,7 +144,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					if obj != null
 						obj.deserialize(listparser.output)
 					else
-						print("invalid data")
+						Log.debug("couldn't fine serializable type")
 					listparser.output.reset()
 					cb.doStep()
 				end)
@@ -269,8 +269,12 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			destroy big
 			actor.unpause()
 		end)
+		print("" + foo().toString())
 		
-		
+	function foo() returns int
+		print("ofoo")
+		let b = GetBooleanAnd(true, true)
+		return b ? 0 : 1
 
 	override function onCast()
 		super.onCast()

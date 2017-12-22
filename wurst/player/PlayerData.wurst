@@ -52,6 +52,7 @@ public class PlayerData
 	Title title
 	Escaper escaper
 	Builder builder
+	UnitEntity array[4] tmods
 
 	int XP = 40
 	effect lvlfx = null
@@ -64,7 +65,6 @@ public class PlayerData
 
 	real zCam = 1600.
 	
-	TerrainModder tmod 
 	UnitProducer prod
 	RevivePointModifier revmod
 
@@ -319,10 +319,10 @@ public function initPlayers()
 	TimerStart(CreateTimer(), 1., true, function setTime)
 	
 	for pd in builderPlayers
-		new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
-		new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
-		new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
-		new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
+		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
+		pd.tmods[1] = new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
+		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
+		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
 		pd.builder = new Builder( pd.p )
 		UnitAddItemById(pd.builder.actor,'I001')
 		UnitAddItemById(pd.builder.actor,'I002')

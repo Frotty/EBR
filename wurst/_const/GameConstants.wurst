@@ -1,12 +1,6 @@
 package GameConstants
 import initlater PlayerData
-public string array names = ["Frotty", "FrottyZ", "Feuerblume", "|cff9C94E6[Tester]", "jkkopp", 
-					"fortress_na-f", "Kornblume", "Gamestargamer", "gamestargamer", "mooniii", 
-					"Carlor01",	"Mo0ni[behh]", "metactylic", "nore.abfl", "kleinerhauck",
-					"kari0003", "Kagu", "pockpoong", "waterknight", "sayack" ]
-public string array tags
-public integer array expBounds
-public string array ranks
+
 
 /**
 	Holds constants and IDs related to both Escaper and Builder.
@@ -21,6 +15,28 @@ public function isBuilder(player p) returns boolean
 
 public function isEscaper(player p) returns boolean
 	return pData[p.getId()].role == Role.ESCAPER
+
+public constant names = ["Frotty", "FrottyZ", "Feuerblume", "|cff9C94E6[Tester]", "jkkopp", 
+					"fortress_na-f", "Kornblume", "Gamestargamer", "gamestargamer", "mooniii", 
+					"Carlor01",	"Mo0ni[behh]", "metactylic", "nore.abfl", "kleinerhauck",
+					"kari0003", "Kagu", "pockpoong", "waterknight", "sayack"]
+
+public constant tags = ["|cffEF6B21[A]", "|cffEF6B21[A]", "|cff9C94E6[Tester]", "|cff9C94E6[Tester]", "|cff9C94E6[Tester]",
+						"|cff9C94E6[Tester]", "|cff9C94E6[Tester]", "|cff9C94E6[Tester]", "|cff9C94E6[Tester]", "|cff9C94E6[Tester]",
+						"|cff9C94E6[Tester]", "|cffB5DE42[Art]", "|cff9C94E6[Tester]", "|cff9C94E6[Tester]", "|cffFFE87C[Adept]",
+						"|cff9C94E6[Tester]", "|cff9C94E6[Tester]", "|cffDE3121[Critter]", "|cff9C94E6[Tester]"]
+
+public constant expBounds = [100, 250, 400, 1250, 2750,
+							5000, 9500, 15500, 20000, 25000,
+							40000, 75000, 150000, 200000]
+
+public constant ranks = ["1:Newbie", "|cffBDBDBD2:Beginner", "|cffFFE6AD3:Novice", "|cffFFD64A4:Rookie", "|cffFFCE195:Superior",
+							"|cffFFA53A6:Major", "7:Pro", "|cff5A8CDE8:Expert", "|cff087BD69:Craver",
+							"|cffD6292110|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r",
+							"|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r",
+							"|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r",
+							"|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r",
+							"|cff94949414: Amazing-|cff949CEF"]
 	
 public enum EBRColor
 	WHITE
@@ -43,55 +59,4 @@ public function EBRColor.toColor() returns colorA
 			return COLOR_WHITE
 		default
 			return playercolors[this castTo int - 1].withAlpha(255)
-
-
-@init1 function init_GameConstants()
-	tags    [0] = "|cffEF6B21[A]"
-	tags    [1] = "|cffEF6B21[A]"
-	tags    [2] = "|cff9C94E6[Tester]"
-	tags    [3] = "|cff9C94E6[Tester]"
-	tags    [4] = "|cff9C94E6[Tester]"
-	tags    [5] = "|cff9C94E6[Tester]"
-	tags    [6] = "|cff9C94E6[Tester]"
-	tags    [7] = "|cff9C94E6[Tester]"
-	tags    [8] = "|cff9C94E6[Tester]"
-	tags    [9] = "|cff9C94E6[Tester]"
-	tags    [10] = "|cff9C94E6[Tester]"
-	tags    [11] = "|cffB5DE42[Art]"
-	tags    [12] = "|cff9C94E6[Tester]"
-	tags    [13] = "|cff9C94E6[Tester]"
-	tags	[14] = "|cffFFE87C[Adept]"
-	tags	[15] = "|cff9C94E6[Tester]"
-	tags	[16] = "|cff9C94E6[Tester]"
-	tags	[17] = "|cffDE3121[Critter]"
-	tags	[18] = "|cff9C94E6[Tester]"
-
-	ranks[0] = "1:Newbie"
-	expBounds[0] = 100
-	ranks[1] = "|cffBDBDBD2:Beginner"
-	expBounds[1] = 250
-	ranks[2] = "|cffFFE6AD3:Novice"
-	expBounds[2] = 400
-	ranks[3] = "|cffFFD64A4:Rookie"
-	expBounds[3] = 1250
-	ranks[4] = "|cffFFCE195:Superior"
-	expBounds[4] = 2750
-	ranks[5] = "|cffFFA53A6:Major"
-	expBounds[5] = 5000
-	ranks[6] = "7:Pro"
-	expBounds[6] = 9500
-	ranks[7] = "|cff5A8CDE8:Expert"
-	expBounds[7] = 15500
-	ranks[8] = "|cff087BD69:Craver"
-	expBounds[8] = 20000
-	ranks[9] = "|cffD6292110|r|cffB93339:|r|cff9C3D51A|r|cff7F4769d|r|cff625181d|r|cff455B99i|r|cff2865B1c|r|cff0B6FC9t|r"
-	expBounds[9] = 25000
-	ranks[10] = "|cffD629211|r|cffB743270|r|cff985D2D:|r|cff797733L|r|cff5A9139e|r|cff3BAB3Fg|r|cff26A182e|r|cff1C9BA2n|r|cff1295C2d|r"
-	expBounds[10] = 40000
-	ranks[11] = "|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r"
-	expBounds[11] = 75000
-	ranks[12] = "|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r"
-	expBounds[12] = 150000
-	ranks[13] = "|cff94949414: Amazing-|cff949CEF"
-	expBounds[13] = 200000
 

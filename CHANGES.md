@@ -3,12 +3,12 @@
 [*] minor redesign of citadel startmaze to make it easier and more fun, also hide spinners
 [*] minor redesign of grass startmaze mainly fixing some possible skips
 [*] further increase unwalkable damage and slightly adjust jump height to prevent skipping two tiles with a normal jump
-[*] startmaze units no longer get duplicated, reducing amount of units on the map and therefore improving performance on low end clients
 [*] slightly increase small obstacle kill range
 [*] fixed exceptions when entering startmaze tp
 [*] fixed desyncs and black screens at start
 [*] fixed escapers not gaining vision of advancing region when their hero is dead
 [*] fixed spinner and conga getting stuck when changing visibility
+[*] fixed a few jump related exploits to skip 2 tiles
 
 [0.90m]
 [*] added configuration options to smode command

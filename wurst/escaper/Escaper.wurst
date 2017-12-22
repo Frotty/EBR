@@ -137,7 +137,7 @@ public abstract class Escaper extends UnitEntity
 			flashEffect(Abilities.boltImpact, pos)
 			actor.damageTarget(actor, 85)
 		else if alive
-			actor.damageTarget(actor, killer == null ? 195 : 1000)
+			actor.damageTarget(actor, killer == null ? 185 : 1000)
 			if not actor.isAliveTrick()
 				alive = false
 				actor.kill()
@@ -168,7 +168,9 @@ public abstract class Escaper extends UnitEntity
 				vel.y = 0
 				slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			vel.z = -vel.z*1.25
-			return
+		else if GetTerrainType(pos.x, pos.y) == this.getCurrentRegion().getTypeSet().unwalkableId
+			actor.damageTarget(actor, 1000)
+			kill(null)
 		actor.setPropWindow(60.)
 		pos.z = .1
 		vel *= 0.175
@@ -414,7 +416,7 @@ public abstract class Escaper extends UnitEntity
 	function onCast(int id)
 		actor.setAnimation("spell")
 		if id == JUMP_SPELL
-			if not flying
+			if not flying and not onUnwalkable
 				addPos(vec3(0,0,1))
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Abilities.aneuCaster, pos).destr()

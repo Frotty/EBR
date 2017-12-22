@@ -62,7 +62,8 @@ function filterfunc.evaluate()
 	..evaluate()
 	..clearConditions()
 
-	
+interface B
+interface A extends B
 
 public function getSyncFileTask() returns SyncFileTask
 	let task = getCurrentTask()

@@ -34,7 +34,6 @@ public class FourthCitadelleMaze extends Startmaze
 		s.checkObj( gg_unit_scik_0277.getEntity())
 		s.checkObj( gg_unit_scik_0278.getEntity())
 		s.spinSpeed.setVal(1.5 *DEGTORAD)
-		
 
 		s = new Spinner(gg_unit_spnr_0162)
 		s.checkObj( gg_unit_bcik_0220.getEntity())
