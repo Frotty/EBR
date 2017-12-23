@@ -33,7 +33,7 @@ public class Faceless extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, KILL_RADIUS, KILL_RADIUS)
-		sleeps = false
+		setup()
 		
 	function setup()
 		setup..setVertexColor(colorA(55,55,55,55))..setScale(0.5)

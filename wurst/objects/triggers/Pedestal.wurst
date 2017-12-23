@@ -95,29 +95,31 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		if task.state == TaskState.FINISHED
 			ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
 			ref.syncingDone = true
-			if task.file.size <= 0
-				// // file empty
-				// if not pd.syncPayload.fileName.startsWith("Logs\\")
-				// 	nullTimer(() -> getSyncedFile(pd, "Logs\\" + pd.syncPayload.fileName, Filter(() -> onLoadSlotSynced())))
-				// return
-			var compressedString = new BigString()
-			var buildString = task.file.read()
-			while buildString != null
-				compressedString.addString(buildString)
-				buildString = task.file.read()
-			printLog(Loglevel.DEBUG, "Reconstructed")
-			compressedString.debugPrint()
-			serializeOrigin = ref.pos.toVec2().toTile().toVec3()
-			decompress(compressedString, (PayloadCallback cb1) -> begin
-				printLog(Loglevel.DEBUG, "on finish decompress")
-				ref.parser.setInput(cb1.customData castTo BigString)
-				ref.parser.parse((PayloadCallback cb2) -> begin
-					printLog(Loglevel.DEBUG, "on finish parse")
-					ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser, (PayloadCallback cb3) -> begin
-						ref.loadEntities(ref.listparser.outputList)
+			if task.file.size > 0
+				var compressedString = new BigString()
+				var buildString = task.file.read()
+				while buildString != null
+					compressedString.addString(buildString)
+					buildString = task.file.read()
+				printLog(Loglevel.DEBUG, "Reconstructed")
+				compressedString.debugPrint()
+				serializeOrigin = ref.pos.toVec2().toTile().toVec3()
+				decompress(compressedString, (PayloadCallback cb1) -> begin
+					printLog(Loglevel.DEBUG, "on finish decompress")
+					ref.parser.setInput(cb1.customData castTo BigString)
+					ref.parser.parse((PayloadCallback cb2) -> begin
+						printLog(Loglevel.DEBUG, "on finish parse")
+						if(ref.parser.output.hasKey(ENTITIES_KEY))
+							ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser, (PayloadCallback cb3) -> begin
+								ref.loadEntities(ref.listparser.outputList)
+							end)
+						else if(ref.parser.output.hasKey(TILES_KEY))
+							ref.parser.output.getStringList(TILES_KEY, ref.listparser, (PayloadCallback cb) -> begin
+								printLog(Loglevel.DEBUG, "load tiles1")
+								ref.loadTiles((cb.customData castTo JsonParser).outputList)
+							end)
 					end)
 				end)
-			end)
 		else
 			printLog(Loglevel.DEBUG, "load failed")
 			ref.ttag.tt..center(ref.pos, "|cffFFBD21load failed!", 10)
@@ -152,10 +154,15 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				ttag.tt..center(pos, "|cff0884CEEntites loaded!", 10)
 				printLog(Loglevel.DEBUG, "entities loaded")
 				doAfter(0.5, () -> begin
-					parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
-						printLog(Loglevel.DEBUG, "load tiles1")
-						loadTiles((cb.customData castTo JsonParser).outputList)
-					end)
+					if parser.output.hasKey(TILES_KEY)
+						parser.output.getStringList(TILES_KEY, listparser, (PayloadCallback cb) -> begin
+							printLog(Loglevel.DEBUG, "load tiles1")
+							loadTiles((cb.customData castTo JsonParser).outputList)
+						end)
+					else
+						printLog(Loglevel.DEBUG, "load finished")
+						ttag.tt..center(pos, "|cffFFBD21load finished!", 10)
+						actor.unpause()
 				end)
 				
 		end
@@ -269,13 +276,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			destroy big
 			actor.unpause()
 		end)
-		print("" + foo().toString())
 		
-	function foo() returns int
-		print("ofoo")
-		let b = GetBooleanAnd(true, true)
-		return b ? 0 : 1
-
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()

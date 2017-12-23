@@ -93,10 +93,8 @@ public class Waypoint extends StaticBaseObject
 					andPartner = null
 	
 	static function delayMove(UnitEntity entity, vec2 pos)
-		Log.info("Delay move")
 		if entity instanceof SetupObject
 			(entity castTo SetupObject).setup.issuePointOrder("move", pos)
-			Log.info("Delay setup moved")
 		else
 			entity.actor.issuePointOrder("move", pos)
 

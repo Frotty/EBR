@@ -138,7 +138,8 @@ public abstract class Escaper extends UnitEntity
 			actor.damageTarget(actor, 85)
 		else if alive
 			actor.damageTarget(actor, killer == null ? 185 : 1000)
-			if not actor.isAliveTrick()
+			if not actor.isAlive()
+				deaths++
 				alive = false
 				actor.kill()
 				manageRevive(this)
@@ -146,7 +147,7 @@ public abstract class Escaper extends UnitEntity
 				setLava(false)
 				flying = false
 				sliding = false
-				deaths++
+				
 			
 	function stop()
 		sliding = false

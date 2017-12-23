@@ -9,6 +9,7 @@
 [*] fixed escapers not gaining vision of advancing region when their hero is dead
 [*] fixed spinner and conga getting stuck when changing visibility
 [*] fixed a few jump related exploits to skip 2 tiles
+[*] fixed loading empty and tile-only M.A.P. slots
 
 [0.90m]
 [*] added configuration options to smode command
