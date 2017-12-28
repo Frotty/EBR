@@ -72,6 +72,8 @@ function checkStaffUnit(unit u)
 				new Door(u)
 		case DOORORDER_ID
 			new BigObstacle(u)
+		case BOBS_ICE_ID
+			new BigObstacle(u)
 		case SOBS_DESERT_ID
 			new SmallObstacle(u)
 		case BOBS_CITADEL_ID

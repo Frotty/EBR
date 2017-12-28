@@ -1,4 +1,8 @@
-[0.90p]
+[0.90s]
+[*] execute initial sync task after map init to avoid desyncs
+[*] fixed faceless one not walking in forest startmaze
+
+[0.90r]
 [*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)
 [*] minor redesign of citadel startmaze to make it easier and more fun, also hide spinners
 [*] minor redesign of grass startmaze mainly fixing some possible skips
@@ -10,6 +14,7 @@
 [*] fixed spinner and conga getting stuck when changing visibility
 [*] fixed a few jump related exploits to skip 2 tiles
 [*] fixed loading empty and tile-only M.A.P. slots
+[*] fixed multiboard version title
 
 [0.90m]
 [*] added configuration options to smode command

@@ -121,3 +121,4 @@ public class Spinner extends SetupObject
 		let json = super.serialize()
 		json.addProperty(new Property(KEY_TYPE, SPINNER_INDEX.toString()))
 		return json
+		

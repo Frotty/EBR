@@ -8,6 +8,7 @@ import Unitcreator
 import Waypoint
 import UnitRemover
 import Executer
+import ClosureTimers
 
 public class ThirdForestMaze extends Startmaze
 
@@ -66,7 +67,7 @@ public class ThirdForestMaze extends Startmaze
 		new Waypoint(gg_unit_wayp_0099)..setRallyPoint(gg_unit_wayp_0078.getPos()).delay = 1
 
 		let vw = new Faceless(gg_unit_dims_0100)
-		vw.setup.issuePointOrder("move", gg_unit_wayp_0078.getPos())
+		doAfter(1.5, () -> vw.actor.issuePointOrder("move", gg_unit_wayp_0078.getPos()))
 		vw.invisDur.setVal(1)
 
 		let exec = new Executer(gg_unit_exec_0076)

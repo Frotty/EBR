@@ -119,7 +119,6 @@ public class RegionData
 				fmods[pd.id] = new FogData(pd.p, theRect)
 
 	function getEscapers() returns LLStaticIterator<Escaper>
-		escapers.staticItr().reset()
 		return escapers.staticItr()
 
 	function addEscaper(Escaper e) 

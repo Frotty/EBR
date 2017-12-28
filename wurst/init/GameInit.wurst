@@ -35,8 +35,10 @@ function initPartTwo()
 
 function partThree()
 	initStartmazes()
-	checkPlayerLocalFiles()
-	jukeBox.playNextMusic()
-	GetExpiredTimer().release()
+	GetExpiredTimer().start(0.5, () -> syncInitial())
 
+function syncInitial()
+	checkPlayerLocalFiles()
+	GetExpiredTimer().release()
+	jukeBox.playNextMusic()
 	

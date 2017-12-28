@@ -12,6 +12,7 @@ import GuardedWorker
 constant XPMAX = 500000
 constant FILE_NAME = "ebrprofile.pld"
 public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
+constant MEH = "*/#-\\"
 constant saveTechnique = 331
 
 public function doSequentialSync()
@@ -47,6 +48,8 @@ class CheckPlayerLocalFilesTask extends GTask
 	override function onUpdate()
 
 	override function onFinish()
+		let rand = GetRandomInt(0, MEH.length()-1)
+		printTimed("|cff999999" + MEH.substring(rand, rand+1), 4)
 		Log.debug("Sync Task Finished")
 		if state == TaskState.TIMEOUT
 			Log.error("Sync Task Errored")
