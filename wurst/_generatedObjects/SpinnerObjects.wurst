@@ -17,7 +17,8 @@ public constant SPIN_SIN_DEC_ID = compiletime(ABIL_ID_GEN.next())
 
 
 @objectgen function genSpinner()		
-	new UnitDefinition(SPINNER_ID, 'ewsp')  
+	new UnitDefinition(SPINNER_ID, 'ewsp') 
+	..setUnitClassification("")
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)

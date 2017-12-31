@@ -5,6 +5,7 @@ import Escaper
 import Assets
 import ChannelAbilityPreset
 import Key
+import Obstacle
 
 constant REINCARNATION_ID = 'A02X'
 constant PORTAL_CREATE_ID = 'A08K'
@@ -26,7 +27,7 @@ public class HolyEscaper extends Escaper
 	override function onCast(int id)
 		super.onCast(id)
 		if id == REINCARNATION_ID
-			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
+			if poisoned or not canCast()
 				actor.resetAbilityCooldown(REINCARNATION_ID)
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
@@ -34,7 +35,7 @@ public class HolyEscaper extends Escaper
 					revivetomb.remove()
 				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
 		else if id == TEMP_REV_ID
-			if poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
+			if poisoned or not canCast()
 				actor.resetAbilityCooldown(TEMP_REV_ID)
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				
@@ -121,7 +122,7 @@ public class FastEscaper extends Escaper
 	override function onCast(int id)
 		super.onCast(id)
 		if id == PORTAL_CREATE_ID
-			if sliding or poisoned or onLava or flying or this.getCurrentRegion() == regions[21]
+			if sliding or not canCast()
 				actor.resetAbilityCooldown(PORTAL_CREATE_ID)
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				return
@@ -197,7 +198,7 @@ public class StrongEscaper extends Escaper
 		super.update()
 		if invulnerable
 			shieldtimer -= ANIMATION_PERIOD
-			if pos.distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0 
+			if getPos().distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0 
 				if shieldtimer > 0
 					createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				shieldtimer = 0
@@ -206,7 +207,7 @@ public class StrongEscaper extends Escaper
 				shieldeffect.destr()
 				
 	override function kill(UnitEntity entity)
-		if entity == null or not invulnerable
+		if not invulnerable or entity == null or entity instanceof Obstacle
 			super.kill(entity)
 		else
 			addEffect(Abilities.spellShieldCaster, pos).destr()
@@ -430,6 +431,64 @@ public class StrongEscaper extends Escaper
 	..setSelectionScale(1)
 	..setTurnRate(1.75)
 	..setUnitSoundSet("Footman")
+	..setCollisionSize(0)
+	..setNormalAbilities(int2fourchar('Aeth') + "," +
+	int2fourchar('AInv'))
+	..setHeroAbilities(int2fourchar('A08L') + "," +
+	int2fourchar('A008'))
+	..setHotkey("")
+	..setProperNames("Mike,Jason,Rocky,Herold,Arthur,Chev")
+	..setProperNamesUsed(6)
+	..setName("|cff084294Strong Escaper")
+	..setTooltipAwaken("")
+	..setTooltipBasic("")
+	..setTooltipExtended("")
+	..setTooltipRevive("")
+	..setRequirements("")
+	..setRequirementsLevels("")
+	..setManaRegeneration(0)
+	..setRepairTime(1)
+	..setBuildTime(1)
+	..setManaInitialAmount(0)
+	..setStartingAgility(0)
+	..setStartingIntelligence(0)
+	..setStartingStrength(0)
+	..setHitPointsMaximumBase(300)
+	..setCanFlee(false)
+	..setGoldBountyAwardedBase(0)
+	..setGoldBountyAwardedNumberofDice(0)
+	..setGoldBountyAwardedSidesperDie(0)
+	..setAgilityPerLevel(0)
+	..setStrengthPerLevel(0)
+	..setIntelligencePerLevel(0)
+	..setSightRadiusDay(300)
+	..setSightRadiusNight(300)
+	..setGoldCost(0)
+	..setLumberCost(0)
+	..setFoodCost(0)
+	..setLevel(1)
+	..hideHeroDeathMsg(true)
+
+	new HeroDefinition(ESC_STRONG_WEEB_ID, 'Hpal')
+	..setAttacksEnabled(0)
+	..setDefenseBase(0)
+	..setTargetedAs("ancient,ground")
+	..setAnimationBlendTimeseconds(0)
+	..setAnimationCastBackswing(0)
+	..setAnimationRunSpeed(200)
+	..setAnimationWalkSpeed(200)
+	..setAnimationCastPoint(0)
+	..setDeathTimeseconds(1)
+	..setShadowImageHeight(100)
+	..setShadowImageCenterX(40)
+	..setShadowImageCenterY(40)
+	..setShadowImageWidth(100)
+	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFootman.blp")
+	..setIconScoreScreen("")
+	..setModelFile("Asuna4.mdx")
+	..setSelectionScale(1)
+	..setTurnRate(1.75)
+	..setUnitSoundSet("Sorceress")
 	..setCollisionSize(0)
 	..setNormalAbilities(int2fourchar('Aeth') + "," +
 	int2fourchar('AInv'))

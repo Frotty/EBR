@@ -4,6 +4,7 @@ import ChannelAbilityPreset
 import TerrainBlocker
 import PlayerData
 import ErrorHandling
+import TerrainData
 
 public constant WALKABLE_ID = compiletime(HERO_ID_GEN.next())
 public constant UNWALKABLE_ID = compiletime(HERO_ID_GEN.next())
@@ -53,7 +54,7 @@ public class TerrainModder extends UnitEntity
 			return
 		let owner = actor.getOwner()
 		let id = GetUnitTypeId(actor)
-		if rdata.canBuild(owner) and not bitset(tileModifierMap.loadInt(orderPos.x.round(),orderPos.y.round())).contains(TileModifiers.PERMAPATH castTo int)
+		if rdata.canBuild(owner) and not orderPos.getTile().modifiers.contains(TileModifier.RESERVED castTo int)
 			idleSeconds = 0
 			if id == SLIDEABLE_ICE_ID
 				if modification == 1
@@ -72,7 +73,7 @@ public class TerrainModder extends UnitEntity
 				else if modification == 2
 					orderPos.changeTerrain(POISON, brushsize, brushsize, brushshape, owner)
 		else
-			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain in this region!")
+			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain here!")
 
 	override function slowUpdate()
 		super.slowUpdate()
@@ -186,7 +187,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	offset.y = (offset.y / 128).round() * 128.
 	let rdata = getRegionData(offset)
 	if rdata != null and rdata.canBuild(caster)
-		offset.setTerrainType(ttype, -1, 1, 0)
+		offset.getTile().setType(ttype)
 
 @init1 function init_TerrainModder()
 	UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'

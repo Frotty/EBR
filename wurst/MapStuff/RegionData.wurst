@@ -3,6 +3,7 @@ import initlater Builder
 import initlater Boss
 import public GameConstants
 import public BuilderConstants
+import public TerrainData
 import HashMap
 import PlayerData
 import TerrainModder
@@ -198,8 +199,7 @@ function rect.changeTerrain( integer ttype )
 	real y = ymin
 	while y <= ymax
 		while x <= xmax
-			if not bitset(tileModifierMap.loadInt(x.round(),y.round())).contains(TileModifiers.PERMAPATH castTo int)
-				SetTerrainType( x, y, ttype, -1, 1, 1 )
+			vec2(x,y).getTile().setType(ttype)
 			x = x + 128
 
 		x = xmin
@@ -269,6 +269,9 @@ public RegionData array regions
 	regions[23].setType(getRegionTypeFromItem('I00G'), false)
 	regions[23].setOwner(STAFF_PLAYER)
 	regions[23].easyMode = true
+	regions[24] = new RegionData(gg_rct_coingamearea)
+	regions[24].setType(getRegionTypeFromItem('I00G'), false)
+	regions[24].setOwner(STAFF_PLAYER)
 	
 	let t = CreateTrigger()
 	t.registerRectLeaveEventSource(gg_rct_Region_023)

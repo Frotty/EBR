@@ -1,6 +1,12 @@
-[0.90s]
+[0.90t]
+[*] added new minigame: Spacey Adventure
 [*] execute initial sync task after map init to avoid desyncs
 [*] fixed faceless one not walking in forest startmaze
+[*] fixed spinners and congas appearing as idle workers
+[*] fixed conga missing speed configuration
+[*] fixed slow wave learn hotkey
+[*] fixed goos
+[*] fixed duplicate deaths on region leave
 
 [0.90r]
 [*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)

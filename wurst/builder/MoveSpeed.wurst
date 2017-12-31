@@ -1,8 +1,8 @@
 package MoveSpeed
 import SetupObject
 
-constant INC_SPEED_ID = 'A01E'
-constant DEC_SPEED_ID = 'A01H'
+public constant INC_SPEED_ID = 'A01E'
+public constant DEC_SPEED_ID = 'A01H'
 
 function onChanceSpeed()
 	var id = GetSpellAbilityId()

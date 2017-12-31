@@ -1,6 +1,7 @@
 package CongaObjects
 import ChannelAbilityPreset
 import BuilderConstants
+import MoveSpeed
 
 public constant ADD_ID = 'A02Y'
 public constant INC_ID = 'A02Z'
@@ -36,7 +37,8 @@ public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 	..setMaximumSpells(1, 10)
 	..setSpellList(1, int2fourchar(CONGA_LOOSE_ID)  + "," + int2fourchar(CONGA_STRICT_ID) + ",A02Z,A030")
 
-	new UnitDefinition(CONGA_LINE_HEAD_ID, 'ewsp')  
+	new UnitDefinition(CONGA_LINE_HEAD_ID, 'ewsp') 
+	..setUnitClassification("")
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
@@ -58,6 +60,8 @@ public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 	int2fourchar(INC_ID) + "," +
 	int2fourchar(DEC_ID) + "," +
 	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(INC_SPEED_ID) + "," +
+	int2fourchar(DEC_SPEED_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))

@@ -1,0 +1,121 @@
+package MGSpacey
+import Minigame
+import PlayerData
+import Assets
+import Fx
+import Coin
+import TerrainUtils
+import Escaper
+import KeyUtils
+import ChannelAbilityPreset
+import Projectile
+import Colors
+
+constant ARENA_POS = vec2(-2600, 7500)
+
+public class MGSpacey extends Minigame
+	LinkedList<Spaceship> ships = new LinkedList<Spaceship>()
+
+	override function getGameRect() returns rect
+		return gg_rct_spaceygamearea
+
+	override function getCamBounds() returns rect
+		return gg_rct_spaceygamebounds
+
+	override function onBegin()
+		for pd in escaperPlayers
+			printTimedToPlayer("Use Arrowkeys and Escape to control your spacecraft.", 15., pd.p)
+			new Spaceship(ARENA_POS, pd.escaper)
+
+	override function onEnd()
+		for ship in ships
+			destroy ship
+		destroy ships
+
+	override function getStartPosition() returns vec2
+		return getGameRect().getCenter()
+
+	override function getName() returns string
+		return "|cff3322e2Spacey Adventure"
+
+init
+	// minigames.add(new MGSpacey())
+
+
+constant SHIP_ID = compiletime(ABIL_ID_GEN.next())
+
+class ShipProjectile extends Projectile
+
+	construct(Spaceship ship)
+		super(ship.getPos().toVec2().polarOffset(ship.actor.getFacingAngle(), 16).withZ(32), 16., ship.owner, ship.actor.getFacingAngle(), "TCSlashProj.mdx")
+		fx.setColor(fromPlayerColor(owner.getColor()).withAlpha(255))
+		setSpeed(10)
+		vel += ship.vel
+
+	override function update()
+		super.update()
+		if not gg_rct_spaceygamearea.contains(pos.toVec2())
+			terminate()
+	
+
+public class Spaceship extends UnitEntity
+	real maxSpeed = 12
+	real acc = 0
+	angle xyAngle = angle(0)
+	Escaper mounter
+
+	construct(vec2 pos, Escaper mounter)
+		super(createUnit(mounter.owner, SHIP_ID, pos, angle(0)))
+		this.mounter = mounter
+		mounter.actor..pause()..hide()
+		setPos(this.pos+vec3(0,0,32))
+		sleeps = false
+		EventListener.add(EVENT_PLAYER_END_CINEMATIC, () -> shoot())
+
+	function shoot()
+		new ShipProjectile(this)
+
+	override function update()
+		let downKeys = owner.getDownKeys()
+		acc = acc.lerp(0,0.1)
+		if downKeys.left
+			xyAngle += angle(0.1)
+		if downKeys.right
+			xyAngle -= angle(0.1)
+		actor.setFacing(xyAngle)
+		owner.panCamToTimed(actor, 0.1)
+		if downKeys.up
+			acc = 1
+		vel += (xyAngle).toVec(acc)
+		vel *= 0.955
+		let lgSq = vel.lengthSquared()
+		if lgSq > maxSpeed.squared()
+			vel = vel.setLength(maxSpeed)
+
+		let tpos = pos + vel*6.
+		if tpos.x  < gg_rct_spaceygamearea.getMinX()
+			vel.x = -1.5*vel.x
+		else if tpos.x > gg_rct_spaceygamearea.getMaxX()
+			vel.x = -1.5*vel.x
+		if tpos.y < gg_rct_spaceygamearea.getMinY()
+			vel.y = -1.5*vel.y
+		else if tpos.y > gg_rct_spaceygamearea.getMaxY()
+			vel.y = -1.5*vel.y
+
+		super.update()
+
+	ondestroy
+		mounter.kill(this)
+
+
+@objectgen function genObjs()
+	new UnitDefinition(SHIP_ID, 'hgry')
+		..setName("Spaceship")
+		..setModelFile("Onslaught.mdx")
+		..setMovementHeight(64)
+		..setMovementHeightMinimum(16)
+		..setNormalAbilities("")
+		..setHitPointsMaximumBase(100000000)
+		..setManaMaximum(0)
+		..setCollisionSize(0)
+		..setScalingValue(0.25)

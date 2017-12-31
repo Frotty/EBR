@@ -25,15 +25,18 @@ function filter() returns boolean
 
 public class Goo
 	image img
-	int x
-	int y
+	vec2 pos
 
-	construct(image img, int x, int y)
+	construct(image img, vec2 pos)
 		this.img = img
-		this.x = x
-		this.y = y
+		this.pos = pos
 
 	ondestroy
+		let tile = pos.getTile()
+		if tile.hasModifier(TileModifier.BLUGOO)
+			tile.removeModifier(TileModifier.BLUGOO)
+		if tile.hasModifier(TileModifier.ORANGEGOO)
+			tile.removeModifier(TileModifier.ORANGEGOO)
 		img.remove()
 
 public class Jumper extends StaticBaseObject
@@ -90,13 +93,12 @@ public class Jumper extends StaticBaseObject
 				jumpForce.increment(this, 30)
 			case SPECIAL_ID
 				if goocounter < 5
-					let x = (GetSpellTargetX()/128).round()
-					let y = (GetSpellTargetY()/128).round()
-					let goo = createImage("textures\\blugoo.blp", vec2(x*128., y*128.), 128, 128)
+					let tpos = getSpellTargetPos()
+					let goo = createImage("textures\\blugoo.blp", tpos, 128, 128)
 					..show()
-					goos[goocounter] = new Goo(goo, x, y)
+					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++
-					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.BLUGOO castTo int).val )
+					getSpellTargetPos().getTile().addModifier(TileModifier.BLUGOO)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -111,9 +113,6 @@ public class Jumper extends StaticBaseObject
 	ondestroy
 		for i = 0 to 4
 			if goos[i] != null
-				let x = goos[i].x
-				let y = goos[i].y
-				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).remove(TileModifiers.BLUGOO castTo int).val)
 				destroy goos[i]
 				
 

@@ -18,15 +18,21 @@ public class RevivePoint extends StaticSetupObject
 
 	construct(unit existing)
 		super(existing, getUnit(existing.getOwner(), REVIVE_POINT_ID, existing.getPos(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
-		this.pos.toVec2().setTerrainType(this.setCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
-		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
-			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
+		let tile = pos.getTile()
+		if tile.hasModifier(TileModifier.RESERVED)
+			terminate()
+		else
+			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
+			tile.addModifier(TileModifier.RESERVED)
 
 	construct(vec3 pos, player owner)
 		super(getUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0), this), getUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0), this), EVENT_RADIUS, function RevivePoint.onReach )
-		this.pos.toVec2().setTerrainType(this.setCurrentRegion().getTypeSet().walkableId, -1, 1, 0)
-		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
-			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).add(TileModifiers.PERMAPATH castTo int).val)
+		let tile = pos.getTile()
+		if tile.hasModifier(TileModifier.RESERVED)
+			terminate()
+		else
+			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
+			tile.addModifier(TileModifier.RESERVED)
 		
 
 	function reach(Escaper reacher)
@@ -96,8 +102,7 @@ public class RevivePoint extends StaticSetupObject
 			super.terminate()
 
 	ondestroy
-		tileModifierMap.saveInt(this.pos.x.round(),this.pos.y.round(), 
-			bitset(tileModifierMap.loadInt(this.pos.x.round(),this.pos.y.round())).remove(TileModifiers.PERMAPATH castTo int).val)
+		pos.getTile().removeModifier(TileModifier.RESERVED)
 
 @objectgen function genRevivePoint()
 	new ChannelAbilityPreset(INFO_REVIVE_POINT_ID, 1, TRUE)

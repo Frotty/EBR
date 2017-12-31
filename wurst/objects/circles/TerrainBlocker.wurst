@@ -4,42 +4,24 @@ import public BitSet
 
 constant INFO_TC_BLOCKER_ID = compiletime(ABIL_ID_GEN.next())
 
-public hashtable tileModifierMap = InitHashtable()
-
-public tuple matrixpos (int x, int y)
-
-public enum TileModifiers
-	NORMAL
-	BLOCK
-	BLUGOO
-	ORANGEGOO
-	PERMAPATH
-
 public class TerrainBlocker extends StaticBaseObject
-	matrixpos m
 	boolean silent = false
 	
 	construct(vec2 pos, player owner)
 		super(pos, getUnit(owner, TC_BLOCKER_ID, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0), this), 0, CODE_NULL, CODE_NULL)
-		m = matrixpos((pos.x/128.0).round(), (pos.y/128.0).round())
+		let tile = pos.getTile()
 		clearQuestionmark()
-		if tileModifierMap.hasInt(m.x, m.y)
-			var bs = bitset(tileModifierMap.loadInt(m.x, m.y))
-			if bs.contains(TileModifiers.BLOCK castTo int)
-				silent = true
-				terminate()
-			else
-				bs = bs.add(TileModifiers.BLOCK castTo int)
-				tileModifierMap.saveInt(m.x, m.y, bs.val)
+		if tile.hasModifier(TileModifier.BLOCK) or tile.hasModifier(TileModifier.RESERVED)
+			silent = true
+			terminate()
 		else
-			tileModifierMap.saveInt(m.x, m.y, bitset(0).add(TileModifiers.BLOCK castTo int).val)
+			tile.addModifier(TileModifier.BLOCK)
+			Log.info("blocking tile")
 		
 		
 	ondestroy
 		if not silent
-			var bs = bitset(tileModifierMap.loadInt(m.x, m.y))
-			bs = bs.remove(TileModifiers.BLOCK castTo int)
-			tileModifierMap.saveInt(m.x, m.y, bs.val)
+			pos.getTile().removeModifier(TileModifier.BLOCK)
 	
 	override function serialize() returns Json
 		let json = super.serialize()

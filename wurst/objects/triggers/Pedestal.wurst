@@ -23,7 +23,10 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	static constant ENTITIES_KEY = "e"
 	static constant TILES_KEY = "t"
 
-	static MemoryAccessPedestal array lastRef 
+	static MemoryAccessPedestal array lastRef
+
+	private constant tileMap = new HashMap<int, TileData>()
+
 	private LinkedList<Serializable> entities = new LinkedList<Serializable>()
 	private LinkedList<TileData> tiles = new LinkedList<TileData>()
 	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
@@ -68,16 +71,13 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	function addTile(vec2 tpos, boolean removeIfExists)
 		let targPos = tpos.toTile()
 		if getRegionData(targPos).canBuild(owner)
-			let mpos = matrixpos((targPos.x / 128.).toInt(), (targPos.y / 128.).toInt())
-			let itr = tiles.staticItr()
-			for tile from itr
-				if tile.offset == mpos
-					if removeIfExists
-						destroy itr.remove()
-					return
-
-			if getTileFromType(targPos) != Tile.UNWALKABLE
-				tiles.add(new TileData(targPos, mpos, owner))
+			let mtile = targPos.getTile()
+			if not tileMap.has(mtile.key)
+				if getTileFromType(targPos) != Tile.UNWALKABLE
+					let tdata = new TileData(targPos, mtile.x, mtile.y, owner)
+					tiles.add(tdata)
+					tileMap.put(mtile.key, tdata)
+				
 
 	function loadSlot(int slotId)
 		nullTimer(() -> begin

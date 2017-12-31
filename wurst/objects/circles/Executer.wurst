@@ -585,9 +585,6 @@ public class Executer extends StaticBaseObject
 		return json
 
 
-
-
-
 @objectgen function genExecuter()
 	new ChannelAbilityPreset(INFO_EXECUTER_ID, 1, TRUE)
 	..setName("Information: Executer")

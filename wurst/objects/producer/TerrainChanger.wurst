@@ -22,44 +22,46 @@ constant TERRAIN_DEC_V_ID = 'A01T'
 public class TerrainChanger extends SetupObject
 	ConfigValue sizeX = new ConfigValue(1, 1, "Width")
 	ConfigValue sizeY = new ConfigValue(1, 1, "Height")
-	matrixpos mp = matrixpos(0,0)
+	tile currentTile
 	int innerTile = '0000'
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
 		super(getUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0), this), getUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0), this), 0)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		currentTile = pos.getTile()
 		innerTile = this.getCurrentRegion().getTypeSet().walkableId
 		outerTile = this.getCurrentRegion().getTypeSet().unwalkableId
 		sleeps = false
 		
 	override function update()
 		super.update()
-		var tX = (pos.x/128).round()
-		var tY = (pos.y/128).round()
 		let rdata = getRegionData(pos)
 		if not rdata.canBuild(owner)
 			return
+
 		int tileID
-		let sizeXI = sizeX.getInt()
-		let sizeYI = sizeY.getInt()
-		if tX != mp.x or tY != mp.y
+		var tX = (pos.x/128).round()
+		var tY = (pos.y/128).round()
+		if tX != currentTile.x or tY != currentTile.y
+			let sizeXI = sizeX.getInt()
+			let sizeYI = sizeY.getInt()
 			// Clear old terrain
 			var xoffset = 0
 			var yoffset = 0
-			if tX < mp.x
+			if tX < currentTile.x
 				xoffset = (sizeXI*2)
 				for i = -(sizeYI) to sizeYI
 					checkAndSetTile(rdata, tX+sizeXI+1, tY+i, outerTile)
-			else if tX > mp.x
+			else if tX > currentTile.x
 				xoffset = (-sizeXI*2)
 				for i = -(sizeYI) to sizeYI
 					checkAndSetTile(rdata, tX-sizeXI-1, tY+i, outerTile)
-			if tY < mp.y
+			if tY < currentTile.y
 				yoffset = (sizeYI*2)
 				for j = -(sizeXI) to sizeXI
 					checkAndSetTile(rdata, tX+j, tY + sizeYI+1, outerTile)
-			else if tY > mp.y
+			else if tY > currentTile.y
 				yoffset = (-sizeYI*2)
 				for j = -(sizeXI) to sizeXI
 					checkAndSetTile(rdata, tX+j, tY - sizeYI-1, outerTile)
@@ -67,29 +69,24 @@ public class TerrainChanger extends SetupObject
 				checkAndSetTile(rdata, tX+xoffset, tY+yoffset, outerTile)
 				
 			// Make new
-			mp.x = tX
-			mp.y = tY
+			currentTile = pos.getTile()
 			for i = -(sizeYI) to sizeYI
 				for j = -(sizeXI) to sizeXI
-					if not bitset(tileModifierMap.loadInt(tX+j, tY+i)).contains(TileModifiers.BLOCK castTo int)
-						var x = (tX+j)*128.
-						var y = (tY+i)*128.
+					let stile = getTile(tX+j, tY+i)
+					if not stile.hasModifier(TileModifier.BLOCK)
 						tileID = innerTile
-						if rdata.theRect.contains(vec2(x,y))
-							if GetTerrainType(x, y) != tileID
-								SetTerrainType(x, y, tileID, -1, 1, 1 )
+						stile.setType(tileID)
 	
 	function checkAndSetTile(RegionData rdata, int x, int y, int id)
-		if not bitset(tileModifierMap.loadInt(x, y)).contains(TileModifiers.BLOCK castTo int)
+		let tile = getTile(x, y)
+		if not tile.hasModifier(TileModifier.BLOCK)
 			let newP = vec2(x*128., y*128.)
 			if rdata.theRect.contains(newP)
-				SetTerrainType(newP.x, newP.y, id, -1, 1, 1)
+				tile.setType(id)
 
 	function cleanArea()
 		let tin = innerTile
 		let tout = outerTile
-		mp.x = -99999
-		mp.y = -99999
 		innerTile = this.getCurrentRegion().getTypeSet().unwalkableId
 		outerTile = this.getCurrentRegion().getTypeSet().unwalkableId
 		update()

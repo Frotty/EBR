@@ -74,9 +74,6 @@ public class Trap extends StaticBaseObject
 	ondestroy 
 		for i = 0 to 4
 			if goos[i] != null
-				let x = goos[i].x
-				let y = goos[i].y
-				tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).remove(TileModifiers.BLUGOO castTo int).val)
 				destroy goos[i]
 				
 	override function update()
@@ -151,6 +148,7 @@ public class Trap extends StaticBaseObject
 	
 	function onCast() returns boolean
 		let spell_id = GetSpellAbilityId()
+		let tpos = getSpellTargetPos()
 		switch spell_id
 			case NEXT_EFFECT_ID
 				if sfxid >= SFX_COUNT
@@ -324,14 +322,12 @@ public class Trap extends StaticBaseObject
 				actor.removeAbility(KNOCKBACK_PUSH_ID)
 				actor.addAbility(KNOCKBACK_PULL_ID)
 			case SPECIAL_ID
-				if goocounter < 5
-					let x = (GetSpellTargetX()/128).round()
-					let y = (GetSpellTargetY()/128).round()
-					let goo = createImage("textures\\orangegoo.blp", vec2(x*128., y*128.), 128, 128)
-					..show()
-					goos[goocounter] = new Goo(goo, x, y)
+				let tile = tpos.getTile()
+				if not tile.hasModifier(TileModifier.ORANGEGOO) and goocounter < 5
+					let goo = createImage("textures\\orangegoo.blp", tpos, 128, 128)..show()
+					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++
-					tileModifierMap.saveInt(x,y,bitset(tileModifierMap.loadInt(x, y)).add(TileModifiers.ORANGEGOO castTo int).val )
+					tile.addModifier(TileModifier.ORANGEGOO)
 		return false
 	
 	override function serialize() returns Json
