@@ -28,10 +28,12 @@ constant int TERRAIN_WALKABLE_ABIL = 'A015'
 constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
 constant int TERRAIN_ICE_ABIL = 'A019'
 constant int TERRAIN_UNICE_ABIL = 'A01A'
+constant int TERRAIN_REVICE_ABIL = 'A00A'
 constant int TERRAIN_W_O_ABIL = 'A03A'
 constant int TERRAIN_UW_O_ABIL = 'A039'
 constant int TERRAIN_I_O_ABIL = 'A038'
 constant int TERRAIN_UI_O_ABIL = 'A037'
+constant int TERRAIN_RI_O_ABIL = 'A00O'
 constant int TERRAIN_INCREASE_H_ABIL = 'A01K'
 constant int TERRAIN_INCREASE_V_ABIL = 'A01M'
 constant int TERRAIN_DECREASE_H_ABIL = 'A01U'
@@ -178,18 +180,16 @@ public class Executer extends StaticBaseObject
 					SetDestructableAnimation(obj.dummy, "death")
 
 	override function slowUpdate()
-		if eventMode != Emode.PRESSUREPLATE and actionMode != Amode.NONE
+		if eventMode == Emode.PRESSUREPLATE and actionMode != Amode.NONE and ON
 			boolean reset = false
 			if canEscaperTrigger
 				GroupEnumUnitsInRect(ENUM_GROUP, eventRect, Filter(() -> GetFilterUnit().isAliveTrick() and GetFilterUnit().getEntity() instanceof Escaper))
-				if ENUM_GROUP.hasNext()
-					ENUM_GROUP.clear()
-					reset = true
+				reset = not ENUM_GROUP.hasNext()
+				ENUM_GROUP.clear()
 			if canKillerTrigger
 				GroupEnumUnitsInRect(ENUM_GROUP, eventRect, Filter(() -> GetFilterUnit().isAliveTrick() and GetFilterUnit().getEntity() instanceof SetupObject))
-				if ENUM_GROUP.hasNext()
-					ENUM_GROUP.clear()
-					reset = true
+				reset = not ENUM_GROUP.hasNext()
+				ENUM_GROUP.clear()
 			if reset
 				negativeAction()
 				ON = false
@@ -521,12 +521,16 @@ public class Executer extends StaticBaseObject
 				nottiletype = '0001'
 			case TERRAIN_ICE_ABIL
 				tiletype = CONTROLLABLEICE
+			case TERRAIN_REVICE_ABIL
+				tiletype = REVICE
 			case TERRAIN_I_O_ABIL
 				nottiletype = CONTROLLABLEICE
 			case TERRAIN_UNICE_ABIL
 				tiletype = UNCONTROLLABLEICE
 			case TERRAIN_UI_O_ABIL
 				nottiletype = UNCONTROLLABLEICE
+			case TERRAIN_RI_O_ABIL
+				nottiletype = REVICE
 			case SPAWN_UNIT_ID
 				actionMode = Amode.CREATEUNIT
 				actionUnit = ActionUnit.TANK

@@ -1,5 +1,6 @@
 [0.90t]
 [*] added new minigame: Spacey Adventure
+[*] added reverse ice option to executer
 [*] execute initial sync task after map init to avoid desyncs
 [*] fixed faceless one not walking in forest startmaze
 [*] fixed spinners and congas appearing as idle workers
@@ -7,6 +8,8 @@
 [*] fixed slow wave learn hotkey
 [*] fixed goos
 [*] fixed duplicate deaths on region leave
+[*] fixed executer idle-check to return to original state when unoccupied
+[*] fixed M.A.P. loading for slightly larger data sets
 
 [0.90r]
 [*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)

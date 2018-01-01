@@ -206,34 +206,40 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	int currentSlotId
 	function saveSlot(int slotId)
-		actor.pause()
-		ttag.tt..center(pos, "|cff0884CEsaving...", 10)
-		serializeOrigin = pos.toVec2().toTile().toVec3()
-		let itr = entities.staticItr()
-		currentSlotId = slotId
-		entString.reset()
-		entString.addString(JSON_OPEN_ARRAY.token)
-		doSeq((SeqCallback cb) -> begin
-			var continue = true
-			if itr.hasNext()
-				let next = itr.next()
-				let json = next.serialize()
-				json.addToBigString(entString)
-				destroy json
+		Log.debug("Save slot " + slotId.toString())
+		nullTimer(() -> begin
+			actor..abortOrder()..pause()
+			ttag.tt..center(pos, "|cff0884CEsaving...", 10)
+			serializeOrigin = pos.toVec2().toTile().toVec3()
+			let itr = entities.staticItr()
+			currentSlotId = slotId
+			entString.reset()
+			entString.addString(JSON_OPEN_ARRAY.token)
+			doSeq((SeqCallback cb) -> begin
+				var continue = true
 				if itr.hasNext()
-					entString.addString(JSON_SIGN_COMMA.token)
+					let next = itr.next()
+					let json = next.serialize()
+					json.addToBigString(entString)
+					destroy json
+					if itr.hasNext()
+						entString.addString(JSON_SIGN_COMMA.token)
 
-				effects.get(next).destr()
-				effects.remove(next)
-				itr.remove()
-			else
-				continue = false
-				entString.addString(JSON_CLOSE_ARRAY.token)
-				saveTileSeq()
-			return continue
+					effects.get(next).destr()
+					effects.remove(next)
+					itr.remove()
+				else
+					continue = false
+					entString.addString(JSON_CLOSE_ARRAY.token)
+					Log.debug("Save tiles")
+					saveTileSeq()
+				return continue
+			end)
 		end)
+		
 
 	function saveTileSeq()
+		Log.debug("Save tiles seq")
 		ttag.tt..center(pos, "|cff0884CEsaving tiles...", 10)
 		tileString.reset()
 		tileString.addString(JSON_OPEN_ARRAY.token)
@@ -249,12 +255,14 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				continue = false
 				tileString.addString(JSON_CLOSE_ARRAY.token)
 				tileString.debugPrint()
+				Log.debug("Saved tiles seq")
 				saveFile()
 			return continue
 		end)
 
 	function saveFile()
-		ttag.tt..center(pos, "|cff0884CEcompressing...", 10)
+		Log.debug("Save file")
+		ttag.tt..center(pos, "|cff0884CEpreparing...", 10)
 		let json = new Json()
 		let big = new BigString()
 		json.addProperty(new Property(new BigSubString(ENTITIES_KEY), entString.asSubstring()))
@@ -262,6 +270,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		
 		json.addToBigString(big)
 		destroy json
+		ttag.tt..center(pos, "|cff0884CEcompressing...", 10)
 		printLog(Loglevel.DEBUG, "start compress")
 		compress(big, (PayloadCallback cb) -> begin
 			let compressedData = cb.customData castTo BigString
@@ -274,6 +283,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				f.close()
 			ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
 			destroy big
+			tileMap.flush()
 			actor.unpause()
 		end)
 		
@@ -296,6 +306,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			case SELECT_TILE_ID
 				addTile(tpos, true)
 			case SAVE1_ID
+				print("oncast save")
 				saveSlot(1)
 			case SAVE2_ID
 				saveSlot(2)
