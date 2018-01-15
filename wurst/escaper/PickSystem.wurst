@@ -5,6 +5,7 @@ import EscaperClasses
 import RevivePointModifier
 import ChannelAbilityPreset
 import CodeManager
+import Assets
 import ClosureTimers
 
 EscaperDefinition array currentView
@@ -154,8 +155,8 @@ public function allow()
 		pd.escaper = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 	end)
 	new EscaperDefinition(ESC_BLIND_ID)
-	..setName("|cff6B6BCEBlind Escaper|r\nHas cool footsteps and resistance to lava.")
-	..setIcon("ReplaceableTextures\\CommandButtons\\BTNEvilIllidan.blp")
+	..setName("|cff6B6BCEFemale Escaper|r\nHas some resistance to lava.")
+	..setIcon(Icons.bTNHuntress)
 	..setCallback((PlayerData pd) -> begin 
 		pd.escaper = new BlindEscaper(currentRevivepoint.toVec3(), pd.p)
 	end)

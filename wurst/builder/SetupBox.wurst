@@ -175,7 +175,6 @@ public class SetupBox extends UnitEntity
 					actor.addAbility(CUT_DISABLE)
 				else
 					actor.addAbility(CUT_ALLOW)
-
 				if rdata.easyMode
 					actor.addAbility(EASY_DISABLE)
 				else
@@ -185,7 +184,7 @@ public class SetupBox extends UnitEntity
 					rdata.gravity -= vec3(0,0,0.1)
 					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
 			case DEC_GRAVITY
-				if(rdata.gravity.z < -.1)
+				if(rdata.gravity.z < -.2)
 					rdata.gravity += vec3(0,0,0.1)
 					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
 			case TURND_ID

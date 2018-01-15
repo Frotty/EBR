@@ -16,8 +16,6 @@ public class TerrainBlocker extends StaticBaseObject
 			terminate()
 		else
 			tile.addModifier(TileModifier.BLOCK)
-			Log.info("blocking tile")
-		
 		
 	ondestroy
 		if not silent

@@ -2,8 +2,8 @@ package RevivePointModifier
 import ChannelAbilityPreset
 
 constant REV_MODIFIER_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
-public constant int CREATE_REV_MOD_ID = 'A07M'
-public constant int REMOVE_REV_MOD_ID = 'D07N'
+public constant CREATE_REV_MOD_ID = 'A07M'
+public constant REMOVE_REV_MOD_ID = 'A07N'
 
 public class RevivePointModifier
 	unit actor

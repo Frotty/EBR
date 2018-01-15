@@ -52,6 +52,13 @@ function manageTimedRevive(Escaper e, real time)
 	if pods[id] == null
 		pods[id] = new RevivePod(pData[id], time, false)
 
+public function forceRevive(Escaper e)
+	let pod = pods[e.owner.getId()]
+	if pod != null
+		pod.owner.escaper.revive()
+		destroy pod
+		pods[e.owner.getId()] = null
+
 function manageWaitForRevive(Escaper e)
 	let id = e.owner.getId()
 	if pods[id] == null 

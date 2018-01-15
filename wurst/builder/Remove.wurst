@@ -8,11 +8,14 @@ function onRemoveObject()
 	if id == REMOVE_OBJECT_ID
 		var u = GetTriggerUnit()
 		var data = u.getUserData()
+		var remove = true
 		if data > 0
 			var e = data castTo Entity
 			addEffect(Abilities.aIamTarget, u.getPos()).destr()
 			e.terminate()
-		u..removeAbility(REMOVE_OBJECT_ID)
+			remove = e.done
+		if remove
+			u..removeAbility(REMOVE_OBJECT_ID)
 	
 @init1 function init_remove()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onRemoveObject())

@@ -285,7 +285,7 @@ public function startTestmode(PlayerData pd)
 		new UnitProducer( hidden, pd.p )
 		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
 		pd.escaper = e
-		e.actor.addAbility('A001')
+		e.actor..addAbility('A001')..addAbility(CREATE_REV_MOD_ID)
 		e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
 		e.actor.addAbility('A001')
 		e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)

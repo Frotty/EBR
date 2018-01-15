@@ -135,12 +135,12 @@ public abstract class Escaper extends UnitEntity
 					setVel(getRealVel() * -1.75)
 			flashEffect(Abilities.boltImpact, pos)
 			actor.damageTarget(actor, 85)
-		else if alive
-			actor.damageTarget(actor, killer == null ? 195 : 1000)
-			if not actor.isAlive()
-				deaths++
+		else if alive 
+			if actor.isAliveTrick()
+				actor.damageTarget(actor, killer == null ? 195 : 1000)
+			if not actor.isAliveTrick()
 				alive = false
-				actor.kill()
+				deaths++
 				manageRevive(this)
 				setPoison(false)
 				setLava(false)
@@ -423,9 +423,9 @@ public abstract class Escaper extends UnitEntity
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Abilities.aneuCaster, pos).destr()
 				if sliding
-					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.25))
+					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.75))
 				else
-					addVel(vec3(7.75 * angl.cos(), 7.75 * angl.sin(), 11.25))
+					addVel(vec3(7.75 * angl.cos(), 7.75 * angl.sin(), 11.75))
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
 			orb.addVel((getRealVel()-walkVel)*0.65)
@@ -440,8 +440,8 @@ public abstract class Escaper extends UnitEntity
 				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)
-			UnitRemoveAbility( actor, CREATE_REV_MOD_ID )
-			UnitAddAbility( actor, REMOVE_REV_MOD_ID )
+			actor..removeAbility(CREATE_REV_MOD_ID)
+			..addAbility(REMOVE_REV_MOD_ID)
 		else if id == REMOVE_REV_MOD_ID
 			if revmod != null
 				destroy revmod

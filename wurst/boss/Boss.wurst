@@ -44,7 +44,7 @@ public class Boss extends SetupObject
 	function onDamage(Escaper escaper, real dmg)
 		currentHP -= dmg
 		if currentHP < 1
-			printLog(Loglevel.DEBUG, "Our boss is dead")
+			Log.debug("Our boss is dead")
 			actor.kill()
 
 	function onCast()

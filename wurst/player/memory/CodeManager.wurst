@@ -3,7 +3,6 @@ import initlater  PlayerData
 import CodeGenerator
 import FileIO
 import SyncWrapper
-import RegisterEvents
 import PlayerMemoryData
 import Playerfile
 import initlater PickSystem
@@ -71,12 +70,10 @@ function onFileSynced()
 		let syncedFile = syncTask.file
 		let token = syncedFile.read()
 		printLog(Loglevel.DEBUG, "on PFCodeManager 2 <" + token + ">")
-		if token == null
-			// if not pdc.syncPayload.fileName.startsWith("Logs\\")
-			// 	destroy pdc.syncPayload	
-			// 	pdc.syncPayload = null
-			// 	nullTimer(() -> getSyncedFile(pdc, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
-			// 	return
+		if token == null or token.length() == 0
+			if not syncTask.filename.startsWith("Logs\\")
+				execute(() -> getSyncedFile(syncTask.pd, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
+				return
 			printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
 			// A new file was created
 			printLog(Loglevel.DEBUG, "New Playerfile1")

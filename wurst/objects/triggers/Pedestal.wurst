@@ -126,7 +126,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			ref.actor.unpause()
 
 	
-	LLStaticIterator<BigSubString> itr
+	LLIterator<BigSubString> itr
 
 	function loadEntities(LinkedList<BigSubString> list)
 		// load entities

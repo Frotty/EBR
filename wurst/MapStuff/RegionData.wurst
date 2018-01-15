@@ -10,7 +10,6 @@ import TerrainModder
 import UnitProducer
 import DummyRecycler
 import PickSystem
-import initlater TerrainBlocker
 import ObstacleObjects
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
@@ -119,7 +118,9 @@ public class RegionData
 			for pd from builderPlayers.staticItr()
 				fmods[pd.id] = new FogData(pd.p, theRect)
 
-	function getEscapers() returns LLStaticIterator<Escaper>
+			setBossRegion()
+
+	function getEscapers() returns LLIterator<Escaper>
 		return escapers.staticItr()
 
 	function addEscaper(Escaper e) 
@@ -128,7 +129,7 @@ public class RegionData
 	function removeEscaper(Escaper e)
 		escapers.remove(e)
 		
-	function setBossRegion()
+	@deprecated("Because Happy Tauren is noob") function setBossRegion()
 		bossRegion = true
 		
 	function resetTiles()

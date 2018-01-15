@@ -3,18 +3,17 @@ import Boss
 import Escaper
 import BaseObject
 
-constant int DAMAGER_ID = 'n01O'
-constant int DMG_INC_ID = 'A07K'
-constant int DMG_DEC_ID = 'A07J'
-constant real EVENT_RADIUS = 32.
-
+constant DAMAGER_ID = 'n01O'
+constant DMG_INC_ID = 'A07K'
+constant DMG_DEC_ID = 'A07J'
+constant EVENT_RADIUS = 32.
 
 public class BossDamager extends StaticBaseObject
     real damage
 
     construct(vec2 pos, player owner)
         super(posToGrid(pos), getUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.), this), EVENT_RADIUS, function BossDamager.onInRange, CODE_NULL)
-        printLog(Loglevel.DEBUG, "creating Boss Damager")
+        Log.debug("creating Boss Damager")
         damage = 40
         EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 

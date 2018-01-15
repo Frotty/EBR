@@ -40,8 +40,7 @@ public function tile.addModifier(TileModifier modifier)
 
 /** Removed and saves the given modifier to the tiles */
 public function tile.removeModifier(TileModifier modifier)
-	this.modifiers.remove(modifier castTo int)
-	tileMap.saveInt(this.key, 3, this.modifiers.val)
+	tileMap.saveInt(this.key, 3, this.modifiers.remove(modifier castTo int).val)
 
 /** Changes the terraintype of this tile if it is not reserved */
 public function tile.setType(int ttype)

@@ -1,15 +1,22 @@
 [0.90t]
 [*] added new minigame: Spacey Adventure
 [*] added reverse ice option to executer
+[*] changed blind escaper to fix attachments and footsteps
 [*] execute initial sync task after map init to avoid desyncs
+[*] fixed revivepoint losing remove ability
 [*] fixed faceless one not walking in forest startmaze
 [*] fixed spinners and congas appearing as idle workers
 [*] fixed conga missing speed configuration
 [*] fixed slow wave learn hotkey
 [*] fixed goos
 [*] fixed duplicate deaths on region leave
-[*] fixed executer idle-check to return to original state when unoccupied
+[*] fixed executer pressure plate not resetting when the pushing escaper dies
 [*] fixed M.A.P. loading for slightly larger data sets
+[*] fixed builder custom revivepoint
+[*] fixed deaths being accounted for twice
+[*] fixed region gravity allowing for zero gravity
+[*] fixed red player always being awarded the checkpoint when teleporting from one startmaze to the other
+[*] fixed minigame area not being revealed
 
 [0.90r]
 [*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)

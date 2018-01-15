@@ -2,8 +2,6 @@ package Jumper
 import Escaper
 import BaseObject
 import SoundUtils
-import TerrainBlocker
-import ClosureForGroups
 
 constant INFO_JUMPER_ID = compiletime(ABIL_ID_GEN.next())
 constant DECREASE_FORCE_ID = compiletime(ABIL_ID_GEN.next())
@@ -109,7 +107,7 @@ public class Jumper extends StaticBaseObject
 	override function deserialize(Json json)
 		super.deserialize(json)
 		jumpForce.setVal(json.getReal("f") / 100.)
-				
+	
 	ondestroy
 		for i = 0 to 4
 			if goos[i] != null
