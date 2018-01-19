@@ -3,7 +3,6 @@ import BaseObject
 import Escaper
 import InstantDummyCaster
 import Camerashakes
-import TerrainBlocker
 import Jumper
 
 constant DECREASE_DURATION_ID = compiletime(ABIL_ID_GEN.next())

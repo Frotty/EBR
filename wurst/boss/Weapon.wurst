@@ -1,6 +1,5 @@
 package Weapon
 import ItemObject
-import ClosureTimers
 import public WeaponTypes
 import ChannelAbilityPreset
 
@@ -8,57 +7,57 @@ public constant WEAPON_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 public constant ATTACK_MELEE = 'A07G'
 public constant ATTACK_RANGED = 'A07H'
 
-public class WeaponObject extends ItemObject
-	Escaper holder = null
-	int weaponId = 0
+// public class WeaponObject extends ItemObject
+	// Escaper holder = null
+	// int weaponId = 0
 
-	construct(vec2 pos, player owner)
-		super(pos, createItem(weapontypes[weaponId].itemId, pos), createUnit(owner, WEAPON_DUMMY_ID, pos, angle(0)))
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+	// construct(vec2 pos, player owner)
+	// 	super(pos, createItem(weapontypes[weaponId].itemId, pos), createUnit(owner, WEAPON_DUMMY_ID, pos, angle(0)))
+	// 	EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
-	override function onPickup(Escaper e)
-		if e.weapon == null
-			e.weapon = this
-			e.weaponAttach = e.actor.addEffect(weapontypes[weaponId].attachment, "hand")
-			holder = e
-			setup.hide()
-			holder.actor.addAbility(weapontypes[weaponId].attackAbil)
-		else
-			fixItem()
+	// override function onPickup(Escaper e)
+	// 	if e.weapon == null
+	// 		e.weapon = this
+	// 		e.weaponAttach = e.actor.addEffect(weapontypes[weaponId].attachment, "hand")
+	// 		holder = e
+	// 		setup.hide()
+	// 		holder.actor.addAbility(weapontypes[weaponId].attackAbil)
+	// 	else
+	// 		fixItem()
 		
-	override function onDrop(Escaper e)
-		holder.actor..removeAbility(weapontypes[weaponId].attackAbil)
-		holder.weapon = null
-		e.weaponAttach.destr()
-		e.weaponAttach = null
-		holder = null
-		setup..setXY(pos.toVec2())..show()
-		fixItem()
+	// override function onDrop(Escaper e)
+	// 	holder.actor..removeAbility(weapontypes[weaponId].attackAbil)
+	// 	holder.weapon = null
+	// 	e.weaponAttach.destr()
+	// 	e.weaponAttach = null
+	// 	holder = null
+	// 	setup..setXY(pos.toVec2())..show()
+	// 	fixItem()
 
-	function fixItem()
-		nullTimer(() -> begin
-			actorItem.setEntity(null)
-			actorItem.remove()
-			actorItem = CreateItem(weapontypes[weaponId].itemId, pos.x, pos.y )
-			actorItem.setUserData(this castTo int)
-		end)
+	// function fixItem()
+	// 	nullTimer(() -> begin
+	// 		actorItem.setEntity(null)
+	// 		actorItem.remove()
+	// 		actorItem = CreateItem(weapontypes[weaponId].itemId, pos.x, pos.y )
+	// 		actorItem.setUserData(this castTo int)
+	// 	end)
 		
 	
-	override function onUse(Escaper e)
-		weapontypes[weaponId].listener.onAttack(e)
+	// override function onUse(Escaper e)
+	// 	weapontypes[weaponId].listener.onAttack(e)
 		
-	override function update()
-		if holder != null
-			pos = holder.pos
+	// override function update()
+	// 	if holder != null
+	// 		pos = holder.pos
 		
-	function onCast()
-		let id = GetSpellAbilityId()
-		for i = 0 to weaponcount - 1
-			if weapontypes[i].abilId == id
-				weaponId = i
-				actorItem.remove()
-				actorItem = createItem(weapontypes[weaponId].itemId, pos.toVec2())
-				actorItem.setUserData(this castTo int)
+	// function onCast()
+	// 	let id = GetSpellAbilityId()
+	// 	for i = 0 to weaponcount - 1
+	// 		if weapontypes[i].abilId == id
+	// 			weaponId = i
+	// 			actorItem.remove()
+	// 			actorItem = createItem(weapontypes[weaponId].itemId, pos.toVec2())
+	// 			actorItem.setUserData(this castTo int)
 		
 	
 // class WeaponMissile extends Projectile

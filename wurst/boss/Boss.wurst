@@ -41,7 +41,7 @@ public class Boss extends SetupObject
 		hpBar.setPosXY(pos.x-100, pos.y + 100)
 		hpBar.setValue(currentHP / maxHp * 100.0)
 
-	function onDamage(Escaper escaper, real dmg)
+	function onDamage(Escaper _escaper, real dmg)
 		currentHP -= dmg
 		if currentHP < 1
 			Log.debug("Our boss is dead")

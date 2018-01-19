@@ -2,10 +2,6 @@ package MGSpacey
 import Minigame
 import PlayerData
 import Assets
-import Fx
-import Coin
-import TerrainUtils
-import Escaper
 import KeyUtils
 import ChannelAbilityPreset
 import Projectile

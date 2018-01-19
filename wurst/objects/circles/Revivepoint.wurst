@@ -4,7 +4,6 @@ import PlayerData
 import Startmazes
 import ClosureTimers
 import SoundUtils
-import TerrainBlocker
 import ChannelAbilityPreset
 
 constant INFO_REVIVE_POINT_ID = compiletime(ABIL_ID_GEN.next())

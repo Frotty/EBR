@@ -7,13 +7,11 @@ import initlater FourthCitadelle
 import PlayerData
 import StringUtils
 import Key
-import ClosureForGroups
 import Door
 import Obstacle
 import Ball
 import LobbyTeleporter
 import MinigameTeleporter
-import BuilderConstants
 import Execute
 
 public Startmaze array startmazes

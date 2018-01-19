@@ -65,7 +65,7 @@ function manageWaitForRevive(Escaper e)
 		pods[id] = new RevivePod(pData[id], 0, true)
 		if waitForListener != null
 			waitForCount++
-			if waitForCount >= escaperPlayers.getSize()
+			if waitForCount >= escaperPlayers.size()
 				waitForCount = 0
 				waitForListener.onAllDead()
 				waitForListener = null

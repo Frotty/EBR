@@ -15,7 +15,7 @@ public class Playerfile
 			pmd.save(file)
 
 	function load(SyncedFile file)
-		if pmDatas.getSize() > 0
+		if pmDatas.size() > 0
 			pmDatas.clear()
 		
 		while file.hasNext()

@@ -57,7 +57,7 @@ public class Portal extends FxEntity
 		this.es = es
 		deactivate()
 		fx.setColor(colorA(145,145,145,145))
-		addSensorListener(this, (UnitEntity source, UnitEntity target) -> begin
+		addSensorListener(this, (UnitEntity _source, UnitEntity target) -> begin
 			if destiny != ZERO2 and target instanceof Escaper
 				var teleport = true
 				for i = 0 to 5

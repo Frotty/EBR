@@ -37,7 +37,7 @@ public class JukeBox
 		jukeTimer = getTimer()
 		jukeTimer.setData(this castTo int)
 		for n = 0 to 3
-			for i = 0 to musics.getSize()
+			for i = 0 to musics.size()
 				if (i * GetRandomInt(1,7)) mod 2 == 0
 					randomQueue.addtoStart(i)
 				else
@@ -45,13 +45,13 @@ public class JukeBox
 				
 	function playNextMusic()
 		StopMusic(false)
-		if requests.getSize() > 0
+		if requests.size() > 0
 			lastWasRequest = true
 			let req = requests.pop()
 			currentMusic = musics.get(req.id)
 			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r as requested by " + req.juker.getNameColored(), 10)
 			destroy req
-		else if randomQueue.getSize() > 0
+		else if randomQueue.size() > 0
 			let id = randomQueue.pop()
 			currentMusic = musics.get(id)
 			if currentMusic == null
@@ -79,7 +79,7 @@ public class JukeBox
 						
 				printTimed("The Track |cff84DE52" + music.name + "|r has been queued by " + p.getNameColored(), 10)
 				requests.add(new JukeRequest(p, idx))
-				if requests.getSize() == 1 and not lastWasRequest
+				if requests.size() == 1 and not lastWasRequest
 					jukeTimer.start(0.5, () -> onMusicCallback())
 				return
 			idx++

@@ -129,7 +129,7 @@ public class RegionData
 	function removeEscaper(Escaper e)
 		escapers.remove(e)
 		
-	@deprecated("Because Happy Tauren is noob") function setBossRegion()
+	function setBossRegion()
 		bossRegion = true
 		
 	function resetTiles()

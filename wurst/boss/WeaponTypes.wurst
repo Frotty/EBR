@@ -1,7 +1,6 @@
 package WeaponTypes
 import Escaper
 import Assets
-import ClosureForGroups
 import Boss
 import Minion
 import BoomerangProjectile

@@ -100,7 +100,7 @@ public class PlayerData
 		playerboard.setNewItem(row,2,rank, null)  
 	
 	function addXp(int amount, boolean time)
-		if localFilesEnabled and allPlayers.getSize() > 1 or title == Title.ADMIN
+		if localFilesEnabled and allPlayers.size() > 1 or title == Title.ADMIN
 			if time
 				XP += amount
 			else if lastExpGain < minutes
@@ -190,7 +190,7 @@ public class PlayerData
 			escaperPlayers.remove(this)
 
 		// Give remaining builders control
-		if builderPlayers.getSize() > 1 and isBuilder(p)
+		if builderPlayers.size() > 1 and isBuilder(p)
 			if builder != null
 				builder.terminate()
 			for int i=0 to 22
@@ -209,7 +209,7 @@ public class PlayerData
 			tagfx.destr()
 		
 function rebuildBoard()
-	playerboard = new Board(allPlayers.getSize()+1,3)
+	playerboard = new Board(allPlayers.size()+1,3)
 	
 	int i = 1
 	for pd in allPlayers
@@ -268,7 +268,7 @@ function setTime()
 		i++
 
 public function startTestmode(PlayerData pd)
-	if (allPlayers.getSize() == 1 or pd.title == Title.ADMIN) and pd.builder == null
+	if (allPlayers.size() == 1 or pd.title == Title.ADMIN) and pd.builder == null
 		pd.escaper.terminate()
 		builderPlayers.add(pd)
 		var i = 0
@@ -327,7 +327,7 @@ public function initPlayers()
 		UnitAddItemById(pd.builder.actor,'I001')
 		UnitAddItemById(pd.builder.actor,'I002')
 		UnitAddItemById(pd.builder.actor,'I003')
-		pd.builder.regionCount = (17. / builderPlayers.getSize()).round()
+		pd.builder.regionCount = (17. / builderPlayers.size()).round()
 
 public function checkPlayerLocalFiles()
 	doAfter(0.5, () -> begin

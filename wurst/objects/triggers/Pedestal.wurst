@@ -3,14 +3,12 @@ import initlater InstantBuild
 import public PedestalObjects
 import Assets
 import BaseObject
-import ClosureForGroups
 import HashMap
 import PlayerData
 import FileIO
 import Builder
 import SyncWrapper
 import JsonParser
-import TerrainBlocker
 import TileData
 import LZW
 import StringUtils
@@ -68,7 +66,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				let ue = serializable castTo UnitEntity
 				effects.put(serializable, ue.actor.addEffect(Abilities.innerFireTarget, "overhead"))
 
-	function addTile(vec2 tpos, boolean removeIfExists)
+	function addTile(vec2 tpos, boolean _removeIfExists)
 		let targPos = tpos.toTile()
 		if getRegionData(targPos).canBuild(owner)
 			let mtile = targPos.getTile()

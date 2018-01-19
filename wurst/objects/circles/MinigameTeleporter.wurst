@@ -2,7 +2,6 @@ package MinigameTeleporter
 import BaseObject
 import PlayerData
 import StringUtils
-import Invisible
 import Assets
 import Minigame
 
@@ -38,7 +37,7 @@ public class MinigameTeleporter extends StaticBaseObject
 		votes[e.owner.getId()] = not votes[e.owner.getId()] 
 		if votes[e.owner.getId()]
 			currentPlus++
-			let votesNeeded = (escaperPlayers.getSize() * 0.65).round()
+			let votesNeeded = (escaperPlayers.size() * 0.65).round()
 			if currentPlus >= votesNeeded
 				startMinigame()
 				text.tt.center(getPos(), "-|cffffcc00Minigame in progress|r-", 10)
@@ -50,7 +49,7 @@ public class MinigameTeleporter extends StaticBaseObject
 			currentPlus--
 
 	function startMinigame()
-		let chosenMinigame = minigames.get(GetRandomInt(0, minigames.getSize()-1))
+		let chosenMinigame = minigames.get(GetRandomInt(0, minigames.size()-1))
 		chosenMinigame.start()
 		
 	function reset()

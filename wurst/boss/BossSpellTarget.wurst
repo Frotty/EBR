@@ -3,7 +3,6 @@ import SetupObject
 import Escaper
 import HomingProjectile
 import Assets
-import ClosureForGroups
 import ClosureTimers
 import HashMap
 
@@ -16,7 +15,6 @@ public enum SpellType
 	AOE
 	LINE
 	MISSILE
-
 
 public HashMap<int,LinkedList<SpellTarget>> targets = new HashMap<int,LinkedList<SpellTarget>>()
 

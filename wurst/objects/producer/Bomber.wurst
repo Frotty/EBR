@@ -3,7 +3,6 @@ import SetupObject
 import Attackspeed
 import ClosureTimers
 import ChannelAbilityPreset
-import Basics
 
 constant BOMBER_ID = 'bmbr'
 constant int AUTOATTACK_ID = 'A03B'

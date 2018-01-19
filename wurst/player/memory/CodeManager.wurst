@@ -54,7 +54,7 @@ class CheckPlayerLocalFilesTask extends GTask
 			Log.error("Sync Task Errored")
 		else if state == TaskState.FINISHED
 			Log.debug("Sync Task Finished")
-		if taskQueue.getSize() == 0
+		if taskQueue.size() == 0
 			startChoose()
 
 
