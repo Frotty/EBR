@@ -56,5 +56,6 @@ public class MinigameTeleporter extends StaticBaseObject
 		inprogress = false
 		for i = 0 to 11
 			votes[i] = false
+		currentPlus = 0
 		text.tt.center(getPos(), "|cffffcc00Vote for minigame", 10)
 

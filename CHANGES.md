@@ -17,6 +17,7 @@
 [*] fixed region gravity allowing for zero gravity
 [*] fixed red player always being awarded the checkpoint when teleporting from one startmaze to the other
 [*] fixed minigame area not being revealed
+[*] fixed succeeding minigame votes instantly triggering minigame after first successful vote
 
 [0.90r]
 [*] replace TH sync with mori's brand new wurst sync libs (rank and maze save/load now much more stable)
