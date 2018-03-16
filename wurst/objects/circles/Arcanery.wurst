@@ -8,7 +8,7 @@ import PresetBuffs
 
 constant SILENCE_BUFF_ID = 'BNsi'
 constant SILENCE_ID = compiletime(ABIL_ID_GEN.next())
-constant SILENCE_BUFF = compiletime(createBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp"))
+constant SILENCE_BUFF = compiletime(createDummyBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp"))
 
 class SilenceBufff extends NormalBuff
 	Arcanery arcanery

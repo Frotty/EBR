@@ -1,6 +1,6 @@
 -runcompiletimefunctions
 -injectobjects
--opt
+opt
 -inline
 -localOptimizations
 uncheckedDispatch

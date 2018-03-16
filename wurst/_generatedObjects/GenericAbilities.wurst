@@ -1,4 +1,4 @@
-package Abilities
+package GenericAbilities
 import ChannelAbilityPreset
 import BuilderConstants
 

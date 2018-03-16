@@ -11,6 +11,7 @@ import UnitProducer
 import DummyRecycler
 import PickSystem
 import ObstacleObjects
+import Execute
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 public constant vec2 LOUNGE = gg_unit_revp_0322.getPos()
@@ -189,22 +190,25 @@ public class RegionData
 				printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 				data.terminate()
 								
-	
-				
+
+real x = 0
+real y = 0
+
 function rect.changeTerrain( integer ttype )
 	real xmax = GetRectMaxX(this)-32
 	real xmin = GetRectMinX(this)+32
 	real ymax = GetRectMaxY(this)-32
 	real ymin = GetRectMinY(this)+32
-	real x = xmin
-	real y = ymin
+	x = xmin
+	y = ymin
 	while y <= ymax
-		while x <= xmax
-			vec2(x,y).getTile().setType(ttype)
-			x = x + 128
+		execute() ->
+			while x <= xmax
+				vec2(x,y).getTile().setType(ttype)
+				x = x + 128
 
-		x = xmin
-		y = y + 128
+			x = xmin
+			y = y + 128
 
 RegionData array currentRegion
 

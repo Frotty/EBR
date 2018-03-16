@@ -1,18 +1,18 @@
 package Playerfile
-import FileIO
 import LinkedList
 import PlayerMemoryData
 import SyncWrapper
+import initlater CodeManager
 
 constant HASH = (-1739309337).toInt().toString()
 
 public class Playerfile
-	LinkedList<PMData> pmDatas = new LinkedList<PMData>()
+	let pmDatas = new LinkedList<PMData>()
 
-	function save(File file)
-		file.write(HASH)
+	function save()
+		addToBuff(HASH)
 		for pmd from pmDatas.staticItr()
-			pmd.save(file)
+			pmd.save()
 
 	function load(SyncedFile file)
 		if pmDatas.size() > 0
@@ -21,9 +21,11 @@ public class Playerfile
 		while file.hasNext()
 			let pmd = new PMData()
 			pmd.load(file)
-			pmDatas.add(pmd)
+			if pmd.namehash.isNotBlank() and pmd.expcode.isNotBlank()
+				pmDatas.add(pmd)
 
 	static function verify(string hash) returns boolean
+		Log.debug("verify: " + HASH + " == " + hash)
 		return hash == HASH
 
 	ondestroy

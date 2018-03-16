@@ -5,7 +5,7 @@ import Assets
 import BaseObject
 import HashMap
 import PlayerData
-import FileIO
+import MultifileIO
 import Builder
 import SyncWrapper
 import JsonParser
@@ -14,6 +14,7 @@ import LZW
 import StringUtils
 import ItemObject
 import GuardedWorker
+import BufferAdapters
 
 constant CHAR_STEPSIZE = 180
 
@@ -270,20 +271,22 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		destroy json
 		ttag.tt..center(pos, "|cff0884CEcompressing...", 10)
 		printLog(Loglevel.DEBUG, "start compress")
-		compress(big, (PayloadCallback cb) -> begin
+		compress(big) cb ->
 			let compressedData = cb.customData castTo BigString
-			if GetLocalPlayer() == owner
-				let f = File.open("dataSlot" + currentSlotId.toString() + ".pld", Mode.WRITE)
+			if localPlayer == owner
+				let writer = new FileWriter("dataSlot" + currentSlotId.toString() + ".pld", false)
+				let buffer = new StringBuffer(4096)
 				while compressedData.getLength() > BIG_SUBSTRING_LEN
-					f.write(compressedData.getString(0, BIG_SUBSTRING_LEN))
+					buffer.writeString(compressedData.getString(0, BIG_SUBSTRING_LEN))
 					compressedData.startoffset += BIG_SUBSTRING_LEN
-				f.write(compressedData.getString(0))
-				f.close()
-			ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
-			destroy big
-			tileMap.flush()
-			actor.unpause()
-		end)
+				buffer.writeString(compressedData.getString(0))
+				writer.populateFromBuffer(buffer)
+				writer.save() ->
+					ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
+					destroy big
+					tileMap.flush()
+					actor.unpause()
+					destroy writer
 		
 	override function onCast()
 		super.onCast()
@@ -304,7 +307,6 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			case SELECT_TILE_ID
 				addTile(tpos, true)
 			case SAVE1_ID
-				print("oncast save")
 				saveSlot(1)
 			case SAVE2_ID
 				saveSlot(2)

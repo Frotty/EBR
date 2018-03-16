@@ -41,7 +41,6 @@ public class Bombertower extends StaticBaseObject
 		var e = GetOrderedUnit().getEntity()
 		var tpos = getOrderPos()
 		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
-			print("abort")
 			GetOrderedUnit().abortOrder()
 			return
 		if e instanceof Bombertower 

@@ -39,7 +39,7 @@ public abstract class Minigame
 				
 				printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
 				
-				if GetLocalPlayer() == pd.p
+				if localPlayer == pd.p
 					SetCameraBoundsToRect(getCamBounds())
 				BEGIN_SOUND.playForPlayer(pd.p)
 			

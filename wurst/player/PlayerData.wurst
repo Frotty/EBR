@@ -154,7 +154,7 @@ public class PlayerData
 		let divhash = name.getHash() - fhash(name) div 2
 		if pmdata != null and not title == Title.ADMIN
 			if pmdata.adminToken != "no"
-				if name.getHash() - fhash(name) == pmdata.adminToken.toInt()
+				if -199306178 == pmdata.adminToken.getHash()
 					printTimedToPlayer("You are an admin!", 10, p)
 					title = Title.ADMIN
 				else if divhash == pmdata.adminToken.toInt()
@@ -162,10 +162,6 @@ public class PlayerData
 					printTimedToPlayer("You are a contributor!", 10, p)
 					escaper.actor.addItem('I00Z')
 					
-	function setAdminWorkaround()
-		title = Title.ADMIN
-		updateRank()
-		
 	function createAdminToken()
 		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
 		savePlayerfile(this)
@@ -330,8 +326,6 @@ public function initPlayers()
 		pd.builder.regionCount = (17. / builderPlayers.size()).round()
 
 public function checkPlayerLocalFiles()
-	doAfter(0.5, () -> begin
-		doSequentialSync()
+	doAfter(1.0, () -> begin
+		checkLocalFiles()
 	end)
-
-

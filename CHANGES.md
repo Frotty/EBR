@@ -1,4 +1,8 @@
-[0.90t]
+[0.90y]
+[*] Now using new MultiFileIO which will support saving bigger mazes in the future
+[*] Regions such as E that couldn't be claimed, are now fixed (thx @Fenris)
+
+[0.90x]
 [*] added new minigame: Spacey Adventure
 [*] added reverse ice option to executer
 [*] changed blind escaper to fix attachments and footsteps

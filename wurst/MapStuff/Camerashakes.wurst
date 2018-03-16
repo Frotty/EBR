@@ -47,14 +47,14 @@ function loopPerPlayer()
 		richter = RICHTER_MAX
 	if (richter < RICHTER_MIN)     
 		richter = RICHTER_MIN
-	if (GetLocalPlayer() == p)     
+	if (localPlayer == p)     
 		temprichter = playerCurrentShake[i] * Pow(10, richter)    
 		CameraSetTargetNoiseEx(playerCurrentShake[i] * 2.0, temprichter, true)    
 		CameraSetSourceNoiseEx(playerCurrentShake[i] * 2.0, temprichter, true)
 		playerCurrentShake[i] = ( playerCurrentShake[i] - ( playerCurrentShake[i] * SHAKE_REDUCE_PERCENT ) )
 		playerCurrentShake[i] = ( playerCurrentShake[i] - SHAKE_REDUCE_FLAT )
 	if ( playerCurrentShake[i] < SHAKE_THRESHOLD )     
-		if (GetLocalPlayer() == p)         
+		if (localPlayer == p)         
 			CameraSetSourceNoise(0, 0)        
 			CameraSetTargetNoise(0, 0)    
 		

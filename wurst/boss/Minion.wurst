@@ -3,7 +3,6 @@ import public EscaperSensor
 import Assets
 import Escaper
 import CustomBar
-import ClosureForGroups
 import ClosureTimers
 
 public constant COLL_SIZE_MINION = 0.
@@ -40,7 +39,7 @@ public class Minion extends EscaperSensorSetup
         spawnPoint = pos.toVec2()
         hpBar = new CustomBar(pos, "|", 40, 6)..setForeground(colorA(200,255,125,255))
 
-    function onDamage(Escaper escaper, real dmg)
+    function onDamage(Escaper _escaper, real dmg)
         currentHP -= dmg
         if currentHP < 1
             actor.kill()

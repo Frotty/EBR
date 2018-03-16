@@ -1,5 +1,5 @@
 package SyncWrapper
-import FileIO
+import MultifileIO
 import Table
 import initlater PlayerData
 import GuardedWorker
@@ -24,25 +24,22 @@ class SyncFileTask extends GTask
 
 		if localPlayer == pd.p
 			let buffer = network.getData()
-			let file = File.open(filename, Mode.READ)
-			var e = file.read()
-			while e != null
-				Log.debug("sync_lines[i]: " + e)
-				buffer.writeString(e)
-				e = file.read()
-			file.close()
-		Log.debug("OnLCSync2")
+			let reader = new FileReader(filename, false)
+			reader.load() status ->
+				if status == FileLoadStatus.SUCCESS
+					while reader.canRead()
+						let line = reader.readLine()
+						buffer.writeString(line)
 
-		network.start((Buffer buffer) -> begin
-			Log.debug("OnLCSync3")
-			Log.debug("OnPFSyncWrapper")
-			let task = getCurrentTask() castTo SyncFileTask
+					// destroy reader
+					network.start() (status, buffer) ->
+						Log.debug("OnLCSync3")
+						let task = getCurrentTask() castTo SyncFileTask
 
-			task.file = new SyncedFile()..deserialize(buffer)
-			
-			Log.debug("OnPFSyncWrapper done")
-			getCurrentTask().finish(false)
-		end)
+						task.file = new SyncedFile()..deserialize(buffer)
+						
+						Log.debug("OnPFSyncWrapper done")
+						getCurrentTask().finish(false)
 
 	override function onUpdate()
 
@@ -74,7 +71,7 @@ public function getSyncFileTask() returns SyncFileTask
 				
 public class SyncedFile implements BufferSerializable
 	int size
-	int readpos
+	int readpos = -1
 	Table stringTable = new Table()
 
 	override function serialize(Buffer buffer)
@@ -82,25 +79,37 @@ public class SyncedFile implements BufferSerializable
 	override function deserialize(Buffer buffer)
 		size = 0
 		if buffer != null
-			var str = buffer.readString()
+			var str = buffer.readString().trim()
 			Log.debug("buffer.readString(): " + str)
-			while str != null and str.length() > 0
-				if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
-					str = str.substring(0, str.length()-1)
-				stringTable.saveString(size, str)
-				size++
-				str = buffer.readString()
-			readpos = size+1
+			if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
+				str = str.substring(0, str.length()-1)
+			
+			int i = 0
+			while str.length() > i+4
+				var countS = str.substring(i, i+4)
+				while countS.charAt(0) == "0"
+					countS = countS.substring(1)
+				let count = countS.toInt()
+				var sub = str.substring(i+4, i+4 + count)
+				Log.debug("count: " + count.toString() + " countS: " + countS + " sub: " + sub)
+				if sub != null and sub.length() > 0
+					stringTable.saveString(size, sub)
+					size++
+				i += 4 + count
+
+			
 		
 	function hasNext() returns boolean
-		return readpos > 1
+		return readpos < size
 		
 	function read() returns string
-		readpos--
-		return stringTable.loadString(size-readpos)
+		readpos++
+		return stringTable.loadString(readpos)
 
 	ondestroy
 		destroy stringTable
 		
-
-	
+@Test function foo()
+	let s = "0011-12345678901"
+	let ss = s.substring(0, 4)
+	ss.assertEquals("0011")

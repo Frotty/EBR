@@ -1,17 +1,17 @@
 package PlayerMemoryData
 import ErrorHandling
-import FileIO
 import SyncWrapper
+import initlater CodeManager
 
 public class PMData
 	string namehash
 	string expcode
 	string adminToken
 
-	function save(File file)
-		file.write(namehash)
-		file.write(expcode)
-		file.write(adminToken)
+	function save()
+		addToBuff(namehash)
+		addToBuff(expcode)
+		addToBuff(adminToken)
 		printLog(Loglevel.DEBUG, "PMData save: hash <"  + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
 
 	function setXP(string xpcode)
