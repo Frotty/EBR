@@ -26,9 +26,9 @@ public class Tracks extends UnitEntity
 	vec2 dir = UP
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, TRACKS[0], pos, angle(0), this))
+		super(createUnit(owner, TRACKS[0], pos, angle(0)))
 		this.setCurrentRegion()
-		setup = getUnit(owner, TRACKS_ID, pos, angle(0), this)
+		setup = createUnit(owner, TRACKS_ID, pos, angle(0))
 		setup.setEntity(this)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		updateTrack()
@@ -40,10 +40,10 @@ public class Tracks extends UnitEntity
 		
 				
 	function recreateDummy()
-		setNewActor(getUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees(), this))
+		setNewActor(createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees()))
 
 	ondestroy
-		setup.recycle()
+		setup.remove()
 				
 	function onCast()
 		let id = GetSpellAbilityId()

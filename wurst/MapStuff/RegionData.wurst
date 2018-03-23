@@ -184,7 +184,7 @@ public class RegionData
 			else if isEscaper(data.owner)
 				rdata.revealRegion(data.owner)
 				edata.updateRegionData()
-		else if data instanceof UnitEntity
+		else
 			if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector
 				and not data instanceof TerrainModder and not data instanceof UnitProducer
 				printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)

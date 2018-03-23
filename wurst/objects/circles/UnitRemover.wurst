@@ -8,12 +8,12 @@ constant INFO_UNIT_REMOVER_ID = compiletime(ABIL_ID_GEN.next())
 public class UnitRemover extends StaticBaseObject
 
 	construct(unit existing)
-		super(existing.getPos(), existing, 64., function UnitRemover.removeUnit, CODE_NULL )
+		super(existing.getPos(), existing, 64., function UnitRemover.removeUnit, null)
 		clearQuestionmark()
 		actor.addAbility(TURN_OFF_ID)
 
 	construct( vec2 pos, player owner)
-		super(pos, getUnit(owner, UNIT_REMOVER_ID, pos, angle(0), this), 64., function UnitRemover.removeUnit, CODE_NULL)
+		super(pos, createUnit(owner, UNIT_REMOVER_ID, pos, angle(0)), 64., function UnitRemover.removeUnit, null)
 		clearQuestionmark()
 		actor.addAbility(TURN_OFF_ID)
 

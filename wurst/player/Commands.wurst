@@ -88,8 +88,8 @@ function onCommandChat()
 						break
 				if i < 2
 					let id2 = tr.getOwner().getId()
-					let pd2 = pData[id2]
-					pd2.createAdminToken()
+					let _pd2 = pData[id2]
+					// TODO apply adminship?
 		case "exp"
 			if pd.title == Title.ADMIN
 				int i = 0

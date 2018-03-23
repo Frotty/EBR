@@ -1,7 +1,6 @@
 package Executer
 import TerrainModder
 import BaseObject
-import ErrorHandling
 import Escaper
 import EscaperKillers
 import Door
@@ -112,10 +111,10 @@ public class Executer extends StaticBaseObject
 	destructable dummy // model for pressure plate, and lever
 	
 	construct(unit existing)
-		super(existing.getPos(), existing, EVENT_RADIUS, function Executer.onEvent, CODE_NULL)
+		super(existing.getPos(), existing, EVENT_RADIUS, function Executer.onEvent, null)
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, EXECUTER_ID, pos, angle(0), this), EVENT_RADIUS, function Executer.onEvent, CODE_NULL)
+		super(pos, createUnit(owner, EXECUTER_ID, pos, angle(0)), EVENT_RADIUS, function Executer.onEvent, null)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	static function onEvent()
@@ -245,7 +244,7 @@ public class Executer extends StaticBaseObject
 			case Amode.MOVEUNIT
 				moveUnit()
 			case Amode.CREATEUNIT
-				createUnit()
+				createUnitInternal()
 			default
 				printTimedToPlayer("Executer has no action set", 15, owner)
 					
@@ -312,7 +311,7 @@ public class Executer extends StaticBaseObject
 		else
 			printLog(owner, Loglevel.WARNING, "Executer: No object selected")
 			
-	function createUnit()
+	function createUnitInternal()
 		let rallyPos = getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)
 		if data.canBuild(owner)

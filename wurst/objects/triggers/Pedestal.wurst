@@ -36,7 +36,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	let listparser = new JsonParser()
 	
 	construct(vec2 pos, player owner)
-		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, CODE_NULL, CODE_NULL)
+		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, null, null)
 		setPos(pos.toTile().toVec3())
 		ttag.tt.center(pos.toVec3(), "|cff4AA542ready", 10)
 		actor..addAbility(SAVE1_ID)..addAbility(LOAD1_ID)..addAbility(SAVE2_ID)..addAbility(SAVE3_ID)

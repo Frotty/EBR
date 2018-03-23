@@ -23,7 +23,7 @@ public abstract class Startmaze
 		for vicu from ENUM_GROUP
 			if vicu.isAlive() and vicu.getPos().isInRect(rdata.theRect)
 				var data = vicu.getEntity()
-				if data != null and (data castTo UnitEntity).actor.getName() != null and data.typeId > 0
+				if data != null and data.actor.getName() != null and data.typeId > 0
 					data.terminate()
 				else
 					vicu.remove()

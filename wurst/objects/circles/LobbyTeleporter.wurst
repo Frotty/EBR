@@ -20,7 +20,7 @@ public class LobbyTeleporter extends StaticBaseObject
 		ftext.recycle()
 
 	construct(unit existing, boolean builder)
-		super(existing.getPos(), existing, EVENT_RADIUS, function LobbyTeleporter.checkVote, CODE_NULL)
+		super(existing.getPos(), existing, EVENT_RADIUS, function LobbyTeleporter.checkVote, null)
 		actor..removeAbility(REMOVE_OBJECT_ID)
 		..removeAbility(MAKE_UNIT_INVISIBLE_ID)
 		..removeAbility(ESC_ID)

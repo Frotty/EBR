@@ -16,11 +16,11 @@ public class Teleporter extends StaticBaseObject
 	TeleportMode mode = TeleportMode.ESCAPER
 	
 	construct( vec2 pos, player owner )
-		super( pos, getUnit(owner, TELEPORTER_ID, pos, angle(0), this), EVENT_RADIUS, function Teleporter.teleport, CODE_NULL ) 
+		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0)), EVENT_RADIUS, function Teleporter.teleport, null) 
 		actor.addAbility(TURN_OFF_ID)
 
 	construct(unit existing)
-		super(existing.getPos(), existing, EVENT_RADIUS, function Teleporter.teleport, CODE_NULL )
+		super(existing.getPos(), existing, EVENT_RADIUS, function Teleporter.teleport, null)
 		actor.addAbility(TURN_OFF_ID)
 		
 	static function teleport()

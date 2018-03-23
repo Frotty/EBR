@@ -58,7 +58,7 @@ public class CongaLineHead extends SetupObject
 	real segLength = 75.
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0), this), getUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0), this), 0.)
+		super(createUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0)), createUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		sleeps = false
 		setup.addAbility(CONGA_CONFIG_ID)

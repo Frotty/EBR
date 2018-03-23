@@ -55,7 +55,7 @@ public class Trap extends StaticBaseObject
 	int goocounter = 0
 	private Goo array[5] goos
 	construct( vec2 pos, player owner )
-		super(pos, getUnit(owner, TRAP_ID, pos, angle(0), this) , EVENT_RADIUS, function onStep, CODE_NULL)
+		super(pos, createUnit(owner, TRAP_ID, pos, angle(0)) , EVENT_RADIUS, function onStep, null)
 		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 			

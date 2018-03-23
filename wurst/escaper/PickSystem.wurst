@@ -6,7 +6,7 @@ import RevivePointModifier
 import ChannelAbilityPreset
 import CodeManager
 import Assets
-import ClosureTimers
+import Execute
 
 EscaperDefinition array currentView
 
@@ -42,12 +42,12 @@ class EscaperDefinition
 		nameTt.tt..setText(name, 12)
 
 	function showTo(PlayerData pd)
-		if GetLocalPlayer() == pd.p
+		if localPlayer == pd.p
 			nameTt.tt..setVisibility(true)
 			escaper.setVertexColor(COLOR_WHITE)
 
 	function hide(PlayerData pd)
-		if GetLocalPlayer() == pd.p
+		if localPlayer == pd.p
 			nameTt.tt..setVisibility(false)
 			escaper.setVertexColor(COLOR_BLACK)
 
@@ -67,8 +67,8 @@ class EscaperDefinition
 
 		pd.icon = mbicon
 		// Check for savefile#
-		doAfter(0.5, () -> checkPlayerfile(pd))
-		
+		execute() ->
+			checkPlayerfile(pd)		
 
 	function setCallback(EscaperClsr closure)
 		this.cb = closure

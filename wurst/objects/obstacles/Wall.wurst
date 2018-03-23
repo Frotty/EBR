@@ -6,7 +6,7 @@ import ChannelAbilityPreset
 public class Wall extends StaticSetupObject
 	int tId = 0
 	construct(vec2 pos, player owner, real angle, int tId)
-		super(getUnit(owner, buildorders[tId], pos, (angle).fromDeg(), this), getUnit(owner, buildorders[tId], pos, (angle).fromDeg(), this), 0., null)
+		super(createUnit(owner, buildorders[tId], pos, (angle).fromDeg()), createUnit(owner, buildorders[tId], pos, (angle).fromDeg()), 0., null)
 		this.tId = tId
 
 	override function serialize() returns Json

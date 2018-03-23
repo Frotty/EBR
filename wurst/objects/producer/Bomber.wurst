@@ -16,9 +16,9 @@ public class Bomber extends UnitEntity
 	boolean realorder = true
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, BOMBER_ID, pos, angle(0), this))
+		super(createUnit(owner, BOMBER_ID, pos, angle(0)))
 		this.setCurrentRegion()
-		setup = getUnit(owner, BOMBER_ID, pos, angle(0), this)..addAbility(GHOST_INVIS_ID)..setEntity(this)
+		setup = createUnit(owner, BOMBER_ID, pos, angle(0))..addAbility(GHOST_INVIS_ID)..setEntity(this)
 		actor..addAbility(LOCUST_ID)
 		UnitAddType(setup, UNIT_TYPE_PEON)
 		UnitAddType(actor, UNIT_TYPE_PEON)

@@ -27,7 +27,7 @@ public class Waypoint extends StaticBaseObject
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius+48., null)
 		for u from ENUM_GROUP
-			let data = u.getEntity() castTo UnitEntity
+			let data = u.getEntity()
 			if owner == data.owner and not data instanceof Escaper and not data instanceof Builder and not data instanceof StaticBaseObject
 				if data instanceof SetupObject
 					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())

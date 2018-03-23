@@ -15,7 +15,7 @@ public class Texter extends StaticBaseObject
 	color col = color(255,255,255)
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, TEXTER_ID, pos, angle(0), this), EVENT_RADIUS, function Texter.onStep, CODE_NULL) 
+		super(pos, createUnit(owner, TEXTER_ID, pos, angle(0)), EVENT_RADIUS, function Texter.onStep, null) 
 		setEnabled(false)
 		text = createCenterFText(actor.getPos3Zero(), "", 12)
 		text.tt..setColor(col.red,col.green,col.blue, 0)..setVisibility(false)

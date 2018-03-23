@@ -18,7 +18,7 @@ public class MinigameTeleporter extends StaticBaseObject
 	boolean inprogress = false
 
 	construct(unit existing)
-		super(existing.getPos(), existing, EVENT_RADIUS, function MinigameTeleporter.checkVote, CODE_NULL )
+		super(existing.getPos(), existing, EVENT_RADIUS, function MinigameTeleporter.checkVote, null)
 		actor..removeAbility(REMOVE_OBJECT_ID)
 		..removeAbility(MAKE_UNIT_INVISIBLE_ID)
 		..removeAbility(ESC_ID)

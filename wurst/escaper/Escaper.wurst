@@ -91,8 +91,7 @@ public abstract class Escaper extends UnitEntity
 		if not e.flying
 			e.flying = true
 			onEscapeGround()
-		if affectedByGravity
-			e.addVel(this.getCurrentRegion().gravity)
+		e.addVel(this.getCurrentRegion().gravity)
 
 	function setLava(boolean add)
 		if add and not onLava
@@ -300,13 +299,13 @@ public abstract class Escaper extends UnitEntity
 			if revmod == null
 				if actor == null
 					printLog(Loglevel.ERROR, "why this happening :(")
-					super.setNewActor(getUnit(owner, 1, rev, angle(0), this))
+					super.setNewActor(createUnit(owner, 1, rev, angle(0)))
 				else
 					ReviveHero(actor, rev.x, rev.y, false)
 				setXY(vec3(rev.x, rev.y, 32.))
 			else
 				if actor == null
-					super.setNewActor(getUnit(owner, 1, revmod.pos, angle(0), this))
+					super.setNewActor(createUnit(owner, 1, revmod.pos, angle(0)))
 				else
 					ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
 				setXY(vec3(revmod.pos.x, revmod.pos.y, 32.))
@@ -320,7 +319,7 @@ public abstract class Escaper extends UnitEntity
 				return
 
 			CameraClearNoiseForPlayer(owner)
-			if (GetLocalPlayer() == owner)
+			if (localPlayer == owner)
 				if selectatrevive
 					PanCameraToTimed(rev.x, rev.y, 0)
 				if camOnRevive
@@ -330,7 +329,7 @@ public abstract class Escaper extends UnitEntity
 				SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
 			if revivetomb != null
 				setPos(revivetomb.getPos3Real())
-				if (GetLocalPlayer() == owner)
+				if (localPlayer == owner)
 					if selectatrevive
 						PanCameraToTimed(rev.x, rev.y, 0)
 				revivetomb.remove()

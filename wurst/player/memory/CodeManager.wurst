@@ -8,7 +8,6 @@ import PlayerMemoryData
 import Playerfile
 import initlater PickSystem
 import GuardedWorker
-import BufferAdapters
 
 constant XPMAX = 500000
 constant FILE_NAME = "ebrprofile.pld"
@@ -29,34 +28,36 @@ public function checkLocalFiles()
 
 /** Load and sync playerfile */
 public function checkPlayerfile(PlayerData pd)
-	printLog(Loglevel.DEBUG, "check playerfile")
+	Log.debug("check playerfile")
 	if pd.localFilesEnabled
+		Log.debug("has local enabled")
 		getSyncedFile(pd, FILE_NAME, Filter(() -> onFileSynced()))
 
 function onFileSynced()
+	Log.debug("on file synced")
 	let syncTask = getSyncFileTask()
 	if syncTask.state == TaskState.FINISHED
 		let syncedFile = syncTask.file
 		let token = syncedFile.read()
-		printLog(Loglevel.DEBUG, "on PFCodeManager 2 <" + token + ">")
+		Log.debug("on PFCodeManager 2 <" + token + ">")
 		if token == null or token.length() == 0
 			if not syncTask.filename.startsWith("Logs\\")
 				execute(() -> getSyncedFile(syncTask.pd, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
 				return
 			printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
 			// A new file was created
-			printLog(Loglevel.DEBUG, "New Playerfile1")
+			Log.debug("New Playerfile1")
 			createNewPlayerfile(syncTask.pd)
-			printLog(Loglevel.DEBUG, "New Playerfile2")
+			Log.debug("New Playerfile2")
 			checkPlayerfile(syncTask.pd)
-			printLog(Loglevel.DEBUG, "New Playerfile3")
+			Log.debug("New Playerfile3")
 		else if Playerfile.verify(token)
 			printTimedToPlayer("Found a |cffFFCC00valid savefile.|r", 25, syncTask.pd.p)
 			let pf = new Playerfile()
 			pf.load(syncedFile)
 			syncTask.pd.pfile = pf
 			for pmd in pf.pmDatas
-				printLog(Loglevel.DEBUG, "pdchash: " + syncTask.pd.hash + " loaded hash: " + pmd.namehash )
+				Log.debug("pdchash: " + syncTask.pd.hash + " loaded hash: " + pmd.namehash )
 				if pmd.namehash == syncTask.pd.hash
 					printTimedToPlayer("Found a profile for |cffFFCC00" + syncTask.pd.name + "|r", 25, syncTask.pd.p)
 					loadPlayerMemory(syncTask.pd, pmd)
@@ -71,7 +72,7 @@ function onFileSynced()
 function loadPlayerMemory(PlayerData pd, PMData pmd)
 	var scode = new Savecode()
 	if scode.load(pd.name, pmd.expcode, saveTechnique)
-		printLog(Loglevel.DEBUG, "load success")
+		Log.debug("load success")
 		let xp = scode.decode(XPMAX)
 		DisplayTextToPlayer(pd.p,0,0,MSG_PREFIX + "|cff73CE4A[Success]|r - Your Character has been loaded. (" + xp.toString() + ")" )
 		pd.pmdata = pmd
@@ -82,7 +83,7 @@ function loadPlayerMemory(PlayerData pd, PMData pmd)
 	destroy scode
 
 function addPlayerProfile(PlayerData pd)
-	printLog(Loglevel.DEBUG, "addPlayerProfile1")
+	Log.debug("addPlayerProfile1")
 	let pmdata = new PMData()
 	var scode = new Savecode()
 	scode.encode(pd.XP, XPMAX)
@@ -93,7 +94,7 @@ function addPlayerProfile(PlayerData pd)
 	destroy scode
 
 	pd.pfile.pmDatas.add(pmdata)
-	printLog(Loglevel.DEBUG, "addPlayerProfile2")
+	Log.debug("addPlayerProfile2")
 	savePlayerfile(pd)
 	printTimedToPlayer("|cffFFCC00Profile|r created!", 25, pd.p)
 
@@ -108,26 +109,33 @@ public function addToBuff(string add)
 	buffer += fkGen(add.length()) + add
 
 public function savePlayerfile(PlayerData pd)
-	var scode = new Savecode()
-	scode.encode(pd.XP, XPMAX)
-	pd.pmdata.setXP(scode.save(pd.name, saveTechnique))
-	destroy scode
-	if localPlayer == pd.p
+	execute() ->
+		var scode = new Savecode()
+		scode.encode(pd.XP, XPMAX)
+		pd.pmdata.setXP(scode.save(pd.name, saveTechnique))
+		destroy scode
 		let writer = new FileWriter(FILE_NAME, false, 0.01)
 		buffer = ""
 		pd.pfile.save()
 		Log.debug("writeLine: " + buffer)
 		writer.writeLine(buffer)
-		writer.save(() -> skip)
+		let sync = new SimpleSynchronizer()
+		if localPlayer == pd.p
+			writer.save(() -> sync.sync())
+		else
+			sync.sync()
+
+		sync.onSynced() ->
+			destroy writer
 	
 function createNewPlayerfile(PlayerData pd)
-	printLog(Loglevel.DEBUG, "createNewPlayerfile0")
+	Log.debug("createNewPlayerfile0")
 	pd.pfile = new Playerfile()
-	printLog(Loglevel.DEBUG, "createNewPlayerfile1")
+	Log.debug("createNewPlayerfile1")
 	addPlayerProfile(pd)
-	printLog(Loglevel.DEBUG, "createNewPlayerfile2")
+	Log.debug("createNewPlayerfile2")
 	destroy pd.pfile
-	printLog(Loglevel.DEBUG, "createNewPlayerfile3")
+	Log.debug("createNewPlayerfile3")
 	pd.pfile = null
-	printLog(Loglevel.DEBUG, "createNewPlayerfile4")
+	Log.debug("createNewPlayerfile4")
 	pd.pmdata = null

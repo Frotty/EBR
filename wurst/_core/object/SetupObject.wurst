@@ -6,7 +6,6 @@ import public Json
 import public BuilderConstants
 import public initlater RegionData
 import public ClosureForGroups
-import ErrorHandling
 
 /**
 	Objects which are unclickable for escapers,	but clickable for builders.
@@ -72,7 +71,7 @@ public abstract class SetupObject extends UnitEntity
 			time = GetRandomReal(30,45)
 	
 	ondestroy
-		setup.recycle()
+		setup.remove()
 		setup = null
 		
 	function onOrderEvent()
@@ -124,13 +123,13 @@ public abstract class StaticSetupObject extends UnitEntity
 	function setNewSetup(unit u)
 		if u == null or not u.isAlive() or u.getEntity() != null
 			error("invalid actor replacement") 
-		setup.recycle()
+		setup.remove()
 		setup = u
 		setup.setEntity(this)
 
 	ondestroy
 		setup.clearRegister()
-		setup.recycle()
+		setup.remove()
 		setup = null
 		if inRangeTrig != null
 			inRangeTrig.destr()

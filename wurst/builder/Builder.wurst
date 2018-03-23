@@ -38,7 +38,7 @@ public class Builder extends UnitEntity
 	boolean hasBossMenu = false
 
 	construct( player p )
-		super(getUnit(p, BUILDER_CIRCLES_ID, vec2(-6000, -7160), angle(0), this))
+		super(createUnit(p, BUILDER_CIRCLES_ID, vec2(-6000, -7160), angle(0)))
 		registerListeners()
 		this.setCurrentRegion()
 

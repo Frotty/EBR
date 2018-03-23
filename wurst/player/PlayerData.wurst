@@ -15,8 +15,7 @@ import CodeManager
 import Playerfile
 import PlayerMemoryData
 import SoundUtils
-
-trigger leaveTrig
+import LocalFiles
 
 public Board playerboard
 public PlayerData array pData
@@ -25,8 +24,8 @@ public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
 constant questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
 
-public int minutes = 0
-public int seconds = 0
+public var minutes = 0
+public var seconds = 0
 
 public enum Role
 	BUILDER
@@ -95,9 +94,9 @@ public class PlayerData
 			escaperPlayers.add(this)
 
 	function setMBRow(int row)
-		playerboard.setNewItem(row,0,mbname,icon)
-		playerboard.setNewItem(row,1,escaper.deaths.toString(), null)
-		playerboard.setNewItem(row,2,rank, null)  
+		playerboard..setNewItem(row,0,mbname,icon)
+		..setNewItem(row,1,escaper.deaths.toString(), null)
+		..setNewItem(row,2,rank, null)  
 	
 	function addXp(int amount, boolean time)
 		if localFilesEnabled and allPlayers.size() > 1 or title == Title.ADMIN
@@ -161,14 +160,9 @@ public class PlayerData
 					// yarik's coin
 					printTimedToPlayer("You are a contributor!", 10, p)
 					escaper.actor.addItem('I00Z')
-					
-	function createAdminToken()
-		pmdata.adminToken = (name.getHash() - fhash(name)).toString()
-		savePlayerfile(this)
-		validateAdmintoken()
 
 	ondestroy
-		DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 20., p.getNameColored() + "|r |cffFFCC33has left the game!") 
+		printTimed(p.getNameColored() + "|r |cffFFCC33has left the game!", 20.) 
 		questFailedSound.play()
 		if selector != null
 			destroy selector
@@ -298,21 +292,19 @@ public function startTestmode(PlayerData pd)
 		
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 			 
-function playerLeft()
-	var p = GetTriggerPlayer()
-	var pd = pData[p.getId()]
-	destroy pd
 
 public function initPlayers()
-	leaveTrig = CreateTrigger()
-	leaveTrig.addAction(function playerLeft)
 	for i = 0 to 11
 		if GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(players[i]) == MAP_CONTROL_USER
 			pData[i] = new PlayerData(players[i])
-			leaveTrig.registerPlayerEvent(players[i], EVENT_PLAYER_LEAVE)
 
-	TimerStart(CreateTimer(), .1, false, () -> rebuildBoard())
-	TimerStart(CreateTimer(), 1., true, function setTime)
+	EventListener.add(EVENT_PLAYER_LEAVE) ->
+		var p = GetTriggerPlayer()
+		var pd = pData[p.getId()]
+		destroy pd
+
+	doAfter(.1, () -> rebuildBoard())
+	doPeriodically(1., (cb) -> setTime())
 	
 	for pd in builderPlayers
 		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
@@ -320,12 +312,13 @@ public function initPlayers()
 		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
 		pd.builder = new Builder( pd.p )
-		UnitAddItemById(pd.builder.actor,'I001')
-		UnitAddItemById(pd.builder.actor,'I002')
-		UnitAddItemById(pd.builder.actor,'I003')
+		pd.builder.actor..addItem('I001')
+		..addItem('I002')..addItem('I003')
 		pd.builder.regionCount = (17. / builderPlayers.size()).round()
 
 public function checkPlayerLocalFiles()
-	doAfter(1.0, () -> begin
-		checkLocalFiles()
-	end)
+	print("|cffc0c0c0Checking LocalFiles, please wait..")
+	doPeriodically(0.5) cb ->
+		if LocalFiles.checkedAll
+			checkLocalFiles()
+			destroy cb

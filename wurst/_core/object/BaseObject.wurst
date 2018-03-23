@@ -15,7 +15,6 @@ import Assets
 
 	A Baseobject is usually a circle. A unit that doesn't move and has an onRange trigger.
 */
-public code CODE_NULL = null
 public constant KEY_RALLY_X = "r"
 public constant KEY_RALLY_Y = "s"
 
@@ -67,7 +66,7 @@ public class StaticBaseObject extends UnitEntity
 				disFx.destr()
 
 			var path = ""
-			if GetLocalPlayer() == owner
+			if localPlayer == owner
 				path = Abilities.sleepTarget
 			disFx = addEffect(path, pos)
 

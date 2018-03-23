@@ -20,26 +20,37 @@ class SyncFileTask extends GTask
 		this.filename = filename
 		
 	override function onStart()
-		let network = new Network(pd.p)
-
-		if localPlayer == pd.p
-			let buffer = network.getData()
+		execute() ->
 			let reader = new FileReader(filename, false)
-			reader.load() status ->
-				if status == FileLoadStatus.SUCCESS
-					while reader.canRead()
-						let line = reader.readLine()
-						buffer.writeString(line)
-
-					// destroy reader
-					network.start() (status, buffer) ->
-						Log.debug("OnLCSync3")
-						let task = getCurrentTask() castTo SyncFileTask
-
-						task.file = new SyncedFile()..deserialize(buffer)
+			let network = new Network(pd.p)
+			let buffer = network.getData()
+			let file = new SyncedFile()
+			let synchronizer = new SimpleSynchronizer()
+			Log.debug("onStart")
+			if localPlayer == pd.p
+				reader.load() status ->
+					Log.debug("onLoaded")
+					if status == FileLoadStatus.SUCCESS
+						Log.debug("is Success")
 						
-						Log.debug("OnPFSyncWrapper done")
-						getCurrentTask().finish(false)
+						while reader.canRead()
+							let line = reader.readLine()
+							buffer.writeString(line)
+
+						synchronizer.sync()
+			else
+				synchronizer.sync()
+
+			synchronizer.onSynced() ->
+				Log.debug("start sync")
+				network.start() (status, buffer) ->
+					Log.debug("OnLCSync3")
+					let task = getCurrentTask() castTo SyncFileTask
+
+					task.file = file..deserialize(buffer)
+					
+					Log.debug("OnPFSyncWrapper done")
+					getCurrentTask().finish(false)
 
 	override function onUpdate()
 

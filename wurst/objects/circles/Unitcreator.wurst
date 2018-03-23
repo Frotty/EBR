@@ -23,11 +23,11 @@ public class UnitCreator extends StaticBaseObject
 	TimerMode tmode = TimerMode.FIXED
 
 	construct(unit existing)
-		super(existing.getPos(), existing, 0., CODE_NULL , CODE_NULL)
+		super(existing.getPos(), existing, 0., null , null)
 		setEnabled(false)
 
 	construct( vec2 pos, player owner)
-		super( pos, getUnit(owner, UNIT_CREATOR_ID, pos, angle(0), this), 0., CODE_NULL , CODE_NULL)
+		super( pos, createUnit(owner, UNIT_CREATOR_ID, pos, angle(0)), 0., null , null)
 		actor.addAbility(FIXED_ID)
 		setEnabled(false)
 	

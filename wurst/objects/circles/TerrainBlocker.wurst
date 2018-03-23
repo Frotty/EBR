@@ -8,7 +8,7 @@ public class TerrainBlocker extends StaticBaseObject
 	boolean silent = false
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, TC_BLOCKER_ID, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0), this), 0, CODE_NULL, CODE_NULL)
+		super(pos, createUnit(owner, TC_BLOCKER_ID, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0)), 0, null, null)
 		let tile = pos.getTile()
 		clearQuestionmark()
 		if tile.hasModifier(TileModifier.BLOCK) or tile.hasModifier(TileModifier.RESERVED)

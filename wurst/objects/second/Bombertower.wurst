@@ -12,9 +12,9 @@ public class Bombertower extends StaticBaseObject
 	boolean skipOrder = false
 
 	construct( vec2 pos, player owner )
-		super( pos, getUnit(owner, BOMB_TOWER_ID, pos, angle(0), this), 0., CODE_NULL, CODE_NULL )
+		super( pos, createUnit(owner, BOMB_TOWER_ID, pos, angle(0)), 0., null, null)
 		actor..addAbility(GHOST_VIS_ID)..addAbility(LOCUST_ID)
-		dummy = getUnit(owner, BOMB_TOWER_ID, pos, angle(0), this)
+		dummy = createUnit(owner, BOMB_TOWER_ID, pos, angle(0))
 		dummy..addAbility(GHOST_INVIS_ID)..setEntity(this)..setScale(0.5)
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> checkOrder())
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> checkOrder())

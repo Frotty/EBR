@@ -23,7 +23,7 @@ enum ZMode
 	HEMISPHERE
 
 public class Vortex extends UnitEntity
-	real gravity = 2.
+	real vgravity = 2.
 	ZMode zMode = ZMode.NONE
 	real radiusSq = GRAV_RADIUS_MEDIUM
 	Fx vortexFx
@@ -42,27 +42,27 @@ public class Vortex extends UnitEntity
 				case ZMode.NONE
 					if pos.toVec2().distanceToSq(e.pos.toVec2()) < radiusSq and not e.flying
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
-						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
+						e.otherVel += vec3(Cos(angl.radians) * vgravity, Sin(angl.radians) * vgravity, 0)
 				case ZMode.CYLINDER
 					if pos.toVec2().distanceToSq(e.pos.toVec2()) < radiusSq
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
-						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
+						e.otherVel += vec3(Cos(angl.radians) * vgravity, Sin(angl.radians) * vgravity, 0)
 				case ZMode.HEMISPHERE
 					if pos.distanceToSq(e.pos) < radiusSq
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
-						e.otherVel += vec3(Cos(angl.radians) * gravity, Sin(angl.radians) * gravity, 0)
+						e.otherVel += vec3(Cos(angl.radians) * vgravity, Sin(angl.radians) * vgravity, 0)
 		
 	function onCast()
 		var id = GetSpellAbilityId()
 		switch id
 			case INC_GRAV_ID
-				if gravity < 25.
-					gravity += .5
-					createFText(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
+				if vgravity < 25.
+					vgravity += .5
+					createFText(pos, vec2(0,0.06), "Gravity : " + vgravity.toString(), 12,  2., colorA(255,255,255,0), owner)
 			case DEC_GRAV_ID
-				if gravity > -25.
-					gravity -= .5
-					createFText(pos, vec2(0,0.06), "Gravity : " + gravity.toString(), 12,  2., colorA(255,255,255,0), owner)
+				if vgravity > -25.
+					vgravity -= .5
+					createFText(pos, vec2(0,0.06), "Gravity : " + vgravity.toString(), 12,  2., colorA(255,255,255,0), owner)
 			case ZMODE_NONE
 				zMode = ZMode.NONE
 				createFText(pos, vec2(0,0.06), "Z Mode: None", 12,  2., colorA(255,255,255,0), owner)

@@ -3,7 +3,6 @@ package TerrainModder
 import ChannelAbilityPreset
 import TerrainBlocker
 import PlayerData
-import ErrorHandling
 
 public constant WALKABLE_ID = compiletime(HERO_ID_GEN.next())
 public constant UNWALKABLE_ID = compiletime(HERO_ID_GEN.next())

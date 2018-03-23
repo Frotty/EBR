@@ -1,9 +1,0 @@
-package SyncSimple_config
-import MapBounds
-import Event
-
-@config function getDummy() returns unit
-	return createUnit(DUMMY_PLAYER, 'hfoo', boundMax, 0 .fromDeg())
-	..addAbility(GHOST_VIS_ID)..addAbility(DONT_FIRE_EVENTS_ID)
-	..pause()
-	..setScale(0)

@@ -1,7 +1,6 @@
 package Sensor
 import public Entity
 import HashMap
-import ErrorHandling
 import FxEntity
 
 /**
@@ -32,11 +31,11 @@ public module Sensor
 			let trig = GetTriggeringTrigger()
 			let u = GetTriggerUnit()
 			if u.getUserData() > 0
-				let target = u.getEntity() castTo UnitEntity
+				let target = u.getEntity()
 				if target != null and not target.done
 					let slistener = sensorListeners.get(trig)
 					if slistener != null
-						slistener.onSensor(trig.getSource().getEntity() castTo UnitEntity, target)
+						slistener.onSensor(trig.getSource().getEntity(), target)
 		end)
 		
 	ondestroy

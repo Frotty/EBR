@@ -11,7 +11,7 @@ public class Booster extends StaticBaseObject
 	ConfigValue boostspeed = new ConfigValue(200, 25, "Boostspeed")
 	
 	construct( vec2 pos, player owner )
-		super( pos, getUnit(owner, BOOSTER_ID, pos, angle(0), this), EVENT_RADIUS, function Booster.orderMove, CODE_NULL ) 
+		super( pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null) 
 		clearQuestionmark()
 		actor.addAbility(TURN_OFF_ID)
 		

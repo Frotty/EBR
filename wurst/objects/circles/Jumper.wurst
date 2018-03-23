@@ -44,11 +44,11 @@ public class Jumper extends StaticBaseObject
 	ConfigValue jumpForce = new ConfigValue(12., 0.5, "Jump Force")
 
 	construct(unit existing)
-		super(existing.getPos(), existing, 40., function Jumper.inRange, CODE_NULL)
+		super(existing.getPos(), existing, 40., function Jumper.inRange, null)
 		actor.addAbility(TURN_OFF_ID)
 	
 	construct(vec2 pos, player owner)
-		super(pos, getUnit(owner, JUMPER_ID, pos, angle(0), this), 40., function Jumper.inRange, CODE_NULL)
+		super(pos, createUnit(owner, JUMPER_ID, pos, angle(0)), 40., function Jumper.inRange, null)
 		actor.addAbility(TURN_OFF_ID)
 		forUnitsInRange(pos, 8, (unit u) -> begin
 			if u != actor and u.getTypeId() == JUMPER_ID

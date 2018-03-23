@@ -67,7 +67,7 @@ function newEventLocPerPlayer()
 	real x
 	real y
 	real dist
-	if GetLocalPlayer() == p
+	if localPlayer == p
 		// Get enum player's camera location    
 		x = GetCameraTargetPositionX()    
 		y = GetCameraTargetPositionY()

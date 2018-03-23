@@ -7,7 +7,7 @@ public constant OBJECT_TARGET_ID = 'wisp'
 public class ObjectTarget extends SetupObject
 	
 	construct(vec2 pos, player owner)
-		super(getUnit(owner, OBJECT_TARGET_ID, pos, angle(0), this), getUnit(owner, OBJECT_TARGET_ID, pos, angle(0), this), 0.)
+		super(createUnit(owner, OBJECT_TARGET_ID, pos, angle(0)), createUnit(owner, OBJECT_TARGET_ID, pos, angle(0)), 0.)
 
 	override function serialize() returns Json
 		let json = super.serialize()

@@ -22,7 +22,7 @@ public class SpellTarget extends SetupObject
 	SpellType stype = SpellType.NONE
 
 	construct(vec2 pos, player owner)
-		super(getLocustUnit(owner, SPELLTARGET_ID, pos, angle(0), this), getUnit(owner, SPELLTARGET_ID,  pos, angle(0), this), 32)
+		super(createUnit(owner, SPELLTARGET_ID, pos, angle(0))..addAbility(LOCUST_ID), createUnit(owner, SPELLTARGET_ID,  pos, angle(0)), 32)
 		stype = SpellType.NONE
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		if not targets.has(owner.getId())
