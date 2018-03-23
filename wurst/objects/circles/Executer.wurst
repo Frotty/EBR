@@ -121,7 +121,7 @@ public class Executer extends StaticBaseObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
+		thistype obj = source.getEntity() castTo Executer
 		
 		if obj.canTrigger(e)
 			switch obj.eventMode
@@ -154,9 +154,8 @@ public class Executer extends StaticBaseObject
 		Entity leaver = GetLeavingUnit().getEntity()
 		thistype obj = r.loadRegionData() castTo thistype
 		if obj.enabled and obj.canTrigger(leaver)
-			GroupEnumUnitsInRect(ENUM_GROUP, obj.eventRect, null)
 			int c = 0
-			for u from ENUM_GROUP
+			forUnitsInRect(obj.eventRect) u ->
 				Entity e = u.getEntity()
 				if obj.canTrigger(e)
 					c++

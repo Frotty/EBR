@@ -92,7 +92,7 @@ public class StaticBaseObject extends UnitEntity
 		return active
 
 	static function isProper() returns boolean
-		return GetTriggerUnit().getFlyHeight() < 22 and (GetTriggeringTrigger().getSource().getUserData() castTo thistype).enabled
+		return GetTriggerUnit().getFlyHeight() < 22 and (GetTriggeringTrigger().getSource().getEntity() castTo StaticBaseObject).enabled
 
 	static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
 		let u			= GetOrderedUnit()

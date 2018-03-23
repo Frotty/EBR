@@ -27,7 +27,7 @@ public class Teleporter extends StaticBaseObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		Teleporter obj = source.getUserData() castTo Teleporter
+		let obj = source.getEntity() castTo Teleporter
 		let rallyPos = obj.getRallyPoint()
 		let rdata = getRegionData(rallyPos)
 		SetupObject dyn

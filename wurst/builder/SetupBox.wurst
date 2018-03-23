@@ -115,8 +115,7 @@ public class SetupBox extends UnitEntity
 					printTimedToPlayer("|cffC51019Why would you do this!", 15, owner)
 						
 			case CLEAR_ID
-				GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
-				for u from ENUM_GROUP
+				forUnitsInRect(rdata.theRect) u ->
 					var data = u.getEntity()
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
 						data.terminate()
@@ -156,7 +155,6 @@ public class SetupBox extends UnitEntity
 					addEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",actor.getPos()).destr()
 					let builder = pData[owner.getId()].builder
 					SelectUnitForPlayerSingle(builder.actor, owner)
-					GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, null)
 					builder.setBossMenu()
 				else
 					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )

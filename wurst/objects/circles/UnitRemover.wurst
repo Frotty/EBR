@@ -19,12 +19,11 @@ public class UnitRemover extends StaticBaseObject
 
 	static function removeUnit()
 		var u = GetTriggerUnit()
-		var data = u.getUserData()
-		var sdata = GetTriggeringTrigger().getSource().getUserData() castTo UnitRemover
-		if data > 0 and (data castTo Entity).owner == sdata.owner and u.hasAbility(REMOVE_OBJECT_ID)
-			var edata = data castTo Entity
-			if edata instanceof SetupObject and not edata instanceof Obstacle and not edata instanceof Decoration
-				edata.terminate()
+		var data = u.getEntity()
+		var sdata = GetTriggeringTrigger().getSource().getEntity() castTo UnitRemover
+		if data != null and data.owner == sdata.owner and u.hasAbility(REMOVE_OBJECT_ID)
+			if data instanceof SetupObject and not data instanceof Obstacle and not data instanceof Decoration
+				data.terminate()
 	
 	override function serialize() returns Json
 		let json = super.serialize()

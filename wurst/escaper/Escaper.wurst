@@ -11,7 +11,6 @@ import initlater Weapon
 import initlater ReviveManager
 import public initlater RegionData
 import Projectile
-import ErrorHandling
 import JukeBox
 import public SerializeIds
 import initlater PlayerData
@@ -20,14 +19,14 @@ import ClosureTimers
 import ChannelAbilityPreset
 import public TerrainData
 
-constant real COLL_RADIUS = 32.
-constant real SLIDE_ADD = 3.3
+constant COLL_RADIUS = 32.
+constant SLIDE_ADD = 3.3
 constant ANK_ITEM_ID = 'A091'
 constant TELEPORT_ITEM_ID = 'A08S'
 
 public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
-constant string POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
-constant string LAVA_EFFECT	= "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+constant POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
+constant LAVA_EFFECT	= "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
@@ -35,17 +34,17 @@ public constant JAUNT_SPELL = 'A08D'
 trigger neutralDeathTrig
 trigger spellTrig
 
-public LinkedList<Escaper> escapers = new LinkedList<Escaper>()
-public vec2 currentRevivepoint = gg_unit_revp_0002.getPos()
+public let escapers = new LinkedList<Escaper>()
+public var currentRevivepoint = gg_unit_revp_0002.getPos()
 
 public abstract class Escaper extends UnitEntity	
 	use PhysicsModule
 	RevivePointModifier revmod = null
-	boolean onUnwalkable = false
-	boolean sliding = false
-	boolean poisoned = false
-	boolean onLava = false
-	boolean camlock = false
+	var onUnwalkable = false
+	var sliding = false
+	var poisoned = false
+	var onLava = false
+	var camlock = false
 	int deaths = 0
 	effect lavaEffect
 	effect poisonEffect
@@ -347,7 +346,7 @@ public abstract class Escaper extends UnitEntity
 			t = 1./speed
 		
 		let startZVelocity = ((-this.getCurrentRegion().gravity.z * t) / 2 - pos.z/t)
-		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
+		this.setVel(vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity))
 			
 	function updateRegionData()
 		let currentReg = this.getCurrentRegion()
@@ -402,12 +401,12 @@ public abstract class Escaper extends UnitEntity
 					actor.setFacing(pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
 				
 	static function neutralDeath()
-		var escaper = GetTriggerUnit().getUserData() castTo Escaper
+		var escaper = GetTriggerUnit().getEntity() castTo Escaper
 		if GetKillingUnit() != null
 			escaper.kill(null)
 			
 	static function onCastEvent()
-		let data = GetTriggerUnit().getUserData() castTo Escaper
+		let data = GetTriggerUnit().getEntity() castTo Escaper
 		data.onCast(GetSpellAbilityId())
 
 	OrbProjectile orb = null

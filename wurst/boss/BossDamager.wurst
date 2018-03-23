@@ -25,7 +25,7 @@ public class BossDamager extends StaticBaseObject
 
     static function onInRange()
         var data = GetTriggerUnit().getEntity()
-        var bossDamager = GetTriggeringTrigger().getSource().getUserData() castTo BossDamager
+        var bossDamager = GetTriggeringTrigger().getSource().getEntity() castTo BossDamager
         if data instanceof Escaper
             var edata = data castTo Escaper
             bossDamager.damage(edata)

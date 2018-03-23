@@ -37,7 +37,7 @@ package CustomSpellBook
 		
 		
 		static function onCast() 
-			SpellBookDummy dum = GetSpellAbilityUnit().getUserData() castTo SpellBookDummy
+			SpellBookDummy dum = GetSpellAbilityUnit().getEntity()
 			
 			
 	init

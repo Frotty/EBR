@@ -19,7 +19,7 @@ public class Booster extends StaticBaseObject
 		let source = GetTriggeringTrigger().getSource()
 		let u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
+		thistype obj = source.getEntity() castTo Booster
 		if e instanceof SetupObject
 			SetupObject ek = e castTo SetupObject
 			ek.actor.setMoveSpeed(obj.boostspeed.get())

@@ -59,7 +59,7 @@ public class Jumper extends StaticBaseObject
 
 	static function inRange()
 		var data = GetTriggerUnit().getEntity()
-		var jdata = GetTriggeringTrigger().getSource().getUserData() castTo Jumper
+		var jdata = GetTriggeringTrigger().getSource().getEntity() castTo Jumper
 		if data instanceof Escaper and getRegionData(jdata.getRallyPoint()).canBuild(jdata.owner)
 			var edata = data castTo Escaper
 			edata.actor.abortOrder()

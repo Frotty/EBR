@@ -5,7 +5,7 @@ function onChangeVisibility()
 	var id = GetSpellAbilityId()
 	if id == MAKE_UNIT_VISIBLE_ID or id == MAKE_UNIT_INVISIBLE_ID
 		var caster = GetSpellAbilityUnit()
-		var dta = caster.getUserData() castTo UnitEntity
+		var dta = caster.getEntity()
 		if dta instanceof SetupObject
 			let data = dta castTo SetupObject
 			if id == MAKE_UNIT_VISIBLE_ID

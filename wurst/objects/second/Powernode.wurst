@@ -179,7 +179,7 @@ public class Powernode extends SetupObject
 	function onCast()
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
-		var node = GetTriggerUnit().getUserData() castTo Powernode
+		var node = GetTriggerUnit().getEntity() castTo Powernode
 		if id == LINK_KILL_ID or id == LINK_B_GROUND_ID or id == LINK_DIODE_GROUND_ID or id == LINK_B_AIR_ID or id == LINK_ORB_ID or id == LINK_B_BOTH_ID
 			var data = target.getEntity()
 			if data instanceof Powernode

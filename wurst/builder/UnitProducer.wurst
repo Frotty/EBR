@@ -38,7 +38,7 @@ public class UnitProducer extends StaticBaseObject
 
 	function onCast() returns boolean
 		var id = GetSpellAbilityId()
-		var obj = GetSpellAbilityUnit().getUserData() castTo UnitProducer
+		var obj = GetSpellAbilityUnit().getEntity() castTo UnitProducer
 		
 		let rallyPos = obj.getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)

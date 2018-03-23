@@ -3,25 +3,26 @@ import EscaperSensor
 import Escaper
 import Preloader
 import ChannelAbilityPreset
+import StringUtils
 
 public constant POINTER_ID = 'pntr'
 constant INFO_POINTER_ID = compiletime(ABIL_ID_GEN.next())
 constant POINTER_RADIUS = 64.
-constant int INC_ID = 'A01F'
-constant int DEC_ID = 'A01G'
-constant int START_ID = 'A031'
-constant int STOP_ID = 'A032'
+constant INC_ID = 'A01F'
+constant DEC_ID = 'A01G'
+constant START_ID = 'A031'
+constant STOP_ID = 'A032'
 
 
 public class Pointer extends EscaperSensorSetup
-	real turnspeed = 2.
-	angle angl
-	boolean turning = false
+	var turnspeed = 2.
+	var angl = 0 .fromDeg()
+	var turning = false
 	
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, POINTER_ID, facing, POINTER_RADIUS, 16.)
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		angl = facing
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	override function update()
 		if turning
@@ -38,15 +39,15 @@ public class Pointer extends EscaperSensorSetup
 			case INC_ID
 				if turnspeed < 6.
 					turnspeed += 0.5
-					createFText(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., COLOR_WHITE, owner)
 				else
-					createFText(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Maximum Speed", 10,  2., COLOR_WHITE, owner)
 			case DEC_ID
 				if turnspeed > -6.
 					turnspeed -= 0.5
-					createFText(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Turnspeed: "+ R2SW(turnspeed,1,2), 10,  2., COLOR_WHITE, owner)
 				else
-					createFText(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Minimum Speed", 10,  2., COLOR_WHITE, owner)
 			case START_ID
 				turning = true
 				angl = actor.getFacingAngle()
@@ -66,41 +67,27 @@ public class Pointer extends EscaperSensorSetup
 				data.angl = data.actor.getFacingAngle()	
 			es.actor.setFacing(data.angl)
 	
-	static function setfacing()
-		string chatmsg = GetEventPlayerChatString()
-		real facing = 0
-		if SubString(chatmsg, 0, 4) == "-sa "
-			facing = S2R(SubString(chatmsg, 4, StringLength(chatmsg)))
-		else if SubString(chatmsg, 0, 10) == "-setangle "
-			facing = S2R(SubString(chatmsg, 10, StringLength(chatmsg)))
-		for u from getSelectedPointers(GetTriggerPlayer())
-			Pointer obj = u.getUserData() castTo Pointer
-			obj.angl = facing.asAngleDegrees()
-			obj.setup.setFacing(obj.angl)
-			obj.actor.setFacing(obj.angl)
-			createFText(obj.pos, vec2(0,0.05), facing.toString(), 10,  2., colorA(255,175,75,0), obj.owner  )
+	function setfacing(angle amount)
+		angl = amount
+		setup.setFacing(angl)
+		actor.setFacing(angl)
+		createFText(pos, vec2(0,0.05), amount.degrees().toString(), 10,  2., colorA(255,175,75,0), owner)
 
 	override function serialize() returns Json
 		let json = super.serialize()
 		json
 		..addProperty(new Property(KEY_TYPE, POINTER_INDEX.toString()))
 		return json
-		
-function getSelectedPointers(player p) returns group
-	GroupEnumUnitsOfType(ENUM_GROUP, UnitId2String(POINTER_ID), null)
-	for u in ENUM_GROUP
-		if not (GetOwningPlayer(u) == p and IsUnitSelected(u, p))
-			GroupRemoveUnit(ENUM_GROUP, u)
-	return ENUM_GROUP	
-	
-@init2 function init_Pointer()
-	trigger t = CreateTrigger()
-	for int i = 0 to 11
-		TriggerRegisterPlayerChatEvent(t,players[i], "-setangle ", false)
-		TriggerRegisterPlayerChatEvent(t,players[i], "-sa ", false)
-	TriggerAddAction(t, function Pointer.setfacing)
 	
 init
+	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
+		let text = GetEventPlayerChatString()
+		let tokens = text.split(" ")
+		if tokens.peek() == "-setangle" or tokens.peek() == "-sa"
+			forUnitsOfType(UnitId2String(POINTER_ID)) u ->
+				let pointer = u.getEntity() castTo Pointer
+				pointer.setFacing(tokens.peek().toReal().fromDeg())
+
 	preloadAbility(START_ID)
 	preloadAbility(STOP_ID)
 	preloadAbility(INC_ID)

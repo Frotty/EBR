@@ -93,7 +93,7 @@ public class Spinner extends SetupObject
 				setEnabled(false)
 			case SPIN_ADD_SINGLE_ID
 				var u = GetSpellTargetUnit()
-				var data = u.getUserData() castTo UnitEntity
+				var data = u.getEntity()
 				if owner == owner
 					checkObj(data)
 			case SPIN_ADD_GROUP_ID

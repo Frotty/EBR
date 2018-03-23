@@ -34,7 +34,7 @@ public class LobbyTeleporter extends StaticBaseObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		LobbyTeleporter obj = source.getUserData() castTo LobbyTeleporter
+		let obj = source.getEntity() castTo LobbyTeleporter
 		if obj.ready and e instanceof Escaper and isEscaper(e.owner)
 			obj.check(e castTo Escaper)
 

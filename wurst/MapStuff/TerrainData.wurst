@@ -62,14 +62,12 @@ function hashtable.saveTile(tile tile)
 init
 	var realPos = playableMin
 	while realPos.x < playableMax.x
-		execute(() -> begin
+		execute() ->
 			while realPos.y < playableMax.y
-				execute(() -> begin
+				execute() ->
 					let x = (realPos.x/128.).round()
 					let y = (realPos.y/128.).round()
 					tileMap.saveTile(tile(x, y, x * xCells + y, 
 					GetTerrainType(realPos.x, realPos.y), GetTerrainType(realPos.x, realPos.y), bitset(TileModifier.NORMAL castTo int)))
-				end)
 				realPos.y += 128.
-		end)
 		realPos.x += 128.

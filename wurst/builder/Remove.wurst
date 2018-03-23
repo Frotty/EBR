@@ -7,13 +7,12 @@ function onRemoveObject()
 	var id = GetSpellAbilityId()
 	if id == REMOVE_OBJECT_ID
 		var u = GetTriggerUnit()
-		var data = u.getUserData()
+		var data = u.getEntity()
 		var remove = true
-		if data > 0
-			var e = data castTo Entity
+		if data != null
 			addEffect(Abilities.aIamTarget, u.getPos()).destr()
-			e.terminate()
-			remove = e.done
+			data.terminate()
+			remove = data.done
 		if remove
 			u..removeAbility(REMOVE_OBJECT_ID)
 	

@@ -96,7 +96,7 @@ public class CongaLineHead extends SetupObject
 		var t = GetSpellTargetUnit()
 		switch id
 			case ADD_ID
-				var ed = t.getUserData() castTo UnitEntity
+				var ed = t.getEntity()
 				if ed.owner == owner and ed instanceof SetupObject
 					addSegment(ed castTo SetupObject)
 			case INC_ID

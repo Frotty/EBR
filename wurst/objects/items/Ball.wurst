@@ -28,7 +28,7 @@ public class BallItem extends ItemObject
 			nullTimer(() -> begin
 				actorItem.remove()
 				actorItem = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
-				actorItem.setUserData(this castTo int)
+				actorItem.setEntity(this)
 			end)
 		else
 			nullTimer(() -> begin
@@ -45,5 +45,5 @@ public class BallItem extends ItemObject
 		nullTimer(() -> begin
 			actorItem.remove()
 			actorItem = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
-			actorItem.setUserData(this castTo int)
+			actorItem.setEntity(this)
 		end)

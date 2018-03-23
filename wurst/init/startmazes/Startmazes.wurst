@@ -19,9 +19,10 @@ public int currentMaze = -1
 public RevivePoint svRev
 
 public function initStartmazes()
-	GroupEnumUnitsOfPlayer(ENUM_GROUP, DUMMY_PLAYER, Filter(() -> GetFilterUnit().setOwner(STAFF_PLAYER, true)))
-		
-	forUnitsOfPlayer(STAFF_PLAYER, (unit u) -> checkStaffUnit(u))
+	forUnitsOfPlayer(DUMMY_PLAYER) u -> 
+		u.setOwner(STAFF_PLAYER, true)
+
+	forUnitsOfPlayer(STAFF_PLAYER, u -> checkStaffUnit(u))
 	
 	execute(() -> begin
 		var rand = GetRandomInt(0,7)

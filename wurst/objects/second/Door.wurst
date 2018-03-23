@@ -37,12 +37,12 @@ public class Door extends StaticSetupObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		Door door = source.getUserData() castTo Door
+		Door door = source.getEntity() castTo Door
 		if not door.opened and e instanceof Escaper
 			var es = e castTo Escaper
 			if es.pos.z < 64
 				if UnitHasItemOfTypeBJ( u, KEY_COLOR_ID[door.col castTo int] ) //WARNING BJ function//
-					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getUserData() castTo Key
+					var kdata = GetItemOfTypeFromUnitBJ( u, KEY_COLOR_ID[door.col castTo int] ).getEntity() castTo Key
 					if kdata != null
 						kdata.terminate()
 						door.openDoor()

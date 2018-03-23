@@ -63,7 +63,7 @@ public class Trap extends StaticBaseObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
+		let obj = source.getEntity() castTo Trap
 		
 		if not obj.active and e instanceof Escaper
 			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
@@ -78,13 +78,11 @@ public class Trap extends StaticBaseObject
 	override function update()
 		if timerreal <= 0.0
 			flashEffect(SFX_STRINGS[sfxid], actor.getPos())
-			GroupEnumUnitsInRange(ENUM_GROUP,actor.getX(), actor.getY(), EVENT_RADIUS, null)
-			for u from ENUM_GROUP
+			forUnitsInRange(pos.toVec2(), EVENT_RADIUS) u ->
 				Entity e = u.getEntity()
 				if e instanceof Escaper
 					var escaper = e castTo Escaper
 					doEffect(escaper)
-			ENUM_GROUP.clear()
 			timerreal = interval
 		else
 			timerreal -= ANIMATION_PERIOD

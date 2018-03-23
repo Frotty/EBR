@@ -97,7 +97,7 @@ public class Arcanery extends StaticBaseObject
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
-		thistype obj = source.getUserData() castTo thistype
+		thistype obj = source.getEntity() castTo Arcanery
 		if e instanceof Escaper
 			obj.onEnter(e castTo Escaper)
 
