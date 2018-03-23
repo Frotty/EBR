@@ -1,15 +1,12 @@
 package ConfigValue
 import Entity
 
-/**
-	Represents a condifurable value of an object.
-	Automatically limits upper and lower bounds as well
-	as displaying a nice text.
-*/
+/**	Represents a configurable value of an object, like spinspeed, waypoint delay, trap force etc.
+	Automatically limits upper and lower bounds as well	as displaying a nice texttag. */
 public class ConfigValue
-	private real value
-	private real increment
-	private string valueName
+	private var value = 0.
+	private var increment = 0.
+	private var valueName = ""
 	
 	construct(real startValue, real increment, string name)
 		this.value = startValue
@@ -28,13 +25,13 @@ public class ConfigValue
 	function increment(UnitEntity caster, real max)
 		if value < max
 			value += increment
-			createFText(caster.getPos(), valueName + ": " + value.toString(3), 9., 1.5, vec2(0,0.1), colorA(255,255,255,255), caster.owner)
+			createFText(caster.getPos(), valueName + ": " + value.toString(3), 9., 1.5, vec2(0,0.1), COLOR_WHITE, caster.owner)
 		else
-			createFText(caster.getPos(), valueName + " at maximum!", 9., 1.5, vec2(0,0.1), colorA(255,255,255,255), caster.owner)
+			createFText(caster.getPos(), valueName + " at maximum!", 9., 1.5, vec2(0,0.1), COLOR_WHITE, caster.owner)
 		
 	function decrement(UnitEntity caster, real min)
 		if value > min
 			value -= increment
-			createFText(caster.getPos(), valueName + ": " + value.toString(3), 9., 1.5, vec2(0,0.1), colorA(255,255,255,255), caster.owner)
+			createFText(caster.getPos(), valueName + ": " + value.toString(3), 9., 1.5, vec2(0,0.1), COLOR_WHITE, caster.owner)
 		else
-			createFText(caster.getPos(), valueName + " at minimum!", 9., 1.5, vec2(0,0.1), colorA(255,255,255,255), caster.owner)
+			createFText(caster.getPos(), valueName + " at minimum!", 9., 1.5, vec2(0,0.1), COLOR_WHITE, caster.owner)

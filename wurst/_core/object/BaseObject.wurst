@@ -20,12 +20,14 @@ public constant KEY_RALLY_Y = "s"
 
 
 public class StaticBaseObject extends UnitEntity
+	effect noRally = null
+	effect disFx = null
+
+	var enabled = true
+
 	private vec3 rallyPoint
 	private unit rallyUnit = null
-	private angle rallyAngle = angle(0)
-	effect noRally
-	effect disFx = null
-	boolean enabled = true
+	private var rallyAngle = angle(0)
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
@@ -33,8 +35,7 @@ public class StaticBaseObject extends UnitEntity
 		super(u)
 		this.setCurrentRegion()
 		noRally = addEffect(Objects.questionMark1, pos)
-		actor..addAbility(GHOST_VIS_ID)
-		..addAbility(REMOVE_OBJECT_ID)
+		actor..addAbility(GHOST_VIS_ID)..addAbility(REMOVE_OBJECT_ID)
 		this.setCurrentRegion()
 		rallyPoint = this.pos
 

@@ -4,29 +4,30 @@ import ClosureTimers
 import Fx
 import ChannelAbilityPreset
 
-public int array keyIds
-
 public constant KEY_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
-constant int DYN_ID = 'A00M'
-constant int STATIC_ID = 'A01O'
+
+public let keyIds = ['I009','I00C','I004','I008','I00J','I005','I00O','I00B','I006']
+
+constant DYN_ID = 'A00M'
+constant STATIC_ID = 'A01O'
+
 constant KEY_COLOR = "c"
 
 public class Key extends ItemObject
-	EBRColor col = EBRColor.WHITE
-	boolean picked = false
-	boolean followWalkable = true
+	var col = EBRColor.WHITE
+	var picked = false
+	var followWalkable = true
 	effect returnSfx = null
 	Escaper holder
 	Fx fx
 	
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(keyIds[0], pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0 ) )
+		super( pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 	function recolor()
-		RemoveItem(actorItem)
-		actorItem = createItem(keyIds[col castTo int], pos)
-		actorItem.setEntity(this)
+		actorItem.remove()
+		actorItem = createItem(keyIds[col castTo int], pos)..setEntity(this)
 		
 	override function onUse(Escaper user)
 		
@@ -56,9 +57,9 @@ public class Key extends ItemObject
 		setup.setXY(pos.toVec2())
 		setup.show()
 		nullTimer(() -> begin
-			actorItem.setEntity(null)
-			actorItem.remove()
-			actorItem = CreateItem( keyIds[col castTo int], pos.x, pos.y )
+			actorItem..setEntity(null)
+			..remove()
+			actorItem = createItem(keyIds[col castTo int], pos)
 			actorItem.setEntity(this)
 		end)
 		
@@ -72,25 +73,11 @@ public class Key extends ItemObject
 		
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()
+		for i = 0 to 8
+			if colorSpells[i] == id
+				col = i castTo EBRColor
+				break
 		switch id
-			case colorSpells[0]
-				col = EBRColor.WHITE
-			case colorSpells[1]
-				col = EBRColor.RED
-			case colorSpells[2]
-				col = EBRColor.BLUE
-			case colorSpells[3]
-				col = EBRColor.TEAL
-			case colorSpells[4]
-				col = EBRColor.PURPLE
-			case colorSpells[5]
-				col = EBRColor.YELLOW
-			case colorSpells[6]
-				col = EBRColor.ORANGE
-			case colorSpells[7]
-				col = EBRColor.GREEN
-			case colorSpells[8]
-				col = EBRColor.PINK
 			case DYN_ID
 				followWalkable = false
 				setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
@@ -120,20 +107,6 @@ public class Key extends ItemObject
 		if returnSfx != null
 			returnSfx.destr()
 			
-	
-		
-@init1 function init_Key()
-	keyIds[0] = 'I009'
-	keyIds[1] = 'I00C'
-	keyIds[2] = 'I004'
-	keyIds[3] = 'I008'
-	keyIds[4] = 'I00J'
-	keyIds[5] = 'I005'
-	keyIds[6] = 'I00O'
-	keyIds[7] = 'I00B'
-	keyIds[8] = 'I006'
-	
-
 @objectgen public function genKey()
 	new UnitDefinition(KEY_DUMMY_ID, 'hfoo')  
 	..setAttacksEnabled(0)

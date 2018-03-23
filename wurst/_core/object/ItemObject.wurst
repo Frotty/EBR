@@ -1,8 +1,6 @@
 package ItemObject
 import public Escaper
 
-ItemObject array itemObjs
-
 /**
 	Abstract class for Entities that are items
 	like Keys, Coins, etc.
@@ -15,7 +13,6 @@ public abstract class ItemObject extends Entity
 		super(setup.getOwner(), pos.toVec3())
 		this.setup = setup
 		setup..addAbility(GHOST_VIS_ID)
-		itemObjs[setup.getIndex()] = this
 		actorItem = i
 		actorItem..setEntity(this)
 		..setPos(pos)
