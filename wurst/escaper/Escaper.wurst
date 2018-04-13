@@ -25,8 +25,8 @@ constant ANK_ITEM_ID = 'A091'
 constant TELEPORT_ITEM_ID = 'A08S'
 
 public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
-constant POISON_EFFECT  = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
-constant LAVA_EFFECT	= "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
+constant POISON_EFFECT  = Abilities.poisonStingTarget
+constant LAVA_EFFECT	= Abilities.flameStrikeEmbers
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
@@ -52,10 +52,10 @@ public abstract class Escaper extends UnitEntity
 	vec2 slideVelocity = vec2(0,0)
 	vec2 otherVel = vec2(0,0)
 
-	boolean alive = true
-	boolean selectatrevive = true
-	boolean camOnRevive = true
-	boolean left = false
+	var alive = true
+	var selectatrevive = true
+	var camOnRevive = true
+	var left = false
 	unit revivetomb = null
 	
 	construct(vec3 pos, player owner, int typ)
@@ -90,7 +90,7 @@ public abstract class Escaper extends UnitEntity
 		if not e.flying
 			e.flying = true
 			onEscapeGround()
-		e.addVel(this.getCurrentRegion().gravity)
+		e.addVel(vec3(0,0,gravity))
 
 	function setLava(boolean add)
 		if add and not onLava
@@ -138,6 +138,7 @@ public abstract class Escaper extends UnitEntity
 				alive = false
 				deaths++
 				manageRevive(this)
+				onUnwalkable = false
 				setPoison(false)
 				setLava(false)
 				flying = false
@@ -340,13 +341,8 @@ public abstract class Escaper extends UnitEntity
 				actor.removeAbility(ORB_SPELL)
 	
 	override function setTarget(vec3 tpos, real speed)
-		var t = pos.distanceTo2d(tpos) / speed
-		let tangle = pos.angleTo2d(tpos)
-		if t < 1.
-			t = 1./speed
-		
-		let startZVelocity = ((-this.getCurrentRegion().gravity.z * t) / 2 - pos.z/t)
-		this.setVel(vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity))
+		stop()
+		super.setTarget(tpos, speed)
 			
 	function updateRegionData()
 		let currentReg = this.getCurrentRegion()
@@ -354,6 +350,7 @@ public abstract class Escaper extends UnitEntity
 		if newReg != null and newReg != currentReg
 			currentReg.removeEscaper(this)
 			newReg.addEscaper(this)
+			gravity = newReg.gravity
 			actor.removeAbility(currentReg.specialAbil)
 			if newReg.specialAbil > 0
 				actor.addAbility(newReg.specialAbil)
@@ -433,6 +430,7 @@ public abstract class Escaper extends UnitEntity
 				slideVelocity = ZERO2
 				setVel(vel * 0.15)
 				flashEffect(Abilities.polyMorphTarget, pos)
+				Log.debug("Escaper Orb Terminate")
 				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)

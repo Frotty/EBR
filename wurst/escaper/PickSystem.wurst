@@ -6,12 +6,11 @@ import RevivePointModifier
 import ChannelAbilityPreset
 import CodeManager
 import Assets
-import Execute
 
 EscaperDefinition array currentView
 
 constant START = gg_unit_revp_0002.getPos3Real()
-constant PICK = vec3(-6743, 6616,100)
+constant PICK = vec3(-6743,6616,100)
 constant BLINK_ID = 'A001'
 public constant PICK_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 constant PREV_ID = compiletime(ABIL_ID_GEN.next())
@@ -67,8 +66,7 @@ class EscaperDefinition
 
 		pd.icon = mbicon
 		// Check for savefile#
-		execute() ->
-			checkPlayerfile(pd)		
+		checkPlayerfile(pd)		
 
 	function setCallback(EscaperClsr closure)
 		this.cb = closure

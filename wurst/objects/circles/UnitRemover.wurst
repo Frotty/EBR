@@ -23,6 +23,7 @@ public class UnitRemover extends StaticBaseObject
 		var sdata = GetTriggeringTrigger().getSource().getEntity() castTo UnitRemover
 		if data != null and data.owner == sdata.owner and u.hasAbility(REMOVE_OBJECT_ID)
 			if data instanceof SetupObject and not data instanceof Obstacle and not data instanceof Decoration
+				Log.debug("UnitRemover Terminate")
 				data.terminate()
 	
 	override function serialize() returns Json

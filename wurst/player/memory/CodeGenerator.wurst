@@ -66,7 +66,7 @@ function modb( int x ) returns int
 
 public class Savecode
 	real digits	= 0.	//logarithmic approximation
-	BigNum bignum = new BigNum(base())
+	let bignum = new BigNum(base())
 	
 	ondestroy
 		destroy bignum

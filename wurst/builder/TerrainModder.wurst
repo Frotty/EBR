@@ -9,9 +9,9 @@ public constant UNWALKABLE_ID = compiletime(HERO_ID_GEN.next())
 public constant SLIDEABLE_ICE_ID = compiletime(HERO_ID_GEN.next())
 public constant SLIDEABLE_UNC_ICE_ID = compiletime(HERO_ID_GEN.next())
 
-constant int ICE_ABILITY = 'A063'
-constant int REVICE_ABILITY = 'A00C'
-int array UNWALKABLE_MOD_ABILITY_ID
+constant ICE_ABILITY = 'A063'
+constant REVICE_ABILITY = 'A00C'
+let UNWALKABLE_MOD_ABILITY_ID = ['A04Z', 'A04Y', 'A04X']
 
 public constant BRUSH_1_IDLE_ABILITY = compiletime(ABIL_ID_GEN.next())
 public constant BRUSH_1_ACTIVE_ABILITY = compiletime(ABIL_ID_GEN.next())
@@ -22,13 +22,10 @@ public constant BRUSH_5_ACTIVE_ABILITY = compiletime(ABIL_ID_GEN.next())
 public constant BRUSH_CIRCLE_ID = compiletime(ABIL_ID_GEN.next())
 public constant BRUSH_RECT_ID = compiletime(ABIL_ID_GEN.next())
 
-trigger castTrigger
-
-
 public class TerrainModder extends UnitEntity
-	int brushsize = 0
-	TShape brushshape = TShape.RECT
-	int modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
+	var brushsize = 0
+	var brushshape = TShape.RECT
+	var modification = 0// 0 = basic terrain, 1 = lava/revice 2 = poison
 
 	construct(unit u)
 		super(u)
@@ -188,11 +185,6 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	if rdata != null and rdata.canBuild(caster)
 		offset.getTile().setType(ttype)
 
-@init1 function init_TerrainModder()
-	UNWALKABLE_MOD_ABILITY_ID[0] = 'A04Z'
-	UNWALKABLE_MOD_ABILITY_ID[1] = 'A04Y'
-	UNWALKABLE_MOD_ABILITY_ID[2] = 'A04X'
-	
 @objectgen public function genTerrainModder()
 	new ChannelAbilityPreset(BRUSH_1_IDLE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)

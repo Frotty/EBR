@@ -7,12 +7,12 @@ import Decoration
 constant INFO_TEXTER_ID = compiletime(ABIL_ID_GEN.next())
 constant EVENT_RADIUS 	= 32.
 
-string array stdcolors
+let stdcolors = ["white", "red", "blue", "teal", "purple", "yellow", "orange", "green", "pink", "gray", "lightblue", "darkgreen", "brown"]
 
 public class Texter extends StaticBaseObject
 	FText text
-	boolean hidden = true
-	color col = color(255,255,255)
+	var hidden = true
+	var col = color(255,255,255)
 	
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, TEXTER_ID, pos, angle(0)), EVENT_RADIUS, function Texter.onStep, null) 
@@ -142,21 +142,6 @@ init
 
 
 	
-@init1 function init_Texter()
-	stdcolors[0] = "white"
-	stdcolors[1] = "red"
-	stdcolors[2] = "blue"
-	stdcolors[3] = "teal"
-	stdcolors[4] = "purple"
-	stdcolors[5] = "yellow"
-	stdcolors[6] = "orange"
-	stdcolors[7] = "green"
-	stdcolors[8] = "pink"
-	stdcolors[9] = "gray"
-	stdcolors[10] = "lightblue"
-	stdcolors[11] = "darkgreen"
-	stdcolors[12] = "brown"
-		
 
 @objectgen function genTexter()
 	new ChannelAbilityPreset(INFO_TEXTER_ID, 1, TRUE)

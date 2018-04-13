@@ -58,6 +58,7 @@ public class Teleporter extends StaticBaseObject
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
 		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_OBJECT_ID) 
+			Log.debug("Teleport term")
 			obj.terminate()
 
 	override function onCast()

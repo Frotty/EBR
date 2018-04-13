@@ -2,6 +2,7 @@ package Jumper
 import Escaper
 import BaseObject
 import SoundUtils
+import EscaperKillers
 
 constant INFO_JUMPER_ID = compiletime(ABIL_ID_GEN.next())
 constant DECREASE_FORCE_ID = compiletime(ABIL_ID_GEN.next())
@@ -37,41 +38,67 @@ public class Goo
 			tile.removeModifier(TileModifier.ORANGEGOO)
 		img.remove()
 
+enum JumpPermission
+	ESCAPER
+	KILLER
+	BOTH
+
 public class Jumper extends StaticBaseObject
 	private Goo array[5] goos
-	private int goocounter = 0
-	JumpMode mode = JumpMode.FORCED
+	private var goocounter = 0
+	var mode = JumpMode.FORCED
+	var permission = JumpPermission.ESCAPER
+
 	ConfigValue jumpForce = new ConfigValue(12., 0.5, "Jump Force")
 
 	construct(unit existing)
-		super(existing.getPos(), existing, 40., function Jumper.inRange, null)
+		super(existing.getPos(), existing, 40., function Jumper.onInRange, null)
 		actor.addAbility(TURN_OFF_ID)
 	
 	construct(vec2 pos, player owner)
-		super(pos, createUnit(owner, JUMPER_ID, pos, angle(0)), 40., function Jumper.inRange, null)
+		super(pos, createUnit(owner, JUMPER_ID, pos, angle(0)), 40., function Jumper.onInRange, null)
 		actor.addAbility(TURN_OFF_ID)
-		forUnitsInRange(pos, 8, (unit u) -> begin
+		forUnitsInRange(pos, 8) u ->
 			if u != actor and u.getTypeId() == JUMPER_ID
 				snd.play()
 				u.addAbility(SPECIAL_ID)
+				Log.debug("Jumper Terminate")
 				this.terminate()
-		end)
 
-	static function inRange()
+	function executeJump(UnitEntity edata)
+		edata.actor.abortOrder()
+		if edata instanceof SetupObject
+			(edata castTo SetupObject).setup..abortOrder()
+		edata.getPos()
+		switch mode
+			case JumpMode.FORCED
+				edata.pos.z = 1
+				edata.setTarget(getRallyPoint(), jumpForce.get())
+			case JumpMode.UNFORCED
+				edata.addVel(vec3(0,0, jumpForce.get()))
+		edata.setXY(edata.pos.add(0,0,1.))
+		flashEffect(EFFECT_STRING, pos)
+
+	function inRange()
 		var data = GetTriggerUnit().getEntity()
+		if not getRegionData(getRallyPoint()).canBuild(owner)
+			return
+		switch permission
+			case ESCAPER
+				if data instanceof Escaper 
+					executeJump(data)
+			case KILLER
+				if data instanceof EscaperSensorSetup 
+					executeJump(data)
+			case BOTH
+				if data instanceof Escaper or data instanceof EscaperSensorSetup
+					executeJump(data)
+		
+			
+
+	static function onInRange()
 		var jdata = GetTriggeringTrigger().getSource().getEntity() castTo Jumper
-		if data instanceof Escaper and getRegionData(jdata.getRallyPoint()).canBuild(jdata.owner)
-			var edata = data castTo Escaper
-			edata.actor.abortOrder()
-			switch jdata.mode
-				case JumpMode.FORCED
-					edata.stop()
-					edata.pos.z = 1
-					edata.setTarget(jdata.getRallyPoint(), jdata.jumpForce.get())
-				case JumpMode.UNFORCED
-					edata.addVel(vec3(0,0, jdata.jumpForce.get()))
-			edata.setXY(edata.pos.add(0,0,1.))
-			addEffect(EFFECT_STRING, data.pos).destr()
+		jdata.inRange()
 					
 				
 	override function onCast()
@@ -97,6 +124,16 @@ public class Jumper extends StaticBaseObject
 					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++
 					getSpellTargetPos().getTile().addModifier(TileModifier.BLUGOO)
+			case MODE_BOTH_ID
+				actor..removeAbility(MODE_BOTH_ID)..addAbility(MODE_ESCAPERS_ID)
+				permission = JumpPermission.ESCAPER
+			case MODE_ESCAPERS_ID
+				actor..removeAbility(MODE_ESCAPERS_ID)..addAbility(MODE_KILLERS_ID)
+				permission = JumpPermission.KILLER
+			case MODE_KILLERS_ID
+				actor..removeAbility(MODE_KILLERS_ID)..addAbility(MODE_BOTH_ID)
+				permission = JumpPermission.BOTH
+
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -180,6 +217,7 @@ public class Jumper extends StaticBaseObject
 	int2fourchar(MODE_FORCED_ID) + "," +
 	int2fourchar(REMOVE_OBJECT_ID) + "," +
 	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
+	int2fourchar(MODE_ESCAPERS_ID) + "," +
 	int2fourchar(RALLY_POINT) + "," +
 	int2fourchar(GHOST_VIS_ID) + "," +
 	int2fourchar(INVULNERABILITY_ID))

@@ -1,6 +1,5 @@
 package EscaperKillers
 import public EscaperSensor
-import Escaper
 import ChannelAbilityPreset
 
 public constant COLL_SIZE_SK = 72.
@@ -133,13 +132,6 @@ public class AirKiller extends EscaperSensorSetup
 	
 	construct(unit existing)
 		super(existing, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
-
-	override function onSensor(UnitEntity source, UnitEntity target)
-		if target instanceof Escaper
-			let zdelta = AIR_HEIGHT - target.pos.z
-			if zdelta - COLL_SIZE_AIR_Z <= sensorHeight and zdelta > 0
-				let escaper = target castTo Escaper
-				escaper.kill(this)
 
 	override function serialize() returns Json
 		let json = super.serialize()

@@ -24,6 +24,7 @@ public abstract class Startmaze
 			if vicu.isAlive() and vicu.getPos().isInRect(rdata.theRect)
 				var data = vicu.getEntity()
 				if data != null and data.actor.getName() != null and data.typeId > 0
+					Log.debug("clear")
 					data.terminate()
 				else
 					vicu.remove()
@@ -39,6 +40,7 @@ public function killD()
 public function deleteKeys()
 	item itm = GetEnumItem()
 	if(itm.getEntity() != null) 
+		Log.debug("Delete Keys")
 		itm.getEntity().terminate()
 	else
 		itm.remove()		

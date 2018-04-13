@@ -17,11 +17,12 @@ public class Waypoint extends StaticBaseObject
 	Waypoint andPartner = null
 	boolean ready = false
 	
-	construct( vec2 pos, player owner )
-		super( pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, null)
+	construct(vec2 pos, player owner)
+		super(pos, CreateUnit(owner, WAYPOINT_ID, pos.x, pos.y, 0.), EVENT_RADIUS, function Waypoint.onInRange, 
+			() ->  GetTriggerUnit().getFlyHeight() < 64 and (GetTriggeringTrigger().getSource().getEntity() castTo StaticBaseObject).enabled)
 
 	construct(unit existing)
-		super( existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, null)
+		super(existing.getPos(), existing, EVENT_RADIUS, function Waypoint.onInRange, () -> true)
 
 	function orderLogicMove()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
@@ -66,28 +67,28 @@ public class Waypoint extends StaticBaseObject
 			case INCREASE_DELAY_ID
 				if delay < 5.
 					delay += INTERVAL
-					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., COLOR_WHITE, owner  )
 				else
-					createFText(pos, vec2(0,0.05), "Maximum Delay", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Maximum Delay", 10,  2., COLOR_WHITE, owner  )
 			case DECREASE_DELAY_ID
 				if delay >= INTERVAL
 					delay -= INTERVAL
-					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10,  2., COLOR_WHITE, owner  )
 				else
-					createFText(pos, vec2(0,0.05), "Minimum Delay", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Minimum Delay", 10,  2., COLOR_WHITE, owner  )
 			case NO_WISPS_ID
 				if wisps
 					wisps = false
-					createFText(pos, vec2(0,0.05), "Wisps |cffAD0821inactive", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Wisps |cffAD0821inactive", 10,  2., COLOR_WHITE, owner  )
 				else
 					wisps = true
-					createFText(pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "Wisps |cff08BD52active", 10,  2., COLOR_WHITE, owner  )
 			case AND_CONNECTION_ID
 				let target = GetSpellTargetUnit().getEntity()
 				if target != null and target instanceof Waypoint
 					andPartner = target castTo Waypoint
 					andPartner.andPartner = this
-					createFText(target.getPos(), vec2(0,0.1), "|cff0873C5Linked", 9., 1.5, colorA(255,255,255,255), owner)
+					createFText(target.getPos(), vec2(0,0.1), "|cff0873C5Linked", 9., 1.5, COLOR_WHITE, owner)
 				else
 					andPartner = null
 	

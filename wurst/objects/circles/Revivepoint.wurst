@@ -98,6 +98,7 @@ public class RevivePoint extends StaticSetupObject
 
 	override function terminate()
 		if currentRevive != this
+			Log.debug("Delete")
 			super.terminate()
 		else
 			printTimedToPlayer("|cffcc3333You cannot remove the currently active Revivepoint", 5., owner)

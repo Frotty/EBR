@@ -120,7 +120,9 @@ function onCommandChat()
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode [both|cam|select|none], -rename [name]")
 
 @init1 function init_Commands()
-	trigger trg = CreateTrigger()
+	let trg = CreateTrigger()
 	for i = 0 to 11
 		trg.registerPlayerChatEvent(Player(i), "-", false)
 	trg.addAction(function onCommandChat)
+
+	Log.debug("init commands done")

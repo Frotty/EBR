@@ -126,6 +126,7 @@ public class Builder extends UnitEntity
 		if rdata != RegionData.EMPTY_REGION and (rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or rdata.canBuild(owner) or rdata.theRect == gg_rct_Start)
 			if i != null and rdata.canBuild(owner)
 				if i.getEntity() != null
+					Log.debug("Builder Terminate")
 					i.getEntity().terminate()
 				else 
 					RemoveItem(i)

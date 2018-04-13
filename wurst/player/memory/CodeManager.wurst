@@ -1,5 +1,5 @@
 package CodeManager
-import initlater  PlayerData
+import initlater PlayerData
 import CodeGenerator
 import LocalFiles
 import MultifileIO
@@ -7,12 +7,10 @@ import SyncWrapper
 import PlayerMemoryData
 import Playerfile
 import initlater PickSystem
-import GuardedWorker
 
 constant XPMAX = 500000
 constant FILE_NAME = "ebrprofile.pld"
-public constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
-constant MEH = "*/#-\\"
+constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
 
 public function checkLocalFiles()
@@ -21,52 +19,47 @@ public function checkLocalFiles()
 		if pd.localFilesEnabled
 			printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pd.p)
 		else
-			printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save stuff!", 15, pd.p)
+			printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save your progress!", 15, pd.p)
 
 	startChoose()
-
 
 /** Load and sync playerfile */
 public function checkPlayerfile(PlayerData pd)
 	Log.debug("check playerfile")
 	if pd.localFilesEnabled
 		Log.debug("has local enabled")
-		getSyncedFile(pd, FILE_NAME, Filter(() -> onFileSynced()))
+		let result = try() ->
+			getSyncedFile(pd, FILE_NAME, (file, pd) -> onFileSynced(file, pd))
 
-function onFileSynced()
+		if result
+
+		else
+
+function onFileSynced(SyncedFile file, PlayerData pd)
 	Log.debug("on file synced")
-	let syncTask = getSyncFileTask()
-	if syncTask.state == TaskState.FINISHED
-		let syncedFile = syncTask.file
-		let token = syncedFile.read()
-		Log.debug("on PFCodeManager 2 <" + token + ">")
-		if token == null or token.length() == 0
-			if not syncTask.filename.startsWith("Logs\\")
-				execute(() -> getSyncedFile(syncTask.pd, "Logs\\" + FILE_NAME, Filter(() -> onFileSynced())))
+	let token = file.read()
+	Log.debug("on PFCodeManager 2 <" + token + ">")
+	if token == null or token.length() == 0
+		// printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
+		// // A new file was created
+		// Log.debug("New Playerfile1")
+		// createNewPlayerfile(syncTask.pd)
+	else if Playerfile.verify(token)
+		printTimedToPlayer("Found a |cffFFCC00valid savefile.|r", 25, pd.p)
+		let pf = new Playerfile()
+		pf.load(file)
+		pd.pfile = pf
+		for pmd in pf.pmDatas
+			Log.debug("pdchash: " + pd.hash + " loaded hash: " + pmd.namehash )
+			if pmd.namehash == pd.hash
+				printTimedToPlayer("Found a profile for |cffFFCC00" + pd.name + "|r", 25, pd.p)
+				loadPlayerMemory(pd, pmd)
 				return
-			printTimed("Creating new |cffFFCC00valid savefile.|r", 25)
-			// A new file was created
-			Log.debug("New Playerfile1")
-			createNewPlayerfile(syncTask.pd)
-			Log.debug("New Playerfile2")
-			checkPlayerfile(syncTask.pd)
-			Log.debug("New Playerfile3")
-		else if Playerfile.verify(token)
-			printTimedToPlayer("Found a |cffFFCC00valid savefile.|r", 25, syncTask.pd.p)
-			let pf = new Playerfile()
-			pf.load(syncedFile)
-			syncTask.pd.pfile = pf
-			for pmd in pf.pmDatas
-				Log.debug("pdchash: " + syncTask.pd.hash + " loaded hash: " + pmd.namehash )
-				if pmd.namehash == syncTask.pd.hash
-					printTimedToPlayer("Found a profile for |cffFFCC00" + syncTask.pd.name + "|r", 25, syncTask.pd.p)
-					loadPlayerMemory(syncTask.pd, pmd)
-					return
 
 		// Savedata exists, but no profile for that name
-		printTimedToPlayer("Didn't find a profile for |cffFFCC00" + syncTask.pd.name + "|r - creating new..", 25, syncTask.pd.p)
-		addPlayerProfile(syncTask.pd)
-		loadPlayerMemory(syncTask.pd, syncTask.pd.pmdata)
+		// printTimedToPlayer("Didn't find a profile for |cffFFCC00" + syncTask.pd.name + "|r - creating new..", 25, syncTask.pd.p)
+		// addPlayerProfile(syncTask.pd)
+		// loadPlayerMemory(syncTask.pd, syncTask.pd.pmdata)
 	
 
 function loadPlayerMemory(PlayerData pd, PMData pmd)
@@ -82,21 +75,21 @@ function loadPlayerMemory(PlayerData pd, PMData pmd)
 		printLog(Loglevel.ERROR, "load failed! your savefile is outdated or broken.")
 	destroy scode
 
-function addPlayerProfile(PlayerData pd)
-	Log.debug("addPlayerProfile1")
-	let pmdata = new PMData()
-	var scode = new Savecode()
-	scode.encode(pd.XP, XPMAX)
-	pmdata.namehash = pd.hash
-	pmdata.setXP(scode.save(pd.name, saveTechnique))
-	pmdata.adminToken = "no"
-	pd.pmdata = pmdata
-	destroy scode
-
-	pd.pfile.pmDatas.add(pmdata)
-	Log.debug("addPlayerProfile2")
-	savePlayerfile(pd)
-	printTimedToPlayer("|cffFFCC00Profile|r created!", 25, pd.p)
+function addPlayerProfile(PlayerData _pd)
+	// Log.debug("addPlayerProfile1")
+	// let pmdata = new PMData()
+	// var scode = new Savecode()
+	// scode.encode(pd.XP, XPMAX)
+	// pmdata.namehash = pd.hash
+	// pmdata.setXP(scode.save(pd.name, saveTechnique))
+	// pmdata.adminToken = "no"
+	// pd.pmdata = pmdata
+	// destroy scode
+	// pd.pfile = new Playerfile()
+	// pd.pfile.pmDatas.add(pmdata)
+	// Log.debug("addPlayerProfile2")
+	// savePlayerfile(pd)
+	// printTimedToPlayer("|cffFFCC00Profile|r created!", 25, pd.p)
 
 
 let fk = "0000"
@@ -139,3 +132,8 @@ function createNewPlayerfile(PlayerData pd)
 	pd.pfile = null
 	Log.debug("createNewPlayerfile4")
 	pd.pmdata = null
+
+	Log.debug("New Playerfile2")
+	execute() ->
+		checkPlayerfile(pd)
+	Log.debug("New Playerfile3")

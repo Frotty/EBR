@@ -1,0 +1,3 @@
+package Printing_config
+
+@config public var DEBUG_LEVEL = Loglevel.INFO

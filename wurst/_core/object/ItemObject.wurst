@@ -1,10 +1,8 @@
 package ItemObject
 import public Escaper
 
-/**
-	Abstract class for Entities that are items
-	like Keys, Coins, etc.
-*/
+/**	Abstract class for Entities that are items
+	like Keys, Coins, etc. */
 public abstract class ItemObject extends Entity
 	unit setup
 	item actorItem
@@ -49,6 +47,9 @@ function onItemPickup()
 	if idata instanceof ItemObject and not idata.done
 		if edata instanceof Escaper and not edata.done
 			(idata castTo ItemObject).onPickup(edata castTo Escaper)
+		else
+			destroy idata
+			itm.remove()
 				
 function onItemDrop()
 	let itm = GetManipulatedItem()

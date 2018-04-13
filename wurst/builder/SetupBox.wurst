@@ -118,6 +118,7 @@ public class SetupBox extends UnitEntity
 				forUnitsInRect(rdata.theRect) u ->
 					var data = u.getEntity()
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
+						Log.debug("SetupBox Terminate")
 						data.terminate()
 
 				rdata.resetTiles()
@@ -178,13 +179,13 @@ public class SetupBox extends UnitEntity
 				else
 					actor.addAbility(EASY_ENABLE)
 			case INC_GRAVITY
-				if(rdata.gravity.z > -10)
-					rdata.gravity -= vec3(0,0,0.1)
-					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
+				if gravity > -10
+					rdata.gravity -= 0.1
+					printTimedToPlayer("Gravity: " + gravity.toString(), 10, owner)
 			case DEC_GRAVITY
-				if(rdata.gravity.z < -.2)
-					rdata.gravity += vec3(0,0,0.1)
-					printTimedToPlayer("Gravity: " + rdata.gravity.z.toString(), 10, owner)
+				if gravity < -.2
+					rdata.gravity += 0.1
+					printTimedToPlayer("Gravity: " + gravity.toString(), 10, owner)
 			case TURND_ID
 				if rdata.turnSpeed > 0.
 					rdata.turnSpeed -= .25

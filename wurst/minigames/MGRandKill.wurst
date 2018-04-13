@@ -50,6 +50,7 @@ public class MGRandKill extends Minigame
 			destroy coinTimer
 			GroupEnumUnitsInRect(ENUM_GROUP, gg_rct_coingamearea, Filter(() -> GetFilterUnit().getOwner() == STAFF_PLAYER))
 			for obj from ENUM_GROUP
+				Log.debug("onEnd Terminate")
 				obj.getEntity().terminate()
 			destroy fx
 			fx = null

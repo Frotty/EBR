@@ -2,84 +2,47 @@ package SyncWrapper
 import MultifileIO
 import Table
 import initlater PlayerData
-import GuardedWorker
 import public Network
 
 public constant ALPHABET = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-
-
-class SyncFileTask extends GTask
-	PlayerData pd
-	string filename
-	filterfunc userListener
-	SyncedFile file = null
-
-	construct(PlayerData pd, string filename, filterfunc userListener)
-		this.pd = pd
-		this.userListener = userListener
-		this.filename = filename
-		
-	override function onStart()
-		execute() ->
-			let reader = new FileReader(filename, false)
-			let network = new Network(pd.p)
-			let buffer = network.getData()
-			let file = new SyncedFile()
-			let synchronizer = new SimpleSynchronizer()
-			Log.debug("onStart")
-			if localPlayer == pd.p
-				reader.load() status ->
-					Log.debug("onLoaded")
-					if status == FileLoadStatus.SUCCESS
-						Log.debug("is Success")
-						
-						while reader.canRead()
-							let line = reader.readLine()
-							buffer.writeString(line)
-
-						synchronizer.sync()
-			else
-				synchronizer.sync()
-
-			synchronizer.onSynced() ->
-				Log.debug("start sync")
-				network.start() (status, buffer) ->
-					Log.debug("OnLCSync3")
-					let task = getCurrentTask() castTo SyncFileTask
-
-					task.file = file..deserialize(buffer)
-					
-					Log.debug("OnPFSyncWrapper done")
-					getCurrentTask().finish(false)
-
-	override function onUpdate()
-
-	override function onFinish()
-		Log.debug("Sync Task Finished")
-		if state == TaskState.TIMEOUT
-			Log.error("Sync Task Errored")
-		else if state == TaskState.FINISHED
-			userListener.evaluate()
 			
-public function getSyncedFile(PlayerData pd, string filename, filterfunc listener)
-	postTask(new SyncFileTask(pd, filename, listener))
+abstract class SyncedFileCallback
+	abstract function run(SyncedFile result, PlayerData pd)
 
-trigger trig = CreateTrigger()
+public function getSyncedFile(PlayerData pd, string filename, SyncedFileCallback cb)
+	let reader = new FileReader(filename, false)
+	let network = new Network(pd.p)
+	let buffer = network.getData()
+	let file = new SyncedFile()
+	let synchronizer = new SimpleSynchronizer()
+	Log.debug("onStart")
+	if localPlayer == pd.p
+		reader.load() status ->
+			Log.debug("onLoaded")
+			if status == FileLoadStatus.SUCCESS
+				Log.debug("is Success")
+				
+				while reader.canRead()
+					let line = reader.readLine()
+					buffer.writeString(line)
+
+				synchronizer.sync()
+	else
+		synchronizer.sync()
+
+	synchronizer.onSynced() ->
+		Log.debug("start sync")
+		network.start() (status, buffer) ->
+			Log.debug("OnLCSync3")
+			cb.run(file..deserialize(buffer), pd)
+
+
+var trig = CreateTrigger()
 function filterfunc.evaluate()
 	trig..addCondition(this)
 	..evaluate()
 	..clearConditions()
 
-interface B
-interface A extends B
-
-public function getSyncFileTask() returns SyncFileTask
-	let task = getCurrentTask()
-	if task instanceof SyncFileTask
-		let stask = task castTo SyncFileTask
-		return stask
-	return null
-				
 public class SyncedFile implements BufferSerializable
 	int size
 	int readpos = -1
@@ -89,25 +52,25 @@ public class SyncedFile implements BufferSerializable
 
 	override function deserialize(Buffer buffer)
 		size = 0
-		if buffer != null
-			var str = buffer.readString().trim()
-			Log.debug("buffer.readString(): " + str)
-			if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
-				str = str.substring(0, str.length()-1)
-			
-			int i = 0
-			while str.length() > i+4
-				var countS = str.substring(i, i+4)
-				while countS.charAt(0) == "0"
-					countS = countS.substring(1)
-				let count = countS.toInt()
-				var sub = str.substring(i+4, i+4 + count)
-				Log.debug("count: " + count.toString() + " countS: " + countS + " sub: " + sub)
-				if sub != null and sub.length() > 0
-					stringTable.saveString(size, sub)
-					size++
-				i += 4 + count
-
+		if buffer != null and buffer.isReadable() and buffer.isValid() and buffer.getFailure() == BufferFailureMode.NONE
+			try() ->	
+				var str = buffer.readString().trim()
+				Log.debug("buffer.readString(): " + str)
+				if not ALPHABET.contains(str.substring(str.length()-1, str.length()))
+					str = str.substring(0, str.length()-1)
+				
+				int i = 0
+				while str.length() > i+4
+					var countS = str.substring(i, i+4)
+					while countS.charAt(0) == "0"
+						countS = countS.substring(1)
+					let count = countS.toInt()
+					var sub = str.substring(i+4, i+4 + count)
+					Log.debug("count: " + count.toString() + " countS: " + countS + " sub: " + sub)
+					if sub != null and sub.length() > 0
+						stringTable.saveString(size, sub)
+						size++
+					i += 4 + count
 			
 		
 	function hasNext() returns boolean

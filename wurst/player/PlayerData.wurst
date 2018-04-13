@@ -5,9 +5,9 @@ import public BuilderConstants
 import public GameConstants
 import public ClosureForGroups
 import initlater CodeGenerator
+import initlater TerrainModder
 import Builder
 import PickSystem
-import initlater TerrainModder
 import UnitProducer
 import RevivePointModifier
 import EscaperClasses
@@ -17,13 +17,15 @@ import Playerfile
 import PlayerMemoryData
 import SoundUtils
 import LocalFiles
+import Assets
 
 public Board playerboard
 public PlayerData array pData
-public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
-public LinkedList<PlayerData> escaperPlayers = new LinkedList<PlayerData>()
-public LinkedList<PlayerData> builderPlayers = new LinkedList<PlayerData>()
-constant questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
+
+public let allPlayers = new LinkedList<PlayerData>()
+public let escaperPlayers = new LinkedList<PlayerData>()
+public let builderPlayers = new LinkedList<PlayerData>()
+let questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
 
 public var minutes = 0
 public var seconds = 0
@@ -43,12 +45,12 @@ public class PlayerData
 	string	hash
 	string 	name
 	string 	mbname
-	string 	icon 		= "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+	string 	icon 		= Icons.bTNSelectHeroOn
 
 	string 	rank 		= "Newbie"
 	
 
-	Role role 			
+	Role role		
 	Title title
 	Escaper escaper
 	Builder builder
@@ -59,7 +61,6 @@ public class PlayerData
 	effect tagfx = null
 
 	boolean localFilesEnabled = false
-	boolean localFilesChecked = false
 	int lastExpGain = 0
 	int lastSave = -1
 
@@ -74,13 +75,13 @@ public class PlayerData
 	
 	construct (player p)
 		this.p = p
-		id = GetPlayerId(p)
-		name = GetPlayerName(p)
+		id = p.getId()
+		name = p.getName()
 		pData[id] = this
 		hash = name.getHash().toString()
 		mbname = name
 			
-		int i = 0
+		var i = 0
 		while names[i] != null
 			if mbname.toLowerCase() == names[i].toLowerCase()
 				mbname = tags[i] + "|r" + p.getNameColored()
@@ -105,22 +106,22 @@ public class PlayerData
 				XP += amount
 			else if lastExpGain < minutes
 				lastExpGain = minutes
-				printLog(Loglevel.DEBUG, "add current xp:" + XP.toString())
+				Log.debug( "add current xp:" + XP.toString())
 				XP += amount
-				printLog(Loglevel.DEBUG, "add new xp:" + XP.toString())
+				Log.debug( "add new xp:" + XP.toString())
 			updateRank()
 	
 	function setXp(int amount)
-		printLog(Loglevel.DEBUG, "set current xp:" + XP.toString())
+		Log.debug( "set current xp:" + XP.toString())
 		XP = amount
 		updateRank()
-		printLog(Loglevel.DEBUG, "set new xp:" + XP.toString())
+		Log.debug( "set new xp:" + XP.toString())
 	
 	function updateRank()
-		int i = 0
-
 		if lvlfx != null
 			lvlfx.destr()
+		
+		var i = 0
 		while XP >= expBounds[i]
 			i++
 		rank = ranks[i]
@@ -128,33 +129,32 @@ public class PlayerData
 		if title == Title.ADMIN
 			rank = "|cffADD642*Admin*"
 			if tagfx == null
-				tagfx = AddSpecialEffectTarget( "war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest" )
+				tagfx = AddSpecialEffectTarget("war3mapImported\\HolyShield Seal_Portrait.mdx", escaper.actor, "chest")
 
 		if XP > 10000
-			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life High_Portrait.mdx", escaper.actor, "chest" )
+			lvlfx = AddSpecialEffectTarget("war3mapImported\\Life High_Portrait.mdx", escaper.actor, "chest")
 		else if XP > 7500
-			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life High.mdx", escaper.actor, "chest" )
+			lvlfx = AddSpecialEffectTarget("war3mapImported\\Life High.mdx", escaper.actor, "chest")
 		else if XP > 4000
-			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest" )
+			lvlfx = AddSpecialEffectTarget("war3mapImported\\Life Low_Portrait.mdx", escaper.actor, "chest")
 		else if XP > 1000
-			lvlfx = AddSpecialEffectTarget( "war3mapImported\\Life Low.mdx", escaper.actor, "chest" )
+			lvlfx = AddSpecialEffectTarget("war3mapImported\\Life Low.mdx", escaper.actor, "chest")
 
 		if XP >= expBounds[3] and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
-			UnitAddItemById(escaper.actor,'I002')
+			escaper.actor.addItem('I002')
 
 		if pfile != null and pmdata != null and (lastSave+20 < minutes*60+seconds)
-			lastSave = minutes*60+seconds
-			printLog(Loglevel.DEBUG, "Playerfile saving")
+			lastSave = minutes * 60 + seconds
+			Log.debug("Playerfile saving")
 			savePlayerfile(this)
 
 		
-
 	function validateAdmintoken()
 		let divhash = name.getHash() - fhash(name) div 2
 		if pmdata != null and not title == Title.ADMIN
 			if pmdata.adminToken != "no"
-				if -199306178 == pmdata.adminToken.getHash()
+				if 1303565542 == pmdata.adminToken.getHash()
 					printTimedToPlayer("You are an admin!", 10, p)
 					title = Title.ADMIN
 				else if divhash == pmdata.adminToken.toInt()
@@ -169,6 +169,7 @@ public class PlayerData
 			destroy selector
 		if escaper != null
 			if escaper.alive
+				Log.debug("PD Terminate")
 				escaper.terminate()
 			else
 				escaper.left = true
@@ -183,6 +184,7 @@ public class PlayerData
 		// Give remaining builders control
 		if not builderPlayers.isEmpty() and isBuilder(p)
 			if builder != null
+				Log.debug("isEmpty Terminate")
 				builder.terminate()
 			for i = 0 to 22
 				if regions[i].getPermission(this.p) == Permission.OWNER
@@ -201,7 +203,7 @@ public class PlayerData
 function rebuildBoard()
 	playerboard = new Board(allPlayers.size()+1,3)
 	
-	int i = 1
+	var i = 1
 	for pd in allPlayers
 		playerboard.board.getItem(i,0)..setStyle(true,true)..setWidth(0.1)
 		playerboard.board.getItem(i,1)..setStyle(true,false)..setWidth(0.015)
@@ -213,7 +215,7 @@ function rebuildBoard()
 	playerboard.board.getItem(0,0)..setStyle(true,false)..setWidth(0.1)
 	playerboard.setNewItem(0,0,"Player",null)
 	playerboard.board.getItem(0,1)..setStyle(false,true)..setWidth(0.02)
-	playerboard.setNewItem(0,1,null,"ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
+	playerboard.setNewItem(0,1,null,Icons.bTNAnkh)
 	playerboard.board.getItem(0,2)..setWidth(0.05)..setStyle(true,false)
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
@@ -223,21 +225,14 @@ function rebuildBoard()
 	
 function setTime()
 	seconds++
-	string secs = "|cffffffff"
-	string mins = "|cffffffff"
-	if seconds < 10
-		secs += "0" + seconds.toString()
-	else
-		secs += seconds.toString()
-		
-	if minutes < 10
-		mins += "0" + minutes.toString()
-	else
-		mins += minutes.toString()
+	var secs = "|cffffffff"
+	var mins = "|cffffffff"
+	// Preceding zeros
+	secs += seconds < 10 ? "0" + seconds.toString() : seconds.toString()
+	mins +=  minutes < 10 ? "0" + minutes.toString() : minutes.toString()
 		
 	secs += "|r"
 	mins += "|r"
-	
 	
 	if seconds >= 60
 		seconds = 0
@@ -245,8 +240,7 @@ function setTime()
 		if minutes % 10 == 0
 			printTimed("|cffFFCC00Visit our discord server |r- |cff217BD6discord.gg/yr3ZyYQ", 45.)
 		if minutes % 5 == 0
-			for pd in allPlayers
-				pd.addXp(10, true)
+			allPlayers.forEach(p -> p.addXp(10, true))
 
 	playerboard.board.setTitle( MAP_VER + " [ " + mins + " : " + secs +" ]")
 	
@@ -259,6 +253,7 @@ function setTime()
 
 public function startTestmode(PlayerData pd)
 	if (allPlayers.size() == 1 or pd.title == Title.ADMIN) and pd.builder == null
+		Log.debug("testmode terminate")
 		pd.escaper.terminate()
 		builderPlayers.add(pd)
 		var i = 0
@@ -268,11 +263,16 @@ public function startTestmode(PlayerData pd)
 			i++
 			reg = regions[i]
 
-		new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
-		new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
-		new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
-		new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
-		new UnitProducer( hidden, pd.p )
+		Log.debug("testmode 1")
+		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
+		Log.debug("testmode 2")
+		pd.tmods[1] = new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
+		Log.debug("testmode 3")
+		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
+		Log.debug("testmode 4")
+		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
+		Log.debug("testmode 5")
+		pd.prod = new UnitProducer( hidden, pd.p )
 		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
 		pd.escaper = e
 		e.actor..addAbility('A001')..addAbility(CREATE_REV_MOD_ID)
@@ -283,12 +283,11 @@ public function startTestmode(PlayerData pd)
 		e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 		e.actor.addAbility('A001')
 		pd.builder = new Builder( pd.p )
-		UnitAddItemById(pd.builder.actor,'I001')
-		UnitAddItemById(pd.builder.actor,'I002')
-		UnitAddItemById(pd.builder.actor,'I003')
+		pd.builder.actor..addItem('I001')
+		..addItem('I002')
+		..addItem('I003')
 		pd.builder.regionCount = 17
 		pd.escaper.actor.addAbility('A001')
-		
 		
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
 			 
@@ -304,7 +303,7 @@ public function initPlayers()
 		destroy pd
 
 	doAfter(.1, () -> rebuildBoard())
-	doPeriodically(1., (cb) -> setTime())
+	doPeriodically(1., cb -> setTime())
 	
 	for pd in builderPlayers
 		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))

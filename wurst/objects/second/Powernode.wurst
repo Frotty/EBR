@@ -99,6 +99,7 @@ public class Powernode extends SetupObject
 					if l.ltype == TetherType.BLOCK_ORB
 						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
 							flashEffect(Abilities.spellBreakerAttack, e.orb.pos)
+							Log.debug("Orb P Terminate")
 							e.orb.terminate()
 					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
 						if e.pos.z < 24 or l.ltype == TetherType.BOUNCE_AIR or l.ltype == TetherType.BOUNCE_BOTH

@@ -18,7 +18,6 @@ import Assets
 public constant KEY_RALLY_X = "r"
 public constant KEY_RALLY_Y = "s"
 
-
 public class StaticBaseObject extends UnitEntity
 	effect noRally = null
 	effect disFx = null
@@ -31,7 +30,7 @@ public class StaticBaseObject extends UnitEntity
 
 	protected trigger inRangeTrig // Trigger for inRange detection
 
-	construct(vec2 pos, unit u, real radius, code action, code cond )
+	construct(vec2 pos, unit u, real radius, code action, code cond)
 		super(u)
 		this.setCurrentRegion()
 		noRally = addEffect(Objects.questionMark1, pos)

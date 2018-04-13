@@ -29,6 +29,5 @@ public class Playerfile
 		return hash == HASH
 
 	ondestroy
-		for pmdata in pmDatas
-			destroy pmdata
+		pmDatas.clear()
 		destroy pmDatas

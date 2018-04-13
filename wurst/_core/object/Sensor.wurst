@@ -13,7 +13,7 @@ public abstract class SensorListener
 public module Sensor
 	private trigger inRangeTrig = null
 	private unit actorRef = null
-	private static HashMap<trigger, SensorListener> sensorListeners = new HashMap<trigger, SensorListener>()
+	private static let sensorListeners = new HashMap<trigger, SensorListener>()
 
 	function addSensorListener(Entity e, SensorListener listener)
 		if listener == null
@@ -43,6 +43,7 @@ public module Sensor
 			destroy sensorListeners.get(inRangeTrig)
 			sensorListeners.remove(inRangeTrig)
 			actorRef.clearRegister()
+			inRangeTrig = null
 
 
 public function unit.abortOrder() returns boolean

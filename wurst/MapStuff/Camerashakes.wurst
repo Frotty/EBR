@@ -96,6 +96,6 @@ public function newEventPlayer(player p, real m)
 function onLoop()
 	ForForce(shakingPlayers, function loopPerPlayer)
 	
-@init1 function init_Shake()
+init
 	CreateTimer().startPeriodic(LOOP_PERIOD, function onLoop)
 	

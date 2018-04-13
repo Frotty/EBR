@@ -117,6 +117,7 @@ public class FastEscaper extends Escaper
 		super.onCPReach()
 		if portal != null
 			portal.terminate()
+			Log.debug("portal Terminate")
 			portal = null
 		
 	override function onCast(int id)

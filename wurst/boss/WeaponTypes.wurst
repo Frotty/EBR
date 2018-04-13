@@ -12,7 +12,12 @@ tuple WeaponType(int itemId, int abilId, int attackAbil, string attachment, Weap
 public interface WeaponListener
 	function onAttack(Escaper attacker)
 
-public WeaponType array weapontypes
+let weapontypes = [
+	WeaponType('I00U','A081', 'A07G', "weapons\\attachment\\Sabre.mdx", e -> onSabre(e)),
+	WeaponType('I00W','A082', 'A085', "weapons\\attachment\\ThrallHammer.mdx", e -> onHammer(e)),
+	WeaponType('I00V','A083', 'A07H', "weapons\\attachment\\Sabre.mdx", e -> onGlaive(e)),
+	WeaponType('I00Y','A084', 'A086', "weapons\\attachment\\Sabre.mdx", e -> onBow(e))
+]
 
 function damageTarget(Entity entity, Escaper escaper, real damage)
 	if entity != null 
@@ -54,9 +59,3 @@ function onBow(Escaper e)
 		let entity = u.getEntity()
 		damageTarget(entity, e, 20)
 	end)
-
-@init1 function init_WeaponTypes()
-	weapontypes[0] = WeaponType('I00U','A081', 'A07G', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onSabre(e))
-	weapontypes[1] = WeaponType('I00W','A082', 'A085', "weapons\\attachment\\ThrallHammer.mdx", (Escaper e) -> onHammer(e))
-	weapontypes[2] = WeaponType('I00V','A083', 'A07H', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onGlaive(e))
-	weapontypes[3] = WeaponType('I00Y','A084', 'A086', "weapons\\attachment\\Sabre.mdx", (Escaper e) -> onBow(e))

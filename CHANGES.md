@@ -1,6 +1,12 @@
 [0.90y]
 [*] Now using new MultiFileIO which will support saving bigger mazes in the future
 [*] Regions such as E that couldn't be claimed, are now fixed (thx @Fenris)
+[*] Updated underlying Frentity framework
+[*] Jumpers can now be configured to allow killers
+[*] Adjusted Ice startmaze killer positions slightly and improved flow at the beginning
+[*] Moved Jumper in desert startmaze to make jump direction for intuitive
+[*] Relocated walkable tile before the door in forest startmaze and made illicit jump to final teleporter less obvious
+[*] Increased spacing of some spun killers in citadel startmaze
 
 [0.90x]
 [*] added new minigame: Spacey Adventure

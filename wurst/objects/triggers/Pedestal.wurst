@@ -13,7 +13,6 @@ import TileData
 import LZW
 import StringUtils
 import ItemObject
-import GuardedWorker
 import BufferAdapters
 
 constant CHAR_STEPSIZE = 180
@@ -83,42 +82,37 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			actor.pause()
 			ttag.tt..center(pos, "|cff0884CEloading...", 10)
 			lastRef[owner.getId()] = this
-			getSyncedFile(pData[owner.getId()],  "dataSlot" + slotId.toString() + ".pld", Filter(() -> onLoadSlotSynced()))
+			getSyncedFile(pData[owner.getId()],  "dataSlot" + slotId.toString() + ".pld", (file, pd) -> onLoadSlotSynced(file, pd))
 		end)
 
-	static function onLoadSlotSynced()
+	static function onLoadSlotSynced(SyncedFile file, PlayerData pd)
 		printLog(Loglevel.DEBUG, "synced")
-		let task = getSyncFileTask()
-		let pd = task.pd
 		let ref = lastRef[pd.id]
-		if task.state == TaskState.FINISHED
-			ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
-			ref.syncingDone = true
-			if task.file.size > 0
-				var compressedString = new BigString()
-				var buildString = task.file.read()
-				while buildString != null
-					compressedString.addString(buildString)
-					buildString = task.file.read()
-				printLog(Loglevel.DEBUG, "Reconstructed")
-				compressedString.debugPrint()
-				serializeOrigin = ref.pos.toVec2().toTile().toVec3()
-				decompress(compressedString, (PayloadCallback cb1) -> begin
-					printLog(Loglevel.DEBUG, "on finish decompress")
-					ref.parser.setInput(cb1.customData castTo BigString)
-					ref.parser.parse((PayloadCallback cb2) -> begin
-						printLog(Loglevel.DEBUG, "on finish parse")
-						if(ref.parser.output.hasKey(ENTITIES_KEY))
-							ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser, (PayloadCallback cb3) -> begin
-								ref.loadEntities(ref.listparser.outputList)
-							end)
-						else if(ref.parser.output.hasKey(TILES_KEY))
-							ref.parser.output.getStringList(TILES_KEY, ref.listparser, (PayloadCallback cb) -> begin
-								printLog(Loglevel.DEBUG, "load tiles1")
-								ref.loadTiles((cb.customData castTo JsonParser).outputList)
-							end)
-					end)
+		ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
+		ref.syncingDone = true
+		if file.size > 0
+			var compressedString = new BigString()
+			var buildString = file.read()
+			while buildString != null
+				compressedString.addString(buildString)
+				buildString = file.read()
+			printLog(Loglevel.DEBUG, "Reconstructed")
+			compressedString.debugPrint()
+			serializeOrigin = ref.pos.toVec2().toTile().toVec3()
+			decompress(compressedString, (PayloadCallback cb1) -> begin
+				printLog(Loglevel.DEBUG, "on finish decompress")
+				ref.parser.setInput(cb1.customData castTo BigString)
+				ref.parser.parse((PayloadCallback cb2) -> begin
+					printLog(Loglevel.DEBUG, "on finish parse")
+					if(ref.parser.output.hasKey(ENTITIES_KEY))
+						ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser) cb3 ->
+							ref.loadEntities(ref.listparser.outputList)
+					else if(ref.parser.output.hasKey(TILES_KEY))
+						ref.parser.output.getStringList(TILES_KEY, ref.listparser) cb ->
+							printLog(Loglevel.DEBUG, "load tiles1")
+							ref.loadTiles((cb.customData castTo JsonParser).outputList)
 				end)
+			end)
 		else
 			printLog(Loglevel.DEBUG, "load failed")
 			ref.ttag.tt..center(ref.pos, "|cffFFBD21load failed!", 10)

@@ -1,6 +1,5 @@
 package AirPhysicsModule
 import public Entity
-import RegionData
 import Interpolation
 
 public constant MAX_MASS = 250
@@ -51,6 +50,6 @@ public module AirPhysicsModule
 		let coef = bezier_3(0.930,0.985,1,mass/MAX_MASS)
 		let gcoef = bezier_3(0.1,0.875,1,mass/MAX_MASS)
 		if affectedByGravity
-			e.addVel(e.getCurrentRegion().gravity * gcoef)
+			e.addVel(vec3(0,0,e.gravity * gcoef))
 		e.scaleVel(coef)
 		

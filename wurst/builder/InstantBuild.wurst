@@ -180,7 +180,8 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 
 public int array buildorders
 
-@init1 function init_InstantBuild()
+init
+	Log.debug("init buildords")
 	buildorders[JUMPER_INDEX] = JUMPER_ID // Jumper
 	buildorders[REVIVE_INDEX] = REVIVE_POINT_ID// Revivepoint
 	buildorders[TEXTER_INDEX] = TEXTER_ID // Texter

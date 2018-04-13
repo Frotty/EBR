@@ -27,7 +27,7 @@ public abstract class SetupObject extends UnitEntity
 		..setPathing(true)..setEntity(this)
 		setup..setEntity(this)
 		..setXY(actor.getPos())
-		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_OBJECT_ID)
+		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_OBJECT_ID)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 		this.setCurrentRegion()
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrderEvent())
@@ -43,13 +43,13 @@ public abstract class SetupObject extends UnitEntity
 		
 	override function setPos(vec3 pos)
 		this.pos = pos
-		setup.setPos(pos.toVec2())
-		actor.setPos(pos.toVec2())
+		setup.setPosFly(pos)
+		actor.setPosFly(pos)
 
 	override function setXY(vec3 pos)
 		this.pos = pos
-		actor.setXY(pos.toVec2())
-		setup.setXY(pos.toVec2())
+		actor.setXYZ(pos)
+		setup.setXYZ(pos)
 	
 	function setFacing(angle angl)
 		actor.setFacing(angl)
@@ -69,8 +69,10 @@ public abstract class SetupObject extends UnitEntity
 			setup.setXY(getPos())
 			setup.setFacing(actor.getFacingAngle())
 			time = GetRandomReal(30,45)
-	
+
 	ondestroy
+		unregisterEventsForUnit(setup)
+		setup.setEntity(null)
 		setup.remove()
 		setup = null
 		
@@ -128,80 +130,30 @@ public abstract class StaticSetupObject extends UnitEntity
 		setup.setEntity(this)
 
 	ondestroy
+		unregisterEventsForUnit(setup)
 		setup.clearRegister()
+		setup.setEntity(null)
 		setup.remove()
 		setup = null
 		if inRangeTrig != null
 			inRangeTrig.destr()
 			inRangeTrig = null
 		
-int count = -1
-vec2 array offsets
+var count = -1
+let offsets = [vec2(0.049, 0.001), vec2(0.048, 0.002), vec2(0.047, 0.003), vec2(0.046, 0.004), vec2(0.045, 0.005), vec2(0.044, 0.006), vec2(0.043, 0.007),
+ 	vec2(0.041, 0.008), vec2(0.040, 0.009), vec2(0.039, 0.008), vec2(0.038, 0.007), vec2(0.037, 0.006), vec2(0.036, 0.005), vec2(0.035, 0.004),
+ 	vec2(0.034, 0.003), vec2(0.033, 0.002), vec2(0.032, 0.001), vec2(0.031, 0.002), vec2(0.030, 0.003), vec2(0.029, 0.004), vec2(0.028, 0.005),
+	vec2(0.027, 0.006), vec2(0.026, 0.007), vec2(0.025, 0.008), vec2(0.024, 0.009), vec2(0.023, 0.008), vec2(0.022, 0.007), vec2(0.021, 0.006),
+    vec2(0.020, 0.005), vec2(0.019, 0.004), vec2(-0.049, 0.003), vec2(-0.048, 0.002), vec2(-0.047, 0.001), vec2(-0.046, 0.002), vec2(-0.045, 0.003),
+	vec2(-0.044, 0.004), vec2(-0.043, 0.005), vec2(-0.041, 0.006), vec2(-0.040, 0.007), vec2(-0.039, 0.008), vec2(-0.038, 0.009), vec2(-0.037, 0.008),
+	vec2(-0.036, 0.007), vec2(-0.035, 0.006), vec2(-0.034, 0.005), vec2(-0.033, 0.004), vec2(-0.032, 0.003), vec2(-0.031, 0.002), vec2(-0.030, 0.001),
+	vec2(-0.029, 0.002), vec2(-0.028, 0.003), vec2(-0.027, 0.004), vec2(-0.026, 0.005), vec2(-0.025, 0.006), vec2(-0.024, 0.007), vec2(-0.023, 0.008), 
+	vec2(-0.022, 0.009), vec2(-0.021, 0.000), vec2(-0.020, 0.009), vec2(-0.019, 0.008)]
+
 function getOffset() returns vec2
 	count++
 	if count > 50
 		count = -1
 	return offsets[count]
 
-@init1 function initSetupObj()
-	offsets[0] = vec2(0.049, 0.001)
-	offsets[1] = vec2(0.048, 0.002)
-	offsets[2] = vec2(0.047, 0.003)
-	offsets[3] = vec2(0.046, 0.004)
-	offsets[4] = vec2(0.045, 0.005)
-	offsets[5] = vec2(0.044, 0.006)
-	offsets[6] = vec2(0.043, 0.007)
-	offsets[7] = vec2(0.041, 0.008)
-	offsets[8] = vec2(0.040, 0.009)
-	offsets[9] = vec2(0.039, 0.008)
-	offsets[10] = vec2(0.038, 0.007)
-	offsets[11] = vec2(0.037, 0.006)
-	offsets[12] = vec2(0.036, 0.005)
-	offsets[13] = vec2(0.035, 0.004)
-	offsets[14] = vec2(0.034, 0.003)
-	offsets[15] = vec2(0.033, 0.002)
-	offsets[16] = vec2(0.032, 0.001)
-	offsets[17] = vec2(0.031, 0.002)
-	offsets[18] = vec2(0.030, 0.003)
-	offsets[19] = vec2(0.029, 0.004)
-	offsets[20] = vec2(0.028, 0.005)
-	offsets[21] = vec2(0.027, 0.006)
-	offsets[22] = vec2(0.026, 0.007)
-	offsets[23] = vec2(0.025, 0.008)
-	offsets[24] = vec2(0.024, 0.009)
-	offsets[25] = vec2(0.023, 0.008)
-	offsets[26] = vec2(0.022, 0.007)
-	offsets[27] = vec2(0.021, 0.006)
-	offsets[28] = vec2( 0.020, 0.005)
-	offsets[29] = vec2( 0.019, 0.004)
-	offsets[30] = vec2( -0.049, 0.003)
-	offsets[31] = vec2( -0.048, 0.002)
-	offsets[32] = vec2( -0.047, 0.001)
-	offsets[33] = vec2( -0.046, 0.002)
-	offsets[34] = vec2( -0.045, 0.003)
-	offsets[35] = vec2( -0.044, 0.004)
-	offsets[36] = vec2( -0.043, 0.005)
-	offsets[37] = vec2( -0.041, 0.006)
-	offsets[38] = vec2( -0.040, 0.007)
-	offsets[39] = vec2( -0.039, 0.008)
-	offsets[40] = vec2( -0.038, 0.009)
-	offsets[41] = vec2( -0.037, 0.008)
-	offsets[42] = vec2( -0.036, 0.007)
-	offsets[43] = vec2( -0.035, 0.006)
-	offsets[44] = vec2( -0.034, 0.005)
-	offsets[45] = vec2( -0.033, 0.004)
-	offsets[46] = vec2( -0.032, 0.003)
-	offsets[47] = vec2( -0.031, 0.002)
-	offsets[48] = vec2( -0.030, 0.001)
-	offsets[49] = vec2( -0.029, 0.002)
-	offsets[50] = vec2( -0.028, 0.003)
-	offsets[51] = vec2( -0.027, 0.004)
-	offsets[52] = vec2( -0.026, 0.005)
-	offsets[53] = vec2( -0.025, 0.006)
-	offsets[54] = vec2( -0.024, 0.007)
-	offsets[55] = vec2( -0.023, 0.008)
-	offsets[56] = vec2( -0.022, 0.009)
-	offsets[57] = vec2( -0.021, 0.000)
-	offsets[58] = vec2( -0.020, 0.009)
-	offsets[59] = vec2( -0.019, 0.008)
 

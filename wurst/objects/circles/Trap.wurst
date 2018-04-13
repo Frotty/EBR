@@ -24,16 +24,26 @@ constant PREVIOUS_EFFECT_ID = compiletime(ABIL_ID_GEN.next())
 constant START_ID = compiletime(ABIL_ID_GEN.next())
 constant STOP_ID = compiletime(ABIL_ID_GEN.next())
 
-constant string POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
-constant real EVENT_RADIUS = 65.
+constant POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
+constant EVENT_RADIUS = 65.
 constant SPECIAL_ID = 'A07V'
 
-constant int STUN_BUFF = 'A06J'
-constant int SPEED_BUFF_NEG = 'A03J'
-constant int SPEED_BUFF_POS = 'A03I'
+constant STUN_BUFF = 'A06J'
+constant SPEED_BUFF_NEG = 'A03J'
+constant SPEED_BUFF_POS = 'A03I'
 constant SFX_COUNT = 9
 
-string array SFX_STRINGS
+let SFX_STRINGS = ["Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl",
+				"Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl", 
+				"Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl", 
+				"Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl", 
+				"Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", 
+				"Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl", 
+				"Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl", 
+				"Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl", 
+				"Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl", 
+				"" ]
+
 enum ABIL
 	KILL
 	STUN
@@ -332,19 +342,6 @@ public class Trap extends StaticBaseObject
 		json..addProperty(new Property(KEY_TYPE, TRAP_INDEX.toString()))
 		return json
 		
-
-@init1 function init_Trap()
-	SFX_STRINGS[0] = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
-	SFX_STRINGS[1] = "Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl"
-	SFX_STRINGS[2] = "Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl"
-	SFX_STRINGS[3] = "Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl"
-	SFX_STRINGS[4] = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl"
-	SFX_STRINGS[5] = "Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl"
-	SFX_STRINGS[6] = "Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl"
-	SFX_STRINGS[7] = "Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl"
-	SFX_STRINGS[8] = "Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl"
-	SFX_STRINGS[9] = ""
-	
 
 @objectgen function genTrap()
 	new ChannelAbilityPreset(DECREASE_DURATION_ID, 1, TRUE)

@@ -19,6 +19,7 @@ init
 function initGame()
 	printTimed("Initializing map..", 10.)
 	initPlayers()
+	Log.debug("players inited")
 	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
 	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), false, false)
 	VolumeGroupReset()
@@ -26,10 +27,12 @@ function initGame()
 	GetExpiredTimer().start(0.01, () -> initOne())
 
 function initOne()
+	Log.debug("init One")
 	callFunctionsWithAnnotation("@init1")
 	GetExpiredTimer().start(0.01, () -> initPartTwo())
 
 function initPartTwo()
+	Log.debug("init Two")
 	callFunctionsWithAnnotation("@init2")
 	GetExpiredTimer().start(0.01, () -> partThree())
 

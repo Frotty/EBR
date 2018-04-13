@@ -4,4 +4,4 @@ opt
 -inline
 -localOptimizations
 uncheckedDispatch
--stacktraces
+stacktraces

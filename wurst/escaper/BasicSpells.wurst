@@ -44,7 +44,7 @@ function onCast()
 		if itm != null
 			new BallProjectile(caster, tpos, itm.getEntity() castTo BallItem)
 		
-@init1 function initSpells()
+init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		
 @objectgen function genAbils()

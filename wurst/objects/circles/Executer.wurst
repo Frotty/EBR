@@ -148,18 +148,18 @@ public class Executer extends StaticBaseObject
 						//obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
 				case Emode.PRESSUREPLATE
 					skip
-
+	var count = 0
 	static function onLeaveEvent()
 		region r = GetTriggeringRegion()
 		Entity leaver = GetLeavingUnit().getEntity()
 		thistype obj = r.loadRegionData() castTo thistype
 		if obj.enabled and obj.canTrigger(leaver)
-			int c = 0
+			obj.count = 0
 			forUnitsInRect(obj.eventRect) u ->
 				Entity e = u.getEntity()
 				if obj.canTrigger(e)
-					c++
-			if c == 0
+					obj.count++
+			if obj.count == 0
 				obj.negativeAction()
 				obj.ON = false
 				if obj.dummy != null
