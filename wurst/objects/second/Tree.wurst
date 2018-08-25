@@ -8,7 +8,7 @@ constant TREE_ID = compiletime(UNIT_ID_GEN.next())
 
 public class Tree extends UnitEntity
 	private destructable dummy
-	
+
 	construct(vec2 pos, player owner)
 		super(createUnit( owner, TREE_ID, pos, angle(0)))
 		var rdata = this.setCurrentRegion().getTypeSet()
@@ -50,9 +50,7 @@ public class Tree extends UnitEntity
 	..setUnitSoundSet("")
 	..setPathingMap("none")
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(GHOST_VIS_ID, REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("Q")
 	..setName("|cFF00FF00Tree|r ")
 	..setTooltipBasic("Plant |cff08A54ATree |r[|cffFFCC00Q|r]")

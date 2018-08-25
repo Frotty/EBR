@@ -27,7 +27,7 @@ public class Vortex extends UnitEntity
 	ZMode zMode = ZMode.NONE
 	real radiusSq = GRAV_RADIUS_MEDIUM
 	Fx vortexFx
-	
+
 	construct(vec2 pos, player owner)
 		super(CreateUnit(owner, VORTEX_ID, pos.x, pos.y, 0) )
 		this.setCurrentRegion()
@@ -35,7 +35,7 @@ public class Vortex extends UnitEntity
 		actor..addAbility(ZMODE_NONE)..addAbility(ZMODE_CYLI)..addAbility(ZMODE_HEMI)..setVertexColor(colorA(255,255,255,155))
 		..addAbility(SIZE_SMALL)..addAbility(SIZE_MED)..addAbility(SIZE_BIG)..addAbility(GHOST_INVIS_ID)
 		vortexFx = new Fx(pos.withZ(12), "models\\vortex256.mdx")
-		
+
 	override function update()
 		for e from this.getCurrentRegion().getEscapers()
 			switch zMode
@@ -51,7 +51,7 @@ public class Vortex extends UnitEntity
 					if pos.distanceToSq(e.pos) < radiusSq
 						var angl = e.pos.toVec2().angleTo(pos.toVec2())
 						e.otherVel += vec3(Cos(angl.radians) * vgravity, Sin(angl.radians) * vgravity, 0)
-		
+
 	function onCast()
 		var id = GetSpellAbilityId()
 		switch id
@@ -148,10 +148,7 @@ public class Vortex extends UnitEntity
 	..setTooltipBasic("Build |cff636363Vortex [R]")
 	..setTooltipExtended("Build a vortex that attracts escapers to it's center.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNStun.blp")
-	..setNormalAbilities(int2fourchar('A04K') + "," +
-	int2fourchar('A04J') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A04K', 'A04J', REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setModelFile("models\\tcBox.mdl")
 	..setTintingColorBlue(225)
 	..setTintingColorGreen(25)
@@ -163,7 +160,7 @@ public class Vortex extends UnitEntity
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(1)        
+	..setCollisionSize(1)
 	..setScalingValue(0.55)
 	..setSelectionScale(1)
 	..setUnitClassification("ancient,standon")

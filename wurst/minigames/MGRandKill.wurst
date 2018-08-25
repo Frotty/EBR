@@ -22,8 +22,8 @@ public class MGRandKill extends Minigame
 
 	override function onBegin()
 		spawn = getGameRect().randomPoint()
-		while not isTerrainWalkable(spawn.x, spawn.y)
-			spawn = getGameRect().randomPoint()	
+		while not spawn.isTerrainWalkable()
+			spawn = getGameRect().randomPoint()
 		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
 		fx.setScale(0.5)
 		doAfter(10., () -> begin
@@ -32,10 +32,10 @@ public class MGRandKill extends Minigame
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 		end)
-		chickenTimer = doPeriodically(10, (CallbackPeriodic cb) -> begin 
+		chickenTimer = doPeriodically(10, (CallbackPeriodic cb) -> begin
 			new SmallRandomKiller(spawn, STAFF_PLAYER)
 		end)
-		bunnyTimer = doPeriodically(30, (CallbackPeriodic cb) -> begin 
+		bunnyTimer = doPeriodically(30, (CallbackPeriodic cb) -> begin
 			new BigRandomKiller(spawn, STAFF_PLAYER)
 		end)
 		coinTimer = doPeriodically(25, (CallbackPeriodic cb) -> begin

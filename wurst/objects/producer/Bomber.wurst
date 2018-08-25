@@ -14,7 +14,7 @@ constant int MOVE_ORDER = 851971
 public class Bomber extends UnitEntity
 	unit setup
 	boolean realorder = true
-	
+
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, BOMBER_ID, pos, angle(0)))
 		this.setCurrentRegion()
@@ -29,32 +29,32 @@ public class Bomber extends UnitEntity
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		setup.abortOrder()
 		actor.abortOrder()
-		
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		onAttackspeedCast(id, actor)
 		if id == AUTOATTACK_ID
 			if IsUnitType(actor, UNIT_TYPE_PEON)
 				UnitRemoveType(actor, UNIT_TYPE_PEON)
-				setup.setPropWindow(0)
+				setup.setPropWindow(0 .fromDeg())
 				actor.setOwner(players[PLAYER_NEUTRAL_AGGRESSIVE], false)
-				actor.setPropWindow(0)
+				actor.setPropWindow(0 .fromDeg())
 				createFText(getPos(), vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner)
 				doAfter(0.1, () -> actor.issueImmediateOrder("stop"))
 			else
 				UnitAddType(actor, UNIT_TYPE_PEON)
-				setup.setPropWindow(60)
-				actor.setPropWindow(60)
+				setup.setPropWindow(60 .fromDeg())
+				actor.setPropWindow(60 .fromDeg())
 				actor.setOwner(owner, false)
 				createFText(getPos(), vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner)
 				doAfter(0.1, () -> actor.issueImmediateOrder("stop"))
-						
+
 	static function orderSetup()
 		var obj = GetExpiredTimer().getData() castTo Bomber
 		obj.realorder = false
 		IssueImmediateOrderById(obj.setup, STOP_ORDER)
 		GetExpiredTimer().release()
-		
+
 	function checkOrder()
 		var i = GetIssuedOrderId()
 		var e = GetOrderedUnit().getEntity()
@@ -73,24 +73,24 @@ public class Bomber extends UnitEntity
 				else if i == ATTACK_ORDER
 					IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
 					getTimer()..start(0.1, function Bomber.orderSetup)..setData(obj castTo int)
-				else if i == STOP_ORDER 
+				else if i == STOP_ORDER
 					if obj.realorder
 						IssueImmediateOrderById(obj.actor, STOP_ORDER)
-					else 
+					else
 						obj.realorder = true
 	ondestroy
 		setup.setEntity(null)
 		setup.remove()
-	
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json
 		..addProperty(new Property(KEY_TYPE, BOMBER_INDEX.toString()))
-		return json	
-						
+		return json
+
 
 @objectgen function genBomber()
-	new UnitDefinition(BOMBER_ID, 'hmtm')  
+	new UnitDefinition(BOMBER_ID, 'hmtm')
 	..setAttack1DamageBase(1000)
 	..setAttack1CooldownTime(2)
 	..setAttack1Range(1750)
@@ -111,14 +111,9 @@ public class Bomber extends UnitEntity
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
 	..setSelectionScale(1)
-	..setUnitSoundSet("")	
+	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar('A03B') + "," +
-	int2fourchar('A043') + "," +
-	int2fourchar('A044') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A03B', 'A043', 'A044', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("E")
 	..setName("|cFFFFFF00Bomber|r")
 	..setTooltipBasic("|cFFFF8000B|r|cFFFFFF00o|r|cFFFF8000mber|r [E]")
@@ -126,7 +121,7 @@ public class Bomber extends UnitEntity
 	..setUpgradesUsed("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setLumberCost(0)

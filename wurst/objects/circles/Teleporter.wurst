@@ -14,15 +14,15 @@ enum TeleportMode
 public class Teleporter extends StaticBaseObject
 	boolean teleportWisps = false
 	TeleportMode mode = TeleportMode.ESCAPER
-	
+
 	construct( vec2 pos, player owner )
-		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0)), EVENT_RADIUS, function Teleporter.teleport, null) 
+		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0)), EVENT_RADIUS, function Teleporter.teleport, null)
 		actor.addAbility(TURN_OFF_ID)
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS, function Teleporter.teleport, null)
 		actor.addAbility(TURN_OFF_ID)
-		
+
 	static function teleport()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
@@ -57,7 +57,7 @@ public class Teleporter extends StaticBaseObject
 					addEffect(EFFECT_STRING, rallyPos).destr()
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
 						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
-		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_OBJECT_ID) 
+		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_OBJECT_ID)
 			Log.debug("Teleport term")
 			obj.terminate()
 
@@ -81,7 +81,7 @@ public class Teleporter extends StaticBaseObject
 		return json
 
 
-@objectgen function genTeleporter()		
+@objectgen function genTeleporter()
 	new ChannelAbilityPreset(INFO_TELEPORTER_ID, 1, TRUE)
 	..setName("Information: Teleporter")
 	..presetTooltipNormal((int lvl) -> "Information: Teleporter")
@@ -91,19 +91,14 @@ public class Teleporter extends StaticBaseObject
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
-		
-	new BuildingDefinition(TELEPORTER_ID, 'ncop')  
+
+	new BuildingDefinition(TELEPORTER_ID, 'ncop')
 	..setName("|cffFFFF08Teleporter")
 	..setHotkey("A")
 	..setTooltipBasic("|cffFFCC00Build |cffFFFF08Teleporter [A]")
 	..setTooltipExtended("Teleports Escaperkillers/Escapers to the selected destination.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTeleporter.blp")
-	..setNormalAbilities(int2fourchar(INFO_TELEPORTER_ID) + "," +
-	int2fourchar(MODE_ESCAPERS_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INFO_TELEPORTER_ID, MODE_ESCAPERS_ID, REMOVE_OBJECT_ID, MAKE_UNIT_INVISIBLE_ID, RALLY_POINT, INVULNERABILITY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(1)
 	..setTintingColorBlue(0)

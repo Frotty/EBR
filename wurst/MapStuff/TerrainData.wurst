@@ -16,44 +16,44 @@ public enum TileModifier
 	ORANGEGOO
 	RESERVED
 
-public tuple tile(int x, int y, int key, int currentType, int lastType, bitset modifiers)
+public tuple ebrtile(int x, int y, int key, int currentType, int lastType, bitset modifiers)
 
 /** Returns the tile below that position */
-public function vec3.getTile() returns tile
-	return this.toVec2().getTile()
+public function vec3.getEBRTile() returns ebrtile
+	return this.toVec2().getEBRTile()
 
 /** Returns the tile below that position */
-public function vec2.getTile() returns tile
+public function vec2.getEBRTile() returns ebrtile
 	return tileMap.loadTile((this.x/128.).round(),(this.y/128.).round())
 
 /** Returns the tile below that position */
-public function getTile(int x, int y) returns tile
+public function getTile(int x, int y) returns ebrtile
 	return tileMap.loadTile(x,y)
 
 /** Adds and saves the given modifier to the tiles */
-public function tile.hasModifier(TileModifier modifier) returns boolean
+public function ebrtile.hasModifier(TileModifier modifier) returns boolean
 	return this.modifiers.contains(modifier castTo int)
 
 /** Adds and saves the given modifier to the tiles */
-public function tile.addModifier(TileModifier modifier)
+public function ebrtile.addModifier(TileModifier modifier)
 	tileMap.saveInt(this.key, 3, this.modifiers.add(modifier castTo int).val)
 
 /** Removed and saves the given modifier to the tiles */
-public function tile.removeModifier(TileModifier modifier)
+public function ebrtile.removeModifier(TileModifier modifier)
 	tileMap.saveInt(this.key, 3, this.modifiers.remove(modifier castTo int).val)
 
 /** Changes the terraintype of this tile if it is not reserved */
-public function tile.setType(int ttype)
+public function ebrtile.setType(int ttype)
 	if not this.hasModifier(TileModifier.RESERVED)
 		SetTerrainType(this.x * 128., this.y * 128., ttype, -1, 1, 0)
 		tileMap.saveInt(this.key, 2, this.currentType)
 		tileMap.saveInt(this.key, 1, ttype)
 
-function hashtable.loadTile(int x, int y) returns tile
+function hashtable.loadTile(int x, int y) returns ebrtile
 	let key = x * xCells + y
-	return tile(x, y, key, this.loadInt(key, 1), this.loadInt(key, 2), bitset(this.loadInt(key, 3)))
+	return ebrtile(x, y, key, this.loadInt(key, 1), this.loadInt(key, 2), bitset(this.loadInt(key, 3)))
 
-function hashtable.saveTile(tile tile)
+function hashtable.saveTile(ebrtile tile)
 	this.saveInt(tile.key, 0, tile.key)
 	this.saveInt(tile.key, 1, tile.currentType)
 	this.saveInt(tile.key, 2, tile.lastType)
@@ -67,7 +67,7 @@ init
 				execute() ->
 					let x = (realPos.x/128.).round()
 					let y = (realPos.y/128.).round()
-					tileMap.saveTile(tile(x, y, x * xCells + y, 
+					tileMap.saveTile(ebrtile(x, y, x * xCells + y,
 					GetTerrainType(realPos.x, realPos.y), GetTerrainType(realPos.x, realPos.y), bitset(TileModifier.NORMAL castTo int)))
 				realPos.y += 128.
 		realPos.x += 128.

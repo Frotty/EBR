@@ -21,12 +21,12 @@ public class Bombertower extends StaticBaseObject
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> checkOrder())
 		SetUnitPathing(dummy, true)
 
-		
+
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
 		onAttackspeedCast(id, actor)
-		
+
 	ondestroy
 		dummy.remove()
 
@@ -34,7 +34,7 @@ public class Bombertower extends StaticBaseObject
 		let json = super.serialize()
 		json
 		..addProperty(new Property(KEY_TYPE, BOMBTOWER_INDEX.toString()))
-		return json	
+		return json
 
 	function checkOrder()
 		var i = GetIssuedOrderId()
@@ -43,7 +43,7 @@ public class Bombertower extends StaticBaseObject
 		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
 			GetOrderedUnit().abortOrder()
 			return
-		if e instanceof Bombertower 
+		if e instanceof Bombertower
 			var obj = e castTo Bombertower
 			if obj.skipOrder
 				obj.skipOrder = false
@@ -58,10 +58,10 @@ public class Bombertower extends StaticBaseObject
 					IssueTargetOrderById(obj.actor,i, GetOrderTargetUnit())
 					obj.skipOrder = true
 					doAfter(0.1,() -> obj.dummy.issueImmediateOrder("stop"))
-				else if i == STOP_ORDER 
+				else if i == STOP_ORDER
 					IssueImmediateOrderById(obj.actor, STOP_ORDER)
-			
-			
+
+
 @objectgen function genBombTower()
 	new BuildingDefinition(BOMB_TOWER_ID, 'hctw')
 	..setName("|cff5A3108Bomb Tower")
@@ -70,11 +70,7 @@ public class Bombertower extends StaticBaseObject
 	..setTooltipExtended("Can only attack \"Bomb Tower attack target\"" +
 	"\nAttackspeed can be modified.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp")
-	..setNormalAbilities(int2fourchar('A043') + "," +
-	int2fourchar('A044') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList('A043', 'A044', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setAttack1DamageBase(1000)
 	..setAttack1CooldownTime(0.2)
 	..setAttack1Range(3500)

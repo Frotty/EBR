@@ -6,10 +6,11 @@ import public Json
 import public BuilderConstants
 import public initlater RegionData
 import public ClosureForGroups
+import ClosureEvents_config
 
 /**
 	Objects which are unclickable for escapers,	but clickable for builders.
-	They have a dummy unit that is invisible to escapers but clickable by builder,	 
+	They have a dummy unit that is invisible to escapers but clickable by builder,
 	and the actor unit is locusted so it cannot be clicked by escaper, but seen.
 */
 timer fixPos = CreateTimer()
@@ -17,13 +18,14 @@ timer fixPos = CreateTimer()
 public abstract class SetupObject extends UnitEntity
 	private real time = GetRandomReal(30,45)
 	boolean enabled = true
-	unit setup 
-					
+	unit setup
+
 	construct(unit u, unit setup, real radius)
 		super(u)
 		this.setup = setup
 		this.radius = radius
-		actor..addAbility(DONT_FIRE_EVENTS_ID)..addAbility(LOCUST_ID)..removeAbility(REMOVE_OBJECT_ID)
+		fire[actor.getIndex()] = true
+		actor..addAbility(LOCUST_ID)..removeAbility(REMOVE_OBJECT_ID)
 		..setPathing(true)..setEntity(this)
 		setup..setEntity(this)
 		..setXY(actor.getPos())
@@ -40,7 +42,7 @@ public abstract class SetupObject extends UnitEntity
 		else if enabled
 			enabled = false
 			setup..removeAbility(TURN_OFF_ID)..addAbility(TURN_ON_ID)
-		
+
 	override function setPos(vec3 pos)
 		this.pos = pos
 		setup.setPosFly(pos)
@@ -50,11 +52,11 @@ public abstract class SetupObject extends UnitEntity
 		this.pos = pos
 		actor.setXYZ(pos)
 		setup.setXYZ(pos)
-	
+
 	function setFacing(angle angl)
 		actor.setFacing(angl)
 		setup.setFacing(angl)
-		
+
 	override function update()
 		super.update()
 		time-=ANIMATION_PERIOD
@@ -71,11 +73,12 @@ public abstract class SetupObject extends UnitEntity
 			time = GetRandomReal(30,45)
 
 	ondestroy
+		fire[actor.getIndex()] = false
 		unregisterEventsForUnit(setup)
 		setup.setEntity(null)
 		setup.remove()
 		setup = null
-		
+
 	function onOrderEvent()
 		var order = GetIssuedOrderId()
 		var targetPos = getOrderPos()
@@ -100,31 +103,31 @@ public abstract class SetupObject extends UnitEntity
 		actor..setXY(pos)
 			..setFacing(setup.getFacingAngle())
 			..setTurnSpeed(GetUnitTurnSpeed(setup))
-	  
-				
+
+
 public abstract class StaticSetupObject extends UnitEntity
 	unit setup
-	
+
 	trigger inRangeTrig = null // Trigger for inRange detection
-						
+
 	construct(unit u, unit setup, real radius, code c)
 		super(u)
 		deactivate()
 		actor.addAbility(LOCUST_ID)
-		setup.addAbility(GHOST_INVIS_ID)
-		setup.setVertexColor(colorA(255, 255, 255, 155))
+		setup..addAbility(GHOST_INVIS_ID)
+		..setVertexColor(colorA(255, 255, 255, 155))
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 			inRangeTrig = CreateTrigger()
 			inRangeTrig.registerUnitInRangeSource(setup, radius)
 			inRangeTrig.addAction(c)
 		setup.setEntity(this)
-	
+
 	override function update()
 
 	function setNewSetup(unit u)
 		if u == null or not u.isAlive() or u.getEntity() != null
-			error("invalid actor replacement") 
+			error("invalid actor replacement")
 		setup.remove()
 		setup = u
 		setup.setEntity(this)
@@ -138,7 +141,7 @@ public abstract class StaticSetupObject extends UnitEntity
 		if inRangeTrig != null
 			inRangeTrig.destr()
 			inRangeTrig = null
-		
+
 var count = -1
 let offsets = [vec2(0.049, 0.001), vec2(0.048, 0.002), vec2(0.047, 0.003), vec2(0.046, 0.004), vec2(0.045, 0.005), vec2(0.044, 0.006), vec2(0.043, 0.007),
  	vec2(0.041, 0.008), vec2(0.040, 0.009), vec2(0.039, 0.008), vec2(0.038, 0.007), vec2(0.037, 0.006), vec2(0.036, 0.005), vec2(0.035, 0.004),
@@ -147,7 +150,7 @@ let offsets = [vec2(0.049, 0.001), vec2(0.048, 0.002), vec2(0.047, 0.003), vec2(
     vec2(0.020, 0.005), vec2(0.019, 0.004), vec2(-0.049, 0.003), vec2(-0.048, 0.002), vec2(-0.047, 0.001), vec2(-0.046, 0.002), vec2(-0.045, 0.003),
 	vec2(-0.044, 0.004), vec2(-0.043, 0.005), vec2(-0.041, 0.006), vec2(-0.040, 0.007), vec2(-0.039, 0.008), vec2(-0.038, 0.009), vec2(-0.037, 0.008),
 	vec2(-0.036, 0.007), vec2(-0.035, 0.006), vec2(-0.034, 0.005), vec2(-0.033, 0.004), vec2(-0.032, 0.003), vec2(-0.031, 0.002), vec2(-0.030, 0.001),
-	vec2(-0.029, 0.002), vec2(-0.028, 0.003), vec2(-0.027, 0.004), vec2(-0.026, 0.005), vec2(-0.025, 0.006), vec2(-0.024, 0.007), vec2(-0.023, 0.008), 
+	vec2(-0.029, 0.002), vec2(-0.028, 0.003), vec2(-0.027, 0.004), vec2(-0.026, 0.005), vec2(-0.025, 0.006), vec2(-0.024, 0.007), vec2(-0.023, 0.008),
 	vec2(-0.022, 0.009), vec2(-0.021, 0.000), vec2(-0.020, 0.009), vec2(-0.019, 0.008)]
 
 function getOffset() returns vec2

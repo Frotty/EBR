@@ -24,7 +24,7 @@ constant PREVIOUS_EFFECT_ID = compiletime(ABIL_ID_GEN.next())
 constant START_ID = compiletime(ABIL_ID_GEN.next())
 constant STOP_ID = compiletime(ABIL_ID_GEN.next())
 
-constant POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl" 
+constant POISON_EFFECT = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
 constant EVENT_RADIUS = 65.
 constant SPECIAL_ID = 'A07V'
 
@@ -34,14 +34,14 @@ constant SPEED_BUFF_POS = 'A03I'
 constant SFX_COUNT = 9
 
 let SFX_STRINGS = ["Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl",
-				"Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl", 
-				"Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl", 
-				"Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl", 
-				"Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", 
-				"Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl", 
-				"Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl", 
-				"Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl", 
-				"Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl", 
+				"Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl",
+				"Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl",
+				"Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl",
+				"Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl",
+				"Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl",
+				"Abilities\\Spells\\Other\\Volcano\\VolcanoDeath.mdl",
+				"Abilities\\Spells\\Demon\\DarkPortal\\DarkPortalTarget.mdl",
+				"Objects\\Spawnmodels\\NightElf\\NEDeathSmall\\NEDeathSmall.mdl",
 				"" ]
 
 enum ABIL
@@ -57,7 +57,7 @@ public class Trap extends StaticBaseObject
 	real interval = 2.
 	real timerreal = 0.
 	ABIL a
-	
+
 	real duration //Shake,  Speed, Stun
 	real value // Shake, Knockback, Speed
 	boolean pull = false
@@ -68,23 +68,23 @@ public class Trap extends StaticBaseObject
 		super(pos, createUnit(owner, TRAP_ID, pos, angle(0)) , EVENT_RADIUS, function onStep, null)
 		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-			
+
 	static function onStep()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		let obj = source.getEntity() castTo Trap
-		
+
 		if not obj.active and e instanceof Escaper
 			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
-	
-	ondestroy 
+
+	ondestroy
 		for i = 0 to 4
 			if goos[i] != null
 				destroy goos[i]
-				
+
 	override function update()
 		if timerreal <= 0.0
 			flashEffect(SFX_STRINGS[sfxid], actor.getPos())
@@ -96,7 +96,7 @@ public class Trap extends StaticBaseObject
 			timerreal = interval
 		else
 			timerreal -= ANIMATION_PERIOD
-				
+
 	function doEffect(Escaper e)
 		switch a
 			case ABIL.KILL
@@ -124,13 +124,13 @@ public class Trap extends StaticBaseObject
 						angl = pos.angleTo2d(e.pos) - (180).asAngleDegrees()
 					else
 						angl = pos.angleTo2d(e.pos)
-				else	
+				else
 					angl = pos.angleTo2d(rallyPos)
-					
+
 				e.addVel(angl.toVec(value).toVec3())
 			default
-		
-		
+
+
 	function addConfiger(boolean dur, boolean val)
 		UnitRemoveAbility(actor,INSTANT_KILL_ID)
 		UnitRemoveAbility(actor,STUN_ID)
@@ -152,7 +152,7 @@ public class Trap extends StaticBaseObject
 		if noRally != null
 			noRally.destr()
 			noRally = null
-	
+
 	function onCast() returns boolean
 		let spell_id = GetSpellAbilityId()
 		let tpos = getSpellTargetPos()
@@ -175,7 +175,7 @@ public class Trap extends StaticBaseObject
 					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
 				else
 					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
-			
+
 			case INSTANT_KILL_ID
 				a = ABIL.KILL
 				addConfiger(false, false)
@@ -202,7 +202,7 @@ public class Trap extends StaticBaseObject
 			case POISON_ID
 				a = ABIL.POISON
 				addConfiger(false, false)
-					
+
 			case INCREASE_INTERVAL_ID
 				if interval >= 10
 					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
@@ -215,7 +215,7 @@ public class Trap extends StaticBaseObject
 				else
 					interval -= 0.25
 					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
-			
+
 			case INCREASE_VALUE_ID
 				switch a
 					case ABIL.KNOCK
@@ -265,7 +265,7 @@ public class Trap extends StaticBaseObject
 							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
-			
+
 			case INCREASE_DURATION_ID
 				switch a
 					case ABIL.STUN
@@ -287,7 +287,7 @@ public class Trap extends StaticBaseObject
 							duration += 1
 							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
-						skip	
+						skip
 			case DECREASE_DURATION_ID
 				switch a
 					case ABIL.STUN
@@ -310,7 +310,7 @@ public class Trap extends StaticBaseObject
 							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
 					default
 						skip
-			
+
 			case START_ID
 				activate()
 				UnitRemoveAbility(actor,START_ID)
@@ -329,19 +329,19 @@ public class Trap extends StaticBaseObject
 				actor.removeAbility(KNOCKBACK_PUSH_ID)
 				actor.addAbility(KNOCKBACK_PULL_ID)
 			case SPECIAL_ID
-				let tile = tpos.getTile()
+				let tile = tpos.getEBRTile()
 				if not tile.hasModifier(TileModifier.ORANGEGOO) and goocounter < 5
 					let goo = createImage("textures\\orangegoo.blp", tpos, 128, 128)..show()
 					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++
 					tile.addModifier(TileModifier.ORANGEGOO)
 		return false
-	
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, TRAP_INDEX.toString()))
 		return json
-		
+
 
 @objectgen function genTrap()
 	new ChannelAbilityPreset(DECREASE_DURATION_ID, 1, TRUE)
@@ -378,7 +378,7 @@ public class Trap extends StaticBaseObject
 	new ChannelAbilityPreset(INCREASE_INTERVAL_ID, 1, TRUE)
 	..setName("Trap: Increase Interval")
 	..presetTooltipNormal((int lvl) -> "|cff73C54AIncrease |rInterval [|cffFFCC00R|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Increases the traps periodic activation interval." + 
+	..presetTooltipNormalExtended((int lvl) -> "Increases the traps periodic activation interval." +
 	"|nTo turn the trap periodic, click the Start button.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNIntervalPlus.blp")
 	..presetButtonPosNormal(3, 0)
@@ -544,17 +544,7 @@ public class Trap extends StaticBaseObject
 	..setTooltipExtended("Trap that can perform various actions on an entering Escaper, like poison, stun, knockback and kill." +
 	"\nThe trapeffect can be customized and made invisible.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTrap.blp")
-	..setNormalAbilities(int2fourchar(KNOCKBACK_ID) + "," +
-	int2fourchar(POISON_ID) + "," +
-	int2fourchar(INSTANT_KILL_ID) + "," +
-	int2fourchar(SHAKE_ID) + "," +
-	int2fourchar(SPEED_ID) + "," +
-	int2fourchar(STUN_ID) + "," +
-	int2fourchar(PREVIOUS_EFFECT_ID) + "," +
-	int2fourchar(NEXT_EFFECT_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(KNOCKBACK_ID, POISON_ID, INSTANT_KILL_ID, SHAKE_ID, SPEED_ID, STUN_ID, PREVIOUS_EFFECT_ID, NEXT_EFFECT_ID, MAKE_UNIT_INVISIBLE_ID, REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(2)
 	..setTintingColorRed(96)
@@ -563,7 +553,7 @@ public class Trap extends StaticBaseObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")

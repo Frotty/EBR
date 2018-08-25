@@ -17,7 +17,7 @@ public class RevivePoint extends StaticSetupObject
 
 	construct(unit existing)
 		super(existing, createUnit(existing.getOwner(), REVIVE_POINT_ID, existing.getPos(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach )
-		let tile = pos.getTile()
+		let tile = pos.getEBRTile()
 		if tile.hasModifier(TileModifier.RESERVED)
 			terminate()
 		else
@@ -26,15 +26,16 @@ public class RevivePoint extends StaticSetupObject
 
 	construct(vec3 pos, player owner)
 		super(createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach )
-		let tile = pos.getTile()
+		let tile = pos.getEBRTile()
 		if tile.hasModifier(TileModifier.RESERVED)
 			terminate()
 		else
 			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
 			tile.addModifier(TileModifier.RESERVED)
-		
+
 
 	function reach(Escaper reacher)
+		Log.debug("on reach")
 		if not reached
 			reached = true
 			actor.setColor(reacher.owner.getColor())
@@ -62,7 +63,7 @@ public class RevivePoint extends StaticSetupObject
 			else
 				svRev.reached = false
 				svRev.actor.setColor(PLAYER_COLOR_LIGHT_GRAY)
-			
+
 			let getExp = currentRevivepoint.distanceTo(pos.toVec2()) > 512
 			for pd from escaperPlayers.staticItr()
 				this.getCurrentRegion().revealRegion(pd.p)
@@ -78,7 +79,7 @@ public class RevivePoint extends StaticSetupObject
 					pd.addXp(20, false)
 
 			if getExp
-				pData[owner.getId()].addXp(15, false)		
+				pData[owner.getId()].addXp(15, false)
 
 
 
@@ -87,7 +88,7 @@ public class RevivePoint extends StaticSetupObject
 		let target = GetTriggerUnit()
 		if(isEscaper(target.getOwner()) and target.getEntity() instanceof Escaper)
 			(source.getEntity() castTo RevivePoint).reach(target.getEntity() castTo Escaper)
-				
+
 	static function filter() returns boolean
 		return GetUnitTypeId(GetFilterUnit()) == REVIVE_POINT_ID
 
@@ -104,7 +105,7 @@ public class RevivePoint extends StaticSetupObject
 			printTimedToPlayer("|cffcc3333You cannot remove the currently active Revivepoint", 5., owner)
 
 	ondestroy
-		pos.getTile().removeModifier(TileModifier.RESERVED)
+		pos.getEBRTile().removeModifier(TileModifier.RESERVED)
 
 @objectgen function genRevivePoint()
 	new ChannelAbilityPreset(INFO_REVIVE_POINT_ID, 1, TRUE)
@@ -116,7 +117,7 @@ public class RevivePoint extends StaticSetupObject
 		..presetButtonPosNormal(0, 0)
 		..presetTargetTypes(Targettype.PASSIVE)
 		..setHeroAbility(FALSE)
-		
+
 	new BuildingDefinition(REVIVE_POINT_ID, 'ncop')
 		..setName("|cff087BB5Revivepoint")
 		..setHotkey("Q")
@@ -124,16 +125,14 @@ public class RevivePoint extends StaticSetupObject
 		..setTooltipExtended("Escapers get revived here when they die." +
 		"\nThe Revivepoint is activated when an escaper steps on it.|nIt cannot be triggered by builders.")
 		..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNReviver.blp")
-		..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INFO_REVIVE_POINT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID))  
+		..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INFO_REVIVE_POINT_ID, INVULNERABILITY_ID))
 		..setButtonPositionX(0)
 		..setButtonPositionY(0)
 		..setSightRadiusDay(0)
 		..setSightRadiusNight(0)
 		..setBuildTime(1)
-		..setCollisionSize(0)        
+		..setCollisionSize(0)
 		..setScalingValue(2)
 		..setSelectionScale(4)
-		..setUnitClassification("ancient,standon")  
+		..setUnitClassification("ancient,standon")
 		..setHideMinimapDisplay(true)

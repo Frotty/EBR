@@ -3,14 +3,14 @@ import ChannelAbilityPreset
 //import Regions
 
 constant GOODS_STORE_ID = compiletime(UNIT_ID_GEN.next())
-	
+
 constant real 	EVENT_RADIUS_SMALL	= 32.
 constant real 	EVENT_RADIUS_BIG	= 64.
 public GlobalShop shop
 
 public class GlobalShop
 	unit actor
-	
+
 	construct( real x, real y, player owner )
 		actor = CreateUnit(owner, GOODS_STORE_ID, x, y, 270. )
 
@@ -22,9 +22,5 @@ public class GlobalShop
 @objectgen function genShop()
 	new BuildingDefinition(GOODS_STORE_ID, 'nmrk')
 	..setName("|cffffcc00Goods Store")
-	..setItemsSold(int2fourchar('I011') + "," +
-	int2fourchar('I00T') + "," +
-	int2fourchar('I00Q') + "," +
-	int2fourchar('I00L') + "," +
-	int2fourchar('I00P'))
+	..setItemsSold(commaList('I011', 'I00T', 'I00Q', 'I00L', 'I00P'))
 	..setHideMinimapDisplay(true)

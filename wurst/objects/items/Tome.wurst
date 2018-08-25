@@ -5,20 +5,20 @@ import ChannelAbilityPreset
 public constant TOME_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 
 public class Tome extends ItemObject
-	
+
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, TOME_DUMMY_ID, pos.x, pos.y, 0 ) )
-		
+
 	override function onUse(Escaper user)
-		
+
 	override function onPickup(Escaper holder)
 		terminate()
-		
+
 	override function onDrop(Escaper e)
-		
-	
+
+
 @objectgen function genTome()
-	new UnitDefinition(TOME_DUMMY_ID, 'hfoo')  
+	new UnitDefinition(TOME_DUMMY_ID, 'hfoo')
 	..setAttacksEnabled(0)
 	..setTargetedAs("structure")
 	..setAnimationBlendTimeseconds(0)
@@ -38,9 +38,7 @@ public class Tome extends ItemObject
 	..setMovementType(MovementType.None)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setName("Tome Dummy")
 	..setUpgradesUsed("")
 	..setBuildTime(1)

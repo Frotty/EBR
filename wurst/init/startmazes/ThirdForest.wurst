@@ -2,7 +2,6 @@ package ThirdForest
 import Startmaze
 import Knockbacker
 import SetupBox
-import Arcanery
 import Faceless
 import Unitcreator
 import Waypoint
@@ -17,7 +16,7 @@ public class ThirdForestMaze extends Startmaze
 		rdata.setType(RegionType.CITY, false)
 		rdata.specialAbil = JUMP_SPELL_ID
 		rdata.allowCut = true
-	
+
 	override function initMaze()
 		inited = true
 		RegionData data = getRegionData(vec2(368, -6647))
@@ -25,7 +24,6 @@ public class ThirdForestMaze extends Startmaze
 
 		let t = new Teleporter(gg_unit_tele_0044)
 		t.setRallyPoint(LOUNGE)
-
 		gg_unit_sgrk_0038.issuePointOrder("patrol", vec2(-122.01,-5897))
 		gg_unit_sgrk_0039.issuePointOrder("patrol", vec2(122.01,-5888))
 
@@ -36,7 +34,6 @@ public class ThirdForestMaze extends Startmaze
 
 		k1.setup.issuePointOrder("patrol", vec2(-1000.01,-6150))
 		k2.setup.issuePointOrder("patrol", vec2(-900.01,-7200))
-
 		gg_unit_bgrk_0145.issuePointOrder("patrol", vec2(635.001,-3835))
 
 		let uk = new UnitCreator(gg_unit_uncr_0117)
@@ -49,7 +46,6 @@ public class ThirdForestMaze extends Startmaze
 
 		wp = new Waypoint(gg_unit_wayp_0101)
 		wp.setRallyPoint(gg_unit_wayp_0102.getPos())
-
 		wp = new Waypoint(gg_unit_wayp_0102)
 		wp.setRallyPoint(gg_unit_wayp_0114.getPos())
 
@@ -65,7 +61,6 @@ public class ThirdForestMaze extends Startmaze
 		new Waypoint(gg_unit_wayp_0066)..setRallyPoint(gg_unit_wayp_0099.getPos()).delay = 1
 		new Waypoint(gg_unit_wayp_0078)..setRallyPoint(gg_unit_wayp_0068.getPos()).delay = 1
 		new Waypoint(gg_unit_wayp_0099)..setRallyPoint(gg_unit_wayp_0078.getPos()).delay = 1
-
 		let vw = new Faceless(gg_unit_dims_0100)
 		doAfter(1.5, () -> vw.actor.issuePointOrder("move", gg_unit_wayp_0078.getPos()))
 		vw.invisDur.setVal(1)
@@ -76,8 +71,6 @@ public class ThirdForestMaze extends Startmaze
 		exec.tiletype = '0000'
 		exec.setRallyPoint(vec2(-387, -4600))
 		exec.horizontalTileSize = 1
-
-		new Arcanery(gg_unit_arca_0050)
 
 	override function getStart() returns vec2
 		return vec2(830, -7050)

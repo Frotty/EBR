@@ -30,7 +30,7 @@ public class UnitCreator extends StaticBaseObject
 		super( pos, createUnit(owner, UNIT_CREATOR_ID, pos, angle(0)), 0., null , null)
 		actor.addAbility(FIXED_ID)
 		setEnabled(false)
-	
+
 	override function update()
 		if timerreal <= 0.0
 			if noRally == null
@@ -40,9 +40,9 @@ public class UnitCreator extends StaticBaseObject
 			else if tmode == TimerMode.RANDOM
 				timerreal = GetRandomReal(0.5, interval)
 		else
-			timerreal -= ANIMATION_PERIOD	
-			
-				
+			timerreal -= ANIMATION_PERIOD
+
+
 	function create()
 		let rPos = getRallyPoint().toVec2() + vec2(0.001,0.001)
 		let cpos = pos.toVec2() + vec2(0.001,0.001)
@@ -65,11 +65,11 @@ public class UnitCreator extends StaticBaseObject
 			case KNOCKBACKER_ID
 				ek = new Knockbacker(cpos, owner, getRallyAngle())
 		ek.setup.issuePointOrder("move", rPos)
-		
+
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
-		switch id 
+		switch id
 			case INCREASE_INTERVAL_ID
 				if interval >= 15
 					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
@@ -105,12 +105,12 @@ public class UnitCreator extends StaticBaseObject
 			case RANDOM_ID
 				actor..removeAbility(RANDOM_ID)..addAbility(FIXED_ID)
 				tmode = TimerMode.FIXED
-	
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
 		return json
-	
+
 
 init
 	preloadAbility('A045')
@@ -158,7 +158,7 @@ init
 	..presetHotkey("C")
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
-		
+
 	new ChannelAbilityPreset(FIXED_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -170,7 +170,7 @@ init
 	..presetTooltipNormalExtended((int lvl) -> "At fixed mode, the monsters will always be spawned in the fixed interval you set."
 	+ "|nClick to change to random mode.")
 	..presetButtonPosNormal(1, 1)
-	
+
 	new ChannelAbilityPreset(RANDOM_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -190,15 +190,7 @@ init
 	..setTooltipExtended("Periodically creates a unit of the selected type." +
 	"\nThe created unit walks to the rallypoint.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Creator.blp")
-	..setNormalAbilities(int2fourchar(INFO_UNIT_CREATOR_ID) + "," +
-	int2fourchar(DECREASE_INTERVAL_ID) + "," +
-	int2fourchar(INCREASE_INTERVAL_ID) + "," +
-	int2fourchar('A042') + "," +
-	int2fourchar(TURN_ON_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INFO_UNIT_CREATOR_ID, DECREASE_INTERVAL_ID, INCREASE_INTERVAL_ID, 'A042', TURN_ON_ID, REMOVE_OBJECT_ID, RALLY_POINT, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(1)
 	..setButtonPositionY(0)
 	..setTintingColorRed(0)
@@ -207,7 +199,7 @@ init
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)       
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")

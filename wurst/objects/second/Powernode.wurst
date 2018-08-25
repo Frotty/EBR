@@ -39,7 +39,7 @@ class Link
 	Powernode parent
 	Powernode target
 	lightning sfx
-	
+
 	construct(Powernode parent, Powernode target, lightning sfx, TetherType ltype)
 		this.parent = parent
 		this.target = target
@@ -49,7 +49,7 @@ class Link
 			next = parent.firstLink
 			parent.firstLink.prev = this
 		parent.firstLink = this
-		
+
 	ondestroy
 		if prev != null
 			prev.next = next
@@ -71,7 +71,7 @@ public class Powernode extends SetupObject
 		..addAbility(INCREASE_BOUNCE_ID)..addAbility(DECREASE_BOUNCE_ID)..addAbility(TURN_OFF_ID)
 		sleeps = false
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+
 	function link(Powernode p, TetherType ltype)
 		switch ltype
 			case KILL
@@ -86,12 +86,12 @@ public class Powernode extends SetupObject
 				new Link(this, p, AddLightning(EFFECT_TETHER_AIR_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
 			case BLOCK_ORB
 				new Link(this, p, AddLightning(EFFECT_ORB_STRING, false, pos.x, pos.y, p.pos.x, p.pos.y), ltype)
-		
+
 	override function update()
 		super.update()
 		var l = firstLink
 		while l != null
-			if l.target.done 
+			if l.target.done
 				destroy l
 			else
 				MoveLightning(l.sfx, false, pos.x, pos.y, l.target.pos.x, l.target.pos.y)
@@ -108,19 +108,19 @@ public class Powernode extends SetupObject
 									AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
 									e.kill(this)
 								case BOUNCE_GROUND
-									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
+									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
 								case BOUNCE_GROUND_DIODE
-									calBounceDiode(l.target.pos,e, (1.00 + bounciness.get()))	
+									calBounceDiode(l.target.pos,e, (1.00 + bounciness.get()))
 								case BOUNCE_AIR
 									if e.pos.z > 10
 										addEffect(Abilities.dispelMagicTarget, e.getPos()).destr()
-										calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
+										calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
 								case BOUNCE_BOTH
 									if e.pos.z > 20
 										addEffect(Abilities.dispelMagicTarget, e.getPos()).destr()
-									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))	
+									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
 								case BLOCK_ORB
-									
+
 			l = l.next
 
 	override function setEnabled(boolean b)
@@ -130,14 +130,14 @@ public class Powernode extends SetupObject
 		while l != null
 			SetLightningColor(l.sfx, v, v, v, v)
 			l = l.next
-				
+
 	function getNormal(vec2 la, vec2 lb, vec2 pos) returns vec3
 		let dx = lb.x - la.x
 		let dy = lb.y - la.y
 		if ((lb.x - la.x)*(pos.y - la.y) - (lb.y - la.y)*(pos.x - la.x)) > 0
 			return vec2(-dy,dx).norm().withZ(0)
 		return vec2(dy,-dx).norm().withZ(0)
-				
+
 	// function calBounce(vec3 lpos, Escaper e, real bounceFactor)
 	// 	let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
 	// 	var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
@@ -146,7 +146,7 @@ public class Powernode extends SetupObject
 	// 	e.setPos(e.pos+b)
 	// 	e.setVel(b)
 	// 	e.slideVelocity = ZERO2
-		
+
 	function calBounceDiode(vec3 lpos, Escaper e, real bounceFactor)
 		let dx = lpos.x - e.pos.x
 		let dy = lpos.y - e.pos.y
@@ -162,21 +162,21 @@ public class Powernode extends SetupObject
 		e.setPos(e.pos+b)
 		e.setVel(b)
 		e.slideVelocity = ZERO2
-		
-		
+
+
 	function getBounceVec(vec3 vel3, vec2 nor2, real bounceFactor) returns vec3
 		vec3 nor3 = nor2.toVec3()
 		vec3 pv3 = vel3.project(nor3)
 		vec2 pv2 = pv3.toVec2()
 		pv2 *= (-bounceFactor)
 		return vel3 + pv2
-	
+
 	ondestroy
 		var l = firstLink
 		while l != null
 			destroy l
 			l = l.next
-	
+
 	function onCast()
 		var id = GetSpellAbilityId()
 		var target = GetSpellTargetUnit()
@@ -198,13 +198,13 @@ public class Powernode extends SetupObject
 						node.link(data castTo Powernode, TetherType.KILL)
 					else if id == LINK_B_GROUND_ID
 						node.link(data castTo Powernode, TetherType.BOUNCE_GROUND)
-					else if id == LINK_B_BOTH_ID	
+					else if id == LINK_B_BOTH_ID
 						node.link(data castTo Powernode, TetherType.BOUNCE_BOTH)
-					else if id == LINK_DIODE_GROUND_ID	
+					else if id == LINK_DIODE_GROUND_ID
 						node.link(data castTo Powernode, TetherType.BOUNCE_GROUND_DIODE)
-					else if id == LINK_ORB_ID	
+					else if id == LINK_ORB_ID
 						node.link(data castTo Powernode, TetherType.BLOCK_ORB)
-					else if id == LINK_B_AIR_ID	
+					else if id == LINK_B_AIR_ID
 						node.link(data castTo Powernode, TetherType.BOUNCE_AIR)
 		else if id == INCREASE_BOUNCE_ID
 			node.bounciness.increment(node, 8)
@@ -213,7 +213,7 @@ public class Powernode extends SetupObject
 				if link.target != this
 					link.target.bounciness.setVal(node.bounciness.get())
 				link = link.next
-				
+
 		else if id == DECREASE_BOUNCE_ID
 			node.bounciness.decrement(node, 0)
 			var link = node.firstLink
@@ -234,7 +234,7 @@ public class Powernode extends SetupObject
 		return json
 
 @objectgen function genPowerNode()
-	new UnitDefinition(POWER_NODE_ID, 'hfoo')  
+	new UnitDefinition(POWER_NODE_ID, 'hfoo')
 	..setAttacksEnabled(0)
 	..setTargetedAs("ground")
 	..setAnimationBlendTimeseconds(0)
@@ -253,8 +253,7 @@ public class Powernode extends SetupObject
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setShadowImageUnit("")
-	..setNormalAbilities(int2fourchar('A01H') + "," + int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," + int2fourchar(GHOST_VIS_ID) + "," + int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("F")
 	..setName("|cff9CA5EFPower Node")
 	..setTooltipBasic("|cffFFCC00Build |cff9CA5EFPower Node [F]")
@@ -293,7 +292,7 @@ public class Powernode extends SetupObject
 	..presetTooltipNormal((int lvl) -> "Decrease Bounciness [|cffFFCC00D|r]")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(2, 1)
-	
+
 	new ChannelAbilityPreset(LINK_B_AIR_ID, 1, true)
 	..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -383,14 +382,12 @@ public class Powernode extends SetupObject
 	..presetTargetTypes(Targettype.UNIT)
 	..presetCastRange((int lvl) -> 2500)
 	..presetTargetsAllowed((int lvl) -> "allies,friend,invulnerable,notself,vulnerable")
-	
+
 	new AbilityDefinitionSpellBook(LINK_SPELLBOOK_ID)
 	..setMaximumSpells(1, 6)
 	..setMinimumSpells(1, 6)
 	..setBaseOrderID(1, "spellbook")
-	..setSpellList(1, int2fourchar(LINK_B_GROUND_ID) + "," + int2fourchar(LINK_B_BOTH_ID) + "," 
-		+ int2fourchar(LINK_DIODE_GROUND_ID) + "," + int2fourchar(LINK_KILL_ID) + "," 
-		+ int2fourchar(LINK_ORB_ID) + "," + int2fourchar(LINK_B_AIR_ID))
+	..setSpellList(1, commaList(LINK_B_GROUND_ID, LINK_B_BOTH_ID, LINK_DIODE_GROUND_ID, LINK_KILL_ID, LINK_ORB_ID, LINK_B_AIR_ID))
 	..setSharedSpellCooldown(1, false)
 	..setIconNormal("ReplaceableTextures\\CommandButtons\\BTNEnchantedGemstone.blp")
 	..setTooltipNormal(1, "Setup |cffFFCC00Tether [|cffFFCC00R|r]")

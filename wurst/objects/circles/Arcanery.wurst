@@ -51,7 +51,7 @@ function is() returns boolean
 public class Arcanery extends StaticBaseObject
 	ArcaneryMode arcMode = ArcaneryMode.SILENCE
 	ExpirationMode expMode = ExpirationMode.RANGE
-	Fx currentEffect 
+	Fx currentEffect
 
 	construct(unit existing)
 		super(existing.getPos(), existing, 102., function onEnterEv, function is)
@@ -65,7 +65,7 @@ public class Arcanery extends StaticBaseObject
 		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
 		recreateEffect()
 
-	
+
 	function recreateEffect()
 		switch arcMode
 			case SILENCE
@@ -128,9 +128,7 @@ public class Arcanery extends StaticBaseObject
 	..setTooltipBasic("|cffFFCC00Build |cffFFFF08Arcanery |r[|cffFFCC00E|r]")
 	..setTooltipExtended("Grants or silences spells for the escapers.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNarcanery.blp")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, MAKE_UNIT_INVISIBLE_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(0)
 	..setTintingColorRed(225)
@@ -139,7 +137,7 @@ public class Arcanery extends StaticBaseObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")

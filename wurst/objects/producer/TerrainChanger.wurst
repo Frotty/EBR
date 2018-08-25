@@ -21,18 +21,18 @@ constant TERRAIN_DEC_V_ID = 'A01T'
 public class TerrainChanger extends SetupObject
 	ConfigValue sizeX = new ConfigValue(1, 1, "Width")
 	ConfigValue sizeY = new ConfigValue(1, 1, "Height")
-	tile currentTile
+	ebrtile currentTile
 	int innerTile = '0000'
 	int outerTile = '0001'
 
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0)), createUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0)), 0)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		currentTile = pos.getTile()
+		currentTile = pos.getEBRTile()
 		innerTile = this.getCurrentRegion().getTypeSet().walkableId
 		outerTile = this.getCurrentRegion().getTypeSet().unwalkableId
 		sleeps = false
-		
+
 	override function update()
 		super.update()
 		let rdata = getRegionData(pos)
@@ -66,16 +66,16 @@ public class TerrainChanger extends SetupObject
 					checkAndSetTile(rdata, tX+j, tY - sizeYI-1, outerTile)
 			if xoffset != 0 and yoffset != 0
 				checkAndSetTile(rdata, tX+xoffset, tY+yoffset, outerTile)
-				
+
 			// Make new
-			currentTile = pos.getTile()
+			currentTile = pos.getEBRTile()
 			for i = -(sizeYI) to sizeYI
 				for j = -(sizeXI) to sizeXI
 					let stile = getTile(tX+j, tY+i)
 					if not stile.hasModifier(TileModifier.BLOCK)
 						tileID = innerTile
 						stile.setType(tileID)
-	
+
 	function checkAndSetTile(RegionData rdata, int x, int y, int id)
 		let tile = getTile(x, y)
 		if not tile.hasModifier(TileModifier.BLOCK)
@@ -121,7 +121,7 @@ public class TerrainChanger extends SetupObject
 				outerTile = CONTROLLABLEICE
 			case TERRAIN_O_UNICE_ID
 				outerTile = UNCONTROLLABLEICE
-			
+
 		update()
 
 	override function serialize() returns Json
@@ -129,9 +129,9 @@ public class TerrainChanger extends SetupObject
 		json
 		..addProperty(new Property(KEY_TYPE, TC_INDEX.toString()))
 		return json
-				
+
 	override function setEnabled(boolean b)
-			
+
 init
 	preloadAbility(TERRAIN_O_WALKABLE_ID)
 	preloadAbility(TERRAIN_O_UNWALKABLE_ID)
@@ -148,7 +148,7 @@ init
 
 
 @objectgen function genTerrainChanger()
-	new UnitDefinition(TERRAIN_CHANGER_ID, 'nlv1')  
+	new UnitDefinition(TERRAIN_CHANGER_ID, 'nlv1')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -167,21 +167,14 @@ init
 	..setMovementHeight(16)
 	..setMovementHeightMinimum(16)
 	..setTurnRate(0.2)
-	..setNormalAbilities(int2fourchar('A029') + "," +
-	int2fourchar('A01H') + "," +
-	int2fourchar('A08J') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A029', 'A01H', 'A08J', 'A01E', MAKE_UNIT_INVISIBLE_ID, REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cff0894E6TerrainChanger")
 	..setTooltipBasic("Spawns a Terrainchanger at |cffFFCC00Rallypoint|r.|nIt is a fully configureable, " +
 	"mobile unit which changes the regionspecific terrain below it.|nUse TC-Blockers (First Builder menu) to " +
 	"create protected tiles.|n|n|cff5ABD4ADoes not kill Escapers")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setHideMinimapDisplay(true)
 	..setCategorizationSpecial(false)
 	..setRace(Race.Undead)

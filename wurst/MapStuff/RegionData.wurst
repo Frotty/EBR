@@ -24,7 +24,7 @@ public enum RegionType
 	CITY
 	SNOW
 	SUNKEN
-	
+
 public function RegionType.getTypeSet() returns regionTypeSet
 	switch this
 		case UNKNOWN
@@ -40,7 +40,7 @@ public function RegionType.getTypeSet() returns regionTypeSet
 		case SUNKEN
 			return regionTypeSet('I00N', 'Zbks', 'Zdrg', SMALL_SUNKEN_KILLER_ID, BIG_SUNKEN_KILLER_ID, 'ZTtw', SOBS_SUNKEN_ID, BOBS_SUNKEN_ID, 'h00N', 'u00O', HOBS_SUNKEN_ID)
 	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-	
+
 public function getRegionTypeFromItem(int itemId) returns RegionType
 	for i = 1 to 5
 		var reg = i castTo RegionType
@@ -73,7 +73,7 @@ class FogData
 			changeFog(FOG_OF_WAR_VISIBLE)
 		else
 			changeFog(FOG_OF_WAR_MASKED)
-	
+
 	function changeFog(fogstate fstate)
 		if state != fstate
 			state = fstate
@@ -81,7 +81,7 @@ class FogData
 				DestroyFogModifier(modifier)
 			modifier = CreateFogModifierRect(p, state, r, false, false)
 			FogModifierStart(modifier)
-  
+
 // The "Area" RegionData a builder has to claim in order to build
 public class RegionData
 	static RegionData EMPTY_REGION = new RegionData(null)
@@ -89,9 +89,9 @@ public class RegionData
 	private LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	private HashMap<player, Permission> permissions = new HashMap<player, Permission>()
 	private FogData array[12] fmods
-	
+
 	RegionType rtype = RegionType.UNKNOWN
-	
+
 	rect theRect
 
 	real slidespeed = 3.
@@ -99,14 +99,14 @@ public class RegionData
 	real lavaDmg = 1.
 	real turnSpeed = 2.55
 	real gravity = -0.8
-	
+
 	boolean easyMode = false
 	boolean visible = false
 	int specialAbil = 0
 	boolean bossRegion = false
 	boolean allowCut = false
 	Boss boss = null
-	
+
 	construct(rect r)
 		theRect = r
 		if(r != null)
@@ -124,15 +124,15 @@ public class RegionData
 	function getEscapers() returns LLIterator<Escaper>
 		return escapers.staticItr()
 
-	function addEscaper(Escaper e) 
+	function addEscaper(Escaper e)
 		escapers.add(e)
-	
+
 	function removeEscaper(Escaper e)
 		escapers.remove(e)
-		
+
 	function setBossRegion()
 		bossRegion = true
-		
+
 	function resetTiles()
 		if rtype != RegionType.UNKNOWN
 			theRect.changeTerrain(rtype.getTypeSet().unwalkableId)
@@ -141,24 +141,24 @@ public class RegionData
 		this.rtype = rtype
 		if rtype != RegionType.UNKNOWN and changeTerrain
 			theRect.changeTerrain(rtype.getTypeSet().unwalkableId)
-		
+
 	function getTypeSet() returns regionTypeSet
 		return rtype.getTypeSet()
-			
+
 	function setOwner(player p)
 		permissions.put(p, Permission.OWNER)
-				
+
 	function allow(player p)
 		permissions.put(p, Permission.CONTRIBUTOR)
-			
+
 	function disallow(player p)
 		permissions.put(p, Permission.GUEST)
-	
+
 	function getPermission(player p) returns Permission
 		if permissions.has(p)
 			return permissions.get(p)
 		return Permission.GUEST
-		
+
 	function canBuild(player p) returns boolean
 		return (permissions.has(p) and (permissions.get(p) castTo int) > 0) or pData[p.getId()].title == Title.ADMIN
 
@@ -168,7 +168,7 @@ public class RegionData
 	function revealRegion(player p)
 		let id = p.getId()
 		fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
-			
+
 	static function enterRect()
 		var u = GetTriggerUnit()
 		var data = u.getEntity()
@@ -191,7 +191,7 @@ public class RegionData
 					printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 					Log.debug("no permission")
 					data.terminate()
-								
+
 
 real x = 0
 real y = 0
@@ -206,7 +206,7 @@ function rect.changeTerrain( integer ttype )
 	while y <= ymax
 		execute() ->
 			while x <= xmax
-				vec2(x,y).getTile().setType(ttype)
+				vec2(x,y).getEBRTile().setType(ttype)
 				x = x + 128
 
 			x = xmin
@@ -224,7 +224,7 @@ public function Entity.getCurrentRegion() returns RegionData
 	return currentRegion[this castTo int]
 
 public function getRegionData(vec3 pos) returns RegionData
-	return getRegionData(pos.toVec2())	 
+	return getRegionData(pos.toVec2())
 
 public function getRegionData(vec2 pos) returns RegionData
 	var i = 0
@@ -280,7 +280,7 @@ public RegionData array regions
 	regions[24] = new RegionData(gg_rct_coingamearea)
 	regions[24].setType(getRegionTypeFromItem('I00G'), false)
 	regions[24].setOwner(STAFF_PLAYER)
-	
+
 	let t = CreateTrigger()
 	t.registerRectLeaveEventSource(gg_rct_Region_023)
 	t.addAction(() -> begin

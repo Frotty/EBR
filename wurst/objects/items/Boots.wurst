@@ -8,12 +8,12 @@ public class Boots extends ItemObject
 	boolean picked = false
 	boolean followWalkable = true
 	Escaper holder
-	
+
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, BOOTS_DUMMY_ID, pos.x, pos.y, 0 ) )
-		
+
 	override function onUse(Escaper user)
-		
+
 	override function onPickup(Escaper holder)
 		picked = true
 		this.holder = holder
@@ -23,9 +23,9 @@ public class Boots extends ItemObject
 
 	override function onDrop(Escaper e)
 	override function update()
-	
+
 @objectgen function genTome()
-	new UnitDefinition(BOOTS_DUMMY_ID, 'hfoo')  
+	new UnitDefinition(BOOTS_DUMMY_ID, 'hfoo')
 	..setAttacksEnabled(0)
 	..setTargetedAs("structure")
 	..setAnimationBlendTimeseconds(0)
@@ -45,9 +45,7 @@ public class Boots extends ItemObject
 	..setMovementType(MovementType.None)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setName("Boots Dummy")
 	..setUpgradesUsed("")
 	..setBuildTime(1)

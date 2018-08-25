@@ -24,7 +24,7 @@ public class Tracks extends UnitEntity
 	int tsize = 0
 	rectangle rct
 	vec2 dir = UP
-	
+
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, TRACKS[0], pos, angle(0)))
 		this.setCurrentRegion()
@@ -32,19 +32,19 @@ public class Tracks extends UnitEntity
 		setup.setEntity(this)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		updateTrack()
-		
+
 	override function update()
 		for escaper from this.getCurrentRegion().getEscapers()
 			if escaper.pos.z < 22 and rct.contains(escaper.pos.toVec2())
 				escaper.otherVel += dir * trackSpeed.get()
-		
-				
+
+
 	function recreateDummy()
 		setNewActor(createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees()))
 
 	ondestroy
 		setup.remove()
-				
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
@@ -52,7 +52,7 @@ public class Tracks extends UnitEntity
 				trackSpeed.increment(this, 20)
 			case DEC_ID
 				trackSpeed.decrement(this, 1)
-				
+
 			case INCLENGTH_ID
 				if tsize < 2
 					tsize++
@@ -82,7 +82,7 @@ public class Tracks extends UnitEntity
 					dir = UP
 				updateTrack()
 		actor.setTimeScale(0.5+trackSpeed.get()/6)
-		
+
 	function updateTrack()
 		if dir == UP or dir == DOWN
 			rct = rectangle(vec2(pos.x - 64,pos.y - tsize * 128 - 64), vec2(pos.x + 64, pos.y + tsize * 128 + 64))
@@ -94,7 +94,7 @@ public class Tracks extends UnitEntity
 		let json = super.serialize()
 		json.addProperty(new Property(KEY_TYPE, TRACKS_INDEX.toString()))
 		return json
-		
+
 
 init
 	TRACKS[0] = TRACKS_1_ID
@@ -112,15 +112,7 @@ init
 	..setModelFile("models\\tcBox.mdl")
 	..setUnitSoundSet("")
 	..setPathingMap("none")
-	..setNormalAbilities(int2fourchar(INC_ID) + "," +
-	int2fourchar(DEC_ID) + "," +
-	int2fourchar(LEFT_ID) + "," +
-	int2fourchar(RIGHT_ID) + "," +
-	int2fourchar(INCLENGTH_ID) + "," +
-	int2fourchar(DECLENGTH_ID) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INC_ID, DEC_ID, LEFT_ID, RIGHT_ID, INCLENGTH_ID, DECLENGTH_ID, GHOST_INVIS_ID, REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setTintingColorRed(210)
@@ -129,7 +121,7 @@ init
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.55)
 	..setSelectionScale(1)
 	..setRace(Race.Nightelf)
@@ -144,8 +136,7 @@ init
 	..setModelFile("war3mapImported\\Tracks_1x1.mdl")
 	..setUnitSoundSet("")
 	..setPathingMap("none")
-	..setNormalAbilities(int2fourchar('Aloc') + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('Aloc', INVULNERABILITY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setTintingColorRed(210)
@@ -154,11 +145,11 @@ init
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setSelectionScale(1)
 	..setRace(Race.Nightelf)
 	..setHideMinimapDisplay(true)
-	
+
 	new BuildingDefinition(TRACKS_2_ID, 'ncop')
 	..setName("|cffE63A21Tracks 2")
 	..setHotkey("B")
@@ -168,8 +159,7 @@ init
 	..setModelFile("war3mapImported\\Tracks_3x1.mdl")
 	..setUnitSoundSet("")
 	..setPathingMap("none")
-	..setNormalAbilities(int2fourchar('Aloc') + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('Aloc', INVULNERABILITY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setTintingColorRed(210)
@@ -178,7 +168,7 @@ init
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setSelectionScale(1)
 	..setRace(Race.Nightelf)
 	..setHideMinimapDisplay(true)
@@ -192,8 +182,7 @@ init
 	..setModelFile("war3mapImported\\Tracks_5x1.mdl")
 	..setUnitSoundSet("")
 	..setPathingMap("none")
-	..setNormalAbilities(int2fourchar('Aloc') + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('Aloc', INVULNERABILITY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setTintingColorRed(210)
@@ -202,7 +191,7 @@ init
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setSelectionScale(1)
 	..setRace(Race.Nightelf)
 	..setHideMinimapDisplay(true)
@@ -218,9 +207,7 @@ init
 	..setModelFile("war3mapImported\\Tracks_1x1.mdl")
 	..setUnitSoundSet("")
 	..setPathingMap("PathTextures\\4x4SimpleSolid.tga")
-	..setNormalAbilities(int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(GHOST_INVIS_ID, REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(1)
 	..setTintingColorRed(210)
@@ -229,7 +216,7 @@ init
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setSelectionScale(1)
 	..setUnitClassification("ancient,standon")
 	..setRace(Race.Nightelf)

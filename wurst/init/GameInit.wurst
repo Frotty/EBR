@@ -8,11 +8,11 @@ import Preloader
 
 init
 	while preloadAbility(ABIL_ID_GEN.next())
-	
+
 	while preloadUnit(UNIT_ID_GEN.next())
 	startEntityLoop()
 	getTimer().start(0.01, () -> initGame())
-	
+
 @compiletime function callGen()
 	callFunctionsWithAnnotation("@objectgen")
 
@@ -37,11 +37,13 @@ function initPartTwo()
 	GetExpiredTimer().start(0.01, () -> partThree())
 
 function partThree()
+	Log.debug("init Three")
 	initStartmazes()
 	GetExpiredTimer().start(0.5, () -> syncInitial())
 
 function syncInitial()
+	Log.debug("init Four")
 	checkPlayerLocalFiles()
 	GetExpiredTimer().release()
 	jukeBox.playNextMusic()
-	
+

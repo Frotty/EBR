@@ -20,17 +20,17 @@ public class Key extends ItemObject
 	effect returnSfx = null
 	Escaper holder
 	Fx fx
-	
+
 	construct(vec2 pos, player owner)
 		super( pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+
 	function recolor()
 		actorItem.remove()
 		actorItem = createItem(keyIds[col castTo int], pos)..setEntity(this)
-		
+
 	override function onUse(Escaper user)
-		
+
 	override function onPickup(Escaper holder)
 		if isEscaper(holder.owner) or this.owner == holder.owner
 			picked = true
@@ -47,7 +47,7 @@ public class Key extends ItemObject
 			setup.setXY(pos.toVec2())
 			setup.show()
 			this.holder = null
-			
+
 	override function onDrop(Escaper e)
 		picked = false
 		holder = null
@@ -62,7 +62,7 @@ public class Key extends ItemObject
 			actorItem = createItem(keyIds[col castTo int], pos)
 			actorItem.setEntity(this)
 		end)
-		
+
 	override function update()
 		if picked
 			fx.setXYZ(holder.getPos()+vec3(0,0,128))
@@ -70,7 +70,7 @@ public class Key extends ItemObject
 				pos = holder.getPos()
 		else
 			super.update()
-		
+
 	function onCast() returns boolean
 		let id = GetSpellAbilityId()
 		for i = 0 to 8
@@ -99,16 +99,16 @@ public class Key extends ItemObject
 	override function deserialize(Json json)
 		col = json.getInt(KEY_COLOR) castTo EBRColor
 		recolor()
-		
+
 	ondestroy
 		if fx != null
 			fx.hiddenDestroy()
 		holder = null
 		if returnSfx != null
 			returnSfx.destr()
-			
+
 @objectgen public function genKey()
-	new UnitDefinition(KEY_DUMMY_ID, 'hfoo')  
+	new UnitDefinition(KEY_DUMMY_ID, 'hfoo')
 	..setAttacksEnabled(0)
 	..setTargetedAs("structure")
 	..setAnimationBlendTimeseconds(0)
@@ -128,11 +128,7 @@ public class Key extends ItemObject
 	..setMovementType(MovementType.None)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar('A00M') + "," +
-	int2fourchar('A05R') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A00M', 'A05R', REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setName("Key Dummy")
 	..setUpgradesUsed("")
 	..setBuildTime(1)

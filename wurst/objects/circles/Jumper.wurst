@@ -31,7 +31,7 @@ public class Goo
 		this.pos = pos
 
 	ondestroy
-		let tile = pos.getTile()
+		let tile = pos.getEBRTile()
 		if tile.hasModifier(TileModifier.BLUGOO)
 			tile.removeModifier(TileModifier.BLUGOO)
 		if tile.hasModifier(TileModifier.ORANGEGOO)
@@ -54,7 +54,7 @@ public class Jumper extends StaticBaseObject
 	construct(unit existing)
 		super(existing.getPos(), existing, 40., function Jumper.onInRange, null)
 		actor.addAbility(TURN_OFF_ID)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, JUMPER_ID, pos, angle(0)), 40., function Jumper.onInRange, null)
 		actor.addAbility(TURN_OFF_ID)
@@ -85,22 +85,22 @@ public class Jumper extends StaticBaseObject
 			return
 		switch permission
 			case ESCAPER
-				if data instanceof Escaper 
+				if data instanceof Escaper
 					executeJump(data)
 			case KILLER
-				if data instanceof EscaperSensorSetup 
+				if data instanceof EscaperSensorSetup
 					executeJump(data)
 			case BOTH
 				if data instanceof Escaper or data instanceof EscaperSensorSetup
 					executeJump(data)
-		
-			
+
+
 
 	static function onInRange()
 		var jdata = GetTriggeringTrigger().getSource().getEntity() castTo Jumper
 		jdata.inRange()
-					
-				
+
+
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
@@ -123,7 +123,7 @@ public class Jumper extends StaticBaseObject
 					..show()
 					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++
-					getSpellTargetPos().getTile().addModifier(TileModifier.BLUGOO)
+					getSpellTargetPos().getEBRTile().addModifier(TileModifier.BLUGOO)
 			case MODE_BOTH_ID
 				actor..removeAbility(MODE_BOTH_ID)..addAbility(MODE_ESCAPERS_ID)
 				permission = JumpPermission.ESCAPER
@@ -144,12 +144,12 @@ public class Jumper extends StaticBaseObject
 	override function deserialize(Json json)
 		super.deserialize(json)
 		jumpForce.setVal(json.getReal("f") / 100.)
-	
+
 	ondestroy
 		for i = 0 to 4
 			if goos[i] != null
 				destroy goos[i]
-				
+
 
 @objectgen function genJumper()
 	new ChannelAbilityPreset(INFO_JUMPER_ID, 1, TRUE)
@@ -165,7 +165,7 @@ public class Jumper extends StaticBaseObject
 	new ChannelAbilityPreset(INCREASE_FORCE_ID, 1, TRUE)
 	..setName("Jumper: Increase Force")
 	..presetTooltipNormal((int lvl) -> "Increase Force [|cffFFCC00W|r]")
-	..presetTooltipNormalExtended((int lvl) -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00faster|r," + 
+	..presetTooltipNormalExtended((int lvl) -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00faster|r," +
 	"and |cffFFCC00lower|n|cff0884BDIn unforced mode|r: Makes the escaper jump |cffFFCC00higher")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
 	..presetButtonPosNormal(1, 0)
@@ -193,7 +193,7 @@ public class Jumper extends StaticBaseObject
 	..presetHotkey("R")
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
-	
+
 	new ChannelAbilityPreset(MODE_UNFORCED_ID, 1, TRUE)
 	..setName("Jumper: Mode Unforced")
 	..presetTooltipNormal((int lvl) -> "Change Jumper Mode [|cffFFCC00R|r]")
@@ -204,23 +204,14 @@ public class Jumper extends StaticBaseObject
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
 
-	new BuildingDefinition(JUMPER_ID, 'ncop')	
+	new BuildingDefinition(JUMPER_ID, 'ncop')
 	..setName("|cff085294Jumper")
 	..setHotkey("C")
 	..setTooltipBasic("|cffFFCC00Build |cff085294Jumper [C]")
 	..setTooltipExtended("Fires the Escaper through the air to the rallypoint." +
 	"\nWhile the Escaper flys, he cant be harmed by Escapekillers, Obstacles or unwalkable Terrain.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNJumper.blp")
-	..setNormalAbilities(int2fourchar(INFO_JUMPER_ID) + "," +
-	int2fourchar(INCREASE_FORCE_ID) + "," +
-	int2fourchar(DECREASE_FORCE_ID) + "," +
-	int2fourchar(MODE_FORCED_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(MODE_ESCAPERS_ID) + "," +
-	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INFO_JUMPER_ID, INCREASE_FORCE_ID, DECREASE_FORCE_ID, MODE_FORCED_ID, REMOVE_OBJECT_ID, MAKE_UNIT_INVISIBLE_ID, MODE_ESCAPERS_ID, RALLY_POINT, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(2)
 	..setTintingColorRed(50)
@@ -228,8 +219,8 @@ public class Jumper extends StaticBaseObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
-	..setUnitClassification("ancient,standon") 
+	..setUnitClassification("ancient,standon")
 	..setHideMinimapDisplay(true)

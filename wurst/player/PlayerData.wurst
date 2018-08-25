@@ -16,7 +16,6 @@ import CodeManager
 import Playerfile
 import PlayerMemoryData
 import SoundUtils
-import LocalFiles
 import Assets
 
 public Board playerboard
@@ -48,9 +47,9 @@ public class PlayerData
 	string 	icon 		= Icons.bTNSelectHeroOn
 
 	string 	rank 		= "Newbie"
-	
 
-	Role role		
+
+	Role role
 	Title title
 	Escaper escaper
 	Builder builder
@@ -65,14 +64,14 @@ public class PlayerData
 	int lastSave = -1
 
 	real zCam = 1600.
-	
+
 	UnitProducer prod
 	RevivePointModifier revmod
 
 	Playerfile pfile = null
 	PMData pmdata = null
 	Selector selector = null
-	
+
 	construct (player p)
 		this.p = p
 		id = p.getId()
@@ -80,7 +79,7 @@ public class PlayerData
 		pData[id] = this
 		hash = name.getHash().toString()
 		mbname = name
-			
+
 		var i = 0
 		while names[i] != null
 			if mbname.toLowerCase() == names[i].toLowerCase()
@@ -98,8 +97,8 @@ public class PlayerData
 	function setMBRow(int row)
 		playerboard..setNewItem(row,0,mbname,icon)
 		..setNewItem(row,1,escaper.deaths.toString(), null)
-		..setNewItem(row,2,rank, null)  
-	
+		..setNewItem(row,2,rank, null)
+
 	function addXp(int amount, boolean time)
 		if localFilesEnabled and allPlayers.size() > 1 or title == Title.ADMIN
 			if time
@@ -110,17 +109,17 @@ public class PlayerData
 				XP += amount
 				Log.debug( "add new xp:" + XP.toString())
 			updateRank()
-	
+
 	function setXp(int amount)
 		Log.debug( "set current xp:" + XP.toString())
 		XP = amount
 		updateRank()
 		Log.debug( "set new xp:" + XP.toString())
-	
+
 	function updateRank()
 		if lvlfx != null
 			lvlfx.destr()
-		
+
 		var i = 0
 		while XP >= expBounds[i]
 			i++
@@ -142,14 +141,14 @@ public class PlayerData
 
 		if XP >= expBounds[3] and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
-			escaper.actor.addItem('I002')
+			escaper.actor.addItemById('I002')
 
 		if pfile != null and pmdata != null and (lastSave+20 < minutes*60+seconds)
 			lastSave = minutes * 60 + seconds
 			Log.debug("Playerfile saving")
 			savePlayerfile(this)
 
-		
+
 	function validateAdmintoken()
 		let divhash = name.getHash() - fhash(name) div 2
 		if pmdata != null and not title == Title.ADMIN
@@ -160,10 +159,10 @@ public class PlayerData
 				else if divhash == pmdata.adminToken.toInt()
 					// yarik's coin
 					printTimedToPlayer("You are a contributor!", 10, p)
-					escaper.actor.addItem('I00Z')
+					escaper.actor.addItemById('I00Z')
 
 	ondestroy
-		printTimed(p.getNameColored() + "|r |cffFFCC33has left the game!", 20.) 
+		printTimed(p.getNameColored() + "|r |cffFFCC33has left the game!", 20.)
 		questFailedSound.play()
 		if selector != null
 			destroy selector
@@ -174,7 +173,7 @@ public class PlayerData
 			else
 				escaper.left = true
 			escaper = null
-		
+
 		allPlayers.remove(this)
 		if isBuilder(p)
 			builderPlayers.remove(this)
@@ -192,17 +191,17 @@ public class PlayerData
 						regions[i].allow(players[j])
 			forUnitsOfPlayer(p) u ->
 				u.setOwner(builderPlayers.peek().p, true)
-		
+
 		pData[id] = null
 		rebuildBoard()
 		if revmod != null
 			destroy revmod
 		if tagfx != null
 			tagfx.destr()
-		
+
 function rebuildBoard()
 	playerboard = new Board(allPlayers.size()+1,3)
-	
+
 	var i = 1
 	for pd in allPlayers
 		playerboard.board.getItem(i,0)..setStyle(true,true)..setWidth(0.1)
@@ -221,8 +220,8 @@ function rebuildBoard()
 	playerboard.board.display(true)
 
 	allow()
-	
-	
+
+
 function setTime()
 	seconds++
 	var secs = "|cffffffff"
@@ -230,10 +229,10 @@ function setTime()
 	// Preceding zeros
 	secs += seconds < 10 ? "0" + seconds.toString() : seconds.toString()
 	mins +=  minutes < 10 ? "0" + minutes.toString() : minutes.toString()
-		
+
 	secs += "|r"
 	mins += "|r"
-	
+
 	if seconds >= 60
 		seconds = 0
 		minutes++
@@ -243,7 +242,7 @@ function setTime()
 			allPlayers.forEach(p -> p.addXp(10, true))
 
 	playerboard.board.setTitle( MAP_VER + " [ " + mins + " : " + secs +" ]")
-	
+
 	int i = 1
 	for pd in allPlayers
 		pd.setMBRow(i)
@@ -283,14 +282,14 @@ public function startTestmode(PlayerData pd)
 		e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 		e.actor.addAbility('A001')
 		pd.builder = new Builder( pd.p )
-		pd.builder.actor..addItem('I001')
-		..addItem('I002')
-		..addItem('I003')
+		pd.builder.actor..addItemById('I001')
+		..addItemById('I002')
+		..addItemById('I003')
 		pd.builder.regionCount = 17
 		pd.escaper.actor.addAbility('A001')
-		
+
 		printTimed("|cff949494SinglePlayer |cffFFCC00test mode |cff949494enabled!", 45)
-			 
+
 
 public function initPlayers()
 	for i = 0 to 11
@@ -304,20 +303,16 @@ public function initPlayers()
 
 	doAfter(.1, () -> rebuildBoard())
 	doPeriodically(1., cb -> setTime())
-	
+
 	for pd in builderPlayers
 		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
 		pd.tmods[1] = new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
 		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
 		pd.builder = new Builder( pd.p )
-		pd.builder.actor..addItem('I001')
-		..addItem('I002')..addItem('I003')
+		pd.builder.actor..addItemById('I001')
+		..addItemById('I002')..addItemById('I003')
 		pd.builder.regionCount = (17. / builderPlayers.size()).round()
 
 public function checkPlayerLocalFiles()
-	print("|cffc0c0c0Checking LocalFiles, please wait..")
-	doPeriodically(0.5) cb ->
-		if LocalFiles.checkedAll
-			checkLocalFiles()
-			destroy cb
+	checkLocalFiles()

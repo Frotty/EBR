@@ -1,7 +1,6 @@
 package CodeManager
 import initlater PlayerData
 import CodeGenerator
-import LocalFiles
 import MultifileIO
 import SyncWrapper
 import PlayerMemoryData
@@ -14,12 +13,12 @@ constant MSG_PREFIX = "|cffDE7B19Save/Load|r :"
 constant saveTechnique = 331
 
 public function checkLocalFiles()
-	for pd in allPlayers
-		pd.localFilesEnabled = LocalFiles.isEnabled(pd.p)
-		if pd.localFilesEnabled
-			printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pd.p)
-		else
-			printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save your progress!", 15, pd.p)
+	// for pd in allPlayers
+	// 	pd.localFilesEnabled = LocalFiles.isEnabled(pd.p)
+	// 	if pd.localFilesEnabled
+	// 		printTimedToPlayer("You have |cffFFCC00local files enabled|r and will be able to save data!", 25, pd.p)
+	// 	else
+	// 		printTimedToPlayer("You have |cffDE5A21local files disabled|r. You need to enabale it in order to save your progress!", 15, pd.p)
 
 	startChoose()
 
@@ -60,7 +59,7 @@ function onFileSynced(SyncedFile file, PlayerData pd)
 		// printTimedToPlayer("Didn't find a profile for |cffFFCC00" + syncTask.pd.name + "|r - creating new..", 25, syncTask.pd.p)
 		// addPlayerProfile(syncTask.pd)
 		// loadPlayerMemory(syncTask.pd, syncTask.pd.pmdata)
-	
+
 
 function loadPlayerMemory(PlayerData pd, PMData pmd)
 	var scode = new Savecode()
@@ -120,7 +119,7 @@ public function savePlayerfile(PlayerData pd)
 
 		sync.onSynced() ->
 			destroy writer
-	
+
 function createNewPlayerfile(PlayerData pd)
 	Log.debug("createNewPlayerfile0")
 	pd.pfile = new Playerfile()

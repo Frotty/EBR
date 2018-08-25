@@ -2,7 +2,6 @@ package SetupBox
 import PlayerData
 import initlater Builder
 import ChannelAbilityPreset
-import RegisterEvents
 import SoundUtils
 import Preloader
 
@@ -33,7 +32,7 @@ constant ORB_TOGGLE_ID 		= 'A08B'
 public constant ORB_SPELL_ID = 'A08A'
 constant CANCEL_TOGGLE_ID 	= 'A08C'
 constant CUT_ALLOW 			= 'A08F'
-constant CUT_DISABLE 		= 'A08G' 
+constant CUT_DISABLE 		= 'A08G'
 
 constant MAX_SLIDESPEED = 15.
 constant MAX_DOT_DMG = 20.
@@ -41,7 +40,7 @@ constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1
 
 public class SetupBox extends UnitEntity
 	private RegionData rdata
-	
+
 	construct( vec2 pos, player owner, RegionData data )
 		super(createUnit(owner, SETUP_BOX_ID, pos, angle(0)))
 		this.setCurrentRegion()
@@ -50,10 +49,10 @@ public class SetupBox extends UnitEntity
 		..addAbility(INC_GRAVITY)..addAbility(DEC_GRAVITY)..addAbility(TURND_ID)..addAbility(TURNI_ID)..addAbility(ABIL_WIZARD)
 		..addAbility(CUT_ALLOW)..addAbility(EASY_ENABLE)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
-		
+
 	function addBossSwitch()
 		actor.addAbility(BOSS_MODE_ID)
-		
+
 	function onCast()
 		var id = GetSpellAbilityId()
 		let owner = actor.getOwner()
@@ -113,11 +112,11 @@ public class SetupBox extends UnitEntity
 							PingMinimapEx((GetRectMaxX(rdata.theRect)+GetRectMinX(rdata.theRect))/2, (GetRectMaxY(rdata.theRect)+GetRectMinY(rdata.theRect))/2, 3, 8, 181, 82, false)
 				else
 					printTimedToPlayer("|cffC51019Why would you do this!", 15, owner)
-						
+
 			case CLEAR_ID
 				forUnitsInRect(rdata.theRect) u ->
 					var data = u.getEntity()
-					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor 
+					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor
 						Log.debug("SetupBox Terminate")
 						data.terminate()
 
@@ -237,8 +236,8 @@ function claimRegion()
 				rdata.setOwner(builder.owner)
 				GetManipulatedItem().remove()
 				addEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", seller.getPos()).destr()
-				seller.remove()		
-				
+				seller.remove()
+
 				DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
 				new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
 				if GetLocalPlayer() == builder.owner
@@ -247,7 +246,7 @@ function claimRegion()
 				printTimedToPlayer("|cff3187CBYou have used up all your regions. Leave some for the other builders", 15, builder.owner)
 
 
-init	
+init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, () -> claimRegion())
 	preloadAbility(ICEI_ID)
 	preloadAbility(ICED_ID)
@@ -297,12 +296,10 @@ init
 	new BuildingDefinition(SETUP_BOX_ID, 'nbse')
 	..setName("|cffFFCC00Setup")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNMagicVault.blp")
-	..setNormalAbilities(
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setGroundTexture("")
-	..setShadowTextureBuilding("") 
-	..setModelFile("buildings\\other\\MagicVault\\MagicVault.mdl")  
+	..setShadowTextureBuilding("")
+	..setModelFile("buildings\\other\\MagicVault\\MagicVault.mdl")
 	..setScalingValue(0.4)
 	..setSelectionScale(1.6)
 	..setPathingMap("")

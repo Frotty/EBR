@@ -154,8 +154,7 @@ public constant HOBS_SUNKEN_ID = 'hosu'
 	u.setString("upat", "none")
 	u.setString("umdl", "models\\tcBox.mdl")
 	u.setString("uico", "ReplaceableTextures\\CommandButtons\\BTNSteelRanged.blp")
-	u.setString("uabi", int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID) + "," +	int2fourchar(GHOST_INVIS_ID))
+	u.setString("uabi", commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID, GHOST_INVIS_ID))
 	u.setString("utub", "A small, |cffFFCC00terrainspecific |robstacle.|n|n|cffFF0000Kills Escapers")
 	u.setUnreal("ucol", 0.0)
 	u.setInt("usid", 0)
@@ -178,8 +177,7 @@ public constant HOBS_SUNKEN_ID = 'hosu'
 	u.setString("usnd", "")
 	u.setString("umdl", "models\\tcBox.mdl")
 	u.setString("uico", "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpOne.blp")
-	u.setString("uabi", int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID) + "," +	int2fourchar(GHOST_INVIS_ID))
+	u.setString("uabi", commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID, GHOST_INVIS_ID))
 	u.setUnreal("ucol", 0.0)
 	u.setString("utub", "A small, |cffFFCC00terrainspecific |robstacle.|n|n|cffFF0000Kills Escapers")
 	u.setInt("uhom", 1)
@@ -204,8 +202,7 @@ public constant HOBS_SUNKEN_ID = 'hosu'
 	u.setString("upat", "none")
 	u.setString("umdl", "models\\tcBox.mdl")
 	u.setString("uico", "ReplaceableTextures\\CommandButtons\\BTNWeb.blp")
-	u.setString("uabi", int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID) + "," +	int2fourchar(GHOST_INVIS_ID))
+	u.setString("uabi", commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID, GHOST_INVIS_ID))
 	u.setString("utub", "A small, |cffFFCC00terrainspecific |robstacle with big detection height. Useful to block jumpers.|n|n|cffFF0000Kills Escapers")
 	u.setUnreal("ucol", 0.0)
 	u.setInt("uhom", 1)
@@ -255,7 +252,7 @@ public constant HOBS_SUNKEN_ID = 'hosu'
 	u.setInt("usin", 0)
 	u.setInt("uhom", 1)
 	u.setReal("usca", 0.8)
-	
+
 	u = createObjectDefinition("w3u", HOBS_CITADEL_ID, 'ncop')
 	u.setString("unam", "High |cFF00FF00Obstacle|r: Citadel")
 	u.setString("utip", "Build high O|cFFFFFF00b|rstacle")

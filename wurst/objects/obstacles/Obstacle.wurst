@@ -16,7 +16,7 @@ public class Obstacle extends EscaperSensorSetup
 		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, height)
 
 public class HighObstacle extends Obstacle
-	
+
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
 
@@ -29,7 +29,7 @@ public class HighObstacle extends Obstacle
 		return json
 
 public class SmallObstacle extends Obstacle
-	
+
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
@@ -67,15 +67,14 @@ public class VolcanoObstacle extends Obstacle
 
 
 @objectgen function genVolcano()
-	new BuildingDefinition(VOLCANO_ID, 'ncop')  
+	new BuildingDefinition(VOLCANO_ID, 'ncop')
 	..setName("|cFF00FF00Volcano|r ")
 	..setHotkey("F")
 	..setTooltipBasic("Build |cffCE4219Volcano |r[|cffFFCC00F|r]")
 	..setTooltipExtended("A very big|cffFFCC00 firey |robstacle.|n|n|cffFF0000Kills Escapers")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNVolcano.blp")
 	..setModelFile("Abilities\\Spells\\Other\\Volcano\\Volcano.mdl")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setSelectionScale(7)
 	..setMovementHeight(-15)
 	..setPathingMap("PathTextures\\16x16Simple.tga")

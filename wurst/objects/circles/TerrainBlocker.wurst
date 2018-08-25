@@ -6,26 +6,26 @@ constant INFO_TC_BLOCKER_ID = compiletime(ABIL_ID_GEN.next())
 
 public class TerrainBlocker extends StaticBaseObject
 	boolean silent = false
-	
+
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, TC_BLOCKER_ID, vec2(((pos.x/128).round())*128., ((pos.y/128).round())*128.), angle(0)), 0, null, null)
-		let tile = pos.getTile()
+		let tile = pos.getEBRTile()
 		clearQuestionmark()
 		if tile.hasModifier(TileModifier.BLOCK) or tile.hasModifier(TileModifier.RESERVED)
 			silent = true
 			terminate()
 		else
 			tile.addModifier(TileModifier.BLOCK)
-		
+
 	ondestroy
 		if not silent
-			pos.getTile().removeModifier(TileModifier.BLOCK)
-	
+			pos.getEBRTile().removeModifier(TileModifier.BLOCK)
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, TBLOCKER_INDEX.toString()))
 		return json
-		
+
 @objectgen function genTC_Blocker()
 	new ChannelAbilityPreset(INFO_TC_BLOCKER_ID, 1, TRUE)
 	..setName("Information: TC Blocker")
@@ -35,7 +35,7 @@ public class TerrainBlocker extends StaticBaseObject
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
-		
+
 	new UnitDefinition(TC_BLOCKER_ID, 'hpea') //info doesn't appear
 	..setName("|cff7B299CTC-Blocker")
 	..setHotkey("D")
@@ -43,10 +43,7 @@ public class TerrainBlocker extends StaticBaseObject
 	..setTooltipExtended("Prevents Terrainchangers from changing the groundtexture below it.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTCBlocker.blp")
 	..setModelFile("buildings\\other\\CircleOfPower\\CircleOfPower.mdl")
-	..setNormalAbilities(int2fourchar(INFO_TC_BLOCKER_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INFO_TC_BLOCKER_ID, REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(1)
 	..setTintingColorRed(128)
@@ -54,7 +51,7 @@ public class TerrainBlocker extends StaticBaseObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.7)
 	..setSelectionScale(2)
 	..setAttacksEnabled(0)
@@ -66,5 +63,5 @@ public class TerrainBlocker extends StaticBaseObject
 	..setFoodCost(0)
 	..setIsaBuilding(TRUE)
 	..setStructuresBuilt("")
-	..setUnitClassification("ancient,standon") 
+	..setUnitClassification("ancient,standon")
 	..setHideMinimapDisplay(true)

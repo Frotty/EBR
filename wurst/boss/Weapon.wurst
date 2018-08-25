@@ -14,7 +14,7 @@ public constant ATTACK_RANGED = 'A07H'
 	// construct(vec2 pos, player owner)
 	// 	super(pos, createItem(weapontypes[weaponId].itemId, pos), createUnit(owner, WEAPON_DUMMY_ID, pos, angle(0)))
 	// 	EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+
 	// override function onPickup(Escaper e)
 	// 	if e.weapon == null
 	// 		e.weapon = this
@@ -24,7 +24,7 @@ public constant ATTACK_RANGED = 'A07H'
 	// 		holder.actor.addAbility(weapontypes[weaponId].attackAbil)
 	// 	else
 	// 		fixItem()
-		
+
 	// override function onDrop(Escaper e)
 	// 	holder.actor..removeAbility(weapontypes[weaponId].attackAbil)
 	// 	holder.weapon = null
@@ -41,15 +41,15 @@ public constant ATTACK_RANGED = 'A07H'
 	// 		actorItem = CreateItem(weapontypes[weaponId].itemId, pos.x, pos.y )
 	// 		actorItem.setUserData(this castTo int)
 	// 	end)
-		
-	
+
+
 	// override function onUse(Escaper e)
 	// 	weapontypes[weaponId].listener.onAttack(e)
-		
+
 	// override function update()
 	// 	if holder != null
 	// 		pos = holder.pos
-		
+
 	// function onCast()
 	// 	let id = GetSpellAbilityId()
 	// 	for i = 0 to weaponcount - 1
@@ -58,10 +58,10 @@ public constant ATTACK_RANGED = 'A07H'
 	// 			actorItem.remove()
 	// 			actorItem = createItem(weapontypes[weaponId].itemId, pos.toVec2())
 	// 			actorItem.setUserData(this castTo int)
-		
-	
+
+
 // class WeaponMissile extends Projectile
-	
+
 	// int id
 	// construct(vec3 pos, vec2 target, player owner, int id)
 	// 	super( vec3(pos.x,pos.y,40.), weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff )
@@ -81,12 +81,12 @@ public constant ATTACK_RANGED = 'A07H'
 	// 			destroy(this)
 	// 		else if e instanceof Wall
 	// 			destroy(this)
-		
+
 	// 	ENUM_GROUP.clear()
-		
+
 
 @objectgen function genWeapon()
-	new UnitDefinition(WEAPON_DUMMY_ID, 'hfoo')  
+	new UnitDefinition(WEAPON_DUMMY_ID, 'hfoo')
 	..setAttacksEnabled(0)
 	..setTargetedAs("structure")
 	..setAnimationBlendTimeseconds(0)
@@ -106,10 +106,7 @@ public constant ATTACK_RANGED = 'A07H'
 	..setMovementType(MovementType.None)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar('A080') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A080', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("Coin Dummy")
 	..setUpgradesUsed("")
 	..setBuildTime(1)

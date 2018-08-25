@@ -9,12 +9,12 @@ constant BOOST_SPEED_KEY = "b"
 
 public class Booster extends StaticBaseObject
 	ConfigValue boostspeed = new ConfigValue(200, 25, "Boostspeed")
-	
+
 	construct( vec2 pos, player owner )
-		super( pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null) 
+		super( pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null)
 		clearQuestionmark()
 		actor.addAbility(TURN_OFF_ID)
-		
+
 	static function orderMove()
 		let source = GetTriggeringTrigger().getSource()
 		let u = GetTriggerUnit()
@@ -28,7 +28,7 @@ public class Booster extends StaticBaseObject
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
-		switch id 
+		switch id
 			case SPEED_UP_ID
 				boostspeed.increment(this, 525)
 			case SPEED_DOWN_ID
@@ -37,7 +37,7 @@ public class Booster extends StaticBaseObject
 	override function deserialize(Json json)
 		let speed = json.getInt(BOOST_SPEED_KEY)
 		if speed > 0
-			boostspeed.setVal(speed * 1.) 
+			boostspeed.setVal(speed * 1.)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -47,7 +47,7 @@ public class Booster extends StaticBaseObject
 		return json
 
 
-@objectgen function genBooster()	
+@objectgen function genBooster()
 	new ChannelAbilityPreset(INFO_BOOSTER_ID, 1, TRUE)
 	..setName("Information: Booster")
 	..presetTooltipNormal((int lvl) -> "Information: Booster")
@@ -56,7 +56,7 @@ public class Booster extends StaticBaseObject
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
-		
+
 	new ChannelAbilityPreset(SPEED_UP_ID, 1, TRUE)
 	..setName("Remove Object")
 	..presetTooltipNormal((int lvl) -> "Set the boost-speed |cff9C299Cup |r[|cffFFCC00Y|r]")
@@ -81,19 +81,14 @@ public class Booster extends StaticBaseObject
 	..setTooltipBasic("|cffFFCC00Build |cffCE086BBooster [S]")
 	..setTooltipExtended("Sets the Movementspeed of a Unit(non-Escaper) that walkes over.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNBooster.blp")
-	..setNormalAbilities(int2fourchar(INFO_BOOSTER_ID) + "," +
-	int2fourchar(SPEED_UP_ID) + "," +
-	int2fourchar(SPEED_DOWN_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(INFO_BOOSTER_ID, SPEED_UP_ID, SPEED_DOWN_ID, REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(1)
 	..setButtonPositionY(1)
 	..setTintingColorGreen(100)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")

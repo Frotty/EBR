@@ -3,7 +3,7 @@ import ChannelAbilityPreset
 import BuilderConstants
 
 @compiletime function genRegionKillers()
-	new UnitDefinition(SMALL_CITADEL_KILLER_ID, 'nlv1')  
+	new UnitDefinition(SMALL_CITADEL_KILLER_ID, 'nlv1')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -17,11 +17,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -32,7 +28,7 @@ import BuilderConstants
 	..setCategorizationSpecial(false)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(SMALL_ICE_KILLER_ID, 'nlv1')  
+	new UnitDefinition(SMALL_ICE_KILLER_ID, 'nlv1')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -46,11 +42,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -58,10 +50,10 @@ import BuilderConstants
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setCategorizationSpecial(false)
-	..setRace(Race.Undead)	
+	..setRace(Race.Undead)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(SMALL_SUNKEN_KILLER_ID, 'ugho')  
+	new UnitDefinition(SMALL_SUNKEN_KILLER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -72,11 +64,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -87,7 +75,7 @@ import BuilderConstants
 	..setCategorizationSpecial(false)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(SMALL_SAND_KILLER_ID, 'nlv1')  
+	new UnitDefinition(SMALL_SAND_KILLER_ID, 'nlv1')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -102,11 +90,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -117,7 +101,7 @@ import BuilderConstants
 	..setCategorizationSpecial(false)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(SMALL_GRASS_KILLER_ID, 'nlv1')  
+	new UnitDefinition(SMALL_GRASS_KILLER_ID, 'nlv1')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -132,11 +116,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFF0080FFSmall|r Escaper Killer")
 	..setTooltipBasic("|cFFFF0000S|r|cFFFFFF00m|r|cFFFF0000all|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -147,7 +127,7 @@ import BuilderConstants
 	..setCategorizationSpecial(false)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BIG_CITADEL_KILLER_ID, 'hpea')  
+	new UnitDefinition(BIG_CITADEL_KILLER_ID, 'hpea')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -162,11 +142,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -176,12 +152,12 @@ import BuilderConstants
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
-	..setRace(Race.Undead)	
+	..setRace(Race.Undead)
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BIG_ICE_KILLER_ID, 'hpea')  
+	new UnitDefinition(BIG_ICE_KILLER_ID, 'hpea')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -196,11 +172,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -210,12 +182,12 @@ import BuilderConstants
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
-	..setRace(Race.Undead)	
+	..setRace(Race.Undead)
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BIG_SAND_KILLER_ID, 'hpea')  
+	new UnitDefinition(BIG_SAND_KILLER_ID, 'hpea')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -230,11 +202,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -244,12 +212,12 @@ import BuilderConstants
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
-	..setRace(Race.Undead)	
+	..setRace(Race.Undead)
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BIG_SUNKEN_KILLER_ID, 'uabo')  
+	new UnitDefinition(BIG_SUNKEN_KILLER_ID, 'uabo')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -261,11 +229,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -275,12 +239,12 @@ import BuilderConstants
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
-	..setRace(Race.Undead)	
+	..setRace(Race.Undead)
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BIG_GRASS_KILLER_ID, 'hpea')  
+	new UnitDefinition(BIG_GRASS_KILLER_ID, 'hpea')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
@@ -295,11 +259,7 @@ import BuilderConstants
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
 	..setSpeedBase(180)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setName("|cFFFF0000Big|r Escaper Killer")
 	..setTooltipBasic("|cFFFFFF00B|r|cFFFF0000ig|r Escaper Killer")
 	..setTooltipExtended("Kills escapers which comes too near")
@@ -309,26 +269,18 @@ import BuilderConstants
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
-	..setRace(Race.Undead)	
+	..setRace(Race.Undead)
 	..setFoodCost(0)
 	..setGoldCost(0)
 	..setHideMinimapDisplay(true)
 
 	new BuildingDefinition(REGION_ADMIN_ID, 'ngme')
 	..setName("|cFF00FF00Administrator|r of |cFFFFFF00this region|r")
-	..setItemsSold(int2fourchar('I011') + "," +
-	int2fourchar('I00T') + "," +
-	int2fourchar('I00Q') + "," +
-	int2fourchar('I00L') + "," +
-	int2fourchar('I00P'))
+	..setItemsSold(commaList('I011', 'I00T', 'I00Q', 'I00L', 'I00P'))
 	..setGroundTexture("USMA")
 	..setModelFile("Units\\Creeps\\HeroTinkerFactory\\HeroTinkerFactory.mdl")
 	..setPathingMap("")
 	..setCollisionSize(0)
-	..setItemsSold(int2fourchar('I00N') + "," +
-	int2fourchar('I00D') + "," +
-	int2fourchar('I00G') + "," +
-	int2fourchar('I00H') + "," +
-	int2fourchar('I00E'))
+	..setItemsSold(commaList('I00N', 'I00D', 'I00G', 'I00H', 'I00E'))
 	..setNeutralBuildingShowsMinimapIcon(false)
 	..setHideMinimapDisplay(true)

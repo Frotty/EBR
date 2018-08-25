@@ -102,17 +102,17 @@ public class Executer extends StaticBaseObject
 	//effect oneffect // when lever and pressurplate is active
 	int tiletype //Terrain Change tile type
 	int nottiletype = '0001' // The basic is Unwalkable
-	int verticalTileSize = 0 
+	int verticalTileSize = 0
 	int horizontalTileSize = 0
 	unit unitToMove // for unitMover
-	ActionUnit actionUnit // only for UnitCreator Executer 
+	ActionUnit actionUnit // only for UnitCreator Executer
 	string moveOrderString // only for unitMover
 	boolean disabled = false // only for oneshot, so you can re-activate
 	destructable dummy // model for pressure plate, and lever
-	
+
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS, function Executer.onEvent, null)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, EXECUTER_ID, pos, angle(0)), EVENT_RADIUS, function Executer.onEvent, null)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -122,7 +122,7 @@ public class Executer extends StaticBaseObject
 		unit u = GetTriggerUnit()
 		Entity e = u.getEntity()
 		thistype obj = source.getEntity() castTo Executer
-		
+
 		if obj.canTrigger(e)
 			switch obj.eventMode
 				case Emode.NONE
@@ -164,7 +164,7 @@ public class Executer extends StaticBaseObject
 				obj.ON = false
 				if obj.dummy != null
 					SetDestructableAnimation(obj.dummy, "stand alternate")
-			
+
 	static function onEnterEvent()
 		unit u = GetTriggerUnit()
 		region r = GetTriggeringRegion()
@@ -246,9 +246,9 @@ public class Executer extends StaticBaseObject
 				createUnitInternal()
 			default
 				printTimedToPlayer("Executer has no action set", 15, owner)
-					
-	function negativeAction()	
-		let target = getRallyUnit().getEntity()	
+
+	function negativeAction()
+		let target = getRallyUnit().getEntity()
 		switch actionMode
 			case Amode.DISABLEOBJ
 				if target == null
@@ -291,7 +291,7 @@ public class Executer extends StaticBaseObject
 				changeTerrain(false)
 			default
 				printTimedToPlayer("Executer has no action set", 15, owner)
-	
+
 	function moveUnit()
 		let rallyPos = getRallyPoint()
 		if moveOrderString == "stop"
@@ -309,7 +309,7 @@ public class Executer extends StaticBaseObject
 				bo.setEnabled(not bo.enabled)
 		else
 			printLog(owner, Loglevel.WARNING, "Executer: No object selected")
-			
+
 	function createUnitInternal()
 		let rallyPos = getRallyPoint().toVec2()
 		var data = getRegionData(rallyPos)
@@ -335,7 +335,7 @@ public class Executer extends StaticBaseObject
 					error("Unitcreator - Wrong Unittype")
 		else
 			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place units in this region!")
-		
+
 	function changeTerrain(boolean isAction)
 		let rallyPos = getRallyPoint()
 		int tileID
@@ -349,7 +349,7 @@ public class Executer extends StaticBaseObject
 		else if tileID== '0001'
 			tileID = data.getTypeSet().unwalkableId
 		rallyPos.toVec2().changeRect(tileID, horizontalTileSize, verticalTileSize, owner)
-	
+
 	function addActionAbilsNormal()
 		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
 		UnitAddAbility(actor,DOOR_OPEN_ABIL)
@@ -357,19 +357,19 @@ public class Executer extends StaticBaseObject
 		UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
 		UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitAddAbility(actor,SPAWN_UNIT_ID)
-		
+
 	function addActionAbilsReversable()
 		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
 		UnitAddAbility(actor,DOOR_OPEN_ABIL)
 		UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
 		UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
-	
+
 	function removeModeAbils()
 		UnitRemoveAbility(actor, ONESHOT_ABIL)
 		UnitRemoveAbility(actor, REPEATING_ABIL)
 		UnitRemoveAbility(actor, LEVER_ABIL)
 		UnitRemoveAbility(actor, PRESSURE_ABIL)
-		
+
 	function removeActionAbils()
 		UnitRemoveAbility(actor,DOOR_CLOSE_ABIL)
 		UnitRemoveAbility(actor,DOOR_OPEN_ABIL)
@@ -378,7 +378,7 @@ public class Executer extends StaticBaseObject
 		UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
 		UnitRemoveAbility(actor,SPAWN_UNIT_ID)
 		actor..addAbility(TURN_OFF_ID)
-		
+
 	function addTerrainAdjuster()
 		UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
 		UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)
@@ -387,13 +387,13 @@ public class Executer extends StaticBaseObject
 		UnitAddAbility(actor, TERRAIN_BOOK_ABIL)
 		if eventMode == Emode.LEVER or eventMode == Emode.PRESSUREPLATE
 			UnitAddAbility(actor, TERRAIN_ANTIBOOK_ABIL)
-		
+
 	function addMoveUnitAdjuster()
 		UnitAddAbility(actor, MOVE_UNIT_STOP_ABIL)
 		UnitAddAbility(actor, MOVE_UNIT_DIRECT_ABIL)
 		UnitAddAbility(actor, MOVE_UNIT_PATROL_ABIL)
 		UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
-			
+
 	function changeVis(boolean invis)
 		if eventMode == Emode.PRESSUREPLATE
 			if invis
@@ -407,28 +407,28 @@ public class Executer extends StaticBaseObject
 			else
 				ShowDestructable(dummy, true)
 				SetDestructableAnimation(dummy, "stand alternate")
-	
+
 	function registerRect(real centerx, real centery, real offset)
 		//note: with movable circles, itll be necessarallyPos.y to move the rect too.
 		actor.clearRegister()
 		inRangeTrig..clearConditions()..clearActions()..destr()
-		
+
 		eventRegion = CreateRegion()
 		eventRect = Rect(centerx-offset, centery-offset, centerx+offset, centery+offset)
 		RegionAddRect(eventRegion,eventRect)
 		eventRegion.setRegionData(this castTo int)
 		TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
 		executerUnitLeave.addAction(function onLeaveEvent)
-		
+
 		TriggerRegisterEnterRegion(executerUnitEnter,eventRegion, null)
 		executerUnitEnter.addAction(function onEnterEvent)
-	
+
 	function disable()
 		SetUnitVertexColor(actor, 44,44,44,255)
 		disabled = true
 		actor.addAbility(REACTIVATE_ABIL)
 		createFText(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
-	
+
 	ondestroy
 		if eventRect != null
 			RemoveRect(eventRect)
@@ -437,7 +437,7 @@ public class Executer extends StaticBaseObject
 			eventRegion.destr()
 		if dummy != null
 			RemoveDestructable(dummy)
-	
+
 	function canTrigger(Entity e) returns boolean
 		if (canEscaperTrigger and e instanceof Escaper)
 			return true
@@ -447,7 +447,7 @@ public class Executer extends StaticBaseObject
 
 	function onCast() returns boolean
 		printLog(Loglevel.DEBUG, "Executer casts")
-		
+
 		let id = GetSpellAbilityId()
 		switch id
 			case ONESHOT_ABIL
@@ -550,7 +550,7 @@ public class Executer extends StaticBaseObject
 				actionUnit = ActionUnit.POINTER
 			case TRAIN_KNOCK_ABIL
 				actionUnit = ActionUnit.KNOCKER
-				
+
 			case MOVE_UNIT_DIRECT_ABIL
 				moveOrderString = "move"
 				if actionMode == Amode.NONE
@@ -565,8 +565,8 @@ public class Executer extends StaticBaseObject
 				let target = GetSpellTargetUnit()
 				if target.getOwner() == owner and target.getEntity().getCurrentRegion() == this.getCurrentRegion() and not target.getEntity() instanceof Builder
 					unitToMove = target
-					
-			
+
+
 			case TERRAIN_INCREASE_H_ABIL
 				if not horizontalTileSize > 3
 					horizontalTileSize ++
@@ -599,25 +599,17 @@ public class Executer extends StaticBaseObject
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
-		
+
 	new BuildingDefinition(EXECUTER_ID, 'ncop')
-	..setName("|cff84C54AExecuter ")
+	..setName("|cff84C54AExecuter")
 	..setHotkey("X")
 	..setTooltipBasic("|cffFFCC00Build |cff84C54AExecuter [X]")
 	..setTooltipExtended("Executes specified actions on other units or positions like opening and closing gates," +
 	"creating units and changing terrain when an escaper and/or killer walks over it." +
 	"\nIt has 3 available modes: Pressure Plate, Standard and Lever.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNExecuter.blp")
-	..setNormalAbilities(int2fourchar('A066') + "," +
-	int2fourchar('A068') + "," +
-	int2fourchar('A069') + "," +
-	int2fourchar('A067') + "," +
-	int2fourchar(MODE_ESCAPERS_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(RALLY_POINT) + "," +
-	int2fourchar(INVULNERABILITY_ID)+
-	int2fourchar(GHOST_VIS_ID))
+	..setNormalAbilities(commaList('A066', 'A068', 'A069', 'A067', MODE_ESCAPERS_ID, REMOVE_OBJECT_ID,
+        MAKE_UNIT_INVISIBLE_ID, RALLY_POINT, INVULNERABILITY_ID, GHOST_VIS_ID))
 	..setButtonPositionX(1)
 	..setButtonPositionY(2)
 	..setTintingColorRed(0)
@@ -626,7 +618,7 @@ public class Executer extends StaticBaseObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")

@@ -29,7 +29,7 @@ public class TerrainModder extends UnitEntity
 
 	construct(unit u)
 		super(u)
-		actor..setPos(hidden)..setPropWindow(0.)
+		actor..setPos(hidden)..setPropWindow(0 .fromDeg())
 		..addAbility(BRUSH_1_ACTIVE_ABILITY)..addAbility(BRUSH_3_IDLE_ABILITY)..addAbility(BRUSH_5_IDLE_ABILITY)
 		..addAbility(BRUSH_RECT_ID)
 
@@ -40,16 +40,16 @@ public class TerrainModder extends UnitEntity
 	function changeTerrain()
 		var orderPos = getOrderPos()
 		var oW = GetOrderTarget()
-		
+
 		if oW != null
 			orderPos = oW.getPos()
-		 
+
 		var rdata = getRegionData(orderPos)
 		if rdata == null
 			return
 		let owner = actor.getOwner()
 		let id = GetUnitTypeId(actor)
-		if rdata.canBuild(owner) and not orderPos.getTile().modifiers.contains(TileModifier.RESERVED castTo int)
+		if rdata.canBuild(owner) and not orderPos.getEBRTile().modifiers.contains(TileModifier.RESERVED castTo int)
 			idleSeconds = 0
 			if id == SLIDEABLE_ICE_ID
 				if modification == 1
@@ -132,7 +132,7 @@ public class TerrainModder extends UnitEntity
 				actor..removeAbility(BRUSH_CIRCLE_ID)
 				..addAbility(BRUSH_RECT_ID)
 			default
-			
+
 	function removeAllActive()
 		if actor.removeAbility(BRUSH_1_ACTIVE_ABILITY)
 			actor.addAbility(BRUSH_1_IDLE_ABILITY)
@@ -147,7 +147,7 @@ public class TerrainModder extends UnitEntity
 		if not legit
 			error("Shouldn't happen ok.")
 
-			
+
 enum TShape
 	RECT
 	CIRCLE
@@ -158,15 +158,15 @@ public function vec2.changeTerrain(int ttype, int hsize, int vsize, TShape shape
 			this.changeRect(ttype, hsize, vsize, caster)
 		case CIRCLE
 			this.changeCircle(ttype, hsize, vsize, caster)
-			
-			
+
+
 public function vec2.changeRect(int ttype, int hsize, int vsize, player caster)
 	let hhalf = (hsize*2) div 2
 	let vhalf = (vsize*2) div 2
 	for i = -hhalf to hhalf
 		for j = -vhalf to vhalf
 			this.setTerrain(ttype, vec2(i * 128., j * 128.), caster)
-				
+
 public function vec2.changeCircle(int ttype, int hsize, int vsize, player caster)
 	let hhalf = (hsize*2) div 2
 	let vhalf = (vsize*2) div 2
@@ -176,14 +176,14 @@ public function vec2.changeCircle(int ttype, int hsize, int vsize, player caster
 				this.setTerrain(ttype, vec2(i * 128., j * 128.), caster)
 	if vsize > 1 and hsize > 1
 		this.changeRect(ttype, 1, 1, caster)
-			
+
 public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	var offset = this + off
 	offset.x = (offset.x / 128).round() * 128.
 	offset.y = (offset.y / 128).round() * 128.
 	let rdata = getRegionData(offset)
 	if rdata != null and rdata.canBuild(caster)
-		offset.getTile().setType(ttype)
+		offset.getEBRTile().setType(ttype)
 
 @objectgen public function genTerrainModder()
 	new ChannelAbilityPreset(BRUSH_1_IDLE_ABILITY, 1, true)
@@ -194,7 +194,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C291|rx|cffFF8C291 |rBrush Size [|cffFFCC00Y|r]")
 	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to select")
 	..presetButtonPosNormal(0, 2)
-	
+
 	new ChannelAbilityPreset(BRUSH_1_ACTIVE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: 1x1 Brush Active")
@@ -203,7 +203,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C291|rx|cffFF8C291 |rBrush Size |cffFFCC00Selected!")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(0, 2)
-	
+
 	new ChannelAbilityPreset(BRUSH_3_IDLE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: 3x3 Brush Idle")
@@ -212,7 +212,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C293|rx|cffFF8C293 |rBrush Size [|cffFFCC00X|r]")
 	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to select")
 	..presetButtonPosNormal(1, 2)
-	
+
 	new ChannelAbilityPreset(BRUSH_3_ACTIVE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: 3x3 Brush Active")
@@ -221,7 +221,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C293|rx|cffFF8C293 |rBrush Size |cffFFCC00Selected!")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(1, 2)
-	
+
 	new ChannelAbilityPreset(BRUSH_5_IDLE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: 5x5 Brush Idle")
@@ -230,7 +230,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C295|rx|cffFF8C295 |rBrush Size [|cffFFCC00C|r]")
 	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to select")
 	..presetButtonPosNormal(2, 2)
-	
+
 	new ChannelAbilityPreset(BRUSH_5_ACTIVE_ABILITY, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: 3x3 Brush Active")
@@ -239,7 +239,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C295|rx|cffFF8C295 |rBrush Size |cffFFCC00Selected!")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(2, 2)
-	
+
 	new ChannelAbilityPreset(BRUSH_RECT_ID, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: Rectengular Brush Shape")
@@ -248,7 +248,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C29Rectangular |cffF7F7F7brush |cffFFCC00selected")
 	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to change to circular brush")
 	..presetButtonPosNormal(0, 1)
-	
+
 	new ChannelAbilityPreset(BRUSH_CIRCLE_ID, 1, true)
 	..makeUnitSpell(0,0)
 	..setName("Tmod: Circular Brush Shape")
@@ -257,12 +257,12 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..presetTooltipNormal((int lvl) -> "|cffFF8C29Circular |cffF7F7F7brush |cffFFCC00selected")
 	..presetTooltipNormalExtended((int lvl) -> "|cffFFCC00Click to change to rectangular brush")
 	..presetButtonPosNormal(0, 1)
-		
+
 	new HeroDefinition(WALKABLE_ID, 'Hblm')
 	..setName("|cff08B552Walkable")
 	..setHotkey("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWalkableTerrain.blp")
-	..setNormalAbilities(int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
@@ -299,9 +299,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..setName("|cffFF6331Unwalkable")
 	..setHotkey("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNUnwalkableTerrain.blp")
-	..setNormalAbilities(int2fourchar('A04Y') + "," +
-	int2fourchar('A04X') + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList('A04Y', 'A04X', INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
@@ -337,8 +335,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..setName("|cff08ADF7Slideable Ice")
 	..setHotkey("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNIce1.blp")
-	..setNormalAbilities(int2fourchar('A00C') + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList('A00C', INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
@@ -374,7 +371,7 @@ public function vec2.setTerrain(int ttype, vec2 off, player caster)
 	..setName("|cff2952B5Slideable Ice (Uncontrolled)")
 	..setHotkey("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNIce2.blp")
-	..setNormalAbilities(int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)

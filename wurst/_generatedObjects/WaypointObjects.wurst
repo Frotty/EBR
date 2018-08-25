@@ -63,7 +63,7 @@ public constant NO_WISPS_ID = compiletime(ABIL_ID_GEN.next())
 	..presetHotkey("X")
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
-		
+
 	new BuildingDefinition(WAYPOINT_ID, 'ncop')
 	..setName("|cffFF7B29Waypoint")
 	..setHotkey("R")
@@ -71,16 +71,7 @@ public constant NO_WISPS_ID = compiletime(ABIL_ID_GEN.next())
 	..setTooltipExtended("Orders Escaperkillers to move to the Rallypoint." +
 	"\nUsefull if you want your units not only to go a straight line.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWaypoint.blp")
-	..setNormalAbilities(int2fourchar(TURN_OFF_ID) + "," +
-		int2fourchar(INFO_WAYPOINT_ID) + "," +
-		int2fourchar(AND_CONNECTION_ID) + "," +
-		int2fourchar(DECREASE_DELAY_ID) + "," +
-		int2fourchar(INCREASE_DELAY_ID) + "," +
-		int2fourchar(NO_WISPS_ID) + "," +
-		int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(RALLY_POINT) + "," +
-		int2fourchar(GHOST_INVIS_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(TURN_OFF_ID, INFO_WAYPOINT_ID, AND_CONNECTION_ID, DECREASE_DELAY_ID, INCREASE_DELAY_ID, NO_WISPS_ID, REMOVE_OBJECT_ID, RALLY_POINT, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(3)
 	..setButtonPositionY(0)
 	..setTintingColorGreen(128)

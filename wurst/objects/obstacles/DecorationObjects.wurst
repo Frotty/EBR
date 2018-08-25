@@ -13,8 +13,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setCollisionSize(0)
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("E")
 	..setName("|cFFFF0000Remains|r")
 	..setTooltipBasic("Build |cFFFFFF00R|remains [E]")
@@ -33,8 +32,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setCollisionSize(1)
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("F")
 	..setName("|cff1BE6B8Ice Crystal")
 	..setTooltipBasic("Build |cff1BE6B8Ice Crystal |r[|cffFFCC00F|r]")
@@ -52,8 +50,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setCollisionSize(1)
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("W")
 	..setName("|cFFFF0000Rune|r")
 	..setTooltipBasic("Build |cFFFFFF00R|rune [W]")
@@ -71,8 +68,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setCollisionSize(1)
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("Y")
 	..setName("|cFFffaa00Post Lantern|r")
 	..setTooltipBasic("Build Post Lantern [|cffFFCC00Y|r]")
@@ -91,8 +87,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setCollisionSize(1)
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("X")
 	..setName("|cFF00FF00Farm|r")
 	..setTooltipBasic("Build |cFFFFFF00F|rarm [X]")
@@ -112,8 +107,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setCollisionSize(1)
 	..setCategorizationCampaign(false)
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setHotkey("D")
 	..setName("|cFF00FF00Lantern|r")
 	..setTooltipBasic("Build |cFFFFFF00L|rantern [D]")
@@ -135,8 +129,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setModelFile("Doodads\\Dungeon\\Terrain\\EggSack\\EggSack0.mdl")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setCollisionSize(1.0)
 	..setHideMinimapDisplay(true)
 	..setTooltipExtended("Places Poison Eggs at selected position.|n|nDoes not kill Escapers. Does not have |cff00aa00poison|r effect.")
@@ -156,8 +149,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setModelFile("Doodads\\Cityscape\\Props\\CrystalShield\\CrystalShield.mdl")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNRune.blp")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setCollisionSize(1.0)
 	..setHideMinimapDisplay(true)
 	..setTooltipExtended("Places a Superlight at selected position.|n|nDoes not kill Escapers.")
@@ -177,8 +169,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setModelFile("Doodads\\LordaeronSummer\\Props\\TorchHuman\\TorchHuman.mdl")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFireForTheCannon.blp")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setCollisionSize(1.0)
 	..setHideMinimapDisplay(true)
 	..setTooltipExtended("Places a Torch at selected position.|n|nDoes not kill Escapers.")
@@ -198,8 +189,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setModelFile("Doodads\\Cityscape\\Props\\City_Oblisk\\City_Oblisk.mdl")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNArcaniteArchitecture.blp")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setCollisionSize(1.0)
 	..setHideMinimapDisplay(true)
 	..setTooltipExtended("Places an Obelisk at selected position.|n|nDoes not kill Escapers.")
@@ -219,8 +209,7 @@ import ObjectIds
 	..setPathingMap("")
 	..setModelFile("Doodads\\Underground\\Plants\\ShroomsBlue\\ShroomsBlue.mdl")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFrost.blp")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-		int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setCollisionSize(1.0)
 	..setHideMinimapDisplay(true)
 	..setTooltipExtended("Places a chilled Mushroom at selected position.|n|nDoes not kill Escapers.")

@@ -26,25 +26,25 @@ public class Faceless extends EscaperSensorSetup
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, DIMENSION_SHIFTER_ID, facing, KILL_RADIUS, KILL_RADIUS)
 		setup()
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, DIMENSION_SHIFTER_ID, KILL_RADIUS, KILL_RADIUS)
 		setup()
-	
+
 	construct(unit existing)
 		super(existing, KILL_RADIUS, KILL_RADIUS)
 		setup()
-		
+
 	function setup()
 		setup..setVertexColor(colorA(55,55,55,55))..setScale(0.5)
 		..addAbility(UP_VIS_ID)..addAbility(DOWN_VIS_ID)
 		..addAbility(UP_INVIS_ID)..addAbility(DOWN_INVIS_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		sleeps = false
-		
+
 	override function update()
 		super.update()
-		
+
 		switch mode
 			case WalkerMode.VIS
 				dur-= ANIMATION_PERIOD
@@ -71,7 +71,7 @@ public class Faceless extends EscaperSensorSetup
 					mode = WalkerMode.VIS
 					dur = visibleDur.get()
 		actor.setVertexColor(color)
-		
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
@@ -89,7 +89,7 @@ public class Faceless extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, FACELESS_INDEX.toString()))
 		return json
-		
+
 @objectgen function genSpells()
 	let inc_spell = new ChannelAbilityPreset(UP_VIS_ID, 1, true)
 	inc_spell..presetManaCost((int lvl) -> 0)
@@ -101,7 +101,7 @@ public class Faceless extends EscaperSensorSetup
 	..presetTooltipNormal((int lvl) -> "Increase Visible Duration [|cffFFCC00D|r]")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(2, 1)
-	
+
 	let dec_spell = new ChannelAbilityPreset(DOWN_VIS_ID, 1, true)
 	dec_spell..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -112,7 +112,7 @@ public class Faceless extends EscaperSensorSetup
 	..presetTooltipNormal((int lvl) -> "Decrease Visible Duration [|cffFFCC00C|r]")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(2, 2)
-	
+
 	let inc_spell2 = new ChannelAbilityPreset(UP_INVIS_ID, 1, true)
 	inc_spell2..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -123,7 +123,7 @@ public class Faceless extends EscaperSensorSetup
 	..presetTooltipNormal((int lvl) -> "Increase Invisible Duration [|cffFFCC00R|r]")
 	..presetTooltipNormalExtended((int lvl) -> "")
 	..presetButtonPosNormal(3, 0)
-	
+
 	let dec_spell2 = new ChannelAbilityPreset(DOWN_INVIS_ID, 1, true)
 	dec_spell2..presetManaCost((int lvl) -> 0)
 	..setHeroAbility(false)
@@ -137,10 +137,10 @@ public class Faceless extends EscaperSensorSetup
 
 
 @objectgen function genShifter()
-	new UnitDefinition(DIMENSION_SHIFTER_ID, 'ugho')  
+	new UnitDefinition(DIMENSION_SHIFTER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
-	..setAnimationCastBackswing(0)			
+	..setAnimationCastBackswing(0)
 	..setShadowImageUnit("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFacelessOne.blp")
 	..setButtonPositionX(3)
@@ -153,11 +153,7 @@ public class Faceless extends EscaperSensorSetup
 	..setMovementHeight(20)
 	..setMovementHeightMinimum(20)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("I")
 	..setName("Dimension Shifter")
 	..setTooltipBasic("Dimension Shifter [I]")
@@ -166,7 +162,7 @@ public class Faceless extends EscaperSensorSetup
 	..setCanFlee(false)
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)

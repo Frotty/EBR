@@ -1,0 +1,7 @@
+package ClosureEvents_config
+import UnitIndexer
+
+public boolean array fire
+
+@config function fireEvents(unit u) returns boolean
+	return not fire[u.getIndex()]

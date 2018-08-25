@@ -45,7 +45,7 @@ public constant BUILD_TRACKS_ID = 'trac'
 public constant VORTEX_ID = 'vrtx'
 public constant PED_ID = compiletime(UNIT_ID_GEN.next())
 //Enviromental
-public constant VOLCANO_ID = 'volc' 
+public constant VOLCANO_ID = 'volc'
 public constant HOR_WALL_ID = 'hwal'
 public constant VER_WALL_ID = 'vwal'
 public constant WALL_ID = 'wall'
@@ -64,7 +64,7 @@ public constant MUSHROOM_ID = compiletime(UNIT_ID_GEN.next())
 public constant POST_LANTERN_ID = compiletime(UNIT_ID_GEN.next())
 public constant RUNE_ID = compiletime(UNIT_ID_GEN.next())
 public constant TORCH_ID = compiletime(UNIT_ID_GEN.next())
-public constant SUPERLIGHT_ID = compiletime(UNIT_ID_GEN.next()) 
+public constant SUPERLIGHT_ID = compiletime(UNIT_ID_GEN.next())
 //Killers
 public constant SMALL_GRASS_KILLER_ID = 'sgrk'
 public constant SMALL_ICE_KILLER_ID = 'sick'

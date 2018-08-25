@@ -25,7 +25,7 @@ public class UnitRemover extends StaticBaseObject
 			if data instanceof SetupObject and not data instanceof Obstacle and not data instanceof Decoration
 				Log.debug("UnitRemover Terminate")
 				data.terminate()
-	
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITREMOVER_INDEX.toString()))
@@ -41,17 +41,14 @@ public class UnitRemover extends StaticBaseObject
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
-		
+
 	new BuildingDefinition(UNIT_REMOVER_ID, 'ncop')
 	..setName("|cffFF0000UnitRemover")
 	..setHotkey("E")
 	..setTooltipBasic("|cffFFCC00Build |cffFF0000UnitRemover [E]")
 	..setTooltipExtended("Removes units that were created by a Unitcreator")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTank Remover.blp")
-	..setNormalAbilities(int2fourchar(INFO_UNIT_REMOVER_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +  
-	int2fourchar(GHOST_INVIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INFO_UNIT_REMOVER_ID, REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(0)
 	..setTintingColorRed(100)
@@ -60,7 +57,7 @@ public class UnitRemover extends StaticBaseObject
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")

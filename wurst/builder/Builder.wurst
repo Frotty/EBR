@@ -71,30 +71,30 @@ public class Builder extends UnitEntity
 				if rdata.canBuild(owner)
 					new Key(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case BOOTS_SPELL_ID
 				if rdata.canBuild(owner)
 					new Boots(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case TOME_SPELL_ID
 				if rdata.canBuild(owner)
 					new Tome(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case COIN_SPELL_ID
 				if rdata.canBuild(owner)
 					new Coin(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!") 
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case BM_BOSS_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
 					if rdata.boss == null
 						rdata.boss = new Boss(owner, tpos, rdata.getTypeSet().bossId)
 					else
-						DisplayTextToPlayer( owner, 0, 0, "|cffC51019You can only have one boss each region!") 
+						DisplayTextToPlayer( owner, 0, 0, "|cffC51019You can only have one boss each region!")
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!") 
+					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!")
 			case BM_SPELLTARGET_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
 					new SpellTarget(tpos, owner)
@@ -106,7 +106,7 @@ public class Builder extends UnitEntity
 					// new WeaponObject(tpos, owner)
 			default
 				jukeBox.checkSpell(id)
-	
+
 	function setBossMenu()
 		hasBossMenu = true
 		actor.addAbility(MENU_BOSS)
@@ -128,7 +128,7 @@ public class Builder extends UnitEntity
 				if i.getEntity() != null
 					Log.debug("Builder Terminate")
 					i.getEntity().terminate()
-				else 
+				else
 					RemoveItem(i)
 				actor.abortOrder()
 			else
@@ -140,31 +140,31 @@ public class Builder extends UnitEntity
 					setPos(orderPos.toVec3())
 		else
 			actor.abortOrder()
-		
+
 function filter() returns boolean
 	return GetUnitTypeId(GetFilterUnit()) == REGION_ADMIN_ID
-	
+
 function isBuilderUnit() returns boolean
 	let id = GetUnitTypeId(GetTriggerUnit())
 	return id == BUILDER_CIRCLES_ID or id == BUILDER_OBJECTS_ID or id == BUILDER_ENVIROMENTAL_ID or id == BUILDER_DECORATIONS_ID
-	
+
 
 @objectgen function genBuilder()
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_1)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_CIRCLES_ID))
+	..setNewUnitType(1, (BUILDER_CIRCLES_ID).toRawCode())
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_2)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_OBJECTS_ID))
+	..setNewUnitType(1, (BUILDER_OBJECTS_ID).toRawCode())
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_3)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_ENVIROMENTAL_ID))
+	..setNewUnitType(1, (BUILDER_ENVIROMENTAL_ID).toRawCode())
 
 	new AbilityDefinitionTankUpgrade(CHAOS_BUILDER_4)
 	..setRequirements("")
-	..setNewUnitType(1, int2fourchar(BUILDER_DECORATIONS_ID))
+	..setNewUnitType(1, (BUILDER_DECORATIONS_ID).toRawCode())
 
 	new ChannelAbilityPreset(MENU_CIRCLES_ID, 1, TRUE)
 		..setName("Builder: Menu: Circles")
@@ -205,31 +205,15 @@ function isBuilderUnit() returns boolean
 		..presetHotkey("F")
 		..presetTargetTypes(Targettype.NONE)
 		..setHeroAbility(FALSE)
-		
-	new UnitDefinition(BUILDER_CIRCLES_ID, 'uaco')  
+
+	new UnitDefinition(BUILDER_CIRCLES_ID, 'uaco')
 	..setName("|cFF0080FFBuilder 1|r |cffFFAD29Circles")
 	..setHotkey("")
 	..setTooltipBasic("")
 	..setTooltipExtended("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
-	..setNormalAbilities(int2fourchar('A03C') + "," +
-	int2fourchar(MENU_CIRCLES_ID) + "," +
-	int2fourchar(MENU_OBJECTS_ID) + "," +
-	int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
-	int2fourchar(MENU_DECORATIONS_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
-	..setStructuresBuilt(int2fourchar(BOOSTER_ID) + "," +
-	int2fourchar(TELEPORTER_ID) + "," +
-	int2fourchar(JUMPER_ID) + "," +
-	int2fourchar(REVIVE_POINT_ID) + "," +
-	int2fourchar(UNIT_CREATOR_ID) + "," +
-	int2fourchar(TC_BLOCKER_ID) + "," +
-	int2fourchar(UNIT_REMOVER_ID) + "," +
-	int2fourchar(WAYPOINT_ID) + "," +
-	int2fourchar(TEXTER_ID) + "," +
-	int2fourchar(TRAP_ID) + "," +
-	int2fourchar(EXECUTER_ID))
+	..setNormalAbilities(commaList('A03C', MENU_CIRCLES_ID, MENU_OBJECTS_ID, MENU_ENVIROMENTALS_ID, MENU_DECORATIONS_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
+	..setStructuresBuilt(commaList(BOOSTER_ID, TELEPORTER_ID, JUMPER_ID, REVIVE_POINT_ID, UNIT_CREATOR_ID, TC_BLOCKER_ID, UNIT_REMOVER_ID, WAYPOINT_ID, TEXTER_ID, TRAP_ID, EXECUTER_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setSightRadiusDay(300)
@@ -259,29 +243,14 @@ function isBuilderUnit() returns boolean
 	..setRepairGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BUILDER_OBJECTS_ID, 'uaco')  
+	new UnitDefinition(BUILDER_OBJECTS_ID, 'uaco')
 	..setName("|cFF0080FFBuilder 2|r |cffFFAD29Objects")
 	..setHotkey("")
 	..setTooltipBasic("")
 	..setTooltipExtended("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
-	..setNormalAbilities(int2fourchar('A03C') + "," +
-	int2fourchar(MENU_CIRCLES_ID) + "," +
-	int2fourchar(MENU_OBJECTS_ID) + "," +
-	int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
-	int2fourchar(MENU_DECORATIONS_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
-	..setStructuresBuilt(int2fourchar(ARCANERY_ID) + "," +
-	int2fourchar(BOMB_TOWER_ID) + "," +
-	int2fourchar(VORTEX_ID) + "," +
-	int2fourchar(CONGA_LINE_HEAD_ID) + "," +
-	int2fourchar(POWER_NODE_ID) + "," +
-	int2fourchar(FOUNTAIN_BOTH_ID) + "," + 
-	int2fourchar(PED_ID) + "," + 
-	int2fourchar(BUILD_TRACKS_ID) + "," +
-	int2fourchar(SPINNER_ID) + "," + 
-	int2fourchar(DOORDUMMY_ID))
+	..setNormalAbilities(commaList('A03C', MENU_CIRCLES_ID, MENU_OBJECTS_ID, MENU_ENVIROMENTALS_ID, MENU_DECORATIONS_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
+	..setStructuresBuilt(commaList(BOMB_TOWER_ID, VORTEX_ID, CONGA_LINE_HEAD_ID, POWER_NODE_ID, FOUNTAIN_BOTH_ID, PED_ID, BUILD_TRACKS_ID, SPINNER_ID, DOORDUMMY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setSightRadiusDay(300)
@@ -311,27 +280,14 @@ function isBuilderUnit() returns boolean
 	..setRepairGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BUILDER_ENVIROMENTAL_ID, 'uaco')  
+	new UnitDefinition(BUILDER_ENVIROMENTAL_ID, 'uaco')
 	..setName("|cFF0080FFBuilder 3|r |cffFFAD29Enviromental")
 	..setHotkey("")
 	..setTooltipBasic("")
 	..setTooltipExtended("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
-	..setNormalAbilities(int2fourchar('A03C') + "," +
-	int2fourchar(MENU_CIRCLES_ID) + "," +
-	int2fourchar(MENU_OBJECTS_ID) + "," +
-	int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
-	int2fourchar(MENU_DECORATIONS_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
-	 ..setStructuresBuilt(int2fourchar(VOLCANO_ID) + "," +
-	int2fourchar(WALL_ID) + "," +
-	int2fourchar(VER_WALL_ID) + "," +
-	int2fourchar(HOR_WALL_ID) + "," +
-	int2fourchar(SOBS_DUMMY_ID) + "," +
-	int2fourchar(BOBS_DUMMY_ID) + "," +
-	int2fourchar(HOBS_DUMMY_ID) + "," +
-	int2fourchar(TREE_DUMMY_ID)) 
+	..setNormalAbilities(commaList('A03C', MENU_CIRCLES_ID, MENU_OBJECTS_ID, MENU_ENVIROMENTALS_ID, MENU_DECORATIONS_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
+	 ..setStructuresBuilt(commaList(VOLCANO_ID, WALL_ID, VER_WALL_ID, HOR_WALL_ID, SOBS_DUMMY_ID, BOBS_DUMMY_ID, HOBS_DUMMY_ID, TREE_DUMMY_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setSightRadiusDay(300)
@@ -361,30 +317,14 @@ function isBuilderUnit() returns boolean
 	..setRepairGoldCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BUILDER_DECORATIONS_ID, 'uaco')  
+	new UnitDefinition(BUILDER_DECORATIONS_ID, 'uaco')
 	..setName("|cFF0080FFBuilder 4|r |cffFFAD29Decorations")
 	..setHotkey("")
 	..setTooltipBasic("")
 	..setTooltipExtended("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
-	..setNormalAbilities(int2fourchar('A03C') + "," +
-	int2fourchar(MENU_CIRCLES_ID) + "," +
-	int2fourchar(MENU_OBJECTS_ID) + "," +
-	int2fourchar(MENU_ENVIROMENTALS_ID) + "," +
-	int2fourchar(MENU_DECORATIONS_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
-	..setStructuresBuilt(int2fourchar(REMAINS_ID) + "," +
-	int2fourchar(FARM_ID) + "," +
-	int2fourchar(ICE_CRYSTAL_ID) + "," +
-	int2fourchar(OBELISK_ID) + "," +
-	int2fourchar(POISON_EGGS_ID) + "," +
-	int2fourchar(LANTERN_ID) + "," +
-	int2fourchar(MUSHROOM_ID) + "," +
-	int2fourchar(POST_LANTERN_ID) + "," +
-	int2fourchar(RUNE_ID) + "," +
-	int2fourchar(TORCH_ID) + "," +
-	int2fourchar(SUPERLIGHT_ID))
+	..setNormalAbilities(commaList('A03C', MENU_CIRCLES_ID, MENU_OBJECTS_ID, MENU_ENVIROMENTALS_ID, MENU_DECORATIONS_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
+	..setStructuresBuilt(commaList(REMAINS_ID, FARM_ID, ICE_CRYSTAL_ID, OBELISK_ID, POISON_EGGS_ID, LANTERN_ID, MUSHROOM_ID, POST_LANTERN_ID, RUNE_ID, TORCH_ID, SUPERLIGHT_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setSightRadiusDay(300)

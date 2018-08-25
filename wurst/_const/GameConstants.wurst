@@ -8,7 +8,7 @@ import initlater PlayerData
 
 public constant string MAP_VER = "EBR 0.90"
 
-public constant STAFF_PLAYER = players[14]
+public constant STAFF_PLAYER = players[PLAYER_NEUTRAL_PASSIVE]
 
 public function isBuilder(player p) returns boolean
 	return pData[p.getId()].role == Role.BUILDER
@@ -16,8 +16,8 @@ public function isBuilder(player p) returns boolean
 public function isEscaper(player p) returns boolean
 	return pData[p.getId()].role == Role.ESCAPER
 
-public constant names = ["Frotty", "FrottyZ", "Feuerblume", "|cff9C94E6[Tester]", "jkkopp", 
-					"fortress_na-f", "Kornblume", "Gamestargamer", "gamestargamer", "mooniii", 
+public constant names = ["Frotty", "FrottyZ", "Feuerblume", "|cff9C94E6[Tester]", "jkkopp",
+					"fortress_na-f", "Kornblume", "Gamestargamer", "gamestargamer", "mooniii",
 					"Carlor01",	"Mo0ni[behh]", "metactylic", "nore.abfl", "kleinerhauck",
 					"kari0003", "Kagu", "pockpoong", "waterknight", "sayack"]
 
@@ -37,16 +37,16 @@ public constant ranks = ["1:Newbie", "|cffBDBDBD2:Beginner", "|cffFFE6AD3:Novice
 							"|cffC563C512:K|r|cffD353ADo|r|cffE14395r|r|cffEF337De|r|cffFF3B43a|r|cffFF4833n|r",
 							"|cff08B5FF13:B|r|cff16A5F4l|r|cff2495E9u|r|cff3285DEe|r|cff4075D3E|r|cff2E73CDy|r|cff1C7BD1e|r|cff0A83D5d|r",
 							"|cff94949414: Amazing-|cff949CEF"]
-	
+
 public enum EBRColor
 	WHITE
 	RED
 	BLUE
-	TEAL	
+	TEAL
 	PURPLE
 	YELLOW
 	ORANGE
-	GREEN		
+	GREEN
 	PINK
 	GREY
 	LIGHTBLUE
@@ -58,5 +58,5 @@ public function EBRColor.toColor() returns colorA
 		case WHITE
 			return COLOR_WHITE
 		default
-			return playercolors[this castTo int - 1].withAlpha(255)
+			return players[this castTo int - 1].getColor().toColor().withAlpha(255)
 

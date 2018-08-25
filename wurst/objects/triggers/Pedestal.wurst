@@ -33,7 +33,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	let bs = new BigString()
 	let parser = new JsonParser()
 	let listparser = new JsonParser()
-	
+
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, PED_ID, pos, angle(bj_UNIT_FACING)), 0, null, null)
 		setPos(pos.toTile().toVec3())
@@ -42,7 +42,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		..addAbility(SELECT_TILE_ID)..addAbility(LOAD2_ID)..addAbility(SELECT_AOE_TILE_ID)
 		..addAbility(LOAD3_ID)..addAbility(REMOVE_OBJECT_ID)..addAbility(SELECT_SINGLE_ID)..addAbility(SELECT_AOE_ID)
 		clearQuestionmark()
-		
+
 	function addObj(Entity serializable, boolean removeIfExists)
 		if serializable instanceof Escaper or serializable instanceof Builder or serializable instanceof MemoryAccessPedestal
 			return
@@ -69,13 +69,13 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	function addTile(vec2 tpos, boolean _removeIfExists)
 		let targPos = tpos.toTile()
 		if getRegionData(targPos).canBuild(owner)
-			let mtile = targPos.getTile()
+			let mtile = targPos.getEBRTile()
 			if not tileMap.has(mtile.key)
 				if getTileFromType(targPos) != Tile.UNWALKABLE
 					let tdata = new TileData(targPos, mtile.x, mtile.y, owner)
 					tiles.add(tdata)
 					tileMap.put(mtile.key, tdata)
-				
+
 
 	function loadSlot(int slotId)
 		nullTimer(() -> begin
@@ -118,7 +118,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			ref.ttag.tt..center(ref.pos, "|cffFFBD21load failed!", 10)
 			ref.actor.unpause()
 
-	
+
 	LLIterator<BigSubString> itr
 
 	function loadEntities(LinkedList<BigSubString> list)
@@ -157,7 +157,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 						ttag.tt..center(pos, "|cffFFBD21load finished!", 10)
 						actor.unpause()
 				end)
-				
+
 		end
 		pcb.doStep()
 
@@ -229,7 +229,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				return continue
 			end)
 		end)
-		
+
 
 	function saveTileSeq()
 		Log.debug("Save tiles seq")
@@ -260,7 +260,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		let big = new BigString()
 		json.addProperty(new Property(new BigSubString(ENTITIES_KEY), entString.asSubstring()))
 		json.addProperty(new Property(new BigSubString(TILES_KEY), tileString.asSubstring()))
-		
+
 		json.addToBigString(big)
 		destroy json
 		ttag.tt..center(pos, "|cff0884CEcompressing...", 10)
@@ -281,7 +281,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					tileMap.flush()
 					actor.unpause()
 					destroy writer
-		
+
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()

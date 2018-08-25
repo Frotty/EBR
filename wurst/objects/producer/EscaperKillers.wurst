@@ -27,7 +27,7 @@ public class SmallKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().smallKillerId, COLL_SIZE_SK, COLL_SIZE_SK + 4)
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_SK, COLL_SIZE_SK + 16)
 
@@ -36,15 +36,15 @@ public class SmallKiller extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, SMALLKILL_INDEX.toString()))
 		return json
-		
+
 public class SmallRandomKiller extends EscaperSensorSetup
-	
+
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, facing, COLL_SIZE_SRK, COLL_SIZE_SRK)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, COLL_SIZE_SRK, COLL_SIZE_SRK)
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_SRK, COLL_SIZE_SRK)
 
@@ -53,15 +53,15 @@ public class SmallRandomKiller extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, SMALLRANDKILL_INDEX.toString()))
 		return json
-	
+
 public class BigKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigKillerId, facing, COLL_SIZE_BK, COLL_SIZE_BK * 0.75)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().bigKillerId, COLL_SIZE_BK, COLL_SIZE_BK * 0.75)
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_BK, COLL_SIZE_BK)
 
@@ -70,15 +70,15 @@ public class BigKiller extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, BIGKILL_INDEX.toString()))
 		return json
-		
+
 public class BigRandomKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, facing, COLL_SIZE_BRK, COLL_SIZE_BRK)
-		
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, COLL_SIZE_BRK, COLL_SIZE_BRK)
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_BRK, COLL_SIZE_BRK)
 
@@ -92,10 +92,10 @@ public class TankKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, TANK_KILLER_ID, facing, COLL_SIZE_TANK, COLL_SIZE_TANK)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, TANK_KILLER_ID, COLL_SIZE_TANK, COLL_SIZE_TANK)
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_TANK, COLL_SIZE_TANK)
 
@@ -104,12 +104,12 @@ public class TankKiller extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, TANKKILL_INDEX.toString()))
 		return json
-		
+
 public class GlaiveKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, GLAIVE_KILLER_ID, facing, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, GLAIVE_KILLER_ID, COLL_SIZE_GLAIVE, COLL_SIZE_GLAIVE)
 
@@ -126,10 +126,10 @@ public class AirKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.withZ(200), owner, AIR_KILLER_ID, facing, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, AIR_KILLER_ID, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_AIR_XY, COLL_SIZE_AIR_Z)
 
@@ -145,17 +145,17 @@ public class FireKiller extends EscaperSensorSetup
 		super(pos.withZ(256), owner, FIRE_KILLER_ID, facing, COLL_SIZE_FIRE, 64)
 		actor.issueImmediateOrder("immolation")
 		setup.removeAbility('A08I')
-	
+
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, FIRE_KILLER_ID, COLL_SIZE_FIRE, COLL_SIZE_FIRE)
 		actor.issueImmediateOrder("immolation")
 		setup.removeAbility('A08I')
-	
+
 	construct(unit existing)
 		super(existing, COLL_SIZE_FIRE, COLL_SIZE_FIRE)
 		actor.issueImmediateOrder("immolation")
 		setup.removeAbility('A08I')
-		
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json
@@ -164,11 +164,11 @@ public class FireKiller extends EscaperSensorSetup
 
 
 @objectgen function genKillers()
-	new UnitDefinition(SMALL_RANDOM_KILLER_ID, 'ugho')  
+	new UnitDefinition(SMALL_RANDOM_KILLER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
-	..setAnimationCastBackswing(0)			
+	..setAnimationCastBackswing(0)
 	..setScalingValue(2)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCritterChicken.blp")
 	..setModelFile("units\\critters\\EasterChicken\\EasterChicken.mdl")
@@ -177,12 +177,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setCollisionSize(0)
 	..setSpeedBase(180)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('Awan') + "," +
-	int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('Awan', 'A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("S")
 	..setName("|cff0894E6Small Random Escaper Killer")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Small Random Escaper Killer [S]")
@@ -191,18 +186,18 @@ public class FireKiller extends EscaperSensorSetup
 	..setCanFlee(false)
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(BIG_RANDOM_KILLER_ID, 'ugho')  
+	new UnitDefinition(BIG_RANDOM_KILLER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
-	..setAnimationCastBackswing(0)	
+	..setAnimationCastBackswing(0)
 	..setAnimationRunSpeed(100)
-	..setAnimationWalkSpeed(100)		
+	..setAnimationWalkSpeed(100)
 	..setScalingValue(4)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCritterRabbit.blp")
 	..setModelFile("units\\critters\\EasterRabbit\\EasterRabbit.mdl")
@@ -211,12 +206,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setCollisionSize(0)
 	..setSpeedBase(180)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('Awan') + "," +
-	int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('Awan', 'A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("D")
 	..setName("|cff0894E6Big Random Escaper Killer")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Big Random Escaper Killer [D]")
@@ -225,15 +215,15 @@ public class FireKiller extends EscaperSensorSetup
 	..setCanFlee(false)
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(GLAIVE_KILLER_ID, 'ugho')  
+	new UnitDefinition(GLAIVE_KILLER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
-	..setAnimationCastBackswing(0)			
+	..setAnimationCastBackswing(0)
 	..setScalingValue(1.3)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNHowlOfTerror.blp")
 	..setButtonPositionX(3)
@@ -245,11 +235,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSpeedBase(180)
 	..setMovementHeight(20)
 	..setMovementHeightMinimum(20)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("C")
 	..setName("Glaive")
 	..setTooltipBasic("Train Glaive [C]")
@@ -258,29 +244,25 @@ public class FireKiller extends EscaperSensorSetup
 	..setCanFlee(false)
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(TANK_KILLER_ID, 'hmtt')  
+	new UnitDefinition(TANK_KILLER_ID, 'hmtt')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
-	..setDeathTimeseconds(0.1)			
+	..setDeathTimeseconds(0.1)
 	..setSelectionScale(1.5)
 	..setUnitSoundSet("")
 	..setCollisionSize(1)
 	..setSpeedBase(180)
 	..setTurnRate(3)
 	..setMovementType(MovementType.Hover)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("R")
 	..setName("|cff0894E6Tank")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Tank [R]")
@@ -289,15 +271,15 @@ public class FireKiller extends EscaperSensorSetup
 	..setRequirements("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(FIRE_KILLER_ID, 'ugho')  
+	new UnitDefinition(FIRE_KILLER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
-	..setAnimationCastBackswing(0)			
+	..setAnimationCastBackswing(0)
 	..setScalingValue(0.9)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNLavaSpawn.blp")
 	..setButtonPositionX(3)
@@ -309,12 +291,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setSpeedBase(180)
 	..setMovementHeight(20)
 	..setMovementHeightMinimum(20)
-	..setNormalAbilities(int2fourchar('A08I') + "," +
-	int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A08I', 'A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("C")
 	..setName("Fire Killer")
 	..setTooltipBasic("Train Fire Killer [C]")
@@ -323,16 +300,16 @@ public class FireKiller extends EscaperSensorSetup
 	..setCanFlee(false)
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)
 
-	new UnitDefinition(AIR_KILLER_ID, 'ugho')  
+	new UnitDefinition(AIR_KILLER_ID, 'ugho')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
-	..setAnimationCastBackswing(0)			
+	..setAnimationCastBackswing(0)
 	..setScalingValue(0.8)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNNetherDragon.blp")
 	..setButtonPositionX(3)
@@ -347,11 +324,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setMovementType(MovementType.Fly)
 	..setMovementHeight(200)
 	..setMovementHeightMinimum(200)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("S")
 	..setName("Flying Killer")
 	..setTooltipBasic("Train flying Escaper Killer [S]")
@@ -360,7 +333,7 @@ public class FireKiller extends EscaperSensorSetup
 	..setCanFlee(false)
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)

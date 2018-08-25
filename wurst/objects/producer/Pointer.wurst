@@ -18,12 +18,12 @@ public class Pointer extends EscaperSensorSetup
 	var turnspeed = 2.
 	var angl = 0 .fromDeg()
 	var turning = false
-	
+
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, POINTER_ID, facing, POINTER_RADIUS, 16.)
 		angl = facing
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+
 	override function update()
 		if turning
 			angl += turnspeed.asAngleDegrees()
@@ -32,7 +32,7 @@ public class Pointer extends EscaperSensorSetup
 			..setFacing(angl)
 		else
 			super.update()
-		
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
@@ -64,9 +64,9 @@ public class Pointer extends EscaperSensorSetup
 		if edata instanceof Escaper
 			var es = edata castTo Escaper
 			if not data.active
-				data.angl = data.actor.getFacingAngle()	
+				data.angl = data.actor.getFacingAngle()
 			es.actor.setFacing(data.angl)
-	
+
 	function setfacing(angle amount)
 		angl = amount
 		setup.setFacing(angl)
@@ -78,7 +78,7 @@ public class Pointer extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, POINTER_INDEX.toString()))
 		return json
-	
+
 init
 	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
 		let text = GetEventPlayerChatString()
@@ -106,13 +106,13 @@ init
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
 
-	new UnitDefinition(POINTER_ID, 'hmtt')  
+	new UnitDefinition(POINTER_ID, 'hmtt')
 	..setAttacksEnabled(0)
 	..setTargetedAs("air")
 	..setAnimationBlendTimeseconds(0)
 	..setAnimationCastBackswing(0)
 	..setAnimationCastPoint(0)
-	..setDeathTimeseconds(0.1)	
+	..setDeathTimeseconds(0.1)
 	..setElevationSamplePoints(0)
 	..setElevationSampleRadius(0)
 	..setShadowImageCenterX(0)
@@ -128,12 +128,7 @@ init
 	..setMovementHeight(10)
 	..setTurnRate(99)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('A031') + "," +
-	int2fourchar('A01F') + "," +
-	int2fourchar('A01G') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A031', 'A01F', 'A01G', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("X")
 	..setName("|cff0894E6Pointer")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Pointer [X]")
@@ -142,7 +137,7 @@ init
 	..setRequirements("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setGoldCost(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)

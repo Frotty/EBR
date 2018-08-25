@@ -37,7 +37,7 @@ trigger spellTrig
 public let escapers = new LinkedList<Escaper>()
 public var currentRevivepoint = gg_unit_revp_0002.getPos()
 
-public abstract class Escaper extends UnitEntity	
+public abstract class Escaper extends UnitEntity
 	use PhysicsModule
 	RevivePointModifier revmod = null
 	var onUnwalkable = false
@@ -57,7 +57,7 @@ public abstract class Escaper extends UnitEntity
 	var camOnRevive = true
 	var left = false
 	unit revivetomb = null
-	
+
 	construct(vec3 pos, player owner, int typ)
 		super(createUnit(owner, typ, pos + vec3(0,0,32), angle(0)))
 		actor..addAbility(LOCUST_ID)..hide()..removeAbility(LOCUST_ID)..show()
@@ -99,7 +99,7 @@ public abstract class Escaper extends UnitEntity
 		else if not add and onLava
 			lavaEffect.destr()
 			onLava = false
-			
+
 	function setPoison(boolean add)
 		if add and not poisoned
 			poisonEffect = AddSpecialEffectTarget(POISON_EFFECT, actor, "chest")
@@ -107,7 +107,7 @@ public abstract class Escaper extends UnitEntity
 		else if not add and poisoned
 			poisonEffect.destr()
 			poisoned = false
-	
+
 	function kill(UnitEntity killer)
 		if this.getCurrentRegion().easyMode and actor.isAlive()
 			setPos(pos-getRealVel()*1.05)
@@ -131,7 +131,7 @@ public abstract class Escaper extends UnitEntity
 					setVel(getRealVel() * -1.75)
 			flashEffect(Abilities.boltImpact, pos)
 			actor.damageTarget(actor, 85)
-		else if alive 
+		else if alive
 			if actor.isAliveTrick()
 				actor.damageTarget(actor, killer == null ? 195 : 1000)
 			if not actor.isAliveTrick()
@@ -143,8 +143,8 @@ public abstract class Escaper extends UnitEntity
 				setLava(false)
 				flying = false
 				sliding = false
-				
-			
+
+
 	function stop()
 		sliding = false
 		slideVelocity = vec2(0,0)
@@ -153,9 +153,9 @@ public abstract class Escaper extends UnitEntity
 
 	override function setNewActor(unit u)
 		error("Don't do this..")
-	
+
 	override function onGroundHit()
-		if pos.getTile().modifiers.contains(TileModifier.BLUGOO castTo int) and vel.z.abs() > 2
+		if pos.getEBRTile().modifiers.contains(TileModifier.BLUGOO castTo int) and vel.z.abs() > 2
 			let rdata = this.getCurrentRegion()
 			var ttype = GetTerrainType(pos.x, pos.y)
 			// Handle Goo it
@@ -165,22 +165,22 @@ public abstract class Escaper extends UnitEntity
 				vel.y = 0
 				slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			vel.z = -vel.z*1.25
-		else 
+		else
 			pos.z = .1
 			vel *= 0.175
 			vel.z = 0.
 			if GetTerrainType(pos.x, pos.y) == this.getCurrentRegion().getTypeSet().unwalkableId
 				actor.damageTarget(actor, 1000)
 				kill(null)
-		actor.setPropWindow(60.)
-		
-		
+		actor.setPropWindow(60 .fromDeg())
+
+
 	override function onEscapeGround()
-		actor.setPropWindow(0)
+		actor.setPropWindow(0 .fromDeg())
 		sliding = false
 
 	int lastVal = -1
-	
+
 	override function onGround(Entity e)
 		if e.flying
 			e.flying = false
@@ -236,7 +236,7 @@ public abstract class Escaper extends UnitEntity
 				sliding = true
 			setLava(false)
 		else
-			if pos.getTile().hasModifier(TileModifier.ORANGEGOO)
+			if pos.getEBRTile().hasModifier(TileModifier.ORANGEGOO)
 				vel += walkVel
 				vel *= 1.0075
 			vel *= 0.96
@@ -250,7 +250,7 @@ public abstract class Escaper extends UnitEntity
 		if sliding
 			speedFactor *= 0.9
 		else
-			slideVelocity *= 0.8		
+			slideVelocity *= 0.8
 		if onLava
 			doLavaDamage()
 		if poisoned
@@ -266,7 +266,7 @@ public abstract class Escaper extends UnitEntity
 			actor.setHP(hp-this.getCurrentRegion().lavaDmg)
 		else if alive
 			kill(null)
-		
+
 	override function update()
 		let newPos = actor.getPos()
 		walkVel = newPos-pos.toVec2()
@@ -280,12 +280,12 @@ public abstract class Escaper extends UnitEntity
 			setPos(pos)
 		else
 			setXY(pos)
-		
+
 	override function setXY(vec3 tpos)
 		if tpos.inPlayable()
 			pos = tpos
 			actor.setXYZ(pos)
-		else 
+		else
 			setPos(currentRevivepoint.toVec3())
 			kill(null)
 
@@ -310,7 +310,7 @@ public abstract class Escaper extends UnitEntity
 					ReviveHero(actor, revmod.pos.x, revmod.pos.y, false)
 				setXY(vec3(revmod.pos.x, revmod.pos.y, 32.))
 			alive = true
-			actor.setPropWindow(60.)
+			actor.setPropWindow(60 .fromDeg())
 			updateRegionData()
 			setPoison(false)
 			setLava(false)
@@ -336,14 +336,14 @@ public abstract class Escaper extends UnitEntity
 				revivetomb = null
 			if this.getCurrentRegion().specialAbil > 0
 				actor.addAbility(this.getCurrentRegion().specialAbil)
-			else 
+			else
 				actor.removeAbility(JUMP_SPELL)
 				actor.removeAbility(ORB_SPELL)
-	
+
 	override function setTarget(vec3 tpos, real speed)
 		stop()
 		super.setTarget(tpos, speed)
-			
+
 	function updateRegionData()
 		let currentReg = this.getCurrentRegion()
 		let newReg = this.setCurrentRegion()
@@ -356,7 +356,7 @@ public abstract class Escaper extends UnitEntity
 				actor.addAbility(newReg.specialAbil)
 				if isEscaper(actor.getOwner())
 					printTimedToPlayer("|cffFFCC00>> |rYou were granted a |cff0884BDspecial ability |rin this region |r(use with hotkey |cffFFCC00T|r)", 10, actor.getOwner())
-			else 
+			else
 				actor.removeAbility(JUMP_SPELL)
 				actor.removeAbility(ORB_SPELL)
 			actor.setTurnSpeed(newReg.turnSpeed)
@@ -396,18 +396,18 @@ public abstract class Escaper extends UnitEntity
 					actor.setFacing(pos.angleTo2d(orderPos)-(180).asAngleDegrees())
 				else
 					actor.setFacing(pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
-				
+
 	static function neutralDeath()
 		var escaper = GetTriggerUnit().getEntity() castTo Escaper
 		if GetKillingUnit() != null
 			escaper.kill(null)
-			
+
 	static function onCastEvent()
 		let data = GetTriggerUnit().getEntity() castTo Escaper
 		data.onCast(GetSpellAbilityId())
 
 	OrbProjectile orb = null
-		
+
 	function onCast(int id)
 		actor.setAnimation("spell")
 		if id == JUMP_SPELL
@@ -445,15 +445,15 @@ public abstract class Escaper extends UnitEntity
 		else if id == ATTACK_MELEE or id == ATTACK_RANGED
 			// weapon.onUse(this)
 			actor.setAnimation("attack")
-		else if id == ANK_ITEM_ID 
+		else if id == ANK_ITEM_ID
 			if poisoned or not canCast()
-				actor.addItem('I00L')
+				actor.addItemById('I00L')
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
 				if revivetomb != null
 					revivetomb.remove()
 				revivetomb = createUnit(owner, TOMB_DUMMY_ID, pos, angle(0))
-		else if id == TELEPORT_ITEM_ID 
+		else if id == TELEPORT_ITEM_ID
 			var teleport = true
 			let itm = GetManipulatedItem()
 			if GetItemCharges(itm) <= 1
@@ -464,7 +464,7 @@ public abstract class Escaper extends UnitEntity
 					teleport = false
 					break
 
-				
+
 			if not teleport or poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				 or this.getCurrentRegion() == regions[22] or this.getCurrentRegion() == regions[23] or this.getCurrentRegion() == regions[24]
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
@@ -485,7 +485,7 @@ public abstract class Escaper extends UnitEntity
 					setPos(target.getPos())
 					flashEffect(Abilities.blinkCaster, target.getPos())
 				end)
-				
+
 
 		else
 			jukeBox.checkSpell(id)
@@ -493,12 +493,12 @@ public abstract class Escaper extends UnitEntity
 	function canCast() returns boolean
 		return not (poisoned or onLava or sliding or this.getCurrentRegion() == regions[21]
 				or this.getCurrentRegion() == regions[22] or this.getCurrentRegion() == regions[23] or this.getCurrentRegion() == regions[24])
-			
+
 	ondestroy
 		lavaEffect.destr()
 		poisonEffect.destr()
 		escapers.remove(this)
-				
+
 class OrbProjectile extends Projectile
 	Escaper e = null
 	RegionData rdata
@@ -515,7 +515,7 @@ class OrbProjectile extends Projectile
 	ondestroy
 		e.orb = null
 		e.actor..removeAbility(JAUNT_SPELL)..addAbility(e.getCurrentRegion().specialAbil)
-	
+
 	override function update()
 		super.update()
 		if not done and rdata != this.setCurrentRegion()
@@ -525,7 +525,7 @@ class OrbProjectile extends Projectile
 function correctRegion()
 	for e from escapers.staticItr()
 		e.updateRegionData()
-		
+
 @init2 function init_Escaper()
 	neutralDeathTrig = CreateTrigger()
 	neutralDeathTrig.addAction(function Escaper.neutralDeath)
@@ -549,7 +549,7 @@ function correctRegion()
 	..setMovementHeight(0)
 	..setTurnRate(0.1)
 	..setMovementType(MovementType.None)
-	..setNormalAbilities(int2fourchar('Aloc'))
+	..setNormalAbilities(('Aloc').toRawCode())
 	..setHotkey("Y")
 	..setName("Dummy - Reincarnation")
 	..setTooltipBasic("Dummy - Reincarnation")
@@ -557,5 +557,5 @@ function correctRegion()
 	..setUpgradesUsed("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setFoodCost(0)

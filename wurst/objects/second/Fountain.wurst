@@ -15,11 +15,11 @@ public class Fountain extends StaticSetupObject
 	construct(unit existing)
 		super(existing, createUnit(existing.getOwner(), FOUNTAIN_BOTH_ID, existing.getPos(), (270).asAngleDegrees()), 200., function Fountain.cure)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, FOUNTAIN_BOTH_ID, pos, (270).asAngleDegrees()), createUnit(owner, FOUNTAIN_BOTH_ID, pos, (270).asAngleDegrees()), 200., function Fountain.cure)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-	
+
 	static function cure()
 		let obj = GetTriggeringTrigger().getSource().getEntity() castTo Fountain
 		Entity e = GetTriggerUnit().getEntity()
@@ -28,7 +28,7 @@ public class Fountain extends StaticSetupObject
 			if es.poisoned and not es.flying
 				DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y ))
 				es.setPoison(false)
-				
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
@@ -62,11 +62,7 @@ public class Fountain extends StaticSetupObject
 	..setTooltipExtended("Heals nearby Escapers." +
 	"\nAlso cures infections.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
-	..setNormalAbilities(int2fourchar('A077') + "," +
-	int2fourchar('A00H') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList('A077', 'A00H', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setScalingValue(0.4)
 	..setAcquisitionRange(3500)
@@ -99,11 +95,7 @@ public class Fountain extends StaticSetupObject
 	..setTooltipExtended("Heals nearby Escapers." +
 	"\nAlso cures infections.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLifeBlood.blp")
-	..setNormalAbilities(int2fourchar('A078') + "," +
-	int2fourchar('A00H') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList('A078', 'A00H', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setScalingValue(0.4)
 	..setAcquisitionRange(3500)
@@ -136,10 +128,7 @@ public class Fountain extends StaticSetupObject
 	..setTooltipExtended("Heals nearby Escapers." +
 	"\nAlso cures infections.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNFountainOfLife.blp")
-	..setNormalAbilities(int2fourchar('A079') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID)) 
+	..setNormalAbilities(commaList('A079', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setAttacksEnabled(0)
 	..setScalingValue(0.4)
 	..setAcquisitionRange(3500)

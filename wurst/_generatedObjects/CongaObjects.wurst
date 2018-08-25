@@ -35,9 +35,9 @@ public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 	..presetIcon("BTNsettingsCog.blp")
 	..setItemAbility(false)
 	..setMaximumSpells(1, 10)
-	..setSpellList(1, int2fourchar(CONGA_LOOSE_ID)  + "," + int2fourchar(CONGA_STRICT_ID) + ",A02Z,A030")
+	..setSpellList(1, commaList(CONGA_LOOSE_ID, CONGA_STRICT_ID, 'A02Z', 'A030'))
 
-	new UnitDefinition(CONGA_LINE_HEAD_ID, 'ewsp') 
+	new UnitDefinition(CONGA_LINE_HEAD_ID, 'ewsp')
 	..setUnitClassification("")
 	..setAttacksEnabled(0)
 	..setAnimationBlendTimeseconds(0)
@@ -56,15 +56,7 @@ public constant CONGA_CONFIG_ID = compiletime(ABIL_ID_GEN.next())
 	..setMovementType(MovementType.Foot)
 	..setUnitSoundSet("ClockwerGoblin")
 	..setCollisionSize(0)
-	..setNormalAbilities(int2fourchar(ADD_ID) + "," +
-	int2fourchar(INC_ID) + "," +
-	int2fourchar(DEC_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(INC_SPEED_ID) + "," +
-	int2fourchar(DEC_SPEED_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(ADD_ID, INC_ID, DEC_ID, MAKE_UNIT_INVISIBLE_ID, INC_SPEED_ID, DEC_SPEED_ID, REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("Q")
 	..setName("|cffA5A5A5Conga Line Head")
 	..setTooltipBasic("|cffFFCC00Build |cffA5A5A5Conga Line Head [Q]")

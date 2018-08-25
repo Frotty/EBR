@@ -7,49 +7,48 @@ public constant MAX_MASS = 250
 public module AirPhysicsModule
 	/** Affected by gravity */
 	boolean affectedByGravity = true
-	
+
 	real terrainZ = 0.
-	
+
 	// Physical factors
-	
+
 	// The higher the more slide. Should be < 1.
 	real surfaceFriction = 0.9
 	// Defines the bounciness
 	real restitution = 0.9
 	// The density of the object
 	real mass = 10
-	
-		
+
+
 	// This function should be called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
 		let pos = e.getPos()
-		terrainZ = getTerrainZ(pos.x, pos.y)
+		terrainZ = pos.getTerrainZ()
 		if pos.z <= terrainZ + .2
 			onGround(e)
 		else
 			inAir(e)
-		
-	// When the Entity is on or near the ground	
+
+	// When the Entity is on or near the ground
 	function onGround(Entity e)
 		let pos = e.getPos()
-		// If the Entity is moving towards 
-		vec3 normal = getTerrainNormal(pos.x, pos.y, 2.).norm()
+		// If the Entity is moving towards
+		let normal = pos.toVec2().getTerrainNormal(2.).norm()
 		// Is the Entity going away from the ground?
-		if e.getVel().dot(normal) > 0 
+		if e.getVel().dot(normal) > 0
 			return
 
 		vec3 pv = e.getVel().project(normal)
 		pv *= (-1. - restitution)
 		if pv.z > 4.
 			e.addVel(pv)
-		else	
+		else
 			e.scaleVel(surfaceFriction * bezier_3(1,0.85,0,mass/MAX_MASS))
-			
-		
+
+
 	function inAir(Entity e)
 		let coef = bezier_3(0.930,0.985,1,mass/MAX_MASS)
 		let gcoef = bezier_3(0.1,0.875,1,mass/MAX_MASS)
 		if affectedByGravity
 			e.addVel(vec3(0,0,e.gravity * gcoef))
 		e.scaleVel(coef)
-		

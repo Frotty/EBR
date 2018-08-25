@@ -34,13 +34,13 @@ public class Door extends StaticSetupObject
 	construct(unit existing)
 		super(createUnit(existing.getOwner(), DOORDUMMY_ID, existing.getPos(), (270).asAngleDegrees()), existing, EVENT_RADIUS, function Door.keyopen )
 		pathing = createUnit(this.owner, DOORPATH, pos, (270).asAngleDegrees())
-	
+
 	construct( vec2 pos, player owner )
-		super(createUnit(owner,DOORDUMMY_ID, pos, (270).asAngleDegrees()), 
+		super(createUnit(owner,DOORDUMMY_ID, pos, (270).asAngleDegrees()),
 							createUnit(owner,DOORORDER_ID, pos, 0 .fromDeg()), EVENT_RADIUS, function Door.keyopen )
 		pathing = createUnit(this.owner, DOORPATH, pos, 270 .fromDeg())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-	
+
 	static function keyopen() //open with item and color conditions
 		let source = GetTriggeringTrigger().getSource()
 		let u = GetTriggerUnit()
@@ -79,14 +79,14 @@ public class Door extends StaticSetupObject
 			case colorSpells[8]
 				col = EBRColor.PINK
 		actor.setVertexColor(col.toColor())
-				
+
 	function toggleOpen()
 		if opened
 			closeDoor()
 		else
 			openDoor()
-			
-	
+
+
 	function closeDoor()
 		SetUnitAnimation( actor, "stand" )
 		pathing.remove()
@@ -104,7 +104,7 @@ public class Door extends StaticSetupObject
 			pathing  = createUnit(owner, DOORPATH_O, pos.toVec2(), 0 .fromDeg())
 		else
 			pathing  = createUnit(owner, DOORPATH_O, pos.toVec2(), 270 .fromDeg())
-			
+
 	function turn()
 		if vertical
 			pathing.remove()
@@ -116,11 +116,11 @@ public class Door extends StaticSetupObject
 			else
 				setNewActor(createUnit(owner, DOORDUMMY_ID , pos.toVec2(), 270 .fromDeg()))
 				pathing  = createUnit(owner, DOORPATH, pos.toVec2(), 270 .fromDeg())
-			
+
 		else
 			pathing.remove()
 			vertical = true
-			if opened 
+			if opened
 				setNewActor(createUnit(owner, DOORDUMMY_ID , pos.toVec2(), 0 .fromDeg()))
 				SetUnitAnimation( actor, "Death Alternate" )
 				pathing  = createUnit(owner, DOORPATH_O, pos.toVec2(), 0 .fromDeg())
@@ -129,18 +129,18 @@ public class Door extends StaticSetupObject
 				setNewActor(createUnit(owner, DOORDUMMY_ID , pos.toVec2(), 0 .fromDeg()))
 				pathing  = createUnit(owner, DOORPATH, pos.toVec2(), 0 .fromDeg())
 		actor.setVertexColor(col.toColor())
-		
+
 	ondestroy
 		pathing.remove()
 
 	function onCast() returns boolean
 		int id = GetSpellAbilityId()
-		switch id 
+		switch id
 			case DOOROPEN_ABILITY_ID
 				toggleOpen()
 			case DOORTURN_ABILITY_ID
 				turn()
-			default 
+			default
 				changeColor(id)
 		return false
 
@@ -157,11 +157,11 @@ public class Door extends StaticSetupObject
  		actor.setVertexColor(col.toColor())
 		if json.getInt(KEY_ROTATION) == 1
 			turn()
-	
 
 
-@objectgen function genDoor()	
-	new BuildingDefinition(DOORPATH, 'hhou')  
+
+@objectgen function genDoor()
+	new BuildingDefinition(DOORPATH, 'hhou')
 	..setScalingValue(0.55)
 	..setRequiredAnimationNames("second")
 	..setButtonPositionX(0)
@@ -176,7 +176,7 @@ public class Door extends StaticSetupObject
 	..setPlacementPreventedBy("")
 	..setCollisionSize(140)
 	..setCanDropItemsOnDeath(false)
-	..setNormalAbilities(int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities((INVULNERABILITY_ID).toRawCode())
 	..setName("Doorpathing")
 	..setHotkey("D")
 	..setTooltipBasic("|cFFFFFF00D|roor Horizontal/Vertical")
@@ -189,7 +189,7 @@ public class Door extends StaticSetupObject
 	..setHideMinimapDisplay(true)
 	..setPlacementRequires("")
 
-	new BuildingDefinition(DOORPATH_O, 'hhou')  
+	new BuildingDefinition(DOORPATH_O, 'hhou')
 	..setScalingValue(0.55)
 	..setRequiredAnimationNames("second")
 	..setButtonPositionX(0)
@@ -204,7 +204,7 @@ public class Door extends StaticSetupObject
 	..setPlacementPreventedBy("")
 	..setCollisionSize(140)
 	..setCanDropItemsOnDeath(false)
-	..setNormalAbilities(int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities((INVULNERABILITY_ID).toRawCode())
 	..setName("DoorpathingOpen")
 	..setHotkey("D")
 	..setTooltipBasic("|cFFFFFF00D|roor Horizontal/Vertical")
@@ -217,7 +217,7 @@ public class Door extends StaticSetupObject
 	..setHideMinimapDisplay(true)
 	..setPlacementRequires("")
 
-	new BuildingDefinition(DOORDUMMY_ID, 'hhou')  
+	new BuildingDefinition(DOORDUMMY_ID, 'hhou')
 	..setScalingValue(0.55)
 	..setRequiredAnimationNames("second")
 	..setButtonPositionX(0)
@@ -232,11 +232,11 @@ public class Door extends StaticSetupObject
 	..setPlacementPreventedBy("")
 	..setCollisionSize(140)
 	..setCanDropItemsOnDeath(false)
-	..setNormalAbilities(int2fourchar('Aloc'))
+	..setNormalAbilities(('Aloc').toRawCode())
 	..setName("|cffFF9421Door")
 	..setHotkey("Y")
 	..setTooltipBasic("|cffFFCC00Build |cffFF9421Door [Y]")
-	..setTooltipExtended("Doors can be opened by keys and executers." + 
+	..setTooltipExtended("Doors can be opened by keys and executers." +
 	"\nThey can be rotated and recolored. Doors of a certain color can only be opened by a key with that same color." +
 	"\nYou can drop keys using the item in your builder's inventory.")
 	..setBuildTime(1)
@@ -248,7 +248,7 @@ public class Door extends StaticSetupObject
 	..setUnitClassification("ancient,mechanical")
 	..setPlacementRequires("")
 
-	new BuildingDefinition(DOORORDER_ID, 'hhou')  
+	new BuildingDefinition(DOORORDER_ID, 'hhou')
 	..setScalingValue(0.75)
 	..setRequiredAnimationNames("second")
 	..setButtonPositionX(0)
@@ -264,12 +264,7 @@ public class Door extends StaticSetupObject
 	..setPlacementRequires("")
 	..setCollisionSize(0)
 	..setCanDropItemsOnDeath(false)
-	..setNormalAbilities(int2fourchar('A05R') + "," +
-	int2fourchar('A01W') + "," +
-	int2fourchar('A00J') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID) + "," +
-	int2fourchar(GHOST_INVIS_ID))
+	..setNormalAbilities(commaList('A05R', 'A01W', 'A00J', REMOVE_OBJECT_ID, INVULNERABILITY_ID, GHOST_INVIS_ID))
 	..setName("|cFFFF8000Door|r ")
 	..setHotkey("D")
 	..setNameEditorSuffix("Dummy")

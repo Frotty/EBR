@@ -77,7 +77,7 @@ class ShipProjectile extends Projectile
 
 	construct(Spaceship ship)
 		super(ship.getPos().toVec2().polarOffset(ship.actor.getFacingAngle(), 16).withZ(32), 16., ship.owner, ship.actor.getFacingAngle(), "TCSlashProj.mdx")
-		fx.setColor(fromPlayerColor(owner.getColor()).withAlpha(255))
+		fx.setColor((owner.getColor().toColor()).withAlpha(255))
 		setSpeed(10)
 		vel += ship.vel
 		this.ship = ship
@@ -86,7 +86,7 @@ class ShipProjectile extends Projectile
 		super.update()
 		if not gg_rct_spaceygamearea.contains(pos.toVec2())
 			terminate()
-		else 
+		else
 			let itr = MGSpacey.rocks.staticItr()
 			for rock from itr
 				if this.pos.distanceTo2dSq(rock.pos.toVec2()) < (28.).squared() + rock.radiusSq
@@ -169,7 +169,7 @@ public class Spaceship extends UnitEntity
 					// minigame.reset()
 				break
 
-		
+
 
 	ondestroy
 		if mounter.actor.isAlive()
@@ -222,7 +222,7 @@ public class SpaceRock extends FxEntity
 		if level > 1
 			for i = 0 to 2
 				new SpaceRock(pos.toVec2(), vec2(GetRandomReal(-2, 2), GetRandomReal(-2, 2)), level-1)
-	
+
 
 @objectgen function genObjs()
 	new UnitDefinition(SHIP_ID, 'hgry')

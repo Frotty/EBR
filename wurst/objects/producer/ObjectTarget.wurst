@@ -5,7 +5,7 @@ import ChannelAbilityPreset
 public constant OBJECT_TARGET_ID = 'wisp'
 
 public class ObjectTarget extends SetupObject
-	
+
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, OBJECT_TARGET_ID, pos, angle(0)), createUnit(owner, OBJECT_TARGET_ID, pos, angle(0)), 0.)
 
@@ -38,11 +38,7 @@ public class ObjectTarget extends SetupObject
 	..setMovementHeight(0)
 	..setTurnRate(999)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('A01H') + "," +
-	int2fourchar('A01E') + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID))
+	..setNormalAbilities(commaList('A01H', 'A01E', REMOVE_OBJECT_ID, GHOST_VIS_ID, MAKE_UNIT_INVISIBLE_ID))
 	..setHotkey("Y")
 	..setName("|cff0894E6Object Target")
 	..setTooltipBasic("|cffFFCC00Train |cff0894E6Teleporter Target [Y]")
@@ -51,6 +47,6 @@ public class ObjectTarget extends SetupObject
 	..setUpgradesUsed("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setFoodCost(0)
 	..setHideMinimapDisplay(true)

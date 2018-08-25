@@ -13,9 +13,9 @@ public class Texter extends StaticBaseObject
 	FText text
 	var hidden = true
 	var col = color(255,255,255)
-	
+
 	construct(vec2 pos, player owner)
-		super(pos, createUnit(owner, TEXTER_ID, pos, angle(0)), EVENT_RADIUS, function Texter.onStep, null) 
+		super(pos, createUnit(owner, TEXTER_ID, pos, angle(0)), EVENT_RADIUS, function Texter.onStep, null)
 		setEnabled(false)
 		text = createCenterFText(actor.getPos3Zero(), "", 12)
 		text.tt..setColor(col.red,col.green,col.blue, 0)..setVisibility(false)
@@ -37,7 +37,7 @@ public class Texter extends StaticBaseObject
 		if e instanceof Escaper
 			obj.text.tt.setVisibility(true)
 			obj.hidden = false
-			
+
 	function onShow()
 		forUnitsOfPlayer(owner) u ->
 			if IsUnitSelected(u, owner)
@@ -45,7 +45,7 @@ public class Texter extends StaticBaseObject
 				if ent instanceof Texter
 					thistype obj = u.getEntity() castTo thistype
 					obj.show()
-	
+
 	function onHide()
 		forUnitsOfPlayer(owner) u ->
 			if IsUnitSelected(u, owner)
@@ -53,7 +53,7 @@ public class Texter extends StaticBaseObject
 				if ent instanceof Texter
 					thistype obj = u.getEntity() castTo thistype
 					obj.hide()
-	
+
 	function setText(string txt)
 		clearQuestionmark()
 		text.tt.center(getPos(), txt, 10)
@@ -91,19 +91,19 @@ public class Texter extends StaticBaseObject
 	override function deactivate()
 		super.deactivate()
 		hide()
-	
+
 function getColorFromString(string s) returns color
 	boolean isstdcolor = false
 	color stringcolor = color(255,255,255)
 	for int i = 1 to 12
-		if stdcolors[i]+ " " == s 
-			stringcolor = playercolors[i-1]
+		if stdcolors[i]+ " " == s
+			stringcolor = players[i-1].getColor().toColor()
 			isstdcolor = true
 	if not isstdcolor
 		int component = 0
 		string tempstring = ""
 		for int ii = 0 to StringLength( s ) - 1
-			if SubString( s, ii, ii + 1 ) != " " 
+			if SubString( s, ii, ii + 1 ) != " "
 				tempstring += SubString( s, ii, ii + 1 )
 			else
 				switch component
@@ -119,7 +119,7 @@ function getColorFromString(string s) returns color
 
 interface TexterClsr
 	function run(Texter texter)
-function forSelectedTexters(TexterClsr cb) 
+function forSelectedTexters(TexterClsr cb)
 	forUnitsOfPlayer(GetTriggerPlayer()) u ->
 		if IsUnitSelected(u, GetTriggerPlayer()) and u.getTypeId() == TEXTER_ID
 			cb.run(u.getEntity() castTo Texter)
@@ -141,18 +141,18 @@ init
 				forSelectedTexters(t -> tokens.pop())
 
 
-	
+
 
 @objectgen function genTexter()
 	new ChannelAbilityPreset(INFO_TEXTER_ID, 1, TRUE)
 	..setName("Information: Texter")
 	..presetTooltipNormal((int lvl) -> "Information: Texter")
 	..presetTooltipNormalExtended((int lvl) -> "Use these commands while having the texter selected." +
-	"\nAll Commands:" + 
+	"\nAll Commands:" +
 	"\n-sht (shows the currently set text)" +
 	"\n-ht (hides the currently set text)" +
 	"\n-sc (set the color of the text)" +
-	"\nExamples:" + 
+	"\nExamples:" +
 	"\n-st Some Text" +
 	"\n-sc red/green/orange" +
 	"\n-sc 125 125 255" +
@@ -169,19 +169,15 @@ init
 	..setTooltipExtended("Creates floating textes that are shown by command or when an Escaper walks over it." +
 	"\nFloating texts can be colored.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNTexter.blp")
-	..setNormalAbilities(int2fourchar(INFO_TEXTER_ID) + "," +
-	int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(MAKE_UNIT_INVISIBLE_ID) + "," +
-	int2fourchar(GHOST_VIS_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(INFO_TEXTER_ID, REMOVE_OBJECT_ID, MAKE_UNIT_INVISIBLE_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(3)
 	..setButtonPositionY(1)
 	..setTintingColorRed(0)
 	..setSightRadiusDay(0)
 	..setSightRadiusNight(0)
 	..setBuildTime(1)
-	..setCollisionSize(0)        
+	..setCollisionSize(0)
 	..setScalingValue(0.8)
 	..setSelectionScale(2.2)
-	..setUnitClassification("ancient,standon")   
+	..setUnitClassification("ancient,standon")
 	..setHideMinimapDisplay(true)

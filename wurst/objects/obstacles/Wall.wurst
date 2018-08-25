@@ -16,7 +16,7 @@ public class Wall extends StaticSetupObject
 
 
 @objectgen function genWalls()
-	new BuildingDefinition(WALL_ID, 'ncop')  
+	new BuildingDefinition(WALL_ID, 'ncop')
 	..setScalingValue(0.8)
 	..setButtonPositionX(0)
 	..setButtonPositionY(2)
@@ -25,8 +25,7 @@ public class Wall extends StaticSetupObject
 	..setSelectionScale(1)
 	..setUnitSoundSet("")
 	..setPathingMap("PathTextures\\2x2Unflyable.tga")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setName("|cFF00FF00Wall|r")
 	..setHotkey("Y")
 	..setTooltipBasic("Wall End [|cffFFCC00Y|r]")
@@ -34,7 +33,7 @@ public class Wall extends StaticSetupObject
 	..setUnitClassification("ancient,standon")
 	..setHideMinimapDisplay(true)
 
-	new BuildingDefinition(HOR_WALL_ID, 'ncop')  
+	new BuildingDefinition(HOR_WALL_ID, 'ncop')
 	..setButtonPositionX(2)
 	..setButtonPositionY(2)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
@@ -42,8 +41,7 @@ public class Wall extends StaticSetupObject
 	..setSelectionScale(1)
 	..setUnitSoundSet("")
 	..setPathingMap("war3mapImported\\12x2pathing.tga")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setName("|cFF00FF00Horizontal Wall|r ")
 	..setHotkey("C")
 	..setTooltipBasic("Horizontal Wall [|cffFFCC00C|r]")
@@ -51,7 +49,7 @@ public class Wall extends StaticSetupObject
 	..setUnitClassification("ancient,standon")
 	..setHideMinimapDisplay(true)
 
-	new BuildingDefinition(VER_WALL_ID, 'ncop')  
+	new BuildingDefinition(VER_WALL_ID, 'ncop')
 	..setButtonPositionX(1)
 	..setButtonPositionY(2)
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCage.blp")
@@ -59,8 +57,7 @@ public class Wall extends StaticSetupObject
 	..setSelectionScale(1)
 	..setUnitSoundSet("")
 	..setPathingMap("war3mapImported\\2x12pathing.tga")
-	..setNormalAbilities(int2fourchar(REMOVE_OBJECT_ID) + "," +
-	int2fourchar(INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, INVULNERABILITY_ID))
 	..setName("Vertical Wall")
 	..setHotkey("X")
 	..setTooltipBasic("Vertical Wall [|cffFFCC00X|r]")

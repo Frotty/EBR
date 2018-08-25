@@ -9,12 +9,12 @@ public class RevivePointModifier
 	unit actor
 	vec2 pos
 	boolean active
-	
+
 	construct(vec2 position, player owner)
 		actor = createUnit(owner, REV_MODIFIER_DUMMY_ID, position, angle(0))
 		pos = position
 		active = true
-		
+
 	ondestroy
 		active = false
 		actor.remove()
@@ -40,13 +40,12 @@ public class RevivePointModifier
 	..setMovementHeight(0)
 	..setTurnRate(999)
 	..setMovementType(MovementType.Fly)
-	..setNormalAbilities(int2fourchar('Aloc') + "," +
-	int2fourchar(GHOST_INVIS_ID))
+	..setNormalAbilities(commaList('Aloc', GHOST_INVIS_ID))
 	..setName("Dummy - Revive Modifier")
 	..setTooltipBasic("Dummy - Revive Modifier")
 	..setTooltipExtended("Dummy - Revive Modifier")
 	..setUpgradesUsed("")
 	..setHitPointsMaximumBase(100000000)
 	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)	
+	..setSightRadiusNight(0)
 	..setFoodCost(0)
