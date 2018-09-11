@@ -9,12 +9,12 @@ class SpinNode
 	SetupObject obj
 	real angl
 	real dist
-	
+
 	construct(SetupObject ent, real ang, real dist)
 		obj = ent
 		angl = ang
 		this.dist = dist
-	
+
 	ondestroy
 		if next != null
 			next.prev = prev
@@ -40,7 +40,7 @@ public class Spinner extends SetupObject
 		sleeps = false
 		setup.addAbility(TURN_OFF_ID)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast())
-		
+
 	override function update()
 		super.update()
 		let speed = spinSpeed.get()
@@ -55,7 +55,7 @@ public class Spinner extends SetupObject
 				if node == firstNode
 					firstNode = node.next
 			node = node.next
-			
+
 	function checkObj(Entity e)
 		if e instanceof SetupObject and not e instanceof Obstacle
 			var dobj = e castTo SetupObject
@@ -97,13 +97,12 @@ public class Spinner extends SetupObject
 				if owner == owner
 					checkObj(data)
 			case SPIN_ADD_GROUP_ID
-				forUnitsInRange(getSpellTargetPos(), 300., (unit u) -> begin
+				forUnitsInRange(getSpellTargetPos(), 300.) u ->
 					if u != actor and u != setup
 						if u.getUserData() > 0
 							var ed = u.getEntity()
 							if ed.owner == owner
 								checkObj(ed)
-				end)
 			case SPIN_INC_SPEED_ID
 				spinSpeed.increment(this, 10 * DEGTORAD)
 			case SPIN_DEC_SPEED_ID
@@ -121,4 +120,3 @@ public class Spinner extends SetupObject
 		let json = super.serialize()
 		json.addProperty(new Property(KEY_TYPE, SPINNER_INDEX.toString()))
 		return json
-		

@@ -471,7 +471,7 @@ public abstract class Escaper extends UnitEntity
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
 				let tpos = getSpellTargetPos()
-				doAfter(0.15, () -> begin
+				doAfter(0.15) ->
 					var smallestDist = 9999999.
 					Escaper target = null
 					for e in escapers
@@ -485,8 +485,6 @@ public abstract class Escaper extends UnitEntity
 					flashEffect(Abilities.blinkCaster, this.getPos())
 					setPos(target.getPos())
 					flashEffect(Abilities.blinkCaster, target.getPos())
-				end)
-
 
 		else
 			jukeBox.checkSpell(id)

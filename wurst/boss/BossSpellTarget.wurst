@@ -7,7 +7,7 @@ import ClosureTimers
 import HashMap
 
 public constant int SPELLTARGET_ID = 'u00F'
-public constant int AOE_ID = 'A06V' 
+public constant int AOE_ID = 'A06V'
 public constant int MISSILE_ID = 'A06W'
 
 public enum SpellType
@@ -28,7 +28,7 @@ public class SpellTarget extends SetupObject
 		if not targets.has(owner.getId())
 			targets.put(owner.getId(), new LinkedList<SpellTarget>())
 		targets.get(owner.getId()).add(this)
-		
+
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
@@ -42,18 +42,16 @@ public class SpellTarget extends SetupObject
 				actor..setVertexColor(0,255,255,255)
 				..removeAbility(MISSILE_ID)
 				..addAbility(AOE_ID)
-	
+
 	function castAoe()
 		addEffect("war3mapImported\\DarknessMeteor.mdx", pos).destr()
 		let tpos = getPos().toVec2()
-		doAfter(1., () -> begin
-			forUnitsInRange(tpos, 200, (unit u) -> begin
+		doAfter(1.) ->
+			forUnitsInRange(tpos, 200) u ->
 				if u.getEntity() instanceof Escaper
 					actor.damageTarget(u, 100)
 					let escaper = u.getEntity() castTo Escaper
 					escaper.addVel((escaper.pos-tpos)*0.5 )
-			end)
-		end)
 
 	ondestroy
 		targets.get(owner.getId()).remove(this)
@@ -68,7 +66,7 @@ public class SpellTarget extends SetupObject
 //				if not es.flying
 //					actor.damageTarget(u,aoe_spell[root.aoe_id].damage)
 //		GroupClear(ENUM_GROUP)
-//	
+//
 
 constant MISSILE_RADIUS = 64.
 constant MISSILE_SPEED = 12.
@@ -82,8 +80,8 @@ public class BossMissile extends HomingProjectile
 		setTarget(target,HOMING.attract,MISSILE_SPEED)
 		setSpeed(14.)
 		setTimed(10)
-		
-	
+
+
 	override function update()
 		super.update()
 		sleeps = false

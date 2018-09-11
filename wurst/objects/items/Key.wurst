@@ -56,12 +56,11 @@ public class Key extends ItemObject
 			fx = null
 		setup.setXY(pos.toVec2())
 		setup.show()
-		nullTimer(() -> begin
+		nullTimer() ->
 			actorItem..setEntity(null)
 			..remove()
 			actorItem = createItem(keyIds[col castTo int], pos)
 			actorItem.setEntity(this)
-		end)
 
 	override function update()
 		if picked

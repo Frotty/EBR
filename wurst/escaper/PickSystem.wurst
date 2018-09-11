@@ -52,6 +52,7 @@ class EscaperDefinition
 	function createFor(PlayerData pd)
 		cb.create(pd)
 		ResetToGameCameraForPlayer(pd.p,0.5)
+		pd.escaper.actor..addAbility(BLINK_ID)
 		if isBuilder(pd.p)
 			pd.escaper.actor..addAbility(BLINK_ID)..addAbility(CREATE_REV_MOD_ID)
 			pd.escaper.selectatrevive = false
@@ -130,33 +131,28 @@ public function allow()
 	new EscaperDefinition(ESC_HOLY_ID)
 	..setName("|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNPriest.blp")
-	..setCallback((PlayerData pd) -> begin
+	..setCallback() pd ->
 		pd.escaper = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
-	end)
 	new EscaperDefinition(ESC_STRONG_ID)
 	..setName("|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNFootman.blp")
-	..setCallback((PlayerData pd) -> begin
+	..setCallback() pd ->
 		pd.escaper = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
-	end)
 	new EscaperDefinition(ESC_FAST_ID)
 	..setName("|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can create a portal.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNPeasant.blp")
-	..setCallback((PlayerData pd) -> begin
+	..setCallback() pd ->
 		pd.escaper = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
-	end)
 	new EscaperDefinition(ESC_ICE_ID)
 	..setName("|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNIceTrollBeserker.blp")
-	..setCallback((PlayerData pd) -> begin
+	..setCallback() pd ->
 		pd.escaper = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
-	end)
 	new EscaperDefinition(ESC_BLIND_ID)
 	..setName("|cff6B6BCEFemale Escaper|r\nHas some resistance to lava.")
 	..setIcon(Icons.bTNHuntress)
-	..setCallback((PlayerData pd) -> begin
+	..setCallback() pd ->
 		pd.escaper = new BlindEscaper(currentRevivepoint.toVec3(), pd.p)
-	end)
 
 	for pd from allPlayers.staticItr()
 		currentView[pd.id] = EscaperDefinition.first

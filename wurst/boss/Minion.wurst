@@ -12,104 +12,100 @@ public constant ATTACK_DAMAGE = 100.
 public constant FOLLOW_RANGE = 1000.
 
 enum MinionState
-    IDLE
-    FOLLOW
-    ATTACK
-    AFTERTARGET
+	IDLE
+	FOLLOW
+	ATTACK
+	AFTERTARGET
 
 public class Minion extends EscaperSensorSetup
-    private Escaper target
-    real maxHp = 40.
-    real currentHP = 40.
-    vec2 spawnPoint
-    CustomBar hpBar
-    MinionState state = MinionState.IDLE
+	private Escaper target
+	real maxHp = 40.
+	real currentHP = 40.
+	vec2 spawnPoint
+	CustomBar hpBar
+	MinionState state = MinionState.IDLE
 
-    construct(vec2 pos, player owner, angle facing)
-        super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
-        setup()
+	construct(vec2 pos, player owner, angle facing)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, facing, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+		setup()
 
-    construct(vec2 pos, player owner)
-        super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
-        setup()
+	construct(vec2 pos, player owner)
+		super(pos.toVec3(), owner, getRegionData(pos).getTypeSet().minionId, COLL_SIZE_MINION, COLL_SIZE_MINION + 16)
+		setup()
 
-    function setup()
-        selectTarget()
-        sleeps = false
-        spawnPoint = pos.toVec2()
-        hpBar = new CustomBar(pos, "|", 40, 6)..setForeground(colorA(200,255,125,255))
+	function setup()
+		selectTarget()
+		sleeps = false
+		spawnPoint = pos.toVec2()
+		hpBar = new CustomBar(pos, "|", 40, 6)..setForeground(colorA(200,255,125,255))
 
-    function onDamage(Escaper _escaper, real dmg)
-        currentHP -= dmg
-        if currentHP < 1
-            actor.kill()
-            setup.abortOrder()
-            hpBar.fadeOut(1.5, true, 0, 0)
-            sleeps = true
-            doAfter(3., () -> terminate())
+	function onDamage(Escaper _escaper, real dmg)
+		currentHP -= dmg
+		if currentHP < 1
+			actor.kill()
+			setup.abortOrder()
+			hpBar.fadeOut(1.5, true, 0, 0)
+			sleeps = true
+			doAfter(3., () -> terminate())
 
-    override function update()
-        super.update()
-        hpBar..setPosXY(pos.x - 15, pos.y + 30)..setValue(currentHP / maxHp * 100.0)
-        let targetInvalid = target == null or not target.alive or target.getCurrentRegion() != this.getCurrentRegion() or target.pos.distanceTo2d(spawnPoint) > FOLLOW_RANGE
-        if targetInvalid
-            if (state == MinionState.ATTACK or state == MinionState.FOLLOW)
-                state = MinionState.AFTERTARGET
-                var fearEffect = actor.addEffect(Abilities.creepSleepTarget, "overhead")
-                target = null
-                setup.issuePointOrder("move", spawnPoint)
-                doAfter(4., () -> begin
-                    fearEffect.destr()
-                    state = MinionState.IDLE
-                end)
-            else if not state == MinionState.AFTERTARGET
-                state = MinionState.IDLE
-                selectTarget()
-        else
-            if state == MinionState.ATTACK
-                actor.setFacing(pos.angleTo2d(target.pos))
-            if not state == MinionState.ATTACK and target.pos.distanceTo(pos) < ATTACK_DISTANCE
-                attack()
-            else if not  state == MinionState.ATTACK
-                // Spamming the order like this might not be a good idea
-                setup.issuePointOrder("move", target.pos.toVec2())
+	override function update()
+		super.update()
+		hpBar..setPosXY(pos.x - 15, pos.y + 30)..setValue(currentHP / maxHp * 100.0)
+		let targetInvalid = target == null or not target.alive or target.getCurrentRegion() != this.getCurrentRegion() or target.pos.distanceTo2d(spawnPoint) > FOLLOW_RANGE
+		if targetInvalid
+			if (state == MinionState.ATTACK or state == MinionState.FOLLOW)
+				state = MinionState.AFTERTARGET
+				var fearEffect = actor.addEffect(Abilities.creepSleepTarget, "overhead")
+				target = null
+				setup.issuePointOrder("move", spawnPoint)
+				doAfter(4.) ->
+					fearEffect.destr()
+					state = MinionState.IDLE
+			else if not state == MinionState.AFTERTARGET
+				state = MinionState.IDLE
+				selectTarget()
+		else
+			if state == MinionState.ATTACK
+				actor.setFacing(pos.angleTo2d(target.pos))
+			if not state == MinionState.ATTACK and target.pos.distanceTo(pos) < ATTACK_DISTANCE
+				attack()
+			else if not  state == MinionState.ATTACK
+				// Spamming the order like this might not be a good idea
+				setup.issuePointOrder("move", target.pos.toVec2())
 
-    function selectTarget()
-        target = null
-        var closestDist = -1.
-        for escaper from this.getCurrentRegion().getEscapers()
-            let dist = escaper.pos.toVec2().distanceTo(spawnPoint)
-            if escaper.alive and dist < FOLLOW_RANGE
-                if closestDist == -1. or dist < closestDist
-                    closestDist = dist
-                    target = escaper
-        if not target == null
-            state = MinionState.FOLLOW
-            flashEffect(Abilities.spellBreakerAttack, pos)
-            setup.issuePointOrder("move", target.pos.toVec2())
+	function selectTarget()
+		target = null
+		var closestDist = -1.
+		for escaper from this.getCurrentRegion().getEscapers()
+			let dist = escaper.pos.toVec2().distanceTo(spawnPoint)
+			if escaper.alive and dist < FOLLOW_RANGE
+				if closestDist == -1. or dist < closestDist
+					closestDist = dist
+					target = escaper
+		if not target == null
+			state = MinionState.FOLLOW
+			flashEffect(Abilities.spellBreakerAttack, pos)
+			setup.issuePointOrder("move", target.pos.toVec2())
 
-    function attack()
-        state = MinionState.ATTACK
-        actor.setAnimation("attack")
-        doAfter(0.7, () -> begin
-            if currentHP > 0
-                let facing = actor.getFacingAngle()
-                let tpos = getPos().toVec2().polarOffset(facing, 80)
-                flashEffect(Abilities.manaFlareBoltImpact, tpos)
-                forUnitsInRange(tpos, ATTACK_RANGE, (unit u) -> begin
-                    let entity = u.getEntity()
-                    if entity != null and entity instanceof Escaper
-                        Escaper e = entity castTo Escaper
-                        doDamage(e)
-                end)
-                doAfter(1.3, () -> begin
-                    if state == MinionState.ATTACK
-                        state = MinionState.FOLLOW
-                end)
-        end)
+	function attack()
+		state = MinionState.ATTACK
+		actor.setAnimation("attack")
+		doAfter(0.7) ->
+			if currentHP > 0
+				let facing = actor.getFacingAngle()
+				let tpos = getPos().toVec2().polarOffset(facing, 80)
+				flashEffect(Abilities.manaFlareBoltImpact, tpos)
+				forUnitsInRange(tpos, ATTACK_RANGE) u ->
+					let entity = u.getEntity()
+					if entity != null and entity instanceof Escaper
+						Escaper e = entity castTo Escaper
+						doDamage(e)
+				doAfter(1.3) ->
+					if state == MinionState.ATTACK
+						state = MinionState.FOLLOW
 
-    function doDamage(Escaper e)
-        actor.damageTarget(e.actor, ATTACK_DAMAGE)
+	function doDamage(Escaper e)
+		actor.damageTarget(e.actor, ATTACK_DAMAGE)
 
-    ondestroy
-        destroy hpBar
+	ondestroy
+		destroy hpBar

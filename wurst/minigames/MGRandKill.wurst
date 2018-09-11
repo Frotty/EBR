@@ -26,22 +26,18 @@ public class MGRandKill extends Minigame
 			spawn = getGameRect().randomPoint()
 		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
 		fx.setScale(0.5)
-		doAfter(10., () -> begin
+		doAfter(10.) ->
 			if fx != null
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
-		end)
-		chickenTimer = doPeriodically(10, (CallbackPeriodic cb) -> begin
+		chickenTimer = doPeriodically(10) cb ->
 			new SmallRandomKiller(spawn, STAFF_PLAYER)
-		end)
-		bunnyTimer = doPeriodically(30, (CallbackPeriodic cb) -> begin
+		bunnyTimer = doPeriodically(30) cb ->
 			new BigRandomKiller(spawn, STAFF_PLAYER)
-		end)
-		coinTimer = doPeriodically(25, (CallbackPeriodic cb) -> begin
+		coinTimer = doPeriodically(25) cb ->
 			for i = 0 to ((tim.getElapsed() / 20) + 2).toInt()
 				new Coin(getGameRect().randomPoint(), STAFF_PLAYER)
-		end)
 
 	override function onEnd()
 		if fx != null

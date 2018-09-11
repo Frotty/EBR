@@ -9,7 +9,7 @@ import FxEntity
 
 public abstract class SensorListener
 	abstract function onSensor(UnitEntity source, UnitEntity target)
-	
+
 public module Sensor
 	private trigger inRangeTrig = null
 	private unit actorRef = null
@@ -19,7 +19,7 @@ public module Sensor
 		if listener == null
 			error("Trying to add null listener")
 		inRangeTrig = CreateTrigger()
-		
+
 		if e instanceof UnitEntity
 			this.actorRef = (e castTo UnitEntity).actor
 		else if e instanceof FxEntity
@@ -27,7 +27,7 @@ public module Sensor
 
 		inRangeTrig.registerUnitInRangeSource(actorRef, e.radius, null)
 		sensorListeners.put(inRangeTrig, listener)
-		inRangeTrig.addAction( () -> begin
+		inRangeTrig.addAction() ->
 			let trig = GetTriggeringTrigger()
 			let u = GetTriggerUnit()
 			if u.getUserData() > 0
@@ -36,8 +36,7 @@ public module Sensor
 					let slistener = sensorListeners.get(trig)
 					if slistener != null
 						slistener.onSensor(trig.getSource().getEntity(), target)
-		end)
-		
+
 	ondestroy
 		if inRangeTrig != null
 			destroy sensorListeners.get(inRangeTrig)

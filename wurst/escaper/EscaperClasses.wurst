@@ -57,7 +57,7 @@ public class Portal extends FxEntity
 		this.es = es
 		deactivate()
 		fx.setColor(colorA(145,145,145,145))
-		addSensorListener(this, (UnitEntity _source, UnitEntity target) -> begin
+		addSensorListener(this) (UnitEntity _source, UnitEntity target) ->
 			if destiny != ZERO2 and target instanceof Escaper
 				var teleport = true
 				for i = 0 to 5
@@ -71,8 +71,6 @@ public class Portal extends FxEntity
 					flashEffect(Abilities.blinkTarget, destiny)
 					if not es.camlock and es.selectatrevive
 						PanCameraToTimedForPlayer(target.actor.getOwner(), destiny.x, destiny.y, 0.03 )
-
-		end)
 
 	override function update()
 		if destiny != ZERO2 and fx.getColor() != COLOR_WHITE

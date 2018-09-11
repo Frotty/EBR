@@ -283,7 +283,7 @@ public RegionData array regions
 
 	let t = CreateTrigger()
 	t.registerRectLeaveEventSource(gg_rct_Region_023)
-	t.addAction(() -> begin
+	t.addAction() ->
 		let entity = GetTriggerUnit().getEntity()
 		if entity instanceof Escaper
 			(entity castTo Escaper).stop()
@@ -292,7 +292,6 @@ public RegionData array regions
 			print(entity.actor.getName())
 			Log.debug("RegionDataDelete")
 			entity.terminate()
-	end)
 
 	Log.debug("regions done")
 

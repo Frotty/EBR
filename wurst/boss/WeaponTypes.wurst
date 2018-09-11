@@ -20,7 +20,7 @@ let weapontypes = [
 ]
 
 function damageTarget(Entity entity, Escaper escaper, real damage)
-	if entity != null 
+	if entity != null
 		if entity instanceof Boss
 			Boss b = entity castTo Boss
 			b.onDamage(escaper, damage)
@@ -32,20 +32,17 @@ function onSabre(Escaper e)
 	let facing = e.actor.getFacingAngle()
 	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	destroy new Fx(tpos, facing, Abilities.defendCaster)
-	forUnitsInRange(tpos, 100, (unit u) -> begin
+	forUnitsInRange(tpos, 100) u ->
 		let entity = u.getEntity()
 		damageTarget(entity, e, 20)
-		
-	end)
 
 function onHammer(Escaper e)
 	let facing = e.actor.getFacingAngle()
 	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	addEffect(Abilities.thunderclapCaster, tpos).destr()
-	forUnitsInRange(tpos, 100, (unit u) -> begin
+	forUnitsInRange(tpos, 100) u ->
 		let entity = u.getEntity()
 		damageTarget(entity, e, 20)
-	end)
 
 function onGlaive(Escaper e)
 	let tpos = getSpellTargetPos()
@@ -55,7 +52,6 @@ function onBow(Escaper e)
 	let facing = e.actor.getFacingAngle()
 	let tpos = e.getPos().toVec2().polarOffset(facing, 64)
 	addEffect(Abilities.thunderclapCaster, tpos).destr()
-	forUnitsInRange(tpos, 100, (unit u) -> begin
+	forUnitsInRange(tpos, 100) u ->
 		let entity = u.getEntity()
 		damageTarget(entity, e, 20)
-	end)

@@ -61,16 +61,18 @@ public function forceRevive(Escaper e)
 
 function manageWaitForRevive(Escaper e)
 	let id = e.owner.getId()
-	if pods[id] == null 
+	if pods[id] == null
 		pods[id] = new RevivePod(pData[id], 0, true)
 		if waitForListener != null
 			waitForCount++
-			if waitForCount >= escaperPlayers.size()
-				waitForCount = 0
-				waitForListener.onAllDead()
-				waitForListener = null
-				for i = 0 to 11
-					pods[i].wait = false
+
+function checkSharedRevive()
+	if waitForCount >= escaperPlayers.size()
+		waitForCount = 0
+		waitForListener.onAllDead()
+		waitForListener = null
+		for i = 0 to 11
+			pods[i].wait = false
 
 function update()
 	for i = 0 to 11

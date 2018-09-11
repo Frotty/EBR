@@ -28,19 +28,17 @@ public class MGSpacey extends Minigame
 			printTimedToPlayer("Use Arrowkeys and Escape to control your spacecraft.", 15., pd.p)
 			ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*16.,0), pd.escaper))
 
-		listener = EventListener.add(EVENT_PLAYER_END_CINEMATIC, (() -> begin
+		listener = EventListener.add(EVENT_PLAYER_END_CINEMATIC) ->
 			for ship in ships
 				if ship.owner == GetTriggerPlayer()
 					ship.shoot()
 					break
-		end))
 
-		klistener = addKeyListener((() -> begin
+		klistener = addKeyListener() ->
 			for ship in ships
 				if ship.owner == GetTriggerPlayer()
 					ship.update()
 					break
-		end))
 
 		for i = 0 to 2
 			new SpaceRock(ARENA_POS.polarOffset((90+GetRandomReal(-45, 45)).fromDeg(), GetRandomReal(256, 480)), vec2(GetRandomReal(-2, 2), GetRandomReal(-2, 2)), 4)
