@@ -9,44 +9,44 @@ constant DMG_DEC_ID = 'A07J'
 constant EVENT_RADIUS = 32.
 
 public class BossDamager extends StaticBaseObject
-    real damage
+	real damage
 
-    construct(vec2 pos, player owner)
-        super(posToGrid(pos), createUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.)), EVENT_RADIUS, function BossDamager.onInRange, null)
-        Log.debug("creating Boss Damager")
-        damage = 40
-        EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+	construct(vec2 pos, player owner)
+		super(posToGrid(pos), createUnit(owner, DAMAGER_ID, posToGrid(pos), angle(0.)), EVENT_RADIUS, function BossDamager.onInRange, null)
+		Log.debug("creating Boss Damager")
+		damage = 40
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
-    function damage(Escaper e)
-        this.getCurrentRegion().boss.onDamage(e, damage)
+	function damage(Escaper e)
+		this.getCurrentRegion().boss.onDamage(e, damage)
 
-    static function posToGrid(vec2 pos) returns vec2
-        return vec2((pos.x/64).round()*64., (pos.y/64).round()*64.)
+	static function posToGrid(vec2 pos) returns vec2
+		return vec2((pos.x/64).round()*64., (pos.y/64).round()*64.)
 
-    static function onInRange()
-        var data = GetTriggerUnit().getEntity()
-        var bossDamager = GetTriggeringTrigger().getSource().getEntity() castTo BossDamager
-        if data instanceof Escaper
-            var edata = data castTo Escaper
-            bossDamager.damage(edata)
+	static function onInRange()
+		var data = GetTriggerUnit().getEntity()
+		var bossDamager = GetTriggeringTrigger().getSource().getEntity() castTo BossDamager
+		if data instanceof Escaper
+			var edata = data castTo Escaper
+			bossDamager.damage(edata)
 
-    static function onCast() returns boolean
-        var data = GetTriggerUnit().getEntity()
-        if data instanceof BossDamager
-            var dmger = data castTo BossDamager
-            var id = GetSpellAbilityId()
-            switch id
-                case DMG_INC_ID
-                    if dmger.damage >= 200
-                        createFText(dmger.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), dmger.owner  )
-                    else
-                        dmger.damage += 10
-                        createFText(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
-                case DMG_DEC_ID
-                    if dmger.damage <= 0
-                        createFText(dmger.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), dmger.owner  )
-                    else
-                        dmger.damage -= 10
-                        createFText(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
-        return false
+	static function onCast() returns boolean
+		var data = GetTriggerUnit().getEntity()
+		if data instanceof BossDamager
+			var dmger = data castTo BossDamager
+			var id = GetSpellAbilityId()
+			switch id
+				case DMG_INC_ID
+					if dmger.damage >= 200
+						createFText(dmger.pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), dmger.owner  )
+					else
+						dmger.damage += 10
+						createFText(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
+				case DMG_DEC_ID
+					if dmger.damage <= 0
+						createFText(dmger.pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), dmger.owner  )
+					else
+						dmger.damage -= 10
+						createFText(dmger.pos, vec2(0,0.05), "|cffC51019Damage "+ R2SW(dmger.damage,1,2), 10,  2., colorA(255,255,255,0), dmger.owner  )
+		return false
 

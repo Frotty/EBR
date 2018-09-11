@@ -3,23 +3,23 @@ package Camerashakes
 //---- Camera Shake System ---- //by rulerofiron99 // translated by kari0003 
 // Functions: 
 //  RCSS_NewEventLoc takes real TargetX, real TargetY, real Magnitude, real MaxRange 
-//      TargetX/Y  location of origin of shake 
-//      Magnitude  the magnitude of the camera shake at origin point 
-//      MaxRange   the maximum range at which players are added // 
+//	  TargetX/Y  location of origin of shake 
+//	  Magnitude  the magnitude of the camera shake at origin point 
+//	  MaxRange   the maximum range at which players are added // 
 //  RCSS_NewEventPlayer takes player TargetPlayer, real Magnitude 
-//      TargetPlayer        the player to be shaken, not stirred 
-//      Magnitude  the amount of camera shake to be added to the player 
+//	  TargetPlayer		the player to be shaken, not stirred 
+//	  Magnitude  the amount of camera shake to be added to the player 
 // 
 // Configurables: 
-//  LOOP_PERIOD    the time between loops - how often the loop will run 
-//  SHAKE_REDUCE_FLAT       flat shake magnitude lost per loop 
-//  SHAKE_REDUCE_PERCENT    percent of current shake magnitude lost per loop 
+//  LOOP_PERIOD	the time between loops - how often the loop will run 
+//  SHAKE_REDUCE_FLAT	   flat shake magnitude lost per loop 
+//  SHAKE_REDUCE_PERCENT	percent of current shake magnitude lost per loop 
 //  SHAKE_THRESHOLDwhen shakiness goes below the threshold, it stops completely 
-//  RICHTER_MAX    the maximum magnitude of the shaking 
-//  RICHTER_MIN    the minimum magnitude of the shaking 
+//  RICHTER_MAX	the maximum magnitude of the shaking 
+//  RICHTER_MIN	the minimum magnitude of the shaking 
 //Note:   The shake variable still goes above, 
-//        and is  just to determine duration. 
-//-------------------------------------------------------------------     
+//		and is  just to determine duration. 
+//-------------------------------------------------------------------	 
 //globals
 //---- Camera Shake System ----
 //Configurables
@@ -45,22 +45,22 @@ function loopPerPlayer()
 	real temprichter
 	if (richter > RICHTER_MAX) 
 		richter = RICHTER_MAX
-	if (richter < RICHTER_MIN)     
+	if (richter < RICHTER_MIN)	 
 		richter = RICHTER_MIN
-	if (localPlayer == p)     
-		temprichter = playerCurrentShake[i] * Pow(10, richter)    
-		CameraSetTargetNoiseEx(playerCurrentShake[i] * 2.0, temprichter, true)    
+	if (localPlayer == p)	 
+		temprichter = playerCurrentShake[i] * Pow(10, richter)	
+		CameraSetTargetNoiseEx(playerCurrentShake[i] * 2.0, temprichter, true)	
 		CameraSetSourceNoiseEx(playerCurrentShake[i] * 2.0, temprichter, true)
 		playerCurrentShake[i] = ( playerCurrentShake[i] - ( playerCurrentShake[i] * SHAKE_REDUCE_PERCENT ) )
 		playerCurrentShake[i] = ( playerCurrentShake[i] - SHAKE_REDUCE_FLAT )
-	if ( playerCurrentShake[i] < SHAKE_THRESHOLD )     
-		if (localPlayer == p)         
-			CameraSetSourceNoise(0, 0)        
-			CameraSetTargetNoise(0, 0)    
+	if ( playerCurrentShake[i] < SHAKE_THRESHOLD )	 
+		if (localPlayer == p)		 
+			CameraSetSourceNoise(0, 0)		
+			CameraSetTargetNoise(0, 0)	
 		
-		ForceRemovePlayer(shakingPlayers, p)        
+		ForceRemovePlayer(shakingPlayers, p)		
 
-	//Loop through players for location event     
+	//Loop through players for location event	 
 function newEventLocPerPlayer()
 	player p = GetEnumPlayer()
 	integer i = GetPlayerId(p)
@@ -68,31 +68,31 @@ function newEventLocPerPlayer()
 	real y
 	real dist
 	if localPlayer == p
-		// Get enum player's camera location    
-		x = GetCameraTargetPositionX()    
+		// Get enum player's camera location	
+		x = GetCameraTargetPositionX()	
 		y = GetCameraTargetPositionY()
 		dist = (x - eventX)*(x - eventX) + (y - eventY)*(y - eventY)
 		if (dist <= eventRange*eventRange)  
-			// Check if it is in range of point    
+			// Check if it is in range of point	
 			playerCurrentShake[i] = ( playerCurrentShake[i] + ( eventShake * ( ( eventRange - dist ) / ( eventRange + dist ) ) ) ) 
-			//add shakiness    
-			if not (IsPlayerInForce(p, shakingPlayers))         
+			//add shakiness	
+			if not (IsPlayerInForce(p, shakingPlayers))		 
 				ForceAddPlayer(shakingPlayers, p) 
-				//add player to shaking group    
-	//Register new location shake event     
+				//add player to shaking group	
+	//Register new location shake event	 
 public function newEventLoc( real x, real y, real m, real r)
 	eventX = x
 	eventY = y
 	eventShake = m
 	eventRange = r
-	ForForce( bj_FORCE_ALL_PLAYERS, function newEventLocPerPlayer )     
-//Register new player shake event     
+	ForForce( bj_FORCE_ALL_PLAYERS, function newEventLocPerPlayer )	 
+//Register new player shake event	 
 public function newEventPlayer(player p, real m)
 	integer i = GetPlayerId(p)
 	playerCurrentShake[i] = (playerCurrentShake[i] + m)
-	if not (IsPlayerInForce(p, shakingPlayers))     
+	if not (IsPlayerInForce(p, shakingPlayers))	 
 	ForceAddPlayer(shakingPlayers, p)
-//Main loop for camera shaking     
+//Main loop for camera shaking	 
 function onLoop()
 	ForForce(shakingPlayers, function loopPerPlayer)
 	
