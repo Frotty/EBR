@@ -30,21 +30,23 @@ public abstract class Minigame
 					waitForListener = null
 			end
 			for pd from escaperPlayers.staticItr()
+				pd.escaper.setPos(getStartPosition().withZ(0))
+				pd.escaper.setCurrentRegion()
+
 				if not pd.escaper.alive
 					pd.escaper.revive()
 					pd.escaper.getCurrentRegion().revealRegion(pd.p)
-				pd.escaper.setPos(getStartPosition().withZ(0))
-				pd.escaper.setCurrentRegion()
+
 				pd.p.panCamToTimed(pd.escaper.actor, 0)
-				
+
 				printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
-				
+
 				if localPlayer == pd.p
 					SetCameraBoundsToRect(getCamBounds())
 				BEGIN_SOUND.playForPlayer(pd.p)
-			
+
 			onBegin()
-			
+
 
 	abstract function onBegin()
 

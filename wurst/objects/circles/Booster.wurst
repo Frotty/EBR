@@ -1,5 +1,6 @@
 package Booster
 import BaseObject
+import Assets
 
 constant INFO_BOOSTER_ID = compiletime(ABIL_ID_GEN.next())
 constant SPEED_UP_ID = compiletime(ABIL_ID_GEN.next())
@@ -24,6 +25,7 @@ public class Booster extends StaticBaseObject
 			SetupObject ek = e castTo SetupObject
 			ek.actor.setMoveSpeed(obj.boostspeed.get())
 			ek.setup.setMoveSpeed(obj.boostspeed.get())
+			flashEffect(Abilities.manaBurnTarget, obj.getPos())
 
 	override function onCast()
 		super.onCast()

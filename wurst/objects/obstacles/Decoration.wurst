@@ -18,11 +18,12 @@ public class Decoration extends StaticSetupObject
 		super(CreateUnit(owner, buildorders[tid], pos.x, pos.y, a ), CreateUnit(owner, buildorders[tid], pos.x, pos.y, a ), 0., null)
 		this.tid = tid
 		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)..addAbility(GHOST_INVIS_ID)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST) ->
+			onCast()
 
 	function onCast()
 		let id = GetSpellAbilityId()
-		
+
 		switch id
 			case CHANGE_FACE_ID
 				let tg = getSpellTargetPos()
@@ -40,6 +41,8 @@ public class Decoration extends StaticSetupObject
 		setNewSetup(createUnit(owner, setup.getTypeId(), pos, a))
 		actor.addAbility(LOCUST_ID)
 		setup..addAbility(GHOST_INVIS_ID)..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST) ->
+			onCast()
 		if select
 			owner.select(setup)
 		hasBeenChanged = true
@@ -93,4 +96,3 @@ public class Decoration extends StaticSetupObject
 		..presetButtonPosNormal(1, 1)
 		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
 		..presetHotkey("S")
-	

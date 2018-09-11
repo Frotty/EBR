@@ -119,28 +119,32 @@ function getColorFromString(string s) returns color
 
 interface TexterClsr
 	function run(Texter texter)
+
 function forSelectedTexters(TexterClsr cb)
-	forUnitsOfPlayer(GetTriggerPlayer()) u ->
+	let p = GetTriggerPlayer()
+	forUnitsOfPlayer(p) u ->
 		if IsUnitSelected(u, GetTriggerPlayer()) and u.getTypeId() == TEXTER_ID
 			cb.run(u.getEntity() castTo Texter)
 
 init
 	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
 		let text = GetEventPlayerChatString()
-		let tokens = text.split(" ")
-		switch tokens.pop()
-			case "-st"
-				forSelectedTexters(t -> t.setText(tokens.pop()))
-			case "-sc"
-				forUnitsOfPlayer(GetTriggerPlayer()) u ->
-					if IsUnitSelected(u, GetTriggerPlayer())
-						Texter.setColor(u.getEntity(), tokens.pop())
-			case "-sht"
-				forSelectedTexters(t -> tokens.pop())
-			case "-ht"
-				forSelectedTexters(t -> tokens.pop())
 
-
+		if text.contains(" ")
+			let tokens = text.split(" ")
+			switch tokens.dequeue()
+				case "-st"
+					forSelectedTexters(t -> t.setText(tokens.dequeue()))
+				case "-sc"
+					forUnitsOfPlayer(GetTriggerPlayer()) u ->
+						if IsUnitSelected(u, GetTriggerPlayer())
+							Texter.setColor(u.getEntity(), tokens.dequeue())
+		else
+			switch text
+				case "-sht"
+					forSelectedTexters(t -> t.show())
+				case "-ht"
+					forSelectedTexters(t -> t.hide())
 
 
 @objectgen function genTexter()

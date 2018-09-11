@@ -5,7 +5,6 @@ import Assets
 import BaseObject
 import HashMap
 import PlayerData
-import MultifileIO
 import Builder
 import SyncWrapper
 import JsonParser
@@ -13,7 +12,6 @@ import TileData
 import LZW
 import StringUtils
 import ItemObject
-import BufferAdapters
 
 constant CHAR_STEPSIZE = 180
 
@@ -266,21 +264,21 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		ttag.tt..center(pos, "|cff0884CEcompressing...", 10)
 		printLog(Loglevel.DEBUG, "start compress")
 		compress(big) cb ->
-			let compressedData = cb.customData castTo BigString
-			if localPlayer == owner
-				let writer = new FileWriter("dataSlot" + currentSlotId.toString() + ".pld", false)
-				let buffer = new StringBuffer(4096)
-				while compressedData.getLength() > BIG_SUBSTRING_LEN
-					buffer.writeString(compressedData.getString(0, BIG_SUBSTRING_LEN))
-					compressedData.startoffset += BIG_SUBSTRING_LEN
-				buffer.writeString(compressedData.getString(0))
-				writer.populateFromBuffer(buffer)
-				writer.save() ->
-					ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
-					destroy big
-					tileMap.flush()
-					actor.unpause()
-					destroy writer
+			// let compressedData = cb.customData castTo BigString
+			// if localPlayer == owner
+			// 	let writer = new FileWriter("dataSlot" + currentSlotId.toString() + ".pld", false)
+				// let buffer = new StringBuffer(4096)
+				// while compressedData.getLength() > BIG_SUBSTRING_LEN
+				// 	buffer.writeString(compressedData.getString(0, BIG_SUBSTRING_LEN))
+				// 	compressedData.startoffset += BIG_SUBSTRING_LEN
+				// buffer.writeString(compressedData.getString(0))
+				// writer.populateFromBuffer(buffer)
+				// writer.save() ->
+				// 	ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
+				// 	destroy big
+				// 	tileMap.flush()
+				// 	actor.unpause()
+				// 	destroy writer
 
 	override function onCast()
 		super.onCast()
