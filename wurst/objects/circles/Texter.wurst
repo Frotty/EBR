@@ -35,8 +35,7 @@ public class Texter extends StaticBaseObject
 		Entity e = u.getEntity()
 		thistype obj = GetTriggeringTrigger().getSource().getEntity() castTo Texter
 		if e instanceof Escaper
-			obj.text.tt.setVisibility(true)
-			obj.hidden = false
+			obj.show()
 
 	function onShow()
 		forUnitsOfPlayer(owner) u ->

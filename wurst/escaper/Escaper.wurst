@@ -109,40 +109,41 @@ public abstract class Escaper extends UnitEntity
 			poisoned = false
 
 	function kill(UnitEntity killer)
-		if this.getCurrentRegion().easyMode and actor.isAlive()
-			setPos(pos-getRealVel()*1.05)
-			var vel = getRealVel()
-			if onUnwalkable
-				let norm = vel.norm() * 16
-				let tt1un = GetTerrainType(pos.x - norm.x, pos.y) != this.getCurrentRegion().getTypeSet().unwalkableId
-				let tt2un = GetTerrainType(pos.x+vel.x, pos.y - norm.y) != this.getCurrentRegion().getTypeSet().unwalkableId
-				if tt1un
-					vel.x = -vel.x*1.25
-				if tt2un
-					vel.y = -vel.y*1.25
-				setVel(vel)
-				if sliding
-					actor.setFacing(vel.toVec2().getAngle())
-			else
-				if killer != null
-					let ang = killer.getPos().angleTo2d(pos)
-					addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
+		if alive and actor.isAlive()
+			if this.getCurrentRegion().easyMode
+				setPos(pos-getRealVel()*1.05)
+				var vel = getRealVel()
+				if onUnwalkable
+					let norm = vel.norm() * 16
+					let tt1un = GetTerrainType(pos.x - norm.x, pos.y) != this.getCurrentRegion().getTypeSet().unwalkableId
+					let tt2un = GetTerrainType(pos.x+vel.x, pos.y - norm.y) != this.getCurrentRegion().getTypeSet().unwalkableId
+					if tt1un
+						vel.x = -vel.x*1.25
+					if tt2un
+						vel.y = -vel.y*1.25
+					setVel(vel)
+					if sliding
+						actor.setFacing(vel.toVec2().getAngle())
 				else
-					setVel(getRealVel() * -1.75)
-			flashEffect(Abilities.boltImpact, pos)
-			actor.damageTarget(actor, 85)
-		else if alive
-			if actor.isAliveTrick()
-				actor.damageTarget(actor, killer == null ? 195 : 1000)
-			if not actor.isAliveTrick()
-				alive = false
-				deaths++
-				manageRevive(this)
-				onUnwalkable = false
-				setPoison(false)
-				setLava(false)
-				flying = false
-				sliding = false
+					if killer != null
+						let ang = killer.getPos().angleTo2d(pos)
+						addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
+					else
+						setVel(getRealVel() * -1.75)
+				flashEffect(Abilities.boltImpact, pos)
+				actor.damageTarget(actor, 85)
+			else
+				if actor.isAliveTrick()
+					actor.damageTarget(actor, killer == null ? 195 : 1000)
+				if not actor.isAliveTrick()
+					alive = false
+					deaths++
+					manageRevive(this)
+					onUnwalkable = false
+					setPoison(false)
+					setLava(false)
+					flying = false
+					sliding = false
 
 
 	function stop()
