@@ -609,7 +609,7 @@ public class Executer extends StaticBaseObject
 	"\nIt has 3 available modes: Pressure Plate, Standard and Lever.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNExecuter.blp")
 	..setNormalAbilities(commaList('A066', 'A068', 'A069', 'A067', MODE_ESCAPERS_ID, REMOVE_OBJECT_ID,
-		MAKE_UNIT_INVISIBLE_ID, RALLY_POINT, INVULNERABILITY_ID, GHOST_VIS_ID))
+        MAKE_UNIT_INVISIBLE_ID, RALLY_POINT, INVULNERABILITY_ID, GHOST_VIS_ID))
 	..setButtonPositionX(1)
 	..setButtonPositionY(2)
 	..setTintingColorRed(0)
