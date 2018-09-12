@@ -169,6 +169,10 @@ public class RegionData
 		let id = p.getId()
 		fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
 
+	function hideRegion(player p)
+		let id = p.getId()
+		fmods[id].changeFog(FOG_OF_WAR_FOGGED)
+
 	static function enterRect()
 		var u = GetTriggerUnit()
 		var data = u.getEntity()

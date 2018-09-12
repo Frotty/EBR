@@ -23,11 +23,11 @@ public abstract class Minigame
 			TimerDialogDisplay(window, true)
 			changeRevMode(ReviveMode.WAIT_FOR_ALL)
 			waitForListener = () ->
-				if waitForListener != null
-					for pd from escaperPlayers.staticItr()
-						printTimedToPlayer("All Escapers have died!", 10, pd.p)
-					doAfter(2., () -> reset())
-					waitForListener = null
+				for pd from escaperPlayers.staticItr()
+					pd.escaper.getCurrentRegion().hideRegion(pd.p)
+					printTimedToPlayer("All Escapers have died!", 10, pd.p)
+				doAfter(2., () -> reset())
+				waitForListener = null
 			for pd from escaperPlayers.staticItr()
 				pd.escaper.setPos(getStartPosition().withZ(0))
 				pd.escaper.setCurrentRegion()
@@ -69,6 +69,7 @@ public abstract class Minigame
 					pd.escaper.revive()
 				pd.escaper.setPos(LOUNGE.toVec3())
 				pd.escaper.setCurrentRegion()
+
 				SetCameraBoundsToRectForPlayerBJ(pd.p, gg_rct_Region_023)
 				pd.p.panCamToTimed(pd.escaper.actor, 0)
 				printTimedToPlayer("Minigame ended!", 10, pd.p)

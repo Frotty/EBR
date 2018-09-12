@@ -1,3 +1,9 @@
+[0.91e]
+[*] Standard library and frentity dependencies updated
+[*] Built with latest wurst compiler version
+[*] Various fixes for minigames including vision, reviving and errors popping up
+[*] Fixed rotating decorations leaking entitiy references
+
 [0.90y]
 [*] Now using new MultiFileIO which will support saving bigger mazes in the future
 [*] Regions such as E that couldn't be claimed, are now fixed (thx @Fenris)

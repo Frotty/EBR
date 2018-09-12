@@ -75,6 +75,8 @@ function checkSharedRevive()
 			pods[i].wait = false
 
 function update()
+	if revMode == ReviveMode.WAIT_FOR_ALL
+		checkSharedRevive()
 	for i = 0 to 11
 		let pod = pods[i]
 		if pod != null
