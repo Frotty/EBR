@@ -8,35 +8,35 @@ public class FourthCitadelleMaze extends Startmaze
 	construct(RegionData rd)
 		rdata = rd
 		rdata.setType(RegionType.CITADEL, false)
-		
+
 	override function initMaze()
 		inited = true
 		Spinner s = new Spinner(gg_unit_spnr_0147)
-		s.checkObj( gg_unit_scik_0260.getEntity())
-		s.checkObj( gg_unit_scik_0261.getEntity())
+		s.checkObj(gg_unit_scik_0260.getEntity())
+		s.checkObj(gg_unit_scik_0261.getEntity())
 		s.spinSpeed.setVal(4.5 *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0161)
-		s.checkObj( gg_unit_scik_0215.getEntity())
-		s.checkObj( gg_unit_scik_0216.getEntity())
-		s.checkObj( gg_unit_scik_0217.getEntity())
+		s.checkObj(gg_unit_scik_0215.getEntity())
+		s.checkObj(gg_unit_scik_0216.getEntity())
+		s.checkObj(gg_unit_scik_0217.getEntity())
 		s.spinSpeed.setVal(4. *DEGTORAD)
 		doAfter(0.2,() -> gg_unit_spnr_0161.issuePointOrder("patrol", vec2(-3900, -4604)) )
-		
+
 
 		s = new Spinner(gg_unit_spnr_0157)
-		s.checkObj( gg_unit_scik_0271.getEntity())
-		s.checkObj( gg_unit_scik_0272.getEntity())
-		s.checkObj( gg_unit_scik_0273.getEntity())
-		s.checkObj( gg_unit_scik_0274.getEntity())
-		s.checkObj( gg_unit_scik_0275.getEntity())
-		s.checkObj( gg_unit_scik_0276.getEntity())
-		s.checkObj( gg_unit_scik_0277.getEntity())
-		s.checkObj( gg_unit_scik_0278.getEntity())
+		s.checkObj(gg_unit_scik_0271.getEntity())
+		s.checkObj(gg_unit_scik_0272.getEntity())
+		s.checkObj(gg_unit_scik_0273.getEntity())
+		s.checkObj(gg_unit_scik_0274.getEntity())
+		s.checkObj(gg_unit_scik_0275.getEntity())
+		s.checkObj(gg_unit_scik_0276.getEntity())
+		s.checkObj(gg_unit_scik_0277.getEntity())
+		s.checkObj(gg_unit_scik_0278.getEntity())
 		s.spinSpeed.setVal(1.5 *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0162)
-		s.checkObj( gg_unit_bcik_0220.getEntity())
+		s.checkObj(gg_unit_bcik_0220.getEntity())
 		s.spinSpeed.setVal(7.5 *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0129)
@@ -45,11 +45,11 @@ public class FourthCitadelleMaze extends Startmaze
 		s.spinSpeed.setVal(4. *DEGTORAD)
 
 		s = new Spinner(gg_unit_spnr_0130)
-		s.checkObj( gg_unit_glve_0158.getEntity())
-		s.checkObj( gg_unit_glve_0159.getEntity())
-		s.checkObj( gg_unit_glve_0160.getEntity())
+		s.checkObj(gg_unit_glve_0158.getEntity())
+		s.checkObj(gg_unit_glve_0159.getEntity())
+		s.checkObj(gg_unit_glve_0160.getEntity())
 		s.spinSpeed.setVal(1.25 *DEGTORAD)
-			
+
 		gg_unit_scik_0263.issuePointOrder("patrol", vec2(-2765, -6283))
 		gg_unit_scik_0264.issuePointOrder("patrol", vec2(-2545, -6780))
 		gg_unit_scik_0265.issuePointOrder("patrol", vec2(-3050, -6523))
@@ -69,7 +69,7 @@ public class FourthCitadelleMaze extends Startmaze
 		gg_unit_bcik_0262.issuePointOrder("patrol", vec2(-3502, -6077))
 		gg_unit_bcik_0280.issuePointOrder("patrol", vec2(-3953, -5678))
 		gg_unit_bcik_0225.issuePointOrder("patrol", vec2(-4648, -3995))
-		
+
 		var t = new Teleporter(gg_unit_tele_0234)
 		t.setRallyPoint(LOUNGE)
 

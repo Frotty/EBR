@@ -8,7 +8,7 @@ import Minigame
 constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 constant ESC_ID = 'A009'
 
-public MinigameTeleporter MINI_TP  
+public MinigameTeleporter MINI_TP
 constant EVENT_RADIUS	= 38.
 
 public class MinigameTeleporter extends StaticBaseObject
@@ -24,7 +24,7 @@ public class MinigameTeleporter extends StaticBaseObject
 		..removeAbility(ESC_ID)
 		clearQuestionmark()
 		text = createCenterFText(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 10)
-		
+
 	static function checkVote()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()
@@ -34,7 +34,7 @@ public class MinigameTeleporter extends StaticBaseObject
 			obj.check(e castTo Escaper)
 
 	function check(Escaper e)
-		votes[e.owner.getId()] = not votes[e.owner.getId()] 
+		votes[e.owner.getId()] = not votes[e.owner.getId()]
 		if votes[e.owner.getId()]
 			currentPlus++
 			let votesNeeded = (escaperPlayers.size() * 0.65).round()
@@ -49,9 +49,10 @@ public class MinigameTeleporter extends StaticBaseObject
 			currentPlus--
 
 	function startMinigame()
+		minigames.shuffle()
 		let chosenMinigame = minigames.get(GetRandomInt(0, minigames.size()-1))
 		chosenMinigame.start()
-		
+
 	function reset()
 		inprogress = false
 		for i = 0 to 11

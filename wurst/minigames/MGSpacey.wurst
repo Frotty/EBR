@@ -110,6 +110,7 @@ public class Spaceship extends UnitEntity
 		this.mounter = mounter
 		actor.addAbility(LOCUST_ID)
 		mounter.actor..pause()..hide()
+		mounter.alive = false
 		setPos(this.pos+vec3(0,0,32))
 		sleeps = false
 
@@ -173,6 +174,7 @@ public class Spaceship extends UnitEntity
 		if mounter.actor.isAlive()
 			mounter.actor..unpause()..show()
 			mounter.kill(this)
+			mounter.kill(this)
 
 function getRockAsset(int level) returns string
 	switch level
@@ -221,6 +223,8 @@ public class SpaceRock extends FxEntity
 			for i = 0 to 2
 				new SpaceRock(pos.toVec2(), vec2(GetRandomReal(-2, 2), GetRandomReal(-2, 2)), level-1)
 
+init
+	// minigames.add(new MGSpacey())
 
 @objectgen function genObjs()
 	new UnitDefinition(SHIP_ID, 'hgry')

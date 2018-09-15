@@ -110,7 +110,7 @@ public abstract class Escaper extends UnitEntity
 			poisoned = false
 
 	function kill(UnitEntity killer)
-		if alive and actor.isAlive()
+		if alive
 			if this.getCurrentRegion().easyMode
 				setPos(pos-getRealVel()*1.05)
 				var vel = getRealVel()

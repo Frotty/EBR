@@ -5,9 +5,9 @@ import SoundUtils
 import ReviveManager
 import initlater MinigameTeleporter
 
-public LinkedList<Minigame> minigames = new LinkedList<Minigame>()
+public constant minigames = new LinkedList<Minigame>()
 public constant MAX_TIME = 1.5 * 60.
-constant BEGIN_SOUND = new SoundDefinition("Sound\\Interface\\ArrangedTeamInvitation.wav", false)
+constant BEGIN_SOUND = new SoundDefinition(Sounds.arrangedTeamInvitation, false)
 
 public abstract class Minigame
 	timer tim
@@ -29,14 +29,15 @@ public abstract class Minigame
 				doAfter(2., () -> reset())
 				waitForListener = null
 			for pd from escaperPlayers.staticItr()
-				pd.escaper.setPos(getStartPosition().withZ(0))
-				pd.escaper.setCurrentRegion()
-				pd.escaper.getCurrentRegion().revealRegion(pd.p)
-
 				if not pd.escaper.alive
 					pd.escaper.revive()
 
-				pd.p.panCamToTimed(pd.escaper.actor, 0)
+				pd.escaper..setPos(getStartPosition().withZ(0))
+				.setCurrentRegion()
+				.revealRegion(pd.p)
+
+
+				pd.p..panCamToTimed(pd.escaper.actor, 0)..select(pd.escaper.actor)
 
 				printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
 

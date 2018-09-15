@@ -133,11 +133,11 @@ init
 			let tokens = text.split(" ")
 			switch tokens.dequeue()
 				case "-st"
-					forSelectedTexters(t -> t.setText(tokens.dequeue()))
+					forSelectedTexters(t -> t.setText(tokens.joinBy("")))
 				case "-sc"
 					forUnitsOfPlayer(GetTriggerPlayer()) u ->
 						if IsUnitSelected(u, GetTriggerPlayer())
-							Texter.setColor(u.getEntity(), tokens.dequeue())
+							Texter.setColor(u.getEntity(), tokens.joinBy(""))
 		else
 			switch text
 				case "-sht"

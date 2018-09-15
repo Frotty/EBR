@@ -79,6 +79,7 @@ public class Bomber extends UnitEntity
 					else
 						obj.realorder = true
 	ondestroy
+		unregisterEvents(setup.getIndex())
 		setup.setEntity(null)
 		setup.remove()
 
@@ -93,11 +94,12 @@ public class Bomber extends UnitEntity
 	new UnitDefinition(BOMBER_ID, 'hmtm')
 	..setAttack1DamageBase(1000)
 	..setAttack1CooldownTime(2)
+	..setAttack1ProjectileSpeed(1150)
 	..setAttack1Range(1750)
 	..setAttack1TargetsAllowed("air,allies,ground,notself,vulnerable")
-	..setAttack1AreaofEffectFullDamage(100)
-	..setAttack1AreaofEffectMediumDamage(0)
-	..setAttack1AreaofEffectSmallDamage(0)
+	..setAttack1AreaofEffectFullDamage(92)
+	..setAttack1AreaofEffectMediumDamage(96)
+	..setAttack1AreaofEffectSmallDamage(98)
 	..setAttack1AreaofEffectTargets("air,alive,allies,debris,enemies,friend,ground,hero,notself,vulnerable")
 	..setAttack1ProjectileSpeed(1150)
 	..setAttack1DamageFactorSmall(0)

@@ -12,6 +12,7 @@ import DummyRecycler
 import PickSystem
 import ObstacleObjects
 import Execute
+import MGSpacey
 
 HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
 public constant vec2 LOUNGE = gg_unit_revp_0322.getPos()
@@ -114,9 +115,7 @@ public class RegionData
 			..registerRectEnterEventSource(r)
 			..addAction(() -> enterRect())
 			regionMap.put(r, this)
-			for pd from escaperPlayers.staticItr()
-				fmods[pd.id] = new FogData(pd.p, theRect)
-			for pd from builderPlayers.staticItr()
+			for pd from allPlayers.staticItr()
 				fmods[pd.id] = new FogData(pd.p, theRect)
 
 			setBossRegion()
@@ -190,7 +189,7 @@ public class RegionData
 					rdata.revealRegion(data.owner)
 					edata.updateRegionData()
 			else
-				if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector
+				if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector and not data instanceof Spaceship
 					and not data instanceof TerrainModder and not data instanceof UnitProducer
 					printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 					Log.debug("no permission")
@@ -281,7 +280,7 @@ public RegionData array regions
 	regions[23].setType(getRegionTypeFromItem('I00G'), false)
 	regions[23].setOwner(STAFF_PLAYER)
 	regions[23].easyMode = true
-	regions[24] = new RegionData(gg_rct_coingamearea)
+	regions[24] = new RegionData(gg_rct_spaceygamearea)
 	regions[24].setType(getRegionTypeFromItem('I00G'), false)
 	regions[24].setOwner(STAFF_PLAYER)
 

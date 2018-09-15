@@ -2,8 +2,9 @@ package Commands
 import PlayerData
 import ClosureTimers
 import SetupBox
-import Spaceship
+import MGSpacey
 import EscaperClasses
+import ReviveManager
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -46,8 +47,8 @@ function onCommandChat()
 			if pd.escaper == null
 				doAfter(0.1) ->
 					pd.escaper = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
-			else if not pd.escaper.alive
-				doAfter(0.1, () -> pd.escaper.revive())
+			else
+				forceRevive(pd.escaper)
 		case "info"
 			string s = "|cffFFD621[Info]|r - Current Region:\n"
 			s += "			|cff63DEFFSlidespeed|r: " + pd.escaper.getCurrentRegion().slidespeed.toString() + "\n"
