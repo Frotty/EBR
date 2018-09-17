@@ -59,4 +59,4 @@ public class MGRandKill extends Minigame
 		return "|cffccaaddRandom Rumble"
 
 init
-	// minigames.add(new MGRandKill())
+	minigames.add(new MGRandKill())
