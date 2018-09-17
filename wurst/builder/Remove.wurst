@@ -6,16 +6,12 @@ import BuilderConstants
 function onRemoveObject()
 	var id = GetSpellAbilityId()
 	if id == REMOVE_OBJECT_ID
-		var u = GetTriggerUnit()
+		var u = GetSpellAbilityUnit()
 		var data = u.getEntity()
-		var remove = true
 		if data != null
-			addEffect(Abilities.aIamTarget, u.getPos()).destr()
-			Log.debug("onRemoveCast")
+			flashEffect(Abilities.aIamTarget, u.getPos())
 			data.terminate()
-			remove = data.done
-		if remove
 			u..removeAbility(REMOVE_OBJECT_ID)
-	
+
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onRemoveObject())

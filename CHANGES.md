@@ -1,3 +1,12 @@
+[0.91h]
+[*] This is a bugfix release adressing most found issues in 0.91d
+[*] Fixed errors on deleting bombers and bomber towers
+[*] Fixed gaining control over terrain modders when a builder leaves
+[*] Fixed not being able to build Arcanery
+[*] Fixed not being able to modify region gravity properly
+[*] Fixed not being able to remove items
+[*] Fixed some revive issues
+
 [0.91d]
 [*] Standard library and frentity dependencies updated
 [*] Built with latest wurst compiler version

@@ -1,29 +1,30 @@
 package Attackspeed
 import Preloader
 import FText
+import ChannelAbilityPreset
 
 public constant integer ATTACK_SPEED_RATE_POSITIVE_ID = 'A02W'
 public constant integer ATTACK_SPEED_RATE_NEGATIVE_ID = 'A02V'
 public constant integer ATTACK_SPEED_DUMMY_ID = 'A024'
-constant integer INCREASE = 'A044'
-constant integer DECREASE = 'A043'
+public constant integer ATTACK_SPEED_INCREASE = compiletime(ABIL_ID_GEN.next())
+public constant integer ATTACK_SPEED_DECREASE = compiletime(ABIL_ID_GEN.next())
 
 init
 	preloadAbility(ATTACK_SPEED_RATE_POSITIVE_ID)
 	preloadAbility(ATTACK_SPEED_RATE_NEGATIVE_ID)
 	preloadAbility(ATTACK_SPEED_DUMMY_ID)
-	preloadAbility(INCREASE)
-	preloadAbility(DECREASE)
-	
+	preloadAbility(ATTACK_SPEED_INCREASE)
+	preloadAbility(ATTACK_SPEED_DECREASE)
+
 
 public function onAttackspeedCast(int spellid, unit actor)
 	switch spellid
-		case INCREASE
-			int pos = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID))
-			int neg = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID))
+		case ATTACK_SPEED_INCREASE
+			int pos = (actor.getAbilityLevel(ATTACK_SPEED_RATE_POSITIVE_ID))
+			int neg = (actor.getAbilityLevel(ATTACK_SPEED_RATE_NEGATIVE_ID))
 			if neg >= 1
 				if neg == 1
-					UnitRemoveAbility(actor,ATTACK_SPEED_RATE_NEGATIVE_ID)
+					actor.removeAbility(ATTACK_SPEED_RATE_NEGATIVE_ID)
 					createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"0.00 %", 10.,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
 				else
 					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID, neg - 1 )
@@ -35,14 +36,14 @@ public function onAttackspeedCast(int spellid, unit actor)
 				else
 					createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Max", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
 			else
-				UnitAddAbility(actor, ATTACK_SPEED_RATE_POSITIVE_ID)
+				actor.addAbility( ATTACK_SPEED_RATE_POSITIVE_ID)
 				createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"+20.0 %", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
-		case DECREASE
-			int pos = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID))
-			int neg = (GetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_NEGATIVE_ID))
+		case ATTACK_SPEED_DECREASE
+			int pos = (actor.getAbilityLevel(ATTACK_SPEED_RATE_POSITIVE_ID))
+			int neg = (actor.getAbilityLevel(ATTACK_SPEED_RATE_NEGATIVE_ID))
 			if pos >= 1
 				if pos == 1
-					UnitRemoveAbility(actor,ATTACK_SPEED_RATE_POSITIVE_ID)
+					actor.removeAbility(ATTACK_SPEED_RATE_POSITIVE_ID)
 					createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"0.00 %", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
 				else
 					SetUnitAbilityLevel(actor, ATTACK_SPEED_RATE_POSITIVE_ID, pos - 1 )
@@ -54,6 +55,20 @@ public function onAttackspeedCast(int spellid, unit actor)
 				else
 					createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05), "Min", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
 			else
-				UnitAddAbility(actor, ATTACK_SPEED_RATE_NEGATIVE_ID)
+				actor.addAbility( ATTACK_SPEED_RATE_NEGATIVE_ID)
 				createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"-20.0 %", 10,  2., colorA(255,255,255,0), GetOwningPlayer(actor) )
-				
+
+@compiletime function genAbilities()
+	new ChannelAbilityPreset(ATTACK_SPEED_DECREASE, 1, true)
+	..setName("Attackspeed: Decrease Attackrate")
+	..presetTooltipNormal(lvl -> "|cffFF8421Decrease|r Attackrate by 20% [|cffffcc00X|r]")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNdecreaseAttackSpeed.blp")
+	..presetButtonPosNormal(1, 2)
+	..presetHotkey("X")
+
+	new ChannelAbilityPreset(ATTACK_SPEED_INCREASE, 1, true)
+	..setName("Attackspeed: Increase Attackrate")
+	..presetTooltipNormal(lvl -> "|cff3ABD52Increase|r Attackrate by 20% [|cffffcc00Y|r]")
+	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNincreaseAttackSpeed.blp")
+	..presetButtonPosNormal(0, 2)
+	..presetHotkey("Y")

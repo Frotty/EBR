@@ -19,21 +19,18 @@ public class Bombertower extends StaticBaseObject
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> checkOrder())
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> checkOrder())
 		EventListener.add(dummy, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> checkOrder())
+		EventListener.onCast(dummy) id ->
+			onAttackspeedCast(id, actor)
 		SetUnitPathing(dummy, true)
 
-
-	override function onCast()
-		super.onCast()
-		let id = GetSpellAbilityId()
-		onAttackspeedCast(id, actor)
-
 	ondestroy
+		unregisterEvents(dummy.getIndex())
+		dummy.setEntity(null)
 		dummy.remove()
 
 	override function serialize() returns Json
 		let json = super.serialize()
-		json
-		..addProperty(new Property(KEY_TYPE, BOMBTOWER_INDEX.toString()))
+		json.addProperty(new Property(KEY_TYPE, BOMBTOWER_INDEX.toString()))
 		return json
 
 	function checkOrder()
@@ -70,7 +67,7 @@ public class Bombertower extends StaticBaseObject
 	..setTooltipExtended("Can only attack \"Bomb Tower attack target\"" +
 	"\nAttackspeed can be modified.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp")
-	..setNormalAbilities(commaList('A043', 'A044', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(ATTACK_SPEED_DECREASE, ATTACK_SPEED_INCREASE, REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setAttack1DamageBase(1000)
 	..setAttack1CooldownTime(0.2)
 	..setAttack1Range(3500)

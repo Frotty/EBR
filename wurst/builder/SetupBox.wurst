@@ -178,13 +178,13 @@ public class SetupBox extends UnitEntity
 				else
 					actor.addAbility(EASY_ENABLE)
 			case INC_GRAVITY
-				if gravity > -10
+				if rdata.gravity > -10
 					rdata.gravity -= 0.1
-					printTimedToPlayer("Gravity: " + gravity.toString(), 10, owner)
+					printTimedToPlayer("Gravity: " + rdata.gravity.toString(), 10, owner)
 			case DEC_GRAVITY
-				if gravity < -.2
+				if rdata.gravity < -.2
 					rdata.gravity += 0.1
-					printTimedToPlayer("Gravity: " + gravity.toString(), 10, owner)
+					printTimedToPlayer("Gravity: " + rdata.gravity.toString(), 10, owner)
 			case TURND_ID
 				if rdata.turnSpeed > 0.
 					rdata.turnSpeed -= .25

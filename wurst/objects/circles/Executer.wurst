@@ -10,59 +10,58 @@ import Knockbacker
 import Builder
 
 constant INFO_EXECUTER_ID = compiletime(ABIL_ID_GEN.next())
-constant string EFFECT_STRING   = "Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBase.mdl"
-constant int 	LEVER_DUMMY_ID = 'DTlv'
-constant int 	PLATE_DUMMY_ID = 'B001'
-constant real 	EVENT_RADIUS	= 42.
-//ABILITY ID-s
-constant int ONESHOT_ABIL = 'A068'
-constant int REPEATING_ABIL = 'A069'
-constant int LEVER_ABIL = 'A067'
-constant int PRESSURE_ABIL = 'A066'
+constant EFFECT_STRING   = Abilities.manaFlareBase
+constant LEVER_DUMMY_ID = 'DTlv'
+constant PLATE_DUMMY_ID = 'B001'
+constant EVENT_RADIUS	= 42.
 
-constant int REACTIVATE_ABIL = 'A06Z'
+constant ONESHOT_ABIL = 'A068'
+constant REPEATING_ABIL = 'A069'
+constant LEVER_ABIL = 'A067'
+constant PRESSURE_ABIL = 'A066'
+constant REACTIVATE_ABIL = 'A06Z'
 
-constant int TERRAIN_CHANGE_ABIL = 'A036'
-constant int TERRAIN_WALKABLE_ABIL = 'A015'
-constant int TERRAIN_UNWALKABLE_ABIL = 'A016'
-constant int TERRAIN_ICE_ABIL = 'A019'
-constant int TERRAIN_UNICE_ABIL = 'A01A'
-constant int TERRAIN_REVICE_ABIL = 'A00A'
-constant int TERRAIN_W_O_ABIL = 'A03A'
-constant int TERRAIN_UW_O_ABIL = 'A039'
-constant int TERRAIN_I_O_ABIL = 'A038'
-constant int TERRAIN_UI_O_ABIL = 'A037'
-constant int TERRAIN_RI_O_ABIL = 'A00O'
-constant int TERRAIN_INCREASE_H_ABIL = 'A01K'
-constant int TERRAIN_INCREASE_V_ABIL = 'A01M'
-constant int TERRAIN_DECREASE_H_ABIL = 'A01U'
-constant int TERRAIN_DECREASE_V_ABIL = 'A01T'
-constant int TERRAIN_BOOK_ABIL = 'A035'
-constant int TERRAIN_ANTIBOOK_ABIL = 'A06B'
+constant TERRAIN_CHANGE_ABIL = 'A036'
+constant TERRAIN_WALKABLE_ABIL = 'A015'
+constant TERRAIN_UNWALKABLE_ABIL = 'A016'
+constant TERRAIN_ICE_ABIL = 'A019'
+constant TERRAIN_UNICE_ABIL = 'A01A'
+constant TERRAIN_REVICE_ABIL = 'A00A'
+constant TERRAIN_W_O_ABIL = 'A03A'
+constant TERRAIN_UW_O_ABIL = 'A039'
+constant TERRAIN_I_O_ABIL = 'A038'
+constant TERRAIN_UI_O_ABIL = 'A037'
+constant TERRAIN_RI_O_ABIL = 'A00O'
+constant TERRAIN_INCREASE_H_ABIL = 'A01K'
+constant TERRAIN_INCREASE_V_ABIL = 'A01M'
+constant TERRAIN_DECREASE_H_ABIL = 'A01U'
+constant TERRAIN_DECREASE_V_ABIL = 'A01T'
+constant TERRAIN_BOOK_ABIL = 'A035'
+constant TERRAIN_ANTIBOOK_ABIL = 'A06B'
 
-constant int DOOR_OPEN_ABIL = 'A018'
-constant int DOOR_CLOSE_ABIL = 'A01N'
-constant int DOOR_TOGGLE_ABIL = 'A01Q'
+constant DOOR_OPEN_ABIL = 'A018'
+constant DOOR_CLOSE_ABIL = 'A01N'
+constant DOOR_TOGGLE_ABIL = 'A01Q'
 
-constant int MOVE_UNIT_DIRECT_ABIL = 'A04R'
-constant int MOVE_UNIT_PATROL_ABIL = 'A064'
-constant int MOVE_UNIT_STOP_ABIL = 'A065'
-constant int MOVE_UNIT_SELECT_ABIL = 'A06A'
+constant MOVE_UNIT_DIRECT_ABIL = 'A04R'
+constant MOVE_UNIT_PATROL_ABIL = 'A064'
+constant MOVE_UNIT_STOP_ABIL = 'A065'
+constant MOVE_UNIT_SELECT_ABIL = 'A06A'
 
-constant int TRAIN_BOOK_ABIL = 'A042'
+constant TRAIN_BOOK_ABIL = 'A042'
 
-constant int SPAWN_UNIT_ID = 'A06S'
-constant int TRAIN_BK_ABIL = 'A045'
-constant int TRAIN_SK_ABIL = 'A046'
-constant int TRAIN_BRK_ABIL = 'A048'
-constant int TRAIN_SRK_ABIL = 'A04B'
-constant int TRAIN_TANK_ABIL = 'A04C'
-constant int TRAIN_GLAIVE_ABIL = 'A04W'
-constant int TRAIN_POINTER_ABIL = 'A04D'
-constant int TRAIN_KNOCK_ABIL = 'A07R'
+constant SPAWN_UNIT_ID = 'A06S'
+constant TRAIN_BK_ABIL = 'A045'
+constant TRAIN_SK_ABIL = 'A046'
+constant TRAIN_BRK_ABIL = 'A048'
+constant TRAIN_SRK_ABIL = 'A04B'
+constant TRAIN_TANK_ABIL = 'A04C'
+constant TRAIN_GLAIVE_ABIL = 'A04W'
+constant TRAIN_POINTER_ABIL = 'A04D'
+constant TRAIN_KNOCK_ABIL = 'A07R'
 
-trigger executerUnitLeave = CreateTrigger()
-trigger executerUnitEnter = CreateTrigger()
+constant executerUnitLeave = CreateTrigger()
+constant executerUnitEnter = CreateTrigger()
 
 public enum Emode
 	NONE
@@ -96,6 +95,7 @@ public class Executer extends StaticBaseObject
 	boolean canEscaperTrigger = true
 	rect eventRect // only for pressureplate
 	region eventRegion
+	LinkedList<UnitEntity> entitiesOnPlate
 	Emode eventMode = Emode.NONE
 	Amode actionMode = Amode.NONE
 	boolean ON = false// only for lever and pressureplate
@@ -111,90 +111,71 @@ public class Executer extends StaticBaseObject
 	destructable dummy // model for pressure plate, and lever
 
 	construct(unit existing)
-		super(existing.getPos(), existing, EVENT_RADIUS, function Executer.onEvent, null)
+		super(existing.getPos(), existing, EVENT_RADIUS,
+				() -> (GetTriggeringTrigger().getSource().getEntity()  castTo Executer).onEvent(), null)
 
 	construct(vec2 pos, player owner)
-		super(pos, createUnit(owner, EXECUTER_ID, pos, angle(0)), EVENT_RADIUS, function Executer.onEvent, null)
+		super(pos, createUnit(owner, EXECUTER_ID, pos, angle(0)), EVENT_RADIUS,
+				() -> (GetTriggeringTrigger().getSource().getEntity()  castTo Executer).onEvent(), null)
+
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
-	static function onEvent()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		thistype obj = source.getEntity() castTo Executer
+	function onEvent()
+		let entity = GetTriggerUnit().getEntity()
 
-		if obj.canTrigger(e)
-			switch obj.eventMode
+		if canTrigger(entity)
+			switch eventMode
 				case Emode.NONE
-					DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019Please select an Event Mode for the Executer")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019Please select an Event Mode for the Executer")
 				case Emode.REPEATING
-					obj.findAction()
+					findAction()
 				case Emode.ONESHOT
-					if not obj.disabled
-						flashEffect(Abilities.charmTarget, obj.getPos())
-						obj.findAction()
-						obj.disable()
+					if not disabled
+						flashEffect(Abilities.charmTarget, getPos())
+						findAction()
+						disable()
 				case Emode.LEVER
-					if obj.ON
-						obj.negativeAction()
-						obj.ON = false
-						if obj.dummy != null
-							SetDestructableAnimation(obj.dummy, "death")
+					if ON
+						negativeAction()
+						ON = false
+						if dummy != null
+							SetDestructableAnimation(dummy, "death")
 					else
-						obj.findAction()
-						obj.ON = true
-						if obj.dummy != null
-							SetDestructableAnimation(obj.dummy, "stand")
+						findAction()
+						ON = true
+						if dummy != null
+							SetDestructableAnimation(dummy, "stand")
 						//obj.oneffect = AddSpecialEffect(EFFECT_STRING, obj.actor.getX(), obj.actor.getY())
 				case Emode.PRESSUREPLATE
-					skip
-	var count = 0
-	static function onLeaveEvent()
-		region r = GetTriggeringRegion()
-		Entity leaver = GetLeavingUnit().getEntity()
-		thistype obj = r.loadRegionData() castTo thistype
-		if obj.enabled and obj.canTrigger(leaver)
-			obj.count = 0
-			forUnitsInRect(obj.eventRect) u ->
-				Entity e = u.getEntity()
-				if obj.canTrigger(e)
-					obj.count++
-			if obj.count == 0
-				obj.negativeAction()
-				obj.ON = false
-				if obj.dummy != null
-					SetDestructableAnimation(obj.dummy, "stand alternate")
 
-	static function onEnterEvent()
-		unit u = GetTriggerUnit()
-		region r = GetTriggeringRegion()
-		Entity e = u.getEntity()
-		thistype obj = r.loadRegionData() castTo thistype
-		if obj.enabled and obj.canTrigger(e)
-			if not obj.ON
-				obj.findAction()
-				obj.ON = true
-				if obj.dummy != null
-					SetDestructableAnimation(obj.dummy, "death")
-
-	override function slowUpdate()
-		if eventMode == Emode.PRESSUREPLATE and actionMode != Amode.NONE and ON
-			boolean reset = false
-			if canEscaperTrigger
-				GroupEnumUnitsInRect(ENUM_GROUP, eventRect, Filter(() -> GetFilterUnit().isAliveTrick() and GetFilterUnit().getEntity() instanceof Escaper))
-				reset = not ENUM_GROUP.hasNext()
-				ENUM_GROUP.clear()
-			if canKillerTrigger
-				GroupEnumUnitsInRect(ENUM_GROUP, eventRect, Filter(() -> GetFilterUnit().isAliveTrick() and GetFilterUnit().getEntity() instanceof SetupObject))
-				reset = not ENUM_GROUP.hasNext()
-				ENUM_GROUP.clear()
-			if reset
+	function onLeave()
+		let leftEntity = GetLeavingUnit().getEntity()
+		if enabled and canTrigger(leftEntity)
+			entitiesOnPlate.remove(leftEntity)
+			if entitiesOnPlate.isEmpty() and ON
 				negativeAction()
 				ON = false
 				if dummy != null
 					SetDestructableAnimation(dummy, "stand alternate")
 
+	function onEnter()
+		UnitEntity e = GetEnteringUnit().getEntity()
+		if enabled and canTrigger(e)
+			entitiesOnPlate.add(e)
+			if not ON
+				findAction()
+				ON = true
+				if dummy != null
+					SetDestructableAnimation(dummy, "death")
 
+	override function slowUpdate()
+		if eventMode == Emode.PRESSUREPLATE and actionMode != Amode.NONE and ON and not entitiesOnPlate.isEmpty()
+			entitiesOnPlate.removeIf(entity -> not entity.actor.isAlive() or not entity.getPos().toVec2().isInRegion(eventRegion))
+			if entitiesOnPlate.isEmpty()
+				negativeAction()
+				ON = false
+				if dummy != null
+					SetDestructableAnimation(dummy, "stand alternate")
 
 	function findAction()
 		let target = getRallyUnit().getEntity()
@@ -351,48 +332,33 @@ public class Executer extends StaticBaseObject
 		rallyPos.toVec2().changeRect(tileID, horizontalTileSize, verticalTileSize, owner)
 
 	function addActionAbilsNormal()
-		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
-		UnitAddAbility(actor,DOOR_OPEN_ABIL)
-		UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
-		UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
-		UnitAddAbility(actor,MOVE_UNIT_DIRECT_ABIL)
-		UnitAddAbility(actor,SPAWN_UNIT_ID)
+		actor..addAbility(DOOR_CLOSE_ABIL)..addAbility(DOOR_OPEN_ABIL)..addAbility(DOOR_TOGGLE_ABIL)
+		..addAbility(TERRAIN_CHANGE_ABIL)..addAbility(MOVE_UNIT_DIRECT_ABIL)..addAbility(SPAWN_UNIT_ID)
 
 	function addActionAbilsReversable()
-		UnitAddAbility(actor,DOOR_CLOSE_ABIL)
-		UnitAddAbility(actor,DOOR_OPEN_ABIL)
-		UnitAddAbility(actor,DOOR_TOGGLE_ABIL)
-		UnitAddAbility(actor,TERRAIN_CHANGE_ABIL)
+		actor..addAbility(DOOR_CLOSE_ABIL)..addAbility(DOOR_OPEN_ABIL)..addAbility(DOOR_TOGGLE_ABIL)
+		..addAbility(TERRAIN_CHANGE_ABIL)
 
 	function removeModeAbils()
-		UnitRemoveAbility(actor, ONESHOT_ABIL)
-		UnitRemoveAbility(actor, REPEATING_ABIL)
-		UnitRemoveAbility(actor, LEVER_ABIL)
-		UnitRemoveAbility(actor, PRESSURE_ABIL)
+		actor..removeAbility(ONESHOT_ABIL)..removeAbility(REPEATING_ABIL)..removeAbility(LEVER_ABIL)
+		..removeAbility(PRESSURE_ABIL)
 
 	function removeActionAbils()
-		UnitRemoveAbility(actor,DOOR_CLOSE_ABIL)
-		UnitRemoveAbility(actor,DOOR_OPEN_ABIL)
-		UnitRemoveAbility(actor,DOOR_TOGGLE_ABIL)
-		UnitRemoveAbility(actor,TERRAIN_CHANGE_ABIL)
-		UnitRemoveAbility(actor,MOVE_UNIT_DIRECT_ABIL)
-		UnitRemoveAbility(actor,SPAWN_UNIT_ID)
+		actor..removeAbility(DOOR_CLOSE_ABIL)..removeAbility(DOOR_OPEN_ABIL)..removeAbility(DOOR_TOGGLE_ABIL)
+		..removeAbility(TERRAIN_CHANGE_ABIL)..removeAbility(MOVE_UNIT_DIRECT_ABIL)..removeAbility(SPAWN_UNIT_ID)
+
 		actor..addAbility(TURN_OFF_ID)
 
 	function addTerrainAdjuster()
-		UnitAddAbility(actor, TERRAIN_INCREASE_V_ABIL)
-		UnitAddAbility(actor, TERRAIN_INCREASE_H_ABIL)
-		UnitAddAbility(actor, TERRAIN_DECREASE_V_ABIL)
-		UnitAddAbility(actor, TERRAIN_DECREASE_H_ABIL)
-		UnitAddAbility(actor, TERRAIN_BOOK_ABIL)
+		actor..addAbility(TERRAIN_INCREASE_V_ABIL)..addAbility(TERRAIN_INCREASE_H_ABIL)..addAbility(TERRAIN_DECREASE_V_ABIL)
+		..addAbility(TERRAIN_DECREASE_H_ABIL)..addAbility(TERRAIN_BOOK_ABIL)
+
 		if eventMode == Emode.LEVER or eventMode == Emode.PRESSUREPLATE
 			UnitAddAbility(actor, TERRAIN_ANTIBOOK_ABIL)
 
 	function addMoveUnitAdjuster()
-		UnitAddAbility(actor, MOVE_UNIT_STOP_ABIL)
-		UnitAddAbility(actor, MOVE_UNIT_DIRECT_ABIL)
-		UnitAddAbility(actor, MOVE_UNIT_PATROL_ABIL)
-		UnitAddAbility(actor, MOVE_UNIT_SELECT_ABIL)
+		actor..addAbility(MOVE_UNIT_STOP_ABIL)..addAbility(MOVE_UNIT_DIRECT_ABIL)
+		..addAbility(MOVE_UNIT_PATROL_ABIL)..addAbility(MOVE_UNIT_SELECT_ABIL)
 
 	function changeVis(boolean invis)
 		if eventMode == Emode.PRESSUREPLATE
@@ -413,18 +379,20 @@ public class Executer extends StaticBaseObject
 		actor.clearRegister()
 		inRangeTrig..clearConditions()..clearActions()..destr()
 
+		entitiesOnPlate = new LinkedList<UnitEntity>()
+		eventRect = Rect(centerx - offset, centery - offset, centerx + offset, centery + offset)
 		eventRegion = CreateRegion()
-		eventRect = Rect(centerx-offset, centery-offset, centerx+offset, centery+offset)
-		RegionAddRect(eventRegion,eventRect)
+		eventRegion.addRect(eventRect)
 		eventRegion.setRegionData(this castTo int)
-		TriggerRegisterLeaveRegion(executerUnitLeave,eventRegion, null)
-		executerUnitLeave.addAction(function onLeaveEvent)
 
-		TriggerRegisterEnterRegion(executerUnitEnter,eventRegion, null)
-		executerUnitEnter.addAction(function onEnterEvent)
+		TriggerRegisterLeaveRegion(executerUnitLeave, eventRegion, null)
+		executerUnitLeave.addCondition(Condition(() -> GetTriggeringRegion().loadRegionData() castTo Executer.onLeave()))
+
+		TriggerRegisterEnterRegion(executerUnitEnter, eventRegion, null)
+		executerUnitEnter.addCondition(Condition(() -> GetTriggeringRegion().loadRegionData() castTo Executer.onEnter()))
 
 	function disable()
-		SetUnitVertexColor(actor, 44,44,44,255)
+		actor.setVertexColor(44, 44, 44, 255)
 		disabled = true
 		actor.addAbility(REACTIVATE_ABIL)
 		createFText(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
@@ -437,17 +405,17 @@ public class Executer extends StaticBaseObject
 			eventRegion.destr()
 		if dummy != null
 			RemoveDestructable(dummy)
+		if entitiesOnPlate != null
+			destroy entitiesOnPlate
 
 	function canTrigger(Entity e) returns boolean
-		if (canEscaperTrigger and e instanceof Escaper)
+		if canEscaperTrigger and e instanceof Escaper
 			return true
-		if (canKillerTrigger and e instanceof EscaperSensorSetup)
+		if canKillerTrigger and e instanceof EscaperSensorSetup
 			return true
 		return false
 
 	function onCast() returns boolean
-		printLog(Loglevel.DEBUG, "Executer casts")
-
 		let id = GetSpellAbilityId()
 		switch id
 			case ONESHOT_ABIL
@@ -468,7 +436,7 @@ public class Executer extends StaticBaseObject
 				eventMode = Emode.PRESSUREPLATE
 				addActionAbilsReversable()
 				removeModeAbils()
-				registerRect(actor.getX(), actor.getY(), 50)
+				registerRect(actor.getX(), actor.getY(), 54)
 				dummy = CreateDestructable(PLATE_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 				SetDestructableAnimation(dummy, "stand alternate")
 			case REACTIVATE_ABIL

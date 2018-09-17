@@ -23,7 +23,7 @@ public class Key extends ItemObject
 
 	construct(vec2 pos, player owner)
 		super( pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function recolor()
 		actorItem.remove()
@@ -38,14 +38,14 @@ public class Key extends ItemObject
 			fx = new Fx(pos, "war3mapImported\\Key_ITEM.mdx")
 			..setColor(col.toColor())
 			..setXYZ(holder.getPos()+vec3(0,0,128))
-			setup.hide()
+			actor.hide()
 			activate()
 		else
 			picked = false
 			holder.actor.removeItem(actorItem)
 			actorItem.setPos(pos.toVec2())
-			setup.setXY(pos.toVec2())
-			setup.show()
+			actor.setXY(pos.toVec2())
+			actor.show()
 			this.holder = null
 
 	override function onDrop(Escaper e)
@@ -54,8 +54,8 @@ public class Key extends ItemObject
 		if fx != null
 			fx.hiddenDestroy()
 			fx = null
-		setup.setXY(pos.toVec2())
-		setup.show()
+		actor.setXY(pos.toVec2())
+		actor.show()
 		nullTimer() ->
 			actorItem..setEntity(null)
 			..remove()
@@ -79,11 +79,11 @@ public class Key extends ItemObject
 		switch id
 			case DYN_ID
 				followWalkable = false
-				setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
+				actor..removeAbility(DYN_ID)..addAbility(STATIC_ID)
 				returnSfx = AddSpecialEffect("XTex.mdx", pos.x, pos.y)
 			case STATIC_ID
 				followWalkable = true
-				setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
+				actor..removeAbility(STATIC_ID)..addAbility(DYN_ID)
 				if returnSfx != null
 					returnSfx.destr()
 		recolor()

@@ -115,7 +115,7 @@ public class Bomber extends UnitEntity
 	..setSelectionScale(1)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(commaList('A03B', 'A043', 'A044', REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
+	..setNormalAbilities(commaList('A03B', ATTACK_SPEED_RATE_NEGATIVE_ID, ATTACK_SPEED_RATE_POSITIVE_ID, REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setHotkey("E")
 	..setName("|cFFFFFF00Bomber|r")
 	..setTooltipBasic("|cFFFF8000B|r|cFFFFFF00o|r|cFFFF8000mber|r [E]")
