@@ -14,7 +14,7 @@ public class Booster extends StaticBaseObject
 	construct( vec2 pos, player owner )
 		super( pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null)
 		clearQuestionmark()
-		actor.addAbility(TURN_OFF_ID)
+		actor..addAbility(TURN_OFF_ID)..addAbility(GHOST_INVIS_ID)
 
 	static function orderMove()
 		let source = GetTriggeringTrigger().getSource()

@@ -46,6 +46,7 @@ function onItemPickup()
 			(idata castTo ItemObject).onPickup(edata castTo Escaper)
 		else
 			destroy idata
+			itm.setEntity(null)
 			itm.remove()
 
 function onItemDrop()

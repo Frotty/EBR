@@ -1,3 +1,12 @@
+[0.91i]
+[*] Reactivate old minigame "Space Adventure"
+[*] Fixed executer pressure plate deactivating even though escapers activating it didn't move
+[*] Fixed texter removing spaces
+[*] Fixed tracks erroring on removal
+[*] Fixed booster not being invisible to escapers
+[*] Fixed more bugs in the revive handler
+
+
 [0.91h]
 [*] This is a bugfix release adressing most found issues in 0.91d
 [*] Fixed errors on deleting bombers and bomber towers

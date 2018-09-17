@@ -52,6 +52,7 @@ class EscaperDefinition
 	function createFor(PlayerData pd)
 		cb.create(pd)
 		ResetToGameCameraForPlayer(pd.p,0.5)
+		pd.escaper.actor..addAbility(BLINK_ID)
 		if isBuilder(pd.p)
 			pd.escaper.actor..addAbility(BLINK_ID)..addAbility(CREATE_REV_MOD_ID)
 			pd.escaper.selectatrevive = false

@@ -193,7 +193,10 @@ public class RegionData
 					and not data instanceof TerrainModder and not data instanceof UnitProducer
 					printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 					Log.debug("no permission")
-					data.terminate()
+					if data == null
+						u.kill()
+					else
+						data.terminate()
 
 
 real x = 0

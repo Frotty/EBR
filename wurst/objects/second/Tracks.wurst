@@ -43,6 +43,7 @@ public class Tracks extends UnitEntity
 		setNewActor(createUnit(owner, TRACKS[tsize], pos, dir.getAngle()-(90).asAngleDegrees()))
 
 	ondestroy
+		setup.setEntity(null)
 		setup.remove()
 
 	function onCast()

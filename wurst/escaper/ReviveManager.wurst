@@ -55,7 +55,8 @@ function manageTimedRevive(Escaper e, real time)
 public function forceRevive(Escaper e)
 	let pod = pods[e.owner.getId()]
 	if pod != null
-		pod.owner.escaper.revive()
+		if pod.owner.escaper != null and not pod.owner.escaper.alive
+			pod.owner.escaper.revive()
 		destroy pod
 		pods[e.owner.getId()] = null
 
@@ -83,7 +84,7 @@ function update()
 			if not pod.wait
 				pod.time -= TIMER_PERIOD
 				if pod.time <= 0
-					if pod.owner.escaper != null
+					if pod.owner.escaper != null and not pod.owner.escaper.alive
 						pod.owner.escaper.revive()
 					destroy pod
 					pods[i] = null

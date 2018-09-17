@@ -29,7 +29,7 @@ public abstract class Minigame
 				doAfter(2., () -> reset())
 				waitForListener = null
 			for pd from escaperPlayers.staticItr()
-				if not pd.escaper.alive
+				if pd.escaper != null and not pd.escaper.alive
 					pd.escaper.revive()
 
 				pd.escaper..setPos(getStartPosition().withZ(0))
@@ -66,13 +66,17 @@ public abstract class Minigame
 			tim = null
 			DestroyTimerDialog(window)
 			for pd from escaperPlayers.staticItr()
-				if not pd.escaper.alive
+				if pd.escaper != null and not pd.escaper.alive
 					pd.escaper.revive()
 				pd.escaper.setPos(LOUNGE.toVec3())
 				pd.escaper.setCurrentRegion()
 
 				SetCameraBoundsToRectForPlayerBJ(pd.p, gg_rct_Region_023)
-				pd.p.panCamToTimed(pd.escaper.actor, 0)
+
+				doAfter(1.) ->
+					pd.p.panCamToTimed(pd.escaper.actor, 0)
+					pd.p.select(pd.escaper.actor)
+				ResetToGameCameraForPlayer(pd.p, 1.)
 				printTimedToPlayer("Minigame ended!", 10, pd.p)
 			changeRevMode(ReviveMode.TIMED)
 			onEnd()

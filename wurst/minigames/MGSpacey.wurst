@@ -44,17 +44,20 @@ public class MGSpacey extends Minigame
 			new SpaceRock(ARENA_POS.polarOffset((90+GetRandomReal(-45, 45)).fromDeg(), GetRandomReal(256, 480)), vec2(GetRandomReal(-2, 2), GetRandomReal(-2, 2)), 4)
 
 	override function onEnd()
-		for ship in ships
-			if localPlayer == ship.owner
-				ResetToGameCamera(0.5)
-			ship.terminate()
-		ships.clear()
+		if listener != null
+			destroy listener
+		if klistener != null
+			removeKeyListener(klistener)
+
 		for rock in rocks
-			rock.terminate()
+			if rock != null
+				rock.terminate()
 		rocks.clear()
 
-		destroy listener
-		removeKeyListener(klistener)
+		for ship in ships
+			if ship != null
+				ship.terminate()
+		ships.clear()
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()
@@ -62,10 +65,10 @@ public class MGSpacey extends Minigame
 	override function getName() returns string
 		return "|cff3322e2Spacey Adventure"
 
-// constant minigame = new MGSpacey()
+constant minigame = new MGSpacey()
 
 init
-	// minigames.add(minigame)
+	minigames.add(minigame)
 
 
 constant SHIP_ID = compiletime(ABIL_ID_GEN.next())
@@ -92,6 +95,7 @@ class ShipProjectile extends Projectile
 					if rock.hp <= 0
 						rock.terminate()
 						itr.remove()
+					flashEffect(Abilities.manaBurnTarget, getPos())
 					this.terminate()
 					break
 
@@ -104,18 +108,19 @@ public class Spaceship extends UnitEntity
 	angle xyAngle = angle(0)
 	var projectiles = new LinkedList<ShipProjectile>
 	Escaper mounter
+	int hp = 2
 
 	construct(vec2 pos, Escaper mounter)
 		super(createUnit(mounter.owner, SHIP_ID, pos, angle(0)))
 		this.mounter = mounter
+		this.mounter.alive = false
 		actor.addAbility(LOCUST_ID)
 		mounter.actor..pause()..hide()
-		mounter.alive = false
 		setPos(this.pos+vec3(0,0,32))
 		sleeps = false
 
 	function shoot()
-		if active and projectiles.size() < 4
+		if active and projectiles.size() < 5
 			projectiles.add(new ShipProjectile(this))
 
 
@@ -123,14 +128,17 @@ public class Spaceship extends UnitEntity
 		let downKeys = owner.getDownKeys()
 		acc = acc.lerp(0,0.1)
 		if downKeys.left
-			xyAngle += angle(0.125)
+			xyAngle += angle(0.115)
 		if downKeys.right
-			xyAngle -= angle(0.125)
+			xyAngle -= angle(0.115)
+		xyAngle = (xyAngle.degrees() % 360.).fromDeg()
 		actor.setFacing(xyAngle)
 		if localPlayer == owner
 			CameraSetupApplyForceDuration(gg_cam_spaceycam, true, 0.)
 		if downKeys.up
-			acc = acc.lerp(1, 0.2)
+			acc = acc.lerp(0.9, 0.2)
+		if downKeys.down
+			acc = acc.lerp(-0.2, 0.2)
 
 	override function update()
 		foo()
@@ -154,27 +162,27 @@ public class Spaceship extends UnitEntity
 
 		let itr = MGSpacey.rocks.staticItr()
 		for rock from itr
-			if this.pos.distanceTo2dSq(rock.pos.toVec2()) < 30*30 + rock.radiusSq
+			if rock == null or rock.done
+				itr.remove()
+			else if this.pos.distanceTo2dSq(rock.pos.toVec2()) < 30*30 + rock.radiusSq
 				rock.terminate()
 				itr.remove()
-				actor.setAnimation("death")
-				deactivate()
-				var isEnd = true
-				for ship in MGSpacey.ships
-					if ship.active
-						isEnd = false
-						break
-				if isEnd
-					// minigame.reset()
-				break
-
-
+				hp--
+				if hp < 0
+					actor.setAnimation("death")
+					deactivate()
+					var isEnd = true
+					for ship in MGSpacey.ships
+						if ship.active
+							isEnd = false
+							break
+					if isEnd or MGSpacey.rocks.isEmpty()
+						minigame.reset()
+					break
 
 	ondestroy
-		if mounter.actor.isAlive()
-			mounter.actor..unpause()..show()
-			mounter.kill(this)
-			mounter.kill(this)
+		mounter.alive = true
+		mounter.actor..unpause()..show()
 
 function getRockAsset(int level) returns string
 	switch level
@@ -197,7 +205,7 @@ public class SpaceRock extends FxEntity
 		super(STAFF_PLAYER, position.withZ(48), velocity.getAngle(), getRockAsset(level))
 		fx..setScale(1+level*0.25)
 		radiusSq = (26 + level*6.).squared()
-		this.vel = (velocity * ((5-level)*1.15)).toVec3()
+		this.vel = (velocity * ((5-level)*0.95)).toVec3()
 		this.level = level
 		hp = level
 		sleeps = false
@@ -207,14 +215,18 @@ public class SpaceRock extends FxEntity
 		let tpos = pos + vel*6.
 		if tpos.x  < gg_rct_spaceygamearea.getMinX()
 			vel.x = -vel.x
+			vel *= 0.95
 		else if tpos.x > gg_rct_spaceygamearea.getMaxX()
 			vel.x = -vel.x
+			vel *= 0.95
 		if tpos.y < gg_rct_spaceygamearea.getMinY()
 			vel.y = -vel.y
+			vel *= 0.95
 		else if tpos.y > gg_rct_spaceygamearea.getMaxY()
 			vel.y = -vel.y
+			vel *= 0.95
 
-		pos+=vel
+		pos += vel
 		fx.setXYAngle(vel.toVec2().getAngle())
 		super.update()
 
@@ -222,9 +234,6 @@ public class SpaceRock extends FxEntity
 		if level > 1
 			for i = 0 to 2
 				new SpaceRock(pos.toVec2(), vec2(GetRandomReal(-2, 2), GetRandomReal(-2, 2)), level-1)
-
-init
-	// minigames.add(new MGSpacey())
 
 @objectgen function genObjs()
 	new UnitDefinition(SHIP_ID, 'hgry')
