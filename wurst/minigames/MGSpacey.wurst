@@ -26,7 +26,7 @@ public class MGSpacey extends Minigame
 			if not pd.escaper.alive
 				forceRevive(pd.escaper)
 			printTimedToPlayer("Use Arrowkeys and Escape to control your spacecraft.", 15., pd.p)
-			ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*16.,0), pd.escaper))
+			ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*32.,-128), pd.escaper))
 
 		listener = EventListener.add(EVENT_PLAYER_END_CINEMATIC) ->
 			for ship in ships
@@ -95,6 +95,7 @@ class ShipProjectile extends Projectile
 					if rock.hp <= 0
 						rock.terminate()
 						itr.remove()
+                        owner.addGold(rock.level div 2)
 					flashEffect(Abilities.manaBurnTarget, getPos())
 					this.terminate()
 					break

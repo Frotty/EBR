@@ -320,7 +320,7 @@ public abstract class Escaper extends UnitEntity
 
 			CameraClearNoiseForPlayer(owner)
 			if (localPlayer == owner)
-				if selectatrevive
+				if selectatrevive and revivetomb == null
 					PanCameraToTimed(rev.x, rev.y, 0)
 				if camOnRevive
 					ClearSelection()
@@ -329,9 +329,8 @@ public abstract class Escaper extends UnitEntity
 				SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
 			if revivetomb != null
 				setPos(revivetomb.getPos3Real())
-				if (localPlayer == owner)
-					if selectatrevive
-						PanCameraToTimed(rev.x, rev.y, 0)
+                if selectatrevive
+                    owner.panCamToTimed(revivetomb, 0.)
 				revivetomb.remove()
 				revivetomb = null
 			if this.getCurrentRegion().specialAbil > 0

@@ -1,4 +1,9 @@
-[0.91i]
+[0.91p]
+[*] Fixed ankh not setting cam properly on revive
+[*] Fixed rare cases of corrupted votes for teleporters
+[*] Added gold rewards to space minigame
+
+[0.91o]
 [*] Reactivate old minigame "Space Adventure"
 [*] Fixed executer pressure plate deactivating even though escapers activating it didn't move
 [*] Fixed texter removing spaces

@@ -25,7 +25,6 @@ public class Booster extends StaticBaseObject
 			SetupObject ek = e castTo SetupObject
 			ek.actor.setMoveSpeed(obj.boostspeed.get())
 			ek.setup.setMoveSpeed(obj.boostspeed.get())
-			flashEffect(Abilities.manaBurnTarget, obj.getPos())
 
 	override function onCast()
 		super.onCast()
