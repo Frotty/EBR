@@ -1,7 +1,12 @@
+[0.91q]
+[*] Fixed pointer -sa/-setangle command
+[*] 
+
 [0.91p]
 [*] Fixed ankh not setting cam properly on revive
 [*] Fixed rare cases of corrupted votes for teleporters
 [*] Added gold rewards to space minigame
+[*] Fixed minigame bugging out when a player didn't pick an escaper yet
 
 [0.91o]
 [*] Reactivate old minigame "Space Adventure"
@@ -15,8 +20,7 @@
 [0.91h]
 [*] This is a bugfix release adressing most found issues in 0.91d
 [*] Fixed errors on deleting bombers and bomber towers
-[*] Fixed gaining control over terrain modders when a builder leaves
-[*] Fixed not being able to build Arcanery
+[*] Fixed gaining control over terrain modders when a builder leaves[*] Fixed not being able to build Arcanery
 [*] Fixed not being able to modify region gravity properly
 [*] Fixed not being able to remove items
 [*] Fixed some revive issues

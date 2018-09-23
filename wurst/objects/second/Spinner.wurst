@@ -3,6 +3,7 @@ import SetupObject
 import Obstacle
 import SpinnerObjects
 
+
 class SpinNode
 	SpinNode next = null
 	SpinNode prev = null

@@ -83,10 +83,13 @@ init
 	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
 		let text = GetEventPlayerChatString()
 		let tokens = text.split(" ")
-		if tokens.peek() == "-setangle" or tokens.peek() == "-sa"
-			forUnitsOfType(UnitId2String(POINTER_ID)) u ->
-				let pointer = u.getEntity() castTo Pointer
-				pointer.setFacing(tokens.peek().toReal().fromDeg())
+		let cmd = tokens.dequeue()
+		if cmd == "-setangle" or cmd == "-sa"
+			let angle = tokens.dequeue().toReal().fromDeg()
+			forUnitsSelected(GetTriggerPlayer()) u ->
+				if u.getEntity() instanceof Pointer
+					let pointer = u.getEntity() castTo Pointer
+					pointer.setFacing(angle)
 
 	preloadAbility(START_ID)
 	preloadAbility(STOP_ID)

@@ -93,9 +93,9 @@ enum ActionUnit
 public class Executer extends StaticBaseObject
 	boolean canKillerTrigger = false
 	boolean canEscaperTrigger = true
-	rect eventRect // only for pressureplate
-	region eventRegion
-	LinkedList<UnitEntity> entitiesOnPlate
+	rect eventRect = null // only for pressureplate
+	region eventRegion = null
+	LinkedList<UnitEntity> entitiesOnPlate = null
 	Emode eventMode = Emode.NONE
 	Amode actionMode = Amode.NONE
 	boolean ON = false// only for lever and pressureplate
@@ -104,11 +104,11 @@ public class Executer extends StaticBaseObject
 	int nottiletype = '0001' // The basic is Unwalkable
 	int verticalTileSize = 0
 	int horizontalTileSize = 0
-	unit unitToMove // for unitMover
+	unit unitToMove = null // for unitMover
 	ActionUnit actionUnit // only for UnitCreator Executer
 	string moveOrderString // only for unitMover
 	boolean disabled = false // only for oneshot, so you can re-activate
-	destructable dummy // model for pressure plate, and lever
+	destructable dummy = null // model for pressure plate, and lever
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS,

@@ -59,6 +59,8 @@ function onCommandChat()
 		case "intro"
 		case "test"
 			startTestmode(pd)
+		case "fuckblizz"
+			Log.info("jesusman".getHash().toString())
 		case "smode"
 			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
 			if nstr == "both"

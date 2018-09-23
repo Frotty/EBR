@@ -194,6 +194,7 @@ public class PlayerData
 				if regions[i].getPermission(this.p) == Permission.OWNER
 					for j = 8 to 11
 						regions[i].allow(players[j])
+						pData[j].builder.regionCount += 2
 			// forUnitsOfPlayer(p) u ->
 			// 	u.setOwner(builderPlayers.peek().p, true)
 

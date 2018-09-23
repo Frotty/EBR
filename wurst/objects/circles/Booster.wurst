@@ -1,6 +1,5 @@
 package Booster
 import BaseObject
-import Assets
 
 constant INFO_BOOSTER_ID = compiletime(ABIL_ID_GEN.next())
 constant SPEED_UP_ID = compiletime(ABIL_ID_GEN.next())
@@ -11,8 +10,8 @@ constant BOOST_SPEED_KEY = "b"
 public class Booster extends StaticBaseObject
 	ConfigValue boostspeed = new ConfigValue(200, 25, "Boostspeed")
 
-	construct( vec2 pos, player owner )
-		super( pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null)
+	construct(vec2 pos, player owner)
+		super(pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null)
 		clearQuestionmark()
 		actor..addAbility(TURN_OFF_ID)..addAbility(GHOST_INVIS_ID)
 

@@ -77,9 +77,10 @@ class ShipProjectile extends Projectile
 	Spaceship ship
 
 	construct(Spaceship ship)
-		super(ship.getPos().toVec2().polarOffset(ship.actor.getFacingAngle(), 16).withZ(32), 16., ship.owner, ship.actor.getFacingAngle(), "TCSlashProj.mdx")
+		super(ship.getPos().toVec2().polarOffset(ship.actor.getFacingAngle(), 16).withZ(64), 16., ship.owner, ship.actor.getFacingAngle(), Abilities.faerieDragonMissile)
 		fx.setColor((owner.getColor().toColor()).withAlpha(255))
 		setSpeed(10)
+		fx.setScale(0.75)
 		vel += ship.vel
 		this.ship = ship
 
@@ -90,12 +91,12 @@ class ShipProjectile extends Projectile
 		else
 			let itr = MGSpacey.rocks.staticItr()
 			for rock from itr
-				if this.pos.distanceTo2dSq(rock.pos.toVec2()) < (28.).squared() + rock.radiusSq
+				if this.pos.distanceTo2dSq(rock.pos.toVec2()) < (21.).squared() + rock.radiusSq
 					rock.hp--
 					if rock.hp <= 0
 						rock.terminate()
 						itr.remove()
-                        owner.addGold(rock.level div 2)
+						owner.addGold(rock.level div 2)
 					flashEffect(Abilities.manaBurnTarget, getPos())
 					this.terminate()
 					break
@@ -144,7 +145,7 @@ public class Spaceship extends UnitEntity
 	override function update()
 		foo()
 		vel += (xyAngle).toVec(acc)
-		vel *= 0.955
+		vel *= 0.995
 		let lgSq = vel.lengthSquared()
 		if lgSq > maxSpeed.squared()
 			vel = vel.setLength(maxSpeed)

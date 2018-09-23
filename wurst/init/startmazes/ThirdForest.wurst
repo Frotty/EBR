@@ -8,6 +8,7 @@ import Waypoint
 import UnitRemover
 import Executer
 import ClosureTimers
+import Arcanery
 
 public class ThirdForestMaze extends Startmaze
 
@@ -21,6 +22,8 @@ public class ThirdForestMaze extends Startmaze
 		inited = true
 		RegionData data = getRegionData(vec2(368, -6647))
 		data.setOwner(STAFF_PLAYER)
+
+		new Arcanery(gg_unit_arca_0050)
 
 		let t = new Teleporter(gg_unit_tele_0044)
 		t.setRallyPoint(LOUNGE)
