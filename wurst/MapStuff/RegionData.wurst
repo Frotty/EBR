@@ -166,11 +166,13 @@ public class RegionData
 
 	function revealRegion(player p)
 		let id = p.getId()
-		fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
+		if fmods[id] != null
+			fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
 
 	function hideRegion(player p)
 		let id = p.getId()
-		fmods[id].changeFog(FOG_OF_WAR_FOGGED)
+		if fmods[id] != null
+			fmods[id].changeFog(FOG_OF_WAR_FOGGED)
 
 	static function enterRect()
 		var u = GetTriggerUnit()
