@@ -36,7 +36,7 @@ class CongaSegment
 				target.setNewPosA(calculateSegmentPos(prev.target.pos.toVec2(), target.pos.toVec2(), head.segLength), target.pos.angleTo2d(prev.target.pos))
 		else if head.cmode == CongaMode.LOOSE
 			if prev == null
-				if target.pos.distanceTo2dSq(head.getPos().toVec2()) > 32*32 
+				if target.pos.distanceTo2dSq(head.getPos().toVec2()) > 32*32
 					target.setNewPosA(target.pos.toVec2().lerp(head.pos.toVec2(), head.segLength * 0.001), target.pos.angleTo2d(head.pos))
 			else
 				if target.pos.distanceTo2dSq(prev.target.pos.toVec2()) > 24*24
@@ -56,20 +56,20 @@ public class CongaLineHead extends SetupObject
 	CongaSegment firstSegment = null
 	CongaMode cmode = CongaMode.LOOSE
 	real segLength = 75.
-	
+
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0)), createUnit(owner, CONGA_LINE_HEAD_ID, pos, angle(0)), 0.)
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		sleeps = false
 		setup.addAbility(CONGA_CONFIG_ID)
-		
+
 	override function update()
 		super.update()
 		var segment = firstSegment
 		while segment != null
 			segment.calcPos()
 			segment = segment.next
-		
+
 	function addSegment(SetupObject e)
 		boolean isNew = true
 		var segment = firstSegment
@@ -90,7 +90,7 @@ public class CongaLineHead extends SetupObject
 				segment.next.phi = e.getPos().angleTo2d(pos.toVec2())
 		else
 			destroy segment
-	
+
 	function onCast()
 		var id = GetSpellAbilityId()
 		var t = GetSpellTargetUnit()
@@ -115,22 +115,23 @@ public class CongaLineHead extends SetupObject
 				cmode = CongaMode.STRICT
 			case CONGA_LOOSE_ID
 				cmode = CongaMode.LOOSE
-	
+
 	override function serialize() returns Json
 		let json = super.serialize()
 		json
 		..addProperty(new Property(KEY_TYPE, CONGA_INDEX.toString()))
-		return json	
+		return json
 
 	override function setEnabled(boolean b)
 
 	ondestroy
 		var l = firstSegment
 		while l != null
-			destroy l
+			let tmp = l
 			l = l.next
+			destroy tmp
 
-		
+
 function UnitEntity.setNewPosA( vec2 tpos, angle angl)
 	if this instanceof SetupObject
 		(this castTo SetupObject).setXY(tpos.toVec3())
@@ -138,7 +139,7 @@ function UnitEntity.setNewPosA( vec2 tpos, angle angl)
 	else if this instanceof Spinner
 		(this castTo Spinner).setXY(tpos.toVec3())
 		(this castTo Spinner).actor.setFacing(angl)
-		
+
 function calculateSegmentPos(vec2 pos1, vec2 pos2, angle a, real segLength) returns vec2
 	let angl = pos2.angleTo(pos1) + a
 	return vec2(pos1.x - Cos(angl.radians()) * segLength, pos1.y - Sin(angl.radians()) * segLength)
@@ -146,5 +147,5 @@ function calculateSegmentPos(vec2 pos1, vec2 pos2, angle a, real segLength) retu
 function calculateSegmentPos(vec2 pos1, vec2 pos2, real segLength) returns vec2
 	let angl = pos2.angleTo(pos1)
 	return vec2(pos1.x - Cos(angl.radians()) * segLength, pos1.y - Sin(angl.radians()) * segLength)
-				
+
 

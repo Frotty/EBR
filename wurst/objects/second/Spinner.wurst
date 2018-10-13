@@ -52,9 +52,10 @@ public class Spinner extends SetupObject
 				if enabled
 					node.angl += speed
 			else
-				destroy node
+				let tmp = node
 				if node == firstNode
 					firstNode = node.next
+				destroy tmp
 			node = node.next
 
 	function checkObj(Entity e)
@@ -82,8 +83,9 @@ public class Spinner extends SetupObject
 		var node = firstNode
 		firstNode = null
 		while node != null
-			destroy node
+			let tmp = node
 			node = node.next
+			destroy tmp
 
 	function onCast()
 		let id = GetSpellAbilityId()

@@ -92,7 +92,9 @@ public class Powernode extends SetupObject
 		var l = firstLink
 		while l != null
 			if l.target.done
-				destroy l
+				let tmp = l
+				l = l.next
+				destroy tmp
 			else
 				MoveLightning(l.sfx, false, pos.x, pos.y, l.target.pos.x, l.target.pos.y)
 				for Escaper e from this.getCurrentRegion().getEscapers()
@@ -121,7 +123,7 @@ public class Powernode extends SetupObject
 									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
 								case BLOCK_ORB
 
-			l = l.next
+				l = l.next
 
 	override function setEnabled(boolean b)
 		super.setEnabled(b)
@@ -174,8 +176,9 @@ public class Powernode extends SetupObject
 	ondestroy
 		var l = firstLink
 		while l != null
-			destroy l
+			let tmp = l
 			l = l.next
+			destroy tmp
 
 	function onCast()
 		var id = GetSpellAbilityId()
