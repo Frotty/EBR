@@ -105,7 +105,7 @@ class ShipProjectile extends Projectile
 		ship.projectiles.remove(this)
 
 public class Spaceship extends UnitEntity
-	real maxSpeed = 12
+	real maxSpeed = 9
 	real acc = 0
 	angle xyAngle = angle(0)
 	var projectiles = new LinkedList<ShipProjectile>
@@ -138,7 +138,7 @@ public class Spaceship extends UnitEntity
 		if localPlayer == owner
 			CameraSetupApplyForceDuration(gg_cam_spaceycam, true, 0.)
 		if downKeys.up
-			acc = acc.lerp(0.9, 0.2)
+			acc = acc.lerp(0.85, 0.2)
 		if downKeys.down
 			acc = acc.lerp(-0.2, 0.2)
 

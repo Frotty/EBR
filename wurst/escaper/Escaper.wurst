@@ -26,13 +26,12 @@ constant ANK_ITEM_ID = 'A091'
 constant TELEPORT_ITEM_ID = 'A08S'
 
 public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
-constant POISON_EFFECT  = Abilities.poisonStingTarget
-constant LAVA_EFFECT	= Abilities.flameStrikeEmbers
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
+constant POISON_EFFECT  = Abilities.poisonStingTarget
+constant LAVA_EFFECT	= Abilities.flameStrikeEmbers
 
-trigger neutralDeathTrig
 trigger spellTrig
 
 public let escapers = new LinkedList<Escaper>()
@@ -40,6 +39,7 @@ public var currentRevivepoint = gg_unit_revp_0002.getPos()
 
 public abstract class Escaper extends UnitEntity
 	use PhysicsModule
+
 	RevivePointModifier revmod = null
 	var onUnwalkable = false
 	var sliding = false
@@ -62,7 +62,7 @@ public abstract class Escaper extends UnitEntity
 	construct(vec3 pos, player owner, int typ)
 		super(createUnit(owner, typ, pos + vec3(0,0,32), angle(0)))
 		actor..addAbility(LOCUST_ID)..hide()..removeAbility(LOCUST_ID)..show()
-		SetUnitPropWindow(actor, 60.)
+		..setPropWindow(60. .fromDeg())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> changeAngle())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> changeAngle())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill(null))
@@ -166,7 +166,7 @@ public abstract class Escaper extends UnitEntity
 				slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
 			vel.z = -vel.z*1.25
 		else
-			pos.z = .1
+			pos.z = 0
 			vel *= 0.175
 			vel.z = 0.
 			if GetTerrainType(pos.x, pos.y) == this.getCurrentRegion().getTypeSet().unwalkableId
@@ -524,12 +524,9 @@ function correctRegion()
 		e.updateRegionData()
 
 @init2 function init_Escaper()
-	neutralDeathTrig = CreateTrigger()
-	neutralDeathTrig.addAction(function Escaper.neutralDeath)
 	getTimer().startPeriodic(1., function correctRegion)
 	spellTrig = CreateTrigger()
 	spellTrig.addAction(function Escaper.onCastEvent)
-
 
 @objectgen function genEscaperThings()
 	new UnitDefinition(TOMB_DUMMY_ID, 'ushd')
