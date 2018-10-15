@@ -18,55 +18,51 @@ public class Key extends ItemObject
 	var picked = false
 	var followWalkable = true
 	effect returnSfx = null
-	Escaper holder
-	Fx fx
+	Fx fx = null
 
 	construct(vec2 pos, player owner)
 		super( pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function recolor()
-		actorItem.setEntity(null)
-		actorItem.remove()
-		actorItem = createItem(keyIds[col castTo int], pos)..setEntity(this)
+		setNewActor(createItem(keyIds[col castTo int], pos))
 
-	override function onUse(Escaper user)
-
-	override function onPickup(Escaper holder)
+	override function onPickup(UnitEntity holder)
 		if isEscaper(holder.owner) or this.owner == holder.owner
 			picked = true
 			this.holder = holder
 			fx = new Fx(pos, "war3mapImported\\Key_ITEM.mdx")
 			..setColor(col.toColor())
 			..setXYZ(holder.getPos()+vec3(0,0,128))
-			actor.hide()
+			setup.hide()
 			activate()
 		else
 			picked = false
-			holder.actor.removeItem(actorItem)
-			actorItem.setPos(pos.toVec2())
-			actor.setXY(pos.toVec2())
-			actor.show()
+			holder.actor.removeItem(actor)
+			actor.setPos(pos.toVec2())
+			setup.setXY(pos.toVec2())
+			setup.show()
 			this.holder = null
 
-	override function onDrop(Escaper e)
+	override function onDrop(UnitEntity e)
 		picked = false
 		holder = null
 		if fx != null
 			fx.hiddenDestroy()
 			fx = null
-		actor.setXY(pos.toVec2())
-		actor.show()
+		setup.setXY(pos.toVec2())
+		setup.show()
 		nullTimer() ->
-			actorItem..setEntity(null)
+			actor..setEntity(null)
 			..remove()
-			actorItem = createItem(keyIds[col castTo int], pos)
-			actorItem.setEntity(this)
+			actor = createItem(keyIds[col castTo int], pos)
+			actor.setEntity(this)
 
 	override function update()
-		if picked
+		if picked and holder instanceof Escaper
 			fx.setXYZ(holder.getPos()+vec3(0,0,128))
-			if followWalkable and not holder.flying and not holder.sliding and not holder.onUnwalkable
+			let escaper = holder castTo Escaper
+			if followWalkable and not holder.flying and not escaper.sliding and not escaper.onUnwalkable
 				pos = holder.getPos()
 		else
 			super.update()
@@ -80,11 +76,11 @@ public class Key extends ItemObject
 		switch id
 			case DYN_ID
 				followWalkable = false
-				actor..removeAbility(DYN_ID)..addAbility(STATIC_ID)
+				setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
 				returnSfx = AddSpecialEffect("XTex.mdx", pos.x, pos.y)
 			case STATIC_ID
 				followWalkable = true
-				actor..removeAbility(STATIC_ID)..addAbility(DYN_ID)
+				setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
 				if returnSfx != null
 					returnSfx.destr()
 		recolor()
@@ -103,6 +99,7 @@ public class Key extends ItemObject
 	ondestroy
 		if fx != null
 			fx.hiddenDestroy()
+			fx = null
 		holder = null
 		if returnSfx != null
 			returnSfx.destr()

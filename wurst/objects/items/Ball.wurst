@@ -7,40 +7,40 @@ import Key
 public class BallItem extends ItemObject
 	boolean picked = false
 	boolean followWalkable = true
-	Escaper holder
+	UnitEntity holder
 
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(BALL_ITEM_ID, pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0 ) )
 
-	override function onUse(Escaper user)
+	override function onUse(UnitEntity user)
 
-	override function onPickup(Escaper holder)
+	override function onPickup(UnitEntity holder)
 		picked = true
 		this.holder = holder
 		holder.actor.addAbility(BALL_SPELL_ID)
-		actor.hide()
+		setup.hide()
 
-	override function onDrop(Escaper e)
+	override function onDrop(UnitEntity e)
 		picked = false
 		holder = null
 		if e.actor.hasAbility(BALL_SPELL_ID)
 			e.actor.removeAbility(BALL_SPELL_ID)
 			nullTimer() ->
-				actorItem.remove()
-				actorItem = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
-				actorItem.setEntity(this)
+				actor.remove()
+				actor = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
+				actor.setEntity(this)
 		else
 			nullTimer() ->
-				actorItem.remove()
+				actor.remove()
 
 	override function update()
 
 	function onIdle(vec2 pos)
 		this.pos = pos.toVec3()
-		actorItem.setVisible(true)
-		actor.setXY(pos)
-		actor.show()
+		actor.setVisible(true)
+		setup.setXY(pos)
+		setup.show()
 		nullTimer() ->
-			actorItem.remove()
-			actorItem = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
-			actorItem.setEntity(this)
+			actor.remove()
+			actor = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
+			actor.setEntity(this)

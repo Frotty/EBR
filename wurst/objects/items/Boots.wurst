@@ -7,21 +7,21 @@ public constant BOOTS_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 public class Boots extends ItemObject
 	boolean picked = false
 	boolean followWalkable = true
-	Escaper holder
 
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, BOOTS_DUMMY_ID, pos.x, pos.y, 0 ) )
 
-	override function onUse(Escaper user)
+	override function onUse(UnitEntity user)
 
-	override function onPickup(Escaper holder)
+	override function onPickup(UnitEntity holder)
 		picked = true
 		this.holder = holder
-		actorItem.setEntity(null)
-		actorItem = null
+		actor.setEntity(null)
+		actor = null
 		terminate()
 
-	override function onDrop(Escaper e)
+	override function onDrop(UnitEntity e)
+
 	override function update()
 
 @objectgen function genTome()

@@ -3,64 +3,26 @@ import public Escaper
 
 /**	Abstract class for Entities that are items
 	like Keys, Coins, etc. */
-public abstract class ItemObject extends UnitEntity
-	item actorItem
+public abstract class ItemObject extends ItemEntity
+	unit setup
+	UnitEntity holder = null
 
 	construct(vec2 pos, item i, unit setup)
-		super(setup)
-		setup..addAbility(GHOST_VIS_ID)
-		actorItem = i
-		actorItem..setEntity(this)
-		..setPos(pos)
-		setup..setPos(actorItem.getPos())..setXY(actorItem.getPos())
+		super(i)
+		this.setup = setup
+		setup..addAbility(GHOST_VIS_ID)..setPos(pos)
+		..setPos(i.getPos())..setXY(i.getPos())
+
+
+	override function onUse(UnitEntity user)
+
+	override function onPickup(UnitEntity holder)
+
+	override function onDrop(UnitEntity e)
 
 	ondestroy
-		if actorItem != null
-			actorItem.setEntity(null)
-			actorItem.remove()
+		if setup != null
+			setup.setEntity(null)
+			setup.remove()
+			setup = null
 
-	abstract function onPickup(Escaper e)
-
-	abstract function onDrop(Escaper e)
-
-	abstract function onUse(Escaper e)
-
-function onItemUse()
-	let itm = GetManipulatedItem()
-	let hero = GetManipulatingUnit()
-
-	let idata = itm.getEntity()
-	let edata = hero.getEntity()
-	if idata instanceof ItemObject and not idata.done
-		if edata instanceof Escaper and not edata.done
-			(idata castTo ItemObject).onUse(edata castTo Escaper)
-
-function onItemPickup()
-	let itm = GetManipulatedItem()
-	let hero = GetManipulatingUnit()
-
-	let idata = itm.getEntity()
-	let edata = hero.getEntity()
-	if idata instanceof ItemObject and not idata.done
-		if edata instanceof Escaper and not edata.done
-			(idata castTo ItemObject).onPickup(edata castTo Escaper)
-		else
-			destroy idata
-			itm.setEntity(null)
-			itm.remove()
-
-function onItemDrop()
-	let itm = GetManipulatedItem()
-	let hero = GetManipulatingUnit()
-
-	let idata = itm.getEntity()
-	let edata = hero.getEntity()
-	if idata instanceof ItemObject and not idata.done
-		if edata instanceof Escaper and not edata.done
-			(idata castTo ItemObject).onDrop(edata castTo Escaper)
-
-
-init
-	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> onItemPickup())
-	EventListener.add(EVENT_PLAYER_UNIT_DROP_ITEM, () -> onItemDrop())
-	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> onItemUse())

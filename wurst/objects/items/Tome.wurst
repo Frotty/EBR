@@ -9,12 +9,8 @@ public class Tome extends ItemObject
 	construct(vec2 pos, player owner)
 		super( pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, TOME_DUMMY_ID, pos.x, pos.y, 0 ) )
 
-	override function onUse(Escaper user)
-
-	override function onPickup(Escaper holder)
+	override function onPickup(UnitEntity holder)
 		terminate()
-
-	override function onDrop(Escaper e)
 
 
 @objectgen function genTome()
