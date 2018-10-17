@@ -67,10 +67,11 @@ public abstract class Minigame
 			tim = null
 			DestroyTimerDialog(window)
 			for pd from escaperPlayers.staticItr()
-				if pd.escaper != null and not pd.escaper.alive
-					pd.escaper.revive()
-				pd.escaper.setPos(LOUNGE.toVec3())
-				pd.escaper.setCurrentRegion()
+				if pd.escaper != null
+					if not pd.escaper.alive
+						pd.escaper.revive()
+					pd.escaper.setPos(LOUNGE.toVec3())
+					pd.escaper.setCurrentRegion()
 
 				SetCameraBoundsToRectForPlayerBJ(pd.p, gg_rct_Region_023)
 

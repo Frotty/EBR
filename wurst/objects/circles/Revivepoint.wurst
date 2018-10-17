@@ -33,7 +33,6 @@ public class RevivePoint extends StaticSetupObject
 			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
 			tile.addModifier(TileModifier.RESERVED)
 
-
 	function reach(Escaper reacher)
 		Log.debug("on reach")
 		if not reached
@@ -136,3 +135,5 @@ public class RevivePoint extends StaticSetupObject
 		..setSelectionScale(4)
 		..setUnitClassification("ancient,standon")
 		..setHideMinimapDisplay(true)
+
+

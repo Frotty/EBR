@@ -56,13 +56,14 @@ class EscaperDefinition
 		if isBuilder(pd.p)
 			pd.escaper.actor..addAbility(BLINK_ID)..addAbility(CREATE_REV_MOD_ID)
 			pd.escaper.selectatrevive = false
+			pd.escaper.camOnRevive = false
 			PanCameraToTimedForPlayer(pd.p,pd.builder.actor.getX(),pd.builder.actor.getY(),0)
 			pd.p.selectSingle(pd.builder.actor)
-			printTimedToPlayer("	You chose the role |cff528CDEBuilder|r!", 20, pd.p)
+			printTimedToPlayer("	You are a |cff528CDEBuilder|r!", 20, pd.p)
 		else
 			PanCameraToTimedForPlayer(pd.p,START.x,START.y,0)
 			pd.p.selectSingle(pd.escaper.actor)
-			printTimedToPlayer("	You chose the role |cff528CDEEscaper|r!", 20, pd.p)
+			printTimedToPlayer("	You are an |cff528CDEEscaper|r!", 20, pd.p)
 
 		pd.icon = mbicon
 		// Check for savefile#

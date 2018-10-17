@@ -14,9 +14,9 @@ import ObstacleObjects
 import Execute
 import MGSpacey
 
-HashMap<rect, RegionData> regionMap = new HashMap<rect, RegionData>()
-public constant vec2 LOUNGE = gg_unit_revp_0322.getPos()
+public constant LOUNGE = gg_unit_revp_0322.getPos()
 
+constant regionMap = new HashMap<rect, RegionData>()
 
 public enum RegionType
 	UNKNOWN
@@ -110,7 +110,7 @@ public class RegionData
 
 	construct(rect r)
 		theRect = r
-		if(r != null)
+		if r != null
 			visTrig = CreateTrigger()
 			..registerRectEnterEventSource(r)
 			..addAction(() -> enterRect())
@@ -172,7 +172,7 @@ public class RegionData
 	function hideRegion(player p)
 		let id = p.getId()
 		if fmods[id] != null
-			fmods[id].changeFog(FOG_OF_WAR_FOGGED)
+			fmods[id].changeFog(FOG_OF_WAR_MASKED)
 
 	static function enterRect()
 		var u = GetTriggerUnit()
@@ -204,11 +204,11 @@ public class RegionData
 real x = 0
 real y = 0
 
-function rect.changeTerrain( integer ttype )
-	real xmax = GetRectMaxX(this)-32
-	real xmin = GetRectMinX(this)+32
-	real ymax = GetRectMaxY(this)-32
-	real ymin = GetRectMinY(this)+32
+function rect.changeTerrain(integer ttype)
+	let xmax = this.getMaxX() - 32
+	let xmin = this.getMinX() + 32
+	let ymax = this.getMaxY() - 32
+	let ymin = this.getMinY() + 32
 	x = xmin
 	y = ymin
 	while y <= ymax
@@ -245,7 +245,6 @@ public function getRegionData(vec2 pos) returns RegionData
 public RegionData array regions
 
 @init1 function init_Regions()
-	Log.debug("init regions")
 	regions[0] = new RegionData(gg_rct_Region_024)
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
 	regions[0].setOwner(STAFF_PLAYER)
@@ -289,9 +288,8 @@ public RegionData array regions
 	regions[24].setType(getRegionTypeFromItem('I00G'), false)
 	regions[24].setOwner(STAFF_PLAYER)
 
-	let t = CreateTrigger()
-	t.registerRectLeaveEventSource(gg_rct_Region_023)
-	t.addAction() ->
+	CreateTrigger()..registerRectLeaveEventSource(gg_rct_Region_023)
+	..addAction() ->
 		let entity = GetTriggerUnit().getEntity()
 		if entity instanceof Escaper
 			(entity castTo Escaper).stop()
@@ -300,7 +298,4 @@ public RegionData array regions
 			print(entity.actor.getName())
 			Log.debug("RegionDataDelete")
 			entity.terminate()
-
-	Log.debug("regions done")
-
 
