@@ -5,6 +5,7 @@ import Escaper
 import Assets
 import Key
 import Obstacle
+import EscaperObjects
 
 constant REINCARNATION_ID = 'A02X'
 constant PORTAL_CREATE_ID = 'A08K'
