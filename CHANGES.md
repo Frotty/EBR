@@ -1,6 +1,10 @@
-[0.91q]
+[0.91w]
+[*] Fixed builder cam changing on escaper revive by default (can be adjusted with -smode)
+[*] Fixed more errors with minigames and escapers being dead or unpicked
+[*] Slightly reduced percentage needed to trigger a builder teleport
+[*] Fixed orb missile having invalid height
+[*] Fixed builders not being able to pick up their own keys with their escaper
 [*] Fixed pointer -sa/-setangle command
-[*] 
 
 [0.91p]
 [*] Fixed ankh not setting cam properly on revive

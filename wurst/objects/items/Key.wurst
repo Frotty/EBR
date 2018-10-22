@@ -21,14 +21,14 @@ public class Key extends ItemObject
 	Fx fx = null
 
 	construct(vec2 pos, player owner)
-		super( pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
+		super(pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function recolor()
 		setNewActor(createItem(keyIds[col castTo int], pos))
 
 	override function onPickup(UnitEntity holder)
-		if isEscaper(holder.owner) or this.owner == holder.owner
+		if isEscaper(holder.owner) or owner == holder.owner
 			picked = true
 			this.holder = holder
 			fx = new Fx(pos, "war3mapImported\\Key_ITEM.mdx")

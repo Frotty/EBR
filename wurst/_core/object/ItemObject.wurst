@@ -8,7 +8,7 @@ public abstract class ItemObject extends ItemEntity
 	UnitEntity holder = null
 
 	construct(vec2 pos, item i, unit setup)
-		super(i)
+		super(i, setup.getOwner())
 		this.setup = setup
 		setup..addAbility(GHOST_VIS_ID)..setPos(pos)
 		..setPos(i.getPos())..setXY(i.getPos())
