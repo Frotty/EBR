@@ -1,0 +1,7 @@
+[CustomSkin]
+IdlePeon=ReplaceableTextures\CommandButtons\BTNEditor-MultipleDoodads.blp
+
+[FrameDef]
+UPKEEP_NONE=TRIGSTR_1816
+RESOURCE_UBERTIP_UPKEEP=TRIGSTR_1815
+
