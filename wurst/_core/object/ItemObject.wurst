@@ -3,16 +3,24 @@ import public Escaper
 
 /**	Abstract class for Entities that are items
 	like Keys, Coins, etc. */
+class ItemEntityBridge extends UnitEntity
+	ItemObject obj
+
+	construct(unit setup, ItemObject obj, vec2 pos)
+		super(setup)
+		this.obj = obj
+		actor..addAbility(GHOST_VIS_ID)..setXY(pos)
+
+	ondestroy
+		obj.terminate()
+
 public abstract class ItemObject extends ItemEntity
-	unit setup
+	ItemEntityBridge setup
 	UnitEntity holder = null
 
 	construct(vec2 pos, item i, unit setup)
 		super(i, setup.getOwner())
-		this.setup = setup
-		setup..addAbility(GHOST_VIS_ID)..setPos(pos)
-		..setPos(i.getPos())..setXY(i.getPos())
-
+		this.setup = new ItemEntityBridge(setup, this, pos)
 
 	override function onUse(UnitEntity user)
 
@@ -21,8 +29,4 @@ public abstract class ItemObject extends ItemEntity
 	override function onDrop(UnitEntity e)
 
 	ondestroy
-		if setup != null
-			setup.setEntity(null)
-			setup.remove()
-			setup = null
-
+		setup.terminate()

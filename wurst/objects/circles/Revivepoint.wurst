@@ -70,6 +70,7 @@ public class RevivePoint extends StaticSetupObject
 					pd.escaper.setPos(pos)
 					pd.escaper.stop()
 					pd.escaper.actor.abortOrder()
+
 					if not pd.escaper.camlock
 						if localPlayer == pd.p
 							PanCameraToTimed(pos.x, pos.y, 0)

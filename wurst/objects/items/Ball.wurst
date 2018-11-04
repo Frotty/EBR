@@ -18,7 +18,7 @@ public class BallItem extends ItemObject
 		picked = true
 		this.holder = holder
 		holder.actor.addAbility(BALL_SPELL_ID)
-		setup.hide()
+		setup.actor.hide()
 
 	override function onDrop(UnitEntity e)
 		picked = false
@@ -38,8 +38,8 @@ public class BallItem extends ItemObject
 	function onIdle(vec2 pos)
 		this.pos = pos.toVec3()
 		actor.setVisible(true)
-		setup.setXY(pos)
-		setup.show()
+		setup.setXY(pos.toVec3())
+		setup.actor.show()
 		nullTimer() ->
 			actor.remove()
 			actor = CreateItem( BALL_ITEM_ID, pos.x, pos.y )

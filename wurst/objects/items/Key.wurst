@@ -20,12 +20,15 @@ public class Key extends ItemObject
 	effect returnSfx = null
 	Fx fx = null
 
-	construct(vec2 pos, player owner)
-		super(pos, createItem(keyIds[0], pos), createUnit(owner, KEY_DUMMY_ID, pos, 0 .fromDeg()) )
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+	construct(vec2 ppos, player owner)
+		super(ppos, createItem(keyIds[0], ppos), createUnit(owner, KEY_DUMMY_ID, ppos, 0 .fromDeg()) )
+		EventListener.add(setup.actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function recolor()
 		setNewActor(createItem(keyIds[col castTo int], pos))
+		if returnSfx != null
+			returnSfx.destr()
+			returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
 
 	override function onPickup(UnitEntity holder)
 		if isEscaper(holder.owner) or owner == holder.owner
@@ -33,15 +36,15 @@ public class Key extends ItemObject
 			this.holder = holder
 			fx = new Fx(pos, "war3mapImported\\Key_ITEM.mdx")
 			..setColor(col.toColor())
-			..setXYZ(holder.getPos()+vec3(0,0,128))
-			setup.hide()
+			..setXYZ(holder.getPos() + vec3(0,0,128))
+			setup.actor.hide()
 			activate()
 		else
 			picked = false
 			holder.actor.removeItem(actor)
 			actor.setPos(pos.toVec2())
-			setup.setXY(pos.toVec2())
-			setup.show()
+			setup.setXY(pos)
+			setup.actor.show()
 			this.holder = null
 
 	override function onDrop(UnitEntity e)
@@ -50,8 +53,8 @@ public class Key extends ItemObject
 		if fx != null
 			fx.hiddenDestroy()
 			fx = null
-		setup.setXY(pos.toVec2())
-		setup.show()
+		setup.setXY(pos)
+		setup.actor.show()
 		nullTimer() ->
 			actor..setEntity(null)
 			..remove()
@@ -67,24 +70,23 @@ public class Key extends ItemObject
 		else
 			super.update()
 
-	function onCast() returns boolean
+	function onCast()
 		let id = GetSpellAbilityId()
+		switch id
+			case DYN_ID
+				followWalkable = false
+				setup.actor..removeAbility(DYN_ID)..addAbility(STATIC_ID)
+				returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
+			case STATIC_ID
+				followWalkable = true
+				setup.actor..removeAbility(STATIC_ID)..addAbility(DYN_ID)
+				if returnSfx != null
+					returnSfx.destr()
 		for i = 0 to 8
 			if colorSpells[i] == id
 				col = i castTo EBRColor
 				break
-		switch id
-			case DYN_ID
-				followWalkable = false
-				setup..removeAbility(DYN_ID)..addAbility(STATIC_ID)
-				returnSfx = AddSpecialEffect("XTex.mdx", pos.x, pos.y)
-			case STATIC_ID
-				followWalkable = true
-				setup..removeAbility(STATIC_ID)..addAbility(DYN_ID)
-				if returnSfx != null
-					returnSfx.destr()
 		recolor()
-		return false
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -125,7 +127,7 @@ public class Key extends ItemObject
 	..setMovementType(MovementType.None)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(commaList('A00M', 'A05R', REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(DYN_ID, 'A05R', REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setName("Key Dummy")
 	..setUpgradesUsed("")
 	..setBuildTime(1)

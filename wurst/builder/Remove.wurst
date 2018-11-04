@@ -8,7 +8,7 @@ function onRemoveObject()
 	if id == REMOVE_OBJECT_ID
 		var u = GetSpellAbilityUnit()
 		var data = u.getEntity()
-		if data != null
+		if data != null and not data.done
 			flashEffect(Abilities.aIamTarget, u.getPos())
 			data.terminate()
 			u..removeAbility(REMOVE_OBJECT_ID)

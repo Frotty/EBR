@@ -1,3 +1,11 @@
+[0.91y]
+[*] Fixed keys not being able to be removed via their remove spell (only builder pickup)
+[*] The color of rooted keys' X symbols now matches the key's color
+[*] Fixed unitcreator interval changes setting spawned unittype to bunnies
+[*] Fixed bomber attackspeed settings missing
+[*] Fixed executer mode tooltip hotkey typo
+[*]
+
 [0.91w]
 [*] Fixed builder cam changing on escaper revive by default (can be adjusted with -smode)
 [*] Fixed more errors with minigames and escapers being dead or unpicked
