@@ -25,8 +25,8 @@ public class MGSpacey extends Minigame
 		for pd in escaperPlayers
 			if not pd.escaper.alive
 				forceRevive(pd.escaper)
-			printTimedToPlayer("Use Arrowkeys and Escape to control your spacecraft.", 15., pd.p)
-			ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*32.,-128), pd.escaper))
+			printTimedToPlayer("Use Arrowkeys and Escapekey to control your spacecraft.", 15., pd.p)
+			ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*64., -168), pd.escaper))
 
 		listener = EventListener.add(EVENT_PLAYER_END_CINEMATIC) ->
 			for ship in ships
@@ -41,7 +41,7 @@ public class MGSpacey extends Minigame
 					break
 
 		for i = 0 to 2
-			new SpaceRock(ARENA_POS.polarOffset((90+GetRandomReal(-45, 45)).fromDeg(), GetRandomReal(256, 480)), vec2(GetRandomReal(-2, 2), GetRandomReal(-2, 2)), 4)
+			new SpaceRock(ARENA_POS.polarOffset((90+GetRandomReal(-45, 45)).fromDeg(), GetRandomReal(256, 480)), vec2(GetRandomReal(-1, 1), GetRandomReal(-1, 1)), 4)
 
 	override function onEnd()
 		if listener != null
@@ -68,7 +68,7 @@ public class MGSpacey extends Minigame
 constant minigame = new MGSpacey()
 
 init
-	minigames.add(minigame)
+	// minigames.add(minigame)
 
 
 constant SHIP_ID = compiletime(ABIL_ID_GEN.next())
@@ -107,13 +107,13 @@ class ShipProjectile extends Projectile
 public class Spaceship extends UnitEntity
 	real maxSpeed = 9
 	real acc = 0
-	angle xyAngle = angle(0)
+	angle xyAngle = (90).fromDeg()
 	var projectiles = new LinkedList<ShipProjectile>
 	Escaper mounter
 	int hp = 2
 
 	construct(vec2 pos, Escaper mounter)
-		super(createUnit(mounter.owner, SHIP_ID, pos, angle(0)))
+		super(createUnit(mounter.owner, SHIP_ID, pos, (90).fromDeg()))
 		this.mounter = mounter
 		this.mounter.alive = false
 		actor.addAbility(LOCUST_ID)
@@ -123,6 +123,7 @@ public class Spaceship extends UnitEntity
 
 	function shoot()
 		if active and projectiles.size() < 5
+			actor.setAnimation("attack")
 			projectiles.add(new ShipProjectile(this))
 
 
@@ -130,17 +131,17 @@ public class Spaceship extends UnitEntity
 		let downKeys = owner.getDownKeys()
 		acc = acc.lerp(0,0.1)
 		if downKeys.left
-			xyAngle += angle(0.115)
+			xyAngle += angle(0.105)
 		if downKeys.right
-			xyAngle -= angle(0.115)
+			xyAngle -= angle(0.105)
 		xyAngle = (xyAngle.degrees() % 360.).fromDeg()
 		actor.setFacing(xyAngle)
 		if localPlayer == owner
 			CameraSetupApplyForceDuration(gg_cam_spaceycam, true, 0.)
 		if downKeys.up
-			acc = acc.lerp(0.85, 0.2)
+			acc = acc.lerp(0.85, 0.175)
 		if downKeys.down
-			acc = acc.lerp(-0.2, 0.2)
+			acc = acc.lerp(-0.2, 0.175)
 
 	override function update()
 		foo()
@@ -248,3 +249,5 @@ public class SpaceRock extends FxEntity
 		..setManaMaximum(0)
 		..setCollisionSize(0)
 		..setScalingValue(0.25)
+		..setAttacksEnabled(0)
+		..setSpeedBase(1)

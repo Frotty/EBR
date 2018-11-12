@@ -6,8 +6,16 @@ import ReviveManager
 import initlater MinigameTeleporter
 
 public constant minigames = new LinkedList<Minigame>()
+constant minigames_live = new LinkedList<Minigame>()
 public constant MAX_TIME = 1.5 * 60.
 constant BEGIN_SOUND = new SoundDefinition(Sounds.arrangedTeamInvitation, false)
+
+public function getNextMinigame() returns Minigame
+	if minigames_live.size() == 0
+		minigames_live.addAll(minigames)
+		minigames_live.shuffle()
+
+	return minigames_live.pop()
 
 public abstract class Minigame
 	timer tim

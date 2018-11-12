@@ -1,10 +1,12 @@
-[0.91y]
-[*] Fixed keys not being able to be removed via their remove spell (only builder pickup)
+[0.91z]
+[*] Added a new minigame: Slide Arena
+[*] Changed minigame's selection algorithm to cycled random
 [*] The color of rooted keys' X symbols now matches the key's color
+[*] Fixed keys not being able to be removed via their remove spell (only builder pickup)
 [*] Fixed unitcreator interval changes setting spawned unittype to bunnies
 [*] Fixed bomber attackspeed settings missing
 [*] Fixed executer mode tooltip hotkey typo
-[*]
+[*] Fixed conga line duplicate spells and overlapping orderids
 
 [0.91w]
 [*] Fixed builder cam changing on escaper revive by default (can be adjusted with -smode)

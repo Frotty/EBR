@@ -1,0 +1,44 @@
+package MGSlide
+import Minigame
+import EscaperKillers
+import Assets
+import Fx
+
+constant LEFT_SPOT = vec2(-1540, 7550)
+constant RIGHT_SPOT = vec2(640, 7550)
+
+public class MGSlide extends Minigame
+	Fx fx
+	RegionData rdata
+	boolean goRight = true
+
+	override function getGameRect() returns rect
+		return gg_rct_slidegamearea
+
+	override function getCamBounds() returns rect
+		return gg_rct_slidegamebounds
+
+	override function onBegin()
+		rdata = getRegionData(LEFT_SPOT)
+		doPeriodically(0.5) cb ->
+			for escaper from rdata.getEscapers()
+
+
+	override function onEnd()
+		if fx != null
+			GroupEnumUnitsInRect(ENUM_GROUP, getGameRect(), Filter(() -> GetFilterUnit().getOwner() == STAFF_PLAYER))
+			for obj from ENUM_GROUP
+				Log.debug("onEnd Terminate")
+				if obj.getEntity() != null
+					obj.getEntity().terminate()
+			destroy fx
+			fx = null
+
+	override function getStartPosition() returns vec2
+		return LEFT_SPOT
+
+	override function getName() returns string
+		return "|cff567eecSlide Fun"
+
+init
+	minigames.add(new MGSlide())

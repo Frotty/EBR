@@ -6,7 +6,7 @@ import initlater PlayerData
 	Holds constants and IDs related to both Escaper and Builder.
 */
 
-public constant string MAP_VER = "EBR 0.90"
+public constant string MAP_VER = "EBR 0.91"
 
 public constant STAFF_PLAYER = players[PLAYER_NEUTRAL_PASSIVE]
 

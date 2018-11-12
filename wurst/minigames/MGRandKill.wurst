@@ -33,9 +33,9 @@ public class MGRandKill extends Minigame
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 		chickenTimer = doPeriodically(10) cb ->
 			new SmallRandomKiller(spawn, STAFF_PLAYER)
-		bunnyTimer = doPeriodically(25) cb ->
+		bunnyTimer = doPeriodically(23) cb ->
 			new BigRandomKiller(spawn, STAFF_PLAYER)
-		coinTimer = doPeriodically(21) cb ->
+		coinTimer = doPeriodically(23) cb ->
 			for i = 0 to ((tim.getElapsed() / 20) + 2).toInt()
 				new Coin(getGameRect().randomPoint(), STAFF_PLAYER)
 
@@ -59,4 +59,4 @@ public class MGRandKill extends Minigame
 		return "|cffccaaddRandom Rumble"
 
 init
-	minigames.add(new MGRandKill())
+	// minigames.add(new MGRandKill())

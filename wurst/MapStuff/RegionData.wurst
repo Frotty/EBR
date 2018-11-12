@@ -287,6 +287,9 @@ public RegionData array regions
 	regions[24] = new RegionData(gg_rct_spaceygamearea)
 	regions[24].setType(getRegionTypeFromItem('I00G'), false)
 	regions[24].setOwner(STAFF_PLAYER)
+	regions[25] = new RegionData(gg_rct_slidegamearea)
+	regions[25].setType(getRegionTypeFromItem('I00D'), false)
+	regions[25].setOwner(STAFF_PLAYER)
 
 	CreateTrigger()..registerRectLeaveEventSource(gg_rct_Region_023)
 	..addAction() ->

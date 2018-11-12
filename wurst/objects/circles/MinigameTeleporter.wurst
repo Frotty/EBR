@@ -49,8 +49,7 @@ public class MinigameTeleporter extends StaticBaseObject
 			currentPlus--
 
 	function startMinigame()
-		minigames.shuffle()
-		let chosenMinigame = minigames.get(GetRandomInt(0, minigames.size()-1))
+		let chosenMinigame = getNextMinigame()
 		chosenMinigame.start()
 
 	function reset()
