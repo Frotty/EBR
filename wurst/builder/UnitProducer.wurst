@@ -30,7 +30,7 @@ constant FIRE	 		= 'Afre'
 
 public class UnitProducer extends StaticBaseObject
 
-	construct( vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, UNIT_PRODUCER_ID, pos, angle(0)), 0., null, null)
 		actor..removeAbility(REMOVE_OBJECT_ID)..addAbility(AIR_KILLER)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -80,11 +80,11 @@ public class UnitProducer extends StaticBaseObject
 				case TANK_KILLER // Tank
 					new TankKiller(rallyPos,obj.owner)
 				case OBJ_TARGET
-					new ObjectTarget(vec2(rallyPos.x,rallyPos.y), obj.owner )
+					new ObjectTarget(vec2(rallyPos.x,rallyPos.y), obj.owner)
 				case GLAIVE_KILLER
 					new GlaiveKiller(rallyPos,obj.owner)
 				case T_CHANGER
-					new TerrainChanger( vec2(rallyPos.x,rallyPos.y), obj.owner )
+					new TerrainChanger(vec2(rallyPos.x,rallyPos.y), obj.owner)
 				case POINTER
 					new Pointer(vec2(rallyPos.x,rallyPos.y), obj.owner, angle(0))
 				case BOMBER
@@ -101,7 +101,7 @@ public class UnitProducer extends StaticBaseObject
 				newObjectFromId(obj.owner, rallyPos, index)
 
 		else
-			DisplayTextToPlayer( obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
+			DisplayTextToPlayer(obj.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 		return false
 
 init

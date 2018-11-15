@@ -10,7 +10,7 @@ import Knockbacker
 import Builder
 
 constant INFO_EXECUTER_ID = compiletime(ABIL_ID_GEN.next())
-constant EFFECT_STRING   = Abilities.manaFlareBase
+constant EFFECT_STRING  = Abilities.manaFlareBase
 constant LEVER_DUMMY_ID = 'DTlv'
 constant PLATE_DUMMY_ID = 'B001'
 constant EVENT_RADIUS	= 42.
@@ -112,11 +112,11 @@ public class Executer extends StaticBaseObject
 
 	construct(unit existing)
 		super(existing.getPos(), existing, EVENT_RADIUS,
-				() -> (GetTriggeringTrigger().getSource().getEntity()  castTo Executer).onEvent(), null)
+				() -> (GetTriggeringTrigger().getSource().getEntity() castTo Executer).onEvent(), null)
 
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, EXECUTER_ID, pos, angle(0)), EVENT_RADIUS,
-				() -> (GetTriggeringTrigger().getSource().getEntity()  castTo Executer).onEvent(), null)
+				() -> (GetTriggeringTrigger().getSource().getEntity() castTo Executer).onEvent(), null)
 
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
@@ -315,7 +315,7 @@ public class Executer extends StaticBaseObject
 				default
 					error("Unitcreator - Wrong Unittype")
 		else
-			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place units in this region!")
+			DisplayTextToPlayer(owner, 0, 0, "|cffC51019You have no permission to place units in this region!")
 
 	function changeTerrain(boolean isAction)
 		let rallyPos = getRallyPoint()
@@ -395,7 +395,7 @@ public class Executer extends StaticBaseObject
 		actor.setVertexColor(44, 44, 44, 255)
 		disabled = true
 		actor.addAbility(REACTIVATE_ABIL)
-		createFText(pos, vec2(0,0.05), "Deactivated", 10,  2., colorA(50,50,50,0), owner )
+		createFText(pos, vec2(0,0.05), "Deactivated", 10, 2., colorA(50,50,50,0), owner)
 
 	ondestroy
 		if eventRect != null
@@ -430,7 +430,7 @@ public class Executer extends StaticBaseObject
 				eventMode = Emode.LEVER
 				addActionAbilsReversable()
 				removeModeAbils()
-				dummy = CreateDestructable( LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
+				dummy = CreateDestructable(LEVER_DUMMY_ID, actor.getX(), actor.getY(), 0,1,0)
 				SetDestructableAnimation(dummy, "death")
 			case PRESSURE_ABIL
 				eventMode = Emode.PRESSUREPLATE

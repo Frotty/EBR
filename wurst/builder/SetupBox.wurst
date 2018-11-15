@@ -41,7 +41,7 @@ constant BOSS_SOUND = new SoundDefinition("Sound\\Dialogue\\Extra\\MuradinTaunt1
 public class SetupBox extends UnitEntity
 	private RegionData rdata
 
-	construct( vec2 pos, player owner, RegionData data )
+	construct(vec2 pos, player owner, RegionData data)
 		super(createUnit(owner, SETUP_BOX_ID, pos, angle(0)))
 		this.setCurrentRegion()
 		rdata = data
@@ -59,40 +59,40 @@ public class SetupBox extends UnitEntity
 		switch id
 			case ICEI_ID
 				if rdata.slidespeed >= MAX_SLIDESPEED
-					DisplayTextToPlayer( owner, 0, 0, "Slidespeed is on Maximum" )
+					DisplayTextToPlayer(owner, 0, 0, "Slidespeed is on Maximum")
 				else
 					rdata.slidespeed += .25
-					DisplayTextToPlayer( owner, 0, 0, "Slidespeed: " + rdata.slidespeed.toString() )
+					DisplayTextToPlayer(owner, 0, 0, "Slidespeed: " + rdata.slidespeed.toString())
 			case ICED_ID
 				if rdata.slidespeed <= -MAX_SLIDESPEED
-					DisplayTextToPlayer( owner, 0, 0, "Slidespeed is on Minimum" )
+					DisplayTextToPlayer(owner, 0, 0, "Slidespeed is on Minimum")
 				else
 					rdata.slidespeed -= .25
-					DisplayTextToPlayer( owner, 0, 0, "Slidespeed: " + rdata.slidespeed.toString() )
+					DisplayTextToPlayer(owner, 0, 0, "Slidespeed: " + rdata.slidespeed.toString())
 			case PI_ID
 				if rdata.poisonDmg >= MAX_DOT_DMG
-					DisplayTextToPlayer( owner, 0, 0, "Poisondamage is on Maximum" )
+					DisplayTextToPlayer(owner, 0, 0, "Poisondamage is on Maximum")
 				else
 					rdata.poisonDmg += .25
-					DisplayTextToPlayer( owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString() )
+					DisplayTextToPlayer(owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString())
 			case PD_ID
 				if rdata.poisonDmg <= .25
-					DisplayTextToPlayer( owner, 0, 0, "Poisondamage is on Minimum" )
+					DisplayTextToPlayer(owner, 0, 0, "Poisondamage is on Minimum")
 				else
 					rdata.poisonDmg -= .25
-					DisplayTextToPlayer( owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString() )
+					DisplayTextToPlayer(owner, 0, 0, "Poisondamage: " + rdata.poisonDmg.toString())
 			case LI_ID
 				if rdata.lavaDmg >= MAX_DOT_DMG
-					DisplayTextToPlayer( owner, 0, 0, "Lavadmg is on Maximum" )
+					DisplayTextToPlayer(owner, 0, 0, "Lavadmg is on Maximum")
 				else
 					rdata.lavaDmg += .25
-					DisplayTextToPlayer( owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString() )
+					DisplayTextToPlayer(owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString())
 			case LD_ID
 				if rdata.lavaDmg <= .25
-					DisplayTextToPlayer( owner, 0, 0, "Lavadmg is on Minimum" )
+					DisplayTextToPlayer(owner, 0, 0, "Lavadmg is on Minimum")
 				else
 					rdata.lavaDmg -= .25
-					DisplayTextToPlayer( owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString() )
+					DisplayTextToPlayer(owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString())
 			case ALLOW_ID
 				var u = GetSpellTargetUnit()
 				var p = u.getOwner()
@@ -157,7 +157,7 @@ public class SetupBox extends UnitEntity
 					SelectUnitForPlayerSingle(builder.actor, owner)
 					builder.setBossMenu()
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing." )
+					DisplayTextToPlayer(owner, 0, 0, "|cffFFD621[Info]|r - You need to have at least the |cffFFE6AD3:Novice|r Rank to be able to make a BossRegion.\nYou accumulate Rank-XP over time by playing.")
 			case SECOND_PAGE
 				actor..removeAbility(ALLOW_ID)..removeAbility(ABIL_WIZARD)..removeAbility(CLEAR_ID)..removeAbility(SECOND_PAGE)
 				..removeAbility(INC_GRAVITY)..removeAbility(DEC_GRAVITY)..removeAbility(TURND_ID)..removeAbility(TURNI_ID)
@@ -238,8 +238,8 @@ function claimRegion()
 				addEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl", seller.getPos()).destr()
 				seller.remove()
 
-				DisplayTextToPlayer( builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
-				new SetupBox( vec2(GetRectMinX(rdata.theRect)  + 192., GetRectMaxY(rdata.theRect) - 192. ), builder.owner, rdata )
+				DisplayTextToPlayer(builder.owner, 0, 0, "|cff6BC54AYou claimed this region!\nA |cffFFCC00Setupunit|cff6BC54A has been created at the |cffFFCC00left top corner|cff6BC54A of your region.")
+				new SetupBox(vec2(GetRectMinX(rdata.theRect) + 192., GetRectMaxY(rdata.theRect) - 192.), builder.owner, rdata)
 				if GetLocalPlayer() == builder.owner
 					SelectUnit(builder.actor, true)
 			else

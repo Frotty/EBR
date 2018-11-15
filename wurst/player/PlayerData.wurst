@@ -105,16 +105,16 @@ public class PlayerData
 				XP += amount
 			else if lastExpGain < minutes
 				lastExpGain = minutes
-				Log.debug( "add current xp:" + XP.toString())
+				Log.debug("add current xp:" + XP.toString())
 				XP += amount
-				Log.debug( "add new xp:" + XP.toString())
+				Log.debug("add new xp:" + XP.toString())
 			updateRank()
 
 	function setXp(int amount)
-		Log.debug( "set current xp:" + XP.toString())
+		Log.debug("set current xp:" + XP.toString())
 		XP = amount
 		updateRank()
-		Log.debug( "set new xp:" + XP.toString())
+		Log.debug("set new xp:" + XP.toString())
 
 	function updateRank()
 		if lvlfx != null
@@ -234,7 +234,7 @@ function setTime()
 	var mins = "|cffffffff"
 	// Preceding zeros
 	secs += seconds < 10 ? "0" + seconds.toString() : seconds.toString()
-	mins +=  minutes < 10 ? "0" + minutes.toString() : minutes.toString()
+	mins += minutes < 10 ? "0" + minutes.toString() : minutes.toString()
 
 	secs += "|r"
 	mins += "|r"
@@ -247,7 +247,7 @@ function setTime()
 		if minutes % 5 == 0
 			allPlayers.forEach(p -> p.addXp(10, true))
 
-	playerboard.board.setTitle( MAP_VER + " [ " + mins + " : " + secs +" ]")
+	playerboard.board.setTitle(MAP_VER + " [ " + mins + " : " + secs +" ]")
 
 	int i = 1
 	for pd in allPlayers
@@ -277,7 +277,7 @@ public function startTestmode(PlayerData pd)
 		Log.debug("testmode 4")
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
 		Log.debug("testmode 5")
-		pd.prod = new UnitProducer( hidden, pd.p )
+		pd.prod = new UnitProducer(hidden, pd.p)
 		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
 		pd.escaper = e
 		e.actor..addAbility('A001')..addAbility(CREATE_REV_MOD_ID)
@@ -287,7 +287,7 @@ public function startTestmode(PlayerData pd)
 		e.actor.addAbility('A001')
 		e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
 		e.actor.addAbility('A001')
-		pd.builder = new Builder( pd.p )
+		pd.builder = new Builder(pd.p)
 		pd.builder.actor..addItemById('I001')
 		..addItemById('I002')
 		..addItemById('I003')
@@ -315,7 +315,7 @@ public function initPlayers()
 		pd.tmods[1] = new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
 		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
-		pd.builder = new Builder( pd.p )
+		pd.builder = new Builder(pd.p)
 		pd.builder.actor..addItemById('I001')
 		..addItemById('I002')..addItemById('I003')
 		pd.builder.regionCount = (17. / builderPlayers.size()).round()

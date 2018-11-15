@@ -38,7 +38,7 @@ public constant ATTACK_RANGED = 'A07H'
 	// 	nullTimer(() -> begin
 	// 		actorItem.setEntity(null)
 	// 		actorItem.remove()
-	// 		actorItem = CreateItem(weapontypes[weaponId].itemId, pos.x, pos.y )
+	// 		actorItem = CreateItem(weapontypes[weaponId].itemId, pos.x, pos.y)
 	// 		actorItem.setUserData(this castTo int)
 	// 	end)
 
@@ -64,7 +64,7 @@ public constant ATTACK_RANGED = 'A07H'
 
 	// int id
 	// construct(vec3 pos, vec2 target, player owner, int id)
-	// 	super( vec3(pos.x,pos.y,40.), weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff )
+	// 	super(vec3(pos.x,pos.y,40.), weapon[id].aoe, owner, pos.angleTo2d(target), weapon[id].eff)
 	// 	setSpeed(18)
 	// 	setRanged(weapon[id].range)
 	// 	this.id = id

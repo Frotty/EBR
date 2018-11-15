@@ -10,7 +10,7 @@ public class BallItem extends ItemObject
 	UnitEntity holder
 
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(BALL_ITEM_ID, pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0 ) )
+		super(pos, CreateItem(BALL_ITEM_ID, pos.x, pos.y), CreateUnit(owner, KEY_DUMMY_ID, pos.x, pos.y, 0))
 
 	override function onUse(UnitEntity user)
 
@@ -27,7 +27,7 @@ public class BallItem extends ItemObject
 			e.actor.removeAbility(BALL_SPELL_ID)
 			nullTimer() ->
 				actor.remove()
-				actor = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
+				actor = CreateItem(BALL_ITEM_ID, pos.x, pos.y)
 				actor.setEntity(this)
 		else
 			nullTimer() ->
@@ -42,5 +42,5 @@ public class BallItem extends ItemObject
 		setup.actor.show()
 		nullTimer() ->
 			actor.remove()
-			actor = CreateItem( BALL_ITEM_ID, pos.x, pos.y )
+			actor = CreateItem(BALL_ITEM_ID, pos.x, pos.y)
 			actor.setEntity(this)

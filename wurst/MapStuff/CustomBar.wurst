@@ -1,5 +1,5 @@
 // *************************************************************
-// *				   TTBars -- Version 1.5.0
+// *				  TTBars -- Version 1.5.0
 // *						by Deaod
 // *************************************************************
 // *
@@ -30,13 +30,13 @@
 // *			!! This is a feature of TTGradBar. Will not work with TTBar !!
 // *			- threshold is the value the bar must be equal to or lower than to apply the color specified in colorstring
 // *			- example input would be "ARGB.create(SOME_ALPHA, SOME_RED, SOME_GREEN, SOME_BLUE)" or "0xAARRGGBB"
-// *			  Look at ARGB's manual for detailed reference
+// *			 Look at ARGB's manual for detailed reference
 // *			- there exists an alternative version named AddGradientString(real, threshold, string color),
-// *			  where the color argument is formatted as follows: "|cAARRGGBB"
+// *			 where the color argument is formatted as follows: "|cAARRGGBB"
 // *
 // *		* you can change the value of the bar at any time by using "YourBar.Value=newval"
 // *			- value is a percentage
-// *			  --> use 100 to fill it completely, use 0 to display an empty bar
+// *			 --> use 100 to fill it completely, use 0 to display an empty bar
 // *
 // *		* you can lock this bar to a unit using YourBar.LockToUnit(unit u, real xOffset, real yOffset, real zOffset)
 // *			- u is the unit this bar is locked to
@@ -49,25 +49,25 @@
 // *		* you can change the foreground color with YourBar.SetForeground(ARGB color)
 // *			!! Gradients are preferred over this !!
 // *			- example input would be "ARGB.create(SOME_ALPHA, SOME_RED, SOME_GREEN, SOME_BLUE)" or "0xAARRGGBB"
-// *			  Look at ARGB's manual for detailed reference
+// *			 Look at ARGB's manual for detailed reference
 // *			- there exitsts an alternative version named SetForegroundString(string color),
-// *			  which takes a string formatted as follows: "|cAARRGGBB"
+// *			 which takes a string formatted as follows: "|cAARRGGBB"
 // *
 // *		* you can change the background color with YouBar.SetBackground(ARGB color)
 // *			- example input would be "ARGB.create(SOME_ALPHA, SOME_RED, SOME_GREEN, SOME_BLUE)" or "0xAARRGGBB"
-// *			  Look at ARGB's manual for detailed reference
+// *			 Look at ARGB's manual for detailed reference
 // *
 // *		* want to show the bar to more players? Use YourBar.ChangeVisibility(force disp)
 // *			- disp should contain all players this bar should be displayed to; note that you have to destroy this parameter for yourself
-// *			  inserting null will show the bar to all players
+// *			 inserting null will show the bar to all players
 // *
 // *		* you can change the size of the bar any time by using "YourBar.Size=newval"
 // *
 // *		* you can read and write a bar's X, Y and Z coordinate by using the X, and X= operators (Y and Z respectively as well).
-// *		  I added another method, YourBar.SetPosXY(real x, real y), which sets the bars X and Y coordinate, for speed reasons.
+// *		 I added another method, YourBar.SetPosXY(real x, real y), which sets the bars X and Y coordinate, for speed reasons.
 // *
 // *		* you have access to XOffand YOffmembers (both are of type real). They are only important when locking a bar to a unit.
-// *		  You can probably guess by their names what i added them for.
+// *		 You can probably guess by their names what i added them for.
 // *
 // *		* you can read/change a bars primitive char by reading/changing the member Char
 // *
@@ -76,11 +76,11 @@
 // *		* you can fade out bars when destroying them using YourBar.FadeOut(real overTime, boolean followThrough, real xVel, real yVel)
 // *			- overTime is the time fading should take
 // *			- followThrough changes whether the TTBar instance should be destroyed on the spot
-// *			  of if it should destroy it when the fading is finished
-// *			  "true" destroys the TTBar instance when the fading is finished
-// *			  "false" destroys the TTBar instance on the spot
+// *			 of if it should destroy it when the fading is finished
+// *			 "true" destroys the TTBar instance when the fading is finished
+// *			 "false" destroys the TTBar instance on the spot
 // *			- xVel and yVel can only be used if the Bar is not locked to a unit
-// *			  and move the bar into x and y direction (respectively) by the amount specified
+// *			 and move the bar into x and y direction (respectively) by the amount specified
 // *
 // *************************************************************
 package CustomBar
@@ -88,13 +88,13 @@ import ErrorHandling
 import TimerUtils
 
 // TTBar
-constant	int		 DEFAULT_BACKGROUND  = 0xFF000000 // 0xAARRGGBB // alpha channel is non-functional (blame blizzard for that)
+constant	int		 DEFAULT_BACKGROUND = 0xFF000000 // 0xAARRGGBB // alpha channel is non-functional (blame blizzard for that)
 
 // TTBar and TTGradBar
-constant	int	 	DEFAULT_FOREGROUND  = 0xFFFFFFFF // 0xAARRGGBB
+constant	int	 	DEFAULT_FOREGROUND = 0xFFFFFFFF // 0xAARRGGBB
 
 // TTGradBar
-constant	int	 	MAX_GRADIENTS	   = 10 // Maximum number of gradients you can add
+constant	int	 	MAX_GRADIENTS	  = 10 // Maximum number of gradients you can add
 
 
 force 		tempForce
@@ -128,7 +128,7 @@ public class CustomBar
 	string char // primitive char/string
 	string ptext // primitive text without colors
 	
-	construct( vec3 pos, string char, integer numochars, real size )
+	construct(vec3 pos, string char, integer numochars, real size)
 		t=CreateTextTag()
 		if t==null
 			error("TTBARS: TextTag limit reached!")
@@ -146,13 +146,13 @@ public class CustomBar
 		
 		if t != null
 			t..setAge(0.)
-				..setColor( bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
+				..setColor(bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
 				..setFadepoint(0.)
 				..setLifespan(0.)
 				..setPermanent(true)
-				..setPos( position )
+				..setPos(position)
 				..setSuspended(false)
-				..setText( txt, textsize)
+				..setText(txt, textsize)
 
 		rebuildText()
 
@@ -173,7 +173,7 @@ public class CustomBar
 		return textsize/0.0023
 
 
-	function setSize( real size )
+	function setSize(real size)
 		textsize = TextTagSize2Height(size)
 
 
@@ -181,7 +181,7 @@ public class CustomBar
 		return value * 100.
 
 
-	function setValue( real val )
+	function setValue(real val)
 		var newval = val
 		// keep newval inside possible boundaries
 		if newval > 100.
@@ -192,41 +192,41 @@ public class CustomBar
 		value = newval / 100. // the new value
 		txt = fg_color.toColorString()
 		var chars = (R2I((value * NUM_CHARS * char.length())+0.5) div char.length())*char.length() // calculate the number of chars needed to display the new value
-		txt += ptext.substring( 0, chars)
+		txt += ptext.substring(0, chars)
 		
 
 		txt += "|r"
-		txt += ptext.substring( 0, ptext.length()-chars)
+		txt += ptext.substring(0, ptext.length()-chars)
 
 		if t != null
-			t.setText( txt, textsize)
+			t.setText(txt, textsize)
 
 
 	function getX() returns real
 		return position.x
 
-	function setX( real x )
+	function setX(real x)
 		position.x = x
 		if t != null and not locked
-			t.setPos( position )
+			t.setPos(position)
 
 
 	function getY() returns real
 		return position.y
 
-	function  setY( real y )
+	function setY(real y)
 		position.y = y
 		if t != null and not locked
-			t.setPos( position )
+			t.setPos(position)
 
 
 	function getZ() returns real
 		return position.z
 
-	function setZ( real z )
+	function setZ(real z)
 		position.z = z
 		if t != null
-			t.setPos( position )
+			t.setPos(position)
 
 
 	function isLocked() returns boolean
@@ -241,7 +241,7 @@ public class CustomBar
 		return char
 
 
-	function setChar( string newStr )
+	function setChar(string newStr)
 		var newString = newStr
 		if newString == "|"
 			newString = "||"
@@ -254,35 +254,35 @@ public class CustomBar
 	function getWidth() returns int
 		return NUM_CHARS
 
-	function setWidth( int width )
+	function setWidth(int width)
 		NUM_CHARS = width
 		rebuildText()
 		setValue(value)
 
-	function setPosXY( real x, real y ) // added for speed reasons
+	function setPosXY(real x, real y) // added for speed reasons
 		position.x = x
 		position.y = y
 		if t != null and not locked
-			t.setPos( position )
+			t.setPos(position)
 
 
-	function setBackground( colorA col )
+	function setBackground(colorA col)
 		bg_color = col
 		if t != null
-			t.setColor( bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
+			t.setColor(bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
 
 
-	function setForeground( colorA col )
+	function setForeground(colorA col)
 		fg_color = col
 		setValue(value)
 
 
-	function setForegroundString( colorA col )
+	function setForegroundString(colorA col)
 		fg_color = col
 		setValue(value)
 
 
-	function changeVisibility( force dsp )
+	function changeVisibility(force dsp)
 		force disp = dsp
 		if disp != null
 			if disp == null
@@ -295,9 +295,9 @@ public class CustomBar
 			if IsPlayerInForce(GetLocalPlayer(), disp) and t == null
 				t = CreateTextTag()
 				if t != null
-					t..setColor( bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
-						..setText( txt, textsize)
-						..setPos( position)
+					t..setColor(bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
+						..setText(txt, textsize)
+						..setPos(position)
 				else
 					error("CustomBar: TextTag limit reached!")
 
@@ -309,14 +309,14 @@ public class CustomBar
 			if t == null
 				t = CreateTextTag()
 				if t != null
-					t..setColor( bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
-						..setText( txt, textsize)
-						..setPos( position)
+					t..setColor(bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha)
+						..setText(txt, textsize)
+						..setPos(position)
 				else
 					error("CustomBar: TextTag limit reached!")
 
 
-	function lockToUnit( unit u, real xOffset, real yOffset, real zOff )
+	function lockToUnit(unit u, real xOffset, real yOffset, real zOff)
 		if not locked
 			bars[count] = this
 			this.u = u
@@ -326,7 +326,7 @@ public class CustomBar
 			this.yOffset = yOffset
 			position.z = zOff
 			if count == 0
-				animationTimer.startPeriodic( ANIMATION_PERIOD, function CustomBar.lockCallback)
+				animationTimer.startPeriodic(ANIMATION_PERIOD, function CustomBar.lockCallback)
 
 			count++
 
@@ -359,7 +359,7 @@ public class CustomBar
 		GetExpiredTimer().release()
 
 
-	function fadeOut( real overTime, boolean followThrough, real xVel, real yVel )
+	function fadeOut(real overTime, boolean followThrough, real xVel, real yVel)
 		if t != null
 			t..setLifespan(overTime)
 				..setAge(0)
@@ -370,8 +370,8 @@ public class CustomBar
 
 		if followThrough
 			getTimer()
-				..setData( this castTo int )
-				..start( overTime, function CustomBar.fadeOutCallback)
+				..setData(this castTo int)
+				..start(overTime, function CustomBar.fadeOutCallback)
 		else
 			t = null
 			destroy this

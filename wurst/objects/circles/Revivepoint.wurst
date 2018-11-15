@@ -16,7 +16,7 @@ public class RevivePoint extends StaticSetupObject
 	int startmaze = -1
 
 	construct(unit existing)
-		super(existing, createUnit(existing.getOwner(), REVIVE_POINT_ID, existing.getPos(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach )
+		super(existing, createUnit(existing.getOwner(), REVIVE_POINT_ID, existing.getPos(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach)
 		let tile = pos.getEBRTile()
 		if tile.hasModifier(TileModifier.RESERVED)
 			terminate()
@@ -25,7 +25,7 @@ public class RevivePoint extends StaticSetupObject
 			tile.addModifier(TileModifier.RESERVED)
 
 	construct(vec3 pos, player owner)
-		super(createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach )
+		super(createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach)
 		let tile = pos.getEBRTile()
 		if tile.hasModifier(TileModifier.RESERVED)
 			terminate()

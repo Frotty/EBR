@@ -1,8 +1,8 @@
 package CodeGenerator
 import BigNum
 
-constant string colorUpper  = "|cffFF8000"
-constant string colorLower  = "|cff0080C0"
+constant string colorUpper = "|cffFF8000"
+constant string colorLower = "|cff0080C0"
 constant string colorNumber = "|cff008000"
 
 function player_charset() returns string
@@ -26,7 +26,7 @@ function hashN() returns int
 function maxInt() returns int
 	return 2147483647
 
-function player_chartoi( string c ) returns int
+function player_chartoi(string c) returns int
 	int i = 0
 	string cs = player_charset()
 	int len = player_charsetlen()
@@ -34,7 +34,7 @@ function player_chartoi( string c ) returns int
 		i = i + 1
 	return i
 
-function chartoi( string c ) returns int
+function chartoi(string c) returns int
 	int i = 0
 	string cs = charset()
 	int len = charsetlen()
@@ -42,11 +42,11 @@ function chartoi( string c ) returns int
 		i = i + 1
 	return i
 
-function itochar( int i ) returns string
+function itochar(int i) returns string
 	return SubString(charset(),i,i+1)
 
 
-public function fhash( string ps ) returns int
+public function fhash(string ps) returns int
 	int hash = 7
 	for int i = 0 to ps.length()-1
 		hash = hash*31+chartoi(ps.charAt(i))+11
@@ -55,7 +55,7 @@ public function fhash( string ps ) returns int
 	return hash
 
 
-function modb( int x ) returns int
+function modb(int x) returns int
 	if x >= base()
 		return x - base()
 	else if x < 0
@@ -71,12 +71,12 @@ public class Savecode
 	ondestroy
 		destroy bignum
 
-	function encode( int val, int max )
+	function encode(int val, int max)
 		digits = digits + log(max+1.,base()+0.)
 		bignum.mulSmall(max+1)
 		bignum.addSmall(val)
 	
-	function decode( int max ) returns int
+	function decode(int max) returns int
 		return bignum.divSmall(max+1)
 	
 	function isEmpty() returns boolean
@@ -114,7 +114,7 @@ public class Savecode
 		return s
 	
 	
-	function fromString( string s )
+	function fromString(string s)
 		int i = s.length()-1
 		BigNum_l cur = new BigNum_l()
 		bignum.list = cur
@@ -141,7 +141,7 @@ public class Savecode
 	//this is not cryptographic which is fine for this application
 	//sign = 1 is forward
 	//sign = -1 is backward
-	function obfuscate(int key, int sign )
+	function obfuscate(int key, int sign)
 		int seed = GetRandomInt(0,maxInt())
 		int advance = 0
 		int x = 0
@@ -185,7 +185,7 @@ public class Savecode
 		return toString()
 	
 	
-	function save(string name, int loadtype ) returns string
+	function save(string name, int loadtype) returns string
 		int key = fhash(name)+loadtype*73
 		int hash
 		clean()
@@ -207,7 +207,7 @@ public class Savecode
 		return inputhash == h
 	
 	
-	function load( string name, string s, int loadtype ) returns boolean
+	function load(string name, string s, int loadtype) returns boolean
 		int ikey = fhash(name)+loadtype*73
 		int inputhash
 		fromString(s)
@@ -244,7 +244,7 @@ function prop_Savecode() returns boolean
 	if loadcode.load("test",s,1)
 		BJDebugMsg("load ok")
 	else
-		BJDebugMsg("load failed")   
+		BJDebugMsg("load failed")  
 		return false
 
 //Must decode in reverse order of encodes
@@ -264,9 +264,9 @@ function prop_Savecode() returns boolean
 
 function runTests()
 	if prop_Savecode()
-		print("save1 OK")  
+		print("save1 OK") 
 	else
-		print("save1 Failed")  
+		print("save1 Failed") 
 
 	
 

@@ -21,7 +21,7 @@ public class FourthCitadelleMaze extends Startmaze
 		s.checkObj(gg_unit_scik_0216.getEntity())
 		s.checkObj(gg_unit_scik_0217.getEntity())
 		s.spinSpeed.setVal(4. *DEGTORAD)
-		doAfter(0.2,() -> gg_unit_spnr_0161.issuePointOrder("patrol", vec2(-3900, -4604)) )
+		doAfter(0.2,() -> gg_unit_spnr_0161.issuePointOrder("patrol", vec2(-3900, -4604)))
 
 
 		s = new Spinner(gg_unit_spnr_0157)

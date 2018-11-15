@@ -12,8 +12,8 @@ package CustomSpellBook
 	public class SpellBookDummy extends Entity
 		unit actor
 		
-		construct( player p, int id )
-			super( 0.,0.,0. )
+		construct(player p, int id)
+			super(0.,0.,0.)
 			GroupEnumUnitsSelected(groups[GetPlayerId(p)], p, null)
 			
 			var invalid = 0

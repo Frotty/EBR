@@ -22,7 +22,7 @@ public class SpellTarget extends SetupObject
 	SpellType stype = SpellType.NONE
 
 	construct(vec2 pos, player owner)
-		super(createUnit(owner, SPELLTARGET_ID, pos, angle(0))..addAbility(LOCUST_ID), createUnit(owner, SPELLTARGET_ID,  pos, angle(0)), 32)
+		super(createUnit(owner, SPELLTARGET_ID, pos, angle(0))..addAbility(LOCUST_ID), createUnit(owner, SPELLTARGET_ID, pos, angle(0)), 32)
 		stype = SpellType.NONE
 		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 		if not targets.has(owner.getId())
@@ -51,13 +51,13 @@ public class SpellTarget extends SetupObject
 				if u.getEntity() instanceof Escaper
 					actor.damageTarget(u, 100)
 					let escaper = u.getEntity() castTo Escaper
-					escaper.addVel((escaper.pos-tpos)*0.5 )
+					escaper.addVel((escaper.pos-tpos)*0.5)
 
 	ondestroy
 		targets.get(owner.getId()).remove(this)
 
 //	function castAOE(Boss root)
-//		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y ))
+//		DestroyEffect(AddSpecialEffect(aoe_spell[root.aoe_id].sfx,pos.x,pos.y))
 //		GroupEnumUnitsInRange(ENUM_GROUP,pos.x, pos.y, aoe_spell[root.aoe_id].aoe, null)
 //		for u in ENUM_GROUP
 //			var e = u.getEntity()

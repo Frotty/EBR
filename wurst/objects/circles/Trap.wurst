@@ -58,13 +58,13 @@ public class Trap extends StaticBaseObject
 	real timerreal = 0.
 	ABIL a
 
-	real duration //Shake,  Speed, Stun
+	real duration //Shake, Speed, Stun
 	real value // Shake, Knockback, Speed
 	boolean pull = false
 	int uptimes = 0
 	int goocounter = 0
 	private Goo array[5] goos
-	construct( vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, TRAP_ID, pos, angle(0)) , EVENT_RADIUS, function onStep, null)
 		deactivate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
@@ -76,7 +76,7 @@ public class Trap extends StaticBaseObject
 		let obj = source.getEntity() castTo Trap
 
 		if not obj.active and e instanceof Escaper
-			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY() ))
+			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY()))
 			var escaper = e castTo Escaper
 			obj.doEffect(escaper)
 
@@ -163,18 +163,18 @@ public class Trap extends StaticBaseObject
 				else
 					sfxid ++
 				if sfxid < SFX_COUNT
-					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
+					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY()))
 				else
-					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14, 2., colorA(255,255,255,0), owner)
 			case PREVIOUS_EFFECT_ID
 				if sfxid <= 0
 					sfxid = SFX_COUNT
 				else
 					sfxid --
 				if sfxid < SFX_COUNT
-					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY() ))
+					DestroyEffect(AddSpecialEffect(SFX_STRINGS[sfxid],actor.getX(),actor.getY()))
 				else
-					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019No Effect", 14, 2., colorA(255,255,255,0), owner)
 
 			case INSTANT_KILL_ID
 				a = ABIL.KILL
@@ -205,38 +205,38 @@ public class Trap extends StaticBaseObject
 
 			case INCREASE_INTERVAL_ID
 				if interval >= 10
-					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10, 2., colorA(255,255,255,0), owner)
 				else
 					interval += 0.25
-					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10, 2., colorA(255,255,255,0), owner)
 			case DECREASE_INTERVAL_ID
 				if interval < 0.75
-					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10, 2., colorA(255,255,255,0), owner)
 				else
 					interval -= 0.25
-					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10, 2., colorA(255,255,255,0), owner)
 
 			case INCREASE_VALUE_ID
 				switch a
 					case ABIL.KNOCK
 						if value >= 200
-							createFText(pos, vec2(0,0.05), "|cffC51019Max Force", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Force", 10, 2., colorA(255,255,255,0), owner)
 						else
 							value += 5
-							createFText(pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Force "+ R2SW(value,1,0), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SHAKE
 						if value >= 1500
-							createFText(pos, vec2(0,0.05), "|cffC51019Intensity Max", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Intensity Max", 10, 2., colorA(255,255,255,0), owner)
 						else
 							value += 100
-							createFText(pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(value,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Intensity "+ R2SW(value,1,0), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SPEED
 						if value >= 180
 							uptimes++
-							createFText(pos, vec2(0,0.05), "|cffC51019Max Speed", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Speed", 10, 2., colorA(255,255,255,0), owner)
 						else
 							value += 20
-							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(value,1,0)+"%", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ R2SW(value,1,0)+"%", 10, 2., colorA(255,255,255,0), owner)
 						if uptimes > 10
 							uptimes = -99999999
 							printTimedToPlayer("|cff08C5E6Relax|r, it's already |cffCE2919max|r... |cffFF7B29But maybe this will help you!", 20, owner)
@@ -247,22 +247,22 @@ public class Trap extends StaticBaseObject
 				switch a
 					case ABIL.KNOCK
 						if value <= 5
-							createFText(pos, vec2(0,0.05), "|cffC51019Min Force", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Force", 10, 2., colorA(255,255,255,0), owner)
 						else
 							value -= 5
-							createFText(pos, vec2(0,0.05), "|cffC51019Force "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Force "+ value.toInt().toString(), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SHAKE
 						if value <= 100
-							createFText(pos, vec2(0,0.05), "|cffC51019Min Intensity", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Intensity", 10, 2., colorA(255,255,255,0), owner)
 						else
 							value -= 100
-							createFText(pos, vec2(0,0.05), "|cffC51019Intensity "+ value.toInt().toString(), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Intensity "+ value.toInt().toString(), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SPEED
 						if value <= 20
-							createFText(pos, vec2(0,0.05), "|cffC51019Min Speed", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Speed", 10, 2., colorA(255,255,255,0), owner)
 						else
 							value -= 20
-							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ value.toInt().toString()+"%", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Speed Bonus "+ value.toInt().toString()+"%", 10, 2., colorA(255,255,255,0), owner)
 					default
 						skip
 
@@ -270,44 +270,44 @@ public class Trap extends StaticBaseObject
 				switch a
 					case ABIL.STUN
 						if duration >= 4
-							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10, 2., colorA(255,255,255,0), owner)
 						else
 							duration += 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SHAKE
 						if duration >= 5
-							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10, 2., colorA(255,255,255,0), owner)
 						else
 							duration += 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SPEED
 						if duration >= 20
-							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Max Duration", 10, 2., colorA(255,255,255,0), owner)
 						else
 							duration += 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10, 2., colorA(255,255,255,0), owner)
 					default
 						skip
 			case DECREASE_DURATION_ID
 				switch a
 					case ABIL.STUN
 						if duration <= 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10, 2., colorA(255,255,255,0), owner)
 						else
 							duration -= 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SHAKE
 						if duration <= 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10, 2., colorA(255,255,255,0), owner)
 						else
 							duration -= 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10, 2., colorA(255,255,255,0), owner)
 					case ABIL.SPEED
 						if duration <= 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Min Duration", 10, 2., colorA(255,255,255,0), owner)
 						else
 							duration -= 1
-							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10,  2., colorA(255,255,255,0), owner  )
+							createFText(pos, vec2(0,0.05), "|cffC51019Duration "+ R2SW(duration,1,0), 10, 2., colorA(255,255,255,0), owner)
 					default
 						skip
 
@@ -537,7 +537,7 @@ public class Trap extends StaticBaseObject
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
 
-   	new BuildingDefinition(TRAP_ID, 'ncop')
+  	new BuildingDefinition(TRAP_ID, 'ncop')
 	..setName("|cffA55A08Trap")
 	..setHotkey("Y")
 	..setTooltipBasic("|cffFFCC00Build |cffA55A08Trap [Y]")

@@ -3,7 +3,7 @@ import BaseObject
 import PlayerData
 
 constant INFO_TELEPORTER_ID = compiletime(ABIL_ID_GEN.next())
-constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+constant EFFECT_STRING  = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 constant EVENT_RADIUS	= 38.
 
 enum TeleportMode
@@ -15,8 +15,8 @@ public class Teleporter extends StaticBaseObject
 	boolean teleportWisps = false
 	TeleportMode mode = TeleportMode.ESCAPER
 
-	construct( vec2 pos, player owner )
-		super( pos, createUnit(owner, TELEPORTER_ID, pos, angle(0)), EVENT_RADIUS, function Teleporter.teleport, null)
+	construct(vec2 pos, player owner)
+		super(pos, createUnit(owner, TELEPORTER_ID, pos, angle(0)), EVENT_RADIUS, function Teleporter.teleport, null)
 		actor.addAbility(TURN_OFF_ID)
 
 	construct(unit existing)
@@ -38,7 +38,7 @@ public class Teleporter extends StaticBaseObject
 					addEffect(EFFECT_STRING, obj.pos).destr()
 					addEffect(EFFECT_STRING, rallyPos).destr()
 					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-						PanCameraToTimedForPlayer( GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03 )
+						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
 			case TeleportMode.KILLER
 				if e instanceof SetupObject and rdata.canBuild(obj.owner)
 					dyn = e castTo SetupObject

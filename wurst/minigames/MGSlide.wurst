@@ -1,8 +1,7 @@
 package MGSlide
 import Minigame
-import EscaperKillers
-import Assets
 import Fx
+import PlayerData
 
 constant LEFT_SPOT = vec2(-1540, 7550)
 constant RIGHT_SPOT = vec2(640, 7550)
@@ -19,9 +18,25 @@ public class MGSlide extends Minigame
 		return gg_rct_slidegamebounds
 
 	override function onBegin()
-		rdata = getRegionData(LEFT_SPOT)
-		doPeriodically(0.5) cb ->
-			for escaper from rdata.getEscapers()
+		rdata = getRegionData(RIGHT_SPOT)
+		doPeriodically(10) cb ->
+			int count = 0
+			for pd in escaperPlayers
+				if goRight and pd.escaper.getPos().distanceTo2d(RIGHT_SPOT) > 64
+					Log.warn("kill")
+					pd.escaper.kill(null)
+				else if not goRight and pd.escaper.getPos().distanceTo2d(LEFT_SPOT) > 64
+					pd.escaper.kill(null)
+					Log.warn("kill")
+				else
+					count++
+
+			if count == 0
+				destroy cb
+			else
+				goRight = not goRight
+				for pd in escaperPlayers
+					printTimedToPlayer("Next round!\nGet to the other side!", 1, pd.p)
 
 
 	override function onEnd()
@@ -38,7 +53,7 @@ public class MGSlide extends Minigame
 		return LEFT_SPOT
 
 	override function getName() returns string
-		return "|cff567eecSlide Fun"
+		return "|cff567eecSlide Fun\n\n|cff8cbfd8a55Get to the other side in 15 seconds!"
 
 init
 	minigames.add(new MGSlide())

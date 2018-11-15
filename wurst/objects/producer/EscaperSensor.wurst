@@ -8,17 +8,17 @@ public class EscaperSensorSetup extends SetupObject
 
 	protected var sensorHeight = 32.
 
-	construct(vec3 pos, player owner, int unitId, angle facing, real radius, real sensorHeight )
+	construct(vec3 pos, player owner, int unitId, angle facing, real radius, real sensorHeight)
 		super(createUnit(owner, unitId, pos, facing)..addAbility(LOCUST_ID), createUnit(owner, unitId, pos, facing), radius)
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 
-	construct(vec3 pos, player owner, int actorId, int setupId, angle facing, real radius, real sensorHeight )
+	construct(vec3 pos, player owner, int actorId, int setupId, angle facing, real radius, real sensorHeight)
 		super(createUnit(owner, actorId, pos, facing)..addAbility(LOCUST_ID), createUnit(owner, setupId, pos, facing), radius)
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))
 
-	construct(vec3 pos, player owner, int unitId, real radius, real sensorHeight )
+	construct(vec3 pos, player owner, int unitId, real radius, real sensorHeight)
 		super(createUnit(owner, unitId, pos, angle(0))..addAbility(LOCUST_ID), createUnit(owner, unitId, pos, angle(0)), radius)
 		this.sensorHeight = sensorHeight
 		addSensorListener(this, (UnitEntity source, UnitEntity target) -> onSensor(source, target))

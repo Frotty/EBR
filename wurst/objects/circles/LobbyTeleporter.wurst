@@ -4,7 +4,7 @@ import PlayerData
 import StringUtils
 import Assets
 
-constant EFFECT_STRING   = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
+constant EFFECT_STRING  = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl"
 constant ESC_ID = 'A009'
 
 constant EVENT_RADIUS	= 38.
@@ -75,7 +75,7 @@ public class LobbyTeleporter extends StaticBaseObject
 			addEffect(EFFECT_STRING, pos).destr()
 			addEffect(EFFECT_STRING, rallyPos).destr()
 			if not pData[e.owner.getId()].escaper.camlock
-				PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03 )
+				PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03)
 
 	override function clearQuestionmark()
 		super.clearQuestionmark()

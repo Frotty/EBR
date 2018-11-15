@@ -39,14 +39,14 @@ public class Bomber extends UnitEntity
 				setup.setPropWindow(0 .fromDeg())
 				actor.setOwner(players[PLAYER_NEUTRAL_AGGRESSIVE], false)
 				actor.setPropWindow(0 .fromDeg())
-				createFText(getPos(), vec2(0,0.05), "ON", 10,  2., colorA(200,0,0,0), owner)
+				createFText(getPos(), vec2(0,0.05), "ON", 10, 2., colorA(200,0,0,0), owner)
 				doAfter(0.1, () -> actor.issueImmediateOrder("stop"))
 			else
 				UnitAddType(actor, UNIT_TYPE_PEON)
 				setup.setPropWindow(60 .fromDeg())
 				actor.setPropWindow(60 .fromDeg())
 				actor.setOwner(owner, false)
-				createFText(getPos(), vec2(0,0.05), "OFF", 10,  2., colorA(0,200,0,0), owner)
+				createFText(getPos(), vec2(0,0.05), "OFF", 10, 2., colorA(0,200,0,0), owner)
 				doAfter(0.1, () -> actor.issueImmediateOrder("stop"))
 
 	static function orderSetup()

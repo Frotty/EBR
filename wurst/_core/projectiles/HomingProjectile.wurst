@@ -16,40 +16,40 @@ public abstract class HomingProjectile extends Projectile
 	real homingSpeed = 0.
 	real radii
 
-	
+
 	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
 		super(pos, radius, owner, xyAngle, fxpath)
-		
+
 	function setTarget(Entity e, HOMING htype, real homingspeed)
 		target = e
 		this.htype = htype
 		this.homingSpeed = homingspeed
 		radii = radius*radius + e.radius*e.radius
-				
+
 	override function update()
 		// let dist = pos.distanceToSq(target.getPos())
 		// let anglexy = pos.angleTo2d(target.getPos())
 		// if dist < radii
 		// 	terminate()
 		// 	return
-			
+
 		// switch htype
 		// 	case HOMING.none
 		// 		skip
 		// 	case HOMING.attract
 		// 		vel = (target.pos - this.pos).setLength(homingSpeed)
 		// 	case HOMING.circle
-		// 		skip			
+		// 		skip
 		// 	case HOMING.angular
 
-		// 		vel = vec3( getSpeed() * xyAngle.cos(), getSpeed() * xyAngle.sin(), 0. )
-				
+		// 		vel = vec3(getSpeed() * xyAngle.cos(), getSpeed() * xyAngle.sin(), 0.)
+
 		// 	case HOMING.forced
 		// 		var tmp = pos.moveTowards(target.pos, homingSpeed + homingSpeed * dist/100000)
-				
+
 		// 		tmp -= pos
 		// 		vel *= 0.95
 		// 		vel += tmp
 		// 		homingSpeed *= 1.01
-				
+
 		super.update()

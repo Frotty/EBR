@@ -102,15 +102,15 @@ public class CongaLineHead extends SetupObject
 			case INC_ID
 				if segLength < 500.
 					segLength += 25
-					createFText(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10, 2., colorA(255,255,255,0), owner)
 				else
-					createFText(pos, vec2(0,0.05), "Maximum Speed", 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Maximum Speed", 10, 2., colorA(255,255,255,0), owner)
 			case DEC_ID
 				if segLength > 25
 					segLength -= 25
-					createFText(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Segment Length: "+ R2SW(segLength,1,2), 10, 2., colorA(255,255,255,0), owner)
 				else
-					createFText(pos, vec2(0,0.05), "Minimum Speed", 10,  2., colorA(255,255,255,0), owner)
+					createFText(pos, vec2(0,0.05), "Minimum Speed", 10, 2., colorA(255,255,255,0), owner)
 			case CONGA_STRICT_ID
 				cmode = CongaMode.STRICT
 			case CONGA_LOOSE_ID
@@ -132,7 +132,7 @@ public class CongaLineHead extends SetupObject
 			destroy tmp
 
 
-function UnitEntity.setNewPosA( vec2 tpos, angle angl)
+function UnitEntity.setNewPosA(vec2 tpos, angle angl)
 	if this instanceof SetupObject
 		(this castTo SetupObject).setXY(tpos.toVec3())
 		(this castTo SetupObject).setFacing(angl)

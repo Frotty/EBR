@@ -21,7 +21,7 @@ public class Key extends ItemObject
 	Fx fx = null
 
 	construct(vec2 ppos, player owner)
-		super(ppos, createItem(keyIds[0], ppos), createUnit(owner, KEY_DUMMY_ID, ppos, 0 .fromDeg()) )
+		super(ppos, createItem(keyIds[0], ppos), createUnit(owner, KEY_DUMMY_ID, ppos, 0 .fromDeg()))
 		EventListener.add(setup.actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function recolor()

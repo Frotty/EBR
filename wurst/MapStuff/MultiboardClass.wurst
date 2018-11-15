@@ -6,7 +6,7 @@ public class Board
 	multiboard board
 	hashtable mbdata
 	
-	construct(int row, int column )
+	construct(int row, int column)
 		board = CreateMultiboard()
 		board.setColumnCount(column)
 		board.setRowCount(row)
@@ -24,7 +24,7 @@ public class Board
 		counter +=1
 		
 	function removeRow(int r)
-		for int j =0 to board.getColumnCount()   
+		for int j =0 to board.getColumnCount()  
 			for int i =r to board.getRowCount()
 				if i == board.getRowCount()-1
 					//destroy data[LoadInteger(mbdata,i,j)]

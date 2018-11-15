@@ -35,8 +35,8 @@ public class UnitCreator extends StaticBaseObject
 		super(existing.getPos(), existing, 0., null , null)
 		setEnabled(false)
 
-	construct( vec2 pos, player owner)
-		super( pos, createUnit(owner, UNIT_CREATOR_ID, pos, angle(0)), 0., null , null)
+	construct(vec2 pos, player owner)
+		super(pos, createUnit(owner, UNIT_CREATOR_ID, pos, angle(0)), 0., null , null)
 		actor.addAbility(FIXED_ID)
 		setEnabled(false)
 
@@ -81,17 +81,17 @@ public class UnitCreator extends StaticBaseObject
 		switch id
 			case INCREASE_INTERVAL_ID
 				if interval >= 15
-					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Max", 10, 2., colorA(255,255,255,0), owner)
 				else
 					interval += 0.25
-					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10, 2., colorA(255,255,255,0), owner)
 			case DECREASE_INTERVAL_ID
 				if interval < 0.75
-					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10,  2., colorA(255,255,255,0), owner  )
+					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10, 2., colorA(255,255,255,0), owner)
 				else
 					interval -= 0.25
-					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10,  2., colorA(255,255,255,0), owner  )
-					//DisplayTextToPlayer( owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2) )
+					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10, 2., colorA(255,255,255,0), owner)
+					//DisplayTextToPlayer(owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2))
 			case UTYPE_BK // Big killer
 				spawnUnitType = 'BIGK'
 			case UTYPE_SK // Small killer

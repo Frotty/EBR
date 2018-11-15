@@ -12,7 +12,7 @@ public class UnitRemover extends StaticBaseObject
 		clearQuestionmark()
 		actor.addAbility(TURN_OFF_ID)
 
-	construct( vec2 pos, player owner)
+	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, UNIT_REMOVER_ID, pos, angle(0)), 64., function UnitRemover.removeUnit, null)
 		clearQuestionmark()
 		actor.addAbility(TURN_OFF_ID)

@@ -29,7 +29,7 @@ public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
-constant POISON_EFFECT  = Abilities.poisonStingTarget
+constant POISON_EFFECT = Abilities.poisonStingTarget
 constant LAVA_EFFECT	= Abilities.flameStrikeEmbers
 
 trigger spellTrig
@@ -439,8 +439,8 @@ public abstract class Escaper extends UnitEntity
 			if revmod != null
 				destroy revmod
 				revmod = null
-			UnitRemoveAbility( actor, REMOVE_REV_MOD_ID )
-			UnitAddAbility( actor, CREATE_REV_MOD_ID )
+			UnitRemoveAbility(actor, REMOVE_REV_MOD_ID)
+			UnitAddAbility(actor, CREATE_REV_MOD_ID)
 		else if id == ATTACK_MELEE or id == ATTACK_RANGED
 			// weapon.onUse(this)
 			actor.setAnimation("attack")

@@ -75,9 +75,9 @@ public class Door extends StaticSetupObject
 		pathing.remove()
 		opened = false
 		if vertical
-			pathing = createUnit(owner, DOORPATH, pos.toVec2(), 0 .fromDeg() )
+			pathing = createUnit(owner, DOORPATH, pos.toVec2(), 0 .fromDeg())
 		else
-			pathing = createUnit(owner, DOORPATH, pos.toVec2(), 270 .fromDeg() )
+			pathing = createUnit(owner, DOORPATH, pos.toVec2(), 270 .fromDeg())
 
 	function openDoor()
 		actor.setAnimation("Death Alternate")

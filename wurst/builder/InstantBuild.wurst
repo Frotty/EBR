@@ -35,11 +35,11 @@ import public SerializeIds
 import Bomber
 import Wall
 
-public function isOrderBuildOrder( int o ) returns boolean
+public function isOrderBuildOrder(int o) returns boolean
 	int i = 1
 	while buildorders[i] != 0
 		if buildorders[i] == o
-			return true 
+			return true
 		i++
 	for i2 = 139 to 152
 			if o == buildorders[i2]
@@ -61,7 +61,7 @@ public function instantBuild(Builder b, vec2 tpos, int id)
 				newObjectFromId(b.owner, tpos, i2)
 				break
 	else
-		DisplayTextToPlayer( b.owner, 0, 0, "|cffC51019You have no permission to build in this region!") 
+		DisplayTextToPlayer(b.owner, 0, 0, "|cffC51019You have no permission to build in this region!")
 	b.actor.abortOrder()
 
 public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
@@ -97,21 +97,21 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 		case TREE_INDEX
 			return new Tree(tpos, owner)
 		case SPINNER_INDEX
-			return new Spinner(tpos, owner)	
+			return new Spinner(tpos, owner)
 		case UNITCREATOR_INDEX
 			return new UnitCreator(tpos, owner)
 		case WALL_INDEX
 			return new Wall(tpos, owner,270., WALL_INDEX)
 		case TRACKS_INDEX
-			return new Tracks(tpos, owner)	
+			return new Tracks(tpos, owner)
 		case FOUNTAIN_INDEX
-			return new Fountain(tpos, owner)	
+			return new Fountain(tpos, owner)
 		case POWERNODE_INDEX
-			return new Powernode(tpos, owner)	
+			return new Powernode(tpos, owner)
 		case TRAP_INDEX
-			return new Trap(tpos, owner)	
+			return new Trap(tpos, owner)
 		case HWALL_INDEX
-			return new Wall(tpos, owner,270.,HWALL_INDEX)	
+			return new Wall(tpos, owner,270.,HWALL_INDEX)
 		case VWALL_INDEX
 			return new Wall(tpos, owner,270.,VWALL_INDEX)
 		case CONGA_INDEX
@@ -187,7 +187,7 @@ init
 	buildorders[TEXTER_INDEX] = TEXTER_ID // Texter
 	buildorders[BOMBTOWER_INDEX] = BOMB_TOWER_ID // BomberTower
 	buildorders[VORTEX_INDEX] = VORTEX_ID // Vortex
-	buildorders[EXECUTER_INDEX] = EXECUTER_ID  // Executer
+	buildorders[EXECUTER_INDEX] = EXECUTER_ID // Executer
 	buildorders[BOOSTER_INDEX] = BOOSTER_ID // Booster
 	buildorders[UNITREMOVER_INDEX] = UNIT_REMOVER_ID // UnitRemover
 	buildorders[WAYPOINT_INDEX] = WAYPOINT_ID // Waypoint
@@ -199,7 +199,7 @@ init
 	buildorders[TREE_INDEX] = TREE_DUMMY_ID // Tree
 	buildorders[SPINNER_INDEX] = SPINNER_ID // Spinner
 	buildorders[UNITCREATOR_INDEX] = UNIT_CREATOR_ID // Unitcreator
-	buildorders[TRACKS_INDEX] = BUILD_TRACKS_ID // Tracks 
+	buildorders[TRACKS_INDEX] = BUILD_TRACKS_ID // Tracks
 	buildorders[FOUNTAIN_INDEX] = FOUNTAIN_BOTH_ID // Fountain
 	buildorders[POWERNODE_INDEX] = POWER_NODE_ID // Powernode
 	buildorders[TRAP_INDEX] = TRAP_ID // Trap

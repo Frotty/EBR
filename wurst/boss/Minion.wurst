@@ -69,7 +69,7 @@ public class Minion extends EscaperSensorSetup
 				actor.setFacing(pos.angleTo2d(target.pos))
 			if not state == MinionState.ATTACK and target.pos.distanceTo(pos) < ATTACK_DISTANCE
 				attack()
-			else if not  state == MinionState.ATTACK
+			else if not state == MinionState.ATTACK
 				// Spamming the order like this might not be a good idea
 				setup.issuePointOrder("move", target.pos.toVec2())
 

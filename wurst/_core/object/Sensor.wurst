@@ -46,10 +46,10 @@ public module Sensor
 
 
 public function unit.abortOrder() returns boolean
-	if IsUnitPaused(this)
+	if this.isPaused()
 		return false
 	else
-		PauseUnit(this, true)
-		IssueImmediateOrder(this, "stop")
-		PauseUnit(this, false)
+		this.pause()
+		this.issueImmediateOrder("stop")
+		this.unpause()
 	return true

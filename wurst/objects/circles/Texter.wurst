@@ -23,12 +23,12 @@ public class Texter extends StaticBaseObject
 	function show()
 		text.tt.setVisibility(true)
 		hidden = false
-		createFText(pos, vec2(0,0.05), "Shown", 10,  2., colorA(255,255,255,0), owner)
+		createFText(pos, vec2(0,0.05), "Shown", 10, 2., colorA(255,255,255,0), owner)
 
 	function hide()
 		text.tt.setVisibility(false)
 		hidden = true
-		createFText(pos, vec2(0,0.05), "Hidden", 10,  2., colorA(255,255,255,0), owner)
+		createFText(pos, vec2(0,0.05), "Hidden", 10, 2., colorA(255,255,255,0), owner)
 
 	static function onStep()
 		unit u = GetTriggerUnit()
@@ -57,7 +57,7 @@ public class Texter extends StaticBaseObject
 		clearQuestionmark()
 		text.tt.center(getPos(), txt, 10)
 		if hidden
-			createFText(pos, vec2(0,0.05), txt, 10,  2., COLOR_WHITE, owner)
+			createFText(pos, vec2(0,0.05), txt, 10, 2., COLOR_WHITE, owner)
 
 	static function setColor(Entity ent, string color)
 		let textcolor = getColorFromString(color + " ")
@@ -65,8 +65,8 @@ public class Texter extends StaticBaseObject
 			let obj = ent castTo Texter
 			if obj.col != textcolor
 				obj.col = textcolor
-				obj.text.tt.setColor(obj.col.red,obj.col.green,obj.col.blue, 0 )
-				createFText(obj.pos, vec2(0,0.05), "Color Set", 10,  2., obj.col.withAlpha(0), obj.owner  )
+				obj.text.tt.setColor(obj.col.red,obj.col.green,obj.col.blue, 0)
+				createFText(obj.pos, vec2(0,0.05), "Color Set", 10, 2., obj.col.withAlpha(0), obj.owner)
 		else if ent instanceof Decoration
 			let obj = ent castTo Decoration
 			obj.actor.setVertexColor(textcolor)
@@ -101,9 +101,9 @@ function getColorFromString(string s) returns color
 	if not isstdcolor
 		int component = 0
 		string tempstring = ""
-		for int ii = 0 to StringLength( s ) - 1
-			if SubString( s, ii, ii + 1 ) != " "
-				tempstring += SubString( s, ii, ii + 1 )
+		for int ii = 0 to StringLength(s) - 1
+			if SubString(s, ii, ii + 1) != " "
+				tempstring += SubString(s, ii, ii + 1)
 			else
 				switch component
 					case 0

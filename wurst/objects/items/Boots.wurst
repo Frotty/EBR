@@ -9,7 +9,7 @@ public class Boots extends ItemObject
 	boolean followWalkable = true
 
 	construct(vec2 pos, player owner)
-		super(pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, BOOTS_DUMMY_ID, pos.x, pos.y, 0 ) )
+		super(pos, CreateItem(BOOTS_ID, pos.x, pos.y), CreateUnit(owner, BOOTS_DUMMY_ID, pos.x, pos.y, 0))
 
 	override function onUse(UnitEntity user)
 

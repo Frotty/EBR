@@ -13,24 +13,23 @@ import ClosureEvents_config
 	They have a dummy unit that is invisible to escapers but clickable by builder,
 	and the actor unit is locusted so it cannot be clicked by escaper, but seen.
 */
-timer fixPos = CreateTimer()
+let fixPos = CreateTimer()
 
 public abstract class SetupObject extends UnitEntity
 	private real time = GetRandomReal(30,45)
 	boolean enabled = true
 	unit setup
 
-	construct(unit u, unit setup, real radius)
-		super(u)
+	construct(unit actor, unit setup, real radius)
+		super(actor)
 		this.setup = setup
 		this.radius = radius
 		fire[actor.getIndex()] = true
-		actor..addAbility(LOCUST_ID)..removeAbility(REMOVE_OBJECT_ID)
-		..setPathing(true)..setEntity(this)
-		setup..setEntity(this)
-		..setXY(actor.getPos())
+		actor..setEntity(this)..addAbility(LOCUST_ID)..removeAbility(REMOVE_OBJECT_ID)..setPathing(true)
+		setup..setEntity(this)..setXY(actor.getPos())
 		..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_OBJECT_ID)..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 		this.setCurrentRegion()
+
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> onOrderEvent())
 		EventListener.add(setup, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> onOrderEvent())
@@ -119,8 +118,8 @@ public abstract class StaticSetupObject extends UnitEntity
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
 			inRangeTrig = CreateTrigger()
-			inRangeTrig.registerUnitInRangeSource(setup, radius)
-			inRangeTrig.addAction(c)
+			..registerUnitInRangeSource(setup, radius)
+			..addAction(c)
 		setup.setEntity(this)
 
 	override function update()

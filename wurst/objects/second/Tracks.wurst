@@ -10,11 +10,11 @@ constant TRACKS_ID = compiletime(UNIT_ID_GEN.next())
 constant TRACKS_1_ID = compiletime(UNIT_ID_GEN.next())
 constant TRACKS_2_ID = compiletime(UNIT_ID_GEN.next())
 constant TRACKS_3_ID = compiletime(UNIT_ID_GEN.next())
-constant INC_ID		  	= 'A04S'
-constant DEC_ID		  	= 'A04T'
+constant INC_ID		 	= 'A04S'
+constant DEC_ID		 	= 'A04T'
 constant LEFT_ID		 	= 'A04L'
-constant RIGHT_ID	   	= 'A04U'
-constant INCLENGTH_ID   	= 'A04H'
+constant RIGHT_ID	  	= 'A04U'
+constant INCLENGTH_ID  	= 'A04H'
 constant DECLENGTH_ID		= 'A050'
 
 public class Tracks extends UnitEntity

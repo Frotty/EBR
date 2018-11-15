@@ -7,7 +7,7 @@ import public SerializeIds
 import public ChannelAbilityPreset
 import Assets
 
-/*  ---Creating a new Baseobject---
+/* ---Creating a new Baseobject---
 	Creating the baseobject will need 3 parameters
 	the unit u: in whichs Userdata the struct is saved
 	the radius: The Range of the InrangeDetection
@@ -28,26 +28,27 @@ public class StaticBaseObject extends UnitEntity
 	private unit rallyUnit = null
 	private var rallyAngle = angle(0)
 
-	protected trigger inRangeTrig // Trigger for inRange detection
+	protected trigger inRangeTrig
 
-	construct(vec2 pos, unit u, real radius, code action, code cond)
-		super(u)
-		this.setCurrentRegion()
-		noRally = addEffect(Objects.questionMark1, pos)
+	construct(vec2 pos, unit actor, real radius, code action, code cond)
+		super(actor)
 		actor..addAbility(GHOST_VIS_ID)..addAbility(REMOVE_OBJECT_ID)
 		this.setCurrentRegion()
+
+		noRally = addEffect(Objects.questionMark1, pos)
 		rallyPoint = this.pos
 
-		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers
+		// A few Objects like Spinner dont have inRange Events, so we only create it if the object has a radius
+		if radius > 0.
 			inRangeTrig = CreateTrigger()
-			inRangeTrig.registerUnitInRangeSource( actor, radius )
+			inRangeTrig.registerUnitInRangeSource(actor, radius)
 			if cond == null
 				inRangeTrig.addCondition(Condition((function isProper)))
 			else
 				inRangeTrig.addCondition(Condition(cond))
 			inRangeTrig.addAction(action)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> adjustRallypoint())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> adjustRallypoint())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, () -> (GetOrderedUnit().getEntity() castTo StaticBaseObject).adjustRally())
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> (GetOrderedUnit().getEntity() castTo StaticBaseObject).adjustRally())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	function setEnabled(boolean flag)
@@ -90,38 +91,34 @@ public class StaticBaseObject extends UnitEntity
 	function isActive() returns boolean
 		return active
 
-	static function isProper() returns boolean
-		return GetTriggerUnit().getFlyHeight() < 22 and (GetTriggeringTrigger().getSource().getEntity() castTo StaticBaseObject).enabled
-
-	static function adjustRallypoint() //method that automaticly adjusts the RallyXY of the baseobject
-		let u			= GetOrderedUnit()
+	function adjustRally()
 		let target		= GetOrderTarget()
 		let utarget 	= GetOrderTargetUnit()
 		let itm			= GetOrderTargetItem()
 		let targetPoint = vec2(GetOrderPointX(), GetOrderPointY())
 		let orderid		= GetIssuedOrderId()
-		
-		let obj  = u.getEntity() castTo StaticBaseObject
-
 		if orderid == 0xD000C or orderid == 851971
 			if target == null
 				if itm == null
-					obj.setRallyPoint(targetPoint)
+					setRallyPoint(targetPoint)
 				else
-					obj.setRallyPoint(itm.getPos())
+					setRallyPoint(itm.getPos())
 			else
 				if utarget != null
 					let data = utarget.getEntity()
 					if data != null and data instanceof SetupObject
-						obj.rallyUnit = (data castTo SetupObject).actor
+						rallyUnit = (data castTo SetupObject).actor
 					else
-						obj.rallyUnit = utarget
-					obj.clearQuestionmark()
-				obj.rallyPoint = target.getPos().toVec3()
-			if obj.noRally != null
-				obj.noRally.destr()
-				obj.noRally = null
-					
+						rallyUnit = utarget
+					clearQuestionmark()
+				rallyPoint = target.getPos().toVec3()
+			if noRally != null
+				noRally.destr()
+				noRally = null
+
+	static function isProper() returns boolean
+		return GetTriggerUnit().getFlyHeight() < 22 and (GetTriggeringTrigger().getSource().getEntity() castTo StaticBaseObject).enabled
+
 	function setRallyPoint(vec2 tpos)
 		rallyPoint = tpos.toVec3()
 		rallyUnit = null

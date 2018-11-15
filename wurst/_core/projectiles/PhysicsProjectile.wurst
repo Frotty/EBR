@@ -1,24 +1,24 @@
 package PhysicsProjectile
-import public  Projectile
+import public Projectile
 import public AirPhysicsModule
 
 public class AirPhysicsProjectile extends Projectile
 	use AirPhysicsModule
-	
-	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
+
+	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
 		super(pos, radius, owner, xyAngle, fxpath)
 		setXYAngle(xyAngle)
-	
+
 
 	function setRestitution(real rest)
 		this.restitution = rest
-			
+
 	function setMass(real mass)
 		this.mass = mass
-		
+
 	override function update()
 		super.update()
 		physicsUpdate(this)
 		setXYAngle(pos.angleTo2d(pos+vel))
 		setZAngle(getSlopeAngle(pos.z, pos.z + vel.z, 2))
-		
+

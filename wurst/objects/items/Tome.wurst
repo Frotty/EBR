@@ -7,7 +7,7 @@ public constant TOME_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 public class Tome extends ItemObject
 
 	construct(vec2 pos, player owner)
-		super( pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, TOME_DUMMY_ID, pos.x, pos.y, 0 ) )
+		super(pos, CreateItem(TOME_ID, pos.x, pos.y), CreateUnit(owner, TOME_DUMMY_ID, pos.x, pos.y, 0))
 
 	override function onPickup(UnitEntity holder)
 		terminate()

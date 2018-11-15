@@ -152,7 +152,7 @@ public class Spaceship extends UnitEntity
 			vel = vel.setLength(maxSpeed)
 
 		let tpos = pos + vel*6.
-		if tpos.x  < gg_rct_spaceygamearea.getMinX()
+		if tpos.x < gg_rct_spaceygamearea.getMinX()
 			vel.x = -1.5*vel.x
 		else if tpos.x > gg_rct_spaceygamearea.getMaxX()
 			vel.x = -1.5*vel.x
@@ -216,7 +216,7 @@ public class SpaceRock extends FxEntity
 
 	override function update()
 		let tpos = pos + vel*6.
-		if tpos.x  < gg_rct_spaceygamearea.getMinX()
+		if tpos.x < gg_rct_spaceygamearea.getMinX()
 			vel.x = -vel.x
 			vel *= 0.95
 		else if tpos.x > gg_rct_spaceygamearea.getMaxX()

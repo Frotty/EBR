@@ -99,15 +99,15 @@ public class Powernode extends SetupObject
 				MoveLightning(l.sfx, false, pos.x, pos.y, l.target.pos.x, l.target.pos.y)
 				for Escaper e from this.getCurrentRegion().getEscapers()
 					if l.ltype == TetherType.BLOCK_ORB
-						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
+						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2()) < ACTIVATION_DIST.squared()
 							flashEffect(Abilities.spellBreakerAttack, e.orb.pos)
 							Log.debug("Orb P Terminate")
 							e.orb.terminate()
-					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2() ) < ACTIVATION_DIST.squared()
+					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2()) < ACTIVATION_DIST.squared()
 						if e.pos.z < 24 or l.ltype == TetherType.BOUNCE_AIR or l.ltype == TetherType.BOUNCE_BOTH
 							switch l.ltype
 								case KILL
-									AddSpecialEffect( KILL_EFFECT , e.pos.x, e.pos.y ).destr()
+									AddSpecialEffect(KILL_EFFECT , e.pos.x, e.pos.y).destr()
 									e.kill(this)
 								case BOUNCE_GROUND
 									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
@@ -380,7 +380,7 @@ public class Powernode extends SetupObject
 	..presetHotkey("W")
 	..presetTooltipNormal((int lvl) -> "Add/Remove |cffFFCC00Block Both|r [|cffFFCC00W|r]")
 	..presetTooltipNormalExtended((int lvl) -> "Add or remove this type of link from another powernode.\n"
-		+ "Blocks escaper  |cffFFCC00on the ground and in the air|r.")
+		+ "Blocks escaper |cffFFCC00on the ground and in the air|r.")
 	..presetButtonPosNormal(2, 0)
 	..presetTargetTypes(Targettype.UNIT)
 	..presetCastRange((int lvl) -> 2500)

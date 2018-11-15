@@ -40,7 +40,7 @@ package ConfigEffectance
 			return effectance.LoadBool(0)
 			
 	init
-		effect_on_ability_id.saveInt( 0, 'Abil')
-		effect_off_ability_id.saveInt( 0, 'Abil')
+		effect_on_ability_id.saveInt(0, 'Abil')
+		effect_off_ability_id.saveInt(0, 'Abil')
 
 */

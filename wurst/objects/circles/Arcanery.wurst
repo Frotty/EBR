@@ -17,7 +17,7 @@ class SilenceBufff extends NormalBuff
 
 	construct(Escaper target, Arcanery arcanery)
 		super(9999, SILENCE_BUFF)
-		InstantDummyCaster.castTarget(DUMMY_PLAYER, SILENCE_ID, 1,  "soulburn", target.actor)
+		InstantDummyCaster.castTarget(DUMMY_PLAYER, SILENCE_ID, 1, "soulburn", target.actor)
 		this.arcanery = arcanery
 		apply(target)
 

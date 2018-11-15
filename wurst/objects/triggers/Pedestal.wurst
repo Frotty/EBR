@@ -80,7 +80,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			actor.pause()
 			ttag.tt..center(pos, "|cff0884CEloading...", 10)
 			lastRef[owner.getId()] = this
-			getSyncedFile(pData[owner.getId()],  "dataSlot" + slotId.toString() + ".pld", (file, pd) -> onLoadSlotSynced(file, pd))
+			getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString() + ".pld", (file, pd) -> onLoadSlotSynced(file, pd))
 
 	static function onLoadSlotSynced(SyncedFile file, PlayerData pd)
 		printLog(Loglevel.DEBUG, "synced")

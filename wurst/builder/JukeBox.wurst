@@ -7,34 +7,35 @@ class Music
 	string path
 	real duration
 	string name
-	
+
 	construct(int id, string path, real duration)
 		this.spellid = id
 		this.path = path
 		this.duration = duration
 		this.name = path.substring(path.lastIndexOf("\\") + 1, path.lastIndexOf("."))
-		
+
 class JukeRequest
 	player juker
 	int id
-	
+
 	construct(player p, int id)
 		this.juker = p
 		this.id = id
-		
+
 
 public JukeBox jukeBox
 LinkedList<Music> musics
 
 public class JukeBox
-	LinkedList<JukeRequest> requests = new LinkedList<JukeRequest>()
-	LinkedList<int> randomQueue = new LinkedList<int>()
-	timer jukeTimer
-	boolean lastWasRequest = false
+	let requests = new LinkedList<JukeRequest>()
+	let randomQueue = new LinkedList<int>()
+	let jukeTimer = getTimer()
+
+	var lastWasRequest = false
+
 	Music currentMusic
-	
+
 	construct()
-		jukeTimer = getTimer()
 		jukeTimer.setData(this castTo int)
 		for n = 0 to 3
 			for i = 0 to musics.size()
@@ -42,7 +43,7 @@ public class JukeBox
 					randomQueue.addtoStart(i)
 				else
 					randomQueue.add(i)
-				
+
 	function playNextMusic()
 		StopMusic(false)
 		if requests.size() > 0
@@ -59,14 +60,14 @@ public class JukeBox
 				return
 			printTimed("Jukebox: Playing |cff84DE52" + currentMusic.name + "|r", 10)
 			randomQueue.addtoStart(id)
-			lastWasRequest = false	
+			lastWasRequest = false
 		if currentMusic != null
 			PlayMusic(currentMusic.path)
 			jukeTimer.start(currentMusic.duration + 0.01, () -> onMusicCallback())
 		else
 			StopMusic(false)
 			jukeTimer.start(60, () -> onMusicCallback())
-	
+
 	function checkSpell(int id)
 		int idx = 0
 		for music from musics.staticItr()
@@ -76,7 +77,7 @@ public class JukeBox
 					if req.juker == p
 						printTimedToPlayer("You already have a track in the jukebox!", 10, p)
 						return
-						
+
 				printTimed("The Track |cff84DE52" + music.name + "|r has been queued by " + p.getNameColored(), 10)
 				requests.add(new JukeRequest(p, idx))
 				if requests.size() == 1 and not lastWasRequest

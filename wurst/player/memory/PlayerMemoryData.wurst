@@ -12,7 +12,7 @@ public class PMData
 		addToBuff(namehash)
 		addToBuff(expcode)
 		addToBuff(adminToken)
-		printLog(Loglevel.DEBUG, "PMData save: hash <"  + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
+		printLog(Loglevel.DEBUG, "PMData save: hash <" + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
 
 	function setXP(string xpcode)
 		expcode = xpcode.trim()
@@ -21,7 +21,7 @@ public class PMData
 		namehash = file.read()
 		expcode = file.read()
 		adminToken = file.read()
-		printLog(Loglevel.DEBUG, "PMData load: hash <"  + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
+		printLog(Loglevel.DEBUG, "PMData load: hash <" + namehash + "> exp: <" + expcode + "> admin: <" + adminToken + ">")
 			
 
 	function assert(boolean b) 

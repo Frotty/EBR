@@ -13,14 +13,14 @@ function onChanceSpeed()
 		var speed = (ddata.setup.getMoveSpeed() / 25.).round() * 25.
 		if id == INC_SPEED_ID
 			if speed <= 500.
-				ddata.setup.setMoveSpeed(speed+25.)
-				ddata.actor.setMoveSpeed(speed+25.)
-				createFText(data.getPos(), vec2(0,0.05), (speed+25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
+				ddata.setup.setMoveSpeed(speed + 25.)
+				ddata.actor.setMoveSpeed(speed + 25.)
+				createFText(data.getPos(), vec2(0, 0.05), (speed + 25.).toString(), 10, 2., colorA(255,255,255,0), ddata.owner)
 		else if id == DEC_SPEED_ID
 			if speed > 50.5
-				ddata.setup.setMoveSpeed(speed-25.)
-				ddata.actor.setMoveSpeed(speed-25.)
-				createFText(data.getPos(), vec2(0,0.05), (speed-25.).toString(), 10,  2., colorA(255,255,255,0), ddata.owner  )
+				ddata.setup.setMoveSpeed(speed - 25.)
+				ddata.actor.setMoveSpeed(speed - 25.)
+				createFText(data.getPos(), vec2(0, 0.05), (speed-25.).toString(), 10, 2., colorA(255,255,255,0), ddata.owner)
 
-init	
+init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChanceSpeed())

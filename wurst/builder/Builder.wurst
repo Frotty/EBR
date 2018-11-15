@@ -37,7 +37,7 @@ public class Builder extends UnitEntity
 	int regionCount = 0
 	boolean hasBossMenu = false
 
-	construct( player p )
+	construct(player p)
 		super(createUnit(p, BUILDER_CIRCLES_ID, vec2(-6000, -7160), angle(0)))
 		registerListeners()
 		this.setCurrentRegion()
@@ -71,30 +71,30 @@ public class Builder extends UnitEntity
 				if rdata.canBuild(owner)
 					new Key(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case BOOTS_SPELL_ID
 				if rdata.canBuild(owner)
 					new Boots(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case TOME_SPELL_ID
 				if rdata.canBuild(owner)
 					new Tome(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case COIN_SPELL_ID
 				if rdata.canBuild(owner)
 					new Coin(tpos, owner)
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019You have no permission to place items in this region!")
 			case BM_BOSS_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
 					if rdata.boss == null
 						rdata.boss = new Boss(owner, tpos, rdata.getTypeSet().bossId)
 					else
-						DisplayTextToPlayer( owner, 0, 0, "|cffC51019You can only have one boss each region!")
+						DisplayTextToPlayer(owner, 0, 0, "|cffC51019You can only have one boss each region!")
 				else
-					DisplayTextToPlayer( owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!")
+					DisplayTextToPlayer(owner, 0, 0, "|cffC51019You are not allowed to place Boss objects in this region!")
 			case BM_SPELLTARGET_ID
 				if rdata.canBuild(owner) and rdata.bossRegion
 					new SpellTarget(tpos, owner)

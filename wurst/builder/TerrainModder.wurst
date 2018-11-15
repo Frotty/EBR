@@ -68,7 +68,7 @@ public class TerrainModder extends UnitEntity
 				else if modification == 2
 					orderPos.changeTerrain(POISON, brushsize, brushsize, brushshape, owner)
 		else
-			DisplayTextToPlayer( owner, 0, 0, "|cffC51019You have no permission to change terrain here!")
+			DisplayTextToPlayer(owner, 0, 0, "|cffC51019You have no permission to change terrain here!")
 
 	override function slowUpdate()
 		super.slowUpdate()
@@ -87,27 +87,27 @@ public class TerrainModder extends UnitEntity
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[1])
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 				modification = 1
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Poison")
+				DisplayTextToPlayer(GetOwningPlayer(GetSpellAbilityUnit()), 0, 0, "Poison")
 			case UNWALKABLE_MOD_ABILITY_ID[2]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[2])
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 				modification = 2
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Lava")
+				DisplayTextToPlayer(GetOwningPlayer(GetSpellAbilityUnit()), 0, 0, "Lava")
 			case UNWALKABLE_MOD_ABILITY_ID[0]
 				UnitRemoveAbility(actor,UNWALKABLE_MOD_ABILITY_ID[0])
 				UnitAddAbility(actor,UNWALKABLE_MOD_ABILITY_ID[modification])
 				modification = 0
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+				DisplayTextToPlayer(GetOwningPlayer(GetSpellAbilityUnit()), 0, 0, "Normal")
 			case ICE_ABILITY
 				UnitRemoveAbility(actor,ICE_ABILITY)
 				UnitAddAbility(actor,REVICE_ABILITY)
 				modification = 0
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Normal")
+				DisplayTextToPlayer(GetOwningPlayer(GetSpellAbilityUnit()), 0, 0, "Normal")
 			case REVICE_ABILITY
 				UnitRemoveAbility(actor,REVICE_ABILITY)
 				UnitAddAbility(actor,ICE_ABILITY)
 				modification = 1
-				DisplayTextToPlayer( GetOwningPlayer( GetSpellAbilityUnit() ), 0, 0, "Reverse")
+				DisplayTextToPlayer(GetOwningPlayer(GetSpellAbilityUnit()), 0, 0, "Reverse")
 			case BRUSH_1_IDLE_ABILITY
 				removeAllActive()
 				actor..removeAbility(BRUSH_1_IDLE_ABILITY)

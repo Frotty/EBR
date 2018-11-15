@@ -9,10 +9,10 @@ constant EVENT_HEIGHT_HIGH	= 256.
 constant EVENT_RADIUS_V	= 256.
 
 public class Obstacle extends EscaperSensorSetup
-	construct(unit existing, real radius, real height  )
+	construct(unit existing, real radius, real height)
 		super(existing, radius, height)
 
-	construct(vec2 pos, player owner, int id, real radius, real height )
+	construct(vec2 pos, player owner, int id, real radius, real height)
 		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, height)
 
 public class HighObstacle extends Obstacle
@@ -20,7 +20,7 @@ public class HighObstacle extends Obstacle
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
 
-	construct(vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(pos, owner, getRegionData(pos).getTypeSet().highObstacleId, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
 
 	override function serialize() returns Json
@@ -33,7 +33,7 @@ public class SmallObstacle extends Obstacle
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
-	construct(vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(pos, owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
 	override function serialize() returns Json
@@ -57,7 +57,7 @@ public class VolcanoObstacle extends Obstacle
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_V, EVENT_RADIUS_V)
 
-	construct( vec2 pos, player owner )
+	construct(vec2 pos, player owner)
 		super(pos, owner, VOLCANO_ID, EVENT_RADIUS_V, EVENT_RADIUS_V)
 
 	override function serialize() returns Json

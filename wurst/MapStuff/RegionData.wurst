@@ -50,8 +50,8 @@ public function getRegionTypeFromItem(int itemId) returns RegionType
 	return RegionType.UNKNOWN
 
 public tuple regionTypeSet(int regionItemId, int walkableId, int unwalkableId,
-						   int smallKillerId, int bigKillerId, int treeId,
-						   int smallObstacleId, int bigObstacleId, int bossId, int minionId, int highObstacleId)
+						  int smallKillerId, int bigKillerId, int treeId,
+						  int smallObstacleId, int bigObstacleId, int bossId, int minionId, int highObstacleId)
 
 public enum Permission
 	GUEST
@@ -87,7 +87,7 @@ class FogData
 public class RegionData
 	static RegionData EMPTY_REGION = new RegionData(null)
 	private trigger visTrig
-	private LinkedList<Escaper> escapers = new LinkedList<Escaper>()
+	LinkedList<Escaper> escapers = new LinkedList<Escaper>()
 	private HashMap<player, Permission> permissions = new HashMap<player, Permission>()
 	private FogData array[12] fmods
 
@@ -248,13 +248,13 @@ public RegionData array regions
 	regions[0] = new RegionData(gg_rct_Region_024)
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
 	regions[0].setOwner(STAFF_PLAYER)
-	regions[1] = new RegionData(gg_rct_Region_018 )
+	regions[1] = new RegionData(gg_rct_Region_018)
 	regions[1].setType(getRegionTypeFromItem('I00G'), false)
 	regions[1].setOwner(STAFF_PLAYER)
-	regions[2] = new RegionData(gg_rct_Region_000 )
+	regions[2] = new RegionData(gg_rct_Region_000)
 	regions[2].setType(getRegionTypeFromItem('I00E'), false)
 	regions[2].setOwner(STAFF_PLAYER)
-	regions[3] = new RegionData(gg_rct_Region_001 )
+	regions[3] = new RegionData(gg_rct_Region_001)
 	regions[3].setType(getRegionTypeFromItem('I00H'), false)
 	regions[3].setOwner(STAFF_PLAYER)
 	regions[4] = new RegionData(gg_rct_Region_004)..createSetup()

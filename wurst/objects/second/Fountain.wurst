@@ -26,24 +26,24 @@ public class Fountain extends StaticSetupObject
 		if e instanceof Escaper and obj.cure
 			var es = e castTo Escaper
 			if es.poisoned and not es.flying
-				DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y ))
+				DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y))
 				es.setPoison(false)
 
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
 			case 'A077'
-				setNewActor(CreateUnit(owner, FOUNTAIN_HEAL_ID, pos.x, pos.y, 270. ))
+				setNewActor(CreateUnit(owner, FOUNTAIN_HEAL_ID, pos.x, pos.y, 270.))
 				actor.addAbility(LOCUST_ID)
 				cure = false
 				setup..removeAbility('A077')..addAbility('A078')
 			case 'A078'
-				setNewActor(CreateUnit(owner, FOUNTAIN_CURE_ID, pos.x, pos.y, 270. ))
+				setNewActor(CreateUnit(owner, FOUNTAIN_CURE_ID, pos.x, pos.y, 270.))
 				actor.addAbility(LOCUST_ID)
 				cure = true
 				setup..removeAbility('A078')..addAbility('A079')
 			case 'A079'
-				setNewActor(CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270. ))
+				setNewActor(CreateUnit(owner, FOUNTAIN_BOTH_ID, pos.x, pos.y, 270.))
 				actor.addAbility(LOCUST_ID)
 				cure = true
 				setup..removeAbility('A079')..addAbility('A077')

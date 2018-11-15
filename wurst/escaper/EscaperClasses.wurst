@@ -19,8 +19,8 @@ constant FIRE_RESISTANCE = 'A08Q'
 
 public class HolyEscaper extends Escaper
 
-	construct( vec3 pos, player owner)
-		super( pos, owner, ESC_HOLY_ID)
+	construct(vec3 pos, player owner)
+		super(pos, owner, ESC_HOLY_ID)
 
 	override function onCast(int id)
 		super.onCast(id)
@@ -66,7 +66,7 @@ public class Portal extends FxEntity
 					flashEffect(Abilities.blinkCaster, pos)
 					flashEffect(Abilities.blinkTarget, destiny)
 					if not es.camlock and es.selectatrevive
-						PanCameraToTimedForPlayer(target.actor.getOwner(), destiny.x, destiny.y, 0.03 )
+						PanCameraToTimedForPlayer(target.actor.getOwner(), destiny.x, destiny.y, 0.03)
 
 	override function update()
 		if destiny != ZERO2 and fx.getColor() != COLOR_WHITE
@@ -143,8 +143,8 @@ public class IceEscaper extends Escaper
 			if sliding
 				var angl = actor.getFacingAngle()
 				var value = 10 + GetUnitAbilityLevel(actor,SPEEDWAVE_ID)*2.5
-				DestroyEffect( AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", pos.x, pos.y))
-				addVel( vec3(value * angl.cos(),value * angl.sin(),0.))
+				DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", pos.x, pos.y))
+				addVel(vec3(value * angl.cos(),value * angl.sin(),0.))
 		else if id == SLOWWAVE_ID
 			let lvl = actor.getAbilityLevel(id) / 4.
 			if sliding

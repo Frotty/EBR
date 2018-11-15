@@ -1,5 +1,6 @@
 [0.91z]
 [*] Added a new minigame: Slide Arena
+[*] Waypoints can now be linked with multiple other waypoints
 [*] Changed minigame's selection algorithm to cycled random
 [*] The color of rooted keys' X symbols now matches the key's color
 [*] Fixed keys not being able to be removed via their remove spell (only builder pickup)
@@ -7,6 +8,7 @@
 [*] Fixed bomber attackspeed settings missing
 [*] Fixed executer mode tooltip hotkey typo
 [*] Fixed conga line duplicate spells and overlapping orderids
+[*] Fixed a pathing bug in lounge where escapers could get stuck
 
 [0.91w]
 [*] Fixed builder cam changing on escaper revive by default (can be adjusted with -smode)

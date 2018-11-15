@@ -11,8 +11,8 @@ public GlobalShop shop
 public class GlobalShop
 	unit actor
 
-	construct( real x, real y, player owner )
-		actor = CreateUnit(owner, GOODS_STORE_ID, x, y, 270. )
+	construct(real x, real y, player owner)
+		actor = CreateUnit(owner, GOODS_STORE_ID, x, y, 270.)
 
 
 @init2 function init_GlobalShop()
