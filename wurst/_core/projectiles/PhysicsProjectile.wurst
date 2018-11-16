@@ -19,6 +19,6 @@ public class AirPhysicsProjectile extends Projectile
 	override function update()
 		super.update()
 		physicsUpdate(this)
-		setXYAngle(pos.angleTo2d(pos+vel))
+		setXYAngle(pos.angleTo2d(pos + vel))
 		setZAngle(getSlopeAngle(pos.z, pos.z + vel.z, 2))
 

@@ -99,8 +99,8 @@ init
 @objectgen function genPointer()
 	new ChannelAbilityPreset(INFO_POINTER_ID, 1, TRUE)
 	..setName("Information: Pointer")
-	..presetTooltipNormal((int lvl) -> "Information: Pointer")
-	..presetTooltipNormalExtended((int lvl) -> "Only on Ice!" +
+	..presetTooltipNormal(lvl -> "Information: Pointer")
+	..presetTooltipNormalExtended(lvl -> "Only on Ice!" +
 	"\nFaces and Escaper in the direction the Pointer is facing." +
 	"\nYou can set facing by moving pointer or by the command: -setangle 0-360" +
 	"\nTo let it autorotate click the Ability once.")

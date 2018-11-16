@@ -168,8 +168,8 @@ function isBuilderUnit() returns boolean
 
 	new ChannelAbilityPreset(MENU_CIRCLES_ID, 1, TRUE)
 		..setName("Builder: Menu: Circles")
-		..presetTooltipNormal((int lvl) -> "Menu: Circles [|cffFFCC00W|r]")
-		..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for circles.")
+		..presetTooltipNormal(lvl -> "Menu: Circles [|cffFFCC00W|r]")
+		..presetTooltipNormalExtended(lvl -> "Swap to the Buildingmenu for circles.")
 		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNCOP.blp")
 		..presetButtonPosNormal(1, 2)
 		..presetHotkey("W")
@@ -178,8 +178,8 @@ function isBuilderUnit() returns boolean
 
 	new ChannelAbilityPreset(MENU_OBJECTS_ID, 1, TRUE)
 		..setName("Builder: Menu: Objects")
-		..presetTooltipNormal((int lvl) -> "Menu: Objects [|cffFFCC00E|r]")
-		..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for objects.")
+		..presetTooltipNormal(lvl -> "Menu: Objects [|cffFFCC00E|r]")
+		..presetTooltipNormalExtended(lvl -> "Swap to the Buildingmenu for objects.")
 		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp")
 		..presetButtonPosNormal(2, 2)
 		..presetHotkey("E")
@@ -188,8 +188,8 @@ function isBuilderUnit() returns boolean
 
 	new ChannelAbilityPreset(MENU_ENVIROMENTALS_ID, 1, TRUE)
 		..setName("Builder: Menu: Enviromental")
-		..presetTooltipNormal((int lvl) -> "Menu: Enviromental [|cffFFCC00R|r]")
-		..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for enviromental stuff.")
+		..presetTooltipNormal(lvl -> "Menu: Enviromental [|cffFFCC00R|r]")
+		..presetTooltipNormalExtended(lvl -> "Swap to the Buildingmenu for enviromental stuff.")
 		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
 		..presetButtonPosNormal(3, 2)
 		..presetHotkey("R")
@@ -198,8 +198,8 @@ function isBuilderUnit() returns boolean
 
 	new ChannelAbilityPreset(MENU_DECORATIONS_ID, 1, TRUE)
 		..setName("Builder: Menu: Decorations")
-		..presetTooltipNormal((int lvl) -> "Menu: Decorations [|cffFFCC00F|r]")
-		..presetTooltipNormalExtended((int lvl) -> "Swap to the Buildingmenu for decorations.")
+		..presetTooltipNormal(lvl -> "Menu: Decorations [|cffFFCC00F|r]")
+		..presetTooltipNormalExtended(lvl -> "Swap to the Buildingmenu for decorations.")
 		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBrilliance.blp")
 		..presetButtonPosNormal(2, 1)
 		..presetHotkey("F")

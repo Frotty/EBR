@@ -76,7 +76,7 @@ public constant SPIN_SIN_DEC_ID = compiletime(ABIL_ID_GEN.next())
 	..setCastRange(1, 1250.0)
 	..presetOption(Option.TARGETIMAGE, true)
 	..presetButtonPosNormal(0, 1)
-	..presetAreaofEffect((int lvl) -> 300.0)
+	..presetAreaofEffect(lvl -> 300.0)
 	..presetHotkey("D")
 
 	new ChannelAbilityPreset(SPIN_INC_SPEED_ID, 1, true)

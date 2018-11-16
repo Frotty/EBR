@@ -1,6 +1,7 @@
 package Decoration
 import BaseObject
 import initlater InstantBuild
+import Assets
 
 public constant CHANGE_FACE_ID = compiletime(ABIL_ID_GEN.next())
 public constant INC_SCALE = compiletime(ABIL_ID_GEN.next())
@@ -10,16 +11,16 @@ constant KEY_SCALE = "d"
 constant KEY_ANGLE = "e"
 
 public class Decoration extends StaticSetupObject
-	private ConfigValue scale = new ConfigValue(1.0, 0.1, "Scale")
-	int tid = 0
-	boolean hasBeenChanged = false
+	private let scale = new ConfigValue(1.0, 0.1, "Scale")
+	var tid = 0
+	var hasBeenChanged = false
 
 	construct(vec2 pos, player owner, real a, int tid)
 		super(CreateUnit(owner, buildorders[tid], pos.x, pos.y, a), CreateUnit(owner, buildorders[tid], pos.x, pos.y, a), 0., null)
 		this.tid = tid
 		setup..addAbility(CHANGE_FACE_ID)..addAbility(INC_SCALE)..addAbility(DEC_SCALE)..addAbility(GHOST_INVIS_ID)
-		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST) ->
-			onCast()
+		EventListener.add(setup, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+
 
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -68,31 +69,31 @@ public class Decoration extends StaticSetupObject
 	new ChannelAbilityPreset(CHANGE_FACE_ID, 1, true)
 		..setName("Set facing")
 		..presetTargetTypes(Targettype.POINT)
-		..presetCastRange((int lvl) -> 500)
-		..presetCooldown((int lvl) -> 0)
-		..presetManaCost((int lvl) -> 0)
-		..presetTooltipNormal((int lvl) -> "Set the facing of this decoration [Q]")
-		..presetTooltipNormalExtended((int lvl) -> "Makes this object point at the target direction")
+		..presetCastRange(lvl -> 500)
+		..presetCooldown(lvl -> 0)
+		..presetManaCost(lvl -> 0)
+		..presetTooltipNormal(lvl -> "Set the facing of this decoration [Q]")
+		..presetTooltipNormalExtended(lvl -> "Makes this object point at the target direction")
 		..presetButtonPosNormal(0, 0)
-		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNLoad.blp")
+		..presetIcon(Icons.bTNLoad)
 		..presetHotkey("Q")
 
 	new ChannelAbilityPreset(INC_SCALE, 1, true)
 		..setName("Increase Scale")
 		..presetTargetTypes(Targettype.NONE)
 		..makeUnitSpell(0, 0)
-		..presetTooltipNormal((int lvl) -> "Increase the scale of this decoration [W]")
-		..presetTooltipNormalExtended((int lvl) -> "+0.1")
+		..presetTooltipNormal(lvl -> "Increase the scale of this decoration [W]")
+		..presetTooltipNormalExtended(lvl -> "+0.1")
 		..presetButtonPosNormal(1, 0)
-		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+		..presetIcon(Icons.bTNReplay_SpeedUp)
 		..presetHotkey("W")
 
 	new ChannelAbilityPreset(DEC_SCALE, 1, true)
 		..setName("Decrease Scale")
 		..presetTargetTypes(Targettype.NONE)
 		..makeUnitSpell(0, 0)
-		..presetTooltipNormal((int lvl) -> "Decrease the scale of this decoration [S]")
-		..presetTooltipNormalExtended((int lvl) -> "-0.1")
+		..presetTooltipNormal(lvl -> "Decrease the scale of this decoration [S]")
+		..presetTooltipNormalExtended(lvl -> "-0.1")
 		..presetButtonPosNormal(1, 1)
-		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+		..presetIcon(Icons.bTNReplay_SpeedDown)
 		..presetHotkey("S")

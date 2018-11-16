@@ -110,8 +110,8 @@ public class RevivePoint extends StaticSetupObject
 @objectgen function genRevivePoint()
 	new ChannelAbilityPreset(INFO_REVIVE_POINT_ID, 1, TRUE)
 		..setName("Information: Revivepoint")
-		..presetTooltipNormal((int lvl) -> "|cff7B94E6Information: |rRevivepoint")
-		..presetTooltipNormalExtended((int lvl) -> "The Revivepoint is the point where fallen Escapers get revived." +
+		..presetTooltipNormal(lvl -> "|cff7B94E6Information: |rRevivepoint")
+		..presetTooltipNormalExtended(lvl -> "The Revivepoint is the point where fallen Escapers get revived." +
 		"\nThe Revivepoint gets activated if an Escaper walks into it. Builders cant activate a Revivepoint.")
 		..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
 		..presetButtonPosNormal(0, 0)

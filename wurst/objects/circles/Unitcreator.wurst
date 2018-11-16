@@ -29,6 +29,7 @@ public class UnitCreator extends StaticBaseObject
 	real interval = 5.
 	real timerreal = .5
 	int spawnUnitType = TANK_KILLER_ID
+	let delays = new LinkedList<real>
 	TimerMode tmode = TimerMode.FIXED
 
 	construct(unit existing)
@@ -47,7 +48,9 @@ public class UnitCreator extends StaticBaseObject
 			if tmode == TimerMode.FIXED
 				timerreal = interval
 			else if tmode == TimerMode.RANDOM
-				timerreal = GetRandomReal(0.5, interval)
+				timerreal = delays.pop() // GetRandomReal(0.5, interval)
+				if delays.isEmpty()
+					refreshDelays()
 		else
 			timerreal -= ANIMATION_PERIOD
 
@@ -75,6 +78,16 @@ public class UnitCreator extends StaticBaseObject
 				ek = new Knockbacker(cpos, owner, getRallyAngle())
 		ek.setup.issuePointOrder("move", rPos)
 
+	function refreshDelays()
+		if tmode == tmode.RANDOM
+			delays.clear()
+			for i = 2 to interval.toInt() * 4
+				if i mod 3 == 0
+					delays.add(i * 0.25)
+				else
+					delays.addtoStart(i * 0.25)
+			delays.shuffle()
+
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
@@ -85,13 +98,14 @@ public class UnitCreator extends StaticBaseObject
 				else
 					interval += 0.25
 					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10, 2., colorA(255,255,255,0), owner)
+				refreshDelays()
 			case DECREASE_INTERVAL_ID
 				if interval < 0.75
 					createFText(pos, vec2(0,0.05), "|cffC51019Min", 10, 2., colorA(255,255,255,0), owner)
 				else
 					interval -= 0.25
 					createFText(pos, vec2(0,0.05), "|cffC51019Intervall "+ R2SW(interval,1,2), 10, 2., colorA(255,255,255,0), owner)
-					//DisplayTextToPlayer(owner, 0, 0, "|cffC51019Intervall is now: "+ R2SW(interval,1,2))
+				refreshDelays()
 			case UTYPE_BK // Big killer
 				spawnUnitType = 'BIGK'
 			case UTYPE_SK // Small killer
@@ -111,6 +125,7 @@ public class UnitCreator extends StaticBaseObject
 			case FIXED_ID
 				actor..removeAbility(FIXED_ID)..addAbility(RANDOM_ID)
 				tmode = TimerMode.RANDOM
+				refreshDelays()
 			case RANDOM_ID
 				actor..removeAbility(RANDOM_ID)..addAbility(FIXED_ID)
 				tmode = TimerMode.FIXED
@@ -119,6 +134,9 @@ public class UnitCreator extends StaticBaseObject
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
 		return json
+
+	ondestroy
+		destroy delays
 
 
 init
@@ -131,8 +149,8 @@ init
 @objectgen function genUnitCreator()
 	new ChannelAbilityPreset(INFO_UNIT_CREATOR_ID, 1, TRUE)
 	..setName("Information: Unit Creator")
-	..presetTooltipNormal((int lvl) -> "|cff7B94E6Information: |rUnit Creator")
-	..presetTooltipNormalExtended((int lvl) -> "If you activcate the creator (Play Button) units of the selected type will be created periodically and walk to the rallypoint.")
+	..presetTooltipNormal(lvl -> "|cff7B94E6Information: |rUnit Creator")
+	..presetTooltipNormalExtended(lvl -> "If you activcate the creator (Play Button) units of the selected type will be created periodically and walk to the rallypoint.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
@@ -140,8 +158,8 @@ init
 
 	new ChannelAbilityPreset(DECREASE_INTERVAL_ID, 1, TRUE)
 	..setName("UC: Decrease Interval")
-	..presetTooltipNormal((int lvl) -> "|cffFF8421Decrease|r the Spawninterval by 0.25 [|cffFFCC00X|r]")
-	..presetTooltipNormalExtended((int lvl) -> "(more units)")
+	..presetTooltipNormal(lvl -> "|cffFF8421Decrease|r the Spawninterval by 0.25 [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended(lvl -> "(more units)")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
 	..presetButtonPosNormal(1, 2)
 	..presetHotkey("X")
@@ -150,8 +168,8 @@ init
 
 	new ChannelAbilityPreset(INCREASE_INTERVAL_ID, 1, TRUE)
 	..setName("UC: Increase Interval")
-	..presetTooltipNormal((int lvl) -> "|cff3ABD52Increase|r the Spawninterval by 0.25 [|cffFFCC00C|r]")
-	..presetTooltipNormalExtended((int lvl) -> "(less units)")
+	..presetTooltipNormal(lvl -> "|cff3ABD52Increase|r the Spawninterval by 0.25 [|cffFFCC00C|r]")
+	..presetTooltipNormalExtended(lvl -> "(less units)")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
 	..presetButtonPosNormal(2, 2)
 	..presetHotkey("C")
@@ -159,26 +177,26 @@ init
 	..setHeroAbility(FALSE)
 
 	new ChannelAbilityPreset(FIXED_ID, 1, true)
-	..presetManaCost((int lvl) -> 0)
+	..presetManaCost(lvl -> 0)
 	..setHeroAbility(false)
-	..presetCooldown((int lvl) -> 0)
+	..presetCooldown(lvl -> 0)
 	..setName("Fixed Timer")
 	..presetIcon("BTNUCModeFixed")
 	..presetHotkey("D")
-	..presetTooltipNormal((int lvl) -> "Fixed Timer [|cffFFCC00D|r]")
-	..presetTooltipNormalExtended((int lvl) -> "At fixed mode, the monsters will always be spawned in the fixed interval you set."
+	..presetTooltipNormal(lvl -> "Fixed Timer [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended(lvl -> "At fixed mode, the monsters will always be spawned in the fixed interval you set."
 	+ "|nClick to change to random mode.")
 	..presetButtonPosNormal(1, 1)
 
 	new ChannelAbilityPreset(RANDOM_ID, 1, true)
-	..presetManaCost((int lvl) -> 0)
+	..presetManaCost(lvl -> 0)
 	..setHeroAbility(false)
-	..presetCooldown((int lvl) -> 0)
+	..presetCooldown(lvl -> 0)
 	..setName("Random Timer")
 	..presetIcon("BTNUCModeRandom")
 	..presetHotkey("D")
-	..presetTooltipNormal((int lvl) -> "Random Timer [|cffFFCC00D|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Chooses a random interval between all monsters spawned. The configured interval is the highest possible interval."
+	..presetTooltipNormal(lvl -> "Random Timer [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended(lvl -> "Chooses a random interval between all monsters spawned. The configured interval is the highest possible interval."
 	+ "|nClick to change to fixed mode.")
 	..presetButtonPosNormal(1, 1)
 

@@ -346,8 +346,8 @@ public class Trap extends StaticBaseObject
 @objectgen function genTrap()
 	new ChannelAbilityPreset(DECREASE_DURATION_ID, 1, TRUE)
 	..setName("Trap: Decrease Duration")
-	..presetTooltipNormal((int lvl) -> "|cffFF5229Decrease |rDuration [|cffFFCC00D|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Decreases the duration of the trap effect, in other words: the amount of time it lasts.")
+	..presetTooltipNormal(lvl -> "|cffFF5229Decrease |rDuration [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended(lvl -> "Decreases the duration of the trap effect, in other words: the amount of time it lasts.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNDurationMinus.blp")
 	..presetButtonPosNormal(2, 1)
 	..presetHotkey("D")
@@ -356,8 +356,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(INCREASE_DURATION_ID, 1, TRUE)
 	..setName("Trap: Increase Duration")
-	..presetTooltipNormal((int lvl) -> "|cff73C54AIncrease |rDuration [|cffFFCC00E|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Increases the duration of the trap effect, in other words: the amount of time it lasts.")
+	..presetTooltipNormal(lvl -> "|cff73C54AIncrease |rDuration [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended(lvl -> "Increases the duration of the trap effect, in other words: the amount of time it lasts.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNDurationPlus.blp")
 	..presetButtonPosNormal(2, 0)
 	..presetHotkey("E")
@@ -366,8 +366,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(DECREASE_INTERVAL_ID, 1, TRUE)
 	..setName("Trap: Decrease Interval")
-	..presetTooltipNormal((int lvl) -> "|cffFF5229Decrease |rInterval [|cffFFCC00F|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Decreases the traps periodic activation interval." +
+	..presetTooltipNormal(lvl -> "|cffFF5229Decrease |rInterval [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended(lvl -> "Decreases the traps periodic activation interval." +
 	"|nTo turn the trap periodic, click the Start button.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNIntervalMinus.blp")
 	..presetButtonPosNormal(3, 1)
@@ -377,8 +377,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(INCREASE_INTERVAL_ID, 1, TRUE)
 	..setName("Trap: Increase Interval")
-	..presetTooltipNormal((int lvl) -> "|cff73C54AIncrease |rInterval [|cffFFCC00R|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Increases the traps periodic activation interval." +
+	..presetTooltipNormal(lvl -> "|cff73C54AIncrease |rInterval [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended(lvl -> "Increases the traps periodic activation interval." +
 	"|nTo turn the trap periodic, click the Start button.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBTNIntervalPlus.blp")
 	..presetButtonPosNormal(3, 0)
@@ -388,8 +388,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(DECREASE_VALUE_ID, 1, TRUE)
 	..setName("Trap: Decrease Value")
-	..presetTooltipNormal((int lvl) -> "|cffFF5229Decrease |rValue [|cffFFCC00S|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Decreases the value of the current trap event." +
+	..presetTooltipNormal(lvl -> "|cffFF5229Decrease |rValue [|cffFFCC00S|r]")
+	..presetTooltipNormalExtended(lvl -> "Decreases the value of the current trap event." +
 	"\nValue always describes the strength or intensity of an effect, for example:" +
 	"\n-Intensity of Camera Shake" +
 	"\n-Strength of Knockback")
@@ -401,7 +401,7 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(INCREASE_VALUE_ID, 1, TRUE)
 	..setName("Trap: Increase Value")
-	..presetTooltipNormal((int lvl) -> "Increases the value of the current trap event." +
+	..presetTooltipNormal(lvl -> "Increases the value of the current trap event." +
 	"\nValue always describes the strength or intensity of an effect, for example:" +
 	"\n-Intensity of Camera Shake" +
 	"\n-Strength of Knockback")
@@ -413,8 +413,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(POISON_ID, 1, TRUE)
 	..setName("Trap: Poison")
-	..presetTooltipNormal((int lvl) -> "Set event to '|cff08C55APoison|r' [|cffFFCC00E|r]")
-	..presetTooltipNormalExtended((int lvl) -> "The entering escaper will be poisoned and can only be cured at a fountain.")
+	..presetTooltipNormal(lvl -> "Set event to '|cff08C55APoison|r' [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended(lvl -> "The entering escaper will be poisoned and can only be cured at a fountain.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNEnvenomedSpear.blp")
 	..presetButtonPosNormal(2, 0)
 	..presetHotkey("E")
@@ -423,8 +423,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(SHAKE_ID, 1, TRUE)
 	..setName("Trap: Shake")
-	..presetTooltipNormal((int lvl) -> "Set event to '|cff088CD6Shake Camera|r' [|cffFFCC00W|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Shakes the camera of the entering escaper for a given amount and intensity.")
+	..presetTooltipNormal(lvl -> "Set event to '|cff088CD6Shake Camera|r' [|cffFFCC00W|r]")
+	..presetTooltipNormalExtended(lvl -> "Shakes the camera of the entering escaper for a given amount and intensity.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNTornado.blp")
 	..presetButtonPosNormal(1, 0)
 	..presetHotkey("W")
@@ -433,8 +433,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(SPEED_ID, 1, TRUE)
 	..setName("Trap: Speed")
-	..presetTooltipNormal((int lvl) -> "Set event to '|cffBDBDBDSpeed Bonus|r' [|cffFFCC00R|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Temporarely adds a movespeed bonus to the entering escaper.")
+	..presetTooltipNormal(lvl -> "Set event to '|cffBDBDBDSpeed Bonus|r' [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended(lvl -> "Temporarely adds a movespeed bonus to the entering escaper.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp")
 	..presetButtonPosNormal(3, 0)
 	..presetHotkey("R")
@@ -443,8 +443,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(STUN_ID, 1, TRUE)
 	..setName("Trap: Stun")
-	..presetTooltipNormal((int lvl) -> "Set event to '|cff086B9CStun|r' [|cffFFCC00S|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Stuns the entering escaper for a given duration.")
+	..presetTooltipNormal(lvl -> "Set event to '|cff086B9CStun|r' [|cffFFCC00S|r]")
+	..presetTooltipNormalExtended(lvl -> "Stuns the entering escaper for a given duration.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNStun.blp")
 	..presetButtonPosNormal(1, 1)
 	..presetHotkey("S")
@@ -453,8 +453,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(KNOCKBACK_ID, 1, TRUE)
 	..setName("Trap: Knockback")
-	..presetTooltipNormal((int lvl) -> "Set event to '|cffF77B21Knockback|r' [|cffFFCC00F|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Knockbacks the entering escaper." +
+	..presetTooltipNormal(lvl -> "Set event to '|cffF77B21Knockback|r' [|cffFFCC00F|r]")
+	..presetTooltipNormalExtended(lvl -> "Knockbacks the entering escaper." +
 	"\nWhen no rallypoint is set, the escaper will be pushed into the same direction he is coming from." +
 	"\nIf the rallypoint is set, he will be pushed to the rallypoints direction.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNShockWave.blp")
@@ -465,8 +465,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(KNOCKBACK_PUSH_ID, 1, TRUE)
 	..setName("Trap: Knockback Push")
-	..presetTooltipNormal((int lvl) -> "Set |cffFFCC00knockback |rto |cffCE6319Push |r[|cffFFCC00E|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Reset the trap to the normal, pushing mode.")
+	..presetTooltipNormal(lvl -> "Set |cffFFCC00knockback |rto |cffCE6319Push |r[|cffFFCC00E|r]")
+	..presetTooltipNormalExtended(lvl -> "Reset the trap to the normal, pushing mode.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNPull.blp")
 	..presetButtonPosNormal(2, 0)
 	..presetHotkey("F")
@@ -475,8 +475,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(KNOCKBACK_PULL_ID, 1, TRUE)
 	..setName("Trap: Knockback Pull")
-	..presetTooltipNormal((int lvl) -> "Set |cffFFCC00knockback |rto |cffCE6319Pull |r[|cffFFCC00E|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Instead of pushing the escaper when entering the trap without rallypoint, " +
+	..presetTooltipNormal(lvl -> "Set |cffFFCC00knockback |rto |cffCE6319Pull |r[|cffFFCC00E|r]")
+	..presetTooltipNormalExtended(lvl -> "Instead of pushing the escaper when entering the trap without rallypoint, " +
 	"the escaper gets pulled. \nThis makes the trap function like a speed boost.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNPush.blp")
 	..presetButtonPosNormal(2, 0)
@@ -486,8 +486,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(INSTANT_KILL_ID, 1, TRUE)
 	..setName("Trap: Instant Kill ")
-	..presetTooltipNormal((int lvl) -> "Set event to '|cffBD1910Instant Kill|r' [|cffFFCC00D|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Instantly kills the entering escaper.")
+	..presetTooltipNormal(lvl -> "Set event to '|cffBD1910Instant Kill|r' [|cffFFCC00D|r]")
+	..presetTooltipNormalExtended(lvl -> "Instantly kills the entering escaper.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
 	..presetButtonPosNormal(2, 1)
 	..presetHotkey("D")
@@ -496,8 +496,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(START_ID, 1, TRUE)
 	..setName("Trap: Start")
-	..presetTooltipNormal((int lvl) -> "|cff21A54AStart |rPeriodic Evaluation [|cffFFCC00X|r]")
-	..presetTooltipNormalExtended((int lvl) -> "By starting periodic evaluation, the trap will only affect escapers " +
+	..presetTooltipNormal(lvl -> "|cff21A54AStart |rPeriodic Evaluation [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended(lvl -> "By starting periodic evaluation, the trap will only affect escapers " +
 	"that are near the circle when the event fires." +
 	"\nWalking into the circle doesn't fire an event anymore.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNstart.blp")
@@ -508,8 +508,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(STOP_ID, 1, TRUE)
 	..setName("Trap: Stop")
-	..presetTooltipNormal((int lvl) -> "|cffC54A10Stop |rPeriodic Evaluation [|cffFFCC00X|r]")
-	..presetTooltipNormalExtended((int lvl) -> "By stupping periodic evaluation, the trap will only affect escapers " +
+	..presetTooltipNormal(lvl -> "|cffC54A10Stop |rPeriodic Evaluation [|cffFFCC00X|r]")
+	..presetTooltipNormalExtended(lvl -> "By stupping periodic evaluation, the trap will only affect escapers " +
 	"that walk into the trap. \nThere will be no more periodic event.")
 		..presetIcon("ReplaceableTextures\\CommandButtons\\BTNstop.blp")
 	..presetButtonPosNormal(1, 2)
@@ -519,8 +519,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(NEXT_EFFECT_ID, 1, TRUE)
 	..setName("Trap: Next Effect")
-	..presetTooltipNormal((int lvl) -> "Set to next special effect [|cffFFCC00Q|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Sets the spawned effect to the next one.")
+	..presetTooltipNormal(lvl -> "Set to next special effect [|cffFFCC00Q|r]")
+	..presetTooltipNormalExtended(lvl -> "Sets the spawned effect to the next one.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNnextEffect.blp")
 	..presetButtonPosNormal(0, 1)
 	..presetHotkey("Q")
@@ -529,8 +529,8 @@ public class Trap extends StaticBaseObject
 
 	new ChannelAbilityPreset(PREVIOUS_EFFECT_ID, 1, TRUE)
 	..setName("Trap: Previous Effect")
-	..presetTooltipNormal((int lvl) -> "Set to previous special effect [|cffFFCC00A|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Sets the spawned effect to the previous one.")
+	..presetTooltipNormal(lvl -> "Set to previous special effect [|cffFFCC00A|r]")
+	..presetTooltipNormalExtended(lvl -> "Sets the spawned effect to the previous one.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNprevEffect.blp")
 	..presetButtonPosNormal(0, 0)
 	..presetHotkey("A")

@@ -558,8 +558,8 @@ public class Executer extends StaticBaseObject
 @objectgen function genExecuter()
 	new ChannelAbilityPreset(INFO_EXECUTER_ID, 1, TRUE)
 	..setName("Information: Executer")
-	..presetTooltipNormal((int lvl) -> "Information: Executer")
-	..presetTooltipNormalExtended((int lvl) -> "The Executer does some advanced actions when an Escaper walks in." +
+	..presetTooltipNormal(lvl -> "Information: Executer")
+	..presetTooltipNormalExtended(lvl -> "The Executer does some advanced actions when an Escaper walks in." +
 	"\nYou define the Action by using the Spell once." +
 	"\nThe Action will be executed at the RallyPoint or RallyUnit." +
 	"\nYou can change the executer to loop or be a one-shot")

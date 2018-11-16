@@ -149,8 +149,8 @@ init
 @objectgen function genTexter()
 	new ChannelAbilityPreset(INFO_TEXTER_ID, 1, TRUE)
 	..setName("Information: Texter")
-	..presetTooltipNormal((int lvl) -> "Information: Texter")
-	..presetTooltipNormalExtended((int lvl) -> "Use these commands while having the texter selected." +
+	..presetTooltipNormal(lvl -> "Information: Texter")
+	..presetTooltipNormalExtended(lvl -> "Use these commands while having the texter selected." +
 	"\nAll Commands:" +
 	"\n-sht (shows the currently set text)" +
 	"\n-ht (hides the currently set text)" +

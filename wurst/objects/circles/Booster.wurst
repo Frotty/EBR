@@ -50,8 +50,8 @@ public class Booster extends StaticBaseObject
 @objectgen function genBooster()
 	new ChannelAbilityPreset(INFO_BOOSTER_ID, 1, TRUE)
 	..setName("Information: Booster")
-	..presetTooltipNormal((int lvl) -> "Information: Booster")
-	..presetTooltipNormalExtended((int lvl) -> "The Booster sets a Tanks Speed when i drives over the Booster to the defined value")
+	..presetTooltipNormal(lvl -> "Information: Booster")
+	..presetTooltipNormalExtended(lvl -> "The Booster sets a Tanks Speed when i drives over the Booster to the defined value")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
@@ -59,7 +59,7 @@ public class Booster extends StaticBaseObject
 
 	new ChannelAbilityPreset(SPEED_UP_ID, 1, TRUE)
 	..setName("Remove Object")
-	..presetTooltipNormal((int lvl) -> "Set the boost-speed |cff9C299Cup |r[|cffFFCC00Y|r]")
+	..presetTooltipNormal(lvl -> "Set the boost-speed |cff9C299Cup |r[|cffFFCC00Y|r]")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
 	..presetButtonPosNormal(2, 0)
 	..presetHotkey("Y")
@@ -68,7 +68,7 @@ public class Booster extends StaticBaseObject
 
 	new ChannelAbilityPreset(SPEED_DOWN_ID, 1, TRUE)
 	..setName("Booster: Speed down")
-	..presetTooltipNormal((int lvl) -> "Set the boost-speed |cffF79CDEdown |r[|cffFFCC00X|r]")
+	..presetTooltipNormal(lvl -> "Set the boost-speed |cffF79CDEdown |r[|cffFFCC00X|r]")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
 	..presetButtonPosNormal(2, 1)
 	..presetHotkey("X")

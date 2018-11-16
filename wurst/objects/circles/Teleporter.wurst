@@ -84,8 +84,8 @@ public class Teleporter extends StaticBaseObject
 @objectgen function genTeleporter()
 	new ChannelAbilityPreset(INFO_TELEPORTER_ID, 1, TRUE)
 	..setName("Information: Teleporter")
-	..presetTooltipNormal((int lvl) -> "Information: Teleporter")
-	..presetTooltipNormalExtended((int lvl) -> "The Teleporter teleports the entering Unit to the Rallypoint." +
+	..presetTooltipNormal(lvl -> "Information: Teleporter")
+	..presetTooltipNormalExtended(lvl -> "The Teleporter teleports the entering Unit to the Rallypoint." +
 	"\nYou can define if Escapers or Escape Killers should be teleporting by clicking on the 'Teleport escapers only' Spell")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
 	..presetButtonPosNormal(0, 0)

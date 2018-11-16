@@ -51,10 +51,10 @@ init
 	new ChannelAbilityPreset(BALL_SPELL_ID, 1, true)
 	..setHeroAbility(false)
 	..setName("Throw a ball")
-	..presetTooltipNormal((int lvl) -> "Throw Ball")
+	..presetTooltipNormal(lvl -> "Throw Ball")
 	..presetTargetTypes(Targettype.POINT)
-	..presetCastRange((int lvl) -> 300.)
-	..presetManaCost((int lvl) -> 0)
+	..presetCastRange(lvl -> 300.)
+	..presetManaCost(lvl -> 0)
 	..presetButtonPosNormal(1,1)
 	..presetIcon("BTNGolemStormBolt")
 	

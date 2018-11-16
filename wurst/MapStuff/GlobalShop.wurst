@@ -1,11 +1,12 @@
 package GlobalShop
 import ChannelAbilityPreset
-//import Regions
+import GameConstants
 
 constant GOODS_STORE_ID = compiletime(UNIT_ID_GEN.next())
 
-constant real 	EVENT_RADIUS_SMALL	= 32.
-constant real 	EVENT_RADIUS_BIG	= 64.
+constant EVENT_RADIUS_SMALL	= 32.
+constant EVENT_RADIUS_BIG	= 64.
+
 public GlobalShop shop
 
 public class GlobalShop
@@ -16,7 +17,7 @@ public class GlobalShop
 
 
 @init2 function init_GlobalShop()
-	shop = new GlobalShop(-6530,-6450,Player(12))
+	shop = new GlobalShop(-6630, -5950, STAFF_PLAYER)
 
 
 @objectgen function genShop()

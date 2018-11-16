@@ -154,8 +154,8 @@ public class Jumper extends StaticBaseObject
 @objectgen function genJumper()
 	new ChannelAbilityPreset(INFO_JUMPER_ID, 1, TRUE)
 	..setName("Information: Jumper")
-	..presetTooltipNormal((int lvl) -> "Information: Jumper")
-	..presetTooltipNormalExtended((int lvl) -> "The Jumper lets an entering Escaper fly to Rallypoint." +
+	..presetTooltipNormal(lvl -> "Information: Jumper")
+	..presetTooltipNormalExtended(lvl -> "The Jumper lets an entering Escaper fly to Rallypoint." +
 	"\nThe Escaper cant be harmed in midair.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
 	..presetButtonPosNormal(0, 0)
@@ -164,8 +164,8 @@ public class Jumper extends StaticBaseObject
 
 	new ChannelAbilityPreset(INCREASE_FORCE_ID, 1, TRUE)
 	..setName("Jumper: Increase Force")
-	..presetTooltipNormal((int lvl) -> "Increase Force [|cffFFCC00W|r]")
-	..presetTooltipNormalExtended((int lvl) -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00faster|r," +
+	..presetTooltipNormal(lvl -> "Increase Force [|cffFFCC00W|r]")
+	..presetTooltipNormalExtended(lvl -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00faster|r," +
 	"and |cffFFCC00lower|n|cff0884BDIn unforced mode|r: Makes the escaper jump |cffFFCC00higher")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
 	..presetButtonPosNormal(1, 0)
@@ -175,8 +175,8 @@ public class Jumper extends StaticBaseObject
 
 	new ChannelAbilityPreset(DECREASE_FORCE_ID, 1, TRUE)
 	..setName("Jumper: Decrease Force")
-	..presetTooltipNormal((int lvl) -> "Decrease Force [|cffFFCC00E|r]")
-	..presetTooltipNormalExtended((int lvl) -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00slower|r," +
+	..presetTooltipNormal(lvl -> "Decrease Force [|cffFFCC00E|r]")
+	..presetTooltipNormalExtended(lvl -> "|cff0884BDIn forced mode|r: Makes the escaper jump |cffFFCC00slower|r," +
 	"but |cffFFCC00higher|n|cff0884BDIn unforced mode|r: Makes the escaper jump |cffFFCC00lower")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
 	..presetButtonPosNormal(2, 0)
@@ -186,8 +186,8 @@ public class Jumper extends StaticBaseObject
 
 	new ChannelAbilityPreset(MODE_FORCED_ID, 1, TRUE)
 	..setName("Jumper: Mode Forced")
-	..presetTooltipNormal((int lvl) -> "Change Jumper Mode [|cffFFCC00R|r]")
-	..presetTooltipNormalExtended((int lvl) -> "The Jump corrently happens onto the Rallypoint.")
+	..presetTooltipNormal(lvl -> "Change Jumper Mode [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended(lvl -> "The Jump corrently happens onto the Rallypoint.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNJumperModeForced.blp")
 	..presetButtonPosNormal(3, 0)
 	..presetHotkey("R")
@@ -196,8 +196,8 @@ public class Jumper extends StaticBaseObject
 
 	new ChannelAbilityPreset(MODE_UNFORCED_ID, 1, TRUE)
 	..setName("Jumper: Mode Unforced")
-	..presetTooltipNormal((int lvl) -> "Change Jumper Mode [|cffFFCC00R|r]")
-	..presetTooltipNormalExtended((int lvl) -> "Only vertical momentum is applied.")
+	..presetTooltipNormal(lvl -> "Change Jumper Mode [|cffFFCC00R|r]")
+	..presetTooltipNormalExtended(lvl -> "Only vertical momentum is applied.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNJumperModeUnforced.blp")
 	..presetButtonPosNormal(3, 0)
 	..presetHotkey("R")

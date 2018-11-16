@@ -5,6 +5,7 @@ import ObjectTarget
 import Builder
 import WaypointObjects
 import ClosureTimers
+import HashSet
 
 constant INTERVAL = .25
 constant EVENT_RADIUS = 32.
@@ -13,7 +14,7 @@ public class Waypoint extends StaticBaseObject
 	real delay = 0.
 	boolean wisps = true
 
-	LinkedList<Waypoint> linked = null
+	HashSet<Waypoint> linked = null
 	boolean ready = false
 
 	construct(vec2 pos, player owner)
@@ -47,13 +48,13 @@ public class Waypoint extends StaticBaseObject
 				if not ready
 					ready = true
 					var allReady = true
-					for andPartner from linked.staticItr()
+					for andPartner in linked
 						if not andPartner.ready
 							allReady = false
 							break
 
 					if allReady
-						for andPartner from linked.staticItr()
+						for andPartner in linked
 							andPartner.orderLogicMove()
 							andPartner.ready = false
 						orderLogicMove()
@@ -92,12 +93,22 @@ public class Waypoint extends StaticBaseObject
 					createFText(pos, vec2(0,0.05), "Wisps |cff08BD52active", 10, 2., COLOR_WHITE, owner)
 			case AND_CONNECTION_ID
 				if linked == null
-					linked = new LinkedList<Waypoint>()
+					linked = new HashSet<Waypoint>()
+
 				let target = GetSpellTargetUnit().getEntity()
+
 				if target != null and target instanceof Waypoint
-					linked.add(target castTo Waypoint)
-					(target castTo Waypoint).linked.add(this)
-					createFText(target.getPos(), vec2(0,0.1), "|cff0873C5Linked", 9., 1.5, COLOR_WHITE, owner)
+					let twp = (target castTo Waypoint)
+					if twp.linked == null
+						twp.linked = new HashSet<Waypoint>()
+					twp.linked.addAll(linked)
+
+					for link in linked
+						link.linked.add(twp)
+
+					linked.add(twp)
+					twp.linked.add(this)
+					createFText(target.getPos(), vec2(0,0.08), "|cff0873C5Linked", 9., 1.75, COLOR_WHITE, owner)
 
 	static function delayMove(UnitEntity entity, vec2 pos)
 		if entity instanceof SetupObject
@@ -117,4 +128,7 @@ public class Waypoint extends StaticBaseObject
 
 	ondestroy
 		if linked != null
+			for link in linked
+				link.linked.remove(this)
 			destroy linked
+

@@ -2,6 +2,7 @@
 [*] Added a new minigame: Slide Arena
 [*] Waypoints can now be linked with multiple other waypoints
 [*] Changed minigame's selection algorithm to cycled random
+[*] Changed unitcreator random mode to cycled random for a more stable, predictable pattern
 [*] The color of rooted keys' X symbols now matches the key's color
 [*] Fixed keys not being able to be removed via their remove spell (only builder pickup)
 [*] Fixed unitcreator interval changes setting spawned unittype to bunnies
