@@ -62,7 +62,7 @@ class Link
 
 
 public class Powernode extends SetupObject
-	private ConfigValue bounciness = new ConfigValue(0.75, 0.25, "Bounciness")
+	let bounciness = new ConfigValue(0.75, 0.25, "Bounciness")
 	protected Link firstLink = null
 
 	construct(vec2 pos, player owner)
@@ -179,6 +179,7 @@ public class Powernode extends SetupObject
 			let tmp = l
 			l = l.next
 			destroy tmp
+		destroy bounciness
 
 	function onCast()
 		var id = GetSpellAbilityId()

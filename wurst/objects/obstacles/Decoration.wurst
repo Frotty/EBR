@@ -48,6 +48,10 @@ public class Decoration extends StaticSetupObject
 			owner.select(setup)
 		hasBeenChanged = true
 
+	ondestroy
+		destroy scale
+
+
 	override function deserialize(Json json)
 		changeAngle((json.getInt(KEY_ANGLE).toReal().fromDeg()))
 		let sc = json.getInt(KEY_SCALE)

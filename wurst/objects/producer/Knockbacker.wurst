@@ -10,8 +10,8 @@ public constant DMG_INC_ID = compiletime(ABIL_ID_GEN.next())
 public constant DMG_DEC_ID = compiletime(ABIL_ID_GEN.next())
 
 public class Knockbacker extends EscaperSensorSetup
-	ConfigValue kforce = new ConfigValue(20, 2.5, "Knockback")
-	ConfigValue damage = new ConfigValue(50, 25, "Damage")
+	let kforce = new ConfigValue(20, 2.5, "Knockback")
+	let damage = new ConfigValue(50, 25, "Damage")
 
 	construct(unit existing)
 		super(existing, 64., 160.)
@@ -55,6 +55,10 @@ public class Knockbacker extends EscaperSensorSetup
 		json
 		..addProperty(new Property(KEY_TYPE, KNOCKBACKER_INDEX.toString()))
 		return json
+
+	ondestroy
+		destroy kforce
+		destroy damage
 
 
 @objectgen function genKnockbacker()

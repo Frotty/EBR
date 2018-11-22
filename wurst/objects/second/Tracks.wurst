@@ -18,7 +18,7 @@ constant INCLENGTH_ID  	= 'A04H'
 constant DECLENGTH_ID		= 'A050'
 
 public class Tracks extends UnitEntity
-	ConfigValue trackSpeed = new ConfigValue(4, 0.50, "Trackspeed")
+	let trackSpeed = new ConfigValue(4, 0.50, "Trackspeed")
 
 	unit setup
 	int tsize = 0
@@ -45,6 +45,7 @@ public class Tracks extends UnitEntity
 	ondestroy
 		setup.setEntity(null)
 		setup.remove()
+		destroy trackSpeed
 
 	function onCast()
 		let id = GetSpellAbilityId()

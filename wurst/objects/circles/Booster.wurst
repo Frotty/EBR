@@ -8,7 +8,7 @@ constant EVENT_RADIUS = 32.
 constant BOOST_SPEED_KEY = "b"
 
 public class Booster extends StaticBaseObject
-	ConfigValue boostspeed = new ConfigValue(200, 25, "Boostspeed")
+	let boostspeed = new ConfigValue(200, 25, "Boostspeed")
 
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null)
@@ -33,6 +33,9 @@ public class Booster extends StaticBaseObject
 				boostspeed.increment(this, 525)
 			case SPEED_DOWN_ID
 				boostspeed.decrement(this, 25)
+
+	ondestroy
+		destroy boostspeed
 
 	override function deserialize(Json json)
 		let speed = json.getInt(BOOST_SPEED_KEY)

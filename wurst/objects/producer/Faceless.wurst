@@ -16,12 +16,13 @@ enum WalkerMode
 	FADEOUT
 
 public class Faceless extends EscaperSensorSetup
-	private colorA color = COLOR_WHITE
-	ConfigValue visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
-	private real fadeDur = 1
-	ConfigValue invisDur = new ConfigValue(.5, 0.5, "Invisible Duration")
-	private WalkerMode mode = WalkerMode.VIS
-	private real dur = visibleDur.get()
+	private var color = COLOR_WHITE
+	private var fadeDur = 1.
+	private var mode = WalkerMode.VIS
+	private var dur = visibleDur.get()
+
+	let visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
+	let invisDur = new ConfigValue(.5, 0.5, "Invisible Duration")
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, DIMENSION_SHIFTER_ID, facing, KILL_RADIUS, KILL_RADIUS)
@@ -47,7 +48,7 @@ public class Faceless extends EscaperSensorSetup
 
 		switch mode
 			case WalkerMode.VIS
-				dur-= ANIMATION_PERIOD
+				dur -= ANIMATION_PERIOD
 				if dur <= 0
 					mode = WalkerMode.FADEOUT
 					dur = fadeDur
@@ -58,14 +59,14 @@ public class Faceless extends EscaperSensorSetup
 					dur = fadeDur
 			case WalkerMode.FADEOUT
 				dur -= ANIMATION_PERIOD
-				color = color.mix(COLOR_BLACK, (fadeDur-dur)/3.)
+				color = color.mix(COLOR_BLACK, (fadeDur-dur) / 3.)
 				if dur <= 0
 					color = COLOR_BLACK
 					mode = WalkerMode.INVIS
 					dur = invisDur.get()
 			case WalkerMode.FADEIN
 				dur -= ANIMATION_PERIOD
-				color = color.mix(COLOR_WHITE, (fadeDur-dur)/3.)
+				color = color.mix(COLOR_WHITE, (fadeDur-dur) / 3.)
 				if dur <= 0
 					color = COLOR_WHITE
 					mode = WalkerMode.VIS
@@ -83,6 +84,10 @@ public class Faceless extends EscaperSensorSetup
 				invisDur.increment(this, 10)
 			case DOWN_INVIS_ID
 				invisDur.decrement(this, 0)
+
+	ondestroy
+		destroy visibleDur
+		destroy invisDur
 
 	override function serialize() returns Json
 		let json = super.serialize()
