@@ -19,11 +19,11 @@ constant TERRAIN_DEC_V_ID = 'A01T'
 
 
 public class TerrainChanger extends SetupObject
-	ConfigValue sizeX = new ConfigValue(1, 1, "Width")
-	ConfigValue sizeY = new ConfigValue(1, 1, "Height")
+	let sizeX = new ConfigValue(1, 1, "Width")
+	let sizeY = new ConfigValue(1, 1, "Height")
 	ebrtile currentTile
-	int innerTile = '0000'
-	int outerTile = '0001'
+	var innerTile = '0000'
+	var outerTile = '0001'
 
 	construct(vec2 pos, player owner)
 		super(createUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0)), createUnit(owner, TERRAIN_CHANGER_ID, pos, angle(0)), 0)
@@ -131,6 +131,10 @@ public class TerrainChanger extends SetupObject
 		return json
 
 	override function setEnabled(boolean b)
+
+	ondestroy
+		destroy sizeX
+		destroy sizeY
 
 init
 	preloadAbility(TERRAIN_O_WALKABLE_ID)

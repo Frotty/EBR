@@ -26,9 +26,9 @@ class SpinNode
 
 public class Spinner extends SetupObject
 	SpinNode firstNode = null
-	ConfigValue spinSpeed = new ConfigValue(2 * DEGTORAD, 0.25 * DEGTORAD, "Spinspeed")
-	ConfigValue cosFactor = new ConfigValue(1, 0.1, "Cos-Factor")
-	ConfigValue sinFactor = new ConfigValue(1, 0.1, "Sin-Factor")
+	let spinSpeed = new ConfigValue(2 * DEGTORAD, 0.25 * DEGTORAD, "Spinspeed")
+	let cosFactor = new ConfigValue(1, 0.1, "Cos-Factor")
+	let sinFactor = new ConfigValue(1, 0.1, "Sin-Factor")
 
 	construct(unit existing)
 		super(createUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0)), existing, 0)
@@ -48,7 +48,7 @@ public class Spinner extends SetupObject
 		var node = firstNode
 		while node != null
 			if not node.obj.done and node.obj.actor != null
-				node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl+speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
+				node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl + speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
 				if enabled
 					node.angl += speed
 			else
@@ -86,6 +86,10 @@ public class Spinner extends SetupObject
 			let tmp = node
 			node = node.next
 			destroy tmp
+
+		destroy cosFactor
+		destroy sinFactor
+		destroy spinSpeed
 
 	function onCast()
 		let id = GetSpellAbilityId()

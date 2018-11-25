@@ -1,7 +1,0 @@
--runcompiletimefunctions
--injectobjects
--opt
--inline
--localOptimizations
-uncheckedDispatch
--stacktraces

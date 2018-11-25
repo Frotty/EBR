@@ -408,11 +408,15 @@ public abstract class Escaper extends UnitEntity
 					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.75))
 				else
 					addVel(vec3(7.75 * angl.cos(), 7.75 * angl.sin(), 11.75))
+				if this.getCurrentRegion().specialAbil != JUMP_SPELL
+					actor.removeAbility(JUMP_SPELL)
 		else if id == ORB_SPELL
 			orb = new OrbProjectile(this, getSpellTargetPos())
 			orb.addVel((getRealVel()-walkVel)*0.65)
 			orb.setXYAngle(orb.vel.toVec2().getAngle())
 			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
+			if this.getCurrentRegion().specialAbil != ORB_SPELL
+				actor.removeAbility(ORB_SPELL)
 		else if id == JAUNT_SPELL
 			if orb != null
 				setXY(orb.getPos())
