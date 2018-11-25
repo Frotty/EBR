@@ -7,7 +7,7 @@ import initlater MinigameTeleporter
 
 public constant minigames = new LinkedList<Minigame>()
 constant minigames_live = new LinkedList<Minigame>()
-public constant MAX_TIME = 1.5 * 60.
+public constant MAX_TIME = 1.75 * 60.
 constant BEGIN_SOUND = new SoundDefinition(Sounds.arrangedTeamInvitation, false)
 
 public function getNextMinigame() returns Minigame

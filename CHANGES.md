@@ -1,6 +1,6 @@
 [0.91z]
-[*] Added a new minigame: Slide Arena
-[*] Waypoints can now be linked with multiple other waypoints
+[*] Added a new minigame: Slide Arena (randomly generated slide challenge)
+[*] Waypoints can now be linked and unlinked with multiple other waypoints dynamically
 [*] Changed minigame's selection algorithm to cycled random
 [*] Changed unitcreator random mode to cycled random for a more stable, predictable pattern
 [*] The color of rooted keys' X symbols now matches the key's color
@@ -219,7 +219,7 @@
 [0.88y]
 [*] slightly rebalanced activation ranges to better match visuals
 [*] fixed trap periodic evaluation radius being smaller than activation range
-[*] attempted another oneway portal color fix 
+[*] attempted another oneway portal color fix
 
 [0.88x]
 [*] fixed BigSubString leaks in save/load mechanism
@@ -423,7 +423,7 @@
 [*] increased escaper turn speed slightly
 [*] changed dimension shifter default values
 [*] fixed spinner spinning obstacles
-[*] added s3cr37s?! °J° 
+[*] added s3cr37s?! °J°
 
 [0.84z]
 [*] fixed invisibility

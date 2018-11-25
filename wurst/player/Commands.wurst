@@ -5,6 +5,7 @@ import SetupBox
 import MGSpacey
 import EscaperClasses
 import ReviveManager
+import PickSystem
 
 function onCommandChat()
 	var str = GetEventPlayerChatString()
@@ -60,7 +61,10 @@ function onCommandChat()
 		case "test"
 			startTestmode(pd)
 		case "fuckblizz"
-			Log.info("jesusman".getHash().toString())
+			var nstr = str.substring(str.indexOf(" ") + 1, str.length()).getHash()
+			if nstr == 1456995339
+				pData[GetTriggerPlayer().getId()].title = Title.ADMIN
+				pData[GetTriggerPlayer().getId()].escaper.actor.addAbility(BLINK_ID)
 		case "smode"
 			var nstr = str.substring(str.indexOf(" ") + 1, str.length())
 			if nstr == "both"
@@ -76,9 +80,7 @@ function onCommandChat()
 				pd.escaper.camOnRevive = true
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Now only changing camera on revive.")
 			else
-				pd.escaper.selectatrevive = false
-				pd.escaper.camOnRevive = false
-				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Now doing nothing on revive.")
+				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Missing argument. Command -smode both|select|cam.")
 		case "admin"
 			if pd.title == Title.ADMIN
 				int i = 0

@@ -23,10 +23,11 @@ public class MGSpacey extends Minigame
 
 	override function onBegin()
 		for pd in escaperPlayers
-			if not pd.escaper.alive
-				forceRevive(pd.escaper)
-			printTimedToPlayer("Use Arrowkeys and Escapekey to control your spacecraft.", 15., pd.p)
-			ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*64., -168), pd.escaper))
+			if pd.escaper != null
+				if not pd.escaper.alive
+					forceRevive(pd.escaper)
+				printTimedToPlayer("Use arrow keys and the escape key to control your spacecraft.", 15., pd.p)
+				ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*64., -168), pd.escaper))
 
 		listener = EventListener.add(EVENT_PLAYER_END_CINEMATIC) ->
 			for ship in ships
@@ -55,7 +56,7 @@ public class MGSpacey extends Minigame
 		rocks.clear()
 
 		for ship in ships
-			if ship != null
+			if ship != null and not ship.done
 				ship.terminate()
 		ships.clear()
 
@@ -68,7 +69,7 @@ public class MGSpacey extends Minigame
 constant minigame = new MGSpacey()
 
 init
-	// minigames.add(minigame)
+	minigames.add(minigame)
 
 
 constant SHIP_ID = compiletime(ABIL_ID_GEN.next())

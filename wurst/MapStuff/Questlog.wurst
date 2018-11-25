@@ -3,30 +3,30 @@ package Questlog
 
 @init1 function init_Quest()
 	var q = CreateQuest()
-	QuestSetTitle(q, "Commands")
+	QuestSetTitle(q, "|cffFFD700Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")
-	QuestSetDescription(q, "Check out - discord:https://discord.gg/yr3ZyYQ - hiveworkshop: https://goo.gl/R4G2FM\n"
-							+ "Available Commands:\n"
-							+ "-clear (clears textmessages)\n"
-							+ "-smode (Toggles revive selection, also effects camera pan)\n"
-							+ "-cam [value] (sets camera distance)\n"
-							+ "-cam lock (locks the camera onto your escaper)\n"
-							+ "-cam unlock (unlocks the camera)\n"
-							+ "-frev (revives your escaper, when he doesn't revive anymore due to a bug)\n"
-							+ "-info (shows basic information about the current Area)\n")
+	QuestSetDescription(q, "|cff4d50ddJoin our discord|r: discord.gg/yr3ZyYQ\n\n"
+							+ "|cff787888Available Commands:|r\n"
+							+ "-|cffFFD700clear|r (clears textmessages)\n"
+							+ "-|cffFFD700smode|r (Toggles revive selection, also effects camera pan)\n"
+							+ "-|cffFFD700cam |r[|cffFFD700select|r | |cffFFD700cam|r | |cffFFD700both|r] (sets camera distance)\n"
+							+ "-|cffFFD700cam lock|r (locks the camera onto your escaper)\n"
+							+ "-|cffFFD700cam unlock|r (unlocks the camera)\n"
+							+ "-|cffFFD700frev|r (revives your escaper, in case of bugs)\n"
+							+ "-|cffFFD700info|r (shows basic information about the current Area)\n")
 	q = CreateQuest()
-	
-	QuestSetTitle(q, "Credits")
+
+	QuestSetTitle(q, "|cff0084ffCredits")
 	QuestSetRequired(q, false)
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNtemp.blp")
-	QuestSetDescription(q, "Check out - discord:https://discord.gg/yr3ZyYQ - hiveworkshop: https://goo.gl/R4G2FM\n"
-							+ "Special thanks in unsorted manner:\n"
+	QuestSetDescription(q, "|cff4d50ddJoin our discord|r: discord.gg/yr3ZyYQ\n\n"
+							+ "|cff787888Special thanks in unsorted manner|r:\n"
 							+ "-kari0003\n"
 							+ "-menag\n"
 							+ "-Crigges\n"
 							+ "-WaterKnight\n"
-							+ "-hiveworkshop ppl\n"
-							+ "-old b.net friends whos names I forgot ;(good ol' times\n"
+							+ "-Hiveworkshop ppl\n"
+							+ "-old b.net friends whose names I forgot ;( good ol' times\n"
 							+ "-Geronimo\n"
 							+ "-The koreans: pockpoong, kagu, sayack\n"
 							+ "-Gamestargamer"

@@ -63,9 +63,9 @@ public class Key extends ItemObject
 
 	override function update()
 		if picked and holder instanceof Escaper
-			fx.setXYZ(holder.getPos()+vec3(0,0,128))
+			fx.setXYZ(holder.getPos() + vec3(0,0,128))
 			let escaper = holder castTo Escaper
-			if followWalkable and not holder.flying and not escaper.sliding and not escaper.onUnwalkable
+			if followWalkable and not holder.flying and not escaper.sliding and escaper.alive
 				pos = holder.getPos()
 		else
 			super.update()
@@ -82,6 +82,7 @@ public class Key extends ItemObject
 				setup.actor..removeAbility(STATIC_ID)..addAbility(DYN_ID)
 				if returnSfx != null
 					returnSfx.destr()
+					returnSfx = null
 		for i = 0 to 8
 			if colorSpells[i] == id
 				col = i castTo EBRColor
@@ -105,6 +106,7 @@ public class Key extends ItemObject
 		holder = null
 		if returnSfx != null
 			returnSfx.destr()
+			returnSfx = null
 
 @objectgen public function genKey()
 	new UnitDefinition(KEY_DUMMY_ID, 'hfoo')

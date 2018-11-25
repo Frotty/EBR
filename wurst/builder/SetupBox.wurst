@@ -302,6 +302,8 @@ init
 	..setModelFile("buildings\\other\\MagicVault\\MagicVault.mdl")
 	..setScalingValue(0.4)
 	..setSelectionScale(1.6)
+	..setSightRadiusDay(100)
+	..setSightRadiusNight(100)
 	..setPathingMap("")
 	..setCollisionSize(0)
 	..setUnitClassification("Mechanical")

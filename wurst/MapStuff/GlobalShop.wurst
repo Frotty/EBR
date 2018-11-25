@@ -17,7 +17,7 @@ public class GlobalShop
 
 
 @init2 function init_GlobalShop()
-	shop = new GlobalShop(-6630, -5950, STAFF_PLAYER)
+	shop = new GlobalShop(-6630, -6150, STAFF_PLAYER)
 
 
 @objectgen function genShop()

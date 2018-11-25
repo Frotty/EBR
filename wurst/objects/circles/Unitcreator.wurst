@@ -81,11 +81,9 @@ public class UnitCreator extends StaticBaseObject
 	function refreshDelays()
 		if tmode == tmode.RANDOM
 			delays.clear()
-			for i = 2 to interval.toInt() * 4
-				if i mod 3 == 0
-					delays.add(i * 0.25)
-				else
-					delays.addtoStart(i * 0.25)
+			for i = 2 + (GetRandomInt(0, 1)) to interval.toInt() * 4
+				delays.add(i * 0.25)
+			delays.shuffle()
 			delays.shuffle()
 
 	override function onCast()

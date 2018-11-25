@@ -99,16 +99,21 @@ public class Waypoint extends StaticBaseObject
 
 				if target != null and target instanceof Waypoint
 					let twp = (target castTo Waypoint)
-					if twp.linked == null
-						twp.linked = new HashSet<Waypoint>()
-					twp.linked.addAll(linked)
 
-					for link in linked
-						link.linked.add(twp)
+					if linked.has(twp)
+						createFText(target.getPos(), vec2(0,0.08), "|cff0873C5Unlinked", 9., 1.75, COLOR_WHITE, owner)
+						linked.remove(twp)
+					else
+						if twp.linked == null
+							twp.linked = new HashSet<Waypoint>()
+						twp.linked.addAll(linked)
 
-					linked.add(twp)
-					twp.linked.add(this)
-					createFText(target.getPos(), vec2(0,0.08), "|cff0873C5Linked", 9., 1.75, COLOR_WHITE, owner)
+						for link in linked
+							link.linked.add(twp)
+
+						linked.add(twp)
+						twp.linked.add(this)
+						createFText(target.getPos(), vec2(0,0.08), "|cff0873C5Linked", 9., 1.75, COLOR_WHITE, owner)
 
 	static function delayMove(UnitEntity entity, vec2 pos)
 		if entity instanceof SetupObject
@@ -129,6 +134,8 @@ public class Waypoint extends StaticBaseObject
 	ondestroy
 		if linked != null
 			for link in linked
-				link.linked.remove(this)
+				if link.linked != null
+					link.linked.remove(this)
 			destroy linked
+			linked = null
 

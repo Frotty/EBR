@@ -1,47 +1,48 @@
 package Escaper
 import public Json
-import PhysicsEntity
-import Assets
 import public Entity
 import public BuilderConstants
 import public GameConstants
+import public SerializeIds
+import public TerrainData
+import Assets
+import PhysicsEntity
 import RevivePointModifier
-import Orders
 import TerrainBlocker
 import initlater Weapon
 import initlater ReviveManager
 import public initlater RegionData
 import Projectile
 import JukeBox
-import public SerializeIds
 import initlater PlayerData
 import initlater Key
 import ClosureTimers
-import ChannelAbilityPreset
-import public TerrainData
+import EscaperObjects
 
 constant COLL_RADIUS = 32.
 constant SLIDE_ADD = 3.3
 constant ANK_ITEM_ID = 'A091'
 constant TELEPORT_ITEM_ID = 'A08S'
 
-public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 public constant JUMP_SPELL = 'A062'
 public constant ORB_SPELL = 'A08A'
 public constant JAUNT_SPELL = 'A08D'
-constant POISON_EFFECT = Abilities.poisonStingTarget
-constant LAVA_EFFECT	= Abilities.flameStrikeEmbers
 
-trigger spellTrig
+constant POISON_EFFECT = Abilities.poisonStingTarget
+constant LAVA_EFFECT = Abilities.flameStrikeEmbers
 
 public let escapers = new LinkedList<Escaper>()
 public var currentRevivepoint = gg_unit_revp_0002.getPos()
+
+public enum KillMode
+	FORCE
+	UNWALKABLE
+	KILLER
 
 public abstract class Escaper extends UnitEntity
 	use PhysicsModule
 
 	RevivePointModifier revmod = null
-	var onUnwalkable = false
 	var sliding = false
 	var poisoned = false
 	var onLava = false
@@ -49,9 +50,9 @@ public abstract class Escaper extends UnitEntity
 	int deaths = 0
 	effect lavaEffect
 	effect poisonEffect
-	vec2 walkVel = vec2(0,0)
-	vec2 slideVelocity = vec2(0,0)
-	vec2 otherVel = vec2(0,0)
+	var walkVel = vec2(0,0)
+	var slideVelocity = vec2(0,0)
+	var otherVel = vec2(0,0)
 
 	var alive = true
 	var selectatrevive = true
@@ -67,7 +68,7 @@ public abstract class Escaper extends UnitEntity
 		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, () -> changeAngle())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill(null))
 		EventListener.add(actor, EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> onPick())
-		spellTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast(GetSpellAbilityId()))
 		updateRegionData()
 		escapers.add(this)
 		if this.getCurrentRegion().specialAbil > 0
@@ -110,35 +111,28 @@ public abstract class Escaper extends UnitEntity
 			poisoned = false
 
 	function kill(UnitEntity killer)
+		this.kill(killer, KillMode.KILLER)
+
+	function kill(UnitEntity killer, KillMode kmode)
 		if alive
 			if this.getCurrentRegion().easyMode
 				setPos(pos-getRealVel()*1.05)
 				var vel = getRealVel()
-				if onUnwalkable
-					vel *= -1.75
-					setVel(vel)
+				if killer != null
+					let ang = killer.getPos().angleTo2d(pos)
+					addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
 					setPos(pos + vel)
-					if sliding
-						actor.setFacing(vel.toVec2().getAngle())
-					else
-						actor.issueImmediateOrderById(Orders.stop)
 				else
-					if killer != null
-						let ang = killer.getPos().angleTo2d(pos)
-						addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
-						setPos(pos + vel)
-					else
-						setVel(getRealVel() * -1.75)
+					setVel(getRealVel() * -1.75)
 				flashEffect(Abilities.boltImpact, pos)
 				actor.damageTarget(actor, 85)
 			else
 				if actor.isAliveTrick()
-					actor.damageTarget(actor, killer == null ? 195 : 1000)
+					actor.damageTarget(actor, killer == null and not kmode == KillMode.FORCE ? 195 : 1000)
 			if not actor.isAliveTrick()
 				alive = false
 				deaths++
 				manageRevive(this)
-				onUnwalkable = false
 				setPoison(false)
 				setLava(false)
 				flying = false
@@ -164,7 +158,7 @@ public abstract class Escaper extends UnitEntity
 				vel.x = 0
 				vel.y = 0
 				slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
-			vel.z = -vel.z*1.25
+			vel.z = -vel.z * 1.25
 		else
 			pos.z = 0
 			vel *= 0.175
@@ -173,7 +167,6 @@ public abstract class Escaper extends UnitEntity
 				actor.damageTarget(actor, 1000)
 				kill(null)
 		actor.setPropWindow(60 .fromDeg())
-
 
 	override function onEscapeGround()
 		actor.setPropWindow(0 .fromDeg())
@@ -208,11 +201,10 @@ public abstract class Escaper extends UnitEntity
 			else
 				ttype = GetTerrainType(pos.x, pos.y)
 				newval = 3
-		if((lastVal == 1 and newval == 2) or (lastVal == 2 and newval == 1))
+		if (lastVal == 1 and newval == 2) or (lastVal == 2 and newval == 1)
 			ttype = rdata.getTypeSet().unwalkableId
 		lastVal = newval
 
-		onUnwalkable = false
 		slideVelocity *= 0.99
 		if ttype == rdata.getTypeSet().unwalkableId or ttype == 'Ibkb' or ttype == RUNES
 			if alive
@@ -223,11 +215,9 @@ public abstract class Escaper extends UnitEntity
 					let t2type = GetTerrainType(bpos.x, bpos.y)
 					if (t2type == rdata.getTypeSet().unwalkableId or t2type == 'Ibkb' or t2type == RUNES) and
 						(t1type == rdata.getTypeSet().unwalkableId or t1type == 'Ibkb' or t1type == RUNES)
-						onUnwalkable = true
 						kill(null)
 				else
-					onUnwalkable = true
-					kill(null)
+					kill(null, KillMode.FORCE)
 		else if alive and (ttype == CONTROLLABLEICE or ttype == UNCONTROLLABLEICE or ttype == REVICE)
 			let angl = actor.getFacingAngle()
 			slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
@@ -410,7 +400,7 @@ public abstract class Escaper extends UnitEntity
 	function onCast(int id)
 		actor.setAnimation("spell")
 		if id == JUMP_SPELL
-			if not flying and not onUnwalkable
+			if not flying
 				addPos(vec3(0,0,1))
 				let angl = pos.angleTo2d(getSpellTargetPos())
 				addEffect(Abilities.aneuCaster, pos).destr()
@@ -525,31 +515,3 @@ function correctRegion()
 
 @init2 function init_Escaper()
 	getTimer().startPeriodic(1., function correctRegion)
-	spellTrig = CreateTrigger()
-	spellTrig.addAction(function Escaper.onCastEvent)
-
-@objectgen function genEscaperThings()
-	new UnitDefinition(TOMB_DUMMY_ID, 'ushd')
-	..setAttacksEnabled(0)
-	..setTargetedAs("air")
-	..setAnimationCastBackswing(0)
-	..setAnimationCastPoint(0)
-	..setScalingValue(0.7)
-	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAnkh.blp")
-	..setModelFile("Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl")
-	..setUnitSoundSet("")
-	..setCollisionSize(0)
-	..setSpeedBase(0)
-	..setMovementHeight(0)
-	..setTurnRate(0.1)
-	..setMovementType(MovementType.None)
-	..setNormalAbilities(('Aloc').toRawCode())
-	..setHotkey("Y")
-	..setName("Dummy - Reincarnation")
-	..setTooltipBasic("Dummy - Reincarnation")
-	..setTooltipExtended("Dummy - Reincarnation")
-	..setUpgradesUsed("")
-	..setHitPointsMaximumBase(100000000)
-	..setSightRadiusDay(0)
-	..setSightRadiusNight(0)
-	..setFoodCost(0)

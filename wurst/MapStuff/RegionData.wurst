@@ -204,7 +204,7 @@ public class RegionData
 real x = 0
 real y = 0
 
-function rect.changeTerrain(integer ttype)
+public function rect.changeTerrain(integer ttype)
 	let xmax = this.getMaxX() - 32
 	let xmin = this.getMinX() + 32
 	let ymax = this.getMaxY() - 32
@@ -290,6 +290,7 @@ public RegionData array regions
 	regions[25] = new RegionData(gg_rct_slidegamearea)
 	regions[25].setType(getRegionTypeFromItem('I00D'), false)
 	regions[25].setOwner(STAFF_PLAYER)
+	regions[26] = new RegionData(gg_rct_Region_027)..createSetup()
 
 	CreateTrigger()..registerRectLeaveEventSource(gg_rct_Region_023)
 	..addAction() ->
