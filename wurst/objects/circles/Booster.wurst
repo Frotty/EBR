@@ -1,5 +1,6 @@
 package Booster
 import BaseObject
+import Assets
 
 constant INFO_BOOSTER_ID = compiletime(ABIL_ID_GEN.next())
 constant SPEED_UP_ID = compiletime(ABIL_ID_GEN.next())
@@ -8,7 +9,7 @@ constant EVENT_RADIUS = 32.
 constant BOOST_SPEED_KEY = "b"
 
 public class Booster extends StaticBaseObject
-	let boostspeed = new ConfigValue(200, 25, "Boostspeed")
+	let boostspeed = new ConfigValue(250, 25, "Boostspeed")
 
 	construct(vec2 pos, player owner)
 		super(pos, createUnit(owner, BOOSTER_ID, pos, angle(0)), EVENT_RADIUS, function Booster.orderMove, null)
@@ -54,16 +55,16 @@ public class Booster extends StaticBaseObject
 	new ChannelAbilityPreset(INFO_BOOSTER_ID, 1, TRUE)
 	..setName("Information: Booster")
 	..presetTooltipNormal(lvl -> "Information: Booster")
-	..presetTooltipNormalExtended(lvl -> "The Booster sets a Tanks Speed when i drives over the Booster to the defined value")
+	..presetTooltipNormalExtended(lvl -> "Permanently changes the move speed of entering units.")
 	..presetIcon("ReplaceableTextures\\CommandButtons\\PASInfo.blp")
 	..presetButtonPosNormal(0, 0)
 	..presetTargetTypes(Targettype.PASSIVE)
 	..setHeroAbility(FALSE)
 
 	new ChannelAbilityPreset(SPEED_UP_ID, 1, TRUE)
-	..setName("Remove Object")
-	..presetTooltipNormal(lvl -> "Set the boost-speed |cff9C299Cup |r[|cffFFCC00Y|r]")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speedup.blp")
+	..setName("Booster: Speed up")
+	..presetTooltipNormal(lvl -> "Increases the boost speed [|cffFFCC00Y|r]")
+	..presetIcon(Icons.bTNReplay_SpeedUp)
 	..presetButtonPosNormal(2, 0)
 	..presetHotkey("Y")
 	..presetTargetTypes(Targettype.NONE)
@@ -71,18 +72,18 @@ public class Booster extends StaticBaseObject
 
 	new ChannelAbilityPreset(SPEED_DOWN_ID, 1, TRUE)
 	..setName("Booster: Speed down")
-	..presetTooltipNormal(lvl -> "Set the boost-speed |cffF79CDEdown |r[|cffFFCC00X|r]")
-	..presetIcon("ReplaceableTextures\\CommandButtons\\BTNReplay-Speeddown.blp")
+	..presetTooltipNormal(lvl -> "Decreases the boost speed [|cffFFCC00X|r]")
+	..presetIcon(Icons.bTNReplay_SpeedDown)
 	..presetButtonPosNormal(2, 1)
 	..presetHotkey("X")
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
 
 	new BuildingDefinition(BOOSTER_ID, 'ncop')
-	..setName("|cffCE086BBooster ")
+	..setName("|cffCE086BBooster")
 	..setHotkey("S")
 	..setTooltipBasic("|cffFFCC00Build |cffCE086BBooster [S]")
-	..setTooltipExtended("Sets the Movementspeed of a Unit(non-Escaper) that walkes over.")
+	..setTooltipExtended("Permanently changes the move speed of entering non-escaper units.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNBooster.blp")
 	..setNormalAbilities(commaList(INFO_BOOSTER_ID, SPEED_UP_ID, SPEED_DOWN_ID, REMOVE_OBJECT_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
 	..setButtonPositionX(1)

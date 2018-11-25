@@ -5,20 +5,24 @@ import Assets
 import InstantDummyCaster
 import Fx
 import PresetBuffs
+import Orders
 
 constant SILENCE_BUFF_ID = 'BNsi'
 constant SILENCE_ID = compiletime(ABIL_ID_GEN.next())
 constant SILENCE_BUFF = compiletime(createDummyBuffObject("Arcane Silence", "", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp"))
 
+constant SILENCE_MODE_ID = compiletime(ABIL_ID_GEN.next())
+constant JUMP_MODE_ID = compiletime(ABIL_ID_GEN.next())
+constant ORB_MODE_ID = compiletime(ABIL_ID_GEN.next())
+
 class SilenceBufff extends NormalBuff
 	Arcanery arcanery
-	int usages = 1
 	real distance = (256.).squared()
 
 	construct(Escaper target, Arcanery arcanery)
 		super(9999, SILENCE_BUFF)
-		InstantDummyCaster.castTarget(DUMMY_PLAYER, SILENCE_ID, 1, "soulburn", target.actor)
 		this.arcanery = arcanery
+		InstantDummyCaster.castTarget(DUMMY_PLAYER, SILENCE_ID, 1, Orders.soulburn, target.actor)
 		apply(target)
 
 	override function update()
@@ -31,8 +35,7 @@ class SilenceBufff extends NormalBuff
 			case USE
 
 	ondestroy
-		target.actor.removeAbility('BNso')
-
+		target.actor.removeAbility(AbilityIds.soulBurn)
 
 
 enum ArcaneryMode
@@ -45,25 +48,31 @@ enum ExpirationMode
 	RANGE
 	USE
 
-function is() returns boolean
-	return true
-
 public class Arcanery extends StaticBaseObject
 	ArcaneryMode arcMode = ArcaneryMode.SILENCE
 	ExpirationMode expMode = ExpirationMode.RANGE
 	Fx currentEffect
 
 	construct(unit existing)
-		super(existing.getPos(), existing, 102., function onEnterEv, function is)
+		super(existing.getPos(), existing, 102., function onEnterEv, () -> true)
 		clearQuestionmark()
-		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
+		currentEffect = new Fx(pos + vec3(0,0,76), angle(0))..setScale(1.25)
 		recreateEffect()
 
 	construct(vec2 position, player owner)
-		super(position, createUnit(owner, ARCANERY_ID, position, angle(0)), 102., function onEnterEv, function is)
+		super(position, createUnit(owner, ARCANERY_ID, position, angle(0)), 102., function onEnterEv, () -> true)
 		clearQuestionmark()
-		currentEffect = new Fx(pos + vec3(0,0,86), angle(0))..setScale(1.25)
+		currentEffect = new Fx(pos + vec3(0,0,76), angle(0))..setScale(1.25)
 		recreateEffect()
+		EventListener.onCast(actor) id ->
+			switch id
+				case JUMP_MODE_ID
+					arcMode = ArcaneryMode.JUMP
+				case ORB_MODE_ID
+					arcMode = ArcaneryMode.ORB
+				case SILENCE_MODE_ID
+					arcMode = ArcaneryMode.SILENCE
+			recreateEffect()
 
 
 	function recreateEffect()
@@ -85,21 +94,18 @@ public class Arcanery extends StaticBaseObject
 				else
 					b.arcanery = this
 			case JUMP
-				currentEffect.setFx("war3mapImported\\BootsofSpeed.mdx")
+				target.actor.addAbility(JUMP_SPELL)
 			case ORB
-				currentEffect.setFx("TC_EnergyBolt.mdx")
+				target.actor.addAbility(ORB_SPELL)
 
 	ondestroy
 		destroy currentEffect
 
-
 	static function onEnterEv()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		thistype obj = source.getEntity() castTo Arcanery
-		if e instanceof Escaper
-			obj.onEnter(e castTo Escaper)
+		let enter = GetTriggerUnit().getEntity()
+		let obj = GetTriggeringTrigger().getSource().getEntity() castTo Arcanery
+		if enter instanceof Escaper
+			obj.onEnter(enter castTo Escaper)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -128,7 +134,8 @@ public class Arcanery extends StaticBaseObject
 	..setTooltipBasic("|cffFFCC00Build |cffFFFF08Arcanery |r[|cffFFCC00E|r]")
 	..setTooltipExtended("Grants or silences spells for the escapers.")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNarcanery.blp")
-	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, MAKE_UNIT_INVISIBLE_ID, INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(REMOVE_OBJECT_ID, MAKE_UNIT_INVISIBLE_ID, INVULNERABILITY_ID,
+								   SILENCE_MODE_ID, JUMP_MODE_ID, ORB_MODE_ID))
 	..setButtonPositionX(2)
 	..setButtonPositionY(0)
 	..setTintingColorRed(225)
@@ -142,3 +149,21 @@ public class Arcanery extends StaticBaseObject
 	..setSelectionScale(2.2)
 	..setUnitClassification("ancient,standon")
 	..setHideMinimapDisplay(true)
+
+	new ChannelAbilityPreset(SILENCE_MODE_ID, 1, true)
+	..setName("Mode: Silence")
+	..presetTooltipNormal(lvl -> "Mode: Silence")
+	..presetIcon(Icons.bTNSilence)
+	..presetButtonPosNormal(0, 0)
+
+	new ChannelAbilityPreset(JUMP_MODE_ID, 1, true)
+	..setName("Mode: Jump")
+	..presetTooltipNormal(lvl -> "Mode: Jump")
+	..presetIcon(Icons.bTNBootsOfSpeed)
+	..presetButtonPosNormal(1, 0)
+
+	new ChannelAbilityPreset(ORB_MODE_ID, 1, true)
+	..setName("Mode: Orb")
+	..presetTooltipNormal(lvl -> "Mode: Orb")
+	..presetIcon(Icons.bTNOrb)
+	..presetButtonPosNormal(2, 0)

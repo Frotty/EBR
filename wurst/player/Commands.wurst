@@ -15,7 +15,7 @@ function onCommandChat()
 	let pd = pData[id]
 	var cstr = str.substring(1, str.indexOf(" "))
 	if pd.escaper == null and cstr != "d"
-		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after pick")
+		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after hero selection.")
 		return
 	switch cstr
 		case "rename"

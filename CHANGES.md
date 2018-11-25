@@ -1,15 +1,19 @@
 [0.91z]
 [*] Added a new minigame: Slide Arena
+[*] Added new "infinite" key mode which allows each escaper to carry one shared instance
 [*] Waypoints can now be linked with multiple other waypoints
+[*] Arcaneries can now grant the jump and orb spell for a one time use
 [*] Changed minigame's selection algorithm to cycled random
 [*] Changed unitcreator random mode to cycled random for a more stable, predictable pattern
 [*] The color of rooted keys' X symbols now matches the key's color
+[*] Keys can now also be picked up by builder-escapers in shared regions
 [*] Fixed keys not being able to be removed via their remove spell (only builder pickup)
 [*] Fixed unitcreator interval changes setting spawned unittype to bunnies
 [*] Fixed bomber attackspeed settings missing
 [*] Fixed executer mode tooltip hotkey typo
 [*] Fixed conga line duplicate spells and overlapping orderids
 [*] Fixed a pathing bug in lounge where escapers could get stuck
+[*] Fixed a few typos in tooltips
 
 [0.91w]
 [*] Fixed builder cam changing on escaper revive by default (can be adjusted with -smode)

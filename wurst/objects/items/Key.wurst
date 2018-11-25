@@ -1,8 +1,9 @@
 package Key
 import ItemObject
 import ClosureTimers
-import Fx
 import ChannelAbilityPreset
+import HashMap
+import Assets
 
 public constant KEY_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 
@@ -11,14 +12,19 @@ public let keyIds = ['I009','I00C','I004','I008','I00J','I005','I00O','I00B','I0
 constant DYN_ID = 'A00M'
 constant STATIC_ID = 'A01O'
 
+constant INFINITE_ID = compiletime(ABIL_ID_GEN.next())
+
 constant KEY_COLOR = "c"
 
 public class Key extends ItemObject
 	var col = EBRColor.WHITE
 	var picked = false
 	var followWalkable = true
+	var infinite = false
+	effect infiniteEff = null
 	effect returnSfx = null
-	Fx fx = null
+	let effectMap = new IterableMap<Escaper, effect>()
+	var ignoreNextDrop = false
 
 	construct(vec2 ppos, player owner)
 		super(ppos, createItem(keyIds[0], ppos), createUnit(owner, KEY_DUMMY_ID, ppos, 0 .fromDeg()))
@@ -31,14 +37,27 @@ public class Key extends ItemObject
 			returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
 
 	override function onPickup(UnitEntity holder)
-		if isEscaper(holder.owner) or owner == holder.owner
-			picked = true
-			this.holder = holder
-			fx = new Fx(pos, "war3mapImported\\Key_ITEM.mdx")
-			..setColor(col.toColor())
-			..setXYZ(holder.getPos() + vec3(0,0,128))
-			setup.actor.hide()
-			activate()
+		if isEscaper(holder.owner) or this.getCurrentRegion().getPermission(holder.owner) != Permission.GUEST
+			var count = 0
+			for itm in holder.actor.inventory()
+				if itm.getEntity() == this
+					count++
+			if count > 1
+				ignoreNextDrop = true
+				holder.actor.removeItem(actor)
+				actor.setPos(pos.toVec2())
+			else
+				let eff = addEffect("war3mapImported\\Key_ITEM.mdx", holder.actor, "overhead")
+				..setColor(col.toColor())
+				effectMap.put(holder castTo Escaper, eff)
+				if infinite
+					actor = createItem(keyIds[col castTo int], pos)
+					actor.setEntity(this)
+				else
+					picked = true
+					this.holder = holder
+					setup.actor.hide()
+					activate()
 		else
 			picked = false
 			holder.actor.removeItem(actor)
@@ -48,45 +67,79 @@ public class Key extends ItemObject
 			this.holder = null
 
 	override function onDrop(UnitEntity e)
-		picked = false
-		holder = null
-		if fx != null
-			fx.hiddenDestroy()
-			fx = null
-		setup.setXY(pos)
-		setup.actor.show()
-		nullTimer() ->
-			actor..setEntity(null)
-			..remove()
-			actor = createItem(keyIds[col castTo int], pos)
-			actor.setEntity(this)
+		if ignoreNextDrop
+			ignoreNextDrop = false
+		else
+			if effectMap.has(e castTo Escaper)
+				effectMap.getAndRemove(e castTo Escaper).destr()
+
+			if infinite
+				GetManipulatedItem().setEntity(null)
+				GetManipulatedItem().remove()
+			else
+				picked = false
+				holder = null
+				setup.setXY(pos)
+				setup.actor.show()
+				nullTimer() ->
+					actor..setEntity(null)
+					..remove()
+					actor = createItem(keyIds[col castTo int], pos)
+					actor.setEntity(this)
 
 	override function update()
-		if picked and holder instanceof Escaper
-			fx.setXYZ(holder.getPos()+vec3(0,0,128))
+		if followWalkable and picked and holder instanceof Escaper
 			let escaper = holder castTo Escaper
-			if followWalkable and not holder.flying and not escaper.sliding and not escaper.onUnwalkable
+			if not holder.flying and not escaper.sliding and not escaper.onUnwalkable
 				pos = holder.getPos()
 		else
 			super.update()
+
+	function setFollow(boolean flag)
+		if flag and returnSfx != null
+			returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
+		else if not flag and returnSfx == null
+			returnSfx.destr()
+			returnSfx = null
+		followWalkable = flag
+
+	function setInfinite(boolean flag)
+		if not flag and infinite
+			infiniteEff.destr()
+			infiniteEff = null
+			clearKeys()
+			effectMap.flush()
+		else if flag and not infinite
+			infiniteEff = addEffect(Abilities.generalAuraTarget, actor.getPos())
+		infinite = flag
 
 	function onCast()
 		let id = GetSpellAbilityId()
 		switch id
 			case DYN_ID
-				followWalkable = false
+				setInfinite(false)
+				setFollow(false)
 				setup.actor..removeAbility(DYN_ID)..addAbility(STATIC_ID)
-				returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
 			case STATIC_ID
-				followWalkable = true
+				setInfinite(false)
+				setFollow(true)
 				setup.actor..removeAbility(STATIC_ID)..addAbility(DYN_ID)
-				if returnSfx != null
-					returnSfx.destr()
+			case INFINITE_ID
+				setInfinite(not infinite)
+				setFollow(false)
+
 		for i = 0 to 8
 			if colorSpells[i] == id
 				col = i castTo EBRColor
 				break
 		recolor()
+
+	function clearKeys()
+		for escaper in effectMap
+			for itm in escaper.actor.inventory()
+				if itm.getEntity() == this
+					itm..setEntity(null)..remove()
+			effectMap.get(escaper).destr()
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -99,12 +152,14 @@ public class Key extends ItemObject
 		recolor()
 
 	ondestroy
-		if fx != null
-			fx.hiddenDestroy()
-			fx = null
+		clearKeys()
+		destroy effectMap
+
 		holder = null
 		if returnSfx != null
 			returnSfx.destr()
+		if infiniteEff != null
+			infiniteEff.destr()
 
 @objectgen public function genKey()
 	new UnitDefinition(KEY_DUMMY_ID, 'hfoo')
@@ -127,7 +182,7 @@ public class Key extends ItemObject
 	..setMovementType(MovementType.None)
 	..setUnitSoundSet("")
 	..setCollisionSize(0)
-	..setNormalAbilities(commaList(DYN_ID, 'A05R', REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
+	..setNormalAbilities(commaList(DYN_ID, 'A05R', INFINITE_ID, REMOVE_OBJECT_ID, GHOST_INVIS_ID, INVULNERABILITY_ID))
 	..setName("Key Dummy")
 	..setUpgradesUsed("")
 	..setBuildTime(1)
@@ -136,3 +191,8 @@ public class Key extends ItemObject
 	..setHideMinimapDisplay(true)
 	..setIsaBuilding(true)
 	..setShadowImageUnit("")
+
+	new ChannelAbilityPreset(INFINITE_ID, 1, true)
+	..setName("Infinite Key Source")
+	..presetTooltipNormal(lvl -> "Mode: One Key Per Player")
+	..presetTooltipNormalExtended(lvl -> "This enables every escaper to pick up this key once.\nIf one of the keys is used all instances currently in inventory will be removed.\nForces rooted key mode.")
