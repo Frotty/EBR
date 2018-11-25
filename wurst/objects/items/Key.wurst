@@ -97,10 +97,10 @@ public class Key extends ItemObject
 
 	function setFollow(boolean flag)
 		if flag and returnSfx != null
-			returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
-		else if not flag and returnSfx == null
 			returnSfx.destr()
 			returnSfx = null
+		else if not flag and returnSfx == null
+			returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
 		followWalkable = flag
 
 	function setInfinite(boolean flag)
