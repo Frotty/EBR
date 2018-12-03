@@ -69,8 +69,8 @@ public abstract class Escaper extends UnitEntity
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> kill(null))
 		EventListener.add(actor, EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> onPick())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> onCast(GetSpellAbilityId()))
-		updateRegionData()
 		escapers.add(this)
+		this.setCurrentRegion()
 		if this.getCurrentRegion().specialAbil > 0
 			actor.addAbility(this.getCurrentRegion().specialAbil)
 

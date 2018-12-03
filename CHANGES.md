@@ -1,7 +1,7 @@
-[0.91z]
+[0.92c]
 [*] Added a new minigame: Slide Arena (randomly generated slide challenge)
 [*] Waypoints can now be linked and unlinked with multiple other waypoints dynamically
-[*] Waypoints can now be linked with multiple other waypoints
+[*] Added key mode "one per escaper" that allows each escaper to carry an instance until one is used
 [*] Arcaneries can now grant the jump and orb spell for a one time use
 [*] Changed minigame's selection algorithm to cycled random
 [*] Changed unitcreator random mode to cycled random for a more stable, predictable pattern

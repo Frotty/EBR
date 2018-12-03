@@ -133,27 +133,27 @@ public function allow()
 	..setName("|cffFFC521Holy Escaper|r\nIn years of studies this priest mastered the art of healing and reincarnation.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNPriest.blp")
 	..setCallback() pd ->
-		pd.escaper = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = new HolyEscaper(currentRevivepoint.withZ(100.), pd.p)
 	new EscaperDefinition(ESC_STRONG_ID)
 	..setName("|cffAD4208Strong Escaper|r\nThis brave baronet perfected his defense abilites and will never retreat.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNFootman.blp")
 	..setCallback() pd ->
-		pd.escaper = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = new StrongEscaper(currentRevivepoint.withZ(100.), pd.p)
 	new EscaperDefinition(ESC_FAST_ID)
 	..setName("|cff08CEEFFast Escaper|r\nThis blazing fast hero inceases the movementspeed of himself and his mates and can create a portal.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNPeasant.blp")
 	..setCallback() pd ->
-		pd.escaper = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = new FastEscaper(currentRevivepoint.withZ(100.), pd.p)
 	new EscaperDefinition(ESC_ICE_ID)
 	..setName("|cff08D6FFIce Escaper|r\nBy living in the arctic snows for so long, this escaper knows how to handle sliding on ice.")
 	..setIcon("ReplaceableTextures\\CommandButtons\\BTNIceTrollBeserker.blp")
 	..setCallback() pd ->
-		pd.escaper = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = new IceEscaper(currentRevivepoint.withZ(100.), pd.p)
 	new EscaperDefinition(ESC_BLIND_ID)
-	..setName("|cff6B6BCEFemale Escaper|r\nHas some resistance to lava.")
+	..setName("|cff6B6BCEFemale Escaper|r\nA cold heart and years of bitching grant her some protection from lava.")
 	..setIcon(Icons.bTNHuntress)
 	..setCallback() pd ->
-		pd.escaper = new BlindEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = new BlindEscaper(currentRevivepoint.withZ(100.), pd.p)
 
 	for pd from allPlayers.staticItr()
 		currentView[pd.id] = EscaperDefinition.first

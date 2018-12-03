@@ -90,7 +90,7 @@ public class Key extends ItemObject
 	override function update()
 		if followWalkable and picked and holder instanceof Escaper
 			let escaper = holder castTo Escaper
-			if not holder.flying and not escaper.sliding and not escaper.alive
+			if not holder.flying and not escaper.sliding and escaper.alive
 				pos = holder.getPos()
 		else
 			super.update()

@@ -35,7 +35,7 @@ class SilenceBufff extends NormalBuff
 			case USE
 
 	ondestroy
-		target.actor.removeAbility(AbilityIds.soulBurn)
+		target.actor.removeAbility('BNso')
 
 
 enum ArcaneryMode
@@ -76,13 +76,14 @@ public class Arcanery extends StaticBaseObject
 
 
 	function recreateEffect()
-		switch arcMode
-			case SILENCE
-				currentEffect.setFx(Abilities.silenceTarget)
-			case JUMP
-				currentEffect.setFx("war3mapImported\\BootsofSpeed.mdx")
-			case ORB
-				currentEffect.setFx("TC_EnergyBolt.mdx")
+		if currentEffect != null
+			switch arcMode
+				case SILENCE
+					currentEffect.setFx(Abilities.silenceTarget)
+				case JUMP
+					currentEffect.setFx("war3mapImported\\BootsofSpeed.mdx")
+				case ORB
+					currentEffect.setFx("TC_EnergyBolt.mdx")
 
 	function onEnter(Escaper target)
 		printLog(Loglevel.DEBUG, "onEnter(target)")
@@ -100,6 +101,7 @@ public class Arcanery extends StaticBaseObject
 
 	ondestroy
 		destroy currentEffect
+		currentEffect = null
 
 	static function onEnterEv()
 		let enter = GetTriggerUnit().getEntity()

@@ -16,13 +16,13 @@ enum WalkerMode
 	FADEOUT
 
 public class Faceless extends EscaperSensorSetup
+	let visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
+	let invisDur = new ConfigValue(.5, 0.5, "Invisible Duration")
+
 	private var color = COLOR_WHITE
 	private var fadeDur = 1.
 	private var mode = WalkerMode.VIS
 	private var dur = visibleDur.get()
-
-	let visibleDur = new ConfigValue(2, 0.5, "Visible Duration")
-	let invisDur = new ConfigValue(.5, 0.5, "Invisible Duration")
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, DIMENSION_SHIFTER_ID, facing, KILL_RADIUS, KILL_RADIUS)

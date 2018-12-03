@@ -43,12 +43,12 @@ public module AirPhysicsModule
 		if pv.z > 4.
 			e.addVel(pv)
 		else
-			e.scaleVel(surfaceFriction * bezier_3(1,0.85,0,mass/MAX_MASS))
+			e.scaleVel(surfaceFriction * bezier3(1,0.85,0,mass/MAX_MASS))
 
 
 	function inAir(Entity e)
-		let coef = bezier_3(0.930,0.985,1,mass/MAX_MASS)
-		let gcoef = bezier_3(0.1,0.875,1,mass/MAX_MASS)
+		let coef = bezier3(0.930,0.985,1,mass/MAX_MASS)
+		let gcoef = bezier3(0.1,0.875,1,mass/MAX_MASS)
 		if affectedByGravity
 			e.addVel(vec3(0,0,e.gravity * gcoef))
 		e.scaleVel(coef)
