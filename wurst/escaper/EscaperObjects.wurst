@@ -187,7 +187,7 @@ public constant TOMB_DUMMY_ID = compiletime(UNIT_ID_GEN.next())
 	..setLevel(1)
 	..hideHeroDeathMsg(true)
 
-	new HeroDefinition(ESC_STRONG_ID, 'Hpal')
+	new HeroDefinition(ESC_STRONG_ID, UnitIds.paladin)
 	..setAttacksEnabled(0)
 	..setDefenseBase(0)
 	..setTargetedAs("ancient,ground")

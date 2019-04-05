@@ -42,8 +42,8 @@ public function isOrderBuildOrder(int o) returns boolean
 			return true
 		i++
 	for i2 = 139 to 152
-			if o == buildorders[i2]
-				return true
+		if o == buildorders[i2]
+			return true
 	return false
 
 public function instantBuild(Builder b, vec2 tpos, int id)

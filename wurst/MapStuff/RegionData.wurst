@@ -40,7 +40,6 @@ public function RegionType.getTypeSet() returns regionTypeSet
 			return regionTypeSet('I00D', 'Itbk', 'Isnw', SMALL_ICE_KILLER_ID, BIG_ICE_KILLER_ID, 'WTst', SOBS_ICE_ID, BOBS_ICE_ID, 'h00O', 'u00L', HOBS_ICE_ID)
 		case SUNKEN
 			return regionTypeSet('I00N', 'Zbks', 'Zdrg', SMALL_SUNKEN_KILLER_ID, BIG_SUNKEN_KILLER_ID, 'ZTtw', SOBS_SUNKEN_ID, BOBS_SUNKEN_ID, 'h00N', 'u00O', HOBS_SUNKEN_ID)
-	return regionTypeSet(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 public function getRegionTypeFromItem(int itemId) returns RegionType
 	for i = 1 to 5

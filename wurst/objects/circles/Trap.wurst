@@ -537,7 +537,7 @@ public class Trap extends StaticBaseObject
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
 
-  	new BuildingDefinition(TRAP_ID, 'ncop')
+	new BuildingDefinition(TRAP_ID, 'ncop')
 	..setName("|cffA55A08Trap")
 	..setHotkey("Y")
 	..setTooltipBasic("|cffFFCC00Build |cffA55A08Trap [Y]")

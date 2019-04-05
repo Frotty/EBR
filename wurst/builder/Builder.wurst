@@ -250,7 +250,7 @@ function isBuilderUnit() returns boolean
 	..setTooltipExtended("")
 	..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNEditor-MultipleDoodads.blp")
 	..setNormalAbilities(commaList('A03C', MENU_CIRCLES_ID, MENU_OBJECTS_ID, MENU_ENVIROMENTALS_ID, MENU_DECORATIONS_ID, GHOST_VIS_ID, INVULNERABILITY_ID))
-	..setStructuresBuilt(commaList(BOMB_TOWER_ID, VORTEX_ID, CONGA_LINE_HEAD_ID, POWER_NODE_ID, FOUNTAIN_BOTH_ID, BUILD_TRACKS_ID, SPINNER_ID, DOORDUMMY_ID, ARCANERY_ID))
+	..setStructuresBuilt(commaList(BOMB_TOWER_ID, VORTEX_ID, CONGA_LINE_HEAD_ID, POWER_NODE_ID, FOUNTAIN_BOTH_ID, BUILD_TRACKS_ID, SPINNER_ID, DOORDUMMY_ID, ARCANERY_ID, PED_ID))
 	..setButtonPositionX(0)
 	..setButtonPositionY(0)
 	..setSightRadiusDay(300)

@@ -503,7 +503,7 @@ public class Executer extends StaticBaseObject
 				removeActionAbils()
 				UnitAddAbility(actor,TRAIN_BOOK_ABIL)
 			case TRAIN_BK_ABIL
-					actionUnit = ActionUnit.BIGKILLER
+				actionUnit = ActionUnit.BIGKILLER
 			case TRAIN_SK_ABIL
 				actionUnit = ActionUnit.SMALLKILLER
 			case TRAIN_BRK_ABIL

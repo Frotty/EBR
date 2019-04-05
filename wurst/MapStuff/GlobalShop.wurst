@@ -1,6 +1,7 @@
 package GlobalShop
 import ChannelAbilityPreset
 import GameConstants
+import BuilderConstants
 
 constant GOODS_STORE_ID = compiletime(UNIT_ID_GEN.next())
 
@@ -23,5 +24,5 @@ public class GlobalShop
 @objectgen function genShop()
 	new BuildingDefinition(GOODS_STORE_ID, 'nmrk')
 	..setName("|cffffcc00Goods Store")
-	..setItemsSold(commaList('I011', 'I00T', 'I00Q', 'I00L', 'I00P'))
+	..setItemsSold(commaList('I012', 'I007', 'I011', 'I00T', 'I00Q', 'I00L', 'I00P'))
 	..setHideMinimapDisplay(true)

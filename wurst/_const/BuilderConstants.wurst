@@ -3,6 +3,9 @@ import Preloader
 import ObjectIdGenerator
 import public SerializeIds
 
+@annotation function objectgen()
+@annotation function init1()
+@annotation function init2()
 /**
 	Holds constant values and object IDs for the builder side
 */

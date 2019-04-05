@@ -76,7 +76,7 @@ public constant NO_WISPS_ID = compiletime(ABIL_ID_GEN.next())
 	..presetTargetTypes(Targettype.NONE)
 	..setHeroAbility(FALSE)
 
-	new BuildingDefinition(WAYPOINT_ID, 'ncop')
+	new BuildingDefinition(WAYPOINT_ID, UnitIds.circleofpower)
 	..setName("|cffFF7B29Waypoint")
 	..setHotkey("R")
 	..setTooltipBasic("|cffFFCC00Build |cffFF7B29Waypoint [R]")

@@ -3,13 +3,15 @@ import PhysicsProjectile
 import ChannelAbilityPreset
 import ItemObjEditing
 import initlater Ball
+import Assets
+import BuilderConstants
 
 public constant BALL_SPELL_ID = compiletime(ABIL_ID_GEN.next())
 public constant BALL_ITEM_ID = compiletime(ABIL_ID_GEN.next())
 
 public class BallProjectile extends AirPhysicsProjectile
 	BallItem ballitem
-	
+
 	construct(unit caster, vec2 target, BallItem itm)
 		super(caster.getPos3with(128), 32, caster.getOwner(), caster.getPos().angleTo(target), "Cannonball.mdx")
 		setSpeed(17)
@@ -17,7 +19,7 @@ public class BallProjectile extends AirPhysicsProjectile
 		setMass(145)
 		setRestitution(0.625)
 		ballitem = itm
-		
+
 	override function update()
 		super.update()
 		let lensq = vel.lengthSquared()
@@ -26,8 +28,8 @@ public class BallProjectile extends AirPhysicsProjectile
 			ballitem.onIdle(pos.toVec2())
 			silent = true
 			terminate()
-			
-		
+
+
 function onCast()
 	let id = GetSpellAbilityId()
 	if id == BALL_SPELL_ID
@@ -43,10 +45,10 @@ function onCast()
 				break
 		if itm != null
 			new BallProjectile(caster, tpos, itm.getEntity() castTo BallItem)
-		
+
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
-		
+
 @objectgen function genAbils()
 	new ChannelAbilityPreset(BALL_SPELL_ID, 1, true)
 	..setHeroAbility(false)
@@ -57,11 +59,11 @@ init
 	..presetManaCost(lvl -> 0)
 	..presetButtonPosNormal(1,1)
 	..presetIcon("BTNGolemStormBolt")
-	
+
 	new ItemDefinition(BALL_ITEM_ID, 'rst1')
 	..setGoldCost(0)..setLumberCost(0)
 	..setAbilities("")..setName("Ball")..setDescription("Throwable.")
 	..setTooltipExtended("It is round")
 	..setDroppedWhenCarrierDies(false)
 	..setTooltipBasic("Do eet")..setModelUsed("Cannonball.mdx")
-	..setInterfaceIcon("ReplaceableTextures\\CommandButtons\\BTNGolemStormBolt.blp")
+	..setInterfaceIcon(Icons.bTNGolemStormBolt)

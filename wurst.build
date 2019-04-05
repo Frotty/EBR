@@ -1,9 +1,65 @@
 ---
-projectName: "Escape Builder Reloaded"
+projectName: Escape Builder Reloaded
 dependencies:
-- "https://github.com/wurstscript/wurstStdlib2"
-- "https://github.com/frotty/frentity"
+- https://github.com/wurstscript/wurstStdlib2
+- https://github.com/frotty/frentity
 buildMapData:
-  name: "|cff217199Escape Builder |r[R] 0.92c"
-  fileName: "Escape Builder[R] 0.92c"
-  author: "Frotty"
+  name: '|cff217199Escape Builder |r[R] 0.92d'
+  fileName: Escape Builder[R] 0.92d
+  author: Frotty
+  scenarioData:
+    description: WurstScript powered!
+    suggestedPlayers: Full House
+  players:
+  - race: HUMAN
+    fixedStartLoc: true
+  - id: 1
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 2
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 3
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 4
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 5
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 6
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 7
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 8
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 9
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 10
+    race: HUMAN
+    fixedStartLoc: true
+  - id: 11
+    race: HUMAN
+    fixedStartLoc: true
+  forces:
+  - name: Escapers
+    playerIds:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+  - name: Builders
+    playerIds:
+    - 8
+    - 9
+    - 10
+    - 11

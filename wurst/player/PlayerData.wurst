@@ -48,7 +48,6 @@ public class PlayerData
 
 	string 	rank 		= "Newbie"
 
-
 	Role role
 	Title title
 	Escaper escaper

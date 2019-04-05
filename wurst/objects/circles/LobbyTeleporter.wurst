@@ -31,6 +31,11 @@ public class LobbyTeleporter extends StaticBaseObject
 			startmaze = true
 			ftext = createFText(pos, "", 10)
 
+	override function slowUpdate()
+		super.slowUpdate()
+		if not owner.isIngame()
+			terminate()
+
 	static function checkVote()
 		unit source = GetTriggeringTrigger().getSource()
 		unit u = GetTriggerUnit()

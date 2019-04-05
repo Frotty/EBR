@@ -1,3 +1,7 @@
+[0.92d]
+[*] Added two new cosmetic items
+[*] Fixed builder lounge teleporters not being removed when a builder leaves
+
 [0.92c]
 [*] Added a new minigame: Slide Arena (randomly generated slide challenge)
 [*] Waypoints can now be linked and unlinked with multiple other waypoints dynamically

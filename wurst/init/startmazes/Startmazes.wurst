@@ -69,8 +69,6 @@ function checkStaffUnit(unit u)
 		case DOORORDER_ID
 			if u != gg_unit_dor2_0023 and u != gg_unit_dor2_0011
 				new Door(u)
-		case DOORORDER_ID
-			new BigObstacle(u)
 		case BOBS_ICE_ID
 			new BigObstacle(u)
 		case SOBS_DESERT_ID

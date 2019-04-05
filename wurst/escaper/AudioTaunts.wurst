@@ -2,13 +2,14 @@ package AudioTaunts
 import ObjectIdGenerator
 import AbilityObjEditing
 import ObjectIds
+import BuilderConstants
 
 constant AUDIOBOOK_ID = compiletime(ABIL_ID_GEN.next())
 
 constant SOUND_OOOH = compiletime(ABIL_ID_GEN.next())
 
 
-@objgen function genSpells()
+@objectgen function genSpells()
 	createObjectDefinition("w3a", AUDIOBOOK_ID, 'Aspb')
 	..setLvlDataInt("spb4", 1, 4, 11)
 	..setLvlDataInt("spb4", 2, 4, 11)
