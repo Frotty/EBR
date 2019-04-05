@@ -1,4 +1,5 @@
 package Questlog
+import BuilderConstants
 
 
 @init1 function init_Quest()
@@ -33,5 +34,3 @@ package Questlog
 							+ "-Garfield1337\n"
 							+ "-Masterstryke\n"
 							+ "-SFan042\n")
-
-@annotation function init1()
