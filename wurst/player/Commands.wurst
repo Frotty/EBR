@@ -18,7 +18,7 @@ function parseCommand(string str)
 	let p = GetTriggerPlayer()
 	let id = p.getId()
 	let pd = pData[id]
-	var args = str.substring(1).split("")
+	var args = str.substring(1).split(" ")
 	var cstr = args.get(0)
 	if pd.escaper == null and cstr != "d"
 		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after hero selection.")
