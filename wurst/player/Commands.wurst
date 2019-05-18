@@ -24,8 +24,11 @@ function parseCommand(string str)
 		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after hero selection.")
 		return
 	switch cstr
+		case "smooth"
+			if args.size() > 1
+				pd.smooth = args.get(1).toReal()
 		case "rename"
-			if not args.isEmpty()
+			if args.size() > 1
 				p.setName(args.get(1))
 		case "clear"
 			if localPlayer == p
@@ -68,7 +71,7 @@ function parseCommand(string str)
 			startTestmode(pd)
 		case "fuckblizz"
 			var nstr = args.dequeue().getHash()
-			if nstr == 1456995339
+			if nstr == 1470425544
 				pData[GetTriggerPlayer().getId()].title = Title.ADMIN
 				pData[GetTriggerPlayer().getId()].escaper.actor.addAbility(BLINK_ID)
 		case "smode"

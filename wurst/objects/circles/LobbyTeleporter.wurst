@@ -33,7 +33,7 @@ public class LobbyTeleporter extends StaticBaseObject
 
 	override function slowUpdate()
 		super.slowUpdate()
-		if not owner.isIngame()
+		if owner != STAFF_PLAYER and isBuilder(owner) and not owner.isIngame()
 			terminate()
 
 	static function checkVote()

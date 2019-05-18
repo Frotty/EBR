@@ -3,6 +3,7 @@ import initlater PlayerData
 import LinkedListModule
 import EscaperClasses
 import RevivePointModifier
+import Camera
 import ChannelAbilityPreset
 import Assets
 
@@ -82,6 +83,7 @@ public class Selector extends UnitEntity
 		pd.p.selectSingle(actor)
 		pd.selector = this
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
+		deactivate()
 
 	function onCast()
 		let id = GetSpellAbilityId()
@@ -111,6 +113,7 @@ public class Selector extends UnitEntity
 		SetCameraFieldForPlayer(pd.p, CAMERA_FIELD_ROTATION, 315.+180., 0.50)
 		SetCameraFieldForPlayer(pd.p, CAMERA_FIELD_ZOFFSET, 110, 0.5)
 		SetCameraFieldForPlayer(pd.p, CAMERA_FIELD_FARZ, 15000.00, 0.5)
+		gg_cam_Camera_001.apply(true, pd.p, 0.)
 
 boolean hastStartedYet = false
 public function startChoose()

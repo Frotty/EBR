@@ -1,0 +1,89 @@
+package MGAgar
+import Minigame
+import PlayerData
+import HashMap
+import FxEntity
+import Builder
+
+constant LEFT_SPOT = vec2(-1540, 7550)
+constant RIGHT_SPOT = vec2(640, 7550)
+
+constant map = new HashMap<Escaper, AgarData>
+
+class AgarData
+	var size = 0.0
+
+class FoodEntity extends FxEntity
+
+	construct()
+		super(STAFF_PLAYER, gg_rct_agargamefoodspawn.randomPoint().toVec3(), angle(0), "models\\tcBox.mdl")
+		fx.setPlayerColor(PLAYER_COLOR_NAMES[GetRandomInt(0, 22)].toPlayerColor())
+
+public class MGAgar extends Minigame
+	CallbackCounted cb
+	RegionData rdata
+	var flist = new LinkedList<FoodEntity>
+
+	override function getGameRect() returns rect
+		return gg_rct_agargamearea
+
+	override function getCamBounds() returns rect
+		return gg_rct_agargamebounds
+
+	override function onBegin()
+		initEscapers()
+
+	function initEscapers()
+		rdata = getRegionData(RIGHT_SPOT)
+		for pd in escaperPlayers
+			if pd.escaper != null and pd.escaper.alive
+				map.put(pd.escaper, new AgarData())
+				pd.escaper.actor.setScale(0.2)
+				rdata.revealRegion(pd.p)
+
+		cb = doPeriodicallyCounted(0.25, 9999) (cb) ->
+			if cb.getCount() mod 11 == 0
+				flist.add(new FoodEntity())
+			if cb.getCount() mod 7 == 0
+				flist.add(new FoodEntity())
+			for pd in escaperPlayers
+				if pd.escaper != null and pd.escaper.alive
+					let adata = map.get(pd.escaper)
+					for pd2 in escaperPlayers
+						let bdata = map.get(pd2.escaper)
+						if pd2.escaper.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 4 * adata.size and adata.size > bdata.size + 1
+							adata.size += bdata.size
+							pd2.escaper.alive = false
+							pd2.escaper.actor..pause()..hide()
+					let itr = flist.staticItr()
+					for fe from itr
+						if not fe.done and fe.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 4 * adata.size
+							fe.terminate()
+							itr.remove()
+							adata.size += 0.2
+					pd.escaper.actor.setScale(0.2 + 1 * adata.size)
+					pd.escaper.actor.setMoveSpeed(max(50, 235 - 10 * adata.size))
+
+
+	override function onEnd()
+		for pd in escaperPlayers
+			pd.escaper.alive = true
+			if pd.escaper != null and pd.escaper.alive
+				pd.escaper.actor..setScale(1.0)..setMoveSpeed(200)..show()..unpause()
+		for food in flist
+			food.terminate()
+		forUnitsInRect(rdata.theRect) u ->
+			var data = u.getEntity()
+			if data != null and not data instanceof Escaper and not data instanceof Builder
+				data.terminate()
+		flist.clear()
+		destroy cb
+
+	override function getStartPosition() returns vec2
+		return getCamBounds().getCenter()
+
+	override function getName() returns string
+		return "|cff567eecAgario\n\n|r >> |cff8cbfddBe the last one standing!"
+
+init
+	minigames.add(new MGAgar())

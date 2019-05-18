@@ -63,6 +63,7 @@ public class PlayerData
 	int lastSave = -1
 
 	real zCam = 1600.
+	var smooth = 10.
 
 	UnitProducer prod
 	RevivePointModifier revmod
@@ -214,6 +215,7 @@ function rebuildBoard()
 		playerboard.board.getItem(i,2)..setStyle(true,false)..setWidth(0.05)
 		pd.setMBRow(i)
 		i++
+
 
 	CameraSetSmoothingFactor(10.)
 	playerboard.board.getItem(0,0)..setStyle(true,false)..setWidth(0.1)

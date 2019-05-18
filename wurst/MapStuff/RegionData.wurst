@@ -290,6 +290,9 @@ public RegionData array regions
 	regions[25].setType(getRegionTypeFromItem('I00D'), false)
 	regions[25].setOwner(STAFF_PLAYER)
 	regions[26] = new RegionData(gg_rct_Region_027)..createSetup()
+	regions[27] = new RegionData(gg_rct_agargamearea)
+	regions[27].setType(getRegionTypeFromItem('I00E'), false)
+	regions[27].setOwner(STAFF_PLAYER)
 
 	CreateTrigger()..registerRectLeaveEventSource(gg_rct_Region_023)
 	..addAction() ->

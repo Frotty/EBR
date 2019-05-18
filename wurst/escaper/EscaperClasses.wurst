@@ -193,7 +193,7 @@ public class StrongEscaper extends Escaper
 		super.update()
 		if invulnerable
 			shieldtimer -= ANIMATION_PERIOD
-			if getPos().distanceTo2dSq(shieldPos) > 32*32 or shieldtimer <= 0
+			if getPos().distanceTo2dSq(shieldPos) > 16*16 or shieldtimer <= 0 or pos.getEBRTile().currentType == this.getCurrentRegion().getTypeSet().unwalkableId
 				if shieldtimer > 0
 					createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 				shieldtimer = 0

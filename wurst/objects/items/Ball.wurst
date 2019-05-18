@@ -3,6 +3,7 @@ import ItemObject
 import BasicSpells
 import ClosureTimers
 import Key
+import Builder
 
 public class BallItem extends ItemObject
 	boolean picked = false
@@ -15,10 +16,13 @@ public class BallItem extends ItemObject
 	override function onUse(UnitEntity user)
 
 	override function onPickup(UnitEntity holder)
-		picked = true
-		this.holder = holder
-		holder.actor.addAbility(BALL_SPELL_ID)
-		setup.actor.hide()
+		if holder instanceof Builder
+			terminate()
+		else
+			picked = true
+			this.holder = holder
+			holder.actor.addAbility(BALL_SPELL_ID)
+			setup.actor.hide()
 
 	override function onDrop(UnitEntity e)
 		picked = false

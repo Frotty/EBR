@@ -1,4 +1,4 @@
-package Camera
+package CameraStuff
 import NoWurst
 import TimerUtils
 import Player

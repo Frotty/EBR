@@ -4,12 +4,9 @@ dependencies:
 - https://github.com/wurstscript/wurstStdlib2
 - https://github.com/frotty/frentity
 buildMapData:
-  name: '|cff217199Escape Builder |r[R] 0.92d'
-  fileName: Escape Builder[R] 0.92d
+  name: '|cff217199Escape Builder |r[R] 0.92j'
+  fileName: Escape Builder[R] 0.92j
   author: Frotty
-  scenarioData:
-    description: WurstScript powered!
-    suggestedPlayers: Full House
   players:
   - race: HUMAN
     fixedStartLoc: true

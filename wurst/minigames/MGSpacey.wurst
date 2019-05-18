@@ -6,6 +6,7 @@ import KeyUtils
 import ChannelAbilityPreset
 import Projectile
 import ReviveManager
+import Execute
 
 constant ARENA_POS = vec2(-2700, 7500)
 
@@ -50,15 +51,17 @@ public class MGSpacey extends Minigame
 		if klistener != null
 			removeKeyListener(klistener)
 
-		for rock in rocks
-			if rock != null
-				rock.terminate()
-		rocks.clear()
+		execute() ->
+			for rock in rocks
+				if rock != null
+					rock.terminate()
+			rocks.clear()
 
-		for ship in ships
-			if ship != null and not ship.done
-				ship.terminate()
-		ships.clear()
+		execute() ->
+			for ship in ships
+				if ship != null and not ship.done
+					ship.terminate()
+			ships.clear()
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()
@@ -70,7 +73,6 @@ constant minigame = new MGSpacey()
 
 init
 	minigames.add(minigame)
-
 
 constant SHIP_ID = compiletime(ABIL_ID_GEN.next())
 
@@ -185,8 +187,10 @@ public class Spaceship extends UnitEntity
 					break
 
 	ondestroy
-		mounter.alive = true
-		mounter.actor..unpause()..show()
+		if mounter != null and not mounter.done
+			mounter.alive = true
+			if mounter.actor.isAlive()
+				mounter.actor..unpause()..show()
 
 function getRockAsset(int level) returns string
 	switch level
