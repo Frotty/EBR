@@ -181,8 +181,8 @@ public abstract class Escaper extends UnitEntity
 		// If the Entity is moving towards
 		e.scaleVel(surfaceFriction)
 		let rv = getRealVel()
-		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 17)
-		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 17)
+		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 16.75)
+		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 16.75)
 		var ttype1 = GetTerrainType(lpos.x, lpos.y)
 		var ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()

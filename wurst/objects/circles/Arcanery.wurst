@@ -65,14 +65,15 @@ public class Arcanery extends StaticBaseObject
 		currentEffect = new Fx(pos + vec3(0,0,76), angle(0))..setScale(1.25)
 		recreateEffect()
 		EventListener.onCast(actor) id ->
-			switch id
-				case JUMP_MODE_ID
-					arcMode = ArcaneryMode.JUMP
-				case ORB_MODE_ID
-					arcMode = ArcaneryMode.ORB
-				case SILENCE_MODE_ID
-					arcMode = ArcaneryMode.SILENCE
-			recreateEffect()
+			if not this.done
+				switch id
+					case JUMP_MODE_ID
+						arcMode = ArcaneryMode.JUMP
+					case ORB_MODE_ID
+						arcMode = ArcaneryMode.ORB
+					case SILENCE_MODE_ID
+						arcMode = ArcaneryMode.SILENCE
+				recreateEffect()
 
 
 	function recreateEffect()

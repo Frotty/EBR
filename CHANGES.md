@@ -1,6 +1,10 @@
-[0.92d]
+[0.92m]
 [*] Added two new cosmetic items
+[*] Added a new minigame
 [*] Fixed builder lounge teleporters not being removed when a builder leaves
+[*] "Hold position" is now hidden from the command card to prevent hotkey collisions on french locale
+[*] Increased Knockbacker activation radius and reduced chances of tunneling
+[*] Fix 'smode' command
 
 [0.92c]
 [*] Added a new minigame: Slide Arena (randomly generated slide challenge)

@@ -32,7 +32,8 @@ public abstract class Minigame
 			changeRevMode(ReviveMode.WAIT_FOR_ALL)
 			waitForListener = () ->
 				for pd from escaperPlayers.staticItr()
-					pd.escaper.getCurrentRegion().hideRegion(pd.p)
+					if pd.escaper != null
+						pd.escaper.getCurrentRegion().hideRegion(pd.p)
 					printTimedToPlayer("All Escapers have died!", 10, pd.p)
 				doAfter(2., () -> reset())
 				waitForListener = null
