@@ -13,6 +13,7 @@ import Ball
 import LobbyTeleporter
 import MinigameTeleporter
 import Execute
+import Arcanery
 
 public Startmaze array startmazes
 public int currentMaze = -1
@@ -101,6 +102,8 @@ function checkStaffUnit(unit u)
 			new BigObstacle(u)
 		case HOBS_GRASS_ID
 			new HighObstacle(u)
+		case ARCANERY_ID
+			new Arcanery(u)
 
 
 public function correctKeys()

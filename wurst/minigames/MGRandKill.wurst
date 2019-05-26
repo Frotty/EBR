@@ -4,6 +4,7 @@ import EscaperKillers
 import Assets
 import Fx
 import Coin
+import Obstacle
 
 constant ARENA_POS = vec2(-4200, 7500)
 
@@ -26,6 +27,8 @@ public class MGRandKill extends Minigame
 			spawn = getGameRect().randomPoint()
 		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
 		fx.setScale(0.5)
+		for i = 0 to GetRandomInt(3, 5)
+			new SmallObstacle(getGameRect().randomPoint(), STAFF_PLAYER)
 		doAfter(6.5) ->
 			if fx != null
 				new SmallRandomKiller(spawn, STAFF_PLAYER)

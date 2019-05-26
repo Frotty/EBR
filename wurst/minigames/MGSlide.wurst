@@ -7,6 +7,7 @@ import Orders
 import Builder
 import Assets
 import Coin
+import Tree
 
 constant LEFT_SPOT = vec2(-1540, 7550)
 constant RIGHT_SPOT = vec2(640, 7550)
@@ -63,12 +64,18 @@ public class MGSlide extends Minigame
 				data.terminate()
 		bcount++
 		let spawn = gg_rct_slidegamespawn
-		gg_rct_slidegamespawn.randomPoint().setTerrainType(UNCONTROLLABLEICE, -1, 1, 0)
+
+		for i = 0 to bcount div 2
+			gg_rct_slidegamespawn.randomPoint().setTerrainType(UNCONTROLLABLEICE, -1, 1, 0)
+
 		for i = 0 to bcount * 2
 			new SmallObstacle(spawn.randomPoint(), STAFF_PLAYER)
 
 		for i = 0 to bcount
 			new BigObstacle(spawn.randomPoint(), STAFF_PLAYER)
+
+		for i = 0 to bcount div 2
+			new Tree(spawn.randomPoint(), STAFF_PLAYER)
 
 		for i = 0 to bcount
 			new SmallKiller(spawn.randomPoint(), STAFF_PLAYER)
