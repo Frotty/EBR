@@ -96,7 +96,7 @@ public class PlayerData
 
 	function setMBRow(int row)
 		playerboard..setNewItem(row,0,mbname,icon)
-		..setNewItem(row,1,escaper.deaths.toString(), null)
+		..setNewItem(row,1, escaper == null ? "-" : escaper.deaths.toString(), null)
 		..setNewItem(row,2,rank, null)
 
 	function addXp(int amount, boolean time)
