@@ -26,6 +26,9 @@ public let escaperPlayers = new LinkedList<PlayerData>()
 public let builderPlayers = new LinkedList<PlayerData>()
 let questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
 
+public function player.getData() returns PlayerData
+	return pData[this.getId()]
+
 public var minutes = 0
 public var seconds = 0
 

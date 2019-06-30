@@ -37,8 +37,8 @@ public class Teleporter extends StaticBaseObject
 					e.setPos(rallyPos)
 					addEffect(EFFECT_STRING, obj.pos).destr()
 					addEffect(EFFECT_STRING, rallyPos).destr()
-					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
+					if not e.owner.getData().escaper.camlock
+						e.owner.getData().p.panCameraToTimed(rallyPos, 0.03)
 			case TeleportMode.KILLER
 				if e instanceof SetupObject and rdata.canBuild(obj.owner)
 					dyn = e castTo SetupObject
@@ -55,8 +55,8 @@ public class Teleporter extends StaticBaseObject
 					u.setPos(rallyPos.x, rallyPos.y)
 					addEffect(EFFECT_STRING, obj.pos).destr()
 					addEffect(EFFECT_STRING, rallyPos).destr()
-					if not pData[GetOwningPlayer(u).getId()].escaper.camlock
-						PanCameraToTimedForPlayer(GetOwningPlayer(u), rallyPos.x, rallyPos.y, 0.03)
+					if not e.owner.getData().escaper.camlock
+						e.owner.getData().p.panCameraToTimed(rallyPos, 0.03)
 		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_OBJECT_ID)
 			Log.debug("Teleport term")
 			obj.terminate()

@@ -310,7 +310,7 @@ public abstract class Escaper extends UnitEntity
 
 			CameraClearNoiseForPlayer(owner)
 			if (localPlayer == owner)
-				if selectatrevive and revivetomb == null
+				if selectatrevive and revivetomb == null and not camlock
 					PanCameraToTimed(rev.x, rev.y, 0)
 				if camOnRevive
 					ClearSelection()

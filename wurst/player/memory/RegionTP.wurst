@@ -1,0 +1,22 @@
+package RegionTP
+import HashMap
+import EventHelper
+
+public class RegionTP
+	static constant objectMap = new HashMap<rect, RegionTP>
+	constant enterTrigger = CreateTrigger()..addAction(() -> RegionTP.onEnterEvent())
+
+	private rect rectangle
+
+	construct(rect rectangle)
+		this.rectangle = rectangle
+		objectMap.put(rectangle, this)
+		enterTrigger.registerRectEnterEventSource(rectangle)
+
+	function onEnter()
+		let u = GetEnteringUnit()
+		// teleport
+
+	static function onEnterEvent()
+		let triggerRect = GetTriggeringTrigger().getSourceRect()
+		objectMap.get(triggerRect).onEnter()

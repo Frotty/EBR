@@ -69,7 +69,7 @@ public class MGAgar extends Minigame
 		for pd in escaperPlayers
 			pd.escaper.alive = true
 			if pd.escaper != null and pd.escaper.alive
-				pd.escaper.actor..setScale(1.0)..setMoveSpeed(200)..show()..unpause()
+				pd.escaper.actor..setScale(1.0)..setMoveSpeed(pd.escaper.actor.getDefaultMovespeed())..show()..unpause()
 		for food in flist
 			food.terminate()
 		forUnitsInRect(rdata.theRect) u ->

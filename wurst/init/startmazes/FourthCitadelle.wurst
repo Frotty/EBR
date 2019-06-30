@@ -51,8 +51,6 @@ public class FourthCitadelleMaze extends Startmaze
 		s.spinSpeed.setVal(1.25 *DEGTORAD)
 
 		gg_unit_scik_0263.issuePointOrder("patrol", vec2(-2765, -6283))
-		gg_unit_scik_0264.issuePointOrder("patrol", vec2(-2545, -6780))
-		gg_unit_scik_0265.issuePointOrder("patrol", vec2(-3050, -6523))
 		gg_unit_scik_0268.issuePointOrder("patrol", vec2(-3552, -6419))
 		gg_unit_scik_0269.issuePointOrder("patrol", vec2(-4317, -5883))
 		gg_unit_scik_0267.issuePointOrder("patrol", vec2(-4045, -6441))

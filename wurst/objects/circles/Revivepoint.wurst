@@ -72,8 +72,7 @@ public class RevivePoint extends StaticSetupObject
 					pd.escaper.actor.abortOrder()
 
 					if not pd.escaper.camlock
-						if localPlayer == pd.p
-							PanCameraToTimed(pos.x, pos.y, 0)
+						pd.p.panCameraToTimed(pos, 0)
 
 				if getExp
 					pd.addXp(20, false)
