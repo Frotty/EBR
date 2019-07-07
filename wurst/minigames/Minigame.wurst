@@ -46,8 +46,10 @@ public abstract class Minigame
 					.setCurrentRegion()
 					.revealRegion(pd.p)
 
+					if not pd.escaper.camlock
+						pd.p.panCamToTimed(pd.escaper.actor, 0)
 
-					pd.p..panCamToTimed(pd.escaper.actor, 0)..select(pd.escaper.actor)
+					pd.p.select(pd.escaper.actor)
 
 				printTimedToPlayer("Minigame started: " + getName(), 20, pd.p)
 
@@ -85,9 +87,11 @@ public abstract class Minigame
 				SetCameraBoundsToRectForPlayerBJ(pd.p, gg_rct_Region_023)
 
 				doAfter(1.) ->
-					pd.p.panCamToTimed(pd.escaper.actor, 0)
+					if not pd.escaper.camlock
+						pd.p.panCamToTimed(pd.escaper.actor, 0)
 					pd.p.select(pd.escaper.actor)
-				ResetToGameCameraForPlayer(pd.p, 1.)
+				if not pd.escaper.camlock
+					ResetToGameCameraForPlayer(pd.p, 1.)
 				printTimedToPlayer("Minigame ended!", 10, pd.p)
 			changeRevMode(ReviveMode.TIMED)
 			onEnd()

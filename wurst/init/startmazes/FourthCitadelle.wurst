@@ -3,6 +3,8 @@ import Startmaze
 import Spinner
 import ClosureTimers
 
+interface I
+
 public class FourthCitadelleMaze extends Startmaze
 
 	construct(RegionData rd)
@@ -11,7 +13,7 @@ public class FourthCitadelleMaze extends Startmaze
 
 	override function initMaze()
 		inited = true
-		Spinner s = new Spinner(gg_unit_spnr_0147)
+		var s = new Spinner(gg_unit_spnr_0147)
 		s.checkObj(gg_unit_scik_0260.getEntity())
 		s.checkObj(gg_unit_scik_0261.getEntity())
 		s.spinSpeed.setVal(4.5 *DEGTORAD)

@@ -38,7 +38,7 @@ public class TerrainModder extends UnitEntity
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> switchMode())
 
 	function changeTerrain()
-		var orderPos = getOrderPos()
+		var orderPos = EventData.getOrderPos()
 		var oW = GetOrderTarget()
 
 		if oW != null

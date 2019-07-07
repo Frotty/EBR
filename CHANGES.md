@@ -1,3 +1,9 @@
+[0.92q]
+[*] Fixed Agario minigame movespeed reduction
+[*] Fixed cam lock being disabled after portal teleports and minigames
+[*]
+[*] Reworked some start mazes
+
 [0.92m]
 [*] Added two new cosmetic items
 [*] Added a new minigame

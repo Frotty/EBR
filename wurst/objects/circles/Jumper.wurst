@@ -118,12 +118,12 @@ public class Jumper extends StaticBaseObject
 				jumpForce.increment(this, 30)
 			case SPECIAL_ID
 				if goocounter < 5
-					let tpos = getSpellTargetPos()
+					let tpos = EventData.getSpellTargetPos()
 					let goo = createImage("textures\\blugoo.blp", tpos, 128, 128)
 					..show()
 					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++
-					getSpellTargetPos().getEBRTile().addModifier(TileModifier.BLUGOO)
+					EventData.getSpellTargetPos().getEBRTile().addModifier(TileModifier.BLUGOO)
 			case MODE_BOTH_ID
 				actor..removeAbility(MODE_BOTH_ID)..addAbility(MODE_ESCAPERS_ID)
 				permission = JumpPermission.ESCAPER

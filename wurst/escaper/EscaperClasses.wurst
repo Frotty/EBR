@@ -65,7 +65,7 @@ public class Portal extends FxEntity
 					target.setPos(destiny.withZ(target.pos.z))
 					flashEffect(Abilities.blinkCaster, pos)
 					flashEffect(Abilities.blinkTarget, destiny)
-					if not es.camlock
+					if not (target castTo Escaper).camlock
 						target.actor.getOwner().panCameraToTimed(destiny, 0.03)
 
 	override function update()

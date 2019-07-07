@@ -34,7 +34,7 @@ function onCast()
 	let id = GetSpellAbilityId()
 	if id == BALL_SPELL_ID
 		let caster = GetSpellAbilityUnit()
-		let tpos = getSpellTargetPos()
+		let tpos = EventData.getSpellTargetPos()
 		caster.removeAbility(BALL_SPELL_ID)
 		item itm = null
 		for i = 0 to 5
@@ -57,6 +57,7 @@ init
 	..presetTargetTypes(Targettype.POINT)
 	..presetCastRange(lvl -> 300.)
 	..presetManaCost(lvl -> 0)
+	..presetHotkey("K")
 	..presetButtonPosNormal(1,1)
 	..presetIcon("BTNGolemStormBolt")
 

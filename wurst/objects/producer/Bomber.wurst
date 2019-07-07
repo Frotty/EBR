@@ -58,7 +58,7 @@ public class Bomber extends UnitEntity
 	function checkOrder()
 		var i = GetIssuedOrderId()
 		var e = GetOrderedUnit().getEntity()
-		var tpos = getSpellTargetPos()
+		var tpos = EventData.getSpellTargetPos()
 		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
 			GetOrderedUnit().abortOrder()
 			return

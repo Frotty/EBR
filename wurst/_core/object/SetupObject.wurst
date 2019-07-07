@@ -80,7 +80,7 @@ public abstract class SetupObject extends UnitEntity
 
 	function onOrderEvent()
 		var order = GetIssuedOrderId()
-		var targetPos = getOrderPos()
+		var targetPos = EventData.getOrderPos()
 		var u = GetOrderTargetUnit()
 		string orderS = OrderId2String(order)
 		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "holdposition" or orderS == "stop"

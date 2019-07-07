@@ -53,6 +53,7 @@ public abstract class Escaper extends UnitEntity
 	var walkVel = vec2(0,0)
 	var slideVelocity = vec2(0,0)
 	var otherVel = vec2(0,0)
+	var threshold = 0
 
 	var alive = true
 	var selectatrevive = true
@@ -202,7 +203,13 @@ public abstract class Escaper extends UnitEntity
 				ttype = GetTerrainType(pos.x, pos.y)
 				newval = 3
 		if (lastVal == 1 and newval == 2) or (lastVal == 2 and newval == 1)
-			ttype = rdata.getTypeSet().unwalkableId
+			threshold++
+			if threshold > 2
+				ttype = rdata.getTypeSet().unwalkableId
+			else
+				ttype = GetTerrainType(pos.x, pos.y)
+		else if threshold > 0
+			threshold--
 		lastVal = newval
 
 		slideVelocity *= 0.99
@@ -319,7 +326,7 @@ public abstract class Escaper extends UnitEntity
 				SetCameraTargetControllerNoZForPlayer(owner, actor, 0,0,true)
 			if revivetomb != null
 				setPos(revivetomb.getPos3Real())
-				if selectatrevive
+				if selectatrevive and not camlock
 					owner.panCamToTimed(revivetomb, 0.)
 				revivetomb.remove()
 				revivetomb = null
@@ -353,7 +360,7 @@ public abstract class Escaper extends UnitEntity
 	function changeAngle()
 		let id = GetIssuedOrderId()
 		var w = GetOrderTarget()
-		let orderPos = getOrderPos()
+		let orderPos = EventData.getOrderPos()
 		let widgetPos = w.getPos()
 		let rv = getRealVel()
 		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 17)
@@ -402,7 +409,7 @@ public abstract class Escaper extends UnitEntity
 		if id == JUMP_SPELL
 			if not flying
 				addPos(vec3(0,0,1))
-				let angl = pos.angleTo2d(getSpellTargetPos())
+				let angl = pos.angleTo2d(EventData.getSpellTargetPos())
 				addEffect(Abilities.aneuCaster, pos).destr()
 				if sliding
 					addVel(vec3(3 * angl.cos(), 3 * angl.sin(), 11.75))
@@ -411,7 +418,7 @@ public abstract class Escaper extends UnitEntity
 				if this.getCurrentRegion().specialAbil != JUMP_SPELL
 					actor.removeAbility(JUMP_SPELL)
 		else if id == ORB_SPELL
-			orb = new OrbProjectile(this, getSpellTargetPos())
+			orb = new OrbProjectile(this, EventData.getSpellTargetPos())
 			orb.addVel((getRealVel()-walkVel)*0.65)
 			orb.setXYAngle(orb.vel.toVec2().getAngle())
 			actor..removeAbility(ORB_SPELL)..addAbility(JAUNT_SPELL)
@@ -462,7 +469,7 @@ public abstract class Escaper extends UnitEntity
 				 or this.getCurrentRegion() == regions[22] or this.getCurrentRegion() == regions[23] or this.getCurrentRegion() == regions[24]
 				createFText(pos, vec2(0,.08), "canceled!", 8.5, 2, colorA(255,0,0,255), owner)
 			else
-				let tpos = getSpellTargetPos()
+				let tpos = EventData.getSpellTargetPos()
 				doAfter(0.15) ->
 					var smallestDist = 9999999.
 					Escaper target = null

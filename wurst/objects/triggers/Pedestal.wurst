@@ -281,7 +281,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
-		let tpos = getSpellTargetPos()
+		let tpos = EventData.getSpellTargetPos()
 		switch id
 			case SELECT_AOE_ID
 				forUnitsInRange(tpos, AOE_PICK_RANGE, (unit u) -> begin

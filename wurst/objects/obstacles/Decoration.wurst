@@ -27,7 +27,7 @@ public class Decoration extends StaticSetupObject
 
 		switch id
 			case CHANGE_FACE_ID
-				let tg = getSpellTargetPos()
+				let tg = EventData.getSpellTargetPos()
 				changeAngle(pos.angleTo2d(tg))
 			case INC_SCALE
 				scale.increment(this, 3.0)

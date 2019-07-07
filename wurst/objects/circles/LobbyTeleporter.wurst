@@ -79,7 +79,7 @@ public class LobbyTeleporter extends StaticBaseObject
 			e.setPos(rallyPos)
 			addEffect(EFFECT_STRING, pos).destr()
 			addEffect(EFFECT_STRING, rallyPos).destr()
-			if not pData[e.owner.getId()].escaper.camlock
+			if not e.camlock
 				PanCameraToTimedForPlayer(e.owner, rallyPos.x, rallyPos.y, 0.03)
 
 	override function clearQuestionmark()

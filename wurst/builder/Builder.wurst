@@ -50,7 +50,7 @@ public class Builder extends UnitEntity
 
 	function onCast()
 		var id = GetSpellAbilityId()
-		let tpos = getSpellTargetPos()
+		let tpos = EventData.getSpellTargetPos()
 		let rdata = getRegionData(tpos)
 		if rdata == null
 			return
@@ -114,7 +114,7 @@ public class Builder extends UnitEntity
 	function onOrder()
 		var i = GetOrderTargetItem()
 		var u = GetOrderTargetUnit()
-		var orderPos = getOrderPos()
+		var orderPos = EventData.getOrderPos()
 
 		if i != null
 			orderPos = i.getPos()

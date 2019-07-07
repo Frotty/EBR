@@ -8,7 +8,6 @@ import Waypoint
 import UnitRemover
 import Executer
 import ClosureTimers
-import Arcanery
 
 public class ThirdForestMaze extends Startmaze
 

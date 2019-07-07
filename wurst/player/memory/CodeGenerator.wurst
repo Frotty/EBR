@@ -67,7 +67,7 @@ function modb(int x) returns int
 public class Savecode
 	real digits	= 0.	//logarithmic approximation
 	let bignum = new BigNum(base())
-	
+
 	ondestroy
 		destroy bignum
 
@@ -75,36 +75,36 @@ public class Savecode
 		digits = digits + log(max+1.,base()+0.)
 		bignum.mulSmall(max+1)
 		bignum.addSmall(val)
-	
+
 	function decode(int max) returns int
 		return bignum.divSmall(max+1)
-	
+
 	function isEmpty() returns boolean
 		return bignum.isZero()
-	
+
 	function length() returns real
 		return digits
-	
+
 	function clean()
 		bignum.clean()
-	
+
 	//These functions get too intimate with BigNum_l
 	function pad()
 		BigNum_l cur = bignum.list
 		BigNum_l prev = null
 		int maxlen = R2I(1.0 + length())
-		
+
 		while cur != null
 			prev = cur
 			cur = cur.next
 			maxlen--
-			
+
 		while maxlen > 0
 			prev.next = new BigNum_l()
 			prev = prev.next
 			maxlen--
-	
-	
+
+
 	function toString() returns string
 		BigNum_l cur = bignum.list
 		string s = ""
@@ -112,21 +112,21 @@ public class Savecode
 			s = itochar(cur.leaf) + s
 			cur = cur.next
 		return s
-	
-	
+
+
 	function fromString(string s)
 		int i = s.length()-1
-		BigNum_l cur = new BigNum_l()
+		var cur = new BigNum_l()
 		bignum.list = cur
 		while true
 			cur.leaf = chartoi(SubString(s,i,i+1))
 			if i <= 0
-				break		
+				break
 			cur.next = new BigNum_l()
 			cur = cur.next
 			i--
 
-	
+
 	function hash() returns int
 		int hash = 0
 		int x
@@ -136,7 +136,7 @@ public class Savecode
 			hash = ModuloInteger(hash+79*hash div (x+1) + 293*x div (1+hash - (hash div base())*base()) + 479,hashN())
 			cur = cur.next
 		return hash
-	
+
 
 	//this is not cryptographic which is fine for this application
 	//sign = 1 is forward
@@ -146,12 +146,12 @@ public class Savecode
 		int advance = 0
 		int x = 0
 		BigNum_l cur = bignum.list
-	
+
 		if sign == -1
 			SetRandomSeed(bignum.lastDigit())
 			cur.leaf = modb(cur.leaf + sign*GetRandomInt(0,base()-1))
 			x = cur.leaf
-		
+
 		SetRandomSeed(key)
 		while cur != null
 			if sign == -1
@@ -163,18 +163,18 @@ public class Savecode
 
 			advance = advance + GetRandomInt(0,base()-1)
 			SetRandomSeed(advance)
-			
+
 			x = cur.leaf
 			cur = cur.next
-		
+
 		if sign == 1
 			SetRandomSeed(x)
 			bignum.list.leaf = modb(bignum.list.leaf + sign*GetRandomInt(0,base()-1))
 
-		
+
 		SetRandomSeed(seed)
 
-	
+
 	function save() returns string
 		int hash
 		clean()
@@ -183,15 +183,15 @@ public class Savecode
 		clean()
 		pad()
 		return toString()
-	
-	
+
+
 	function save(string name, int loadtype) returns string
 		int key = fhash(name)+loadtype*73
 		int hash
 		clean()
 		hash = hash()
 		encode(hash,hashN())
-//		print("key:"+ (scommhash(GetPlayerName(p))+loadtype*73).toString() + " : " + hash.toString()) 
+//		print("key:"+ (scommhash(GetPlayerName(p))+loadtype*73).toString() + " : " + hash.toString())
 		clean()
 		pad()
 		obfuscate(key,1)
@@ -201,23 +201,23 @@ public class Savecode
 		int inputhash
 		fromString(s)
 		inputhash = decode(hashN())
-		
+
 		clean()
 		let h = hash()
 		return inputhash == h
-	
-	
+
+
 	function load(string name, string s, int loadtype) returns boolean
 		int ikey = fhash(name)+loadtype*73
 		int inputhash
 		fromString(s)
 		obfuscate(ikey,-1)
 		inputhash = decode(hashN())
-		
+
 		clean()
 		let h = hash()
 		return inputhash == h
-		
+
 function prop_Savecode() returns boolean
 	string s
 	Savecode loadcode
@@ -227,7 +227,7 @@ function prop_Savecode() returns boolean
 	integer medalmax = 13
 	integer XP = 1337
 	integer xpmax = 1000000
-	Savecode savecode = new Savecode()
+	let savecode = new Savecode()
 
 	SetPlayerName(Player(0),"yomp")
 	SetPlayerName(Player(1),"fruitcup")
@@ -244,7 +244,7 @@ function prop_Savecode() returns boolean
 	if loadcode.load("test",s,1)
 		BJDebugMsg("load ok")
 	else
-		BJDebugMsg("load failed")  
+		BJDebugMsg("load failed")
 		return false
 
 //Must decode in reverse order of encodes
@@ -264,9 +264,9 @@ function prop_Savecode() returns boolean
 
 function runTests()
 	if prop_Savecode()
-		print("save1 OK") 
+		print("save1 OK")
 	else
-		print("save1 Failed") 
+		print("save1 Failed")
 
-	
+
 

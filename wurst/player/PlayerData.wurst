@@ -7,7 +7,6 @@ import public ClosureForGroups
 import initlater CodeGenerator
 import initlater TerrainModder
 import Builder
-import PickSystem
 import UnitProducer
 import RevivePointModifier
 import EscaperClasses
@@ -17,6 +16,7 @@ import Playerfile
 import PlayerMemoryData
 import SoundUtils
 import Assets
+import PickSystem
 
 public Board playerboard
 public PlayerData array pData
@@ -229,7 +229,8 @@ function rebuildBoard()
 	playerboard.setNewItem(0,2,"Rank",null)
 	playerboard.board.display(true)
 
-	allow()
+	EnableUserControl(true)
+	EnableOcclusion(true)
 
 
 function setTime()
@@ -282,15 +283,15 @@ public function startTestmode(PlayerData pd)
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
 		Log.debug("testmode 5")
 		pd.prod = new UnitProducer(hidden, pd.p)
-		Escaper e = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
-		pd.escaper = e
-		e.actor..addAbility('A001')..addAbility(CREATE_REV_MOD_ID)
-		e = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
-		e.actor.addAbility('A001')
-		e = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
-		e.actor.addAbility('A001')
-		e = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
-		e.actor.addAbility('A001')
+		var e1 = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
+		pd.escaper = e1
+		e1.actor..addAbility('A001')..addAbility(CREATE_REV_MOD_ID)
+		var e2 = new FastEscaper(currentRevivepoint.toVec3(), pd.p)
+		e2.actor.addAbility('A001')
+		var e3 = new StrongEscaper(currentRevivepoint.toVec3(), pd.p)
+		e3.actor.addAbility('A001')
+		var e4 = new IceEscaper(currentRevivepoint.toVec3(), pd.p)
+		e4.actor.addAbility('A001')
 		pd.builder = new Builder(pd.p)
 		pd.builder.actor..addItemById('I001')
 		..addItemById('I002')

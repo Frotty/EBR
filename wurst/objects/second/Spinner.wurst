@@ -104,7 +104,7 @@ public class Spinner extends SetupObject
 				if owner == owner
 					checkObj(data)
 			case SPIN_ADD_GROUP_ID
-				forUnitsInRange(getSpellTargetPos(), 300.) u ->
+				forUnitsInRange(EventData.getSpellTargetPos(), 300.) u ->
 					if u != actor and u != setup
 						if u.getUserData() > 0
 							var ed = u.getEntity()

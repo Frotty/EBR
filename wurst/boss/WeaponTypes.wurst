@@ -45,7 +45,7 @@ function onHammer(Escaper e)
 		damageTarget(entity, e, 20)
 
 function onGlaive(Escaper e)
-	let tpos = getSpellTargetPos()
+	let tpos = EventData.getSpellTargetPos()
 	new Boomerang(e, tpos)
 
 function onBow(Escaper e)

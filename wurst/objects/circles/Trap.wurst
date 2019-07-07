@@ -155,7 +155,7 @@ public class Trap extends StaticBaseObject
 
 	function onCast() returns boolean
 		let spell_id = GetSpellAbilityId()
-		let tpos = getSpellTargetPos()
+		let tpos = EventData.getSpellTargetPos()
 		switch spell_id
 			case NEXT_EFFECT_ID
 				if sfxid >= SFX_COUNT
