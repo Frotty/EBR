@@ -128,6 +128,13 @@ function parseCommand(string str)
 				printTimedToPlayer("|cffFFD621[Info]|r - You are not experienced enough!", 15, pd.p)
 		case "ship"
 			new Spaceship(pd.escaper.getPos().toVec2(), pd.escaper)
+		case "kick"
+			var name = args.get(1)
+			if name.length() > 1
+				for pl in allPlayers
+					if pl.name.startsWith(name) and not pl.title == Title.ADMIN
+						CustomDefeatBJ(pl.p, "You have been kicked.")
+						return
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
 				DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Command not found! Available Commands: -clear, -cam [value], -cam unlock, -cam lock, -frev (forced revive), -info, -intro, -smode [both|cam|select|none], -rename [name]")
