@@ -1,8 +1,6 @@
 package Questlog
-import BuilderConstants
 
-
-@init1 function init_Quest()
+init
 	var q = CreateQuest()
 	QuestSetTitle(q, "|cffFFD700Commands")
 	QuestSetIconPath(q, "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp")

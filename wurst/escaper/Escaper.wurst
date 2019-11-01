@@ -150,7 +150,7 @@ public abstract class Escaper extends UnitEntity
 		error("Don't do this..")
 
 	override function onGroundHit()
-		if pos.getEBRTile().modifiers.contains(TileModifier.BLUGOO castTo int) and vel.z.abs() > 2
+		if pos.getEBRTile().modifiers.get(TileModifier.BLUGOO castTo int) and vel.z.abs() > 2
 			let rdata = this.getCurrentRegion()
 			var ttype = GetTerrainType(pos.x, pos.y)
 			// Handle Goo it
@@ -524,5 +524,5 @@ function correctRegion()
 	for e from escapers.staticItr()
 		e.updateRegionData()
 
-@init2 function init_Escaper()
+init
 	getTimer().startPeriodic(1., function correctRegion)

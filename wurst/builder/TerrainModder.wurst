@@ -49,7 +49,7 @@ public class TerrainModder extends UnitEntity
 			return
 		let owner = actor.getOwner()
 		let id = GetUnitTypeId(actor)
-		if rdata.canBuild(owner) and not orderPos.getEBRTile().modifiers.contains(TileModifier.RESERVED castTo int)
+		if rdata.canBuild(owner) and not orderPos.getEBRTile().modifiers.get(TileModifier.RESERVED castTo int)
 			idleSeconds = 0
 			if id == SLIDEABLE_ICE_ID
 				if modification == 1

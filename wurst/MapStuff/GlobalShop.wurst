@@ -8,17 +8,13 @@ constant GOODS_STORE_ID = compiletime(UNIT_ID_GEN.next())
 constant EVENT_RADIUS_SMALL	= 32.
 constant EVENT_RADIUS_BIG	= 64.
 
-public GlobalShop shop
+public constant shop = new GlobalShop(-6630, -6150, STAFF_PLAYER)
 
 public class GlobalShop
 	unit actor
 
 	construct(real x, real y, player owner)
 		actor = CreateUnit(owner, GOODS_STORE_ID, x, y, 270.)
-
-
-@init2 function init_GlobalShop()
-	shop = new GlobalShop(-6630, -6150, STAFF_PLAYER)
 
 
 @objectgen function genShop()

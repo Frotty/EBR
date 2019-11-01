@@ -32,15 +32,15 @@ public function getTile(int x, int y) returns ebrtile
 
 /** Adds and saves the given modifier to the tiles */
 public function ebrtile.hasModifier(TileModifier modifier) returns boolean
-	return this.modifiers.contains(modifier castTo int)
+	return this.modifiers.get(modifier castTo int)
 
 /** Adds and saves the given modifier to the tiles */
 public function ebrtile.addModifier(TileModifier modifier)
-	tileMap.saveInt(this.key, 3, this.modifiers.add(modifier castTo int).val)
+	tileMap.saveInt(this.key, 3, this.modifiers.set(modifier castTo int).val)
 
 /** Removed and saves the given modifier to the tiles */
 public function ebrtile.removeModifier(TileModifier modifier)
-	tileMap.saveInt(this.key, 3, this.modifiers.remove(modifier castTo int).val)
+	tileMap.saveInt(this.key, 3, this.modifiers.reset(modifier castTo int).val)
 
 /** Changes the terraintype of this tile if it is not reserved */
 public function ebrtile.setType(int ttype)

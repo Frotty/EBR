@@ -114,8 +114,6 @@ public class RegionData
 			..registerRectEnterEventSource(r)
 			..addAction(() -> enterRect())
 			regionMap.put(r, this)
-			for pd from allPlayers.staticItr()
-				fmods[pd.id] = new FogData(pd.p, theRect)
 
 			setBossRegion()
 
@@ -165,13 +163,17 @@ public class RegionData
 
 	function revealRegion(player p)
 		let id = p.getId()
-		if fmods[id] != null
-			fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
+		if fmods[id] == null
+			fmods[id] = new FogData(p, theRect)
+
+		fmods[id].changeFog(FOG_OF_WAR_VISIBLE)
 
 	function hideRegion(player p)
 		let id = p.getId()
-		if fmods[id] != null
-			fmods[id].changeFog(FOG_OF_WAR_MASKED)
+		if fmods[id] == null
+			fmods[id] = new FogData(p, theRect)
+
+		fmods[id].changeFog(FOG_OF_WAR_MASKED)
 
 	static function enterRect()
 		var u = GetTriggerUnit()
@@ -243,7 +245,7 @@ public function getRegionData(vec2 pos) returns RegionData
 
 public RegionData array regions
 
-@init1 function init_Regions()
+init
 	regions[0] = new RegionData(gg_rct_Region_024)
 	regions[0].setType(getRegionTypeFromItem('I00D'), false)
 	regions[0].setOwner(STAFF_PLAYER)

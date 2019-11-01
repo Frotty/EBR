@@ -6,13 +6,13 @@ import BaseObject
 import HashMap
 import PlayerData
 import Builder
-import SyncWrapper
 import JsonParser
 import TileData
 import LZW
 import StringUtils
+import SaveLoadData
 import ItemObject
-import MultifileIO
+import HashList
 
 constant CHAR_STEPSIZE = 180
 
@@ -24,11 +24,11 @@ public class MemoryAccessPedestal extends StaticBaseObject
 
 	private constant tileMap = new HashMap<int, TileData>()
 
-	private LinkedList<Serializable> entities = new LinkedList<Serializable>()
-	private LinkedList<TileData> tiles = new LinkedList<TileData>()
-	private HashMap<Serializable, effect> effects = new HashMap<Serializable, effect>()
-	private boolean syncingDone = true
-	private FText ttag = createFText(pos, "", 12)
+	private var entities = new HashList<Serializable>()
+	private var tiles = new LinkedList<TileData>()
+	private var effects = new HashMap<Serializable, effect>()
+	private var syncingDone = true
+	private var ttag = createFText(pos, "", 12)
 	let bs = new BigString()
 	let parser = new JsonParser()
 	let listparser = new JsonParser()
@@ -46,12 +46,11 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		if serializable instanceof Escaper or serializable instanceof Builder or serializable instanceof MemoryAccessPedestal
 			return
 		if getRegionData(serializable.getPos()).canBuild(owner)
-			let itr = entities.staticItr()
-			for entity from itr
-				if entity == serializable
-					if removeIfExists
-						destroy itr.remove()
-					return
+			if entities.has(serializable)
+				if removeIfExists
+					entities.remove(serializable)
+				return
+
 			// Isnt added yet
 			entities.add(serializable)
 			flashEffect(Abilities.healTarget, serializable.getPos())
@@ -81,40 +80,37 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			actor.pause()
 			ttag.tt..center(pos, "|cff0884CEloading...", 10)
 			lastRef[owner.getId()] = this
-			getSyncedFile(pData[owner.getId()], "dataSlot" + slotId.toString() + ".pld", (file, pd) -> onLoadSlotSynced(file, pd))
-
-	static function onLoadSlotSynced(SyncedFile file, PlayerData pd)
-		printLog(Loglevel.DEBUG, "synced")
-		let ref = lastRef[pd.id]
-		ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
-		ref.syncingDone = true
-		if file.size > 0
-			var compressedString = new BigString()
-			var buildString = file.read()
-			while buildString != null
-				compressedString.addString(buildString)
-				buildString = file.read()
-			printLog(Loglevel.DEBUG, "Reconstructed")
-			compressedString.debugPrint()
-			serializeOrigin = ref.pos.toVec2().toTile().toVec3()
-			decompress(compressedString, (PayloadCallback cb1) -> begin
-				printLog(Loglevel.DEBUG, "on finish decompress")
-				ref.parser.setInput(cb1.customData castTo BigString)
-				ref.parser.parse((PayloadCallback cb2) -> begin
-					printLog(Loglevel.DEBUG, "on finish parse")
-					if(ref.parser.output.hasKey(ENTITIES_KEY))
-						ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser) cb3 ->
-							ref.loadEntities(ref.listparser.outputList)
-					else if(ref.parser.output.hasKey(TILES_KEY))
-						ref.parser.output.getStringList(TILES_KEY, ref.listparser) cb ->
-							printLog(Loglevel.DEBUG, "load tiles1")
-							ref.loadTiles((cb.customData castTo JsonParser).outputList)
-				end)
-			end)
-		else
-			printLog(Loglevel.DEBUG, "load failed")
-			ref.ttag.tt..center(ref.pos, "|cffFFBD21load failed!", 10)
-			ref.actor.unpause()
+			let pd = pData[owner.getId()]
+			pd.p.loadData("EBR\\savedata\\dataSlot" + slotId.toString() + ".pld") (status, data) ->
+				switch status
+					case SUCCESS
+						printLog(Loglevel.DEBUG, "synced")
+						let ref = lastRef[pd.id]
+						ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
+						ref.syncingDone = true
+						var compressedString = new BigString()
+						for i = 0 to data.chunkCount
+							compressedString.addString(data.getChunk(i))
+						destroy data
+						printLog(Loglevel.DEBUG, "Reconstructed")
+						compressedString.debugPrint()
+						serializeOrigin = ref.pos.toVec2().toTile().toVec3()
+						decompress(compressedString, (PayloadCallback cb1) -> begin
+							printLog(Loglevel.DEBUG, "on finish decompress")
+							ref.parser.setInput(cb1.customData castTo BigString)
+							ref.parser.parse((PayloadCallback cb2) -> begin
+								printLog(Loglevel.DEBUG, "on finish parse")
+								if(ref.parser.output.hasKey(ENTITIES_KEY))
+									ref.parser.output.getStringList(ENTITIES_KEY, ref.listparser) cb3 ->
+										ref.loadEntities(ref.listparser.outputList)
+								else if(ref.parser.output.hasKey(TILES_KEY))
+									ref.parser.output.getStringList(TILES_KEY, ref.listparser) cb ->
+										printLog(Loglevel.DEBUG, "load tiles1")
+										ref.loadTiles((cb.customData castTo JsonParser).outputList)
+							end)
+						end)
+					default
+						Log.error("ERROR: " +  (status castTo int).toString())
 
 
 	LLIterator<BigSubString> itr
@@ -202,7 +198,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			actor..abortOrder()..pause()
 			ttag.tt..center(pos, "|cff0884CEsaving...", 10)
 			serializeOrigin = pos.toVec2().toTile().toVec3()
-			let itr = entities.staticItr()
+			let itr = entities.iterator()
 			currentSlotId = slotId
 			entString.reset()
 			entString.addString(JSON_OPEN_ARRAY.token)
@@ -210,15 +206,15 @@ public class MemoryAccessPedestal extends StaticBaseObject
 				var continue = true
 				if itr.hasNext()
 					let next = itr.next()
-					let json = next.serialize()
-					json.addToBigString(entString)
-					destroy json
-					if itr.hasNext()
-						entString.addString(JSON_SIGN_COMMA.token)
-
-					effects.get(next).destr()
-					effects.remove(next)
-					itr.remove()
+					if isValid(next)
+						let json = next.serialize()
+						json.addToBigString(entString)
+						destroy json
+						if itr.hasNext()
+							entString.addString(JSON_SIGN_COMMA.token)
+						effects.get(next).destr()
+						effects.remove(next)
+						itr.remove()
 				else
 					continue = false
 					entString.addString(JSON_CLOSE_ARRAY.token)
@@ -228,6 +224,9 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			end)
 		end)
 
+
+	function isValid(Serializable next) returns boolean
+		return next.typeId > 0 and (not (next instanceof Entity)) or (next instanceof UnitEntity and ((next castTo UnitEntity).actor.isAlive()))
 
 	function saveTileSeq()
 		Log.debug("Save tiles seq")
@@ -265,18 +264,16 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		printLog(Loglevel.DEBUG, "start compress")
 		compress(big) cb ->
 			let compressedData = cb.customData castTo BigString
-			if localPlayer == owner
-				let writer = new FileWriter("dataSlot" + currentSlotId.toString() + ".pld", false)
-				while compressedData.getLength() > BIG_SUBSTRING_LEN
-					writer.writeLine(compressedData.getString(0, BIG_SUBSTRING_LEN))
-					compressedData.startoffset += BIG_SUBSTRING_LEN
-				writer.writeLine(compressedData.getString(0))
-				writer.save() ->
-					ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
-					destroy big
-					tileMap.flush()
-					actor.unpause()
-					destroy writer
+			let cstring = new ChunkedString()
+			for i = 0 to (compressedData.getLength() div BIG_SUBSTRING_LEN)
+				let remain = min(BIG_SUBSTRING_LEN, compressedData.getLength() - i * BIG_SUBSTRING_LEN)
+				cstring.append(compressedData.getString(i * BIG_SUBSTRING_LEN, remain))
+			owner.saveData("EBR\\savedata\\dataSlot" + currentSlotId.toString() + ".pld", cstring)
+			destroy cstring
+			ttag.tt..center(pos, "|cffFFBD21save finished!", 10)
+			destroy big
+			tileMap.flush()
+			actor.unpause()
 
 	override function onCast()
 		super.onCast()
@@ -284,13 +281,12 @@ public class MemoryAccessPedestal extends StaticBaseObject
 		let tpos = EventData.getSpellTargetPos()
 		switch id
 			case SELECT_AOE_ID
-				forUnitsInRange(tpos, AOE_PICK_RANGE, (unit u) -> begin
+				forUnitsInRange(tpos, AOE_PICK_RANGE) u ->
 					if u != actor
 						if u.getEntity() != null
 							var ed = u.getEntity()
 							if ed.owner == owner
 								addObj(ed, false)
-				end)
 			case SELECT_SINGLE_ID
 				if GetSpellTargetUnit().getEntity().owner == owner
 					addObj(GetSpellTargetUnit().getEntity(), true)

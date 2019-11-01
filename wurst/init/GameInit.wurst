@@ -5,45 +5,42 @@ import PlayerData
 import JukeBox
 import ObjectIdGenerator
 import Preloader
+import ClosureTimers
+import PickSystem
+import Textures
 
 init
-	while preloadAbility(ABIL_ID_GEN.next())
+	preload()
 
-	while preloadUnit(UNIT_ID_GEN.next())
 	startEntityLoop()
-	getTimer().start(0.01, () -> initGame())
+	doAfter(0.01, () -> initGame())
 
-@compiletime function callGen()
-	callFunctionsWithAnnotation("@objectgen")
+function preload()
+	let abils = new IdGenerator('AM00')
+	while preloadAbility(abils.next())
+	destroy abils
+
+	let units = new IdGenerator('x000')
+	while preloadUnit(units.next())
+	destroy units
 
 function initGame()
 	printTimed("Initializing map..", 10.)
 	initPlayers()
-	Log.debug("players inited")
-	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, "ReplaceableTextures\\CameraMasks\\Black_mask.blp", 0, 0, 0, 0)
-	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), false, false)
+	CinematicFadeBJ(bj_CINEFADETYPE_FADEOUT, 0.00, Textures.black_mask, 0, 0, 0, 0)
+	CreateFogModifierRect(STAFF_PLAYER, FOG_OF_WAR_VISIBLE, playableMapRect, false, false)
 	VolumeGroupReset()
 	EndThematicMusic()
-	GetExpiredTimer().start(0.01, () -> initOne())
-
-function initOne()
-	Log.debug("init One")
-	callFunctionsWithAnnotation("@init1")
-	GetExpiredTimer().start(0.01, () -> initPartTwo())
-
-function initPartTwo()
-	Log.debug("init Two")
-	callFunctionsWithAnnotation("@init2")
-	GetExpiredTimer().start(0.01, () -> partThree())
+	doAfter(0.01, () -> partThree())
 
 function partThree()
-	Log.debug("init Three")
 	initStartmazes()
-	GetExpiredTimer().start(0.5, () -> syncInitial())
+	doAfter(0.5, () -> syncInitial())
 
 function syncInitial()
-	Log.debug("init Four")
 	checkPlayerLocalFiles()
-	GetExpiredTimer().release()
 	jukeBox.playNextMusic()
+	startPick()
 
+@compiletime function callGen()
+	callFunctionsWithAnnotation("@objectgen")

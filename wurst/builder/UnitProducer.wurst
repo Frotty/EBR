@@ -1,7 +1,6 @@
 package UnitProducer
 import BaseObject
 import EscaperKillers
-import initlater PlayerData
 import initlater InstantBuild
 import Preloader
 import ObjectTarget
@@ -120,10 +119,6 @@ init
 	preloadAbility(BOMBER)
 	preloadAbility(KNOCKBACK)
 	preloadAbility(FACELESS)
-
-@init2 function init_UnitProducer()
-	for pd from builderPlayers.staticItr()
-		new UnitProducer(hidden, pd.p)
 
 
 @objectgen function genUnitProducer()

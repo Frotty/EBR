@@ -13,6 +13,7 @@ import EscaperClasses
 import ClosureTimers
 import CodeManager
 import Playerfile
+import Players
 import PlayerMemoryData
 import SoundUtils
 import Assets
@@ -24,7 +25,7 @@ public PlayerData array pData
 public let allPlayers = new LinkedList<PlayerData>()
 public let escaperPlayers = new LinkedList<PlayerData>()
 public let builderPlayers = new LinkedList<PlayerData>()
-let questFailedSound = new SoundDefinition("Sound\\Interface\\QuestFailed.wav", false)
+let questFailedSound = new SoundDefinition(Sounds.questFailed, false)
 
 public function player.getData() returns PlayerData
 	return pData[this.getId()]
@@ -48,7 +49,6 @@ public class PlayerData
 	string 	name
 	string 	mbname
 	string 	icon 		= Icons.bTNSelectHeroOn
-
 	string 	rank 		= "Newbie"
 
 	Role role
@@ -56,6 +56,7 @@ public class PlayerData
 	Escaper escaper
 	Builder builder
 	TerrainModder array[4] tmods
+	UnitProducer prod
 
 	int XP = 40
 	effect lvlfx = null
@@ -68,7 +69,6 @@ public class PlayerData
 	real zCam = 1600.
 	var smooth = 10.
 
-	UnitProducer prod
 	RevivePointModifier revmod
 
 	Playerfile pfile = null
@@ -76,6 +76,7 @@ public class PlayerData
 	Selector selector = null
 
 	construct (player p)
+		pData[p.getId()] = this
 		this.p = p
 		id = p.getId()
 		name = p.getName()
@@ -83,10 +84,11 @@ public class PlayerData
 		hash = name.getHash().toString()
 		mbname = name
 
+		checkName()
+
 		var i = 0
 		while names[i] != null
-			if mbname.toLowerCase() == names[i].toLowerCase()
-				mbname = tags[i] + "|r" + p.getNameColored()
+
 			i++
 		mbname = p.getNameColored()
 		allPlayers.add(this)
@@ -97,10 +99,17 @@ public class PlayerData
 			role = Role.ESCAPER
 			escaperPlayers.add(this)
 
+
+	function checkName()
+		let cname = mbname.toLowerCase()
+		for i = 0 to names.length
+			if cname == names[i].toLowerCase()
+				mbname = tags[i] + "|r" + p.getNameColored()
+
 	function setMBRow(int row)
 		playerboard..setNewItem(row,0,mbname,icon)
-		..setNewItem(row,1, escaper == null ? "-" : escaper.deaths.toString(), null)
-		..setNewItem(row,2,rank, null)
+		..setNewItem(row, 1, escaper == null ? "-" : escaper.deaths.toString(), null)
+		..setNewItem(row, 2, rank, null)
 
 	function addXp(int amount, boolean time)
 		if localFilesEnabled and allPlayers.size() > 1 or title == Title.ADMIN
@@ -146,10 +155,10 @@ public class PlayerData
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			escaper.actor.addItemById('I002')
 
-		if pfile != null and pmdata != null and (lastSave+20 < minutes*60+seconds)
+		if pfile != null and pmdata != null and (lastSave + 20 < minutes * 60 + seconds)
 			lastSave = minutes * 60 + seconds
 			Log.debug("Playerfile saving")
-			savePlayerfile(this)
+			// savePlayerfile(this)
 
 
 	function validateAdmintoken()
@@ -207,6 +216,8 @@ public class PlayerData
 			destroy revmod
 		if tagfx != null
 			tagfx.destr()
+
+		pData[p.getId()] = null
 
 function rebuildBoard()
 	playerboard = new Board(allPlayers.size()+1,3)
@@ -266,22 +277,13 @@ public function startTestmode(PlayerData pd)
 		Log.debug("testmode terminate")
 		pd.escaper.terminate()
 		builderPlayers.add(pd)
-		var i = 0
-		var reg = regions[i]
-		while reg != null
-			reg.revealRegion(pd.p)
-			i++
-			reg = regions[i]
+		for i = 0 to 27
+			regions[i].revealRegion(pd.p)
 
-		Log.debug("testmode 1")
 		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
-		Log.debug("testmode 2")
 		pd.tmods[1] = new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
-		Log.debug("testmode 3")
 		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
-		Log.debug("testmode 4")
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
-		Log.debug("testmode 5")
 		pd.prod = new UnitProducer(hidden, pd.p)
 		var e1 = new HolyEscaper(currentRevivepoint.toVec3(), pd.p)
 		pd.escaper = e1
@@ -303,14 +305,11 @@ public function startTestmode(PlayerData pd)
 
 
 public function initPlayers()
-	for i = 0 to 11
-		if GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(players[i]) == MAP_CONTROL_USER
-			pData[i] = new PlayerData(players[i])
+	ALL_PLAYERS.forEach() p ->
+		new PlayerData(p)
 
-	EventListener.add(EVENT_PLAYER_LEAVE) ->
-		var p = GetTriggerPlayer()
-		var pd = pData[p.getId()]
-		destroy pd
+	onPlayerLeave() p ->
+		destroy p.getData()
 
 	doAfter(.1, () -> rebuildBoard())
 	doPeriodically(1., cb -> setTime())
@@ -320,10 +319,14 @@ public function initPlayers()
 		pd.tmods[1] = new TerrainModder(createUnit(pd.p, UNWALKABLE_ID, hidden, angle(0)))
 		pd.tmods[2] = new TerrainModder(createUnit(pd.p, SLIDEABLE_ICE_ID, hidden, angle(0)))
 		pd.tmods[3] = new TerrainModder(createUnit(pd.p, SLIDEABLE_UNC_ICE_ID, hidden, angle(0)))
+		pd.prod = new UnitProducer(hidden, pd.p)
 		pd.builder = new Builder(pd.p)
 		pd.builder.actor..addItemById('I001')
 		..addItemById('I002')..addItemById('I003')
 		pd.builder.regionCount = (17. / builderPlayers.size()).round()
+		for i = 0 to 27
+			regions[i].revealRegion(pd.p)
+
 
 public function checkPlayerLocalFiles()
 	checkLocalFiles()

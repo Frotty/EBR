@@ -89,5 +89,5 @@ function update()
 					destroy pod
 					pods[i] = null
 
-@init2 function init_Revive()
+init
 	CreateTimer().startPeriodic(TIMER_PERIOD, () -> update())
