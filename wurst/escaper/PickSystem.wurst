@@ -53,7 +53,6 @@ class EscaperDefinition
 	function createFor(PlayerData pd)
 		cb.create(pd)
 		ResetToGameCameraForPlayer(pd.p,0.5)
-		// pd.escaper.actor..addAbility(BLINK_ID)
 		if isBuilder(pd.p)
 			pd.escaper.actor..addAbility(BLINK_ID)..addAbility(CREATE_REV_MOD_ID)
 			pd.escaper.selectatrevive = false
@@ -67,8 +66,6 @@ class EscaperDefinition
 			printTimedToPlayer("	You are an |cff528CDEEscaper|r!", 20, pd.p)
 
 		pd.icon = mbicon
-		// Check for savefile#
-		// checkPlayerfile(pd)
 
 	function setCallback(EscaperClsr closure)
 		this.cb = closure

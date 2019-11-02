@@ -57,10 +57,10 @@ public class ThirdForestMaze extends Startmaze
 		new AirKiller(gg_unit_airk_0149)
 		gg_unit_airk_0149.issuePointOrder("patrol", vec2(-1025,-4565))
 
-		new Waypoint(gg_unit_wayp_0068)..setRallyPoint(gg_unit_wayp_0066.getPos()).delay = 1
-		new Waypoint(gg_unit_wayp_0066)..setRallyPoint(gg_unit_wayp_0099.getPos()).delay = 1
-		new Waypoint(gg_unit_wayp_0078)..setRallyPoint(gg_unit_wayp_0068.getPos()).delay = 1
-		new Waypoint(gg_unit_wayp_0099)..setRallyPoint(gg_unit_wayp_0078.getPos()).delay = 1
+		new Waypoint(gg_unit_wayp_0068)..setRallyPoint(gg_unit_wayp_0066.getPos()).delay.setVal(1)
+		new Waypoint(gg_unit_wayp_0066)..setRallyPoint(gg_unit_wayp_0099.getPos()).delay.setVal(1)
+		new Waypoint(gg_unit_wayp_0078)..setRallyPoint(gg_unit_wayp_0068.getPos()).delay.setVal(1)
+		new Waypoint(gg_unit_wayp_0099)..setRallyPoint(gg_unit_wayp_0078.getPos()).delay.setVal(1)
 		let vw = new Faceless(gg_unit_dims_0100)
 		doAfter(1.5, () -> vw.actor.issuePointOrder("move", gg_unit_wayp_0078.getPos()))
 		vw.invisDur.setVal(1)

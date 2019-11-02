@@ -130,7 +130,8 @@ public abstract class Escaper extends UnitEntity
 			else
 				if actor.isAliveTrick()
 					actor.damageTarget(actor, killer == null and not kmode == KillMode.FORCE ? 195 : 1000)
-			if not actor.isAliveTrick()
+
+			if alive and not actor.isAliveTrick()
 				alive = false
 				deaths++
 				manageRevive(this)

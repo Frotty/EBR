@@ -7,11 +7,11 @@ import WaypointObjects
 import ClosureTimers
 import HashSet
 
-constant INTERVAL = .25
+constant INCREMENT = .25
 constant EVENT_RADIUS = 32.
 
 public class Waypoint extends StaticBaseObject
-	real delay = 0.
+	let delay = new ConfigValue(0., INCREMENT, "Delay")
 	boolean wisps = true
 
 	HashSet<Waypoint> linked = null
@@ -60,30 +60,22 @@ public class Waypoint extends StaticBaseObject
 						orderLogicMove()
 						ready = false
 
-			else if delay < INTERVAL
+			else if delay.get() < INCREMENT
 				if data instanceof SetupObject and (data castTo SetupObject).setup != (data castTo SetupObject).actor
 					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
 				else
 					data.actor.issuePointOrder("move", rallyPos.toVec2())
 			else
-				doAfter(delay, () -> delayMove(data, rallyPos.toVec2()))
+				doAfter(delay.get(), () -> delayMove(data, rallyPos.toVec2()))
 
 	override function onCast()
 		super.onCast()
 		let id = GetSpellAbilityId()
 		switch id
 			case INCREASE_DELAY_ID
-				if delay < 5.
-					delay += INTERVAL
-					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10, 2., COLOR_WHITE, owner)
-				else
-					createFText(pos, vec2(0,0.05), "Maximum Delay", 10, 2., COLOR_WHITE, owner)
+				delay.increment(this, 5.)
 			case DECREASE_DELAY_ID
-				if delay >= INTERVAL
-					delay -= INTERVAL
-					createFText(pos, vec2(0,0.05), "Delay " + delay.toString(), 10, 2., COLOR_WHITE, owner)
-				else
-					createFText(pos, vec2(0,0.05), "Minimum Delay", 10, 2., COLOR_WHITE, owner)
+				delay.decrement(this, 0.)
 			case NO_WISPS_ID
 				if wisps
 					wisps = false
@@ -114,6 +106,11 @@ public class Waypoint extends StaticBaseObject
 						linked.add(twp)
 						twp.linked.add(this)
 						createFText(target.getPos(), vec2(0,0.08), "|cff0873C5Linked", 9., 1.75, COLOR_WHITE, owner)
+			case CLEAR_CONNECTION_ID
+				if linked != null
+					linked.forEach() waypoint ->
+						waypoint.linked.remove(this)
+					linked.clear()
 
 	static function delayMove(UnitEntity entity, vec2 pos)
 		if entity instanceof SetupObject

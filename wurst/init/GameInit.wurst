@@ -38,7 +38,7 @@ function partThree()
 	doAfter(0.5, () -> syncInitial())
 
 function syncInitial()
-	checkPlayerLocalFiles()
+	startChoose()
 	jukeBox.playNextMusic()
 	startPick()
 

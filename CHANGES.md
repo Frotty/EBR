@@ -1,16 +1,18 @@
-[0.92q]
-[*] Fixed Agario minigame movespeed reduction
-[*] Fixed cam lock being disabled after portal teleports and minigames
-[*]
+[0.92t]
+[*] Added new minigame Agario
 [*] Reworked some start mazes
-
-[0.92m]
 [*] Added two new cosmetic items
-[*] Added a new minigame
+[*] Added a -kick command for admins
+[*] Fixed M.A.P. maze save/load using the new natives
+[*] Fixed Waypoint clear not doing anything
+[*] Fixed cam lock being disabled after portal teleports and minigames
+[*] Fixed 'smode' command
+[*] Fixed escapers dying on unwalkable from just rotating
 [*] Fixed builder lounge teleporters not being removed when a builder leaves
+[*] Fixed certain deaths being counted twice
 [*] "Hold position" is now hidden from the command card to prevent hotkey collisions on french locale
 [*] Increased Knockbacker activation radius and reduced chances of tunneling
-[*] Fix 'smode' command
+[*] Many upstream fixes from the wurst standard library
 
 [0.92c]
 [*] Added a new minigame: Slide Arena (randomly generated slide challenge)

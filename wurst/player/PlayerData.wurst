@@ -11,8 +11,6 @@ import UnitProducer
 import RevivePointModifier
 import EscaperClasses
 import ClosureTimers
-import CodeManager
-import Playerfile
 import Players
 import PlayerMemoryData
 import SoundUtils
@@ -71,7 +69,6 @@ public class PlayerData
 
 	RevivePointModifier revmod
 
-	Playerfile pfile = null
 	PMData pmdata = null
 	Selector selector = null
 
@@ -154,11 +151,6 @@ public class PlayerData
 		if XP >= expBounds[3] and not UnitHasItemOfTypeBJ(escaper.actor, 'I002')
 			printTimedToPlayer("You have unlocked the |cffFFCC00jukebox|r!", 25, p)
 			escaper.actor.addItemById('I002')
-
-		if pfile != null and pmdata != null and (lastSave + 20 < minutes * 60 + seconds)
-			lastSave = minutes * 60 + seconds
-			Log.debug("Playerfile saving")
-			// savePlayerfile(this)
 
 
 	function validateAdmintoken()
@@ -327,6 +319,3 @@ public function initPlayers()
 		for i = 0 to 27
 			regions[i].revealRegion(pd.p)
 
-
-public function checkPlayerLocalFiles()
-	checkLocalFiles()
