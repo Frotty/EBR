@@ -183,8 +183,8 @@ public abstract class Escaper extends UnitEntity
 		// If the Entity is moving towards
 		e.scaleVel(surfaceFriction)
 		let rv = getRealVel()
-		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 16.75)
-		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 16.75)
+		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 16.50)
+		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 16.50)
 		var ttype1 = GetTerrainType(lpos.x, lpos.y)
 		var ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()
@@ -394,6 +394,7 @@ public abstract class Escaper extends UnitEntity
 				else
 					actor.setFacing(pos.angleTo2d(widgetPos)-(180).asAngleDegrees())
 
+
 	static function neutralDeath()
 		var escaper = GetTriggerUnit().getEntity() castTo Escaper
 		if GetKillingUnit() != null
@@ -431,7 +432,6 @@ public abstract class Escaper extends UnitEntity
 				slideVelocity = ZERO2
 				setVel(vel * 0.15)
 				flashEffect(Abilities.polyMorphTarget, pos)
-				Log.debug("Escaper Orb Terminate")
 				orb.terminate()
 		else if id == CREATE_REV_MOD_ID
 			revmod = new RevivePointModifier(pos.toVec2(), owner)

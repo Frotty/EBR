@@ -4,6 +4,7 @@
 [*] Added two new cosmetic items
 [*] Added a -kick command for admins
 [*] Fixed M.A.P. maze save/load using the new natives
+[*] Fixed item save/load
 [*] Fixed Waypoint clear not doing anything
 [*] Fixed cam lock being disabled after portal teleports and minigames
 [*] Fixed 'smode' command

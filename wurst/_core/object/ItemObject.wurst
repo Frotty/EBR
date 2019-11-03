@@ -11,6 +11,9 @@ class ItemEntityBridge extends UnitEntity
 		this.obj = obj
 		actor..addAbility(GHOST_VIS_ID)..setXY(pos)
 
+	override function serialize() returns Json
+		return obj.serialize()
+
 	ondestroy
 		obj.terminate()
 

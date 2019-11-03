@@ -12,6 +12,12 @@ public class Coin extends ItemObject
 	override function onPickup(UnitEntity holder)
 		terminate()
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, COIN_INDEX.toString()))
+		return json
+
+
 
 @objectgen function genCoin()
 	new UnitDefinition(COIN_DUMMY_ID, 'hfoo')

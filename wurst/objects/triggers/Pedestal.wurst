@@ -56,7 +56,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 			flashEffect(Abilities.healTarget, serializable.getPos())
 			if serializable instanceof ItemObject
 				let io = serializable castTo ItemObject
-				effects.put(serializable, io.actor.addEffect(Abilities.innerFireTarget, "overhead"))
+				effects.put(serializable, io.setup.actor.addEffect(Abilities.innerFireTarget, "overhead"))
 			else if serializable instanceof StaticSetupObject
 				let so = serializable castTo StaticSetupObject
 				effects.put(serializable, so.setup.addEffect(Abilities.innerFireTarget, "overhead"))

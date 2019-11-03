@@ -12,6 +12,11 @@ public class Tome extends ItemObject
 	override function onPickup(UnitEntity holder)
 		terminate()
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, TOME_INDEX.toString()))
+		return json
+
 
 @objectgen function genTome()
 	new UnitDefinition(TOME_DUMMY_ID, 'hfoo')

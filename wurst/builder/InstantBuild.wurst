@@ -34,6 +34,9 @@ import Faceless
 import public SerializeIds
 import Bomber
 import Wall
+import Coin
+import Boots
+import Tome
 
 public function isOrderBuildOrder(int o) returns boolean
 	int i = 1
@@ -176,6 +179,12 @@ public function newObjectFromId(player owner, vec2 tpos, int id) returns Entity
 			return new ObjectTarget(tpos, owner)
 		case TC_INDEX
 			return new TerrainChanger(tpos, owner)
+		case COIN_INDEX
+			return new Coin(tpos, owner)
+		case BOOTS_INDEX
+			return new Boots(tpos, owner)
+		case TOME_INDEX
+			return new Tome(tpos, owner)
 	return null
 
 public int array buildorders

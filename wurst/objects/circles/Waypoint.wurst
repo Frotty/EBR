@@ -109,7 +109,8 @@ public class Waypoint extends StaticBaseObject
 			case CLEAR_CONNECTION_ID
 				if linked != null
 					linked.forEach() waypoint ->
-						waypoint.linked.remove(this)
+						if waypoint != null
+							waypoint.linked.remove(this)
 					linked.clear()
 
 	static function delayMove(UnitEntity entity, vec2 pos)

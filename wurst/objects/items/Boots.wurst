@@ -24,6 +24,11 @@ public class Boots extends ItemObject
 
 	override function update()
 
+	override function serialize() returns Json
+		let json = super.serialize()
+		json..addProperty(new Property(KEY_TYPE, BOOTS_INDEX.toString()))
+		return json
+
 @objectgen function genTome()
 	new UnitDefinition(BOOTS_DUMMY_ID, 'hfoo')
 	..setAttacksEnabled(0)

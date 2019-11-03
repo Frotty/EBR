@@ -3,8 +3,6 @@ import BaseObject
 import EscaperKillers
 import Pointer
 import Knockbacker
-import Preloader
-
 
 constant INFO_UNIT_CREATOR_ID = compiletime(ABIL_ID_GEN.next())
 constant INCREASE_INTERVAL_ID = compiletime(ABIL_ID_GEN.next())
@@ -20,6 +18,10 @@ constant UTYPE_POINTER = compiletime(ABIL_ID_GEN.next())
 constant UTYPE_KNOCKER = compiletime(ABIL_ID_GEN.next())
 constant UTYPE_GLAIVE = compiletime(ABIL_ID_GEN.next())
 constant UTYPE_SPELLBOOK = compiletime(ABIL_ID_GEN.next())
+
+constant KEY_RTYPE = "r"
+constant KEY_SPAWN = "s"
+constant KEY_INTERVAL = "i"
 
 public enum TimerMode
 	FIXED
@@ -48,7 +50,7 @@ public class UnitCreator extends StaticBaseObject
 			if tmode == TimerMode.FIXED
 				timerreal = interval
 			else if tmode == TimerMode.RANDOM
-				timerreal = delays.pop() // GetRandomReal(0.5, interval)
+				timerreal = delays.pop()
 				if delays.isEmpty()
 					refreshDelays()
 		else
@@ -131,17 +133,19 @@ public class UnitCreator extends StaticBaseObject
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
+		..addProperty(new Property(KEY_RTYPE, (tmode castTo int).toString()))
+		..addProperty(new Property(KEY_SPAWN, (spawnUnitType).toRawCode()))
+		..addProperty(new Property(KEY_INTERVAL, (interval).toString()))
 		return json
+
+	override function deserialize(Json json)
+		super.deserialize(json)
+		tmode = json.getInt(KEY_RTYPE) castTo TimerMode
+		spawnUnitType = json.getString(KEY_SPAWN).getSingle().fromRawCode()
+		interval = json.getReal(KEY_INTERVAL)
 
 	ondestroy
 		destroy delays
-
-
-init
-	// Types
-	preloadAbility(UTYPE_BK, UTYPE_SK, UTYPE_BRK, UTYPE_POINTER, UTYPE_GLAIVE, UTYPE_TANK, UTYPE_SRK, UTYPE_KNOCKER)
-	// Abils
-	preloadAbility(TURN_OFF_ID, TURN_ON_ID, INCREASE_INTERVAL_ID, DECREASE_INTERVAL_ID, FIXED_ID, RANDOM_ID)
 
 
 @objectgen function genUnitCreator()

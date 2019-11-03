@@ -51,3 +51,6 @@ public constant HIGH_OBS_INDEX = 44
 public constant SMALL_LIGHT_INDEX = 45
 public constant MEDIUM_LIGHT_INDEX = 46
 public constant LARGE_LIGHT_INDEX = 47
+public constant COIN_INDEX = 48
+public constant TOME_INDEX = 49
+public constant BOOTS_INDEX = 50
