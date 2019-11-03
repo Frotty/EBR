@@ -133,16 +133,7 @@ public class UnitCreator extends StaticBaseObject
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
-		..addProperty(new Property(KEY_RTYPE, (tmode castTo int).toString()))
-		..addProperty(new Property(KEY_SPAWN, (spawnUnitType).toRawCode()))
-		..addProperty(new Property(KEY_INTERVAL, (interval).toString()))
 		return json
-
-	override function deserialize(Json json)
-		super.deserialize(json)
-		tmode = json.getInt(KEY_RTYPE) castTo TimerMode
-		spawnUnitType = json.getString(KEY_SPAWN).getSingle().fromRawCode()
-		interval = json.getReal(KEY_INTERVAL)
 
 	ondestroy
 		destroy delays
