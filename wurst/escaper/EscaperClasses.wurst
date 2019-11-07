@@ -4,7 +4,7 @@ import FxEntity
 import Escaper
 import Assets
 import Key
-import Obstacle
+import EscaperSensor
 import EscaperObjects
 
 constant REINCARNATION_ID = 'A02X'
@@ -202,7 +202,7 @@ public class StrongEscaper extends Escaper
 				shieldeffect.destr()
 
 	override function kill(UnitEntity entity, KillMode kmode)
-		if not invulnerable or entity == null or entity instanceof Obstacle or kmode == KillMode.FORCE
+		if not invulnerable or entity == null or entity instanceof StaticEscaperSensorSetup or kmode == KillMode.FORCE
 			super.kill(null, KillMode.FORCE)
 		else
 			addEffect(Abilities.spellShieldCaster, pos).destr()

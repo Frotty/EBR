@@ -44,7 +44,7 @@ public class Waypoint extends StaticBaseObject
 			var data = e castTo UnitEntity
 			if not wisps and data instanceof ObjectTarget
 				return
-			if linked != null
+			if linked != null and not linked.isEmpty()
 				if not ready
 					ready = true
 					var allReady = true

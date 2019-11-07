@@ -1,0 +1,4 @@
+package OrderStringFactory_config
+
+@config function isOrderBanned(string order) returns boolean
+	return order == "waterelemental" or order == "roar"

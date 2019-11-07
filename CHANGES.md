@@ -1,4 +1,9 @@
-[0.92t]
+[0.92v]
+[*] Fixed previously linked waypoints being defunt after unlinking
+[*] Fixed order collisions between movespeed modifiers and other abilities
+[*] Fixed static objects built on a teleporter being teleported
+
+[0.92u]
 [*] Added new minigame Agario
 [*] Reworked some start mazes
 [*] Added two new cosmetic items

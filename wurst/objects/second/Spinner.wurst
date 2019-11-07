@@ -1,6 +1,5 @@
 package Spinner
-import SetupObject
-import Obstacle
+import EscaperSensor
 import SpinnerObjects
 
 
@@ -59,7 +58,7 @@ public class Spinner extends SetupObject
 			node = node.next
 
 	function checkObj(Entity e)
-		if e instanceof SetupObject and not e instanceof Obstacle
+		if e instanceof SetupObject and not e instanceof StaticEscaperSensorSetup
 			var dobj = e castTo SetupObject
 			boolean isNew = true
 			var node = firstNode

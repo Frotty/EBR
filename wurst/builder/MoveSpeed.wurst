@@ -4,7 +4,7 @@ import SetupObject
 public constant INC_SPEED_ID = 'A01E'
 public constant DEC_SPEED_ID = 'A01H'
 
-function onChanceSpeed()
+function onChangeSpeed()
 	var id = GetSpellAbilityId()
 	var caster = GetSpellAbilityUnit()
 	var data = caster.getEntity()
@@ -23,4 +23,6 @@ function onChanceSpeed()
 				createFText(data.getPos(), vec2(0, 0.05), (speed-25.).toString(), 10, 2., colorA(255,255,255,0), ddata.owner)
 
 init
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChanceSpeed())
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> onChangeSpeed())
+
+@compiletime function genAbils()

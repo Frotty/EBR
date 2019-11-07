@@ -8,57 +8,50 @@ constant EVENT_RADIUS_HIGH	= 52.
 constant EVENT_HEIGHT_HIGH	= 256.
 constant EVENT_RADIUS_V	= 256.
 
-public class Obstacle extends EscaperSensorSetup
-	construct(unit existing, real radius, real height)
-		super(existing, radius, height)
-
-	construct(vec2 pos, player owner, int id, real radius, real height)
-		super(pos.toVec3(), owner, id, GetRandomReal(0,360).asAngleDegrees(), radius, height)
-
-public class HighObstacle extends Obstacle
+public class HighObstacle extends StaticEscaperSensorSetup
 
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
 
 	construct(vec2 pos, player owner)
-		super(pos, owner, getRegionData(pos).getTypeSet().highObstacleId, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
+		super(pos.withTerrainZ(), owner, getRegionData(pos).getTypeSet().highObstacleId, EVENT_RADIUS_HIGH, EVENT_HEIGHT_HIGH)
 
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, HIGH_OBS_INDEX.toString()))
 		return json
 
-public class SmallObstacle extends Obstacle
+public class SmallObstacle extends StaticEscaperSensorSetup
 
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
 	construct(vec2 pos, player owner)
-		super(pos, owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
+		super(pos.withTerrainZ(), owner, getRegionData(pos).getTypeSet().smallObstacleId, EVENT_RADIUS_SMALL, EVENT_RADIUS_SMALL)
 
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, SMALLOBS_INDEX.toString()))
 		return json
 
-public class BigObstacle extends Obstacle
+public class BigObstacle extends StaticEscaperSensorSetup
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_BIG, EVENT_RADIUS_BIG)
 
 	construct(vec2 pos, player owner)
-		super(pos, owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG, EVENT_RADIUS_BIG)
+		super(pos.withTerrainZ(), owner, getRegionData(pos).getTypeSet().bigObstacleId, EVENT_RADIUS_BIG, EVENT_RADIUS_BIG)
 
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, BIGOBS_INDEX.toString()))
 		return json
 
-public class VolcanoObstacle extends Obstacle
+public class VolcanoObstacle extends StaticEscaperSensorSetup
 	construct(unit existing)
 		super(existing, EVENT_RADIUS_V, EVENT_RADIUS_V)
 
 	construct(vec2 pos, player owner)
-		super(pos, owner, VOLCANO_ID, EVENT_RADIUS_V, EVENT_RADIUS_V)
+		super(pos.withTerrainZ(), owner, VOLCANO_ID, EVENT_RADIUS_V, EVENT_RADIUS_V)
 
 	override function serialize() returns Json
 		let json = super.serialize()
