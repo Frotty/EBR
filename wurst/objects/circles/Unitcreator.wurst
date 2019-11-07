@@ -133,7 +133,11 @@ public class UnitCreator extends StaticBaseObject
 	override function serialize() returns Json
 		let json = super.serialize()
 		json..addProperty(new Property(KEY_TYPE, UNITCREATOR_INDEX.toString()))
+		json..addProperty(new Property(KEY_SPAWN, spawnUnitType.toString()))
 		return json
+
+	override function deserialize(Json json)
+		spawnUnitType = json.getInt(KEY_SPAWN)
 
 	ondestroy
 		destroy delays
