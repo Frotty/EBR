@@ -8,7 +8,7 @@ buildMapData:
   fileName: Escape Builder[R] 0.92v
   author: Frotty
   players:
-  - id: -1
+  - id: 0
     race: HUMAN
     fixedStartLoc: true
   - id: 1
