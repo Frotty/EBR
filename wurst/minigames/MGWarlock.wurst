@@ -1,0 +1,131 @@
+package MGWarlock
+import Minigame
+import PlayerData
+import Assets
+import ChannelAbilityPreset
+import Projectile
+import ReviveManager
+import Execute
+import DummyDamage
+
+constant ARENA_POS = vec2(3200, 7500)
+
+public class MGWarlock extends Minigame
+	static constant warlocks = new LinkedList<Warlock>()
+
+	override function getGameRect() returns rect
+		return gg_rct_warlockgamearea
+
+	override function getCamBounds() returns rect
+		return gg_rct_warlockgamebounds
+
+	override function onBegin()
+		for pd in escaperPlayers
+			if pd.escaper != null
+				if not pd.escaper.alive
+					forceRevive(pd.escaper)
+				printTimedToPlayer("Be the last warlock standing!", 15., pd.p)
+				warlocks.add(new Warlock(ARENA_POS, pd.escaper))
+
+	override function onEnd()
+		execute() ->
+			for warlock in warlocks
+				if warlock != null and not warlock.done
+					warlock.terminate()
+			warlocks.clear()
+
+	override function getStartPosition() returns vec2
+		return getGameRect().getCenter()
+
+	override function getName() returns string
+		return "|cff3322e2Spacey Adventure"
+
+constant minigame = new MGWarlock()
+
+// init
+// 	minigames.add(minigame)
+
+constant WARLOCK_ID = compiletime(UNIT_ID_GEN.next())
+
+class ShipProjectile extends Projectile
+	Warlock caster
+
+	construct(Warlock caster)
+		super(caster.getPos().toVec2().polarOffset(caster.actor.getFacingAngle(), 16).withZ(64), 16., caster.owner, caster.actor.getFacingAngle(), Abilities.faerieDragonMissile)
+		fx.setColor((owner.getColor().toColor()).withAlpha(255))
+		setSpeed(8)
+		fx.setScale(0.75)
+		vel += caster.vel
+		this.caster = caster
+
+	override function update()
+		super.update()
+		if not gg_rct_spaceygamearea.contains(pos.toVec2())
+			terminate()
+
+	ondestroy
+
+public class Warlock extends UnitEntity
+	Escaper mounter
+
+	construct(vec2 pos, Escaper mounter)
+		super(createUnit(mounter.owner, WARLOCK_ID, pos, (90).fromDeg()))
+		this.mounter = mounter
+		this.mounter.alive = false
+		mounter.actor..pause()..hide()
+		setPos(this.pos+vec3(0,0,32))
+		sleeps = false
+		mounter.owner.selectSingle(actor)
+
+	function shoot()
+
+	override function update()
+		super.update()
+		mounter.owner.selectSingle(actor)
+		if getPos().toVec2().getTerrainType() == 1147958883
+			new DummyDamage()..target(actor)..amount(0.5).apply(true)
+			if not actor.isAliveTrick()
+				mounter.kill(null, KillMode.FORCE)
+
+	ondestroy
+		if mounter != null and not mounter.done
+			mounter.alive = true
+			if mounter.actor.isAlive()
+				mounter.actor..unpause()..show()
+
+public class Fireball extends Projectile
+
+	construct(vec2 position, vec2 velocity)
+		super(position.withZ(48), 46., STAFF_PLAYER, velocity.getAngle(), Abilities.fireBallMissile)
+
+	override function update()
+		let tpos = pos + vel*6.
+		if tpos.x < gg_rct_spaceygamearea.getMinX()
+			vel.x = -vel.x
+			vel *= 0.95
+		else if tpos.x > gg_rct_spaceygamearea.getMaxX()
+			vel.x = -vel.x
+			vel *= 0.95
+		if tpos.y < gg_rct_spaceygamearea.getMinY()
+			vel.y = -vel.y
+			vel *= 0.95
+		else if tpos.y > gg_rct_spaceygamearea.getMaxY()
+			vel.y = -vel.y
+			vel *= 0.95
+
+		pos += vel
+		fx.setXYAngle(vel.toVec2().getAngle())
+		super.update()
+
+	ondestroy
+
+@objectgen function genObjs()
+	new UnitDefinition(WARLOCK_ID, UnitIds.war2warlock)
+		..setName("Warlock")
+		..setNormalAbilities("")
+		..setHitPointsMaximumBase(100)
+		..setManaMaximum(10)
+		..setCollisionSize(0)
+		..setScalingValue(1.0)
+		..setAttacksEnabled(0)
+		..setSpeedBase(255)
