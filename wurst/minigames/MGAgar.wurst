@@ -51,7 +51,7 @@ public class MGAgar extends Minigame
 					let adata = map.get(pd.escaper)
 					for pd2 in escaperPlayers
 						let bdata = map.get(pd2.escaper)
-						if pd2.escaper.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 4 * adata.size and adata.size > bdata.size + 1
+						if pd2.escaper.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 6 * adata.size and adata.size > bdata.size + 1
 							adata.size += bdata.size
 							pd2.escaper.alive = false
 							pd2.escaper.actor..pause()..hide()
@@ -64,12 +64,12 @@ public class MGAgar extends Minigame
 								doAfter(2., () -> reset())
 					let itr = flist.staticItr()
 					for fe from itr
-						if not fe.done and fe.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 4 * adata.size
+						if not fe.done and fe.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 6 * adata.size
 							fe.terminate()
 							itr.remove()
 							adata.size += 0.2
 					pd.escaper.actor.setScale(0.2 + 1 * adata.size)
-					pd.escaper.actor.setMoveSpeed(max(50, 235 - 10 * adata.size))
+					pd.escaper.actor.setMoveSpeed(max(75, 235 - 10 * adata.size))
 
 
 	override function onEnd()
