@@ -129,11 +129,11 @@ function parseCommand(string str)
 		case "ship"
 			new Spaceship(pd.escaper.getPos().toVec2(), pd.escaper)
 		case "kick"
-			var name = args.get(1)
+			var name = args.get(1).toLowerCase()
 			if name.length() > 1
 				for pl in allPlayers
-					if pl.name.startsWith(name) and not pl.title == Title.ADMIN
-						CustomDefeatBJ(pl.p, "You have been kicked.")
+					if pl.name.toLowerCase().startsWith(name) and not pl.title == Title.ADMIN
+						RemovePlayer(pl.p, PLAYER_GAME_RESULT_DEFEAT)
 						return
 		default
 			if not (cstr.startsWith("st") or cstr.startsWith("sht") or cstr.startsWith("sc") or cstr.startsWith("sa") or cstr.startsWith("ht"))
