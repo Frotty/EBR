@@ -41,7 +41,7 @@ public class MGAgar extends Minigame
 				pd.escaper.actor.setScale(0.2)
 				rdata.revealRegion(pd.p)
 
-		cb = doPeriodicallyCounted(0.25, 9999) (cb) ->
+		cb = doPeriodicallyCounted(0.2, 9999) (cb) ->
 			if cb.getCount() mod 11 == 0
 				flist.add(new FoodEntity())
 			if cb.getCount() mod 7 == 0
@@ -55,6 +55,13 @@ public class MGAgar extends Minigame
 							adata.size += bdata.size
 							pd2.escaper.alive = false
 							pd2.escaper.actor..pause()..hide()
+							map.remove(pd2.escaper)
+							if map.size() == 1
+								for pdi from escaperPlayers.staticItr()
+									if pdi.escaper != null
+										pdi.escaper.getCurrentRegion().hideRegion(pdi.p)
+									printTimedToPlayer(pd.p.getName() + "has won!", 10, pdi.p)
+								doAfter(2., () -> reset())
 					let itr = flist.staticItr()
 					for fe from itr
 						if not fe.done and fe.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 4 * adata.size
