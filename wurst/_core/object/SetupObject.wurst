@@ -113,7 +113,7 @@ public abstract class StaticSetupObject extends UnitEntity
 		super(u)
 		deactivate()
 		actor.addAbility(LOCUST_ID)
-		setup..addAbility(GHOST_INVIS_ID)
+		setup..addAbility(GHOST_INVIS_ID)..addAbility(REMOVE_OBJECT_ID)
 		..setVertexColor(colorA(255, 255, 255, 155))
 		this.setup = setup
 		if radius > 0. // a few Objects like Spinner dont have inRange Events, we dont want to create unused triggers

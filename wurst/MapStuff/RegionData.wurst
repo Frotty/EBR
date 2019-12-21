@@ -183,7 +183,7 @@ public class RegionData
 		if data != null
 			if data instanceof Escaper
 				var edata = data castTo Escaper
-				if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or edata.getPos().z > 10
+				if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or edata.getRealVel().toVec2().lengthSq() > 1
 					edata.setPos(edata.getPos()-edata.getRealVel())
 					edata.stop()
 					edata.kill(null)

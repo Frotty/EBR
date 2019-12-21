@@ -167,7 +167,7 @@ public abstract class Escaper extends UnitEntity
 			vel.z = 0.
 			if GetTerrainType(pos.x, pos.y) == this.getCurrentRegion().getTypeSet().unwalkableId
 				actor.damageTarget(actor, 1000)
-				kill(null)
+				kill(null, KillMode.UNWALKABLE)
 		actor.setPropWindow(60 .fromDeg())
 
 	override function onEscapeGround()
