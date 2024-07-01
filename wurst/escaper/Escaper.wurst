@@ -351,7 +351,7 @@ public abstract class Escaper extends UnitEntity
 			actor.removeAbility(currentReg.specialAbil)
 			if newReg.specialAbil > 0
 				actor.addAbility(newReg.specialAbil)
-				if isEscaper(actor.getOwner())
+				if isEscaperPlayer(actor.getOwner())
 					printTimedToPlayer("|cffFFCC00>> |rYou were granted a |cff0884BDspecial ability |rin this region |r(use with hotkey |cffFFCC00T|r)", 10, actor.getOwner())
 			else
 				actor.removeAbility(JUMP_SPELL)

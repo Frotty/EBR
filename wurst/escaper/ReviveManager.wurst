@@ -37,7 +37,7 @@ public function changeRevMode(ReviveMode rMode)
 	update()
 
 public function manageRevive(Escaper e)
-	if isBuilder(e.owner)
+	if isBuilderPlayer(e.owner)
 		manageTimedRevive(e, TIMER_PERIOD)
 	switch revMode
 		case TIMED

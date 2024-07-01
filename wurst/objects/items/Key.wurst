@@ -37,7 +37,7 @@ public class Key extends ItemObject
 			returnSfx = addEffect("XTex" + (this.col castTo int).toString() + ".mdx", pos)
 
 	override function onPickup(UnitEntity holder)
-		if isEscaper(holder.owner) or this.getCurrentRegion().getPermission(holder.owner) != Permission.GUEST
+		if isEscaperPlayer(holder.owner) or this.getCurrentRegion().getPermission(holder.owner) != Permission.GUEST
 			var count = 0
 			for itm in holder.actor.inventory()
 				if itm.getEntity() == this

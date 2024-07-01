@@ -57,7 +57,7 @@ public class Teleporter extends StaticBaseObject
 					addEffect(EFFECT_STRING, rallyPos).destr()
 					if not (e castTo Escaper).camlock
 						e.owner.panCameraToTimed(rallyPos, 0.03)
-		if e instanceof Escaper and isEscaper(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_OBJECT_ID)
+		if e instanceof Escaper and isEscaperPlayer(e.owner) and obj.owner == STAFF_PLAYER and not obj.actor.hasAbility(REMOVE_OBJECT_ID)
 			Log.debug("Teleport term")
 			obj.terminate()
 

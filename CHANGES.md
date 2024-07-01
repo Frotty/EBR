@@ -1,8 +1,9 @@
-[0.92v]
+[0.92x]
 [*] Save unit type for unitcreator save/load
-[*] Fixed previously linked waypoints being defunt after unlinking
+[*] Fixed previously linked waypoints being defunct after unlinking
 [*] Fixed order collisions between movespeed modifiers and other abilities
 [*] Fixed static objects built on a teleporter being teleported
+[*] Fixed lobby revivepoint issues
 
 [0.92u]
 [*] Added new minigame Agario

@@ -30,8 +30,9 @@ public class RevivePoint extends StaticSetupObject
 		if tile.hasModifier(TileModifier.RESERVED)
 			terminate()
 		else
-			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
 			tile.addModifier(TileModifier.RESERVED)
+			if owner != STAFF_PLAYER
+				tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
 
 	function reach(Escaper reacher)
 		Log.debug("on reach")
@@ -85,7 +86,7 @@ public class RevivePoint extends StaticSetupObject
 	static function onReach()
 		let source = GetTriggeringTrigger().getSource()
 		let target = GetTriggerUnit()
-		if(isEscaper(target.getOwner()) and target.getEntity() instanceof Escaper)
+		if(isEscaperPlayer(target.getOwner()) and target.getEntity() instanceof Escaper)
 			(source.getEntity() castTo RevivePoint).reach(target.getEntity() castTo Escaper)
 
 	static function filter() returns boolean

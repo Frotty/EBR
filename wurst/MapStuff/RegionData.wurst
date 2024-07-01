@@ -68,7 +68,7 @@ class FogData
 	construct(player p, rect r)
 		this.r = r
 		this.p = p
-		visible = isBuilder(p)
+		visible = isBuilderPlayer(p)
 		if visible
 			changeFog(FOG_OF_WAR_VISIBLE)
 		else
@@ -183,12 +183,12 @@ public class RegionData
 		if data != null
 			if data instanceof Escaper
 				let edata = data castTo Escaper
-				if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or edata.getRealVel().toVec2().lengthSq() > 1
+				if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet()
 					edata.setPos(edata.getPos()-edata.getRealVel())
 					edata.stop()
 					edata.kill(null)
 					edata.setCurrentRegion()
-				else if isEscaper(data.owner)
+				else if isEscaperPlayer(data.owner)
 					rdata.revealRegion(data.owner)
 					edata.updateRegionData()
 			else

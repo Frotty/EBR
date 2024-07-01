@@ -96,7 +96,7 @@ public class SetupBox extends UnitEntity
 			case ALLOW_ID
 				let u = GetSpellTargetUnit()
 				let p = u.getOwner()
-				if isBuilder(p) and p != owner
+				if isBuilderPlayer(p) and p != owner
 					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
 					if rdata.canBuild(p) and not pData[p.getId()].title == Title.ADMIN
 						rdata.disallow(p)

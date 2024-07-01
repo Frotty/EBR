@@ -33,7 +33,7 @@ public class LobbyTeleporter extends StaticBaseObject
 
 	override function slowUpdate()
 		super.slowUpdate()
-		if owner != STAFF_PLAYER and isBuilder(owner) and not owner.isIngame()
+		if owner != STAFF_PLAYER and isBuilderPlayer(owner) and not owner.isIngame()
 			terminate()
 
 	static function checkVote()
@@ -41,7 +41,7 @@ public class LobbyTeleporter extends StaticBaseObject
 		let u = GetTriggerUnit()
 		let e = u.getEntity()
 		let obj = source.getEntity() castTo LobbyTeleporter
-		if obj.ready and e instanceof Escaper and isEscaper(e.owner)
+		if obj.ready and e instanceof Escaper and isEscaperPlayer(e.owner)
 			obj.check(e castTo Escaper)
 
 	function check(Escaper e)
@@ -52,7 +52,7 @@ public class LobbyTeleporter extends StaticBaseObject
 		if votes[e.owner.getId()]
 			currentPlus++
 			if currentPlus >= votesNeeded
-				if startmaze or (isEscaper(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_OBJECT_ID))
+				if startmaze or (isEscaperPlayer(e.owner) and owner == STAFF_PLAYER and not actor.hasAbility(REMOVE_OBJECT_ID))
 					teleport(e)
 					terminate()
 					return

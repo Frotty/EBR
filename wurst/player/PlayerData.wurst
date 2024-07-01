@@ -184,13 +184,13 @@ public class PlayerData
 				tmods[i].legit = true
 				tmods[i].terminate()
 		allPlayers.remove(this)
-		if isBuilder(p)
+		if isBuilderPlayer(p)
 			builderPlayers.remove(this)
 		else
 			escaperPlayers.remove(this)
 
 		// Give remaining builders control
-		if not builderPlayers.isEmpty() and isBuilder(p)
+		if not builderPlayers.isEmpty() and isBuilderPlayer(p)
 			if builder != null
 				Log.debug("isEmpty Terminate")
 				builder.terminate()

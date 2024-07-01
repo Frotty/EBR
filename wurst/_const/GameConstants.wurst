@@ -10,10 +10,10 @@ public constant string MAP_VER = "EBR v0.92"
 
 public constant STAFF_PLAYER = players[PLAYER_NEUTRAL_PASSIVE]
 
-public function isBuilder(player p) returns boolean
+public function isBuilderPlayer(player p) returns boolean
 	return pData[p.getId()].role == Role.BUILDER
 
-public function isEscaper(player p) returns boolean
+public function isEscaperPlayer(player p) returns boolean
 	return pData[p.getId()].role == Role.ESCAPER
 
 public constant names = ["Frotty", "FrottyZ", "Feuerblume", "|cff9C94E6[Tester]", "jkkopp",
