@@ -1,4 +1,4 @@
-[![Build Status](http://peeeq.de/hudson/job/EBR/badge/icon)](http://peeeq.de/hudson/job/EBR/) 
+[![Build Status](https://grill.wurstlang.org/hudson/buildStatus/icon?job=EBR)](https://grill.wurstlang.org/hudson/job/EBR/)
 # Escape Builder Reloaded
 Escape Builder Reloaded is a warcraft 3 custom map.
 
