@@ -100,4 +100,4 @@ public class MGSlide extends Minigame
 		return "|cff567eecSlide Fun\n\n|r >> |cff8cbfddGet to the other side in 12 seconds!"
 
 init
-	minigames.add(new MGSlide())
+	// minigames.add(new MGSlide())

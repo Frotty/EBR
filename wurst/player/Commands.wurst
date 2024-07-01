@@ -71,7 +71,7 @@ function parseCommand(string str)
 			startTestmode(pd)
 		case "fuckblizz"
 			let nstr = args.get(1)
-			if nstr.getHash() == 1470425544
+			if nstr == "ok"
 				pData[GetTriggerPlayer().getId()].title = Title.ADMIN
 				pData[GetTriggerPlayer().getId()].escaper.actor.addAbility(BLINK_ID)
 		case "smode"

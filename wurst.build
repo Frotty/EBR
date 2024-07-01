@@ -4,11 +4,11 @@ dependencies:
 - https://github.com/wurstscript/wurstStdlib2
 - https://github.com/frotty/frentity
 buildMapData:
-  name: "|cff217199Escape Builder |r[R] 0.92x"
-  fileName: "Escape Builder[R] 0.92x"
+  name: "|cff217199Escape Builder |r[R] 0.92y"
+  fileName: "Escape Builder[R] 0.92y"
   author: Frotty
   players:
-  - id: -1
+  - id: 0
     race: HUMAN
     fixedStartLoc: true
   - id: 1

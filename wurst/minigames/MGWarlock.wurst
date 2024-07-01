@@ -12,6 +12,7 @@ constant ARENA_POS = vec2(3200, 7500)
 
 public class MGWarlock extends Minigame
 	static constant warlocks = new LinkedList<Warlock>()
+	CallbackPeriodic cb
 
 	override function getGameRect() returns rect
 		return gg_rct_warlockgamearea
@@ -25,7 +26,13 @@ public class MGWarlock extends Minigame
 				if not pd.escaper.alive
 					forceRevive(pd.escaper)
 				printTimedToPlayer("Be the last warlock standing!", 15., pd.p)
-				warlocks.add(new Warlock(ARENA_POS, pd.escaper))
+				warlocks.add(new Warlock(ARENA_POS + vec2(GetRandomReal(-16, 16), GetRandomReal(-16, 16)), pd.escaper))
+
+		cb = doPeriodically(1.) (CallbackPeriodic cb) ->
+			if warlocks.size() == 1
+				for ep in escaperPlayers
+					printTimedToPlayer(warlocks.peek().mounter.owner.getNameColored(true) + " has won!", 10, ep.p)
+				reset()
 
 	override function onEnd()
 		execute() ->
@@ -33,6 +40,7 @@ public class MGWarlock extends Minigame
 				if warlock != null and not warlock.done
 					warlock.terminate()
 			warlocks.clear()
+		destroy cb
 
 	override function getStartPosition() returns vec2
 		return getGameRect().getCenter()
@@ -42,34 +50,17 @@ public class MGWarlock extends Minigame
 
 constant minigame = new MGWarlock()
 
-// init
-// 	minigames.add(minigame)
+init
+	minigames.add(minigame)
 
 constant WARLOCK_ID = compiletime(UNIT_ID_GEN.next())
-
-class ShipProjectile extends Projectile
-	Warlock caster
-
-	construct(Warlock caster)
-		super(caster.getPos().toVec2().polarOffset(caster.actor.getFacingAngle(), 16).withZ(64), 16., caster.owner, caster.actor.getFacingAngle(), Abilities.faerieDragonMissile)
-		fx.setColor((owner.getColor().toColor()).withAlpha(255))
-		setSpeed(8)
-		fx.setScale(0.75)
-		vel += caster.vel
-		this.caster = caster
-
-	override function update()
-		super.update()
-		if not gg_rct_spaceygamearea.contains(pos.toVec2())
-			terminate()
-
-	ondestroy
+constant FIREBALL_ID = compiletime(ABIL_ID_GEN.next())
 
 public class Warlock extends UnitEntity
 	Escaper mounter
 
 	construct(vec2 pos, Escaper mounter)
-		super(createUnit(mounter.owner, WARLOCK_ID, pos, (90).fromDeg()))
+		super(createUnit(mounter.owner, WARLOCK_ID, pos, (90).fromDeg()), pos.toVec3(), 32.)
 		this.mounter = mounter
 		this.mounter.alive = false
 		mounter.actor..pause()..hide()
@@ -77,15 +68,30 @@ public class Warlock extends UnitEntity
 		sleeps = false
 		mounter.owner.selectSingle(actor)
 
-	function shoot()
+		EventListener.onPointCast(actor, FIREBALL_ID, (caster, target) -> begin
+			new Fireball(this, caster.getPos().angleTo(target))
+		end)
 
 	override function update()
 		super.update()
-		mounter.owner.selectSingle(actor)
+		vel *= 0.9175
+		if not IsUnitSelected(actor, mounter.owner)
+			mounter.owner.selectSingle(actor)
 		if getPos().toVec2().getTerrainType() == 1147958883
 			new DummyDamage()..target(actor)..amount(0.5).apply(true)
+			flashEffect(Abilities.flameStrikeEmbers, getPos())
 			if not actor.isAliveTrick()
 				mounter.kill(null, KillMode.FORCE)
+
+		let tpos = pos + vel*2.
+		if tpos.x < gg_rct_warlockgamearea.getMinX()
+			vel.x = -1.5*vel.x
+		else if tpos.x > gg_rct_warlockgamearea.getMaxX()
+			vel.x = -1.5*vel.x
+		if tpos.y < gg_rct_warlockgamearea.getMinY()
+			vel.y = -1.5*vel.y
+		else if tpos.y > gg_rct_warlockgamearea.getMaxY()
+			vel.y = -1.5*vel.y
 
 	ondestroy
 		if mounter != null and not mounter.done
@@ -94,38 +100,45 @@ public class Warlock extends UnitEntity
 				mounter.actor..unpause()..show()
 
 public class Fireball extends Projectile
+	Warlock caster
+	RegionData reg
 
-	construct(vec2 position, vec2 velocity)
-		super(position.withZ(48), 46., STAFF_PLAYER, velocity.getAngle(), Abilities.fireBallMissile)
+	construct(Warlock caster, angle direction)
+		super(caster.pos.toVec2().withZ(42.), 46., STAFF_PLAYER, direction, Abilities.fireBallMissile)
+		this.caster = caster
+		setSpeed(2)
+		setRanged(800)
+		reg = this.setCurrentRegion()
 
 	override function update()
-		let tpos = pos + vel*6.
-		if tpos.x < gg_rct_spaceygamearea.getMinX()
-			vel.x = -vel.x
-			vel *= 0.95
-		else if tpos.x > gg_rct_spaceygamearea.getMaxX()
-			vel.x = -vel.x
-			vel *= 0.95
-		if tpos.y < gg_rct_spaceygamearea.getMinY()
-			vel.y = -vel.y
-			vel *= 0.95
-		else if tpos.y > gg_rct_spaceygamearea.getMaxY()
-			vel.y = -vel.y
-			vel *= 0.95
-
-		pos += vel
-		fx.setXYAngle(vel.toVec2().getAngle())
 		super.update()
+		MGWarlock.warlocks.forEach() (Warlock target) ->
+			if target != caster and target.getPos().distanceTo2dSq(pos.toVec2()) < (radius2 + target.radius2)
+				new DummyDamage()..target(target.actor)..amount(10).apply(true)
+				(target).addVel(((target.getPos().toVec2() - getPos().toVec2()).norm() * 40).toVec3())
+				terminate()
 
-	ondestroy
+
+
 
 @objectgen function genObjs()
 	new UnitDefinition(WARLOCK_ID, UnitIds.war2warlock)
 		..setName("Warlock")
-		..setNormalAbilities("")
+		..setNormalAbilities(commaList(FIREBALL_ID))
 		..setHitPointsMaximumBase(100)
 		..setManaMaximum(10)
 		..setCollisionSize(0)
-		..setScalingValue(1.0)
+		..setScalingValue(0.6)
 		..setAttacksEnabled(0)
 		..setSpeedBase(255)
+
+	new ChannelAbilityPreset(FIREBALL_ID, 1, true)
+	..presetIcon(Icons.bTNFireBolt)
+	..presetCooldown(lvl -> 5.)
+	..presetManaCost(lvl -> 0)
+	..setName("Fireball")
+	..presetTooltipNormal(lvl -> "Fireball")
+	..presetButtonPosNormal(0, 0)
+	..presetHotkey("Q")
+	..presetTargetTypes(Targettype.POINT)
+	..presetCastRange(lvl -> 1500.)

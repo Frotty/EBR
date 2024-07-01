@@ -269,7 +269,7 @@ public function startTestmode(PlayerData pd)
 		Log.debug("testmode terminate")
 		pd.escaper.terminate()
 		builderPlayers.add(pd)
-		for i = 0 to 27
+		for i = 0 to 28
 			regions[i].revealRegion(pd.p)
 
 		pd.tmods[0] = new TerrainModder(createUnit(pd.p, WALKABLE_ID, hidden, angle(0)))
@@ -316,6 +316,6 @@ public function initPlayers()
 		pd.builder.actor..addItemById('I001')
 		..addItemById('I002')..addItemById('I003')
 		pd.builder.regionCount = (17. / builderPlayers.size()).round()
-		for i = 0 to 27
+		for i = 0 to 28
 			regions[i].revealRegion(pd.p)
 

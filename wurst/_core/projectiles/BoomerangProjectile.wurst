@@ -9,7 +9,7 @@ public class Boomerang extends Projectile
 	vec2 middleone
 	vec2 middletwo
 	vec2 target
-	Escaper caster 
+	Escaper caster
 
 	construct(Escaper caster, vec2 target)
 		super(caster.getPos(), 32, caster.owner, caster.actor.getFacingAngle(), Abilities.sentinelMissile)
@@ -19,13 +19,13 @@ public class Boomerang extends Projectile
 		middleone = initialPos.polarOffset(initialPos.angleTo(target) + (40).asAngleDegrees(), initialPos.distanceTo(target) / 1.8)
 		middletwo = initialPos.polarOffset(initialPos.angleTo(target) + (-40).asAngleDegrees(), initialPos.distanceTo(target) / 1.8)
 		setTimed(0)
-		
+
 	override function update()
-		if lifespan > 2
+		if time > 2
 			terminate()
-		else if lifespan >= 1
-			setPos(target.bezier3(middletwo, caster.getPos().toVec2(), lifespan-1.).toVec3())
-			lifespan = lifespan.lerp(2.3, 0.040)
+		else if time >= 1
+			setPos(target.bezier3(middletwo, caster.getPos().toVec2(), time-1.).toVec3())
+			time = time.lerp(2.3, 0.040)
 		else
-			lifespan = lifespan.lerp(1.2, 0.035)
-			setPos(initialPos.bezier3(middleone, target, lifespan).toVec3())
+			time = time.lerp(1.2, 0.035)
+			setPos(initialPos.bezier3(middleone, target, time).toVec3())

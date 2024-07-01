@@ -14,7 +14,7 @@ public class BallProjectile extends AirPhysicsProjectile
 	construct(unit caster, vec2 target, BallItem itm)
 		super(caster.getPos3with(128), 32, caster.getOwner(), caster.getPos().angleTo(target), "Cannonball.mdx")
 		setSpeed(17)
-		fx.getDummy().setColor(caster.getOwner().getColor())
+		fx.setTintFromPlayer(caster.getOwner())
 		setMass(145)
 		setRestitution(0.625)
 		ballitem = itm
@@ -22,7 +22,6 @@ public class BallProjectile extends AirPhysicsProjectile
 	override function update()
 		super.update()
 		let lensq = vel.lengthSquared()
-		fx.getDummy().setTimeScale((1. / lensq))
 		if lensq < 1
 			ballitem.onIdle(pos.toVec2())
 			silent = true

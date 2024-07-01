@@ -18,11 +18,7 @@ public class RevivePoint extends StaticSetupObject
 	construct(unit existing)
 		super(existing, createUnit(existing.getOwner(), REVIVE_POINT_ID, existing.getPos(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach)
 		let tile = pos.getEBRTile()
-		if tile.hasModifier(TileModifier.RESERVED)
-			terminate()
-		else
-			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
-			tile.addModifier(TileModifier.RESERVED)
+		tile.addModifier(TileModifier.RESERVED)
 
 	construct(vec3 pos, player owner)
 		super(createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), createUnit(owner, REVIVE_POINT_ID, pos.toVec2(), angle(0)), EVENT_RADIUS, function RevivePoint.onReach)
@@ -31,8 +27,7 @@ public class RevivePoint extends StaticSetupObject
 			terminate()
 		else
 			tile.addModifier(TileModifier.RESERVED)
-			if owner != STAFF_PLAYER
-				tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
+			tile.setType(this.setCurrentRegion().getTypeSet().walkableId)
 
 	function reach(Escaper reacher)
 		Log.debug("on reach")

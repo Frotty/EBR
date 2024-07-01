@@ -72,7 +72,7 @@ public class MGSpacey extends Minigame
 constant minigame = new MGSpacey()
 
 init
-	minigames.add(minigame)
+	// minigames.add(minigame)
 
 constant SHIP_ID = compiletime(UNIT_ID_GEN.next())
 
@@ -81,9 +81,9 @@ class ShipProjectile extends Projectile
 
 	construct(Spaceship ship)
 		super(ship.getPos().toVec2().polarOffset(ship.actor.getFacingAngle(), 16).withZ(64), 16., ship.owner, ship.actor.getFacingAngle(), Abilities.faerieDragonMissile)
-		fx.setColor((owner.getColor().toColor()).withAlpha(255))
+		fx.setTintFromPlayer(owner)
 		setSpeed(8)
-		fx.setScale(0.75)
+		fx.eff.setScale(0.75)
 		vel += ship.vel
 		this.ship = ship
 
@@ -204,14 +204,14 @@ function getRockAsset(int level) returns string
 			return Abilities.makuraMissile
 	return ""
 
-public class SpaceRock extends FxEntity
+public class SpaceRock extends Fx2Entity
 	int level
 	int hp
 	real radiusSq
 
 	construct(vec2 position, vec2 velocity, int level)
 		super(STAFF_PLAYER, position.withZ(48), velocity.getAngle(), getRockAsset(level))
-		fx..setScale(1+level*0.25)
+		fx.eff.setScale(1+level*0.25)
 		radiusSq = (26 + level*6.).squared()
 		this.vel = (velocity * ((5-level)*0.85)).toVec3()
 		this.level = level
@@ -235,7 +235,7 @@ public class SpaceRock extends FxEntity
 			vel *= 0.95
 
 		pos += vel
-		fx.setXYAngle(vel.toVec2().getAngle())
+		fx.setOrientation(vel.toVec2().getAngle().toQuat(vec3(0,0,1)))
 		super.update()
 
 	ondestroy

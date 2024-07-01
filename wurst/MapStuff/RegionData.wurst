@@ -13,6 +13,7 @@ import PickSystem
 import ObstacleObjects
 import Execute
 import MGSpacey
+import MGWarlock
 
 public constant LOUNGE = gg_unit_revp_0322.getPos()
 
@@ -192,7 +193,7 @@ public class RegionData
 					rdata.revealRegion(data.owner)
 					edata.updateRegionData()
 			else
-				if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector and not data instanceof Spaceship
+				if not rdata.canBuild(data.owner) and not data instanceof Builder and not data instanceof Selector and not data instanceof Spaceship and not data instanceof Warlock
 					and not data instanceof TerrainModder and not data instanceof UnitProducer
 					printTimedToPlayer("|cffC51019You have no permission to move units into this region", 15, data.owner)
 					Log.debug("no permission")
@@ -295,6 +296,9 @@ init
 	regions[27] = new RegionData(gg_rct_agargamearea)
 	regions[27].setType(getRegionTypeFromItem('I00E'), false)
 	regions[27].setOwner(STAFF_PLAYER)
+	regions[28] = new RegionData(gg_rct_warlockgamearea)
+	regions[28].setType(getRegionTypeFromItem('I00E'), false)
+	regions[28].setOwner(STAFF_PLAYER)
 
 	CreateTrigger()..registerRectLeaveEventSource(gg_rct_Region_023)
 	..addAction() ->
