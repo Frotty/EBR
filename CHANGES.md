@@ -4,6 +4,7 @@
 [*] Fixed order collisions between movespeed modifiers and other abilities
 [*] Fixed static objects built on a teleporter being teleported
 [*] Fixed lobby revivepoint issues
+[*] Fixed bug with walking across regions as escaper
 
 [0.92u]
 [*] Added new minigame Agario
