@@ -52,8 +52,8 @@ public class Boss extends SetupObject
 		actor.setAnimation("spell")
 		switch id
 			case HP_UP_ID
-				int bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
-				int smallhp = GetUnitAbilityLevel(actor, REAL_HP_SMALL_ID)
+				let bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
+				let smallhp = GetUnitAbilityLevel(actor, REAL_HP_SMALL_ID)
 				if smallhp == 4
 					if bighp < 4
 						if bighp == 0
@@ -69,8 +69,8 @@ public class Boss extends SetupObject
 					else
 						SetUnitAbilityLevel(actor,REAL_HP_SMALL_ID, smallhp+1)
 			case HP_DOWN_ID
-				int bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
-				int smallhp = GetUnitAbilityLevel(actor, REAL_HP_SMALL_ID)
+				let bighp = GetUnitAbilityLevel(actor, REAL_HP_BIG_ID)
+				let smallhp = GetUnitAbilityLevel(actor, REAL_HP_SMALL_ID)
 				if smallhp == 0
 					if bighp > 0
 						SetUnitAbilityLevel(actor,REAL_HP_BIG_ID, bighp-1)

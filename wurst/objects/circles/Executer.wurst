@@ -159,7 +159,7 @@ public class Executer extends StaticBaseObject
 					SetDestructableAnimation(dummy, "stand alternate")
 
 	function onEnter()
-		UnitEntity e = GetEnteringUnit().getEntity()
+		let e = GetEnteringUnit().getEntity()
 		if enabled and canTrigger(e)
 			entitiesOnPlate.add(e)
 			if not ON
@@ -286,14 +286,14 @@ public class Executer extends StaticBaseObject
 		if ru != null
 			let data = ru.getEntity()
 			if data instanceof StaticBaseObject
-				var bo = data castTo StaticBaseObject
+				let bo = data castTo StaticBaseObject
 				bo.setEnabled(not bo.enabled)
 		else
 			printLog(owner, Loglevel.WARNING, "Executer: No object selected")
 
 	function createUnitInternal()
 		let rallyPos = getRallyPoint().toVec2()
-		var data = getRegionData(rallyPos)
+		let data = getRegionData(rallyPos)
 		if data.canBuild(owner)
 			switch actionUnit
 				case ActionUnit.SMALLKILLER

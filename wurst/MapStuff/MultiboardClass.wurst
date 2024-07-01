@@ -5,7 +5,7 @@ MbItem array data
 public class Board
 	multiboard board
 	hashtable mbdata
-	
+
 	construct(int row, int column)
 		board = CreateMultiboard()
 		board.setColumnCount(column)
@@ -15,25 +15,25 @@ public class Board
 			for int j = 1 to column
 				setNewItem(i,j,null,null)
 				board.getItem(i,j).setStyle(false,false) //Hide everything, updateItem() func will show stuff automatically
-		
+
 	function setNewItem(int i,int j,string value, string icon)
 		SaveInteger(mbdata,i,j,counter)
 		data[counter] = MbItem(value, icon)
 		board.getItem(i,j).setValue(value)
 		board.getItem(i,j).setIcon(icon)
 		counter +=1
-		
+
 	function removeRow(int r)
-		for int j =0 to board.getColumnCount()  
+		for int j =0 to board.getColumnCount()
 			for int i =r to board.getRowCount()
 				if i == board.getRowCount()-1
 					//destroy data[LoadInteger(mbdata,i,j)]
 					RemoveSavedInteger(mbdata,i,j) //clear the last row
 				else
-					var nextitem = data[LoadInteger(mbdata,i+1,j)]
+					let nextitem = data[LoadInteger(mbdata,i+1,j)]
 					updateItem(i,j,nextitem.value,nextitem.icon)
 		board.setRowCount(board.getRowCount()-1)
-		
+
 	function updateItem(int i,int j,string value, string icon)
 		data[LoadInteger(mbdata,i,j)] = MbItem(value , icon)
 		if value != null
@@ -46,7 +46,7 @@ public class Board
 		else if icon != null
 			updateIcon(i, j,icon)
 			board.getItem(i,j).setStyle(false,true)
-		
+
 	function updateValue(int i, int j,string value)
 		data[LoadInteger(mbdata,i,j)].value = value
 		board.getItem(i,j).setValue(value)
@@ -54,7 +54,7 @@ public class Board
 	function updateIcon(int i, int j,string icon)
 		data[LoadInteger(mbdata,i,j)].icon = icon
 		board.getItem(i,j).setIcon(icon)
-		
+
 	function getPlayerPos(string name) returns integer //Get string coz players can have different names on the Multiboard
 		for int i = 1 to board.getRowCount()
 			if name == data[LoadInteger(mbdata,i,0)].value
@@ -64,13 +64,13 @@ public class Board
 	ondestroy
 		DestroyMultiboard(board)
 		FlushParentHashtable(mbdata)
-		
+
 tuple MbItem(string value, string icon)
 /*
 class MbItem
 	string value
 	string icon
-	
+
 	construct (string s, string i)
 		value = s
 		icon = i*/

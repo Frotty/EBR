@@ -79,10 +79,10 @@ public abstract class SetupObject extends UnitEntity
 		setup = null
 
 	function onOrderEvent()
-		var order = GetIssuedOrderId()
-		var targetPos = EventData.getOrderPos()
-		var u = GetOrderTargetUnit()
-		string orderS = OrderId2String(order)
+		let order = GetIssuedOrderId()
+		let targetPos = EventData.getOrderPos()
+		let u = GetOrderTargetUnit()
+		let orderS = OrderId2String(order)
 		if orderS == "smart" or orderS == "move" or orderS == "attack" or orderS == "patrol" or orderS == "holdposition" or orderS == "stop"
 			Log.trace("actor mimick move order")
 			if orderS == "smart" and u == null

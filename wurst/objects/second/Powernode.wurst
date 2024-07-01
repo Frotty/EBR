@@ -153,22 +153,22 @@ public class Powernode extends SetupObject
 		let dx = lpos.x - e.pos.x
 		let dy = lpos.y - e.pos.y
 		let normal = vec2(-dy,dx).norm().toVec3()
-		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
+		let b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
 		e.setPos(e.pos+b)
 		e.setVel(b)
 		e.slideVelocity = ZERO2
 
 	function calBounceSimple(vec3 lpos, Escaper e, real bounceFactor)
 		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
-		var b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
+		let b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
 		e.setPos(e.pos+b)
 		e.setVel(b)
 		e.slideVelocity = ZERO2
 
 
 	function getBounceVec(vec3 vel3, vec2 nor2, real bounceFactor) returns vec3
-		vec3 nor3 = nor2.toVec3()
-		vec3 pv3 = vel3.project(nor3)
+		let nor3 = nor2.toVec3()
+		let pv3 = vel3.project(nor3)
 		vec2 pv2 = pv3.toVec2()
 		pv2 *= (-bounceFactor)
 		return vel3 + pv2
@@ -182,13 +182,13 @@ public class Powernode extends SetupObject
 		destroy bounciness
 
 	function onCast()
-		var id = GetSpellAbilityId()
-		var target = GetSpellTargetUnit()
-		var node = GetTriggerUnit().getEntity() castTo Powernode
+		let id = GetSpellAbilityId()
+		let target = GetSpellTargetUnit()
+		let node = GetTriggerUnit().getEntity() castTo Powernode
 		if id == LINK_KILL_ID or id == LINK_B_GROUND_ID or id == LINK_DIODE_GROUND_ID or id == LINK_B_AIR_ID or id == LINK_ORB_ID or id == LINK_B_BOTH_ID
-			var data = target.getEntity()
+			let data = target.getEntity()
 			if data instanceof Powernode
-				var pdata = data castTo Powernode
+				let pdata = data castTo Powernode
 				var isNew = true
 				var l = node.firstLink
 				while l != null

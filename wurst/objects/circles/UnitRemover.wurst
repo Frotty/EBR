@@ -18,9 +18,9 @@ public class UnitRemover extends StaticBaseObject
 		actor.addAbility(TURN_OFF_ID)
 
 	static function removeUnit()
-		var u = GetTriggerUnit()
-		var data = u.getEntity()
-		var sdata = GetTriggeringTrigger().getSource().getEntity() castTo UnitRemover
+		let u = GetTriggerUnit()
+		let data = u.getEntity()
+		let sdata = GetTriggeringTrigger().getSource().getEntity() castTo UnitRemover
 		if data != null and data.owner == sdata.owner and u.hasAbility(REMOVE_OBJECT_ID)
 			if data instanceof SetupObject and not data instanceof StaticEscaperSensorSetup and not data instanceof Decoration
 				Log.debug("UnitRemover Terminate")

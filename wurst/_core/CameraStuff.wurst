@@ -59,7 +59,7 @@ public function cinematicModeForPlayer(boolean cineMode, player forPlayer, real 
 *	Shake the camera of the player for the given parameters
 */
 public function setCameraNoiseTimed(player owner, real value, real velocity, real time)
-	int id = GetPlayerId(owner)
+	let id = GetPlayerId(owner)
 	if TimerGetRemaining(noiseTimer[id]) < 0.15
 		noiseTimer[id] = getTimer()
 		CameraSetSourceNoiseForPlayer(owner, value, velocity)
@@ -82,6 +82,6 @@ public function shakeCameraTimed(player p, real value, real time)
 		..start(time, function resetCam)
 
 function resetCam()
-	var t = GetExpiredTimer()
+	let t = GetExpiredTimer()
 	CameraClearNoiseForPlayer(Player(t.getData()))
 	t.release()

@@ -70,14 +70,14 @@ public class Trap extends StaticBaseObject
 		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> onCast())
 
 	static function onStep()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
+		let source = GetTriggeringTrigger().getSource()
+		let u = GetTriggerUnit()
+		let e = u.getEntity()
 		let obj = source.getEntity() castTo Trap
 
 		if not obj.active and e instanceof Escaper
 			DestroyEffect(AddSpecialEffect(SFX_STRINGS[obj.sfxid],obj.actor.getX(),obj.actor.getY()))
-			var escaper = e castTo Escaper
+			let escaper = e castTo Escaper
 			obj.doEffect(escaper)
 
 	ondestroy
@@ -89,9 +89,9 @@ public class Trap extends StaticBaseObject
 		if timerreal <= 0.0
 			flashEffect(SFX_STRINGS[sfxid], actor.getPos())
 			forUnitsInRange(pos.toVec2(), EVENT_RADIUS) u ->
-				Entity e = u.getEntity()
+				let e = u.getEntity()
 				if e instanceof Escaper
-					var escaper = e castTo Escaper
+					let escaper = e castTo Escaper
 					doEffect(escaper)
 			timerreal = interval
 		else
@@ -109,7 +109,7 @@ public class Trap extends StaticBaseObject
 			case ABIL.POISON
 				e.setPoison(true)
 			case ABIL.SPEED
-				int level = (value/20).toInt() mod 10
+				let level = (value/20).toInt() mod 10
 				printLog(Loglevel.TRACE, "Level: " + level.toString())
 				if level > 5
 					InstantDummyCaster.castTarget(DUMMY_PLAYER, SPEED_BUFF_POS, level-5, "bloodlust", e.actor)

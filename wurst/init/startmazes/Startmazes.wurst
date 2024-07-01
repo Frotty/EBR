@@ -36,7 +36,7 @@ public function initStartmazes()
 
 	try() ->
 		setBuilderTeleporter()
-		var rand = GetRandomInt(0,7)
+		let rand = GetRandomInt(0,7)
 		if rand < 2
 			setStartTeleport(0,3)
 			setStartTeleport(1,2)
@@ -107,7 +107,7 @@ function checkStaffUnit(unit u)
 
 
 public function correctKeys()
-	item itm = GetEnumItem()
+	let itm = GetEnumItem()
 	if GetItemTypeId(itm) == 'I009'
 		new Key(vec2(GetItemX(itm), GetItemY(itm)), STAFF_PLAYER)
 		itm.remove()

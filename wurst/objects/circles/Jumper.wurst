@@ -80,7 +80,7 @@ public class Jumper extends StaticBaseObject
 		flashEffect(EFFECT_STRING, pos)
 
 	function inRange()
-		var data = GetTriggerUnit().getEntity()
+		let data = GetTriggerUnit().getEntity()
 		if not getRegionData(getRallyPoint()).canBuild(owner)
 			return
 		switch permission
@@ -97,7 +97,7 @@ public class Jumper extends StaticBaseObject
 
 
 	static function onInRange()
-		var jdata = GetTriggeringTrigger().getSource().getEntity() castTo Jumper
+		let jdata = GetTriggeringTrigger().getSource().getEntity() castTo Jumper
 		jdata.inRange()
 
 

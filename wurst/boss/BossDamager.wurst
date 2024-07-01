@@ -24,17 +24,17 @@ public class BossDamager extends StaticBaseObject
 		return vec2((pos.x/64).round()*64., (pos.y/64).round()*64.)
 
 	static function onInRange()
-		var data = GetTriggerUnit().getEntity()
-		var bossDamager = GetTriggeringTrigger().getSource().getEntity() castTo BossDamager
+		let data = GetTriggerUnit().getEntity()
+		let bossDamager = GetTriggeringTrigger().getSource().getEntity() castTo BossDamager
 		if data instanceof Escaper
-			var edata = data castTo Escaper
+			let edata = data castTo Escaper
 			bossDamager.damage(edata)
 
 	static function onCast() returns boolean
-		var data = GetTriggerUnit().getEntity()
+		let data = GetTriggerUnit().getEntity()
 		if data instanceof BossDamager
 			var dmger = data castTo BossDamager
-			var id = GetSpellAbilityId()
+			let id = GetSpellAbilityId()
 			switch id
 				case DMG_INC_ID
 					if dmger.damage >= 200

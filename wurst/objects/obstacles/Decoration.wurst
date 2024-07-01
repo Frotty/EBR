@@ -1,7 +1,6 @@
 package Decoration
 import BaseObject
 import initlater InstantBuild
-import Assets
 
 public constant CHANGE_FACE_ID = compiletime(ABIL_ID_GEN.next())
 public constant INC_SCALE = compiletime(ABIL_ID_GEN.next())
@@ -37,7 +36,7 @@ public class Decoration extends StaticSetupObject
 		setup.setScale(scale.get())
 
 	function changeAngle(angle a)
-		boolean select = IsUnitSelected(setup, owner)
+		let select = IsUnitSelected(setup, owner)
 		setNewActor(createUnit(owner, actor.getTypeId(), pos, a))
 		setNewSetup(createUnit(owner, setup.getTypeId(), pos, a))
 		actor.addAbility(LOCUST_ID)

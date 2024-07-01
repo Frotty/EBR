@@ -37,9 +37,9 @@ public class LobbyTeleporter extends StaticBaseObject
 			terminate()
 
 	static function checkVote()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
+		let source = GetTriggeringTrigger().getSource()
+		let u = GetTriggerUnit()
+		let e = u.getEntity()
 		let obj = source.getEntity() castTo LobbyTeleporter
 		if obj.ready and e instanceof Escaper and isEscaper(e.owner)
 			obj.check(e castTo Escaper)

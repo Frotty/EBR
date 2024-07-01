@@ -34,9 +34,9 @@ public class Bombertower extends StaticBaseObject
 		return json
 
 	function checkOrder()
-		var i = GetIssuedOrderId()
-		var e = GetOrderedUnit().getEntity()
-		var tpos = EventData.getOrderPos()
+		let i = GetIssuedOrderId()
+		let e = GetOrderedUnit().getEntity()
+		let tpos = EventData.getOrderPos()
 		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
 			GetOrderedUnit().abortOrder()
 			return

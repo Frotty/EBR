@@ -35,14 +35,13 @@ public class Waypoint extends StaticBaseObject
 					data.actor.issuePointOrder("move", rallyPos.toVec2())
 
 	function onEnter(unit entry)
-		Entity e = entry.getEntity()
+		let entity = entry.getEntity()
 		let rallyPos = getRallyPoint() + vec2(0.001,0)
-		if owner == e.owner and e instanceof UnitEntity and not e instanceof Escaper and not e instanceof Builder
-			if e instanceof SetupObject
-				if not (e castTo SetupObject).setup.hasAbility(REMOVE_OBJECT_ID)
+		if owner == entity.owner and not entity instanceof Escaper and not entity instanceof Builder
+			if entity instanceof SetupObject
+				if not (entity castTo SetupObject).setup.hasAbility(REMOVE_OBJECT_ID)
 					return
-			var data = e castTo UnitEntity
-			if not wisps and data instanceof ObjectTarget
+			if not wisps and entity instanceof ObjectTarget
 				return
 			if linked != null and not linked.isEmpty()
 				if not ready
@@ -61,12 +60,12 @@ public class Waypoint extends StaticBaseObject
 						ready = false
 
 			else if delay.get() < INCREMENT
-				if data instanceof SetupObject and (data castTo SetupObject).setup != (data castTo SetupObject).actor
-					(data castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
+				if entity instanceof SetupObject and (entity castTo SetupObject).setup != (entity castTo SetupObject).actor
+					(entity castTo SetupObject).setup.issuePointOrder("move", rallyPos.toVec2())
 				else
-					data.actor.issuePointOrder("move", rallyPos.toVec2())
+					entity.actor.issuePointOrder("move", rallyPos.toVec2())
 			else
-				doAfter(delay.get(), () -> delayMove(data, rallyPos.toVec2()))
+				doAfter(delay.get(), () -> delayMove(entity, rallyPos.toVec2()))
 
 	override function onCast()
 		super.onCast()
@@ -120,8 +119,8 @@ public class Waypoint extends StaticBaseObject
 			entity.actor.issuePointOrder("move", pos)
 
 	static function onInRange()
-		unit source = GetTriggeringTrigger().getSource()
-		thistype obj = source.getEntity() castTo thistype
+		let source = GetTriggeringTrigger().getSource()
+		let obj = source.getEntity() castTo thistype
 		obj.onEnter(GetTriggerUnit())
 
 	override function serialize() returns Json

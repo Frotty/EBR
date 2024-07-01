@@ -92,11 +92,11 @@ public class CongaLineHead extends SetupObject
 			destroy segment
 
 	function onCast()
-		var id = GetSpellAbilityId()
-		var t = GetSpellTargetUnit()
+		let id = GetSpellAbilityId()
+		let t = GetSpellTargetUnit()
 		switch id
 			case ADD_ID
-				var ed = t.getEntity()
+				let ed = t.getEntity()
 				if ed.owner == owner and ed instanceof SetupObject
 					addSegment(ed castTo SetupObject)
 			case INC_ID

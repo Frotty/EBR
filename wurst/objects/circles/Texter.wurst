@@ -31,9 +31,9 @@ public class Texter extends StaticBaseObject
 		createFText(pos, vec2(0,0.05), "Hidden", 10, 2., colorA(255,255,255,0), owner)
 
 	static function onStep()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		thistype obj = GetTriggeringTrigger().getSource().getEntity() castTo Texter
+		let u = GetTriggerUnit()
+		let e = u.getEntity()
+		let obj = GetTriggeringTrigger().getSource().getEntity() castTo Texter
 		if e instanceof Escaper
 			obj.show()
 
@@ -42,7 +42,7 @@ public class Texter extends StaticBaseObject
 			if IsUnitSelected(u, owner)
 				let ent = u.getEntity()
 				if ent instanceof Texter
-					thistype obj = u.getEntity() castTo thistype
+					let obj = u.getEntity() castTo thistype
 					obj.show()
 
 	function onHide()
@@ -50,7 +50,7 @@ public class Texter extends StaticBaseObject
 			if IsUnitSelected(u, owner)
 				let ent = u.getEntity()
 				if ent instanceof Texter
-					thistype obj = u.getEntity() castTo thistype
+					let obj = u.getEntity() castTo thistype
 					obj.hide()
 
 	function setText(string txt)

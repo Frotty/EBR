@@ -36,11 +36,11 @@ public class UnitProducer extends StaticBaseObject
 		clearQuestionmark()
 
 	function onCast() returns boolean
-		var id = GetSpellAbilityId()
-		var obj = GetSpellAbilityUnit().getEntity() castTo UnitProducer
+		let id = GetSpellAbilityId()
+		let obj = GetSpellAbilityUnit().getEntity() castTo UnitProducer
 
 		let rallyPos = obj.getRallyPoint().toVec2()
-		var data = getRegionData(rallyPos)
+		let data = getRegionData(rallyPos)
 		if id == SECOND_PAGE
 			obj.actor..removeAbility(BIG_KILLER)..removeAbility(SMALL_KILLER)
 			..removeAbility(SR_KILLER)..removeAbility(BR_KILLER)

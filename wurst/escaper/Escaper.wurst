@@ -118,7 +118,7 @@ public abstract class Escaper extends UnitEntity
 		if alive
 			if this.getCurrentRegion().easyMode
 				setPos(pos-getRealVel()*1.05)
-				var vel = getRealVel()
+				let vel = getRealVel()
 				if killer != null
 					let ang = killer.getPos().angleTo2d(pos)
 					addVel(vec3(ang.cos()*(10 + vel.length()),ang.sin()*(10+vel.length()),0))
@@ -153,7 +153,7 @@ public abstract class Escaper extends UnitEntity
 	override function onGroundHit()
 		if pos.getEBRTile().modifiers.get(TileModifier.BLUGOO castTo int) and vel.z.abs() > 2
 			let rdata = this.getCurrentRegion()
-			var ttype = GetTerrainType(pos.x, pos.y)
+			let ttype = GetTerrainType(pos.x, pos.y)
 			// Handle Goo it
 			let angl = actor.getFacingAngle()
 			if ttype == CONTROLLABLEICE
@@ -185,8 +185,8 @@ public abstract class Escaper extends UnitEntity
 		let rv = getRealVel()
 		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 16.50)
 		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 16.50)
-		var ttype1 = GetTerrainType(lpos.x, lpos.y)
-		var ttype2 = GetTerrainType(rpos.x, rpos.y)
+		let ttype1 = GetTerrainType(lpos.x, lpos.y)
+		let ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()
 		int ttype
 		int newval = -1
@@ -252,14 +252,14 @@ public abstract class Escaper extends UnitEntity
 		if onLava
 			doLavaDamage()
 		if poisoned
-			var hp2 = actor.getHP()
+			let hp2 = actor.getHP()
 			if hp2 > .405
 				actor.setHP(hp2-this.getCurrentRegion().poisonDmg)
 			else if alive
 				kill(null)
 
 	function doLavaDamage()
-		var hp = actor.getHP()
+		let hp = actor.getHP()
 		if hp > .405
 			actor.setHP(hp-this.getCurrentRegion().lavaDmg)
 		else if alive
@@ -360,14 +360,14 @@ public abstract class Escaper extends UnitEntity
 
 	function changeAngle()
 		let id = GetIssuedOrderId()
-		var w = GetOrderTarget()
+		let w = GetOrderTarget()
 		let orderPos = EventData.getOrderPos()
 		let widgetPos = w.getPos()
 		let rv = getRealVel()
 		let lpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()-(90.).asAngleDegrees(), 17)
 		let rpos = pos.toVec2().polarOffset(rv.toVec2().getAngle()+(90.).asAngleDegrees(), 17)
-		var ttype1 = GetTerrainType(lpos.x, lpos.y)
-		var ttype2 = GetTerrainType(rpos.x, rpos.y)
+		let ttype1 = GetTerrainType(lpos.x, lpos.y)
+		let ttype2 = GetTerrainType(rpos.x, rpos.y)
 		let rdata = this.getCurrentRegion()
 		int ttype
 		if ttype1 == rdata.getTypeSet().unwalkableId
@@ -396,7 +396,7 @@ public abstract class Escaper extends UnitEntity
 
 
 	static function neutralDeath()
-		var escaper = GetTriggerUnit().getEntity() castTo Escaper
+		let escaper = GetTriggerUnit().getEntity() castTo Escaper
 		if GetKillingUnit() != null
 			escaper.kill(null)
 

@@ -24,9 +24,9 @@ public class Teleporter extends StaticBaseObject
 		actor.addAbility(TURN_OFF_ID)
 
 	static function teleport()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
+		let source = GetTriggeringTrigger().getSource()
+		let u = GetTriggerUnit()
+		let e = u.getEntity()
 		let obj = source.getEntity() castTo Teleporter
 		let rallyPos = obj.getRallyPoint()
 		let rdata = getRegionData(rallyPos)
@@ -63,7 +63,7 @@ public class Teleporter extends StaticBaseObject
 
 	override function onCast()
 		super.onCast()
-		var id = GetSpellAbilityId()
+		let id = GetSpellAbilityId()
 		switch id
 			case MODE_BOTH_ID
 				actor..removeAbility(MODE_BOTH_ID)..addAbility(MODE_ESCAPERS_ID)

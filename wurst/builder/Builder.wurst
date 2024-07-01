@@ -49,7 +49,7 @@ public class Builder extends UnitEntity
 		EventListener.add(actor, EVENT_PLAYER_UNIT_CONSTRUCT_FINISH, () -> GetTriggerUnit().remove())
 
 	function onCast()
-		var id = GetSpellAbilityId()
+		let id = GetSpellAbilityId()
 		let tpos = EventData.getSpellTargetPos()
 		let rdata = getRegionData(tpos)
 		if rdata == null
@@ -103,6 +103,8 @@ public class Builder extends UnitEntity
 					new BossDamager(tpos, owner)
 			case BM_WEAPON_ID
 				if getRegionData(tpos).canBuild(owner) and getRegionData(tpos).bossRegion
+					skip
+					// TODO?
 					// new WeaponObject(tpos, owner)
 			default
 				jukeBox.checkSpell(id)
@@ -112,8 +114,8 @@ public class Builder extends UnitEntity
 		actor.addAbility(MENU_BOSS)
 
 	function onOrder()
-		var i = GetOrderTargetItem()
-		var u = GetOrderTargetUnit()
+		let i = GetOrderTargetItem()
+		let u = GetOrderTargetUnit()
 		var orderPos = EventData.getOrderPos()
 
 		if i != null
@@ -132,7 +134,7 @@ public class Builder extends UnitEntity
 					RemoveItem(i)
 				actor.abortOrder()
 			else
-				var orderId = GetIssuedOrderId()
+				let orderId = GetIssuedOrderId()
 				if isOrderBuildOrder(orderId)
 					doAfter(0.01, () -> instantBuild(this, orderPos, orderId))
 					actor.abortOrder()

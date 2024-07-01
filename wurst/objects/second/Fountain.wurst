@@ -22,9 +22,9 @@ public class Fountain extends StaticSetupObject
 
 	static function cure()
 		let obj = GetTriggeringTrigger().getSource().getEntity() castTo Fountain
-		Entity e = GetTriggerUnit().getEntity()
+		let e = GetTriggerUnit().getEntity()
 		if e instanceof Escaper and obj.cure
-			var es = e castTo Escaper
+			let es = e castTo Escaper
 			if es.poisoned and not es.flying
 				DestroyEffect(AddSpecialEffect(EFFECT_ID,es.pos.x ,es.pos.y))
 				es.setPoison(false)

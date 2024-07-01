@@ -22,7 +22,7 @@ public abstract class Startmaze
 		GroupEnumUnitsInRect(ENUM_GROUP, rdata.theRect, Filter(() -> GetFilterUnit().getOwner() == STAFF_PLAYER))
 		for vicu from ENUM_GROUP
 			if vicu.isAlive() and vicu.getPos().isInRect(rdata.theRect)
-				var data = vicu.getEntity()
+				let data = vicu.getEntity()
 				if data != null and data.actor.getName() != null and data.typeId > 0
 					Log.debug("clear")
 					data.terminate()
@@ -31,18 +31,17 @@ public abstract class Startmaze
 
 		EnumDestructablesInRectAll(rdata.theRect, function killD)
 		EnumItemsInRect(rdata.theRect, null, function deleteKeys)
-	
+
 	abstract function getStart() returns vec2
-	
+
 public function killD()
 	RemoveDestructable(GetEnumDestructable())
-	
+
 public function deleteKeys()
-	item itm = GetEnumItem()
-	if(itm.getEntity() != null) 
+	let itm = GetEnumItem()
+	if(itm.getEntity() != null)
 		Log.debug("Delete Keys")
 		itm.getEntity().terminate()
 	else
-		itm.remove()		
-	
-		
+		itm.remove()
+

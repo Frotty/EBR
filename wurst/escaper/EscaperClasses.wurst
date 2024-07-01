@@ -141,8 +141,8 @@ public class IceEscaper extends Escaper
 		super.onCast(id)
 		if id == SPEEDWAVE_ID
 			if sliding
-				var angl = actor.getFacingAngle()
-				var value = 10 + GetUnitAbilityLevel(actor,SPEEDWAVE_ID)*2.5
+				let angl = actor.getFacingAngle()
+				let value = 10 + GetUnitAbilityLevel(actor,SPEEDWAVE_ID)*2.5
 				DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl", pos.x, pos.y))
 				addVel(vec3(value * angl.cos(),value * angl.sin(),0.))
 		else if id == SLOWWAVE_ID
@@ -160,8 +160,8 @@ public class BlindEscaper extends Escaper
 		super.onCast(id)
 
 	override function doLavaDamage()
-		var hp = actor.getHP()
-		var bias = 1 - (actor.getAbilityLevel(FIRE_RESISTANCE) * 0.1)
+		let hp = actor.getHP()
+		let bias = 1 - (actor.getAbilityLevel(FIRE_RESISTANCE) * 0.1)
 		if hp > .405
 			actor.setHP(hp-this.getCurrentRegion().lavaDmg * bias)
 		else if alive

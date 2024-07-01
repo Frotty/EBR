@@ -4,7 +4,6 @@ import LinkedListModule
 import EscaperClasses
 import RevivePointModifier
 import ChannelAbilityPreset
-import Assets
 import Players
 
 EscaperDefinition array currentView

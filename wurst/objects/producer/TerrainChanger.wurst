@@ -40,8 +40,8 @@ public class TerrainChanger extends SetupObject
 			return
 
 		int tileID
-		var tX = (pos.x/128).round()
-		var tY = (pos.y/128).round()
+		let tX = (pos.x/128).round()
+		let tY = (pos.y/128).round()
 		if tX != currentTile.x or tY != currentTile.y
 			let sizeXI = sizeX.getInt()
 			let sizeYI = sizeY.getInt()

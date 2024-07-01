@@ -18,10 +18,12 @@ init
 function preload()
 	let abils = new IdGenerator('AM00')
 	while preloadAbility(abils.next())
+		skip
 	destroy abils
 
 	let units = new IdGenerator('x000')
 	while preloadUnit(units.next())
+		skip
 	destroy units
 
 function initGame()

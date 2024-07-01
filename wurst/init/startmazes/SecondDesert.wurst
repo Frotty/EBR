@@ -31,7 +31,7 @@ public class SecondDesertMaze extends Startmaze
 		IssuePointOrder(gg_unit_bsak_0080, "patrol", 1293.01, -6286)
 		IssuePointOrder(gg_unit_bsak_0104, "patrol", 1293.01, -6286)
 
-		var t = new Teleporter(gg_unit_tele_0141)
+		let t = new Teleporter(gg_unit_tele_0141)
 		t.setRallyPoint(LOUNGE)
 
 		var j = new Jumper(gg_unit_jump_0151)

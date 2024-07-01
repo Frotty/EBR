@@ -22,10 +22,10 @@ let weapontypes = [
 function damageTarget(Entity entity, Escaper escaper, real damage)
 	if entity != null
 		if entity instanceof Boss
-			Boss b = entity castTo Boss
+			let b = entity castTo Boss
 			b.onDamage(escaper, damage)
 		if entity instanceof Minion
-			Minion m = entity castTo Minion
+			let m = entity castTo Minion
 			m.onDamage(escaper, damage)
 
 function onSabre(Escaper e)

@@ -20,8 +20,8 @@ init
 public function onAttackspeedCast(int spellid, unit actor)
 	switch spellid
 		case ATTACK_SPEED_INCREASE
-			int pos = (actor.getAbilityLevel(ATTACK_SPEED_RATE_POSITIVE_ID))
-			int neg = (actor.getAbilityLevel(ATTACK_SPEED_RATE_NEGATIVE_ID))
+			let pos = (actor.getAbilityLevel(ATTACK_SPEED_RATE_POSITIVE_ID))
+			let neg = (actor.getAbilityLevel(ATTACK_SPEED_RATE_NEGATIVE_ID))
 			if neg >= 1
 				if neg == 1
 					actor.removeAbility(ATTACK_SPEED_RATE_NEGATIVE_ID)
@@ -39,8 +39,8 @@ public function onAttackspeedCast(int spellid, unit actor)
 				actor.addAbility(ATTACK_SPEED_RATE_POSITIVE_ID)
 				createFText(vec3(actor.getX(),actor.getY(),0), vec2(0,0.05),"+20.0 %", 10, 2., colorA(255,255,255,0), GetOwningPlayer(actor))
 		case ATTACK_SPEED_DECREASE
-			int pos = (actor.getAbilityLevel(ATTACK_SPEED_RATE_POSITIVE_ID))
-			int neg = (actor.getAbilityLevel(ATTACK_SPEED_RATE_NEGATIVE_ID))
+			let pos = (actor.getAbilityLevel(ATTACK_SPEED_RATE_POSITIVE_ID))
+			let neg = (actor.getAbilityLevel(ATTACK_SPEED_RATE_NEGATIVE_ID))
 			if pos >= 1
 				if pos == 1
 					actor.removeAbility(ATTACK_SPEED_RATE_POSITIVE_ID)

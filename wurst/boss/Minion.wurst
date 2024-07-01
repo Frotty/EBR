@@ -55,7 +55,7 @@ public class Minion extends EscaperSensorSetup
 		if targetInvalid
 			if (state == MinionState.ATTACK or state == MinionState.FOLLOW)
 				state = MinionState.AFTERTARGET
-				var fearEffect = actor.addEffect(Abilities.creepSleepTarget, "overhead")
+				let fearEffect = actor.addEffect(Abilities.creepSleepTarget, "overhead")
 				target = null
 				setup.issuePointOrder("move", spawnPoint)
 				doAfter(4.) ->
@@ -98,7 +98,7 @@ public class Minion extends EscaperSensorSetup
 				forUnitsInRange(tpos, ATTACK_RANGE) u ->
 					let entity = u.getEntity()
 					if entity != null and entity instanceof Escaper
-						Escaper e = entity castTo Escaper
+						let e = entity castTo Escaper
 						doDamage(e)
 				doAfter(1.3) ->
 					if state == MinionState.ATTACK

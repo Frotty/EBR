@@ -1,6 +1,5 @@
 package Booster
 import BaseObject
-import Assets
 
 constant INFO_BOOSTER_ID = compiletime(ABIL_ID_GEN.next())
 constant SPEED_UP_ID = compiletime(ABIL_ID_GEN.next())
@@ -19,10 +18,10 @@ public class Booster extends StaticBaseObject
 	static function orderMove()
 		let source = GetTriggeringTrigger().getSource()
 		let u = GetTriggerUnit()
-		Entity e = u.getEntity()
-		thistype obj = source.getEntity() castTo Booster
+		let e = u.getEntity()
+		let obj = source.getEntity() castTo Booster
 		if e instanceof SetupObject
-			SetupObject ek = e castTo SetupObject
+			let ek = e castTo SetupObject
 			ek.actor.setMoveSpeed(obj.boostspeed.get())
 			ek.setup.setMoveSpeed(obj.boostspeed.get())
 

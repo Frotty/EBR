@@ -70,7 +70,7 @@ public class FourthCitadelleMaze extends Startmaze
 		gg_unit_bcik_0280.issuePointOrder("patrol", vec2(-3953, -5678))
 		gg_unit_bcik_0225.issuePointOrder("patrol", vec2(-4648, -3995))
 
-		var t = new Teleporter(gg_unit_tele_0234)
+		let t = new Teleporter(gg_unit_tele_0234)
 		t.setRallyPoint(LOUNGE)
 
 

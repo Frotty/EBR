@@ -4,10 +4,10 @@ import Assets
 import BuilderConstants
 
 function onRemoveObject()
-	var id = GetSpellAbilityId()
+	let id = GetSpellAbilityId()
 	if id == REMOVE_OBJECT_ID
-		var u = GetSpellAbilityUnit()
-		var data = u.getEntity()
+		let u = GetSpellAbilityUnit()
+		let data = u.getEntity()
 		if data != null and not data.done
 			flashEffect(Abilities.aIamTarget, u.getPos())
 			data.terminate()

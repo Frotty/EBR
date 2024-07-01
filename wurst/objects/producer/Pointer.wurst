@@ -59,10 +59,10 @@ public class Pointer extends EscaperSensorSetup
 				setup..removeAbility(STOP_ID)..addAbility(START_ID)
 
 	override function onSensor(UnitEntity source, UnitEntity target)
-		var edata = target
+		let edata = target
 		var data = source castTo Pointer
 		if edata instanceof Escaper
-			var es = edata castTo Escaper
+			let es = edata castTo Escaper
 			if not data.active
 				data.angl = data.actor.getFacingAngle()
 			es.actor.setFacing(data.angl)

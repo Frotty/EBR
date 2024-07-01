@@ -39,12 +39,12 @@ public class TerrainModder extends UnitEntity
 
 	function changeTerrain()
 		var orderPos = EventData.getOrderPos()
-		var oW = GetOrderTarget()
+		let oW = GetOrderTarget()
 
 		if oW != null
 			orderPos = oW.getPos()
 
-		var rdata = getRegionData(orderPos)
+		let rdata = getRegionData(orderPos)
 		if rdata == null
 			return
 		let owner = actor.getOwner()

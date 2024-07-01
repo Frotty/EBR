@@ -28,16 +28,16 @@ function maxInt() returns int
 
 function player_chartoi(string c) returns int
 	int i = 0
-	string cs = player_charset()
-	int len = player_charsetlen()
+	let cs = player_charset()
+	let len = player_charsetlen()
 	while i < len and c != SubString(cs,i,i+1)
 		i = i + 1
 	return i
 
 function chartoi(string c) returns int
 	int i = 0
-	string cs = charset()
-	int len = charsetlen()
+	let cs = charset()
+	let len = charsetlen()
 	while i < len and c != SubString(cs,i,i+1)
 		i = i + 1
 	return i
@@ -142,7 +142,7 @@ public class Savecode
 	//sign = 1 is forward
 	//sign = -1 is backward
 	function obfuscate(int key, int sign)
-		int seed = GetRandomInt(0,maxInt())
+		let seed = GetRandomInt(0,maxInt())
 		int advance = 0
 		int x = 0
 		BigNum_l cur = bignum.list
@@ -186,7 +186,7 @@ public class Savecode
 
 
 	function save(string name, int loadtype) returns string
-		int key = fhash(name)+loadtype*73
+		let key = fhash(name)+loadtype*73
 		int hash
 		clean()
 		hash = hash()
@@ -208,7 +208,7 @@ public class Savecode
 
 
 	function load(string name, string s, int loadtype) returns boolean
-		int ikey = fhash(name)+loadtype*73
+		let ikey = fhash(name)+loadtype*73
 		int inputhash
 		fromString(s)
 		obfuscate(ikey,-1)
@@ -222,11 +222,11 @@ function prop_Savecode() returns boolean
 	string s
 	Savecode loadcode
 //--- Data you want to save ---
-	integer medal1 = 10
-	integer medal2 = 3
-	integer medalmax = 13
-	integer XP = 1337
-	integer xpmax = 1000000
+	let medal1 = 10
+	let medal2 = 3
+	let medalmax = 13
+	let XP = 1337
+	let xpmax = 1000000
 	let savecode = new Savecode()
 
 	SetPlayerName(Player(0),"yomp")

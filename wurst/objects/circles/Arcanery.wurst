@@ -23,19 +23,19 @@ class SilenceBufff extends NormalBuff
 		super(9999, SILENCE_BUFF)
 		this.arcanery = arcanery
 		InstantDummyCaster.castTarget(DUMMY_PLAYER, SILENCE_ID, 1, Orders.soulburn, target.actor)
-		apply(target)
+		apply(target.actor)
 
 	override function update()
 		super.update()
 		switch arcanery.expMode
 			case TIME
 			case RANGE
-				if arcanery.pos.distanceToSq(target.pos) > distance
+				if arcanery.pos.distanceTo2dSq(target.getPos()) > distance
 					terminate()
 			case USE
 
 	ondestroy
-		target.actor.removeAbility('BNso')
+		target.removeAbility('BNso')
 
 
 enum ArcaneryMode
@@ -90,7 +90,7 @@ public class Arcanery extends StaticBaseObject
 		printLog(Loglevel.DEBUG, "onEnter(target)")
 		switch arcMode
 			case SILENCE
-				SilenceBufff b = target.getBuff(SilenceBufff.typeId) castTo SilenceBufff
+				SilenceBufff b = target.actor.getBuff(SilenceBufff.typeId) castTo SilenceBufff
 				if b == null
 					new SilenceBufff(target, this)
 				else

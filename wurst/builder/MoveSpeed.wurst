@@ -5,12 +5,12 @@ public constant INC_SPEED_ID = 'A01E'
 public constant DEC_SPEED_ID = 'A01H'
 
 function onChangeSpeed()
-	var id = GetSpellAbilityId()
-	var caster = GetSpellAbilityUnit()
-	var data = caster.getEntity()
+	let id = GetSpellAbilityId()
+	let caster = GetSpellAbilityUnit()
+	let data = caster.getEntity()
 	if (id == INC_SPEED_ID or id == DEC_SPEED_ID) and data instanceof SetupObject
-		var ddata = data castTo SetupObject
-		var speed = (ddata.setup.getMoveSpeed() / 25.).round() * 25.
+		let ddata = data castTo SetupObject
+		let speed = (ddata.setup.getMoveSpeed() / 25.).round() * 25.
 		if id == INC_SPEED_ID
 			if speed <= 500.
 				ddata.setup.setMoveSpeed(speed + 25.)

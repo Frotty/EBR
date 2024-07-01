@@ -50,7 +50,7 @@ public function isOrderBuildOrder(int o) returns boolean
 	return false
 
 public function instantBuild(Builder b, vec2 tpos, int id)
-	var rdata = getRegionData(tpos)
+	let rdata = getRegionData(tpos)
 	if rdata != null and rdata.canBuild(b.owner)
 		var i = 1
 		while buildorders[i] > 0 // by commenting out the line, this loop stops before reaching bottom ids

@@ -80,7 +80,7 @@ public class MGAgar extends Minigame
 		for food in flist
 			food.terminate()
 		forUnitsInRect(rdata.theRect) u ->
-			var data = u.getEntity()
+			let data = u.getEntity()
 			if data != null and not data instanceof Escaper and not data instanceof Builder
 				data.terminate()
 		flist.clear()

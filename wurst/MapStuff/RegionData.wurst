@@ -43,7 +43,7 @@ public function RegionType.getTypeSet() returns regionTypeSet
 
 public function getRegionTypeFromItem(int itemId) returns RegionType
 	for i = 1 to 5
-		var reg = i castTo RegionType
+		let reg = i castTo RegionType
 		if reg.getTypeSet().regionItemId == itemId
 			return reg
 	return RegionType.UNKNOWN
@@ -176,13 +176,13 @@ public class RegionData
 		fmods[id].changeFog(FOG_OF_WAR_MASKED)
 
 	static function enterRect()
-		var u = GetTriggerUnit()
-		var data = u.getEntity()
-		var rdata = regionMap.get(GetTriggeringTrigger().getSourceRect())
+		let u = GetTriggerUnit()
+		let data = u.getEntity()
+		let rdata = regionMap.get(GetTriggeringTrigger().getSourceRect())
 
 		if data != null
 			if data instanceof Escaper
-				var edata = data castTo Escaper
+				let edata = data castTo Escaper
 				if rdata.getTypeSet() == RegionType.UNKNOWN.getTypeSet() or edata.getRealVel().toVec2().lengthSq() > 1
 					edata.setPos(edata.getPos()-edata.getRealVel())
 					edata.stop()

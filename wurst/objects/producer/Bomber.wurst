@@ -56,9 +56,9 @@ public class Bomber extends UnitEntity
 		GetExpiredTimer().release()
 
 	function checkOrder()
-		var i = GetIssuedOrderId()
-		var e = GetOrderedUnit().getEntity()
-		var tpos = EventData.getSpellTargetPos()
+		let i = GetIssuedOrderId()
+		let e = GetOrderedUnit().getEntity()
+		let tpos = EventData.getSpellTargetPos()
 		if tpos != ZERO2 and not getRegionData(tpos).canBuild(owner)
 			GetOrderedUnit().abortOrder()
 			return

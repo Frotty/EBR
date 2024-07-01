@@ -59,7 +59,7 @@ public class Spinner extends SetupObject
 
 	function checkObj(Entity e)
 		if e instanceof SetupObject and not e instanceof StaticEscaperSensorSetup
-			var dobj = e castTo SetupObject
+			let dobj = e castTo SetupObject
 			boolean isNew = true
 			var node = firstNode
 			while node != null
@@ -98,15 +98,15 @@ public class Spinner extends SetupObject
 			case TURN_OFF_ID
 				setEnabled(false)
 			case SPIN_ADD_SINGLE_ID
-				var u = GetSpellTargetUnit()
-				var data = u.getEntity()
+				let u = GetSpellTargetUnit()
+				let data = u.getEntity()
 				if owner == owner
 					checkObj(data)
 			case SPIN_ADD_GROUP_ID
 				forUnitsInRange(EventData.getSpellTargetPos(), 300.) u ->
 					if u != actor and u != setup
 						if u.getUserData() > 0
-							var ed = u.getEntity()
+							let ed = u.getEntity()
 							if ed.owner == owner
 								checkObj(ed)
 			case SPIN_INC_SPEED_ID

@@ -26,9 +26,9 @@ public class MinigameTeleporter extends StaticBaseObject
 		text = createCenterFText(existing.getPos().toVec3(), "|cffffcc00Vote for minigame", 10)
 
 	static function checkVote()
-		unit source = GetTriggeringTrigger().getSource()
-		unit u = GetTriggerUnit()
-		Entity e = u.getEntity()
+		let source = GetTriggeringTrigger().getSource()
+		let u = GetTriggerUnit()
+		let e = u.getEntity()
 		let obj = source.getEntity() castTo MinigameTeleporter
 		if isEscaper(e.owner) and e instanceof Escaper and not obj.inprogress
 			obj.check(e castTo Escaper)

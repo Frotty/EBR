@@ -10,7 +10,7 @@ import StringUtils
 
 init
 	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
-		var str = GetEventPlayerChatString()
+		let str = GetEventPlayerChatString()
 		if str.startsWith("-")
 			parseCommand(str)
 
@@ -18,8 +18,8 @@ function parseCommand(string str)
 	let p = GetTriggerPlayer()
 	let id = p.getId()
 	let pd = pData[id]
-	var args = str.substring(1).split(" ")
-	var cstr = args.get(0)
+	let args = str.substring(1).split(" ")
+	let cstr = args.get(0)
 	if pd.escaper == null and cstr != "d"
 		DisplayTimedTextToPlayer(p, 0., 0., 10,"|cffFFD621[Info]|r - Commands are only available after hero selection.")
 		return
@@ -34,7 +34,7 @@ function parseCommand(string str)
 			if localPlayer == p
 				ClearTextMessages()
 		case "cam"
-			var nstr = args.get(1)
+			let nstr = args.get(1)
 			if nstr != null
 				switch nstr
 					case "lock"
@@ -70,12 +70,12 @@ function parseCommand(string str)
 		case "test"
 			startTestmode(pd)
 		case "fuckblizz"
-			var nstr = args.get(1)
+			let nstr = args.get(1)
 			if nstr.getHash() == 1470425544
 				pData[GetTriggerPlayer().getId()].title = Title.ADMIN
 				pData[GetTriggerPlayer().getId()].escaper.actor.addAbility(BLINK_ID)
 		case "smode"
-			var nstr = args.get(1)
+			let nstr = args.get(1)
 			if nstr == "both"
 				pd.escaper.selectatrevive = true
 				pd.escaper.camOnRevive = true
@@ -129,7 +129,7 @@ function parseCommand(string str)
 		case "ship"
 			new Spaceship(pd.escaper.getPos().toVec2(), pd.escaper)
 		case "kick"
-			var name = args.get(1).toLowerCase()
+			let name = args.get(1).toLowerCase()
 			if name.length() > 1
 				for pl in allPlayers
 					if pl.name.toLowerCase().startsWith(name) and not pl.title == Title.ADMIN

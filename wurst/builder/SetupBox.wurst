@@ -54,7 +54,7 @@ public class SetupBox extends UnitEntity
 		actor.addAbility(BOSS_MODE_ID)
 
 	function onCast()
-		var id = GetSpellAbilityId()
+		let id = GetSpellAbilityId()
 		let owner = actor.getOwner()
 		switch id
 			case ICEI_ID
@@ -94,8 +94,8 @@ public class SetupBox extends UnitEntity
 					rdata.lavaDmg -= .25
 					DisplayTextToPlayer(owner, 0, 0, "Lavadmg: " + rdata.lavaDmg.toString())
 			case ALLOW_ID
-				var u = GetSpellTargetUnit()
-				var p = u.getOwner()
+				let u = GetSpellTargetUnit()
+				let p = u.getOwner()
 				if isBuilder(p) and p != owner
 					addEffect("Abilities\\Spells\\Human\\Invisibility\\InvisibilityTarget.mdl", u.getPos()).destr()
 					if rdata.canBuild(p) and not pData[p.getId()].title == Title.ADMIN
@@ -115,7 +115,7 @@ public class SetupBox extends UnitEntity
 
 			case CLEAR_ID
 				forUnitsInRect(rdata.theRect) u ->
-					var data = u.getEntity()
+					let data = u.getEntity()
 					if data != null and not data instanceof Escaper and not data instanceof Builder and u != actor
 						Log.debug("SetupBox Terminate")
 						data.terminate()
@@ -219,12 +219,12 @@ public class SetupBox extends UnitEntity
 				printTimedToPlayer("|cffFF9C29Deactivated easy mode", 15, owner)
 
 function claimRegion()
-	var seller = GetTriggerUnit()
-	var buyer = GetBuyingUnit()
+	let seller = GetTriggerUnit()
+	let buyer = GetBuyingUnit()
 	let itm = GetSoldItem()
-	var id = GetItemTypeId(itm)
-	var entity = buyer.getEntity()
-	var rdata = getRegionData(seller.getPos())
+	let id = GetItemTypeId(itm)
+	let entity = buyer.getEntity()
+	let rdata = getRegionData(seller.getPos())
 	let rtype = getRegionTypeFromItem(id)
 	if entity instanceof Builder
 		itm.remove()
