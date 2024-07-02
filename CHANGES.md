@@ -5,6 +5,7 @@
 [*] Fixed static objects built on a teleporter being teleported
 [*] Fixed lobby revivepoint issues
 [*] Fixed bug with walking across regions as escaper
+[*] Fixed splitting of random escape killers
 
 [0.92u]
 [*] Added new minigame Agario

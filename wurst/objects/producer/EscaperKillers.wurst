@@ -41,12 +41,18 @@ public class SmallRandomKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, facing, COLL_SIZE_SRK, COLL_SIZE_SRK)
+		setupRandKiller()
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, SMALL_RANDOM_KILLER_ID, COLL_SIZE_SRK, COLL_SIZE_SRK)
+		setupRandKiller()
 
 	construct(unit existing)
 		super(existing, COLL_SIZE_SRK, COLL_SIZE_SRK)
+		setupRandKiller()
+
+	function setupRandKiller()
+		actor.removeAbility(AbilityIds.wander)
 
 	override function serialize() returns Json
 		let json = super.serialize()
@@ -75,12 +81,18 @@ public class BigRandomKiller extends EscaperSensorSetup
 
 	construct(vec2 pos, player owner, angle facing)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, facing, COLL_SIZE_BRK, COLL_SIZE_BRK)
+		setupRandKiller()
 
 	construct(vec2 pos, player owner)
 		super(pos.toVec3(), owner, BIG_RANDOM_KILLER_ID, COLL_SIZE_BRK, COLL_SIZE_BRK)
+		setupRandKiller()
 
 	construct(unit existing)
 		super(existing, COLL_SIZE_BRK, COLL_SIZE_BRK)
+		setupRandKiller()
+
+	function setupRandKiller()
+		actor.removeAbility(AbilityIds.wander)
 
 	override function serialize() returns Json
 		let json = super.serialize()
