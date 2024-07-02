@@ -89,7 +89,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 						ref.ttag.tt..center(ref.pos, "|cff0884CEdecompressing...", 10)
 						ref.syncingDone = true
 						let compressedString = new BigString()
-						for i = 1 to data.getChunkCount()
+						for i = 0 to data.getChunkCount()
 							compressedString.addString(data.getChunk(i))
 						destroy data
 						printLog(Loglevel.DEBUG, "Reconstructed")
