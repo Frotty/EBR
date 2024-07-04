@@ -1,11 +1,12 @@
-[0.92x]
+[0.93a]
 [*] Save unit type for unitcreator save/load
 [*] Fixed previously linked waypoints being defunct after unlinking
 [*] Fixed order collisions between movespeed modifiers and other abilities
 [*] Fixed static objects built on a teleporter being teleported
 [*] Fixed lobby revivepoint issues
 [*] Fixed bug with walking across regions as escaper
-[*] Fixed splitting of random escape killers
+[*] Fixed splitting of random killers
+[*] Fixed JukeBox issues
 
 [0.92u]
 [*] Added new minigame Agario
