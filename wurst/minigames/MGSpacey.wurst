@@ -72,7 +72,7 @@ public class MGSpacey extends Minigame
 constant minigame = new MGSpacey()
 
 init
-	// minigames.add(minigame)
+	minigames.add(minigame)
 
 constant SHIP_ID = compiletime(UNIT_ID_GEN.next())
 

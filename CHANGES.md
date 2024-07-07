@@ -7,6 +7,8 @@
 [*] Fixed bug with walking across regions as escaper
 [*] Fixed splitting of random killers
 [*] Fixed JukeBox issues
+[*] Improved Powernode bounce behavior
+[*] Added new Minigame: Warlock
 
 [0.92u]
 [*] Added new minigame Agario

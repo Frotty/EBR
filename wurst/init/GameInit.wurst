@@ -41,7 +41,10 @@ function partThree()
 
 function syncInitial()
 	startChoose()
-	jukeBox.playNextMusic()
+	ClearMapMusic()
+	StopMusic(false)
+	doAfter(1.) ->
+		jukeBox.playNextMusic()
 	startPick()
 
 @compiletime function callGen()

@@ -130,7 +130,7 @@ public class MemoryAccessPedestal extends StaticBaseObject
 					let npos = vec2(json.getReal(KEY_X), json.getReal(KEY_Y))
 					let tId = json.getInt(KEY_TYPE)
 					let obj = newObjectFromId(owner, serializeOrigin.toVec2() + npos, tId)
-					if obj != null
+					if obj != null and obj.typeId > 0
 						obj.deserialize(listparser.output)
 					else
 						Log.debug("couldn't fine serializable type")

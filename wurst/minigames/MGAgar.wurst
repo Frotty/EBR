@@ -93,4 +93,4 @@ public class MGAgar extends Minigame
 		return "|cff567eecAgario\n\n|r >> |cff8cbfddBe the last one standing!"
 
 init
-	// minigames.add(new MGAgar())
+	minigames.add(new MGAgar())

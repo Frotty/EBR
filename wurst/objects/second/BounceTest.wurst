@@ -1,0 +1,44 @@
+package BounceTest
+
+public function calculateNormal(vec2 pointA, vec2 pointB, vec2 pointC) returns vec2
+    let vectorAB = pointB - pointA
+    let vectorAC = pointC - pointA
+
+    // Calculate the cross product of AB and AC (only Z component since we're in 2D)
+    let crossProductZ = vectorAB.x * vectorAC.y - vectorAB.y * vectorAC.x
+
+    // Determine the normal based on the cross product sign
+    vec2 normal
+    if crossProductZ > 0
+        normal = vec2(-vectorAB.y, vectorAB.x) // Left normal
+    else
+        normal = vec2(vectorAB.y, -vectorAB.x) // Right normal
+
+    // Normalize the normal vector
+    return normal.norm()
+
+public function reflectVelocity(vec2 velocity, vec2 normal, real reboundFactor) returns vec2
+    // Calculate the dot product of velocity and normalized normal
+    let dotProduct = velocity.dot(normal)
+
+    // Calculate the reflection vector
+    var reflection = velocity - (2 * dotProduct * normal)
+
+	// // Calculate the cosine of the angle between vel3 and nor3
+    // let cosAngle = dotProduct / (velocity.length() * normal.length())
+
+	// print(cosAngle.toString())
+    // // Check if the angle is very small (cosAngle close to 1 means angle close to 0)
+    // if (cosAngle > 0.5) // Adjust this threshold based on your needs
+    //     // For nearly parallel, reduce the reflection magnitude
+    //     reflection *= 0.5 // Example: reduce the reflection's magnitude
+
+    // Apply the rebound factor
+    let reflectedVelocity = reflection * reboundFactor
+
+    return reflectedVelocity
+
+@Test function test()
+	calculateNormal(vec2(0, 0), vec2(1, 0), vec2(0, 0.5)).assertEquals(vec2(0, 1.0))
+    print(calculateNormal(vec2(0, 0), vec2(1, 0), vec2(0, 0.5)).toString())
+	print(reflectVelocity(vec2(0.5, -0.5), calculateNormal(vec2(0, 0), vec2(1, 0), vec2(0, 0.5)), 1.).toString())

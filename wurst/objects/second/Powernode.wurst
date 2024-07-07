@@ -3,6 +3,7 @@ import Escaper
 import SetupObject
 import ChannelAbilityPreset
 import Assets
+import BounceTest
 
 
 
@@ -89,41 +90,41 @@ public class Powernode extends SetupObject
 
 	override function update()
 		super.update()
-		var l = firstLink
-		while l != null
-			if l.target.done
-				let tmp = l
-				l = l.next
+		var link = firstLink
+		while link != null
+			if link.target.done
+				let tmp = link
+				link = link.next
 				destroy tmp
 			else
-				MoveLightning(l.sfx, false, pos.x, pos.y, l.target.pos.x, l.target.pos.y)
+				MoveLightning(link.sfx, false, pos.x, pos.y, link.target.pos.x, link.target.pos.y)
 				for Escaper e from this.getCurrentRegion().getEscapers()
-					if l.ltype == TetherType.BLOCK_ORB
-						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2()) < ACTIVATION_DIST.squared()
+					if link.ltype == TetherType.BLOCK_ORB
+						if e.orb != null and e.orb.pos.toVec2().distanceToSegmentSq(pos.toVec2(), link.target.pos.toVec2()) < ACTIVATION_DIST.squared()
 							flashEffect(Abilities.spellBreakerAttack, e.orb.pos)
 							Log.debug("Orb P Terminate")
 							e.orb.terminate()
-					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), l.target.pos.toVec2()) < ACTIVATION_DIST.squared()
-						if e.pos.z < 24 or l.ltype == TetherType.BOUNCE_AIR or l.ltype == TetherType.BOUNCE_BOTH
-							switch l.ltype
+					else if e.alive and e.pos.toVec2().distanceToSegmentSq(pos.toVec2(), link.target.pos.toVec2()) < ACTIVATION_DIST.squared()
+						if e.pos.z < 24 or link.ltype == TetherType.BOUNCE_AIR or link.ltype == TetherType.BOUNCE_BOTH
+							switch link.ltype
 								case KILL
 									AddSpecialEffect(KILL_EFFECT , e.pos.x, e.pos.y).destr()
 									e.kill(this)
 								case BOUNCE_GROUND
-									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
+									calBounceSimple(link.target.pos,e, bounciness.get())
 								case BOUNCE_GROUND_DIODE
-									calBounceDiode(l.target.pos,e, (1.00 + bounciness.get()))
+									calBounceDiode(link.target.pos,e, bounciness.get())
 								case BOUNCE_AIR
 									if e.pos.z > 10
 										addEffect(Abilities.dispelMagicTarget, e.getPos()).destr()
-										calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
+										calBounceSimple(link.target.pos,e, bounciness.get())
 								case BOUNCE_BOTH
 									if e.pos.z > 20
 										addEffect(Abilities.dispelMagicTarget, e.getPos()).destr()
-									calBounceSimple(l.target.pos,e, (1.00 + bounciness.get()))
+									calBounceSimple(link.target.pos,e, bounciness.get())
 								case BLOCK_ORB
 
-				l = l.next
+				link = link.next
 
 	override function setEnabled(boolean b)
 		super.setEnabled(b)
@@ -140,15 +141,6 @@ public class Powernode extends SetupObject
 			return vec2(-dy,dx).norm().withZ(0)
 		return vec2(dy,-dx).norm().withZ(0)
 
-	// function calBounce(vec3 lpos, Escaper e, real bounceFactor)
-	// 	let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
-	// 	var b = getBounceVec(e.getRealVel(), normal.toVec2(), bounceFactor)
-	// 	if b.lengthSquared() < 75
-	// 		b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-	// 	e.setPos(e.pos+b)
-	// 	e.setVel(b)
-	// 	e.slideVelocity = ZERO2
-
 	function calBounceDiode(vec3 lpos, Escaper e, real bounceFactor)
 		let dx = lpos.x - e.pos.x
 		let dy = lpos.y - e.pos.y
@@ -159,19 +151,21 @@ public class Powernode extends SetupObject
 		e.slideVelocity = ZERO2
 
 	function calBounceSimple(vec3 lpos, Escaper e, real bounceFactor)
-		let normal = getNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
-		let b = getBounceVec(normal, normal.toVec2(), -bounceFactor) * 3
-		e.setPos(e.pos+b)
-		e.setVel(b)
+		let normal = calculateNormal(lpos.toVec2(), pos.toVec2(), e.pos.toVec2())
+		if e.flying
+			let refVel = reflectVelocity(e.vel.toVec2() + e.walkVel + e.slideVelocity + e.otherVel, normal, bounceFactor)
+			e.setXY(e.pos+normal+refVel)
+			e.setVel(refVel.withZ(e.getVel().z))
+		else
+			e.setXY(e.pos - e.walkVel - e.slideVelocity + normal * 2)
 		e.slideVelocity = ZERO2
-
 
 	function getBounceVec(vec3 vel3, vec2 nor2, real bounceFactor) returns vec3
 		let nor3 = nor2.toVec3()
-		let pv3 = vel3.project(nor3)
-		vec2 pv2 = pv3.toVec2()
-		pv2 *= (-bounceFactor)
-		return vel3 + pv2
+		let dotProduct = vel3.dot(nor3) // Dot product of velocity and normal
+		var reflection = vel3 - (2 * dotProduct * nor3) // Reflection vector calculation
+		reflection *= bounceFactor // Apply bounce factor to adjust the magnitude
+		return reflection
 
 	ondestroy
 		var l = firstLink

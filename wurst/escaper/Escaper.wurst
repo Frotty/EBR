@@ -152,14 +152,12 @@ public abstract class Escaper extends UnitEntity
 
 	override function onGroundHit()
 		if pos.getEBRTile().modifiers.get(TileModifier.BLUGOO castTo int) and vel.z.abs() > 2
-			let rdata = this.getCurrentRegion()
 			let ttype = GetTerrainType(pos.x, pos.y)
 			// Handle Goo it
 			let angl = actor.getFacingAngle()
 			if ttype == CONTROLLABLEICE
-				vel.x = 0
-				vel.y = 0
-				slideVelocity = vec2(angl.cos() * rdata.slidespeed * SLIDE_ADD, angl.sin() * rdata.slidespeed * SLIDE_ADD)
+				let length = vel.length()
+				vel = angl.toVec(length).withZ(vel.z)
 			vel.z = -vel.z * 1.25
 		else
 			pos.z = 0
@@ -235,7 +233,8 @@ public abstract class Escaper extends UnitEntity
 			setLava(false)
 		else
 			if pos.getEBRTile().hasModifier(TileModifier.ORANGEGOO)
-				vel += walkVel
+				if vel.lengthSquared() < 1
+					vel = walkVel.toVec3()
 				vel *= 1.0075
 			vel *= 0.96
 			sliding = false

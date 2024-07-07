@@ -84,6 +84,7 @@ public class Trap extends StaticBaseObject
 		for i = 0 to 4
 			if goos[i] != null
 				destroy goos[i]
+				goos[i] = null
 
 	override function update()
 		if timerreal <= 0.0
@@ -330,7 +331,7 @@ public class Trap extends StaticBaseObject
 				actor.addAbility(KNOCKBACK_PULL_ID)
 			case SPECIAL_ID
 				let tile = tpos.getEBRTile()
-				if not tile.hasModifier(TileModifier.ORANGEGOO) and goocounter < 5
+				if not tile.hasModifier(TileModifier.ORANGEGOO) and goocounter < 4
 					let goo = createImage("textures\\orangegoo.blp", tpos, 128, 128)..show()
 					goos[goocounter] = new Goo(goo, tpos)
 					goocounter++

@@ -29,7 +29,7 @@ public class MGWarlock extends Minigame
 				warlocks.add(new Warlock(ARENA_POS + vec2(GetRandomReal(-16, 16), GetRandomReal(-16, 16)), pd.escaper))
 
 		cb = doPeriodically(1.) (CallbackPeriodic cb) ->
-			if warlocks.size() == 1
+			if warlocks.filter(warlock -> warlock.actor.isAlive()).size() == 1
 				for ep in escaperPlayers
 					printTimedToPlayer(warlocks.peek().mounter.owner.getNameColored(true) + " has won!", 10, ep.p)
 				reset()
@@ -106,14 +106,14 @@ public class Fireball extends Projectile
 	construct(Warlock caster, angle direction)
 		super(caster.pos.toVec2().withZ(42.), 46., STAFF_PLAYER, direction, Abilities.fireBallMissile)
 		this.caster = caster
-		setSpeed(2)
+		setSpeed(10)
 		setRanged(800)
 		reg = this.setCurrentRegion()
 
 	override function update()
 		super.update()
 		MGWarlock.warlocks.forEach() (Warlock target) ->
-			if target != caster and target.getPos().distanceTo2dSq(pos.toVec2()) < (radius2 + target.radius2)
+			if target.actor.isAlive() and target != caster and target.getPos().distanceTo2dSq(pos.toVec2()) < (radius2 + target.radius2)
 				new DummyDamage()..target(target.actor)..amount(10).apply(true)
 				(target).addVel(((target.getPos().toVec2() - getPos().toVec2()).norm() * 40).toVec3())
 				terminate()
@@ -134,7 +134,7 @@ public class Fireball extends Projectile
 
 	new ChannelAbilityPreset(FIREBALL_ID, 1, true)
 	..presetIcon(Icons.bTNFireBolt)
-	..presetCooldown(lvl -> 5.)
+	..presetCooldown(lvl -> 4.)
 	..presetManaCost(lvl -> 0)
 	..setName("Fireball")
 	..presetTooltipNormal(lvl -> "Fireball")
@@ -142,3 +142,5 @@ public class Fireball extends Projectile
 	..presetHotkey("Q")
 	..presetTargetTypes(Targettype.POINT)
 	..presetCastRange(lvl -> 1500.)
+	..presetCastingTime(lvl -> 0.)
+	..presetArtDuration(lvl -> 0.)
