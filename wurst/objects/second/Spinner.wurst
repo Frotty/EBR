@@ -23,11 +23,29 @@ class SpinNode
 		if not obj.done and obj.actor != null
 			obj.setup.addAbility(REMOVE_OBJECT_ID)
 
+function superformulaRadius(real t, real a, real b, real m, real n1, real n2, real n3) returns real
+    let part1 = (1 / a) * Cos(m * t / 4)
+    let part2 = (1 / b) * Sin(m * t / 4)
+    let absPart1PowN2 = Pow((part1).abs(), n2)
+    let absPart2PowN3 = Pow((part2).abs(), n3)
+    let r = Pow(absPart1PowN2 + absPart2PowN3, -1 / n1)
+    return r
+
+function superformula(real t, real a, real b, real m, real n1, real n2, real n3, real n4) returns real
+	let part1 = Pow((Cos(m * t / 4) / a).abs(), n2)
+	let part2 = Pow((Sin(m * t / 4) / b).abs(), n3)
+	let part3 = Pow(part1 + part2, -1 / n1)
+	let part4 = Pow((Cos(m * t / 4) / a).abs(), n4)
+	let part5 = Pow((Sin(m * t / 4) / b).abs(), n4)
+	let part6 = Pow(part4 + part5, -1 / n1)
+	return Pow(part3 + part6, -1 / n1)
+
 public class Spinner extends SetupObject
 	SpinNode firstNode = null
 	let spinSpeed = new ConfigValue(2 * DEGTORAD, 0.25 * DEGTORAD, "Spinspeed")
 	let cosFactor = new ConfigValue(1, 0.1, "Cos-Factor")
 	let sinFactor = new ConfigValue(1, 0.1, "Sin-Factor")
+	var useSuperFormula = false
 
 	construct(unit existing)
 		super(createUnit(existing.getOwner(), SPINNER_ID, existing.getPos(), angle(0)), existing, 0)
@@ -47,7 +65,22 @@ public class Spinner extends SetupObject
 		var node = firstNode
 		while node != null
 			if not node.obj.done and node.obj.actor != null
-				node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl + speed) * cosFactor.get(), pos.y + node.dist * Sin(node.angl+speed) * sinFactor.get(), 0.))
+				if useSuperFormula
+					// Use superformula curve
+					let a = 1.0
+					let b = 1.0
+					let m = 4.0
+					let n1 = 30.0
+					let n2 = 15.0
+					let n3 = 15.0
+
+					let r = superformulaRadius(node.angl, a, b, m, n1, n2, n3)
+					node.obj.setXY(vec3(pos.x + r * node.dist * Cos(node.angl) * cosFactor.get(), pos.y + r * node.dist * Sin(node.angl) * sinFactor.get(), 0.))
+
+				else
+					// Use normal circle
+					node.obj.setXY(vec3(pos.x + node.dist * Cos(node.angl) * cosFactor.get(), pos.y + node.dist * Sin(node.angl) * sinFactor.get(), 0.))
+
 				if enabled
 					node.angl += speed
 			else
