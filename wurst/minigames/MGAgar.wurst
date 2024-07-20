@@ -20,9 +20,10 @@ class FoodEntity extends FxEntity
 		fx.setPlayerColor(PLAYER_COLOR_NAMES[GetRandomInt(0, 22)].toPlayerColor())
 
 public class MGAgar extends Minigame
-	CallbackCounted cb
+	CallbackCounted cbs = null
 	RegionData rdata
 	var flist = new LinkedList<FoodEntity>
+	var done = false
 
 	override function getGameRect() returns rect
 		return gg_rct_agargamearea
@@ -41,7 +42,7 @@ public class MGAgar extends Minigame
 				pd.escaper.actor.setScale(0.2)
 				rdata.revealRegion(pd.p)
 
-		cb = doPeriodicallyCounted(0.2, 9999) (cb) ->
+		cbs = doPeriodicallyCounted(0.2, 9999) (cb) ->
 			if cb.getCount() mod 11 == 0
 				flist.add(new FoodEntity())
 			if cb.getCount() mod 7 == 0
@@ -51,26 +52,27 @@ public class MGAgar extends Minigame
 					let adata = map.get(pd.escaper)
 					for pd2 in escaperPlayers
 						let bdata = map.get(pd2.escaper)
-						if pd2.escaper.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 6 * adata.size and adata.size > bdata.size + 1
+						if pd2.escaper.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < (32 + 6 * adata.size).squared() and adata.size > bdata.size + 1
 							adata.size += bdata.size
 							pd2.escaper.alive = false
 							pd2.escaper.actor..pause()..hide()
 							map.remove(pd2.escaper)
-							if map.size() == 1
-								for pdi from escaperPlayers.staticItr()
-									if pdi.escaper != null
-										pdi.escaper.getCurrentRegion().hideRegion(pdi.p)
-									printTimedToPlayer(pd.p.getName() + "has won!", 10, pdi.p)
-								doAfter(2., () -> reset())
 					let itr = flist.staticItr()
 					for fe from itr
-						if not fe.done and fe.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < 32 * 32 + 6 * adata.size
+						if not fe.done and fe.pos.distanceTo2dSq(pd.escaper.getPos().toVec2()) < (32 + 6 * adata.size).squared()
 							fe.terminate()
 							itr.remove()
-							adata.size += 0.2
-					pd.escaper.actor.setScale(0.2 + 1 * adata.size)
-					pd.escaper.actor.setMoveSpeed(max(75, 235 - 10 * adata.size))
-
+							adata.size += 1
+					pd.escaper.actor.setScale(0.2 + 0.15 * adata.size)
+					pd.escaper.actor.setMoveSpeed(max(75, 235 - 3 * adata.size))
+			if map.size() == 1
+				for pdi in escaperPlayers
+					if pdi.escaper != null
+						pdi.escaper.getCurrentRegion().hideRegion(pdi.p)
+					printTimedToPlayer(pdi.p.getNameColored(true) + " has won!", 10, pdi.p)
+				destroy cbs
+				cbs = null
+				reset()
 
 	override function onEnd()
 		for pd in escaperPlayers
@@ -84,7 +86,8 @@ public class MGAgar extends Minigame
 			if data != null and not data instanceof Escaper and not data instanceof Builder
 				data.terminate()
 		flist.clear()
-		destroy cb
+		if cbs != null
+			destroy cbs
 
 	override function getStartPosition() returns vec2
 		return getCamBounds().getCenter()

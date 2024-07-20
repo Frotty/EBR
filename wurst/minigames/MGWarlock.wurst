@@ -25,13 +25,13 @@ public class MGWarlock extends Minigame
 			if pd.escaper != null
 				if not pd.escaper.alive
 					forceRevive(pd.escaper)
-				printTimedToPlayer("Be the last warlock standing!", 15., pd.p)
+				printTimedToPlayer("Use your [Q] Spell and be the last warlock standing!", 15., pd.p)
 				warlocks.add(new Warlock(ARENA_POS + vec2(GetRandomReal(-16, 16), GetRandomReal(-16, 16)), pd.escaper))
 
 		cb = doPeriodically(1.) (CallbackPeriodic cb) ->
 			if warlocks.filter(warlock -> warlock.actor.isAlive()).size() == 1
 				for ep in escaperPlayers
-					printTimedToPlayer(warlocks.peek().mounter.owner.getNameColored(true) + " has won!", 10, ep.p)
+					printTimedToPlayer(warlocks.filter(warlock -> warlock.actor.isAlive()).peek().mounter.owner.getNameColored(true) + " has won!", 10, ep.p)
 				reset()
 
 	override function onEnd()
@@ -85,13 +85,13 @@ public class Warlock extends UnitEntity
 
 		let tpos = pos + vel*2.
 		if tpos.x < gg_rct_warlockgamearea.getMinX()
-			vel.x = -1.5*vel.x
+			vel.x = -0.5*vel.x
 		else if tpos.x > gg_rct_warlockgamearea.getMaxX()
-			vel.x = -1.5*vel.x
+			vel.x = -0.5*vel.x
 		if tpos.y < gg_rct_warlockgamearea.getMinY()
-			vel.y = -1.5*vel.y
+			vel.y = -0.5*vel.y
 		else if tpos.y > gg_rct_warlockgamearea.getMaxY()
-			vel.y = -1.5*vel.y
+			vel.y = -0.5*vel.y
 
 	ondestroy
 		if mounter != null and not mounter.done
@@ -104,9 +104,9 @@ public class Fireball extends Projectile
 	RegionData reg
 
 	construct(Warlock caster, angle direction)
-		super(caster.pos.toVec2().withZ(42.), 46., STAFF_PLAYER, direction, Abilities.fireBallMissile)
+		super(caster.pos.toVec2().withZ(42.) + direction.toVec(20.), 46., STAFF_PLAYER, direction, Abilities.fireBallMissile)
 		this.caster = caster
-		setSpeed(10)
+		setSpeed(12)
 		setRanged(800)
 		reg = this.setCurrentRegion()
 
@@ -114,7 +114,7 @@ public class Fireball extends Projectile
 		super.update()
 		MGWarlock.warlocks.forEach() (Warlock target) ->
 			if target.actor.isAlive() and target != caster and target.getPos().distanceTo2dSq(pos.toVec2()) < (radius2 + target.radius2)
-				new DummyDamage()..target(target.actor)..amount(10).apply(true)
+				new DummyDamage()..target(target.actor)..amount(20).apply(true)
 				(target).addVel(((target.getPos().toVec2() - getPos().toVec2()).norm() * 40).toVec3())
 				terminate()
 
@@ -130,11 +130,12 @@ public class Fireball extends Projectile
 		..setCollisionSize(0)
 		..setScalingValue(0.6)
 		..setAttacksEnabled(0)
+		..setAnimationCastPoint(0.0)
 		..setSpeedBase(255)
 
 	new ChannelAbilityPreset(FIREBALL_ID, 1, true)
 	..presetIcon(Icons.bTNFireBolt)
-	..presetCooldown(lvl -> 4.)
+	..presetCooldown(lvl -> 3.)
 	..presetManaCost(lvl -> 0)
 	..setName("Fireball")
 	..presetTooltipNormal(lvl -> "Fireball")
@@ -142,5 +143,3 @@ public class Fireball extends Projectile
 	..presetHotkey("Q")
 	..presetTargetTypes(Targettype.POINT)
 	..presetCastRange(lvl -> 1500.)
-	..presetCastingTime(lvl -> 0.)
-	..presetArtDuration(lvl -> 0.)

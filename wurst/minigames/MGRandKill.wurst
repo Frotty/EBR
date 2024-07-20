@@ -5,6 +5,7 @@ import Assets
 import Fx
 import Coin
 import Obstacle
+import Fx2
 
 constant ARENA_POS = vec2(-4200, 7500)
 
@@ -13,7 +14,7 @@ public class MGRandKill extends Minigame
 	CallbackPeriodic bunnyTimer = null
 	CallbackPeriodic coinTimer = null
 	vec2 spawn
-	Fx fx
+	Fx2 fx
 
 	override function getGameRect() returns rect
 		return gg_rct_coingamearea
@@ -25,18 +26,19 @@ public class MGRandKill extends Minigame
 		spawn = getGameRect().randomPoint()
 		while not spawn.isTerrainWalkable()
 			spawn = getGameRect().randomPoint()
-		fx = new Fx(spawn, GetRandomInt(0, 360).toReal().fromDeg(), Doodads.shimmeringPortal)
-		fx.setScale(0.5)
-		for i = 0 to GetRandomInt(3, 5)
+		fx = new Fx2(spawn.toVec3(), Doodads.shimmeringPortal)
+		fx.eff.setScale(0.5)
+		fx.eff.playAnimation(ANIM_TYPE_STAND)
+		for i = 0 to GetRandomInt(5, 7)
 			new SmallObstacle(getGameRect().randomPoint(), STAFF_PLAYER)
-		doAfter(6.5) ->
+		doAfter(2.5) ->
 			if fx != null
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
 				new SmallRandomKiller(spawn, STAFF_PLAYER)
-		chickenTimer = doPeriodically(10) cb ->
+		chickenTimer = doPeriodically(5) cb ->
 			new SmallRandomKiller(spawn, STAFF_PLAYER)
-		bunnyTimer = doPeriodically(23) cb ->
+		bunnyTimer = doPeriodically(13) cb ->
 			new BigRandomKiller(spawn, STAFF_PLAYER)
 		coinTimer = doPeriodically(23) cb ->
 			for i = 0 to ((tim.getElapsed() / 20) + 2).toInt()

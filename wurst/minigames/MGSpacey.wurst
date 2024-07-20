@@ -27,7 +27,7 @@ public class MGSpacey extends Minigame
 			if pd.escaper != null
 				if not pd.escaper.alive
 					forceRevive(pd.escaper)
-				printTimedToPlayer("Use arrow keys and the escape key to control your spacecraft.", 15., pd.p)
+				printTimedToPlayer("Use ARROW KEYS and the ESC key to control your spacecraft.", 15., pd.p)
 				ships.add(new Spaceship(ARENA_POS+vec2(ships.size()*64., -168), pd.escaper))
 
 		listener = EventListener.add(EVENT_PLAYER_END_CINEMATIC) ->
@@ -142,7 +142,7 @@ public class Spaceship extends UnitEntity
 		if localPlayer == owner
 			CameraSetupApplyForceDuration(gg_cam_spaceycam, true, 0.)
 		if downKeys.up
-			acc = acc.lerp(0.85, 0.145)
+			acc = acc.lerp(0.75, 0.125)
 		if downKeys.down
 			acc = acc.lerp(-0.2, 0.125)
 
@@ -156,13 +156,13 @@ public class Spaceship extends UnitEntity
 
 		let tpos = pos + vel*6.
 		if tpos.x < gg_rct_spaceygamearea.getMinX()
-			vel.x = -1.5*vel.x
+			vel.x = -0.8*vel.x
 		else if tpos.x > gg_rct_spaceygamearea.getMaxX()
-			vel.x = -1.5*vel.x
+			vel.x = -0.8*vel.x
 		if tpos.y < gg_rct_spaceygamearea.getMinY()
-			vel.y = -1.5*vel.y
+			vel.y = -0.8*vel.y
 		else if tpos.y > gg_rct_spaceygamearea.getMaxY()
-			vel.y = -1.5*vel.y
+			vel.y = -0.8*vel.y
 
 		super.update()
 

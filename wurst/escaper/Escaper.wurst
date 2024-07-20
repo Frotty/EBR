@@ -509,6 +509,7 @@ class OrbProjectile extends Projectile
 		setRanged(360)
 		setTimed(3)
 		setSpeed(9.85)
+		this.fx.setTintFromPlayer(e.owner)
 
 	ondestroy
 		e.orb = null

@@ -58,6 +58,9 @@ public class MGSlide extends Minigame
 				generateNewCourse()
 
 	function generateNewCourse()
+		createFText((goRight ? RIGHT_SPOT : LEFT_SPOT).toVec3(), "12", 12, 2., vec2(0, 0.03))
+		doPeriodicallyCounted(1, 11) cb ->
+			createFText((goRight ? RIGHT_SPOT : LEFT_SPOT).toVec3(), cb.getCount().toString(), 12, 2., vec2(0, 0.03))
 		forUnitsInRect(gg_rct_slidegamespawn) u ->
 			let data = u.getEntity()
 			if data != null and not data instanceof Escaper and not data instanceof Builder

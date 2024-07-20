@@ -149,7 +149,10 @@ public class Spinner extends SetupObject
 			case SPIN_COS_INC_ID
 				cosFactor.increment(this, 1)
 			case SPIN_COS_DEC_ID
-				cosFactor.decrement(this, 0)
+				if cosFactor.get() == 0. and sinFactor.get() == 0.
+					useSuperFormula = not useSuperFormula
+				else
+					cosFactor.decrement(this, 0)
 			case SPIN_SIN_INC_ID
 				sinFactor.increment(this, 1)
 			case SPIN_SIN_DEC_ID
